@@ -83,12 +83,12 @@ export default function NewsSection() {
              {/* Background Image Placeholder */}
              <div className="absolute inset-0 bg-gray-800 overflow-hidden">
                 <motion.div 
-                   className="w-full h-full bg-gradient-to-br from-green-900 to-black opacity-80" 
+                   className="w-full h-full bg-linear-to-br from-green-900 to-black opacity-80" 
                    whileHover={{ scale: 1.05 }}
                    transition={{ duration: 0.7 }}
                 />
              </div>
-             <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent" />
+             <div className="absolute inset-0 bg-linear-to-t from-black via-black/50 to-transparent" />
 
              <div className="absolute bottom-0 left-0 p-8 w-full z-10">
                 <div className="flex gap-3 mb-4">
@@ -128,7 +128,7 @@ export default function NewsSection() {
               >
                 <div className="w-1/3 h-full min-h-[120px] bg-gray-800 rounded-xl overflow-hidden relative">
                     <motion.div 
-                       className="absolute inset-0 bg-gradient-to-br from-gray-700 to-gray-900" 
+                       className="absolute inset-0 bg-linear-to-br from-gray-700 to-gray-900" 
                        whileHover={{ scale: 1.1 }}
                        transition={{ duration: 0.5 }}
                     />
