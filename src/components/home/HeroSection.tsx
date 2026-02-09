@@ -67,8 +67,8 @@ export default function HeroSection() {
           {/* Placeholder video - replace with actual assets */}
             <source src="https://static.videezy.com/system/resources/previews/000/043/553/original/Rugby_Game.mp4" type="video/mp4" />
         </video>
-        <div className="absolute inset-0 bg-gradient-to-t from-rich-black via-rich-black/50 to-transparent" />
-        <div className="absolute inset-0 bg-gradient-to-r from-rich-black/80 to-transparent" />
+        <div className="absolute inset-0 bg-linear-to-t from-rich-black via-rich-black/50 to-transparent" />
+        <div className="absolute inset-0 bg-linear-to-r from-rich-black/80 to-transparent" />
       </motion.div>
 
       {/* Content */}
@@ -98,7 +98,7 @@ export default function HeroSection() {
             <motion.h1 variants={textRevealVariants} className="text-6xl md:text-8xl lg:text-9xl font-heading text-white leading-[0.9] drop-shadow-2xl uppercase">
               THE ZIMBABWE
               <br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-400">
+              <span className="text-transparent bg-clip-text bg-linear-to-r from-white to-gray-400">
                 SABLES
               </span>
             </motion.h1>

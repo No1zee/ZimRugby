@@ -115,11 +115,11 @@ export default function MatchCentre() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               whileHover={{ scale: 1.01, rotate: 0.5 }}
-              className="relative bg-gradient-to-br from-gray-900 to-black rounded-2xl overflow-hidden border border-white/10 shadow-2xl group"
+              className="relative bg-linear-to-br from-gray-900 to-black rounded-2xl overflow-hidden border border-white/10 shadow-2xl group"
             >
               {/* Cinematic Background */}
                <div className="absolute inset-0 opacity-30 bg-[url('/images/stadium-bg.jpg')] bg-cover bg-center grayscale group-hover:grayscale-0 transition-all duration-700" />
-               <div className="absolute inset-0 bg-gradient-to-r from-black via-black/80 to-transparent" />
+               <div className="absolute inset-0 bg-linear-to-r from-black via-black/80 to-transparent" />
 
               <div className="relative z-10 p-8 md:p-12 flex flex-col md:flex-row justify-between items-center gap-8">
                  <div className="flex-1 text-center md:text-left">

@@ -66,11 +66,11 @@ export default function TeamsShowcase() {
             >
               {/* Background Image Placeholder */}
               <div className="absolute inset-0 bg-gray-800 transition-transform duration-700 group-hover:scale-105">
-                 <div className="w-full h-full bg-gradient-to-t from-black via-gray-900/50 to-gray-800" />
+                 <div className="w-full h-full bg-linear-to-t from-black via-gray-900/50 to-gray-800" />
                  {/* <img src={player.image} alt={player.name} className="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity" /> */}
               </div>
               
-              <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent opacity-90" />
+              <div className="absolute inset-0 bg-linear-to-t from-black via-black/20 to-transparent opacity-90" />
 
               <div className="absolute top-6 right-6">
                  <div className="w-16 h-16 rounded-full border-2 border-white/20 flex items-center justify-center bg-black/40 backdrop-blur-md group-hover:border-zru-orange transition-colors">

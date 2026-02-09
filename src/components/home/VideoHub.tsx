@@ -68,7 +68,7 @@ export default function VideoHub() {
                className="lg:col-span-2 relative group rounded-2xl overflow-hidden aspect-video bg-gray-900 shadow-2xl cursor-pointer"
             >
                 <div className="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-colors z-10" />
-                <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-80 z-10" />
+                <div className="absolute inset-0 bg-linear-to-t from-black via-transparent to-transparent opacity-80 z-10" />
                 
                 {/* Play Button */}
                 <div className="absolute inset-0 flex items-center justify-center z-20">

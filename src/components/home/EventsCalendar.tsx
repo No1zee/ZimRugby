@@ -104,7 +104,7 @@ export default function EventsCalendar() {
               <div className="h-48 bg-gray-800 relative overflow-hidden">
                 {/* Image Placeholder */}
                 <motion.div 
-                    className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent" 
+                    className="absolute inset-0 bg-linear-to-t from-black/80 to-transparent" 
                     whileHover={{ scale: 1.1 }}
                 >
                     <div className="absolute top-4 left-4">
