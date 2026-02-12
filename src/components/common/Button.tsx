@@ -36,13 +36,13 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
 
     const variants = {
       primary:
-        "bg-zru-orange text-white hover:bg-orange-600 focus:ring-zru-orange border border-transparent shadow-lg hover:shadow-xl hover:-translate-y-0.5",
+        "bg-zru-red text-white hover:bg-red-700 focus:ring-zru-red border border-transparent shadow-lg hover:shadow-xl hover:shadow-red-500/20 hover:-translate-y-0.5",
       secondary:
-        "bg-white text-rich-black hover:bg-gray-100 focus:ring-white border border-transparent shadow-md hover:shadow-lg",
+        "bg-zru-gold text-rich-black hover:bg-yellow-500 focus:ring-zru-gold border border-transparent shadow-md hover:shadow-lg hover:shadow-yellow-500/20",
       outline:
-        "bg-transparent border-2 border-zru-orange text-zru-orange hover:bg-zru-orange hover:text-white",
-      ghost: "bg-transparent text-gray-300 hover:text-white hover:bg-white/10",
-      link: "bg-transparent text-zru-orange hover:underline p-0 h-auto",
+        "bg-transparent border-2 border-zru-gold text-zru-gold hover:bg-zru-gold hover:text-rich-black",
+      ghost: "bg-white/10 text-white hover:bg-white/20 border border-white/20 backdrop-blur-sm",
+      link: "bg-transparent text-zru-gold hover:underline p-0 h-auto",
     };
 
     const sizes = {

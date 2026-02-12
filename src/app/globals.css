@@ -1,12 +1,15 @@
 @import "tailwindcss";
 
+/* eslint-disable-next-line */
 @theme {
   --font-heading: var(--font-bebas-neue), sans-serif;
   --font-subheading: var(--font-montserrat), sans-serif;
   --font-body: var(--font-inter), sans-serif;
 
-  --color-sables-green: #006633;
-  --color-zru-orange: #FF8C00;
+  --color-zru-green: #006039;
+  --color-zru-gold: #FFD200;
+  --color-zru-orange: #ED8B00;
+  --color-zru-red: #D71920;
   --color-rich-black: #0A0A0A;
   --color-gray-900: #1A1A1A;
   --color-gray-100: #F5F5F5;
@@ -15,10 +18,17 @@
 }
 
 body {
-  background-color: var(--color-rich-black);
+  background-color: #050505;
   background-image: 
-    radial-gradient(circle at 50% 0%, #1a3320 0%, #0A0A0A 70%),
-    url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E");
+    /* Subtle diagonal lines - 45deg, 100px spacing, ~7% opacity */
+    repeating-linear-gradient(
+      135deg,
+      rgba(58, 58, 58, 0.07) 0px,
+      rgba(58, 58, 58, 0.07) 1px,
+      rgba(5, 5, 5, 0) 1px,
+      rgba(5, 5, 5, 0) 100px
+    );
+  background-blend-mode: soft-light;
   color: white;
   font-family: var(--font-body);
 }

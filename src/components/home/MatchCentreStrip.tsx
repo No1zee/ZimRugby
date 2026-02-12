@@ -1,121 +1,276 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { ArrowRight, MapPin, Calendar, Clock } from "lucide-react";
-import Button from "../common/Button";
+import { useState } from "react";
+import { ArrowRight, Calendar, MapPin, Clock, Filter, ChevronRight } from "lucide-react";
+import Link from "next/link";
+import { ScrollReveal, StaggerContainer, staggerItemVariants, Tilt3DCard, GlowButton } from "../ui/animations";
+import { RugbyDecorations, CornerAccent } from "../ui/RugbyDecorations";
+import { StripedBackground } from "../ui/StripedBackground";
+
+// Match types for filtering
+const matchCategories = [
+  { id: "all", label: "All Matches" },
+  { id: "international", label: "International" },
+  { id: "domestic", label: "Domestic" },
+  { id: "women", label: "Women" },
+  { id: "youth", label: "Youth" },
+];
+
+const matches = [
+  {
+    id: 1,
+    competition: "AFRICA CUP 2025",
+    homeTeam: "ZIM SABLES",
+    awayTeam: "NAMIBIA",
+    date: "22 MAR 2025",
+    time: "16:00",
+    venue: "National Sports Stadium, Harare",
+    category: "international",
+    isFeatured: true,
+  },
+  {
+    id: 2,
+    competition: "AFRICA CUP 2025",
+    homeTeam: "ZIM SABLES",
+    awayTeam: "KENYA",
+    date: "29 MAR 2025",
+    time: "15:00",
+    venue: "National Sports Stadium, Harare",
+    category: "international",
+    isFeatured: false,
+  },
+  {
+    id: 3,
+    competition: "WOMEN'S AFRICA CUP",
+    homeTeam: "LADY SABLES",
+    awayTeam: "UGANDA",
+    date: "05 APR 2025",
+    time: "14:00",
+    venue: "Harare Sports Club",
+    category: "women",
+    isFeatured: false,
+  },
+  {
+    id: 4,
+    competition: "SUPER LEAGUE",
+    homeTeam: "OLD HARARIANS",
+    awayTeam: "HARARE SPORTS CLUB",
+    date: "12 APR 2025",
+    time: "15:30",
+    venue: "Old Hararians Sports Ground",
+    category: "domestic",
+    isFeatured: false,
+  },
+];
 
 export default function MatchCentreStrip() {
+  const [activeFilter, setActiveFilter] = useState("all");
+  
+  const filteredMatches = activeFilter === "all" 
+    ? matches 
+    : matches.filter(m => m.category === activeFilter);
+
+  const featuredMatch = matches.find(m => m.isFeatured);
+
+  const getCategoryColor = (category: string) => {
+    switch(category) {
+      case "international": return "bg-zru-gold text-rich-black";
+      case "women": return "bg-pink-500 text-white";
+      case "youth": return "bg-blue-500 text-white";
+      case "domestic": return "bg-zru-green text-white";
+      default: return "bg-gray-500 text-white";
+    }
+  };
+
   return (
-    <section className="bg-rich-black py-12 border-t border-white/5">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex flex-col lg:flex-row gap-8">
-          
-          {/* Main Featured Match - Takes up 2/3 on desktop */}
-          <div className="lg:w-2/3">
-             <div className="flex items-center justify-between mb-6">
-                <h2 className="text-zru-gold text-sm font-bold tracking-[0.2em] uppercase">Next Match</h2>
-                <div className="flex items-center gap-2 text-red-500 animate-pulse">
-                    <span className="w-2 h-2 rounded-full bg-current"></span>
-                    <span className="text-xs font-bold tracking-widest uppercase">Live in 4 Days</span>
-                </div>
-             </div>
-
-             <motion.div 
-               className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-white/10 to-white/5 border border-white/10 p-8 h-full min-h-[300px] flex flex-col justify-center"
-               whileHover={{ scale: 1.01, borderColor: "rgba(255, 255, 255, 0.2)" }}
-             >
-                {/* Background Pattern */}
-                <div className="absolute inset-0 bg-[url('/images/pattern-overlay.png')] opacity-10" />
-
-                <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-8 text-center md:text-left">
-                   
-                   {/* Home Team */}
-                   <div className="flex flex-col items-center gap-4">
-                      <div className="w-24 h-24 md:w-32 md:h-32 bg-white rounded-full flex items-center justify-center p-4">
-                         {/* Replace with Image */}
-                         <span className="text-3xl font-bold text-black">ZIM</span>
-                      </div>
-                      <span className="text-2xl md:text-4xl font-heading text-white">SABLES</span>
-                   </div>
-
-                   {/* VS / Info */}
-                   <div className="flex flex-col items-center gap-2">
-                      <div className="text-4xl font-heading text-white/20">VS</div>
-                      <div className="flex flex-col items-center gap-1 mt-2">
-                         <div className="flex items-center gap-2 text-white/80 text-sm font-bold">
-                            <Calendar className="w-4 h-4" />
-                            <span>15 JULY, 2025</span>
-                         </div>
-                         <div className="flex items-center gap-2 text-white/60 text-xs font-bold tracking-wide">
-                            <Clock className="w-3 h-3" />
-                            <span>15:00 KICK OFF</span>
-                         </div>
-                         <div className="flex items-center gap-2 text-white/60 text-xs font-bold tracking-wide mt-1">
-                            <MapPin className="w-3 h-3" />
-                            <span>HARARE SPORTS CLUB</span>
-                         </div>
-                      </div>
-                      <Button variant="primary" className="mt-6 bg-white text-rich-black hover:bg-gray-200 text-sm py-2 px-6">
-                         BUY TICKETS
-                      </Button>
-                   </div>
-
-                   {/* Away Team */}
-                   <div className="flex flex-col items-center gap-4">
-                      <div className="w-24 h-24 md:w-32 md:h-32 bg-white rounded-full flex items-center justify-center p-4 border-4 border-red-600">
-                         {/* Replace with Image */}
-                         <span className="text-3xl font-bold text-black">KEN</span>
-                      </div>
-                      <span className="text-2xl md:text-4xl font-heading text-white">KENYA</span>
-                   </div>
-
-                </div>
-             </motion.div>
+    <section 
+      className="bg-rich-black py-16 lg:py-20 relative overflow-hidden"
+      style={{
+        backgroundImage: `repeating-linear-gradient(135deg, rgba(80, 80, 80, 0.15) 0px, rgba(80, 80, 80, 0.15) 1px, transparent 1px, transparent 100px)`
+      }}
+    >
+      {/* Rugby-themed decorative elements */}
+      <RugbyDecorations variant="mixed" />
+      <CornerAccent position="top-left" />
+      <CornerAccent position="bottom-right" />
+      
+      {/* HK Rugby style diagonal stripes */}
+      <StripedBackground variant="subtle" position="right" color="green" />
+      
+      <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        
+        {/* Section Header */}
+        <ScrollReveal>
+          <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6 mb-10">
+            <div>
+              <h2 className="text-3xl md:text-4xl font-black text-white uppercase mb-2">
+                Match Centre
+              </h2>
+              <p className="text-white/60 text-sm max-w-md">
+                All upcoming fixtures for Zimbabwe Rugby teams and competitions.
+              </p>
+            </div>
+            
+            {/* Filter Tags */}
+            <div className="flex flex-wrap gap-2">
+              {matchCategories.map((cat) => (
+                <motion.button
+                  key={cat.id}
+                  onClick={() => setActiveFilter(cat.id)}
+                  className={`
+                    px-4 py-2 text-xs font-bold uppercase tracking-wider rounded-full transition-all
+                    ${activeFilter === cat.id 
+                      ? "bg-zru-gold text-rich-black" 
+                      : "bg-white/10 text-white hover:bg-white/20"
+                    }
+                  `}
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                >
+                  {cat.label}
+                </motion.button>
+              ))}
+            </div>
           </div>
+        </ScrollReveal>
 
-          {/* Upcoming Fixtures List - Takes up 1/3 on desktop */}
-          <div className="lg:w-1/3 flex flex-col">
-             <div className="flex items-center justify-between mb-6">
-                <h2 className="text-white text-sm font-bold tracking-[0.2em] uppercase">Upcoming Fixtures</h2>
-                <a href="/match-centre" className="text-zru-orange text-xs font-bold tracking-widest hover:text-white transition-colors flex items-center gap-1">
-                    VIEW ALL <ArrowRight className="w-3 h-3" />
-                </a>
-             </div>
-
-             <div className="flex-1 flex flex-col gap-4">
-                {[
-                    { date: "22 JUL", opponent: "NAMIBIA", venue: "WINDHOEK", type: "AFRICA CUP" },
-                    { date: "29 JUL", opponent: "UGANDA", venue: "KAMPALA", type: "AFRICA CUP" },
-                    { date: "05 AUG", opponent: "IVORY COAST", venue: "HARARE", type: "FRIENDLY" }
-                ].map((match, i) => (
-                    <motion.div 
-                        key={i}
-                        initial={{ opacity: 0, x: 20 }}
-                        whileInView={{ opacity: 1, x: 0 }}
-                        transition={{ delay: i * 0.1 }}
-                        className="bg-white/5 border border-white/5 rounded-xl p-4 flex items-center justify-between hover:bg-white/10 transition-colors cursor-pointer group"
-                    >
-                        <div className="flex items-center gap-4">
-                            <div className="flex flex-col items-center justify-center w-12 border-r border-white/10 pr-4">
-                                <span className="text-white font-heading text-lg leading-none">{match.date.split(" ")[0]}</span>
-                                <span className="text-white/40 text-[10px] font-bold uppercase">{match.date.split(" ")[1]}</span>
-                            </div>
-                            <div>
-                                <div className="text-zru-gold text-[10px] font-bold tracking-widest uppercase mb-1">{match.type}</div>
-                                <h3 className="text-white font-heading text-xl group-hover:text-zru-orange transition-colors">VS {match.opponent}</h3>
-                                <div className="text-white/40 text-xs font-bold uppercase">{match.venue}</div>
-                            </div>
+        {/* Featured Match - Full Width Card */}
+        {featuredMatch && (
+          <ScrollReveal delay={0.1}>
+            <Tilt3DCard tiltAmount={3}>
+              <div className="relative bg-linear-to-br from-zru-green via-green-700 to-green-900 rounded-xl overflow-hidden mb-8 shadow-2xl">
+                <div className="absolute inset-0 bg-linear-to-r from-black/30 to-transparent" />
+                <div className="relative p-8 lg:p-10">
+                  
+                  {/* Top: Competition & Category */}
+                  <div className="flex items-center gap-3 mb-6">
+                    <span className={`${getCategoryColor(featuredMatch.category)} px-3 py-1 text-[10px] font-bold uppercase rounded-full shadow-md`}>
+                      {featuredMatch.category}
+                    </span>
+                    <span className="text-white/60 text-xs font-bold uppercase tracking-wider">
+                      {featuredMatch.competition}
+                    </span>
+                  </div>
+                  
+                  <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-8">
+                    {/* Left: Teams */}
+                    <div className="flex-1">
+                      <div className="flex items-center gap-4 lg:gap-6 mb-6">
+                        <span className="text-white font-black text-3xl sm:text-4xl lg:text-5xl uppercase tracking-tight">{featuredMatch.homeTeam}</span>
+                        <div className="flex flex-col items-center px-4">
+                          <span className="text-white/40 text-xl lg:text-2xl font-bold">VS</span>
                         </div>
-                        <ChevronDown className="w-4 h-4 text-white/20 -rotate-90 group-hover:text-white transition-colors" />
-                    </motion.div>
-                ))}
-             </div>
-          </div>
+                        <span className="text-white font-black text-3xl sm:text-4xl lg:text-5xl uppercase tracking-tight">{featuredMatch.awayTeam}</span>
+                      </div>
+                      
+                      {/* Match Details with Icons */}
+                      <div className="flex flex-wrap gap-6 text-white/80 text-sm">
+                        <span className="flex items-center gap-2">
+                          <Clock className="w-4 h-4 text-zru-gold" />
+                          <span className="font-semibold">{featuredMatch.time} CAT</span>
+                        </span>
+                        <span className="flex items-center gap-2">
+                          <MapPin className="w-4 h-4 text-zru-gold" />
+                          <span>{featuredMatch.venue}</span>
+                        </span>
+                      </div>
+                    </div>
+                    
+                    {/* Right: Date Block & CTA */}
+                    <div className="flex items-center gap-6">
+                      {/* Prominent Date Display */}
+                      <div className="text-center bg-white/10 backdrop-blur-sm rounded-xl px-6 py-4 border border-white/20">
+                        <div className="text-zru-gold font-black text-5xl lg:text-6xl leading-none">
+                          {featuredMatch.date.split(' ')[0]}
+                        </div>
+                        <div className="text-white font-bold text-lg uppercase tracking-wider">
+                          {featuredMatch.date.split(' ')[1]}
+                        </div>
+                      </div>
+                      
+                      {/* CTA */}
+                      <Link href={`/matches/${featuredMatch.id}`}>
+                        <GlowButton 
+                          className="bg-zru-red hover:bg-red-700 text-white px-6 py-4 text-xs font-bold uppercase tracking-wider flex items-center gap-2 rounded-lg transition-colors"
+                          glowColor="rgba(215, 25, 32, 0.4)"
+                        >
+                          View Match
+                          <ChevronRight className="w-4 h-4" />
+                        </GlowButton>
+                      </Link>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </Tilt3DCard>
+          </ScrollReveal>
+        )}
 
-        </div>
+        {/* Match Cards Grid */}
+        <StaggerContainer className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" staggerDelay={0.1}>
+          {filteredMatches.filter(m => !m.isFeatured).map((match) => (
+            <motion.div key={match.id} variants={staggerItemVariants}>
+              <Link href={`/matches/${match.id}`} className="block group">
+                <div className="bg-white/5 hover:bg-white/10 border border-white/10 rounded-lg p-5 transition-all duration-300 h-full">
+                  
+                  {/* Top Row: Category + Competition */}
+                  <div className="flex items-center justify-between mb-4">
+                    <span className={`${getCategoryColor(match.category)} px-2 py-1 text-[9px] font-bold uppercase rounded`}>
+                      {match.category}
+                    </span>
+                    <span className="text-white/40 text-[10px] font-bold uppercase">
+                      {match.competition}
+                    </span>
+                  </div>
+                  
+                  {/* Teams */}
+                  <div className="flex items-center justify-between mb-4">
+                    <span className="text-white font-bold text-sm uppercase">{match.homeTeam}</span>
+                    <span className="text-zru-gold font-bold text-xs px-3">VS</span>
+                    <span className="text-white font-bold text-sm uppercase text-right">{match.awayTeam}</span>
+                  </div>
+                  
+                  {/* Date/Time/Venue */}
+                  <div className="border-t border-white/10 pt-4 space-y-2">
+                    <div className="flex items-center gap-4 text-white/60 text-xs">
+                      <span className="flex items-center gap-1">
+                        <Calendar className="w-3 h-3" /> {match.date}
+                      </span>
+                      <span className="flex items-center gap-1">
+                        <Clock className="w-3 h-3" /> {match.time}
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-1 text-white/40 text-xs">
+                      <MapPin className="w-3 h-3" /> {match.venue}
+                    </div>
+                  </div>
+                  
+                  {/* View Match Link */}
+                  <div className="mt-4 flex items-center gap-1 text-zru-gold text-xs font-bold uppercase group-hover:gap-2 transition-all">
+                    View Match <ArrowRight className="w-3 h-3" />
+                  </div>
+                </div>
+              </Link>
+            </motion.div>
+          ))}
+        </StaggerContainer>
+
+        {/* View All Link */}
+        <ScrollReveal delay={0.4}>
+          <div className="text-center mt-10">
+            <Link href="/match-centre">
+              <motion.button 
+                className="text-white/60 hover:text-zru-gold text-sm font-bold uppercase tracking-wider flex items-center gap-2 mx-auto transition-colors"
+                whileHover={{ x: 5 }}
+              >
+                View Full Match Centre <ArrowRight className="w-4 h-4" />
+              </motion.button>
+            </Link>
+          </div>
+        </ScrollReveal>
+
       </div>
     </section>
   );
 }
-
-import { ChevronDown } from "lucide-react";

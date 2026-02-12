@@ -24,7 +24,7 @@ const tiles = [
   },
   {
     key: "whats_on",
-    label: "WHAT'S ON",
+    label: "WHAT&apos;S ON",
     description: "Upcoming matches, events, and programmes.",
     icon: Calendar,
     href: "/events",

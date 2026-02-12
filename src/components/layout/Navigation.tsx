@@ -1,81 +1,155 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
-import { Menu, X } from "lucide-react";
+import { usePathname } from "next/navigation";
+import { Menu, X, ShoppingCart, User, Search, ChevronDown } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import Button from "../common/Button";
 
 const navItems = [
-  { label: "TEAMS", href: "#teams" },
-  { label: "MATCH CENTRE", href: "#match-centre" },
-  { label: "MEDIA", href: "#media" },
-  { label: "WHAT'S ON", href: "#events" },
-  { label: "PLAY RUGBY", href: "#play-rugby" },
-  { label: "ABOUT", href: "#about" },
+  { label: "OUR TEAMS", href: "/teams" },
+  { label: "MATCH CENTRE", href: "/match-centre" },
+  { 
+    label: "NEWS & EVENTS", 
+    href: "/media",
+    children: [
+      { label: "Latest News", href: "/media" },
+      { label: "What's On", href: "/events" },
+    ]
+  },
+  { 
+    label: "GET INVOLVED", 
+    href: "/play-rugby",
+    children: [
+      { label: "Play Rugby", href: "/play-rugby" },
+      { label: "Clubs", href: "/clubs" },
+      { label: "Schools", href: "/schools" },
+      { label: "Volunteer", href: "/volunteer" },
+    ]
+  },
+  { label: "ABOUT", href: "/about" },
 ];
 
 export default function Navigation() {
   const [isOpen, setIsOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
+  const pathname = usePathname();
 
-  // Toggle mobile menu
   const toggleMenu = () => setIsOpen(!isOpen);
 
-  return (
-    <nav className="fixed w-full z-50 bg-rich-black/90 backdrop-blur-md border-b border-white/10">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-20">
-          {/* Logo */}
-          <div className="flex-shrink-0 flex items-center gap-3">
-             <Link href="/" className="flex items-center gap-2">
-                <div className="w-10 h-10 bg-zru-green rounded-full flex items-center justify-center border-2 border-white">
-                    <span className="text-white font-heading font-bold text-xl">Z</span>
-                </div>
-                <div className="flex flex-col">
-                    <span className="text-white font-heading leading-none text-xl tracking-wider">ZIMBABWE</span>
-                    <span className="text-zru-gold font-heading leading-none text-sm tracking-widest">RUGBY UNION</span>
-                </div>
-             </Link>
-          </div>
+  useEffect(() => {
+    const handleScroll = () => setIsScrolled(window.scrollY > 20);
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
-          {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-8">
+  const isActive = (href: string) => pathname === href || pathname.startsWith(href + "/");
+
+  return (
+    <header 
+      className={`
+        fixed w-full z-50 transition-all duration-500
+        ${isScrolled 
+          ? "bg-zru-green/95 backdrop-blur-md shadow-lg translate-y-0 opacity-100" 
+          : "bg-transparent translate-y-0 opacity-0 pointer-events-none"
+        }
+      `}
+    >
+      
+      {/* Main Navigation */}
+      <nav className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
+        <div className={`flex justify-between items-center transition-all duration-300 ${isScrolled ? "h-14" : "h-16"}`}>
+          
+          {/* Logo */}
+          <Link href="/" className="flex items-center gap-3 group">
+            <motion.div 
+              className="w-10 h-10 bg-zru-green rounded-full flex items-center justify-center border-2 border-zru-gold"
+              whileHover={{ scale: 1.05 }}
+            >
+              <span className="text-white font-black text-lg">Z</span>
+            </motion.div>
+            <div className="hidden md:flex flex-col">
+              <span className="text-white font-black text-sm tracking-wider">ZRU</span>
+              <span className="text-white/60 text-[9px] uppercase tracking-widest">Zimbabwe Rugby</span>
+            </div>
+          </Link>
+
+          {/* Desktop Nav */}
+          <div className="hidden lg:flex items-center gap-1">
             {navItems.map((item) => (
-              <div
+              <div 
                 key={item.label}
-                className="relative group"
-                onMouseEnter={() => setActiveDropdown(item.label)}
+                className="relative"
+                onMouseEnter={() => item.children && setActiveDropdown(item.label)}
                 onMouseLeave={() => setActiveDropdown(null)}
               >
-                <Link
-                  href={item.href}
-                  className="text-white hover:text-zru-gold font-heading tracking-widest text-sm transition-colors py-2 flex items-center gap-1"
+                <Link 
+                  href={item.href} 
+                  className={`
+                    relative px-4 py-2 text-sm font-bold uppercase tracking-wider transition-colors
+                    flex items-center gap-1
+                    ${isActive(item.href) 
+                      ? "text-zru-gold" 
+                      : "text-white hover:text-zru-gold"
+                    }
+                  `}
                 >
                   {item.label}
+                  {item.children && <ChevronDown className="w-3 h-3" />}
+                  
+                  {/* Active indicator */}
+                  {isActive(item.href) && (
+                    <motion.div 
+                      className="absolute bottom-0 left-4 right-4 h-0.5 bg-zru-gold"
+                      layoutId="navIndicator"
+                    />
+                  )}
                 </Link>
+
+                {/* Dropdown */}
+                {item.children && (
+                  <AnimatePresence>
+                    {activeDropdown === item.label && (
+                      <motion.div
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: 10 }}
+                        className="absolute top-full left-0 mt-1 bg-zru-green/95 backdrop-blur-md rounded-lg shadow-xl py-2 min-w-[180px] border border-white/10"
+                      >
+                        {item.children.map((child) => (
+                          <Link
+                            key={child.label}
+                            href={child.href}
+                            className={`
+                              block px-4 py-2 text-sm font-medium transition-colors
+                              ${isActive(child.href) 
+                                ? "text-zru-gold bg-white/10" 
+                                : "text-white hover:text-zru-gold hover:bg-white/5"
+                              }
+                            `}
+                          >
+                            {child.label}
+                          </Link>
+                        ))}
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                )}
               </div>
             ))}
           </div>
 
-          {/* Utilities */}
-          <div className="hidden md:flex items-center gap-4">
-            <Button variant="primary" className="bg-zru-orange hover:bg-orange-600 border-none">
-               SUPPORT ZRU
-            </Button>
-          </div>
-
           {/* Mobile Menu Button */}
-          <div className="md:hidden flex items-center">
-            <button
-              onClick={toggleMenu}
-              className="text-white hover:text-zru-gold focus:outline-none"
-            >
-              {isOpen ? <X className="w-8 h-8" /> : <Menu className="w-8 h-8" />}
-            </button>
-          </div>
+          <button
+            onClick={toggleMenu}
+            className="lg:hidden text-white hover:text-zru-gold p-2 transition-colors"
+            aria-label="Toggle menu"
+          >
+            {isOpen ? <X className="w-7 h-7" /> : <Menu className="w-7 h-7" />}
+          </button>
         </div>
-      </div>
+      </nav>
 
       {/* Mobile Menu */}
       <AnimatePresence>
@@ -84,29 +158,44 @@ export default function Navigation() {
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
-            className="md:hidden bg-rich-black border-t border-white/10"
+            className="lg:hidden bg-zru-green/95 backdrop-blur-md border-t border-white/10"
           >
-            <div className="px-4 pt-4 pb-8 space-y-4">
+            <div className="px-6 py-6 space-y-1">
               {navItems.map((item) => (
                 <div key={item.label}>
-                    <Link
-                        href={item.href}
-                        className="block text-white hover:text-zru-gold font-heading text-xl py-2"
-                        onClick={toggleMenu}
-                    >
-                        {item.label}
-                    </Link>
+                  <Link
+                    href={item.href}
+                    className={`
+                      block py-3 text-lg font-bold uppercase tracking-wider transition-colors
+                      ${isActive(item.href) ? "text-zru-gold" : "text-white hover:text-zru-gold"}
+                    `}
+                    onClick={toggleMenu}
+                  >
+                    {item.label}
+                  </Link>
+                  {item.children && (
+                    <div className="pl-4 space-y-1 mb-2">
+                      {item.children.map((child) => (
+                        <Link
+                          key={child.label}
+                          href={child.href}
+                          className={`
+                            block py-2 text-sm font-medium transition-colors
+                            ${isActive(child.href) ? "text-zru-gold" : "text-white/70 hover:text-zru-gold"}
+                          `}
+                          onClick={toggleMenu}
+                        >
+                          {child.label}
+                        </Link>
+                      ))}
+                    </div>
+                  )}
                 </div>
               ))}
-              <div className="pt-6 border-t border-white/10 flex flex-col gap-4">
-                 <Button variant="primary" className="w-full justify-center bg-zru-orange">
-                    SUPPORT ZRU
-                 </Button>
-              </div>
             </div>
           </motion.div>
         )}
       </AnimatePresence>
-    </nav>
+    </header>
   );
 }

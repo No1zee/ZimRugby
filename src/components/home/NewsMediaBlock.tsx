@@ -1,132 +1,231 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { ArrowRight, Play, Calendar } from "lucide-react";
+import { ArrowRight, Play, Newspaper, ExternalLink } from "lucide-react";
 import Link from "next/link";
+import { ScrollReveal, StaggerContainer, staggerItemVariants, GlowButton, Tilt3DCard } from "../ui/animations";
+import { RugbyDecorations, CornerAccent } from "../ui/RugbyDecorations";
 
-const newsItems = [
-  {
-    id: 1,
-    title: "Sables Squad Announced for Africa Cup Defense",
-    category: "SABLES",
-    date: "10 JULY, 2025",
-    image: "/images/news-1.jpg", // Replace with real image
-    excerpt: "Head coach Piet Benade has named a strong 35-man squad for the upcoming Africa Cup campaign in Kampala.",
-  },
+const featuredStory = {
+  id: 1,
+  title: "SABLES SQUAD ANNOUNCED FOR AFRICA CUP DEFENCE",
+  excerpt: "Head coach Brendan Dawson names 30-man squad for the upcoming Africa Cup campaign, with several exciting new faces joining the defending champions.",
+  date: "08 FEB 2025",
+  image: "/images/news/sables-squad.jpg",
+  category: "Sables"
+};
+
+const mediaItems = [
   {
     id: 2,
-    title: "Lady Sables secure historic win over Kenya",
-    category: "LADY SABLES",
-    date: "08 JULY, 2025",
-    image: "/images/news-2.jpg",
-    excerpt: "A dominant second-half performance saw the Lady Sables cruise to a 32-15 victory at Prince Edward.",
+    type: "news",
+    title: "LADY SABLES SECURE HISTORIC WIN OVER KENYA",
+    excerpt: "A dominant second-half performance seals a memorable victory at Harare Sports Club.",
+    date: "06 FEB 2025",
+    image: "/images/news/lady-sables.jpg",
+    category: "Lady Sables"
   },
   {
     id: 3,
-    title: "Schools Rugby Festival: Day 3 Round-up",
-    category: "SCHOOLS",
-    date: "05 JULY, 2025",
-    image: "/images/news-3.jpg",
-    excerpt: "PE Tigers and Falcon College remain unbeaten as the schools festival enters its final day.",
+    type: "video",
+    title: "CHEETAHS SEVENS: CAPE TOWN LEG HIGHLIGHTS",
+    excerpt: "Watch the best moments from Zimbabwe's impressive run in the SVNS series.",
+    date: "04 FEB 2025",
+    image: "/images/news/cheetahs.jpg",
+    category: "Cheetahs 7s"
+  },
+  {
+    id: 4,
+    type: "news",
+    title: "SCHOOLS RUGBY FESTIVAL: DAY 3 ROUND-UP",
+    excerpt: "Churchill and Prince Edward set up a thrilling final after semi-final victories.",
+    date: "02 FEB 2025",
+    image: "/images/news/schools.jpg",
+    category: "Schools"
   },
 ];
 
+const getCategoryColor = (category: string) => {
+  switch(category) {
+    case "Sables": return "bg-zru-green text-white";
+    case "Lady Sables": return "bg-pink-600 text-white";
+    case "Cheetahs 7s": return "bg-orange-500 text-white";
+    case "Schools": return "bg-blue-500 text-white";
+    default: return "bg-gray-500 text-white";
+  }
+};
+
 export default function NewsMediaBlock() {
   return (
-    <section className="bg-rich-black py-24 border-t border-white/5">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex flex-col lg:flex-row gap-16">
-          
-          {/* Latest News Column */}
-          <div className="lg:w-1/2">
-             <div className="flex items-center justify-between mb-10">
-                <h2 className="text-3xl md:text-4xl font-heading text-white">LATEST NEWS</h2>
-                <Link href="/news" className="text-zru-orange text-sm font-bold tracking-widest hover:text-white transition-colors flex items-center gap-2">
-                    VIEW ALL <ArrowRight className="w-4 h-4" />
-                </Link>
-             </div>
+    <section 
+      className="bg-rich-black py-16 lg:py-24 relative overflow-hidden"
+      style={{
+        backgroundImage: `repeating-linear-gradient(135deg, rgba(80, 80, 80, 0.15) 0px, rgba(80, 80, 80, 0.15) 1px, transparent 1px, transparent 100px)`
+      }}
+    >
+      {/* Rugby-themed decorative elements */}
+      <RugbyDecorations variant="goalposts" />
+      <CornerAccent position="top-right" />
+      <CornerAccent position="bottom-left" />
 
-             <div className="space-y-8">
-                {newsItems.map((item, index) => (
-                    <motion.div 
-                        key={item.id}
-                        initial={{ opacity: 0, y: 20 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ delay: index * 0.1 }}
-                        className="group flex gap-6 cursor-pointer"
-                    >
-                        {/* Thumbnail */}
-                        <div className="w-32 h-32 flex-shrink-0 bg-white/10 rounded-lg overflow-hidden relative">
-                             {/* Image Placeholder */}
-                             <div className="absolute inset-0 bg-gray-700 group-hover:scale-105 transition-transform duration-500" />
-                             <div className="absolute inset-0 flex items-center justify-center text-white/20 font-heading">IMG</div>
-                        </div>
-
-                        {/* Content */}
-                        <div className="flex-1 flex flex-col justify-center">
-                            <div className="flex items-center gap-3 mb-2">
-                                <span className="text-zru-gold text-xs font-bold tracking-widest uppercase">{item.category}</span>
-                                <span className="w-1 h-1 bg-white/30 rounded-full"></span>
-                                <span className="text-gray-400 text-xs font-bold uppercase">{item.date}</span>
-                            </div>
-                            <h3 className="text-xl font-heading text-white leading-tight mb-2 group-hover:text-zru-orange transition-colors">
-                                {item.title}
-                            </h3>
-                            <p className="text-gray-400 text-sm line-clamp-2">
-                                {item.excerpt}
-                            </p>
-                        </div>
-                    </motion.div>
-                ))}
-             </div>
+      <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        
+        {/* Section Header */}
+        <ScrollReveal>
+          <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6 mb-10">
+            <div>
+              <div className="flex items-center gap-2 mb-3">
+                <Newspaper className="w-5 h-5 text-zru-gold" />
+                <span className="text-zru-gold text-xs font-bold uppercase tracking-widest">Latest</span>
+              </div>
+              <h2 className="text-3xl md:text-4xl lg:text-5xl font-black text-white uppercase">
+                News & Media
+              </h2>
+            </div>
+            
+            {/* Category Pills */}
+            <div className="flex flex-wrap gap-2">
+              {["All", "Sables", "Lady Sables", "Cheetahs 7s", "Schools"].map((cat) => (
+                <motion.button
+                  key={cat}
+                  className={`
+                    px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider rounded-full transition-all
+                    ${cat === "All" ? "bg-zru-gold text-rich-black" : "bg-white/10 text-white hover:bg-white/20"}
+                  `}
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                >
+                  {cat}
+                </motion.button>
+              ))}
+            </div>
           </div>
+        </ScrollReveal>
 
-          {/* Featured Video Column */}
-          <div className="lg:w-1/2">
-             <div className="flex items-center justify-between mb-10">
-                <h2 className="text-3xl md:text-4xl font-heading text-white">FEATURED MEDIA</h2>
-                <Link href="/media" className="text-zru-orange text-sm font-bold tracking-widest hover:text-white transition-colors flex items-center gap-2">
-                    MEDIA HUB <ArrowRight className="w-4 h-4" />
-                </Link>
-             </div>
-
-             <motion.div 
-                initial={{ opacity: 0, scale: 0.95 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                viewport={{ once: true }}
-                className="relative aspect-video bg-white/5 rounded-2xl overflow-hidden group cursor-pointer border border-white/10"
-             >
-                 {/* Video Thumbnail Placeholder */}
-                 <div className="absolute inset-0 bg-gray-800" />
-                 
-                 {/* Overlay */}
-                 <div className="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-colors duration-300" />
-                 
-                 {/* Play Button */}
-                 <div className="absolute inset-0 flex items-center justify-center">
-                    <div className="w-20 h-20 bg-zru-orange rounded-full flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300">
-                        <Play className="w-8 h-8 text-white ml-1" fill="currentColor" />
+        {/* Featured Story */}
+        <ScrollReveal delay={0.1}>
+          <Link href={`/media/${featuredStory.id}`} className="block group mb-8">
+            <Tilt3DCard tiltAmount={3}>
+              <div className="relative bg-zru-green rounded-xl overflow-hidden group-hover:shadow-2xl transition-all duration-300">
+                <div className="flex flex-col lg:flex-row">
+                  {/* Image with gradient placeholder */}
+                  <div className="lg:w-1/2 h-64 lg:h-80 relative overflow-hidden">
+                    <div 
+                      className="absolute inset-0 bg-linear-to-br from-zru-green via-green-700 to-green-900 group-hover:scale-105 transition-transform duration-500"
+                      style={{ backgroundImage: 'url(/images/rugby-pattern.svg)', backgroundSize: '200px', opacity: 0.1 }}
+                    />
+                    <div className="absolute inset-0 bg-linear-to-t lg:bg-linear-to-r from-zru-green via-zru-green/50 to-transparent z-10" />
+                    {/* Abstract rugby shape overlay */}
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <div className="w-32 h-20 border-4 border-white/10 rounded-full rotate-45" />
                     </div>
-                 </div>
-
-                 {/* Video Info */}
-                 <div className="absolute bottom-0 left-0 right-0 p-8 bg-gradient-to-t from-black/90 to-transparent">
-                    <div className="text-zru-gold text-sm font-bold tracking-widest uppercase mb-2">HIGHLIGHTS</div>
-                    <h3 className="text-2xl md:text-3xl font-heading text-white mb-2">
-                        SABLES VS NAMIBIA: FULL MATCH HIGHLIGHTS
+                  </div>
+                  
+                  {/* Content */}
+                  <div className="lg:w-1/2 p-8 lg:p-10 relative z-10">
+                    <div className="flex items-center gap-3 mb-4">
+                      <span className={`${getCategoryColor(featuredStory.category)} px-3 py-1 text-[10px] font-bold uppercase rounded-full`}>
+                        {featuredStory.category}
+                      </span>
+                      <span className="text-white/60 text-xs font-medium">
+                        {featuredStory.date}
+                      </span>
+                    </div>
+                    
+                    <h3 className="text-2xl lg:text-3xl font-black text-white uppercase leading-tight mb-4 group-hover:text-zru-gold transition-colors">
+                      {featuredStory.title}
                     </h3>
-                    <div className="flex items-center gap-2 text-white/60 text-sm font-bold">
-                        <Calendar className="w-4 h-4" />
-                        <span>RECENTLY ADDED</span>
-                        <span className="mx-2">•</span>
-                        <span>10:42 MINS</span>
-                    </div>
-                 </div>
-             </motion.div>
-          </div>
+                    
+                    <p className="text-white/80 text-base leading-relaxed mb-6">
+                      {featuredStory.excerpt}
+                    </p>
+                    
+                    <span className="inline-flex items-center gap-2 bg-zru-gold hover:bg-yellow-500 text-rich-black px-5 py-2.5 text-xs font-bold uppercase tracking-wider rounded transition-all group-hover:gap-3">
+                      Read Full Story <ArrowRight className="w-4 h-4" />
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </Tilt3DCard>
+          </Link>
+        </ScrollReveal>
 
-        </div>
+        {/* Media Cards Grid */}
+        <StaggerContainer className="grid grid-cols-1 md:grid-cols-3 gap-5" staggerDelay={0.1}>
+          {mediaItems.map((item) => (
+            <motion.div key={item.id} variants={staggerItemVariants}>
+              <Link href={`/media/${item.id}`} className="block group h-full">
+                <div className="bg-white/5 hover:bg-white/10 border border-white/10 rounded-lg overflow-hidden h-full transition-all duration-300 hover:shadow-xl hover:scale-[1.02]">
+                  
+                  {/* Image with gradient placeholder */}
+                  <div className="h-44 relative overflow-hidden">
+                    <div 
+                      className="absolute inset-0 bg-linear-to-br from-gray-800 via-gray-700 to-gray-900 group-hover:scale-110 transition-transform duration-500"
+                    />
+                    {/* Gradient overlay based on category */}
+                    <div className={`absolute inset-0 opacity-60 ${
+                      item.category === 'Lady Sables' ? 'bg-linear-to-br from-pink-600/50 to-purple-800/50' :
+                      item.category === 'Cheetahs 7s' ? 'bg-linear-to-br from-orange-500/50 to-red-700/50' :
+                      item.category === 'Schools' ? 'bg-linear-to-br from-blue-500/50 to-blue-800/50' :
+                      'bg-linear-to-br from-zru-green/50 to-green-900/50'
+                    }`} />
+                    
+                    {/* Video play button or abstract shape */}
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      {item.type === "video" ? (
+                        <div className="w-14 h-14 bg-zru-red rounded-full flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
+                          <Play className="w-6 h-6 text-white ml-1" />
+                        </div>
+                      ) : (
+                        <div className="w-20 h-12 border-2 border-white/20 rounded-full rotate-45" />
+                      )}
+                    </div>
+                    
+                    {/* Category Badge */}
+                    <div className="absolute top-3 left-3 z-10">
+                      <span className={`${getCategoryColor(item.category)} px-2 py-1 text-[9px] font-bold uppercase rounded shadow-md`}>
+                        {item.category}
+                      </span>
+                    </div>
+                  </div>
+                  
+                  {/* Content */}
+                  <div className="p-5">
+                    <h4 className="text-white font-bold text-sm uppercase leading-tight mb-2 group-hover:text-zru-gold transition-colors line-clamp-2">
+                      {item.title}
+                    </h4>
+                    
+                    <p className="text-white/60 text-xs leading-relaxed mb-4 line-clamp-2">
+                      {item.excerpt}
+                    </p>
+                    
+                    <div className="flex items-center justify-between">
+                      <span className="text-white/40 text-[10px] font-bold uppercase">{item.date}</span>
+                      <span className="bg-zru-gold/20 text-zru-gold px-3 py-1 text-[10px] font-bold uppercase rounded flex items-center gap-1 group-hover:bg-zru-gold group-hover:text-rich-black transition-all">
+                        {item.type === "video" ? "Watch" : "Read"} <ArrowRight className="w-3 h-3" />
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </Link>
+            </motion.div>
+          ))}
+        </StaggerContainer>
+
+        {/* Read More Button */}
+        <ScrollReveal delay={0.4}>
+          <div className="text-center mt-10">
+            <Link href="/media">
+              <GlowButton 
+                className="bg-zru-red hover:bg-red-700 text-white px-8 py-3 text-xs font-bold uppercase tracking-wider flex items-center gap-2 mx-auto rounded transition-colors"
+                glowColor="rgba(215, 25, 32, 0.4)"
+              >
+                View All News & Media <ExternalLink className="w-4 h-4" />
+              </GlowButton>
+            </Link>
+          </div>
+        </ScrollReveal>
+
       </div>
     </section>
   );
