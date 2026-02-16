@@ -12,7 +12,7 @@ const featuredStory = {
   title: "SABLES SQUAD ANNOUNCED FOR AFRICA CUP DEFENCE",
   excerpt: "Head coach Brendan Dawson names 30-man squad for the upcoming Africa Cup campaign, with several exciting new faces joining the defending champions.",
   date: "08 FEB 2025",
-  image: "/images/teams/sables.jpg",
+  image: "/images/media/vid3.jpg",
   category: "Sables"
 };
 

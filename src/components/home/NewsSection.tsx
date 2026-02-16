@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { ArrowRight, Calendar, ChevronRight, Share2 } from "lucide-react";
 import Button from "../common/Button";
 import Link from "next/link";
+import Image from "next/image";
 
 const newsItems = [
   {
@@ -13,7 +14,7 @@ const newsItems = [
     date: "5 MAY 2025",
     author: "ZRU Media",
     excerpt: "Zimbabwe's national team prepares for crucial match against Namibia as the road to Australia 2027 heats up.",
-    image: "/images/teams/sables.jpg",
+    image: "/images/media/vid3.jpg",
     isFeatured: true,
   },
   {
@@ -45,7 +46,18 @@ const newsItems = [
 export default function NewsSection() {
   return (
     <section className="py-20 bg-rich-black relative border-t border-white/10 overflow-hidden">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      {/* Background Image */}
+      <div className="absolute inset-0 z-0">
+        <Image 
+          src="/images/events/africa-cup.jpg" 
+          alt="Background" 
+          fill 
+          className="object-cover opacity-20"
+        />
+        <div className="absolute inset-0 bg-linear-to-b from-rich-black via-rich-black/90 to-rich-black" />
+      </div>
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="flex justify-between items-end mb-12">
           <div>
             <h2 className="text-white font-heading text-xl tracking-widest mb-2">
