@@ -34,7 +34,7 @@ export default function HeroVideoHub() {
 
       {/* Main Content - Proper Hierarchy */}
       <motion.div 
-        className="relative z-10 w-full max-w-4xl mx-auto px-6 text-center"
+        className="relative z-10 w-full max-w-4xl mx-auto px-6 text-center pt-48"
         style={{ opacity }}
       >
 
