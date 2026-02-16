@@ -69,7 +69,7 @@ export default function Footer() {
               The official governing body of rugby union in Zimbabwe. Dedicated to growing the game and achieving excellence on the world stage.
             </p>
             <div className="flex gap-4">
-              {socialLinks.map(({ Icon: icon, href, label }) => (
+              {socialLinks.map(({ Icon, href, label }) => (
                 <motion.a
                   key={label}
                   href={href}
@@ -80,9 +80,7 @@ export default function Footer() {
                   whileTap={{ scale: 0.95 }}
                   aria-label={label}
                 >
-                  {/* The original code used 'Icon' as the prop name, but the provided snippet uses 'icon'.
-                      Adjusting to 'Icon' to match the socialLinks array structure. */}
-                  <icon className="w-4 h-4" />
+                  <Icon className="w-4 h-4" />
                 </motion.a>
               ))}
             </div>
