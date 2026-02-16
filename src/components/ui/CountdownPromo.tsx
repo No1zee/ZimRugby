@@ -137,7 +137,7 @@ export function CountdownPromo({
                 </div>
               ) : (
                 <div className="w-full h-full bg-linear-to-br from-zru-green via-green-700 to-green-900 flex items-center justify-center">
-                  <span className="text-white/20 text-6xl font-black">ZRU</span>
+                  <span className="text-white/20 text-4xl font-black">DEBUG: Placeholder</span>
                 </div>
               )}
             </div>
