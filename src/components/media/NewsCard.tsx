@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 
 interface NewsCardProps {
   id: string | number;
@@ -27,11 +28,21 @@ export default function NewsCard({
     <Link href={slug}>
         <motion.div 
             whileHover={{ x: 5 }}
-            className="flex gap-6 group cursor-pointer border-b border-white/5 pb-8 last:border-0"
+            className="flex flex-col md:flex-row gap-6 group cursor-pointer border-b border-white/5 pb-8 last:border-0"
         >
+            {image && (
+                <div className="w-full md:w-48 h-32 relative rounded-lg overflow-hidden shrink-0">
+                    <Image 
+                        src={image} 
+                        alt={title} 
+                        fill 
+                        className="object-cover transition-transform duration-500 group-hover:scale-110" 
+                    />
+                </div>
+            )}
             <div className="flex-1">
                 <div className="flex items-center gap-3 mb-2">
-                    <span className="text-zru-gold text-xs font-bold tracking-widest uppercase">{category}</span>
+                    <span className="text-zru-green text-xs font-bold tracking-widest uppercase">{category}</span>
                     <span className="w-1 h-1 bg-gray-600 rounded-full"></span>
                     <span className="text-gray-500 text-xs font-bold uppercase">{date}</span>
                 </div>

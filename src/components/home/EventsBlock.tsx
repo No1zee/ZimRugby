@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import { ArrowRight, Calendar, MapPin, Plus, Trophy, GraduationCap } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 import { StaggerContainer, staggerItemVariants } from "../ui/animations";
 import { StripedBackground } from "../ui/StripedBackground";
 import { BackgroundText } from "../ui/BackgroundText";
@@ -17,7 +18,7 @@ const events = [
     description: "The premier domestic rugby competition featuring Zimbabwe's top clubs.",
     tags: ["Domestic", "Super League"],
     icon: Trophy,
-    color: "from-zru-green to-green-800",
+    color: "from-zru-green to-black",
   },
   {
     id: 2,
@@ -28,7 +29,8 @@ const events = [
     description: "The Sables host the continent's premier tournament on home soil.",
     tags: ["Sables", "International"],
     icon: Trophy,
-    color: "from-zru-gold to-yellow-700",
+    color: "from-gray-900 to-black",
+    image: "/images/events/africa-cup.jpg"
   },
   {
     id: 3,
@@ -39,7 +41,8 @@ const events = [
     description: "The next generation of Sables compete in Zimbabwe's biggest schools event.",
     tags: ["Youth", "Schools"],
     icon: GraduationCap,
-    color: "from-blue-600 to-blue-800",
+    color: "from-zru-green to-gray-900",
+    image: "/images/events/schools-fest.jpg"
   }
 ];
 
@@ -72,7 +75,7 @@ export default function EventsBlock() {
             
             <Link href="/events">
               <motion.button
-                className="bg-zru-red hover:bg-red-700 text-white px-6 py-3 text-xs font-bold uppercase tracking-wider flex items-center gap-2 rounded transition-all"
+                className="bg-zru-green hover:bg-green-800 text-white px-6 py-3 text-xs font-bold uppercase tracking-wider flex items-center gap-2 rounded transition-all"
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
               >
@@ -90,16 +93,24 @@ export default function EventsBlock() {
             {events.slice(0, 2).map((event) => (
               <motion.div key={event.id} variants={staggerItemVariants}>
                 <Link href={`/events/${event.id}`} className="block h-full group">
-                  <div className="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 h-full">
+                  <div className="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 h-full flex flex-col">
                     
-                    {/* Image placeholder with gradient */}
-                    <div className={`h-48 bg-linear-to-br ${event.color} relative overflow-hidden`}>
+                    {/* Image Placeholder or Actual Image */}
+                    <div className={`h-48 relative overflow-hidden group`}>
+                      <Image 
+                        src={event.image || ""} 
+                        alt={event.title}
+                        fill
+                        className="object-cover transition-transform duration-700 group-hover:scale-110"
+                      />
+                      <div className={`absolute inset-0 bg-linear-to-br ${event.color} opacity-60 mix-blend-multiply group-hover:opacity-40 transition-opacity duration-300`} />
+                      
                       {/* Tags */}
                       <div className="absolute top-3 left-3 z-10 flex gap-1">
                         {event.tags.map(tag => (
                           <span 
                             key={tag}
-                            className="bg-white/90 text-gray-700 text-[9px] px-2 py-0.5 rounded font-bold uppercase"
+                            className="bg-white/90 text-gray-700 text-[9px] px-2 py-0.5 rounded font-bold uppercase backdrop-blur-sm"
                           >
                             {tag}
                           </span>
@@ -107,14 +118,16 @@ export default function EventsBlock() {
                       </div>
                       
                       {/* Icon */}
-                      <div className="absolute inset-0 flex items-center justify-center">
-                        <event.icon className="w-16 h-16 text-white/30" />
+                      <div className="absolute top-3 right-3 z-10">
+                         <div className="bg-white/20 backdrop-blur-xs p-2 rounded-full">
+                            <event.icon className="w-5 h-5 text-white" />
+                         </div>
                       </div>
                     </div>
                     
                     {/* Content */}
                     <div className="p-5">
-                      <h3 className="text-lg font-black text-gray-900 uppercase mb-1 group-hover:text-zru-red transition-colors">
+                      <h3 className="text-lg font-black text-gray-900 uppercase mb-1 group-hover:text-zru-green transition-colors">
                         {event.title}
                       </h3>
                       

@@ -15,7 +15,7 @@ const programs = [
     statLabel: "CLUBS",
     cta: "Get Involved",
     ctaLink: "/community/grassroots",
-    color: "from-zru-green to-green-700"
+    color: "from-zru-green to-green-900"
   },
   {
     id: 2,
@@ -26,7 +26,7 @@ const programs = [
     statLabel: "SCHOOLS",
     cta: "Learn More",
     ctaLink: "/community/schools",
-    color: "from-blue-600 to-blue-800"
+    color: "from-gray-900 to-black"
   },
   {
     id: 3,
@@ -37,7 +37,7 @@ const programs = [
     statLabel: "PLAYERS",
     cta: "Join Us",
     ctaLink: "/community/womens",
-    color: "from-pink-600 to-pink-800"
+    color: "from-zru-green to-black"
   },
 ];
 
@@ -50,8 +50,8 @@ export default function PlayRugbyDevelopment() {
         <ScrollReveal>
           <div className="text-center mb-12 lg:mb-16">
             <div className="flex items-center justify-center gap-2 mb-4">
-              <HandHeart className="w-6 h-6 text-zru-gold" />
-              <span className="text-zru-green text-xs font-bold uppercase tracking-widest">Community Impact</span>
+              <HandHeart className="w-6 h-6 text-white" />
+              <span className="text-white text-xs font-bold uppercase tracking-widest">Community Impact</span>
             </div>
             <h2 className="text-3xl md:text-4xl lg:text-5xl font-black text-zru-green uppercase mb-4">
               Rugby For Good
@@ -142,7 +142,7 @@ export default function PlayRugbyDevelopment() {
               </Link>
               <Link href="/donate">
                 <motion.button 
-                  className="bg-zru-gold text-zru-green px-6 py-3 text-xs font-bold uppercase tracking-wider rounded flex items-center gap-2 hover:bg-yellow-500 transition-colors"
+                  className="bg-white text-zru-green px-6 py-3 text-xs font-bold uppercase tracking-wider rounded flex items-center gap-2 hover:bg-gray-100 transition-colors"
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                 >
