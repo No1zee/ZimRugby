@@ -64,15 +64,12 @@ export default function Navigation() {
           {/* Logo */}
           <Link href="/" className="flex items-center gap-3 group">
             <motion.div 
-              className="w-10 h-10 bg-zru-green rounded-full flex items-center justify-center border-2 border-zru-gold"
+              className="w-10 h-10 bg-zru-green rounded-full flex items-center justify-center border-2 border-white"
               whileHover={{ scale: 1.05 }}
             >
               <span className="text-white font-black text-lg">Z</span>
             </motion.div>
-            <div className="hidden md:flex flex-col">
-              <span className="text-white font-black text-sm tracking-wider">ZRU</span>
-              <span className="text-white/60 text-[9px] uppercase tracking-widest">Zimbabwe Rugby</span>
-            </div>
+            <span className="text-white font-black text-xl tracking-tighter">ZRU</span>
           </Link>
 
           {/* Desktop Nav */}
@@ -90,8 +87,8 @@ export default function Navigation() {
                     relative px-4 py-2 text-sm font-bold uppercase tracking-wider transition-colors
                     flex items-center gap-1
                     ${isActive(item.href) 
-                      ? "text-zru-gold" 
-                      : "text-white hover:text-zru-gold"
+                      ? "text-white" 
+                      : "text-white/70 hover:text-white"
                     }
                   `}
                 >
@@ -101,7 +98,7 @@ export default function Navigation() {
                   {/* Active indicator */}
                   {isActive(item.href) && (
                     <motion.div 
-                      className="absolute bottom-0 left-4 right-4 h-0.5 bg-zru-gold"
+                      className="absolute bottom-0 left-4 right-4 h-0.5 bg-white"
                       layoutId="navIndicator"
                     />
                   )}

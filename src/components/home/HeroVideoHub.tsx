@@ -22,7 +22,7 @@ export default function HeroVideoHub() {
         {/* Video/Image Background */}
         <div 
           className="w-full h-full bg-cover bg-center"
-          style={{ backgroundImage: "url('/images/hero-sables.jpg')" }}
+          style={{ backgroundImage: "url('/images/teams/sables.jpg')" }}
         >
           {/* Overlay for text readability */}
           <div className="absolute inset-0 bg-linear-to-b from-black/70 via-black/50 to-rich-black" />
@@ -62,7 +62,7 @@ export default function HeroVideoHub() {
                 height: '0',
                 borderLeft: '120px solid transparent',
                 borderRight: '120px solid transparent',
-                borderTop: '400px solid rgba(255, 210, 0, 0.2)',
+                borderTop: '400px solid rgba(0, 150, 70, 0.2)',
                 transform: 'rotate(-20deg)',
                 filter: 'blur(15px)',
               }}
@@ -78,7 +78,7 @@ export default function HeroVideoHub() {
                 left: '60px',
                 width: '2px',
                 height: '350px',
-                background: 'linear-gradient(to bottom, rgba(255, 210, 0, 1) 0%, rgba(255, 210, 0, 0.5) 50%, transparent 100%)',
+                background: 'linear-gradient(to bottom, rgba(0, 150, 70, 1) 0%, rgba(0, 150, 70, 0.5) 50%, transparent 100%)',
                 transform: 'rotate(-20deg)',
                 transformOrigin: 'top center',
               }}
@@ -97,7 +97,7 @@ export default function HeroVideoHub() {
                 height: '0',
                 borderLeft: '120px solid transparent',
                 borderRight: '120px solid transparent',
-                borderTop: '400px solid rgba(255, 210, 0, 0.2)',
+                borderTop: '400px solid rgba(0, 150, 70, 0.2)',
                 transform: 'rotate(20deg)',
                 filter: 'blur(15px)',
               }}
@@ -113,7 +113,7 @@ export default function HeroVideoHub() {
                 right: '60px',
                 width: '2px',
                 height: '350px',
-                background: 'linear-gradient(to bottom, rgba(255, 210, 0, 1) 0%, rgba(255, 210, 0, 0.5) 50%, transparent 100%)',
+                background: 'linear-gradient(to bottom, rgba(0, 150, 70, 1) 0%, rgba(0, 150, 70, 0.5) 50%, transparent 100%)',
                 transform: 'rotate(20deg)',
                 transformOrigin: 'top center',
               }}
@@ -130,7 +130,7 @@ export default function HeroVideoHub() {
             animate={{ opacity: [0, 0, 0.7, 0] }}
             transition={{ delay: 0.6, duration: 3, times: [0, 0.25, 0.5, 1] }}
             style={{
-              background: 'radial-gradient(ellipse at center, rgba(255, 210, 0, 0.5) 0%, transparent 60%)',
+              background: 'radial-gradient(ellipse at center, rgba(0, 150, 70, 0.5) 0%, transparent 60%)',
             }}
           />
           
@@ -144,9 +144,9 @@ export default function HeroVideoHub() {
           
           {/* ARE HOME - 20% larger with gold glow */}
           <span 
-            className="block text-zru-gold italic relative z-20 text-6xl sm:text-7xl md:text-8xl lg:text-9xl"
+            className="block text-white italic relative z-20 text-6xl sm:text-7xl md:text-8xl lg:text-9xl"
             style={{ 
-              textShadow: '0 0 40px rgba(255, 210, 0, 0.5), 0 4px 20px rgba(0, 0, 0, 0.5)',
+              textShadow: '0 0 40px rgba(0, 150, 70, 0.5), 0 4px 20px rgba(0, 0, 0, 0.5)',
             }}
           >
             ARE HOME
@@ -173,8 +173,8 @@ export default function HeroVideoHub() {
           {/* Primary CTA */}
           <Link href="/tickets">
             <GlowButton 
-              className="bg-zru-red hover:bg-red-700 text-white px-8 py-4 text-sm font-bold uppercase tracking-widest flex items-center gap-3 rounded transition-all duration-300 min-w-[200px] justify-center"
-              glowColor="rgba(215, 25, 32, 0.5)"
+              className="bg-zru-green hover:bg-green-800 text-white px-8 py-4 text-sm font-bold uppercase tracking-widest flex items-center gap-3 rounded transition-all duration-300 min-w-[200px] justify-center"
+              glowColor="rgba(0, 96, 57, 0.5)"
             >
               <Ticket className="w-5 h-5" />
               Book Tickets
@@ -207,7 +207,7 @@ export default function HeroVideoHub() {
           </div>
           <div className="w-px h-8 bg-white/20" />
           <div className="text-center">
-            <div className="text-zru-gold font-black text-xl">22</div>
+            <div className="text-white font-black text-xl">22</div>
             <div className="text-white/60 text-xs font-bold uppercase">MAR</div>
           </div>
           <div className="w-px h-8 bg-white/20" />
@@ -231,7 +231,7 @@ export default function HeroVideoHub() {
           <motion.div 
             animate={{ y: [0, 8, 0] }}
             transition={{ repeat: Infinity, duration: 1.5 }}
-            className="w-1 h-1 bg-zru-gold rounded-full"
+            className="w-1 h-1 bg-white rounded-full"
           />
         </div>
       </motion.div>
