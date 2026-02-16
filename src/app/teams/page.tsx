@@ -8,7 +8,7 @@ const teams = [
     id: "sables",
     name: "Sables",
     description: "The pride of the nation. Zimbabwe&apos;s senior men&apos;s XV team, reigning Africa Cup champions.",
-    image: "/images/teams/sables.jpg", // Replace with real image
+    image: "/images/media/vid1.jpg", // Replace with real image
     color: "bg-zru-green",
     href: "/teams/sables",
   },
