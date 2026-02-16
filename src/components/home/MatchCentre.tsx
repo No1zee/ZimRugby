@@ -4,6 +4,7 @@ import { useState } from "react";
 import { ArrowRight, ChevronRight, MapPin, Share2, Ticket } from "lucide-react";
 import Button from "../common/Button";
 import { motion } from "framer-motion";
+import Image from "next/image";
 
 const fixtures = [
   {
@@ -71,8 +72,19 @@ export default function MatchCentre() {
   const upcomingFixtures = fixtures.slice(1);
 
   return (
-    <section className="py-20 bg-rich-black relative border-t border-white/10" id="match-centre">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section className="py-20 bg-rich-black relative border-t border-white/10 overflow-hidden" id="match-centre">
+      {/* Background Image */}
+      <div className="absolute inset-0 z-0">
+        <Image 
+          src="/images/events/africa-cup.jpg" 
+          alt="Match Centre Background" 
+          fill 
+          className="object-cover opacity-30"
+        />
+        <div className="absolute inset-0 bg-linear-to-b from-rich-black via-rich-black/90 to-rich-black" />
+      </div>
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Header */}
         <div className="flex flex-col md:flex-row justify-between items-end mb-12 gap-6">
           <div>
