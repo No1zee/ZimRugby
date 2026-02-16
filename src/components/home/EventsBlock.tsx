@@ -32,7 +32,7 @@ const events = [
     tags: ["Sables", "International"],
     icon: Trophy,
     color: "from-gray-900 to-black",
-    image: "/images/teams/sables.jpg"
+    image: "/images/media/vid1.jpg"
   },
   {
     id: 3,
