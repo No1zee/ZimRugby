@@ -17,7 +17,7 @@ const teams = [
     name: "Lady Sables",
     description: "Breaking barriers and making history. Our senior women&apos;s XV team competing on the continental stage.",
     image: "/images/teams/lady-sables.jpg",
-    color: "bg-zru-orange",
+    color: "bg-zru-green",
     href: "/teams/lady-sables",
   },
   {
@@ -25,7 +25,7 @@ const teams = [
     name: "Cheetahs",
     description: "Fast, furious, and fearless. The national men&apos;s sevens team competing on the World Series circuit.",
     image: "/images/teams/cheetahs.jpg",
-    color: "bg-zru-gold",
+    color: "bg-zru-green",
     href: "/teams/cheetahs",
   },
   {
@@ -33,7 +33,7 @@ const teams = [
     name: "Lady Cheetahs",
     description: "Speed and skill combined. The national women&apos;s sevens team inspiring the next generation.",
     image: "/images/teams/lady-cheetahs.jpg",
-    color: "bg-purple-700",
+    color: "bg-zru-green",
     href: "/teams/lady-cheetahs",
   },
   {
@@ -41,7 +41,7 @@ const teams = [
     name: "Junior Sables (U20)",
     description: "The future is bright. Our U20 team, consistently one of the top performing sides in Africa.",
     image: "/images/teams/junior-sables.jpg",
-    color: "bg-blue-700",
+    color: "bg-zru-green",
     href: "/teams/junior-sables",
   },
 ];

@@ -1,20 +1,25 @@
 @import "tailwindcss";
 
 /* eslint-disable-next-line */
+/* Note: @theme is standard Tailwind v4 syntax. Ignore "Unknown at rule" warnings. */
 @theme {
   --font-heading: var(--font-bebas-neue), sans-serif;
   --font-subheading: var(--font-montserrat), sans-serif;
   --font-body: var(--font-inter), sans-serif;
 
   --color-zru-green: #006039;
-  --color-zru-gold: #FFD200;
-  --color-zru-orange: #ED8B00;
-  --color-zru-red: #D71920;
   --color-rich-black: #0A0A0A;
   --color-gray-900: #1A1A1A;
   --color-gray-100: #F5F5F5;
-  --color-gold: #FFD700;
-  --color-red: #DC143C;
+  /* Mapped for backward compatibility but forced to allowed palette */
+  --color-zru-gold: #ffffff; 
+  --color-zru-orange: #006039;
+  --color-zru-red: #006039;
+  --color-gold: #ffffff;
+  --color-red: #006039;
+  --color-blue-600: #0A0A0A;
+  --color-blue-700: #0A0A0A;
+  --color-blue-800: #1A1A1A;
 }
 
 body {

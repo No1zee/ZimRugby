@@ -30,15 +30,15 @@ export default function TeamCard({
         >
         {/* Background Image Placeholder if no real image */}
         <div className={`absolute inset-0 bg-gray-800 transition-transform duration-700 group-hover:scale-110`}>
-             {/* Use Next.js Image in real app. For now, a colored block or placeholder */}
+             <Image 
+                src={image} 
+                alt={name}
+                fill
+                className="object-cover"
+             />
              <div className="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-colors duration-500 z-10" />
              {/* Gradient Overlay */}
              <div className={`absolute inset-0 bg-linear-to-t from-black/90 via-black/50 to-transparent z-20`} />
-             
-             {/* Placeholder for actual image */}
-             <div className="w-full h-full bg-gray-700 flex items-center justify-center">
-                <span className="text-white/10 font-heading text-6xl uppercase transform -rotate-12">{name}</span>
-             </div>
         </div>
 
         <div className="absolute inset-0 z-30 p-8 flex flex-col justify-end">

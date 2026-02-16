@@ -51,7 +51,7 @@ export default function Footer() {
       
       {/* Top Border Accent */}
       <motion.div 
-        className="h-1 bg-linear-to-r from-zru-green via-zru-gold to-zru-green"
+        className="h-1 bg-linear-to-r from-zru-green via-white to-zru-green"
         initial={{ scaleX: 0 }}
         whileInView={{ scaleX: 1 }}
         viewport={{ once: true }}
@@ -85,7 +85,7 @@ export default function Footer() {
                   href={href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-9 h-9 rounded-full bg-white/10 hover:bg-zru-gold flex items-center justify-center transition-colors"
+                  className="w-9 h-9 rounded-full bg-white/10 hover:bg-white hover:text-zru-green flex items-center justify-center transition-colors"
                   whileHover={{ scale: 1.1 }}
                   whileTap={{ scale: 0.95 }}
                   aria-label={label}
@@ -99,7 +99,7 @@ export default function Footer() {
           {/* Link Columns */}
           {Object.entries(footerLinks).map(([title, links]) => (
             <div key={title}>
-              <h4 className="font-bold text-sm uppercase tracking-wider mb-4 text-zru-gold">
+              <h4 className="font-bold text-sm uppercase tracking-wider mb-4 text-white">
                 {title}
               </h4>
               <ul className="space-y-2">
