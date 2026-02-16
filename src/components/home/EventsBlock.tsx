@@ -7,6 +7,7 @@ import Image from "next/image";
 import { StaggerContainer, staggerItemVariants } from "../ui/animations";
 import { StripedBackground } from "../ui/StripedBackground";
 import { BackgroundText } from "../ui/BackgroundText";
+import SubtleBackground from "../ui/SubtleBackground";
 
 const events = [
   {
@@ -93,7 +94,8 @@ export default function EventsBlock() {
             {events.slice(0, 2).map((event) => (
               <motion.div key={event.id} variants={staggerItemVariants}>
                 <Link href={`/events/${event.id}`} className="block h-full group">
-                  <div className="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 h-full flex flex-col">
+                  <div className="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 h-full flex flex-col relative group">
+                    <SubtleBackground variant="flow" intensity="low" />
                     
                     {/* Image Placeholder or Actual Image */}
                     <div className={`h-48 relative overflow-hidden group`}>

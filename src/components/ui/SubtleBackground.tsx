@@ -48,7 +48,7 @@ export default function SubtleBackground({
     <div className={`absolute inset-0 overflow-hidden pointer-events-none select-none ${className}`}>
       {/* Primary drifting blob */}
       <motion.div
-        className="absolute -top-1/2 -left-1/2 w-[200%] h-[200%] bg-gradient-to-br from-transparent via-zru-green/5 to-transparent rounded-full blur-3xl"
+        className="absolute -top-1/2 -left-1/2 w-[200%] h-[200%] bg-linear-to-br from-transparent via-zru-green/5 to-transparent rounded-full blur-3xl"
         animate={{
           transform: [
             "translate(0%, 0%) rotate(0deg)",
@@ -66,7 +66,7 @@ export default function SubtleBackground({
       
       {/* Secondary drifting blob (counter-movement) */}
       <motion.div
-        className="absolute -bottom-1/2 -right-1/2 w-[200%] h-[200%] bg-gradient-to-tl from-transparent via-zru-green/5 to-transparent rounded-full blur-3xl"
+        className="absolute -bottom-1/2 -right-1/2 w-[200%] h-[200%] bg-linear-to-tl from-transparent via-zru-green/5 to-transparent rounded-full blur-3xl"
         animate={{
           transform: [
             "translate(0%, 0%) scale(1)",
