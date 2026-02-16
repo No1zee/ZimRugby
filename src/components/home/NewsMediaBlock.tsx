@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import { ArrowRight, Play, Newspaper, ExternalLink } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 import { ScrollReveal, StaggerContainer, staggerItemVariants, GlowButton, Tilt3DCard } from "../ui/animations";
 import { RugbyDecorations, CornerAccent } from "../ui/RugbyDecorations";
 
@@ -104,9 +105,11 @@ export default function NewsMediaBlock() {
                 <div className="flex flex-col lg:flex-row">
                   {/* Image with gradient placeholder */}
                   <div className="lg:w-1/2 h-64 lg:h-80 relative overflow-hidden">
-                    <div 
-                      className="absolute inset-0 bg-linear-to-br from-zru-green via-green-700 to-green-900 group-hover:scale-105 transition-transform duration-500"
-                      style={{ backgroundImage: 'url(/images/rugby-pattern.svg)', backgroundSize: '200px', opacity: 0.1 }}
+                    <Image
+                      src={featuredStory.image}
+                      alt={featuredStory.title}
+                      fill
+                      className="object-cover group-hover:scale-105 transition-transform duration-500"
                     />
                     <div className="absolute inset-0 bg-linear-to-t lg:bg-linear-to-r from-zru-green via-zru-green/50 to-transparent z-10" />
                     {/* Abstract rugby shape overlay */}
@@ -153,8 +156,11 @@ export default function NewsMediaBlock() {
                   
                   {/* Image with gradient placeholder */}
                   <div className="h-44 relative overflow-hidden">
-                    <div 
-                      className="absolute inset-0 bg-linear-to-br from-gray-800 via-gray-700 to-gray-900 group-hover:scale-110 transition-transform duration-500"
+                    <Image 
+                      src={item.image} 
+                      alt={item.title} 
+                      fill 
+                      className="object-cover group-hover:scale-110 transition-transform duration-500"
                     />
                     {/* Gradient overlay based on category */}
                     <div className={`absolute inset-0 opacity-60 bg-linear-to-br from-zru-green/50 to-green-900/50`} />

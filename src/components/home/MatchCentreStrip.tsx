@@ -170,8 +170,14 @@ export default function MatchCentreStrip() {
         {featuredMatch && (
           <ScrollReveal delay={0.1}>
             <Tilt3DCard tiltAmount={3}>
-              <div className="relative bg-linear-to-br from-zru-green via-green-700 to-green-900 rounded-xl overflow-hidden mb-8 shadow-2xl">
-                <div className="absolute inset-0 bg-linear-to-r from-black/30 to-transparent" />
+              <div className="relative bg-rich-black rounded-xl overflow-hidden mb-8 shadow-2xl">
+                <Image 
+                  src="/images/teams/sables.jpg" 
+                  alt="Featured Match" 
+                  fill
+                  className="object-cover opacity-60"
+                />
+                <div className="absolute inset-0 bg-linear-to-r from-rich-black via-rich-black/80 to-transparent" />
                 <div className="relative p-8 lg:p-10">
                   
                   {/* Top: Competition & Category */}
