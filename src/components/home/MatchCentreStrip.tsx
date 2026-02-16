@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { useState } from "react";
 import { ArrowRight, Calendar, MapPin, Clock, Filter, ChevronRight } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 import { ScrollReveal, StaggerContainer, staggerItemVariants, Tilt3DCard, GlowButton } from "../ui/animations";
 import { RugbyDecorations, CornerAccent } from "../ui/RugbyDecorations";
 import { StripedBackground } from "../ui/StripedBackground";
@@ -20,46 +21,68 @@ const matchCategories = [
 const matches = [
   {
     id: 1,
-    competition: "AFRICA CUP 2025",
-    homeTeam: "ZIM SABLES",
-    awayTeam: "NAMIBIA",
-    date: "22 MAR 2025",
-    time: "16:00",
-    venue: "National Sports Stadium, Harare",
+    competition: "NATIONS CUP",
+    homeTeam: "TONGA",
+    awayTeam: "ZIM SABLES",
+    date: "04 JULY 2026",
+    time: "TBA",
+    venue: "USA",
     category: "international",
     isFeatured: true,
   },
   {
     id: 2,
-    competition: "AFRICA CUP 2025",
-    homeTeam: "ZIM SABLES",
-    awayTeam: "KENYA",
-    date: "29 MAR 2025",
-    time: "15:00",
-    venue: "National Sports Stadium, Harare",
+    competition: "NATIONS CUP",
+    homeTeam: "USA",
+    awayTeam: "ZIM SABLES",
+    date: "11 JULY 2026",
+    time: "TBA",
+    venue: "USA",
     category: "international",
     isFeatured: false,
   },
   {
     id: 3,
-    competition: "WOMEN'S AFRICA CUP",
-    homeTeam: "LADY SABLES",
-    awayTeam: "UGANDA",
-    date: "05 APR 2025",
-    time: "14:00",
-    venue: "Harare Sports Club",
-    category: "women",
+    competition: "NATIONS CUP",
+    homeTeam: "CANADA",
+    awayTeam: "ZIM SABLES",
+    date: "18 JULY 2026",
+    time: "TBA",
+    venue: "CANADA",
+    category: "international",
     isFeatured: false,
   },
   {
     id: 4,
-    competition: "SUPER LEAGUE",
-    homeTeam: "OLD HARARIANS",
-    awayTeam: "HARARE SPORTS CLUB",
-    date: "12 APR 2025",
-    time: "15:30",
-    venue: "Old Hararians Sports Ground",
-    category: "domestic",
+    competition: "NATIONS CUP",
+    homeTeam: "SAMOA",
+    awayTeam: "ZIM SABLES",
+    date: "07 NOV 2026",
+    time: "TBA",
+    venue: "ENGLAND",
+    category: "international",
+    isFeatured: false,
+  },
+  {
+    id: 5,
+    competition: "NATIONS CUP",
+    homeTeam: "URUGUAY",
+    awayTeam: "ZIM SABLES",
+    date: "14 NOV 2026",
+    time: "TBA",
+    venue: "ENGLAND",
+    category: "international",
+    isFeatured: false,
+  },
+  {
+    id: 6,
+    competition: "NATIONS CUP",
+    homeTeam: "CHILE",
+    awayTeam: "ZIM SABLES",
+    date: "21 NOV 2026",
+    time: "TBA",
+    venue: "ENGLAND",
+    category: "international",
     isFeatured: false,
   },
 ];
@@ -86,10 +109,18 @@ export default function MatchCentreStrip() {
   return (
     <section 
       className="bg-rich-black py-16 lg:py-20 relative overflow-hidden"
-      style={{
-        backgroundImage: `repeating-linear-gradient(135deg, rgba(80, 80, 80, 0.15) 0px, rgba(80, 80, 80, 0.15) 1px, transparent 1px, transparent 100px)`
-      }}
     >
+      {/* Background Image */}
+      <div className="absolute inset-0 z-0">
+        <Image 
+          src="/images/events/africa-cup.jpg" 
+          alt="Background" 
+          fill 
+          className="object-cover opacity-20"
+        />
+        <div className="absolute inset-0 bg-linear-to-b from-rich-black via-rich-black/90 to-rich-black" />
+      </div>
+
       {/* Rugby-themed decorative elements */}
       <RugbyDecorations variant="mixed" />
       <CornerAccent position="top-left" />
