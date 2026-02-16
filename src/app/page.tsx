@@ -28,7 +28,7 @@ export default function Home() {
           targetDate="2025-03-22T16:00:00"
           countdownLabel="COUNTDOWN TO KICK OFF:"
           location="National Sports Stadium, Harare"
-          image="/images/teams/sables.jpg"
+          image="/images/events/africa-cup.jpg"
           ctas={[
             { label: "Get Tickets", href: "/tickets", variant: "primary" },
             { label: "Match Info", href: "/matches/africa-cup-kenya", variant: "outline" },
