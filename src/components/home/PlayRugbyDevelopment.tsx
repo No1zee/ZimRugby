@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { ArrowRight, Heart, Users, GraduationCap, HandHeart, Target } from "lucide-react";
 import Link from "next/link";
 import { ScrollReveal, StaggerContainer, staggerItemVariants, GlowButton, Tilt3DCard, AnimatedCounter } from "../ui/animations";
+import SubtleBackground from "../ui/SubtleBackground";
 
 const programs = [
   {
@@ -67,7 +68,8 @@ export default function PlayRugbyDevelopment() {
           {programs.map((program) => (
             <motion.div key={program.id} variants={staggerItemVariants}>
               <Tilt3DCard tiltAmount={5} glareEnabled>
-                <div className="bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 h-full flex flex-col">
+                <div className="bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 h-full flex flex-col relative">
+                  <SubtleBackground variant="flow" intensity="low" />
                   
                   {/* Visual Header with Icon & Stats */}
                   <div className={`h-44 bg-linear-to-br ${program.color} relative overflow-hidden`}>
