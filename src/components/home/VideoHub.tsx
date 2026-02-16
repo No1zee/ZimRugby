@@ -11,7 +11,7 @@ const videos = [
     title: "Sables vs Kenya: Highlights",
     duration: "10:32",
     date: "2 days ago",
-    thumbnail: "/images/video/highlights.jpg",
+    thumbnail: "/images/media/vid1.jpg",
     featured: true,
   },
   {
@@ -19,21 +19,21 @@ const videos = [
     title: "Player Profile: T. Musingwini",
     duration: "3:45",
     date: "5 days ago",
-    thumbnail: "/images/video/profile.jpg",
+    thumbnail: "/images/media/vid2.jpg",
   },
   {
     id: 3,
     title: "Road to World Cup 2027",
     duration: "15:20",
     date: "1 week ago",
-    thumbnail: "/images/video/documentary.jpg",
+    thumbnail: "/images/media/vid3.jpg",
   },
   {
     id: 4,
     title: "Training Camp: Behind Scenes",
     duration: "5:10",
     date: "2 weeks ago",
-    thumbnail: "/images/video/training.jpg",
+    thumbnail: "/images/media/vid4.jpg",
   },
 ];
 
@@ -46,7 +46,7 @@ export default function VideoHub() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-end mb-12">
           <div>
-            <h2 className="text-zru-orange font-heading text-xl tracking-widest mb-2">
+            <h2 className="text-white font-heading text-xl tracking-widest mb-2">
               WATCH
             </h2>
             <h3 className="text-4xl md:text-5xl font-heading text-white">
@@ -75,14 +75,14 @@ export default function VideoHub() {
                     <motion.div
                        whileHover={{ scale: 1.1 }}
                        whileTap={{ scale: 0.95 }}
-                       className="w-20 h-20 bg-zru-orange rounded-full flex items-center justify-center shadow-[0_0_30px_rgba(255,140,0,0.4)] group-hover:shadow-[0_0_50px_rgba(255,140,0,0.6)] transition-shadow"
+                       className="w-20 h-20 bg-zru-green rounded-full flex items-center justify-center shadow-[0_0_30px_rgba(0,150,70,0.4)] group-hover:shadow-[0_0_50px_rgba(0,150,70,0.6)] transition-shadow"
                     >
                         <Play className="w-8 h-8 text-white fill-white ml-1" />
                     </motion.div>
                 </div>
 
                 <div className="absolute bottom-0 left-0 p-8 z-20 w-full">
-                    <span className="bg-red-600 text-white text-xs font-bold px-2 py-1 rounded inline-block mb-3">
+                    <span className="bg-zru-green text-white text-xs font-bold px-2 py-1 rounded inline-block mb-3">
                         FEATURED
                     </span>
                     <h3 className="text-2xl md:text-4xl font-heading text-white mb-2 leading-tight">
@@ -111,13 +111,13 @@ export default function VideoHub() {
                         <div className="w-32 h-20 bg-gray-800 rounded-lg overflow-hidden relative shrink-0">
                            <div className="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors" />
                            <div className="absolute inset-0 flex items-center justify-center">
-                               <div className="w-8 h-8 bg-black/50 rounded-full flex items-center justify-center backdrop-blur-sm group-hover:bg-zru-orange group-hover:text-white transition-colors">
+                               <div className="w-8 h-8 bg-black/50 rounded-full flex items-center justify-center backdrop-blur-sm group-hover:bg-zru-green group-hover:text-white transition-colors">
                                    <Play className="w-3 h-3 text-white fill-white ml-0.5" />
                                </div>
                            </div>
                         </div>
                         <div className="flex flex-col justify-center">
-                            <h4 className="text-white font-heading text-lg leading-tight mb-1 group-hover:text-zru-orange transition-colors line-clamp-2">
+                            <h4 className="text-white font-heading text-lg leading-tight mb-1 group-hover:text-zru-green transition-colors line-clamp-2">
                                 {video.title}
                             </h4>
                             <div className="flex items-center gap-2 text-gray-500 text-xs font-bold">

@@ -51,7 +51,7 @@ export default function EventsBlock() {
     <section className="relative bg-gray-50 py-16 lg:py-24 overflow-hidden">
       
       {/* Background text - "WHAT'S ON? A GAME FOR ALL" style */}
-      <BackgroundText text="WHAT'S ON?" repeat={3} color="gray" />
+      <BackgroundText text="WHAT'S ON?" repeat={3} color="green" />
       
 
       <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 relative z-10">

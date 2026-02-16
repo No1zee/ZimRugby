@@ -30,7 +30,7 @@ export function BackgroundText({
   const colorMap = {
     navy: "rgba(9, 31, 64, 0.15)",
     gray: "rgba(128, 128, 128, 0.08)",
-    green: "rgba(0, 96, 57, 0.1)",
+    green: "rgba(0, 96, 57, 0.2)",
   };
 
   const repeatedText = Array(repeat).fill(text).join(" ");
@@ -47,7 +47,7 @@ export function BackgroundText({
         className="whitespace-nowrap select-none"
         style={{
           fontFamily: "var(--font-heading), sans-serif",
-          fontSize: "clamp(80px, 15vw, 200px)",
+          fontSize: "clamp(100px, 18vw, 250px)",
           fontWeight: 900,
           letterSpacing: "0.05em",
           color: colorMap[color],

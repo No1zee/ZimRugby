@@ -13,7 +13,7 @@ const newsItems = [
     date: "5 MAY 2025",
     author: "ZRU Media",
     excerpt: "Zimbabwe's national team prepares for crucial match against Namibia as the road to Australia 2027 heats up.",
-    image: "/images/news/sables-qualification.jpg",
+    image: "/images/teams/sables.jpg",
     isFeatured: true,
   },
   {
@@ -21,7 +21,7 @@ const newsItems = [
     title: "Lady Sables Announce Squad for Africa Women's Cup",
     category: "Lady Sables",
     date: "3 MAY 2025",
-    image: "/images/news/lady-sables.jpg",
+    image: "/images/teams/lady-sables.jpg",
     isFeatured: false,
   },
   {
@@ -29,7 +29,7 @@ const newsItems = [
     title: "Schools Rugby Festival Dates Confirmed for 2025",
     category: "Schools Rugby",
     date: "1 MAY 2025",
-    image: "/images/news/schools-rugby.jpg",
+    image: "/images/events/schools-fest.jpg",
     isFeatured: false,
   },
   {
@@ -37,7 +37,7 @@ const newsItems = [
     title: "ZRU Launches New Development Program in Bulawayo",
     category: "Development",
     date: "28 APR 2025",
-    image: "/images/news/development.jpg",
+    image: "/images/events/africa-cup.jpg",
     isFeatured: false,
   },
 ];
@@ -48,7 +48,7 @@ export default function NewsSection() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-end mb-12">
           <div>
-            <h2 className="text-zru-orange font-heading text-xl tracking-widest mb-2">
+            <h2 className="text-white font-heading text-xl tracking-widest mb-2">
               LATEST UPDATES
             </h2>
             <h3 className="text-4xl md:text-5xl font-heading text-white">
@@ -92,7 +92,7 @@ export default function NewsSection() {
 
              <div className="absolute bottom-0 left-0 p-8 w-full z-10">
                 <div className="flex gap-3 mb-4">
-                  <span className="bg-zru-orange text-white text-xs font-bold px-3 py-1 rounded uppercase tracking-wider">
+                  <span className="bg-zru-green text-white text-xs font-bold px-3 py-1 rounded uppercase tracking-wider">
                     {newsItems[0].category}
                   </span>
                   <span className="text-gray-300 text-xs font-bold flex items-center gap-1">
@@ -100,7 +100,7 @@ export default function NewsSection() {
                   </span>
                 </div>
                 <Link href={`/news/${newsItems[0].id}`}>
-                  <h3 className="text-3xl md:text-4xl font-heading text-white mb-4 hover:text-zru-orange transition-colors duration-300 leading-tight">
+                  <h3 className="text-3xl md:text-4xl font-heading text-white mb-4 hover:text-zru-green transition-colors duration-300 leading-tight">
                     {newsItems[0].title}
                   </h3>
                 </Link>
@@ -135,7 +135,7 @@ export default function NewsSection() {
                 </div>
                 <div className="flex-1 flex flex-col justify-center">
                    <div className="flex gap-2 mb-2">
-                      <span className="text-zru-orange text-[10px] font-bold uppercase tracking-wider">
+                      <span className="text-zru-green text-[10px] font-bold uppercase tracking-wider">
                         {item.category}
                       </span>
                       <span className="text-gray-500 text-[10px]">&bull;</span>
@@ -144,7 +144,7 @@ export default function NewsSection() {
                       </span>
                    </div>
                    <Link href={`/news/${item.id}`}>
-                     <h4 className="font-heading text-xl text-white hover:text-zru-orange transition-colors leading-tight mb-2 line-clamp-2">
+                     <h4 className="font-heading text-xl text-white hover:text-zru-green transition-colors leading-tight mb-2 line-clamp-2">
                        {item.title}
                      </h4>
                    </Link>

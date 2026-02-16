@@ -33,7 +33,7 @@ export default function EventCard({
         {/* Date Banner */}
         <div className="bg-white/5 p-4 flex items-center justify-between border-b border-white/5">
         <div className="flex items-center gap-2 text-white font-bold tracking-wider">
-            <CalendarIcon className="w-4 h-4 text-zru-gold" />
+            <CalendarIcon className="w-4 h-4 text-white" />
             <span>{date}</span>
         </div>
         <span className={`text-[10px] font-bold px-2 py-1 rounded text-white ${color}`}>

@@ -11,7 +11,7 @@ const featuredStory = {
   title: "SABLES SQUAD ANNOUNCED FOR AFRICA CUP DEFENCE",
   excerpt: "Head coach Brendan Dawson names 30-man squad for the upcoming Africa Cup campaign, with several exciting new faces joining the defending champions.",
   date: "08 FEB 2025",
-  image: "/images/news/sables-squad.jpg",
+  image: "/images/teams/sables.jpg",
   category: "Sables"
 };
 
@@ -22,7 +22,7 @@ const mediaItems = [
     title: "LADY SABLES SECURE HISTORIC WIN OVER KENYA",
     excerpt: "A dominant second-half performance seals a memorable victory at Harare Sports Club.",
     date: "06 FEB 2025",
-    image: "/images/news/lady-sables.jpg",
+    image: "/images/teams/lady-sables.jpg",
     category: "Lady Sables"
   },
   {
@@ -31,7 +31,7 @@ const mediaItems = [
     title: "CHEETAHS SEVENS: CAPE TOWN LEG HIGHLIGHTS",
     excerpt: "Watch the best moments from Zimbabwe's impressive run in the SVNS series.",
     date: "04 FEB 2025",
-    image: "/images/news/cheetahs.jpg",
+    image: "/images/teams/cheetahs.jpg",
     category: "Cheetahs 7s"
   },
   {
@@ -40,19 +40,13 @@ const mediaItems = [
     title: "SCHOOLS RUGBY FESTIVAL: DAY 3 ROUND-UP",
     excerpt: "Churchill and Prince Edward set up a thrilling final after semi-final victories.",
     date: "02 FEB 2025",
-    image: "/images/news/schools.jpg",
+    image: "/images/events/schools-fest.jpg",
     category: "Schools"
   },
 ];
 
 const getCategoryColor = (category: string) => {
-  switch(category) {
-    case "Sables": return "bg-zru-green text-white";
-    case "Lady Sables": return "bg-pink-600 text-white";
-    case "Cheetahs 7s": return "bg-orange-500 text-white";
-    case "Schools": return "bg-blue-500 text-white";
-    default: return "bg-gray-500 text-white";
-  }
+  return "bg-zru-green text-white";
 };
 
 export default function NewsMediaBlock() {
@@ -75,8 +69,8 @@ export default function NewsMediaBlock() {
           <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6 mb-10">
             <div>
               <div className="flex items-center gap-2 mb-3">
-                <Newspaper className="w-5 h-5 text-zru-gold" />
-                <span className="text-zru-gold text-xs font-bold uppercase tracking-widest">Latest</span>
+                <Newspaper className="w-5 h-5 text-white" />
+                <span className="text-white text-xs font-bold uppercase tracking-widest">Latest</span>
               </div>
               <h2 className="text-3xl md:text-4xl lg:text-5xl font-black text-white uppercase">
                 News & Media
@@ -90,7 +84,7 @@ export default function NewsMediaBlock() {
                   key={cat}
                   className={`
                     px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider rounded-full transition-all
-                    ${cat === "All" ? "bg-zru-gold text-rich-black" : "bg-white/10 text-white hover:bg-white/20"}
+                    ${cat === "All" ? "bg-white text-zru-green" : "bg-white/10 text-white hover:bg-white/20"}
                   `}
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
@@ -132,7 +126,7 @@ export default function NewsMediaBlock() {
                       </span>
                     </div>
                     
-                    <h3 className="text-2xl lg:text-3xl font-black text-white uppercase leading-tight mb-4 group-hover:text-zru-gold transition-colors">
+                    <h3 className="text-2xl lg:text-3xl font-black text-white uppercase leading-tight mb-4 group-hover:text-zru-green transition-colors">
                       {featuredStory.title}
                     </h3>
                     
@@ -140,7 +134,7 @@ export default function NewsMediaBlock() {
                       {featuredStory.excerpt}
                     </p>
                     
-                    <span className="inline-flex items-center gap-2 bg-zru-gold hover:bg-yellow-500 text-rich-black px-5 py-2.5 text-xs font-bold uppercase tracking-wider rounded transition-all group-hover:gap-3">
+                    <span className="inline-flex items-center gap-2 bg-white hover:bg-gray-100 text-zru-green px-5 py-2.5 text-xs font-bold uppercase tracking-wider rounded transition-all group-hover:gap-3">
                       Read Full Story <ArrowRight className="w-4 h-4" />
                     </span>
                   </div>
@@ -163,17 +157,12 @@ export default function NewsMediaBlock() {
                       className="absolute inset-0 bg-linear-to-br from-gray-800 via-gray-700 to-gray-900 group-hover:scale-110 transition-transform duration-500"
                     />
                     {/* Gradient overlay based on category */}
-                    <div className={`absolute inset-0 opacity-60 ${
-                      item.category === 'Lady Sables' ? 'bg-linear-to-br from-pink-600/50 to-purple-800/50' :
-                      item.category === 'Cheetahs 7s' ? 'bg-linear-to-br from-orange-500/50 to-red-700/50' :
-                      item.category === 'Schools' ? 'bg-linear-to-br from-blue-500/50 to-blue-800/50' :
-                      'bg-linear-to-br from-zru-green/50 to-green-900/50'
-                    }`} />
+                    <div className={`absolute inset-0 opacity-60 bg-linear-to-br from-zru-green/50 to-green-900/50`} />
                     
                     {/* Video play button or abstract shape */}
                     <div className="absolute inset-0 flex items-center justify-center">
                       {item.type === "video" ? (
-                        <div className="w-14 h-14 bg-zru-red rounded-full flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
+                        <div className="w-14 h-14 bg-zru-green rounded-full flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
                           <Play className="w-6 h-6 text-white ml-1" />
                         </div>
                       ) : (
@@ -191,7 +180,7 @@ export default function NewsMediaBlock() {
                   
                   {/* Content */}
                   <div className="p-5">
-                    <h4 className="text-white font-bold text-sm uppercase leading-tight mb-2 group-hover:text-zru-gold transition-colors line-clamp-2">
+                    <h4 className="text-white font-bold text-sm uppercase leading-tight mb-2 group-hover:text-zru-green transition-colors line-clamp-2">
                       {item.title}
                     </h4>
                     
@@ -201,7 +190,7 @@ export default function NewsMediaBlock() {
                     
                     <div className="flex items-center justify-between">
                       <span className="text-white/40 text-[10px] font-bold uppercase">{item.date}</span>
-                      <span className="bg-zru-gold/20 text-zru-gold px-3 py-1 text-[10px] font-bold uppercase rounded flex items-center gap-1 group-hover:bg-zru-gold group-hover:text-rich-black transition-all">
+                      <span className="bg-white/10 text-white px-3 py-1 text-[10px] font-bold uppercase rounded flex items-center gap-1 group-hover:bg-white group-hover:text-zru-green transition-all">
                         {item.type === "video" ? "Watch" : "Read"} <ArrowRight className="w-3 h-3" />
                       </span>
                     </div>
@@ -217,8 +206,8 @@ export default function NewsMediaBlock() {
           <div className="text-center mt-10">
             <Link href="/media">
               <GlowButton 
-                className="bg-zru-red hover:bg-red-700 text-white px-8 py-3 text-xs font-bold uppercase tracking-wider flex items-center gap-2 mx-auto rounded transition-colors"
-                glowColor="rgba(215, 25, 32, 0.4)"
+                className="bg-zru-green hover:bg-green-800 text-white px-8 py-3 text-xs font-bold uppercase tracking-wider flex items-center gap-2 mx-auto rounded transition-colors"
+                glowColor="rgba(0, 96, 57, 0.4)"
               >
                 View All News & Media <ExternalLink className="w-4 h-4" />
               </GlowButton>

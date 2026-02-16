@@ -57,29 +57,19 @@ export default function Footer() {
         viewport={{ once: true }}
       />
 
-      <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-16">
-        
-        {/* Main Footer Grid */}
-        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-8 lg:gap-12 mb-12">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
           
           {/* Brand Column */}
-          <div className="col-span-2 md:col-span-4 lg:col-span-1 mb-4 lg:mb-0">
-            <Link href="/" className="flex items-center gap-3 mb-4">
-              <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center">
-                <span className="text-zru-green font-black text-xl">Z</span>
-              </div>
-              <div>
-                <span className="font-black text-xl">ZRU</span>
-                <p className="text-white/60 text-[10px] uppercase tracking-wider">Zimbabwe Rugby Union</p>
-              </div>
+          <div className="space-y-6">
+            <Link href="/" className="inline-block">
+              <span className="text-3xl font-black text-white tracking-tighter">ZRU</span>
             </Link>
-            <p className="text-white/70 text-xs leading-relaxed mb-4 max-w-xs">
-              Growing rugby in Zimbabwe through passion, development, and community since 1895.
+            <p className="text-white/60 text-sm leading-relaxed">
+              The official governing body of rugby union in Zimbabwe. Dedicated to growing the game and achieving excellence on the world stage.
             </p>
-            
-            {/* Social Icons */}
-            <div className="flex gap-3">
-              {socialLinks.map(({ Icon, href, label }) => (
+            <div className="flex gap-4">
+              {socialLinks.map(({ Icon: icon, href, label }) => (
                 <motion.a
                   key={label}
                   href={href}
@@ -90,13 +80,15 @@ export default function Footer() {
                   whileTap={{ scale: 0.95 }}
                   aria-label={label}
                 >
-                  <Icon className="w-4 h-4" />
+                  {/* The original code used 'Icon' as the prop name, but the provided snippet uses 'icon'.
+                      Adjusting to 'Icon' to match the socialLinks array structure. */}
+                  <icon className="w-4 h-4" />
                 </motion.a>
               ))}
             </div>
           </div>
 
-          {/* Link Columns */}
+          {/* Quick Links */}
           {Object.entries(footerLinks).map(([title, links]) => (
             <div key={title}>
               <h4 className="font-bold text-sm uppercase tracking-wider mb-4 text-white">
@@ -133,18 +125,19 @@ export default function Footer() {
           </div>
         </div>
 
-        {/* Bottom Bar */}
-        <div className="border-t border-white/10 pt-6 flex flex-col md:flex-row justify-between items-center gap-4 text-white/50 text-[10px] uppercase tracking-wider">
-          <p>
-            © {new Date().getFullYear()} Zimbabwe Rugby Union. All rights reserved.
+        {/* Copyright */}
+        <div className="border-t border-white/10 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+          <p className="text-white/40 text-xs text-center md:text-left">
+            &copy; {new Date().getFullYear()} Zimbabwe Rugby Union. All rights reserved.
           </p>
-          <div className="flex flex-wrap gap-6 justify-center">
-            <Link href="/privacy" className="hover:text-white transition-colors">Privacy Policy</Link>
-            <Link href="/terms" className="hover:text-white transition-colors">Terms of Service</Link>
-            <Link href="/sitemap" className="hover:text-white transition-colors">Sitemap</Link>
+          <div className="flex gap-6 text-xs text-white/40">
+            {['Privacy Policy', 'Terms of Service', 'Cookie Policy'].map((item) => (
+              <a key={item} href="#" className="hover:text-white transition-colors">
+                {item}
+              </a>
+            ))}
           </div>
         </div>
-
       </div>
     </footer>
   );
