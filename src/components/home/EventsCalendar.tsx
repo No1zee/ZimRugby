@@ -34,7 +34,7 @@ const events = [
     month: "JUL",
     location: "Harare Sports Club",
     category: "SABLES",
-    image: "/images/events/sables.jpg",
+    image: "/images/media/vid4.jpg",
   },
   {
     id: 4,
