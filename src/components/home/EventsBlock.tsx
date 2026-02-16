@@ -32,7 +32,7 @@ const events = [
     tags: ["Sables", "International"],
     icon: Trophy,
     color: "from-gray-900 to-black",
-    image: "/images/events/africa-cup.jpg"
+    image: "/images/teams/sables.jpg"
   },
   {
     id: 3,
