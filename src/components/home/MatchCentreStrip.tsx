@@ -172,7 +172,7 @@ export default function MatchCentreStrip() {
             <Tilt3DCard tiltAmount={3}>
               <div className="relative bg-rich-black rounded-xl overflow-hidden mb-8 shadow-2xl">
                 <Image 
-                  src="/images/teams/sables.jpg" 
+                  src="/images/media/vid2.jpg" 
                   alt="Featured Match" 
                   fill
                   className="object-cover opacity-60"
