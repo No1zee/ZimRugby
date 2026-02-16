@@ -8,7 +8,7 @@ import { TextScramble, FloatingParticles, GlowButton } from "../ui/animations";
 export default function HeroVideoHub() {
   const { scrollY } = useScroll();
   const y = useTransform(scrollY, [0, 500], [0, 150]);
-  const opacity = useTransform(scrollY, [0, 300], [1, 0]);
+  const opacity = useTransform(scrollY, [0, 300], [0, 1]);
   const scale = useTransform(scrollY, [0, 300], [1, 1.1]);
 
   return (
@@ -25,7 +25,7 @@ export default function HeroVideoHub() {
           style={{ backgroundImage: "url('/images/teams/sables.jpg')" }}
         >
           {/* Overlay for text readability */}
-          <div className="absolute inset-0 bg-linear-to-b from-black/70 via-black/50 to-rich-black" />
+          <div className="absolute inset-0 bg-linear-to-b from-black/20 via-black/40 to-rich-black" />
         </div>
       </motion.div>
 
@@ -34,7 +34,7 @@ export default function HeroVideoHub() {
 
       {/* Main Content - Proper Hierarchy */}
       <motion.div 
-        className="relative z-10 w-full max-w-4xl mx-auto px-6 text-center pt-48"
+        className="relative z-10 w-full max-w-4xl mx-auto px-6 text-center pt-[35vh]"
         style={{ opacity }}
       >
 
