@@ -20,6 +20,7 @@ const events = [
     tags: ["Domestic", "Super League"],
     icon: Trophy,
     color: "from-zru-green to-black",
+    image: "/images/events/super-league.jpg"
   },
   {
     id: 2,
