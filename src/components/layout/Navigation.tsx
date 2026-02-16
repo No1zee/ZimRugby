@@ -3,8 +3,8 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Menu, X, ShoppingCart, User, Search, ChevronDown } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
+import { Menu, X, ChevronDown } from "lucide-react";
+import { motion, AnimatePresence, useScroll, useMotionValueEvent } from "framer-motion";
 
 const navItems = [
   { label: "OUR TEAMS", href: "/teams" },
@@ -32,27 +32,42 @@ const navItems = [
 
 export default function Navigation() {
   const [isOpen, setIsOpen] = useState(false);
+  const [hidden, setHidden] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
   const pathname = usePathname();
+  const { scrollY } = useScroll();
 
   const toggleMenu = () => setIsOpen(!isOpen);
 
-  useEffect(() => {
-    const handleScroll = () => setIsScrolled(window.scrollY > 20);
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+  useMotionValueEvent(scrollY, "change", (latest) => {
+    const previous = scrollY.getPrevious() || 0;
+    
+    // Determine if scrolled styling should apply
+    if (latest > 20) {
+      setIsScrolled(true);
+    } else {
+      setIsScrolled(false);
+    }
+
+    // Determine hide/show behavior
+    if (latest > previous && latest > 150) {
+      setHidden(true);
+    } else {
+      setHidden(false);
+    }
+  });
 
   const isActive = (href: string) => pathname === href || pathname.startsWith(href + "/");
 
   return (
     <header 
       className={`
-        fixed w-full z-50 transition-all duration-500
+        fixed w-full z-50 transition-all duration-300
+        ${hidden ? "-translate-y-full" : "translate-y-0"}
         ${isScrolled 
-          ? "bg-zru-green/95 backdrop-blur-md shadow-lg translate-y-0 opacity-100" 
-          : "bg-transparent translate-y-0 opacity-0 pointer-events-none"
+          ? "bg-zru-green/95 backdrop-blur-md shadow-lg" 
+          : "bg-transparent"
         }
       `}
     >
