@@ -63,10 +63,10 @@ export default function Navigation() {
   return (
     <header 
       className={`
-        fixed w-full z-50 transition-all duration-300
+        fixed w-full z-50 transition-all duration-300 border-b border-transparent
         ${hidden ? "-translate-y-full" : "translate-y-0"}
         ${isScrolled 
-          ? "bg-zru-green/95 backdrop-blur-md shadow-lg" 
+          ? "bg-zru-green/85 backdrop-blur-xl shadow-lg border-white/10" 
           : "bg-transparent"
         }
       `}
@@ -92,31 +92,30 @@ export default function Navigation() {
             {navItems.map((item) => (
               <div 
                 key={item.label}
-                className="relative"
+                className="relative group"
                 onMouseEnter={() => item.children && setActiveDropdown(item.label)}
                 onMouseLeave={() => setActiveDropdown(null)}
               >
                 <Link 
                   href={item.href} 
                   className={`
-                    relative px-4 py-2 text-sm font-bold uppercase tracking-wider transition-colors
+                    relative px-4 py-2 text-sm font-bold uppercase tracking-wider transition-colors z-10
                     flex items-center gap-1
-                    ${isActive(item.href) 
-                      ? "text-white" 
-                      : "text-white/70 hover:text-white"
-                    }
+                    ${isActive(item.href) ? "text-white" : "text-white/80 group-hover:text-white"}
                   `}
                 >
-                  {item.label}
-                  {item.children && <ChevronDown className="w-3 h-3" />}
-                  
-                  {/* Active indicator */}
-                  {isActive(item.href) && (
-                    <motion.div 
-                      className="absolute bottom-0 left-4 right-4 h-0.5 bg-white"
-                      layoutId="navIndicator"
+                  {/* Floating Pill Background */}
+                  {activeDropdown === item.label || isActive(item.href) ? (
+                    <motion.div
+                      layoutId="navBackground"
+                      className="absolute inset-0 bg-white/10 rounded-full -z-10"
+                      initial={false}
+                      transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
                     />
-                  )}
+                  ) : null}
+
+                  {item.label}
+                  {item.children && <ChevronDown className="w-3 h-3 transition-transform group-hover:rotate-180" />}
                 </Link>
 
                 {/* Dropdown */}
@@ -124,21 +123,19 @@ export default function Navigation() {
                   <AnimatePresence>
                     {activeDropdown === item.label && (
                       <motion.div
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: 10 }}
-                        className="absolute top-full left-0 mt-1 bg-zru-green/95 backdrop-blur-md rounded-lg shadow-xl py-2 min-w-[180px] border border-white/10"
+                        initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                        animate={{ opacity: 1, y: 0, scale: 1 }}
+                        exit={{ opacity: 0, y: 10, scale: 0.95 }}
+                        transition={{ duration: 0.2 }}
+                        className="absolute top-full left-0 mt-2 bg-zru-green/95 backdrop-blur-xl rounded-xl shadow-2xl py-2 min-w-[200px] border border-white/10 overflow-hidden"
                       >
                         {item.children.map((child) => (
                           <Link
                             key={child.label}
                             href={child.href}
                             className={`
-                              block px-4 py-2 text-sm font-medium transition-colors
-                              ${isActive(child.href) 
-                                ? "text-zru-gold bg-white/10" 
-                                : "text-white hover:text-zru-gold hover:bg-white/5"
-                              }
+                              block px-4 py-3 text-sm font-medium transition-colors hover:bg-white/10
+                              ${isActive(child.href) ? "text-zru-gold bg-white/5" : "text-white"}
                             `}
                           >
                             {child.label}
@@ -150,6 +147,14 @@ export default function Navigation() {
                 )}
               </div>
             ))}
+
+            {/* TICKETS CTA */}
+            <Link 
+              href="/tickets" 
+              className="ml-4 px-6 py-2 bg-white text-zru-green font-black text-sm uppercase tracking-wider rounded-full hover:bg-gray-100 hover:scale-105 transition-all shadow-lg"
+            >
+              Tickets
+            </Link>
           </div>
 
           {/* Mobile Menu Button */}
