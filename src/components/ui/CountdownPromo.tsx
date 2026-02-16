@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { ArrowRight, Calendar, MapPin } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 import { StripedBackground } from "./StripedBackground";
 
 interface CountdownPromoProps {
@@ -126,11 +127,14 @@ export function CountdownPromo({
               }}
             >
               {image ? (
-                <img 
-                  src={image} 
-                  alt={title}
-                  className="w-full h-full object-cover"
-                />
+                <div className="relative w-full h-full">
+                  <Image 
+                    src={image} 
+                    alt={title}
+                    fill
+                    className="object-cover"
+                  />
+                </div>
               ) : (
                 <div className="w-full h-full bg-linear-to-br from-zru-green via-green-700 to-green-900 flex items-center justify-center">
                   <span className="text-white/20 text-6xl font-black">ZRU</span>
