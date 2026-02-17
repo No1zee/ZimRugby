@@ -196,7 +196,7 @@ export default function MatchCentreStrip() {
                       <div className="flex items-center gap-4 lg:gap-6 mb-6">
                         <span className="text-white font-black text-3xl sm:text-4xl lg:text-5xl uppercase tracking-tight">{featuredMatch.homeTeam}</span>
                         <div className="flex flex-col items-center px-4">
-                          <span className="text-white/40 text-xl lg:text-2xl font-bold">VS</span>
+                          <span className="text-white/60 text-xl lg:text-2xl font-bold">VS</span>
                         </div>
                         <span className="text-white font-black text-3xl sm:text-4xl lg:text-5xl uppercase tracking-tight">{featuredMatch.awayTeam}</span>
                       </div>
@@ -256,7 +256,7 @@ export default function MatchCentreStrip() {
                     <span className={`${getCategoryColor(match.category)} px-2 py-1 text-[9px] font-bold uppercase rounded`}>
                       {match.category}
                     </span>
-                    <span className="text-white/40 text-[10px] font-bold uppercase">
+                    <span className="text-white/60 text-[10px] font-bold uppercase">
                       {match.competition}
                     </span>
                   </div>
@@ -278,7 +278,7 @@ export default function MatchCentreStrip() {
                         <Clock className="w-3 h-3" /> {match.time}
                       </span>
                     </div>
-                    <div className="flex items-center gap-1 text-white/40 text-xs">
+                    <div className="flex items-center gap-1 text-white/60 text-xs">
                       <MapPin className="w-3 h-3" /> {match.venue}
                     </div>
                   </div>

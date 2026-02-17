@@ -12,38 +12,50 @@ import SubtleBackground from "../ui/SubtleBackground";
 const events = [
   {
     id: 1,
-    title: "ZIMBABWE SUPER LEAGUE",
-    subtitle: "2025/26 SEASON",
-    date: "10 OCT 2025 - 14 MAR 2026",
-    location: "NATIONWIDE",
-    description: "The premier domestic rugby competition featuring Zimbabwe's top clubs.",
-    tags: ["Domestic", "Super League"],
+    title: "SUPER SIX RUGBY LEAGUE",
+    subtitle: "PREMIER CLUB COMPETITION",
+    date: "MAY - SEP 2025",
+    location: "HARARE & BULAWAYO",
+    description: "Zimbabwe's top clubs including Old Hararians, Old Georgians, and Old Miltonians battle for supremacy.",
+    tags: ["Premier League", "Club Rugby"],
     icon: Trophy,
     color: "from-zru-green to-black",
     image: "/images/events/super-league.jpg"
   },
   {
     id: 2,
-    title: "AFRICA CUP 2025",
-    subtitle: "DEFENDING CHAMPIONS",
-    date: "20 MAR - 29 MAR 2025",
-    location: "HARARE, ZIMBABWE",
-    description: "The Sables host the continent's premier tournament on home soil.",
-    tags: ["Sables", "International"],
+    title: "SABLE LAGER GRID CUP",
+    subtitle: "FRANCHISE RUGBY",
+    date: "OCT - NOV 2025",
+    location: "HARARE SPORTS CLUB",
+    description: "The new franchise-style format boosting excitement and participation in the local scene.",
+    tags: ["Franchise", "Sable Lager"],
     icon: Trophy,
-    color: "from-gray-900 to-black",
+    color: "from-zru-gold to-black",
     image: "/images/media/vid1.jpg"
   },
   {
     id: 3,
-    title: "SCHOOLS RUGBY FESTIVAL",
-    subtitle: "ANNUAL SHOWCASE",
-    date: "15 AUG - 18 AUG 2025",
-    location: "HARARE",
-    description: "The next generation of Sables compete in Zimbabwe's biggest schools event.",
-    tags: ["Youth", "Schools"],
-    icon: GraduationCap,
-    color: "from-zru-green to-gray-900",
+    title: "NEDBANK CHALLENGE CUP",
+    subtitle: "KNOCKOUT TOURNAMENT",
+    date: "MARCH 2026",
+    location: "OLD HARARIANS",
+    description: "The 4th edition of the prominent knockout tournament highlighting provincial and club talent.",
+    tags: ["Knockout", "Nedbank"],
+    icon: Trophy,
+    color: "from-green-900 to-black",
+    image: "/images/events/schools-fest.jpg"
+  },
+  {
+    id: 4,
+    title: "HARARE UNDER-20 LEAGUE",
+    subtitle: "YOUTH DEVELOPMENT",
+    date: "JAN 2026",
+    location: "OLD HARARIANS",
+    description: "Future stars in action at the Harare Under-20 League, rescheduled for January.",
+    tags: ["Youth", "U20 League"],
+    icon: Trophy,
+    color: "from-blue-900 to-black",
     image: "/images/events/schools-fest.jpg"
   }
 ];
@@ -92,7 +104,7 @@ export default function EventsBlock() {
             className="lg:col-span-9 grid grid-cols-1 md:grid-cols-2 gap-6" 
             staggerDelay={0.1}
           >
-            {events.slice(0, 2).map((event) => (
+            {events.slice(0, 4).map((event) => (
               <motion.div key={event.id} variants={staggerItemVariants}>
                 <Link href={`/events/${event.id}`} className="block h-full group">
                   <div className="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 h-full flex flex-col relative group">
