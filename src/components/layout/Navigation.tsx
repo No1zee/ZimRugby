@@ -114,6 +114,17 @@ export default function Navigation() {
                     />
                   ) : null}
 
+                  {/* Active Indicator - Bottom Border */}
+                  {isActive(item.href) && (
+                    <motion.div
+                      layoutId="activeNavIndicator"
+                      className="absolute bottom-0 left-0 right-0 h-0.5 bg-zru-gold"
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ duration: 0.3 }}
+                    />
+                  )}
+
                   {item.label}
                   {item.children && <ChevronDown className="w-3 h-3 transition-transform group-hover:rotate-180" />}
                 </Link>

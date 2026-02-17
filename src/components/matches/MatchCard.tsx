@@ -6,6 +6,7 @@ import Button from "../common/Button";
 import Link from "next/link";
 
 interface MatchCardProps {
+  id: number | string;
   competition: string;
   round: string;
   date: string;
@@ -25,6 +26,7 @@ interface MatchCardProps {
 }
 
 export default function MatchCard({
+  id,
   competition,
   round,
   date,
@@ -122,12 +124,11 @@ export default function MatchCard({
 
         {/* Action Button */}
         <div className="mt-6">
-            <Link href="/match-centre/match-details">
-                <Button variant="outline" className="w-full justify-between group-hover:bg-white group-hover:text-rich-black transition-all duration-300">
-                    <span>MATCH CENTER</span>
-                    <ChevronRight className="w-4 h-4" />
-                </Button>
-            </Link>
+                <Link href="/match-centre" className="flex-1">
+                    <Button variant="outline" className="w-full border-white/10 hover:bg-white/5 text-xs h-9">
+                        <span>MATCH CENTRE</span>
+                    </Button>
+                </Link>
         </div>
       </div>
     </motion.div>

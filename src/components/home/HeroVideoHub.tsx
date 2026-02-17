@@ -3,9 +3,12 @@
 import { motion, useScroll, useTransform } from "framer-motion";
 import { ArrowRight, Play, Ticket } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
+import { useState } from "react";
 import { TextScramble, FloatingParticles, GlowButton } from "../ui/animations";
 
 export default function HeroVideoHub() {
+  const [isLoaded, setIsLoaded] = useState(false);
   const { scrollY } = useScroll();
   const y = useTransform(scrollY, [0, 500], [0, 150]);
   const opacity = useTransform(scrollY, [0, 300], [0, 1]);
@@ -20,12 +23,21 @@ export default function HeroVideoHub() {
         style={{ y, scale }}
       >
         {/* Video/Image Background */}
-        <div 
-          className="w-full h-full bg-cover bg-center"
-          style={{ backgroundImage: "url('/images/teams/sables.jpg')" }}
-        >
+        {/* Video/Image Background with Loading State */}
+        <div className="w-full h-full relative">
+          {!isLoaded && (
+            <div className="absolute inset-0 bg-rich-black animate-pulse z-10" />
+          )}
+          <Image
+            src="/images/teams/sables.jpg"
+            alt="The Sables"
+            fill
+            priority
+            className={`object-cover transition-opacity duration-1000 ${isLoaded ? 'opacity-100' : 'opacity-0'}`}
+            onLoad={() => setIsLoaded(true)}
+          />
           {/* Overlay for text readability */}
-          <div className="absolute inset-0 bg-linear-to-b from-black/20 via-black/40 to-rich-black" />
+          <div className="absolute inset-0 bg-linear-to-b from-black/30 via-black/50 to-rich-black z-10" />
         </div>
       </motion.div>
 
@@ -134,17 +146,17 @@ export default function HeroVideoHub() {
             }}
           />
           
-          {/* THE SABLES - regular size */}
+          {/* THE SABLES - regular size - Mobile Optimized */}
           <span 
-            className="block relative z-20 text-5xl sm:text-6xl md:text-7xl lg:text-8xl"
+            className="block relative z-20 text-4xl sm:text-6xl md:text-7xl lg:text-8xl"
             style={{ textShadow: '0 4px 20px rgba(0, 0, 0, 0.5)' }}
           >
             THE SABLES
           </span>
           
-          {/* ARE HOME - 20% larger with gold glow */}
+          {/* ARE HOME - Mobile Optimized */}
           <span 
-            className="block text-white italic relative z-20 text-6xl sm:text-7xl md:text-8xl lg:text-9xl"
+            className="block text-white italic relative z-20 text-5xl sm:text-7xl md:text-8xl lg:text-9xl"
             style={{ 
               textShadow: '0 0 40px rgba(0, 150, 70, 0.5), 0 4px 20px rgba(0, 0, 0, 0.5)',
             }}
