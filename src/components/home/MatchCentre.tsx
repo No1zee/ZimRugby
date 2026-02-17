@@ -5,6 +5,7 @@ import { ArrowRight, ChevronRight, MapPin, Share2, Ticket } from "lucide-react";
 import Button from "../common/Button";
 import { motion } from "framer-motion";
 import Image from "next/image";
+import Link from "next/link";
 
 const fixtures = [
   {
@@ -262,10 +263,11 @@ export default function MatchCentre() {
                     <MapPin className="w-3 h-3 text-zru-orange" />
                     <span>{match.venue}</span>
                   </div>
-
-                  <Button className="w-full text-sm h-10" variant="outline">
-                    MATCH CENTER
-                  </Button>
+                  <Link href="/match-centre">
+                    <Button variant="outline" className="border-white/20 text-white hover:bg-white/10 px-8 py-3">
+                        MATCH CENTRE
+                    </Button>
+                </Link>
                 </div>
               </motion.div>
             ))}
