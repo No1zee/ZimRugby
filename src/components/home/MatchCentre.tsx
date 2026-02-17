@@ -168,7 +168,7 @@ export default function MatchCentre() {
                       NEXT MATCH
                     </span>
                     <h4 className="text-gray-300 font-heading text-2xl mb-1">{nextMatch.competition}</h4>
-                    <p className="text-gray-500">{nextMatch.round} • {nextMatch.venue}</p>
+                    <p className="text-gray-400">{nextMatch.round} • {nextMatch.venue}</p>
                  </div>
                  
                  <div className="flex items-center gap-8 md:gap-16">
