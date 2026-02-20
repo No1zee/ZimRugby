@@ -55,6 +55,7 @@ const slides: SlideData[] = [
   {
     id: 3,
     image: "/images/media/vid1.jpg", 
+    video: "/images/zim-rugby-slow-mo.mp4",
     headline: {
       line1: "A CUT ABOVE",
       line2: "THE COMPETITION",
@@ -116,14 +117,26 @@ export default function HeroCarousel() {
                 animate={{ scale: 1.0 }}
                 transition={{ duration: 10, ease: "linear" }}
             >
-                <Image
-                src={activeSlide.image}
-                alt={`${activeSlide.headline.line1} ${activeSlide.headline.line2}`}
-                fill
-                priority
-                className="object-cover"
-                onLoad={() => setIsLoaded(true)}
-                />
+                {activeSlide.video ? (
+                  <video
+                    src={activeSlide.video}
+                    autoPlay
+                    muted
+                    loop
+                    playsInline
+                    className="absolute inset-0 w-full h-full object-cover"
+                    onLoadedData={() => setIsLoaded(true)}
+                  />
+                ) : (
+                  <Image
+                    src={activeSlide.image}
+                    alt={`${activeSlide.headline.line1} ${activeSlide.headline.line2}`}
+                    fill
+                    priority
+                    className="object-cover"
+                    onLoad={() => setIsLoaded(true)}
+                  />
+                )}
             </motion.div>
             {/* Overlay */}
             <div className="absolute inset-0 bg-linear-to-b from-black/30 via-black/50 to-rich-black z-10" />

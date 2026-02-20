@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { Menu, X, ChevronDown } from "lucide-react";
 import { motion, AnimatePresence, useScroll, useMotionValueEvent } from "framer-motion";
@@ -78,13 +79,16 @@ export default function Navigation() {
           
           {/* Logo */}
           <Link href="/" className="flex items-center gap-3 group">
-            <motion.div 
-              className="w-10 h-10 bg-zru-green rounded-full flex items-center justify-center border-2 border-white"
-              whileHover={{ scale: 1.05 }}
-            >
-              <span className="text-white font-black text-lg">Z</span>
+            <motion.div whileHover={{ scale: 1.05 }} className="translate-y-10">
+              <Image
+                src="/zru logo monotone.svg"
+                alt="ZRU Logo"
+                width={90}
+                height={90}
+                className="object-contain drop-shadow-2xl"
+                priority
+              />
             </motion.div>
-            <span className="text-white font-black text-xl tracking-tighter">ZRU</span>
           </Link>
 
           {/* Desktop Nav */}
