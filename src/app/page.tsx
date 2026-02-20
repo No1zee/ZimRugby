@@ -1,5 +1,5 @@
 import Navigation from "@/components/layout/Navigation";
-import HeroVideoHub from "@/components/home/HeroVideoHub";
+import HeroCarousel from "@/components/home/HeroCarousel";
 import MatchCentreStrip from "@/components/home/MatchCentreStrip";
 import NewsMediaBlock from "@/components/home/NewsMediaBlock";
 import PlayRugbyDevelopment from "@/components/home/PlayRugbyDevelopment";
@@ -13,8 +13,8 @@ export default function Home() {
     <main className="bg-rich-black min-h-screen">
       <Navigation />
       
-      {/* 1. Hero with Video & Overlay */}
-      <HeroVideoHub />
+      {/* 1. Hero Carousel */}
+      <HeroCarousel />
 
       <div className="relative z-10 bg-rich-black">
         {/* 2. Match Centre Strip (Horizontal List) */}
