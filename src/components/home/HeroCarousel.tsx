@@ -41,7 +41,7 @@ const slides: SlideData[] = [
   },
   {
     id: 2,
-    image: "/images/teams/african-chamions.png", // Using the uploaded file (note: user filename has typo "chamions")
+    image: "/images/teams/african-champions-2025.jpg", 
     headline: {
       line1: "AFRICAN",
       line2: "CHAMPIONS",
