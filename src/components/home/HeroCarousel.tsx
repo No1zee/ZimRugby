@@ -28,19 +28,6 @@ interface SlideData {
 const slides: SlideData[] = [
   {
     id: 1,
-    image: "/images/teams/african-chamions.png", // Using the uploaded file (note: user filename has typo "chamions")
-    headline: {
-      line1: "AFRICAN",
-      line2: "CHAMPIONS",
-    },
-    subtext: "Celebrating the victorious journey of the Zimbabwe Sables.",
-    ctas: {
-      primary: { label: "Celebrate With Us", href: "/sables", icon: Ticket },
-      secondary: { label: "View Gallery", href: "/gallery", icon: ArrowRight },
-    },
-  },
-  {
-    id: 2,
     image: "/images/teams/sables.jpg",
     headline: {
       line1: "THE SABLES",
@@ -50,6 +37,19 @@ const slides: SlideData[] = [
     ctas: {
       primary: { label: "Book Tickets", href: "/tickets", icon: Ticket },
       secondary: { label: "Match Centre", href: "/match-centre", icon: Play },
+    },
+  },
+  {
+    id: 2,
+    image: "/images/teams/african-chamions.png", // Using the uploaded file (note: user filename has typo "chamions")
+    headline: {
+      line1: "AFRICAN",
+      line2: "CHAMPIONS",
+    },
+    subtext: "Celebrating the victorious journey of the Zimbabwe Sables.",
+    ctas: {
+      primary: { label: "Celebrate With Us", href: "/sables", icon: Ticket },
+      secondary: { label: "View Gallery", href: "/gallery", icon: ArrowRight },
     },
   },
   {
