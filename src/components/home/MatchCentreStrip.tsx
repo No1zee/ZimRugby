@@ -24,6 +24,8 @@ const matches = [
     competition: "NATIONS CUP",
     homeTeam: "TONGA",
     awayTeam: "ZIM SABLES",
+    homeLogo: "/images/teams/tonga.png",
+    awayLogo: "/images/teams/zimbabwe.png",
     date: "04 JULY 2026",
     time: "TBA",
     venue: "USA",
@@ -35,6 +37,8 @@ const matches = [
     competition: "NATIONS CUP",
     homeTeam: "USA",
     awayTeam: "ZIM SABLES",
+    homeLogo: "/images/teams/usa.svg",
+    awayLogo: "/images/teams/zimbabwe.png",
     date: "11 JULY 2026",
     time: "TBA",
     venue: "USA",
@@ -46,6 +50,8 @@ const matches = [
     competition: "NATIONS CUP",
     homeTeam: "CANADA",
     awayTeam: "ZIM SABLES",
+    homeLogo: "/images/teams/canada.svg",
+    awayLogo: "/images/teams/zimbabwe.png",
     date: "18 JULY 2026",
     time: "TBA",
     venue: "CANADA",
@@ -57,6 +63,8 @@ const matches = [
     competition: "NATIONS CUP",
     homeTeam: "SAMOA",
     awayTeam: "ZIM SABLES",
+    homeLogo: "/images/teams/samoa.png",
+    awayLogo: "/images/teams/zimbabwe.png",
     date: "07 NOV 2026",
     time: "TBA",
     venue: "ENGLAND",
@@ -68,6 +76,8 @@ const matches = [
     competition: "NATIONS CUP",
     homeTeam: "URUGUAY",
     awayTeam: "ZIM SABLES",
+    homeLogo: "/images/teams/uruguay.png",
+    awayLogo: "/images/teams/zimbabwe.png",
     date: "14 NOV 2026",
     time: "TBA",
     venue: "ENGLAND",
@@ -79,6 +89,8 @@ const matches = [
     competition: "NATIONS CUP",
     homeTeam: "CHILE",
     awayTeam: "ZIM SABLES",
+    homeLogo: "/images/teams/chile.png",
+    awayLogo: "/images/teams/zimbabwe.png",
     date: "21 NOV 2026",
     time: "TBA",
     venue: "ENGLAND",
@@ -194,11 +206,21 @@ export default function MatchCentreStrip() {
                     {/* Left: Teams */}
                     <div className="flex-1">
                       <div className="flex items-center gap-4 lg:gap-6 mb-6">
-                        <span className="text-white font-black text-3xl sm:text-4xl lg:text-5xl uppercase tracking-tight">{featuredMatch.homeTeam}</span>
-                        <div className="flex flex-col items-center px-4">
+                        <div className="flex flex-col items-center gap-2">
+                          <div className="w-16 h-16 relative">
+                            <Image src={featuredMatch.homeLogo} alt={featuredMatch.homeTeam} fill className="object-contain" />
+                          </div>
+                          <span className="text-white font-black text-2xl sm:text-3xl lg:text-4xl uppercase tracking-tight">{featuredMatch.homeTeam}</span>
+                        </div>
+                        <div className="flex flex-col items-center px-2">
                           <span className="text-white/60 text-xl lg:text-2xl font-bold">VS</span>
                         </div>
-                        <span className="text-white font-black text-3xl sm:text-4xl lg:text-5xl uppercase tracking-tight">{featuredMatch.awayTeam}</span>
+                        <div className="flex flex-col items-center gap-2">
+                          <div className="w-16 h-16 relative">
+                            <Image src={featuredMatch.awayLogo} alt={featuredMatch.awayTeam} fill className="object-contain" />
+                          </div>
+                          <span className="text-white font-black text-2xl sm:text-3xl lg:text-4xl uppercase tracking-tight">{featuredMatch.awayTeam}</span>
+                        </div>
                       </div>
                       
                       {/* Match Details with Icons */}
@@ -249,7 +271,7 @@ export default function MatchCentreStrip() {
           {filteredMatches.filter(m => !m.isFeatured).map((match) => (
             <motion.div key={match.id} variants={staggerItemVariants}>
               <Link href={`/matches/${match.id}`} className="block group">
-                <div className="bg-white/5 hover:bg-white/10 border border-white/10 rounded-lg p-5 transition-all duration-300 h-full">
+                <div className="bg-white/20 hover:bg-white/30 border border-white/30 backdrop-blur-md shadow-lg rounded-lg p-5 transition-all duration-300 h-full">
                   
                   {/* Top Row: Category + Competition */}
                   <div className="flex items-center justify-between mb-4">
@@ -263,9 +285,21 @@ export default function MatchCentreStrip() {
                   
                   {/* Teams */}
                   <div className="flex items-center justify-between mb-4">
-                    <span className="text-white font-bold text-sm uppercase">{match.homeTeam}</span>
-                    <span className="text-zru-gold font-bold text-xs px-3">VS</span>
-                    <span className="text-white font-bold text-sm uppercase text-right">{match.awayTeam}</span>
+                    <div className="flex flex-col items-start w-2/5">
+                      <div className="w-10 h-10 relative mb-2">
+                        <Image src={match.homeLogo} alt={match.homeTeam} fill className="object-contain drop-shadow-md" />
+                      </div>
+                      <span className="text-white font-bold text-sm uppercase leading-tight">{match.homeTeam}</span>
+                    </div>
+                    
+                    <div className="text-zru-gold font-black text-xs px-2 shrink-0 w-1/5 text-center">VS</div>
+                    
+                    <div className="flex flex-col items-end w-2/5 text-right">
+                      <div className="w-10 h-10 relative mb-2">
+                        <Image src={match.awayLogo} alt={match.awayTeam} fill className="object-contain drop-shadow-md" />
+                      </div>
+                      <span className="text-white font-bold text-sm uppercase leading-tight">{match.awayTeam}</span>
+                    </div>
                   </div>
                   
                   {/* Date/Time/Venue */}

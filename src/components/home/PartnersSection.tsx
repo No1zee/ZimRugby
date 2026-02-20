@@ -5,22 +5,18 @@ import { Plus, Sparkles, Building2 } from "lucide-react";
 import Link from "next/link";
 import { ScrollReveal, StaggerContainer, staggerItemVariants, GlowButton } from "../ui/animations";
 
-// Sponsor data with placeholder logos
+import Image from "next/image";
+
+// Sponsor data with actual logos
 const principalSponsors = [
-  { name: "NEDBANK", color: "#00A651" },
-  { name: "DELTA", color: "#003DA5" },
-  { name: "OLD MUTUAL", color: "#002B5C" },
-  { name: "ECONET", color: "#ED1C24" },
-  { name: "CBZ", color: "#00529B" },
+  { name: "NEDBANK", color: "#00A651", logo: "/images/sponsors/nedbank.jpeg" },
+  { name: "WORLD RUGBY", color: "#003DA5", logo: "/images/sponsors/world-rugby.png" },
+  { name: "RUGBY AFRICA", color: "#ED1C24", logo: "/images/sponsors/rugby-africa.png" },
 ];
 
 const partners = [
-  { name: "Steward Bank", initial: "SB" },
-  { name: "TelOne", initial: "T1" },
-  { name: "Zimbabwe Tourism", initial: "ZT" },
-  { name: "National Foods", initial: "NF" },
-  { name: "Schweppes", initial: "SW" },
-  { name: "Cimas", initial: "CM" },
+  { name: "ZOC", initial: "ZOC", logo: "/images/sponsors/zoc.png" },
+  { name: "SRC", initial: "SRC", logo: "/images/sponsors/src.png" },
 ];
 
 export default function PartnersSection() {
@@ -50,7 +46,7 @@ export default function PartnersSection() {
             <h3 className="text-center text-gray-500 font-bold tracking-widest text-xs uppercase mb-8">
               PRINCIPAL SPONSORS
             </h3>
-            <div className="grid grid-cols-2 md:grid-cols-5 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 max-w-4xl mx-auto">
               {principalSponsors.map((sponsor, i) => (
                 <motion.div
                   key={sponsor.name}
@@ -69,11 +65,16 @@ export default function PartnersSection() {
                       className="absolute bottom-0 left-0 right-0 h-1 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300"
                       style={{ backgroundColor: sponsor.color }}
                     />
-                    <span 
-                      className="text-lg font-black text-gray-400 group-hover:text-gray-700 transition-colors tracking-wide"
-                    >
-                      {sponsor.name}
-                    </span>
+                    {/* Logo or text */}
+                    {sponsor.logo ? (
+                       <Image src={sponsor.logo} alt={sponsor.name} fill className="object-contain p-4 mix-blend-multiply" />
+                    ) : (
+                      <span 
+                        className="text-lg font-black text-gray-400 group-hover:text-gray-700 transition-colors tracking-wide"
+                      >
+                        {sponsor.name}
+                      </span>
+                    )}
                   </div>
                 </motion.div>
               ))}
@@ -87,7 +88,7 @@ export default function PartnersSection() {
             <h3 className="text-center text-gray-500 font-bold tracking-widest text-xs uppercase mb-8">
               PARTNERS AND SUPPLIERS
             </h3>
-            <div className="grid grid-cols-3 md:grid-cols-6 gap-4">
+            <div className="flex flex-wrap justify-center gap-4">
               {partners.map((partner, i) => (
                 <motion.div
                   key={partner.name}
@@ -98,8 +99,13 @@ export default function PartnersSection() {
                   whileHover={{ y: -3 }}
                   className="group cursor-pointer"
                 >
-                  <div className="h-16 rounded-lg flex items-center justify-center transition-all duration-300 border border-gray-100 hover:border-zru-gold/50 hover:shadow-md bg-gray-50">
-                    {/* Placeholder logo circle */}
+                  <div className="h-20 px-8 rounded-lg flex items-center justify-center transition-all duration-300 border border-gray-100 hover:border-zru-gold/50 hover:shadow-md bg-white relative overflow-hidden">
+                    {/* Official logo cutout */}
+                    {partner.logo ? (
+                      <div className="w-24 h-12 relative flex items-center justify-center">
+                         <Image src={partner.logo} alt={partner.name} fill className="object-contain" />
+                      </div>
+                    ) : (
                     <div className="flex items-center gap-2">
                       <div className="w-8 h-8 rounded-full bg-gray-200 group-hover:bg-zru-gold/20 flex items-center justify-center transition-colors">
                         <span className="text-[10px] font-bold text-gray-500 group-hover:text-zru-green">
@@ -110,6 +116,7 @@ export default function PartnersSection() {
                         {partner.name}
                       </span>
                     </div>
+                    )}
                   </div>
                 </motion.div>
               ))}
