@@ -55,7 +55,7 @@ const slides: SlideData[] = [
   {
     id: 3,
     image: "/images/media/vid1.jpg", 
-    video: "/images/zim-rugby-slow-mo.mp4",
+    video: "/images/zim-rugby-slow-mo-2.mp4",
     headline: {
       line1: "A CUT ABOVE",
       line2: "THE COMPETITION",
@@ -124,6 +124,7 @@ export default function HeroCarousel() {
                     muted
                     loop
                     playsInline
+                    preload="auto"
                     className="absolute inset-0 w-full h-full object-cover"
                     onLoadedData={() => setIsLoaded(true)}
                   />
