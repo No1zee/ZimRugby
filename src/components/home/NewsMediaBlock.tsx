@@ -109,6 +109,7 @@ export default function NewsMediaBlock() {
                       src={featuredStory.image}
                       alt={featuredStory.title}
                       fill
+                      sizes="(max-width: 1024px) 100vw, 50vw"
                       className="object-cover group-hover:scale-105 transition-transform duration-500"
                     />
                     <div className="absolute inset-0 bg-linear-to-t lg:bg-linear-to-r from-zru-green via-zru-green/50 to-transparent z-10" />
@@ -160,6 +161,7 @@ export default function NewsMediaBlock() {
                       src={item.image} 
                       alt={item.title} 
                       fill 
+                      sizes="(max-width: 768px) 100vw, 33vw"
                       className="object-cover group-hover:scale-110 transition-transform duration-500"
                     />
                     {/* Gradient overlay based on category */}

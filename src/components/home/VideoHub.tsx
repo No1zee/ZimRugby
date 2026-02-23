@@ -50,6 +50,7 @@ export default function VideoHub() {
           src="/images/events/africa-cup.jpg" 
           alt="Background" 
           fill 
+          sizes="100vw"
           className="object-cover opacity-20"
         />
         <div className="absolute inset-0 bg-linear-to-b from-rich-black via-rich-black/90 to-rich-black" />

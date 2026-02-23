@@ -111,6 +111,7 @@ export default function PlayRugbyDevelopment() {
                         className="w-full bg-zru-green hover:bg-green-800 text-white text-xs font-bold uppercase tracking-wider py-3 rounded flex items-center justify-center gap-2 transition-colors"
                         whileHover={{ scale: 1.02 }}
                         whileTap={{ scale: 0.98 }}
+                        aria-label={`${program.cta} about ${program.title}`}
                       >
                         {program.cta} <ArrowRight className="w-4 h-4" />
                       </motion.button>

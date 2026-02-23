@@ -116,6 +116,7 @@ export default function EventsBlock() {
                         src={event.image || ""} 
                         alt={event.title}
                         fill
+                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                         className="object-cover transition-transform duration-700 group-hover:scale-110"
                       />
                       <div className={`absolute inset-0 bg-linear-to-br ${event.color} opacity-60 mix-blend-multiply group-hover:opacity-40 transition-opacity duration-300`} />

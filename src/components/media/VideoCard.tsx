@@ -33,6 +33,7 @@ export default function VideoCard({
                     src={thumbnail} 
                     alt={title} 
                     fill
+                    sizes="(max-width: 768px) 100vw, 25vw"
                     className="object-cover opacity-80 group-hover:scale-105 transition-transform duration-700" 
                 />
             </div>
