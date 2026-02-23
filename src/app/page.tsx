@@ -22,16 +22,16 @@ export default function Home() {
 
         {/* 3. Featured Match Countdown (HK Rugby style) */}
         <CountdownPromo
-          title="SABLES"
-          subtitle="VS KENYA SIMBAS"
-          description="The Sables take on rivals Kenya in a crucial Africa Cup qualifier. Don't miss this historic clash as Zimbabwe defends their continental crown on home soil."
-          targetDate="2025-03-22T16:00:00"
+          title="TONGA"
+          subtitle="VS ZIM SABLES"
+          description="The Sables take on Tonga in the upcoming Nations Cup clash. Don't miss this historic match as Zimbabwe faces international competition in the USA."
+          targetDate="2026-07-04T15:00:00"
           countdownLabel="COUNTDOWN TO KICK OFF:"
-          location="National Sports Stadium, Harare"
+          location="USA"
           image="/images/events/africa-cup.jpg"
           ctas={[
             { label: "Get Tickets", href: "/tickets", variant: "primary" },
-            { label: "Match Info", href: "/matches/africa-cup-kenya", variant: "outline" },
+            { label: "Match Info", href: "/matches/tonga", variant: "outline" },
           ]}
         />
 
