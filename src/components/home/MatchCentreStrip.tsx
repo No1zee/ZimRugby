@@ -269,9 +269,10 @@ export default function MatchCentreStrip() {
         )}
 
         {/* Match Cards Grid */}
-        <StaggerContainer className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" staggerDelay={0.1}>
+        <div className="overflow-x-auto pb-8 -mx-4 px-4 scrollbar-hide">
+          <StaggerContainer className="flex gap-4 min-w-max" staggerDelay={0.1}>
           {filteredMatches.filter(m => !m.isFeatured).map((match) => (
-            <motion.div key={match.id} variants={staggerItemVariants}>
+            <motion.div key={match.id} variants={staggerItemVariants} className="w-[85vw] sm:w-[350px] shrink-0">
               <Link href={`/matches/${match.id}`} className="block group">
                 <div className="bg-white/20 hover:bg-white/30 border border-white/30 backdrop-blur-md shadow-lg rounded-lg p-5 transition-all duration-300 h-full">
                   
@@ -328,6 +329,7 @@ export default function MatchCentreStrip() {
             </motion.div>
           ))}
         </StaggerContainer>
+        </div>
 
         {/* View All Link */}
         <ScrollReveal delay={0.4}>

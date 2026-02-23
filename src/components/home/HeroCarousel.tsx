@@ -248,39 +248,9 @@ export default function HeroCarousel() {
         </div>
       </div>
 
-      {/* Navigation Controls */}
-      <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 z-30 flex justify-between px-4 sm:px-8 pointer-events-none">
-        <button 
-            onClick={prevSlide}
-            aria-label="Previous slide"
-            className="pointer-events-auto p-4 rounded-full bg-black/20 hover:bg-black/40 backdrop-blur-sm text-white/70 hover:text-white transition-all border border-white/10 hover:border-white/30 group"
-        >
-            <ChevronLeft className="w-8 h-8 group-hover:-translate-x-1 transition-transform" />
-        </button>
-        <button 
-            onClick={nextSlide}
-            aria-label="Next slide"
-            className="pointer-events-auto p-4 rounded-full bg-black/20 hover:bg-black/40 backdrop-blur-sm text-white/70 hover:text-white transition-all border border-white/10 hover:border-white/30 group"
-        >
-            <ChevronRight className="w-8 h-8 group-hover:translate-x-1 transition-transform" />
-        </button>
-      </div>
+      {/* Navigation Controls Removed */}
 
-      {/* Pagination Dots */}
-      <div className="absolute bottom-12 left-1/2 -translate-x-1/2 z-30 flex gap-4">
-        {slides.map((slide, index) => (
-            <button
-                key={slide.id}
-                onClick={() => setSlide(index)}
-                className={`w-3 h-3 rounded-full transition-all duration-500 ${
-                    currentSlide === index 
-                    ? "bg-zru-green w-10 scale-110 shadow-[0_0_10px_rgba(0,100,50,0.8)]" 
-                    : "bg-white/40 hover:bg-white/60"
-                }`}
-                aria-label={`Go to slide ${index + 1}`}
-            />
-        ))}
-      </div>
+      {/* Pagination Dots Removed */}
 
       {/* Bottom Fade */}
       <div className="absolute bottom-0 left-0 w-full h-32 bg-linear-to-t from-rich-black to-transparent pointer-events-none z-10" />
