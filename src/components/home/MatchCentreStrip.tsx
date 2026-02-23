@@ -128,6 +128,7 @@ export default function MatchCentreStrip() {
           src="/images/events/africa-cup.jpg" 
           alt="Background" 
           fill 
+          sizes="100vw"
           className="object-cover opacity-20"
         />
         <div className="absolute inset-0 bg-linear-to-b from-rich-black via-rich-black/90 to-rich-black" />
@@ -187,6 +188,7 @@ export default function MatchCentreStrip() {
                   src="/images/media/vid2.jpg" 
                   alt="Featured Match" 
                   fill
+                  sizes="100vw"
                   className="object-cover opacity-60"
                 />
                 <div className="absolute inset-0 bg-linear-to-r from-rich-black via-rich-black/80 to-transparent" />
@@ -208,7 +210,7 @@ export default function MatchCentreStrip() {
                       <div className="flex items-center gap-4 lg:gap-6 mb-6">
                         <div className="flex flex-col items-center gap-2">
                           <div className="w-16 h-16 relative">
-                            <Image src={featuredMatch.homeLogo} alt={featuredMatch.homeTeam} fill className="object-contain" />
+                            <Image src={featuredMatch.homeLogo} alt={featuredMatch.homeTeam} fill sizes="64px" className="object-contain" />
                           </div>
                           <span className="text-white font-black text-2xl sm:text-3xl lg:text-4xl uppercase tracking-tight">{featuredMatch.homeTeam}</span>
                         </div>
@@ -217,7 +219,7 @@ export default function MatchCentreStrip() {
                         </div>
                         <div className="flex flex-col items-center gap-2">
                           <div className="w-16 h-16 relative">
-                            <Image src={featuredMatch.awayLogo} alt={featuredMatch.awayTeam} fill className="object-contain" />
+                            <Image src={featuredMatch.awayLogo} alt={featuredMatch.awayTeam} fill sizes="64px" className="object-contain" />
                           </div>
                           <span className="text-white font-black text-2xl sm:text-3xl lg:text-4xl uppercase tracking-tight">{featuredMatch.awayTeam}</span>
                         </div>
@@ -287,7 +289,7 @@ export default function MatchCentreStrip() {
                   <div className="flex items-center justify-between mb-4">
                     <div className="flex flex-col items-start w-2/5">
                       <div className="w-10 h-10 relative mb-2">
-                        <Image src={match.homeLogo} alt={match.homeTeam} fill className="object-contain drop-shadow-md" />
+                        <Image src={match.homeLogo} alt={match.homeTeam} fill sizes="40px" className="object-contain drop-shadow-md" />
                       </div>
                       <span className="text-white font-bold text-sm uppercase leading-tight">{match.homeTeam}</span>
                     </div>
@@ -296,7 +298,7 @@ export default function MatchCentreStrip() {
                     
                     <div className="flex flex-col items-end w-2/5 text-right">
                       <div className="w-10 h-10 relative mb-2">
-                        <Image src={match.awayLogo} alt={match.awayTeam} fill className="object-contain drop-shadow-md" />
+                        <Image src={match.awayLogo} alt={match.awayTeam} fill sizes="40px" className="object-contain drop-shadow-md" />
                       </div>
                       <span className="text-white font-bold text-sm uppercase leading-tight">{match.awayTeam}</span>
                     </div>

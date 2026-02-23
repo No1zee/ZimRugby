@@ -2,6 +2,7 @@ import { Metadata } from "next";
 import Navigation from "@/components/layout/Navigation";
 import Footer from "@/components/layout/Footer";
 import { Users, Target, Award, Heart, ArrowRight, Mail, MapPin, Phone } from "lucide-react";
+import Image from "next/image";
 
 export const metadata: Metadata = {
   title: "About | Zimbabwe Rugby Union",
@@ -16,8 +17,7 @@ const stats = [
 ];
 
 const leadership = [
-  { name: "Aaron Jani", role: "President", image: null },
-  { name: "Losson Mtongwiza", role: "Vice President", image: null },
+  { name: "Paddy Zhanda", role: "Chairman (Interim Management Committee)", image: null },
   { name: "Brendan Dawson", role: "Head Coach (Sables)", image: null },
 ];
 
@@ -100,6 +100,39 @@ export default function AboutPage() {
             </p>
           </div>
         </div>
+      </section>
+
+      {/* In Memoriam Tribute */}
+      <section className="py-16 bg-linear-to-br from-zru-green to-rich-black relative">
+        <div className="max-w-[1000px] mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
+          <div className="inline-flex items-center justify-center p-3 bg-white/10 rounded-full mb-6 text-zru-gold">
+            <Heart className="w-8 h-8 fill-current" />
+          </div>
+          <h2 className="text-3xl font-black text-white uppercase mb-8">In Memoriam</h2>
+          <div className="w-48 h-48 mx-auto mb-6 relative rounded-full overflow-hidden border-4 border-zru-gold shadow-2xl">
+            <Image 
+              src="/images/leadership/aaron-jani.png"
+              alt="Aaron Jani"
+              fill
+              className="object-cover"
+            />
+          </div>
+          <h3 className="text-4xl font-black text-zru-gold uppercase mb-6 drop-shadow-lg">Aaron Jani</h3>
+          <p className="text-xl text-white/80 font-medium mb-8 italic">
+            Former President, Zimbabwe Rugby Union (2017 &ndash; May 2024)<br />
+            Rugby Africa Treasurer
+          </p>
+          <div className="w-24 h-1 bg-zru-gold mx-auto mb-8 rounded-full opacity-50"></div>
+          <p className="text-white/80 text-lg leading-relaxed max-w-3xl mx-auto mb-4">
+            The Zimbabwe Rugby Union honors the extraordinary life and legacy of Aaron Jani, who passed away on February 26, 2025, after a courageous battle with cancer. 
+          </p>
+          <p className="text-white/80 text-lg leading-relaxed max-w-3xl mx-auto">
+            A true pioneer of the sport, Aaron was one of the first Black players to proudly wear the Sables jersey in the early 1990s. He later transitioned into a visionary administrator, dedicating his life to the growth and development of rugby not only in Zimbabwe but across the entire African continent. His passion, leadership, and unyielding commitment to the game will forever echo through the halls of Zimbabwe Rugby.
+          </p>
+        </div>
+        {/* Subtle background decoration */}
+        <div className="absolute top-0 right-0 w-64 h-64 bg-zru-red/10 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute bottom-0 left-0 w-64 h-64 bg-zru-gold/10 rounded-full blur-3xl pointer-events-none" />
       </section>
 
       {/* Leadership */}

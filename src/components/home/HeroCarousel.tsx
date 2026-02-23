@@ -134,6 +134,7 @@ export default function HeroCarousel() {
                     alt={`${activeSlide.headline.line1} ${activeSlide.headline.line2}`}
                     fill
                     priority
+                    sizes="100vw"
                     className="object-cover"
                     onLoad={() => setIsLoaded(true)}
                   />
@@ -251,12 +252,14 @@ export default function HeroCarousel() {
       <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 z-30 flex justify-between px-4 sm:px-8 pointer-events-none">
         <button 
             onClick={prevSlide}
+            aria-label="Previous slide"
             className="pointer-events-auto p-4 rounded-full bg-black/20 hover:bg-black/40 backdrop-blur-sm text-white/70 hover:text-white transition-all border border-white/10 hover:border-white/30 group"
         >
             <ChevronLeft className="w-8 h-8 group-hover:-translate-x-1 transition-transform" />
         </button>
         <button 
             onClick={nextSlide}
+            aria-label="Next slide"
             className="pointer-events-auto p-4 rounded-full bg-black/20 hover:bg-black/40 backdrop-blur-sm text-white/70 hover:text-white transition-all border border-white/10 hover:border-white/30 group"
         >
             <ChevronRight className="w-8 h-8 group-hover:translate-x-1 transition-transform" />
