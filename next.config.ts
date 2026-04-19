@@ -29,7 +29,26 @@ const nextConfig: NextConfig = {
         ]
       }
     ];
-  }
+  },
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'images.unsplash.com',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'plus.unsplash.com',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'zru.co.zw',
+        pathname: '/**',
+      },
+    ],
+  },
 };
 
 export default nextConfig;

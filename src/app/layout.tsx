@@ -25,6 +25,8 @@ export const metadata: Metadata = {
 
 import Navigation from "@/components/layout/Navigation";
 import Footer from "@/components/layout/Footer";
+import SmoothScrollProvider from "@/components/layout/SmoothScrollProvider";
+import CustomCursor from "@/components/ui/CustomCursor";
 
 export default function RootLayout({
   children,
@@ -36,9 +38,12 @@ export default function RootLayout({
       <body
         className={`${montserrat.variable} ${bebasNeue.variable} ${inter.variable} antialiased`}
       >
-        <Navigation />
-        {children}
-        <Footer />
+        <SmoothScrollProvider>
+          <CustomCursor />
+          <Navigation />
+          {children}
+          <Footer />
+        </SmoothScrollProvider>
       </body>
     </html>
   );

@@ -3,46 +3,13 @@
 import { motion } from "framer-motion";
 
 interface SubtleBackgroundProps {
-  variant?: "flow" | "pulse";
   className?: string;
-  intensity?: "low" | "medium" | "high";
 }
 
-const variants = {
-  flow: {
-    animate: {
-      backgroundPosition: ["0% 0%", "100% 100%"],
-    },
-    transition: {
-      duration: 20,
-      repeat: Infinity,
-      repeatType: "reverse" as const,
-      ease: "linear",
-    },
-  },
-};
-
 export default function SubtleBackground({ 
-  variant = "flow", 
   className = "",
-  intensity = "low" 
 }: SubtleBackgroundProps) {
   
-  const opacity = intensity === "low" ? 0.03 : intensity === "medium" ? 0.05 : 0.08;
-
-  if (variant === "pulse") {
-    return (
-      <motion.div
-        className={`absolute inset-0 pointer-events-none ${className}`}
-        initial={{ opacity: 0.02 }}
-        animate={{ opacity: [0.02, 0.06, 0.02] }}
-        transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-      >
-        <div className="absolute inset-0 bg-zru-green" />
-      </motion.div>
-    );
-  }
-
   // "Flow" variant - drifting gradients
   return (
     <div className={`absolute inset-0 overflow-hidden pointer-events-none select-none ${className}`}>

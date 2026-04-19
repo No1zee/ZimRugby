@@ -1,78 +1,35 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Filter, Search } from "lucide-react";
+import { Filter, Search, Loader2 } from "lucide-react";
 import Navigation from "@/components/layout/Navigation";
 import Footer from "@/components/layout/Footer";
 import Button from "@/components/common/Button";
-import MatchList from "@/components/matches/MatchList";
+import MatchList, { Match } from "@/components/matches/MatchList";
 import LeagueTable from "@/components/matches/LeagueTable";
-import { useState } from "react";
-
-// Mock Data
-const upcomingFixtures = [
-  {
-    id: 1,
-    date: "22 JUL",
-    time: "15:00",
-    homeTeam: { name: "Zimbabwe Sables", logo: "/images/logos/zimbabwe.png" },
-    awayTeam: { name: "Namibia", logo: "/images/logos/namibia.png" },
-    venue: "Hartsfield, Bulawayo",
-    competition: "AFRICA CUP",
-    round: "ROUND 2",
-    status: "upcoming" as const,
-  },
-  {
-    id: 2,
-    date: "29 JUL",
-    time: "15:00",
-    homeTeam: { name: "Uganda", logo: "/images/logos/uganda.png" },
-    awayTeam: { name: "Zimbabwe Sables", logo: "/images/logos/zimbabwe.png" },
-    venue: "Kyadondo, Kampala",
-    competition: "AFRICA CUP",
-    round: "ROUND 3",
-    status: "upcoming" as const,
-  },
-  {
-    id: 3,
-    date: "05 AUG",
-    time: "15:00",
-    homeTeam: { name: "Zimbabwe Sables", logo: "/images/logos/zimbabwe.png" },
-    awayTeam: { name: "Ivory Coast", logo: "/images/logos/ivory_coast.png" },
-    venue: "Harare Sports Club",
-    competition: "FRIENDLY",
-    round: "WARM UP",
-    status: "upcoming" as const,
-  },
-];
-
-const pastResults = [
-  {
-    id: 101,
-    date: "15 JUN",
-    time: "15:00",
-    homeTeam: { name: "Zimbabwe Sables", score: 32, logo: "/images/logos/zimbabwe.png" },
-    awayTeam: { name: "Kenya Simbas", score: 15, logo: "/images/logos/kenya.png" },
-    venue: "Prince Edward, Harare",
-    competition: "VICTORIA CUP",
-    round: "FINAL",
-    status: "completed" as const,
-  },
-  {
-    id: 102,
-    date: "08 JUN",
-    time: "14:00",
-    homeTeam: { name: "Zambia", score: 12, logo: "/images/logos/zambia.png" },
-    awayTeam: { name: "Zimbabwe Sables", score: 45, logo: "/images/logos/zimbabwe.png" },
-    venue: "Lusaka Showgrounds",
-    competition: "VICTORIA CUP",
-    round: "SEMI-FINAL",
-    status: "completed" as const,
-  },
-];
+import { useState, useEffect } from "react";
 
 export default function MatchCentre() {
   const [activeTab, setActiveTab] = useState<"fixtures" | "results" | "standings">("fixtures");
+  const [data, setData] = useState<{ fixtures: Match[], results: Match[] }>({ fixtures: [], results: [] });
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    async function fetchFixtures() {
+      try {
+        const response = await fetch('/api/fixtures');
+        if (!response.ok) throw new Error('Failed to fetch fixtures');
+        const json = await response.json();
+        setData(json);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'An error occurred');
+      } finally {
+        setIsLoading(false);
+      }
+    }
+    fetchFixtures();
+  }, []);
 
   return (
     <>
@@ -135,37 +92,63 @@ export default function MatchCentre() {
 
         {/* Content Area */}
         <div className="min-h-[500px]">
-            {activeTab === "fixtures" && (
-                <motion.div
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    exit={{ opacity: 0, x: 20 }}
-                >
-                    <MatchList matches={upcomingFixtures} />
-                </motion.div>
-            )}
+            {isLoading ? (
+                <div className="flex flex-col items-center justify-center py-20 gap-4">
+                    <Loader2 className="w-12 h-12 text-zru-gold animate-spin" />
+                    <p className="text-gray-400 font-heading tracking-widest">SYNCING FIXTURES...</p>
+                </div>
+            ) : error ? (
+                <div className="text-center py-20">
+                    <p className="text-red-500 mb-4">Error: {error}</p>
+                    <Button onClick={() => window.location.reload()}>Retry</Button>
+                </div>
+            ) : (
+                <>
+                    {activeTab === "fixtures" && (
+                        <motion.div
+                            initial={{ opacity: 0, x: -20 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            exit={{ opacity: 0, x: 20 }}
+                        >
+                            {data.fixtures.length > 0 ? (
+                                <MatchList matches={data.fixtures} />
+                            ) : (
+                                <div className="text-center py-20 border border-dashed border-white/10 rounded-2xl">
+                                    <p className="text-gray-500 font-heading">NO UPCOMING FIXTURES SCHEDULED</p>
+                                </div>
+                            )}
+                        </motion.div>
+                    )}
 
-            {activeTab === "results" && (
-                <motion.div
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    exit={{ opacity: 0, x: 20 }}
-                >
-                    <MatchList matches={pastResults} />
-                </motion.div>
-            )}
+                    {activeTab === "results" && (
+                        <motion.div
+                            initial={{ opacity: 0, x: -20 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            exit={{ opacity: 0, x: 20 }}
+                        >
+                            {data.results.length > 0 ? (
+                                <MatchList matches={data.results} />
+                            ) : (
+                                <div className="text-center py-20 border border-dashed border-white/10 rounded-2xl">
+                                    <p className="text-gray-500 font-heading">NO RECENT RESULTS FOUND</p>
+                                </div>
+                            )}
+                        </motion.div>
+                    )}
 
-            {activeTab === "standings" && (
-                <motion.div
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    exit={{ opacity: 0, x: 20 }}
-                >
-                    <div className="bg-white/5 border border-white/10 rounded-2xl p-6 lg:p-8">
-                        <h2 className="text-2xl font-heading text-white mb-6">PREMIER LEAGUE STANDINGS</h2>
-                        <LeagueTable />
-                    </div>
-                </motion.div>
+                    {activeTab === "standings" && (
+                        <motion.div
+                            initial={{ opacity: 0, x: -20 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            exit={{ opacity: 0, x: 20 }}
+                        >
+                            <div className="bg-white/5 border border-white/10 rounded-2xl p-6 lg:p-8">
+                                <h2 className="text-2xl font-heading text-white mb-6">PREMIER LEAGUE STANDINGS</h2>
+                                <LeagueTable />
+                            </div>
+                        </motion.div>
+                    )}
+                </>
             )}
         </div>
 

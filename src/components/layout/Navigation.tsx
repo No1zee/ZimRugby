@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
@@ -11,23 +11,24 @@ const navItems = [
   { label: "OUR TEAMS", href: "/teams" },
   { label: "MATCH CENTRE", href: "/match-centre" },
   { 
-    label: "NEWS & EVENTS", 
+    label: "NEWS & MEDIA", 
     href: "/media",
     children: [
       { label: "Latest News", href: "/media" },
-      { label: "What's On", href: "/events" },
+      { label: "What&apos;s On", href: "/events" },
     ]
   },
   { 
-    label: "GET INVOLVED", 
+    label: "PLAY RUGBY", 
     href: "/play-rugby",
     children: [
-      { label: "Play Rugby", href: "/play-rugby" },
+      { label: "Rugby Pathways", href: "/play-rugby", highlight: true },
       { label: "Clubs", href: "/clubs" },
       { label: "Schools", href: "/schools" },
       { label: "Volunteer", href: "/volunteer" },
     ]
   },
+  { label: "SHOP", href: "/clubhouse" },
   { label: "ABOUT", href: "/about" },
 ];
 
@@ -78,14 +79,14 @@ export default function Navigation() {
         <div className={`flex justify-between items-center transition-all duration-300 ${isScrolled ? "h-14" : "h-16"}`}>
           
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-3 group">
-            <motion.div whileHover={{ scale: 1.05 }} className="translate-y-10">
+          <Link href="/" className="flex items-center gap-3 group relative">
+            <motion.div whileHover={{ scale: 1.05 }} className="relative z-50">
               <Image
                 src="/zru logo monotone.svg"
                 alt="ZRU Logo"
-                width={90}
-                height={90}
-                className="object-contain drop-shadow-2xl"
+                width={80}
+                height={80}
+                className="object-contain drop-shadow-2xl w-auto h-8 lg:h-9"
                 priority
               />
             </motion.div>

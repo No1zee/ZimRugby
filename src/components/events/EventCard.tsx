@@ -16,7 +16,6 @@ interface EventCardProps {
 }
 
 export default function EventCard({
-  id,
   title,
   date,
   time,

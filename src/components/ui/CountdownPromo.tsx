@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { ArrowRight, Calendar, MapPin } from "lucide-react";
+import { ArrowRight, MapPin } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import { StripedBackground } from "./StripedBackground";
@@ -69,9 +69,11 @@ export function CountdownPromo({
   location,
   className = "",
 }: CountdownPromoProps) {
+  const [mounted, setMounted] = useState(false);
   const [timeLeft, setTimeLeft] = useState<TimeLeft>(calculateTimeLeft(targetDate));
 
   useEffect(() => {
+    setMounted(true);
     const timer = setInterval(() => {
       setTimeLeft(calculateTimeLeft(targetDate));
     }, 1000);
@@ -85,14 +87,23 @@ export function CountdownPromo({
     month: "long",
     year: "numeric",
   }).toUpperCase().replace(/ /g, "–");
+  
+  const isClient = mounted;
 
   return (
-    <section className={`relative py-16 lg:py-24 bg-gray-50 overflow-hidden ${className}`}>
+    <section className={`relative py-20 lg:py-32 bg-rich-black overflow-hidden ${className}`}>
       
-      {/* Stripes */}
-      <StripedBackground variant="accent" position="right" color="green" />
+      {/* Visual Background Accent */}
+      <div className="absolute inset-0 z-0">
+        <div className="absolute inset-0 bg-linear-to-r from-rich-black via-transparent to-rich-black z-10" />
+        <div className="absolute inset-0 bg-zru-green/10 z-0" />
+        <div className="absolute top-0 right-0 w-1/2 h-full bg-[radial-gradient(circle_at_top_right,rgba(255,215,0,0.1),transparent_70%)]" />
+      </div>
 
-      <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      {/* Stripes */}
+      <StripedBackground variant="accent" position="right" color="gold" className="opacity-10" />
+
+      <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 relative z-20">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           
           {/* Left: Clipped Image */}
@@ -106,25 +117,13 @@ export function CountdownPromo({
             {/* Diagonal lines behind */}
             <div className="absolute -left-8 -top-8 -bottom-8 w-32">
               <div
-                className="h-full"
-                style={{
-                  background: `repeating-linear-gradient(
-                    -45deg,
-                    transparent,
-                    transparent 8px,
-                    rgba(215, 25, 32, 0.15) 8px,
-                    rgba(215, 25, 32, 0.15) 12px
-                  )`,
-                }}
+                className="h-full bg-[repeating-linear-gradient(-45deg,transparent,transparent_8px,rgba(215,25,32,0.15)_8px,rgba(215,25,32,0.15)_12px)]"
               />
             </div>
             
             {/* Image with clip-path */}
             <div
-              className="relative z-10 aspect-4/3 rounded-lg overflow-hidden"
-              style={{
-                clipPath: "polygon(0 10%, 100% 0%, 100% 90%, 0% 100%)",
-              }}
+              className="relative z-10 aspect-4/3 rounded-lg overflow-hidden [clip-path:polygon(0_10%,100%_0%,100%_90%,0%_100%)]"
             >
               {image ? (
                 <div className="relative w-full h-full">
@@ -132,6 +131,7 @@ export function CountdownPromo({
                     src={image} 
                     alt={title}
                     fill
+                    sizes="(max-width: 768px) 100vw, 50vw"
                     className="object-cover"
                   />
                 </div>
@@ -151,25 +151,25 @@ export function CountdownPromo({
             transition={{ duration: 0.8, delay: 0.2 }}
           >
             {/* Date */}
-            <p className="text-3xl md:text-4xl font-black text-rich-black italic mb-2">
-              {formattedDate}
+            <p className="text-3xl md:text-5xl font-black text-white italic mb-4 h-[1em] tracking-tighter">
+              {isClient ? formattedDate : "\u00A0"}
             </p>
             
             {/* Title */}
-            <h2 className="text-2xl md:text-3xl font-black text-zru-red uppercase mb-2">
+            <h2 className="text-sm font-black text-zru-gold uppercase tracking-[0.4em] mb-4">
               {title}
             </h2>
             
             {/* Subtitle */}
             {subtitle && (
-              <p className="text-xl md:text-2xl font-black text-[#091F40] uppercase mb-4">
+              <p className="text-4xl md:text-6xl font-black text-white uppercase mb-8 leading-[0.9] tracking-tighter">
                 {subtitle}
               </p>
             )}
             
             {/* Description */}
             {description && (
-              <p className="text-gray-600 text-sm leading-relaxed mb-6 max-w-md">
+              <p className="text-white/60 text-base leading-relaxed mb-10 max-w-md font-medium">
                 {description}
               </p>
             )}
@@ -186,16 +186,16 @@ export function CountdownPromo({
                   { value: timeLeft.minutes, label: "MINUTES" },
                   { value: timeLeft.seconds, label: "SECONDS" },
                 ].map((unit) => (
-                  <div key={unit.label} className="text-center">
+                  <div key={unit.label} className="text-center min-w-[70px]">
                     <motion.span
                       key={`${unit.label}-${unit.value}`}
                       initial={{ scale: 1.1 }}
                       animate={{ scale: 1 }}
-                      className="block text-4xl md:text-5xl font-black text-[#091F40] leading-none"
+                      className="block text-5xl md:text-7xl font-black text-zru-gold leading-none tracking-tighter"
                     >
-                      {String(unit.value).padStart(2, "0")}
+                      {isClient ? String(unit.value).padStart(2, "0") : "00"}
                     </motion.span>
-                    <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">
+                    <span className="text-[9px] font-black text-white/30 uppercase tracking-[0.3em] block mt-2">
                       {unit.label}
                     </span>
                   </div>

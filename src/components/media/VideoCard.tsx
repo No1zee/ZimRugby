@@ -5,7 +5,6 @@ import { Play } from "lucide-react";
 import Image from "next/image";
 
 interface VideoCardProps {
-  id: string | number;
   title: string;
   duration: string;
   date: string;
@@ -14,7 +13,6 @@ interface VideoCardProps {
 }
 
 export default function VideoCard({
-  id,
   title,
   duration,
   date,

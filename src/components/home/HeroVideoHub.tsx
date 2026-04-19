@@ -1,11 +1,11 @@
 "use client";
 
 import { motion, useScroll, useTransform } from "framer-motion";
-import { ArrowRight, Play, Ticket } from "lucide-react";
+import { Play, Ticket } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import { useState } from "react";
-import { TextScramble, FloatingParticles, GlowButton } from "../ui/animations";
+import { FloatingParticles, GlowButton } from "../ui/animations";
 
 export default function HeroVideoHub() {
   const [isLoaded, setIsLoaded] = useState(false);

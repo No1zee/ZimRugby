@@ -1,7 +1,7 @@
 import { Metadata } from "next";
 import Navigation from "@/components/layout/Navigation";
 import Footer from "@/components/layout/Footer";
-import { MapPin, Users, Calendar, Trophy, Search, ArrowRight, Heart, GraduationCap, Volleyball } from "lucide-react";
+import { MapPin, Users, Search, ArrowRight, Heart, GraduationCap } from "lucide-react";
 import Link from "next/link";
 
 export const metadata: Metadata = {
@@ -67,7 +67,7 @@ export default function PlayRugbyPage() {
             Play Rugby
           </h1>
           <p className="text-white/80 text-lg max-w-2xl">
-            Whether you're picking up a ball for the first time or returning to the game, there's a place for you in Zimbabwe Rugby.
+            Whether you&apos;re picking up a ball for the first time or returning to the game, there&apos;s a place for you in Zimbabwe Rugby.
           </p>
         </div>
       </section>

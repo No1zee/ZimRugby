@@ -6,7 +6,6 @@ import Link from "next/link";
 import Image from "next/image";
 
 interface NewsCardProps {
-  id: string | number;
   title: string;
   excerpt: string;
   date: string;
@@ -16,7 +15,6 @@ interface NewsCardProps {
 }
 
 export default function NewsCard({
-  id,
   title,
   excerpt,
   date,

@@ -197,25 +197,16 @@ export function RugbyDecorations({ variant = "mixed", className = "" }: RugbyDec
   const leftY = useTransform(scrollYProgress, [0, 1], [50, -50]);
   const rightY = useTransform(scrollYProgress, [0, 1], [-30, 70]);
   const rotate = useTransform(scrollYProgress, [0, 1], [0, 15]);
+  const rotateRight = useTransform(scrollYProgress, [0, 1], [0, -15]);
 
   return (
     <div ref={ref} className={`absolute inset-0 overflow-hidden pointer-events-none ${className}`}>
       
       {/* Top gradient fade for seamless blending */}
-      <div 
-        className="absolute top-0 left-0 right-0 h-32 z-10"
-        style={{
-          background: 'linear-gradient(to bottom, rgba(10, 10, 10, 1) 0%, rgba(10, 10, 10, 0) 100%)'
-        }}
-      />
+      <div className="absolute top-0 left-0 right-0 h-32 z-10 bg-linear-to-b from-[#0a0a0a] to-transparent" />
       
       {/* Bottom gradient fade for seamless blending */}
-      <div 
-        className="absolute bottom-0 left-0 right-0 h-32 z-10"
-        style={{
-          background: 'linear-gradient(to top, rgba(10, 10, 10, 1) 0%, rgba(10, 10, 10, 0) 100%)'
-        }}
-      />
+      <div className="absolute bottom-0 left-0 right-0 h-32 z-10 bg-linear-to-t from-[#0a0a0a] to-transparent" />
 
       {/* Left side decorations */}
       {(variant === "balls" || variant === "mixed") && (
@@ -244,7 +235,7 @@ export function RugbyDecorations({ variant = "mixed", className = "" }: RugbyDec
       {(variant === "balls" || variant === "mixed") && (
         <motion.div 
           className="absolute -right-16 bottom-1/3 opacity-20"
-          style={{ y: rightY, rotate: useTransform(scrollYProgress, [0, 1], [0, -15]) }}
+          style={{ y: rightY, rotate: rotateRight }}
         >
           <RugbyBallSVG color="#FFD200" size={180} />
         </motion.div>

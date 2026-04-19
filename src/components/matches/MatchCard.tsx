@@ -1,12 +1,11 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Calendar, Clock, MapPin, ChevronRight } from "lucide-react";
+import { Calendar, Clock, MapPin } from "lucide-react";
 import Button from "../common/Button";
 import Link from "next/link";
 
 interface MatchCardProps {
-  id: number | string;
   competition: string;
   round: string;
   date: string;
@@ -26,7 +25,6 @@ interface MatchCardProps {
 }
 
 export default function MatchCard({
-  id,
   competition,
   round,
   date,
@@ -53,11 +51,14 @@ export default function MatchCard({
         <div className="flex justify-between items-center mb-6">
           {/* Home Team */}
           <div className="flex flex-col items-center gap-3 w-1/3">
-            <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center p-2">
-              {/* Fallback for logo */}
-              <span className="text-black font-heading font-bold text-xl">
-                {homeTeam.name.substring(0, 3).toUpperCase()}
-              </span>
+            <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center p-2 overflow-hidden relative">
+              {homeTeam.logo ? (
+                <Image src={homeTeam.logo} alt={homeTeam.name} fill sizes="64px" className="object-contain p-2" />
+              ) : (
+                <span className="text-black font-heading font-bold text-xl">
+                  {homeTeam.name.substring(0, 3).toUpperCase()}
+                </span>
+              )}
             </div>
             <span className="text-white font-heading text-lg text-center leading-tight">
               {homeTeam.name}
@@ -87,10 +88,14 @@ export default function MatchCard({
 
           {/* Away Team */}
           <div className="flex flex-col items-center gap-3 w-1/3">
-            <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center p-2 border-2 border-transparent group-hover:border-zru-green transition-colors">
-               <span className="text-black font-heading font-bold text-xl">
-                {awayTeam.name.substring(0, 3).toUpperCase()}
-              </span>
+            <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center p-2 border-2 border-transparent group-hover:border-zru-green transition-colors overflow-hidden relative">
+               {awayTeam.logo ? (
+                 <Image src={awayTeam.logo} alt={awayTeam.name} fill sizes="64px" className="object-contain p-2" />
+               ) : (
+                 <span className="text-black font-heading font-bold text-xl">
+                    {awayTeam.name.substring(0, 3).toUpperCase()}
+                  </span>
+               )}
             </div>
             <span className="text-white font-heading text-lg text-center leading-tight">
               {awayTeam.name}
