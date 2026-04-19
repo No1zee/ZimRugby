@@ -1,17 +1,16 @@
-import Navigation from "@/components/layout/Navigation";
 import HeroCarousel from "@/components/home/HeroCarousel";
 import MatchCentreStrip from "@/components/home/MatchCentreStrip";
+import StorePreviewStrip from "@/components/home/StorePreviewStrip";
 import NewsMediaBlock from "@/components/home/NewsMediaBlock";
 import PlayRugbyDevelopment from "@/components/home/PlayRugbyDevelopment";
 import EventsBlock from "@/components/home/EventsBlock";
 import PartnersSection from "@/components/home/PartnersSection";
-import Footer from "@/components/layout/Footer";
 import { CountdownPromo } from "@/components/ui/CountdownPromo";
+import JournalStrip from "@/components/home/JournalStrip";
 
 export default function Home() {
   return (
     <main className="bg-rich-black min-h-screen">
-      <Navigation />
       
       {/* 1. Hero Carousel */}
       <HeroCarousel />
@@ -20,20 +19,26 @@ export default function Home() {
         {/* 2. Match Centre Strip (Horizontal List) */}
         <MatchCentreStrip />
 
+        {/* 2.5 Store Preview Strip (Interaction Portal) */}
+        <StorePreviewStrip />
+
         {/* 3. Featured Match Countdown (HK Rugby style) */}
         <CountdownPromo
-          title="TONGA"
-          subtitle="VS ZIM SABLES"
-          description="The Sables take on Tonga in the upcoming Nations Cup clash. Don't miss this historic match as Zimbabwe faces international competition in the USA."
-          targetDate="2026-07-04T15:00:00"
+          title="MATCH"
+          subtitle="ZAMBIA vs ZIMBABWE"
+          description="The Sables return to action against Zambia in Bulawayo. Be there to support the boys as they kick off their 2026 international campaign."
+          targetDate="2026-04-25T15:00:00"
           countdownLabel="COUNTDOWN TO KICK OFF:"
-          location="USA"
+          location="Hartsfield, Bulawayo"
           image="/images/events/africa-cup.jpg"
           ctas={[
-            { label: "Get Tickets", href: "/tickets", variant: "primary" },
-            { label: "Match Info", href: "/matches/tonga", variant: "outline" },
+            { label: "Match Tickets", href: "/tickets", variant: "primary" },
+            { label: "Fixture News", href: "/news/sables-vs-zambia", variant: "outline" },
           ]}
         />
+
+        {/* 3.5 The Sables Journal (Directorial Narrative) */}
+        <JournalStrip />
 
         {/* 4. What's On / Events */}
         <EventsBlock />
@@ -48,7 +53,6 @@ export default function Home() {
         <PartnersSection />
 
       </div>
-      <Footer />
     </main>
   );
 }

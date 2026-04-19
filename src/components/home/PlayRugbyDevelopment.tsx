@@ -1,10 +1,9 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { ArrowRight, Heart, Users, GraduationCap, HandHeart, Target } from "lucide-react";
+import { ArrowRight, Heart, Users, GraduationCap } from "lucide-react";
 import Link from "next/link";
-import { ScrollReveal, StaggerContainer, staggerItemVariants, GlowButton, Tilt3DCard, AnimatedCounter } from "../ui/animations";
-import SubtleBackground from "../ui/SubtleBackground";
+import { AnimatedCounter } from "../ui/animations";
 
 const programs = [
   {
@@ -14,7 +13,7 @@ const programs = [
     icon: Users,
     stat: 50,
     statLabel: "CLUBS",
-    cta: "Get Involved",
+    cta: "Explore Program",
     ctaLink: "/community/grassroots",
     color: "from-zru-green to-green-900"
   },
@@ -25,18 +24,18 @@ const programs = [
     icon: GraduationCap,
     stat: 200,
     statLabel: "SCHOOLS",
-    cta: "Learn More",
+    cta: "Explore Program",
     ctaLink: "/community/schools",
     color: "from-gray-900 to-black"
   },
   {
     id: 3,
-    title: "WOMEN'S RUGBY",
+    title: "WOMEN&apos;S RUGBY",
     description: "Empowering women and girls through rugby with pathways from community to international level.",
     icon: Heart,
     stat: 5000,
     statLabel: "PLAYERS",
-    cta: "Join Us",
+    cta: "Join Program",
     ctaLink: "/community/womens",
     color: "from-zru-green to-black"
   },
@@ -44,117 +43,100 @@ const programs = [
 
 export default function PlayRugbyDevelopment() {
   return (
-    <section className="bg-gray-50 py-16 lg:py-24 overflow-hidden">
-      <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
+    <section className="bg-white py-32 overflow-hidden relative">
+      <div className="max-w-[1440px] mx-auto px-6 relative z-10">
         
-        {/* Section Header */}
-        <ScrollReveal>
-          <div className="text-center mb-12 lg:mb-16">
-            <div className="flex items-center justify-center gap-2 mb-4">
-              <HandHeart className="w-6 h-6 text-white" />
-              <span className="text-white text-xs font-bold uppercase tracking-widest">Community Impact</span>
-            </div>
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-black text-zru-green uppercase mb-4">
-              Rugby For Good
-            </h2>
-            <p className="text-gray-600 text-base max-w-2xl mx-auto">
-              From grassroots development to community outreach, Zimbabwe Rugby Union is committed to using the power of sport to transform lives.
-            </p>
-          </div>
-        </ScrollReveal>
+        {/* Section Header: Directorial Style */}
+        <div className="mb-24 flex flex-col items-center text-center max-w-3xl mx-auto space-y-6">
+          <motion.div 
+            initial={{ opacity: 0, y: 10 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="flex items-center gap-3"
+          >
+            <div className="w-8 h-px bg-zru-gold" />
+            <span className="text-[10px] font-black uppercase tracking-[0.4em] text-clubhouse-gold">For the Future</span>
+            <div className="w-8 h-px bg-zru-gold" />
+          </motion.div>
+          <motion.h2 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
+            className="text-5xl md:text-7xl font-black uppercase tracking-tighter text-clubhouse-charcoal leading-[0.9]"
+          >
+            RUGBY <br />FOR <span className="text-stroke-charcoal text-transparent">GOOD</span>
+          </motion.h2>
+          <p className="text-lg text-clubhouse-charcoal/60 font-medium leading-relaxed">
+            Harnessing the power of the oval ball to transform communities, empower youth, and build a lasting legacy across Zimbabwe.
+          </p>
+        </div>
 
-        {/* Programs Grid - 3 Column Cards */}
-        <StaggerContainer className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12" staggerDelay={0.15}>
-          {programs.map((program) => (
-            <motion.div key={program.id} variants={staggerItemVariants}>
-              <Tilt3DCard tiltAmount={5} glareEnabled>
-                <div className="bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 h-full flex flex-col relative">
-                  <SubtleBackground variant="flow" intensity="low" />
-                  
-                  {/* Visual Header with Icon & Stats */}
-                  <div className={`h-44 bg-linear-to-br ${program.color} relative overflow-hidden`}>
-                    {/* Pattern */}
-                    <div 
-                      className="absolute inset-0 opacity-10"
-                      style={{
-                        backgroundImage: "url(\"data:image/svg+xml,%3Csvg width='30' height='30' viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='15' cy='15' r='2' fill='%23fff'/%3E%3C/svg%3E\")",
-                      }}
-                    />
-                    
-                    <div className="absolute inset-0 flex flex-col items-center justify-center text-white p-6">
-                      <motion.div
-                        animate={{ y: [0, -5, 0] }}
-                        transition={{ duration: 3, repeat: Infinity }}
-                      >
-                        <program.icon className="w-10 h-10 mb-3" />
-                      </motion.div>
-                      <div className="text-4xl font-black">
-                        <AnimatedCounter value={program.stat} suffix="+" />
-                      </div>
-                      <div className="text-xs font-bold uppercase tracking-widest opacity-80">
-                        {program.statLabel}
-                      </div>
+        {/* Programs: Cinematic Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-12 lg:gap-20">
+          {programs.map((program, idx) => (
+            <motion.div
+              key={program.id}
+              initial={{ opacity: 0, scale: 0.95 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              transition={{ delay: idx * 0.1, duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
+              className="group relative"
+            >
+              <div className="relative aspect-3/4 mb-10 overflow-hidden rounded-2xl bg-neutral-100 shadow-2xl shadow-black/5">
+                <div className={`absolute inset-0 bg-linear-to-br ${program.color} opacity-90 transition-opacity group-hover:opacity-100`} />
+                <div className="absolute inset-0 flex flex-col justify-end p-10 space-y-6">
+                  <div className="space-y-2">
+                    <program.icon className="w-8 h-8 text-clubhouse-gold" />
+                    <div className="text-6xl font-black text-white px-0 tracking-tighter">
+                      <AnimatedCounter value={program.stat} suffix="+" />
                     </div>
                   </div>
-                  
-                  {/* Content */}
-                  <div className="p-6 flex-1 flex flex-col">
-                    <h3 className="text-zru-green font-black text-lg uppercase mb-3">
-                      {program.title}
-                    </h3>
-                    <p className="text-gray-600 text-sm leading-relaxed mb-6 flex-1">
-                      {program.description}
-                    </p>
-                    
-                    <Link href={program.ctaLink}>
-                      <motion.button 
-                        className="w-full bg-zru-green hover:bg-green-800 text-white text-xs font-bold uppercase tracking-wider py-3 rounded flex items-center justify-center gap-2 transition-colors"
-                        whileHover={{ scale: 1.02 }}
-                        whileTap={{ scale: 0.98 }}
-                        aria-label={`${program.cta} about ${program.title}`}
-                      >
-                        {program.cta} <ArrowRight className="w-4 h-4" />
-                      </motion.button>
-                    </Link>
-                  </div>
+                  <h3 className="text-2xl font-black text-white uppercase tracking-tight leading-none">
+                    {program.title}
+                  </h3>
+                  <p className="text-sm text-white/70 font-medium line-clamp-3">
+                    {program.description}
+                  </p>
+                  <Link href={program.ctaLink} className="pt-4 block group/btn">
+                    <div className="flex items-center gap-3 text-[10px] font-black uppercase tracking-widest text-white">
+                      <span>{program.cta}</span>
+                      <ArrowRight className="w-4 h-4 translate-x-0 group-hover/btn:translate-x-2 transition-transform" />
+                    </div>
+                  </Link>
                 </div>
-              </Tilt3DCard>
+                {/* Visual backdrop removed as icon is now anchored */}
+                {/* <program.icon className="absolute top-10 right-10 w-24 h-24 text-white/10 rotate-12" /> */}
+              </div>
             </motion.div>
           ))}
-        </StaggerContainer>
+        </div>
 
-        {/* Impact Summary Bar */}
-        <ScrollReveal delay={0.3}>
-          <div className="bg-zru-green rounded-xl p-8 flex flex-col md:flex-row items-center justify-between gap-6">
-            <div className="text-center md:text-left">
-              <h3 className="text-white font-black text-xl uppercase mb-2">
-                Want to Make a Difference?
-              </h3>
-              <p className="text-white/80 text-sm">
-                Support Zimbabwe Rugby's community initiatives through volunteering, donations, or partnerships.
-              </p>
-            </div>
-            <div className="flex flex-wrap gap-3 justify-center">
-              <Link href="/volunteer">
-                <GlowButton 
-                  className="bg-white text-zru-green px-6 py-3 text-xs font-bold uppercase tracking-wider rounded flex items-center gap-2 hover:bg-gray-100 transition-colors"
-                  glowColor="rgba(255,255,255,0.3)"
-                >
-                  Volunteer
-                </GlowButton>
-              </Link>
-              <Link href="/donate">
-                <motion.button 
-                  className="bg-white text-zru-green px-6 py-3 text-xs font-bold uppercase tracking-wider rounded flex items-center gap-2 hover:bg-gray-100 transition-colors"
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                >
-                  Donate <Heart className="w-4 h-4" />
-                </motion.button>
-              </Link>
-            </div>
+        {/* Bottom CTA: High-end Banner */}
+        <motion.div 
+          initial={{ opacity: 0, y: 50 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="mt-32 p-12 md:p-20 bg-clubhouse-charcoal rounded-4xl relative overflow-hidden flex flex-col md:flex-row items-center justify-between gap-12"
+        >
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,215,0,0.1),transparent_50%)]" />
+          <div className="space-y-4 relative z-10 max-w-xl">
+             <h3 className="text-3xl md:text-5xl font-black text-white uppercase tracking-tighter leading-[0.9]">
+               Join The <br /><span className="text-clubhouse-gold">Ranks of Impact</span>
+             </h3>
+             <p className="text-white/40 font-medium">
+               Whether as a volunteer, donor, or strategic partner, your involvement drives the next era of Zimbabwe Rugby.
+             </p>
           </div>
-        </ScrollReveal>
+          <div className="flex gap-4 relative z-10">
+            <Link href="/donate" className="px-10 py-5 bg-zru-gold text-white text-[10px] font-black uppercase tracking-widest rounded-full hover:bg-white hover:text-clubhouse-charcoal transition-all shadow-xl">
+              Donate Now
+            </Link>
+            <Link href="/volunteer" className="px-10 py-5 border border-white/20 text-white text-[10px] font-black uppercase tracking-widest rounded-full hover:bg-white/10 transition-all">
+              Volunteer
+            </Link>
+          </div>
+        </motion.div>
 
       </div>
     </section>

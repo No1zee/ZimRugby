@@ -1,9 +1,7 @@
 "use client";
 
-import { motion } from "framer-motion";
 import Link from "next/link";
-import { Facebook, Twitter, Instagram, Youtube, Linkedin, Mail, MapPin, Phone } from "lucide-react";
-import { ScrollReveal } from "../ui/animations";
+import { Facebook, Twitter, Instagram, Youtube, Linkedin } from "lucide-react";
 
 const socialLinks = [
   { Icon: Facebook, href: "https://facebook.com/zimbabwerugby", label: "Facebook" },
@@ -42,100 +40,100 @@ const footerLinks = {
 
 export default function Footer() {
   return (
-    <footer 
-      className="bg-zru-green text-white relative overflow-hidden"
-      style={{
-        backgroundImage: `repeating-linear-gradient(135deg, rgba(0, 80, 40, 0.2) 0px, rgba(0, 80, 40, 0.2) 1px, transparent 1px, transparent 100px)`
-      }}
-    >
+    <footer className="bg-clubhouse-charcoal text-white relative overflow-hidden pt-32 pb-12">
       
-      {/* Top Border Accent */}
-      <motion.div 
-        className="h-1 bg-linear-to-r from-zru-green via-white to-zru-green"
-        initial={{ scaleX: 0 }}
-        whileInView={{ scaleX: 1 }}
-        viewport={{ once: true }}
-      />
+      {/* Dynamic Background */}
+      <div className="absolute top-0 right-0 w-1/3 h-full bg-linear-to-l from-clubhouse-gold/5 to-transparent pointer-events-none" />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
-          
-          {/* Brand Column */}
-          <div className="space-y-6">
-            <Link href="/" className="inline-block">
-              <span className="text-3xl font-black text-white tracking-tighter">ZRU</span>
+      <div className="max-w-[1440px] mx-auto px-6 relative z-10">
+        
+        {/* Top Section: Brand & Newsletter */}
+        <div className="flex flex-col lg:flex-row justify-between gap-20 mb-32">
+          <div className="max-w-md space-y-10">
+            <Link href="/" className="inline-block group">
+              <div className="space-y-4">
+                <span className="text-6xl font-black text-white tracking-tighter block leading-none">ZIMBABWE <br /><span className="text-clubhouse-gold">RUGBY</span></span>
+                <div className="flex items-center gap-3">
+                   <div className="w-10 h-px bg-white/20" />
+                   <span className="text-[10px] font-black uppercase tracking-[0.4em] text-white/40">The Pride of Zimbabwe</span>
+                </div>
+              </div>
             </Link>
-            <p className="text-white/60 text-sm leading-relaxed">
-              The official governing body of rugby union in Zimbabwe. Dedicated to growing the game and achieving excellence on the world stage.
+            <p className="text-white/40 font-medium leading-relaxed">
+              Founded in 1895, the Zimbabwe Rugby Union is the custodian of the game&apos;s rich heritage and its ambitious future on the world stage.
             </p>
-            <div className="flex gap-4">
+            <div className="flex gap-6">
               {socialLinks.map(({ Icon, href, label }) => (
-                <motion.a
-                  key={label}
-                  href={href}
+                <a 
+                  key={label} 
+                  href={href} 
+                  className="text-white/20 hover:text-clubhouse-gold transition-colors"
+                  aria-label={label}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-9 h-9 rounded-full bg-white/10 hover:bg-white hover:text-zru-green flex items-center justify-center transition-colors"
-                  whileHover={{ scale: 1.1 }}
-                  whileTap={{ scale: 0.95 }}
-                  aria-label={label}
                 >
-                  <Icon className="w-4 h-4" />
-                </motion.a>
+                  <Icon className="w-5 h-5" />
+                </a>
               ))}
             </div>
           </div>
 
-          {/* Quick Links */}
-          {Object.entries(footerLinks).map(([title, links]) => (
-            <div key={title}>
-              <h4 className="font-bold text-sm uppercase tracking-wider mb-4 text-white">
-                {title}
-              </h4>
-              <ul className="space-y-2">
-                {links.map((link) => (
-                  <li key={link.label}>
-                    <Link 
-                      href={link.href}
-                      className="text-white/70 hover:text-white text-xs transition-colors"
+          <div className="bg-white/5 border border-white/10 rounded-4xl p-10 md:p-16 max-w-2xl w-full relative">
+             <div className="space-y-8 relative z-10">
+                <div className="space-y-2">
+                   <span className="text-clubhouse-gold text-[10px] font-black uppercase tracking-[0.4em]">Stay in the Loop</span>
+                   <h3 className="text-3xl font-black text-white uppercase tracking-tighter">THE SABLES <br />BULLETIN</h3>
+                </div>
+                <form className="relative" aria-labelledby="newsletter-heading">
+                   <label htmlFor="footer-email" className="sr-only">Email Address</label>
+                   <input 
+                     id="footer-email"
+                     type="email" 
+                     placeholder="Enter your email" 
+                     className="w-full bg-transparent border-b border-white/20 py-4 text-white focus:outline-hidden focus:border-clubhouse-gold transition-all placeholder:text-white/10 text-lg font-medium"
+                   />
+                    <button 
+                      type="submit"
+                      className="absolute right-2 top-1/2 -translate-y-1/2 bg-zru-green text-white px-6 py-2 rounded-full text-[10px] font-black uppercase tracking-widest hover:bg-zru-gold transition-colors shadow-lg"
                     >
-                      {link.label}
-                    </Link>
-                  </li>
-                ))}
+                      Subscribe
+                   </button>
+                </form>
+             </div>
+          </div>
+        </div>
+
+        {/* Links Grid */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-12 mb-32">
+          {Object.entries(footerLinks).map(([title, links]) => (
+            <div key={title} className="space-y-8">
+              <h4 className="text-[10px] font-black uppercase tracking-[0.3em] text-clubhouse-gold">{title}</h4>
+              <ul className="space-y-4">
+                 {links.map((link) => (
+                    <li key={link.label}>
+                       <Link href={link.href} className="text-sm font-bold text-white/40 hover:text-white transition-colors">{link.label}</Link>
+                    </li>
+                 ))}
               </ul>
             </div>
           ))}
         </div>
 
-        {/* Contact Bar */}
-        <div className="border-t border-white/10 pt-8 mb-8">
-          <div className="flex flex-wrap gap-6 text-xs text-white/60">
-            <a href="mailto:info@zimbabwerugby.co.zw" className="flex items-center gap-2 hover:text-white transition-colors">
-              <Mail className="w-4 h-4" /> info@zimbabwerugby.co.zw
-            </a>
-            <span className="flex items-center gap-2">
-              <MapPin className="w-4 h-4" /> National Sports Stadium, Harare
-            </span>
-            <a href="tel:+263242751234" className="flex items-center gap-2 hover:text-white transition-colors">
-              <Phone className="w-4 h-4" /> +263 (24) 275 1234
-            </a>
-          </div>
+        {/* Bottom Bar */}
+        <div className="pt-12 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-8">
+           <div className="flex items-center gap-8">
+              <span className="text-[9px] font-black uppercase tracking-widest text-white/20">© 2026 ZRU OFFICIAL</span>
+              <div className="hidden md:flex gap-8">
+                {['Privacy Policy', 'Terms of Use', 'Accessibility'].map((item) => (
+                  <Link key={item} href="#" className="text-[9px] font-black uppercase tracking-widest text-white/20 hover:text-white transition-colors">
+                    {item}
+                  </Link>
+                ))}
+              </div>
+           </div>
+
         </div>
 
-        {/* Copyright */}
-        <div className="border-t border-white/10 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
-          <p className="text-white/40 text-xs text-center md:text-left">
-            &copy; {new Date().getFullYear()} Zimbabwe Rugby Union. All rights reserved.
-          </p>
-          <div className="flex gap-6 text-xs text-white/40">
-            {['Privacy Policy', 'Terms of Service', 'Cookie Policy'].map((item) => (
-              <a key={item} href="#" className="hover:text-white transition-colors">
-                {item}
-              </a>
-            ))}
-          </div>
-        </div>
       </div>
     </footer>
   );

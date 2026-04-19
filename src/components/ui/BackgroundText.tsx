@@ -1,6 +1,7 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, useScroll, useTransform } from "framer-motion";
+import { useRef } from "react";
 
 interface BackgroundTextProps {
   /** Text to repeat */
@@ -11,6 +12,8 @@ interface BackgroundTextProps {
   orientation?: "horizontal" | "diagonal";
   /** Color theme */
   color?: "navy" | "gray" | "green";
+  /** Animation style */
+  animation?: "marquee" | "scroll";
   /** Additional className */
   className?: string;
 }
@@ -21,52 +24,53 @@ interface BackgroundTextProps {
  */
 export function BackgroundText({
   text,
-  repeat = 2,
+  repeat = 4,
   orientation = "horizontal",
   color = "gray",
+  animation = "marquee",
   className = "",
 }: BackgroundTextProps) {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start end", "end start"]
+  });
+
+  const y1 = useTransform(scrollYProgress, [0, 1], [0, -200]);
+  const y2 = useTransform(scrollYProgress, [0, 1], [0, 200]);
   
   const colorMap = {
-    navy: "rgba(9, 31, 64, 0.15)",
-    gray: "rgba(128, 128, 128, 0.08)",
-    green: "rgba(0, 96, 57, 0.2)",
+    navy: "rgba(9, 31, 64, 0.5)",
+    gray: "rgba(200, 200, 200, 0.12)",
+    green: "rgba(0, 150, 80, 0.55)",
   };
 
   const repeatedText = Array(repeat).fill(text).join(" ");
 
   return (
-    <motion.div
+    <div
+      ref={containerRef}
       className={`absolute inset-0 overflow-hidden pointer-events-none z-0 ${className}`}
-      initial={{ opacity: 0 }}
-      whileInView={{ opacity: 1 }}
-      viewport={{ once: true, margin: "-50px" }}
-      transition={{ duration: 1, delay: 0.5 }}
     >
       <div
-        className="whitespace-nowrap select-none"
+        className="whitespace-nowrap select-none font-heading font-black leading-[1.1] tracking-[0.05em] text-[clamp(100px,18vw,250px)]"
         style={{
-          fontFamily: "var(--font-heading), sans-serif",
-          fontSize: "clamp(100px, 18vw, 250px)",
-          fontWeight: 900,
-          letterSpacing: "0.05em",
           color: colorMap[color],
           transform: orientation === "diagonal" ? "rotate(-5deg)" : "none",
-          lineHeight: 1.1,
         }}
       >
         {/* First line */}
         <div className="overflow-hidden">
           <motion.span
             className="inline-block"
-            initial={{ x: "0%" }}
-            animate={{ x: "-10%" }}
-            transition={{ 
-              duration: 30, 
+            style={{ y: animation === "scroll" ? y1 : 0 }}
+            animate={animation === "marquee" ? { x: ["-0%", "-50%"] } : {}}
+            transition={animation === "marquee" ? { 
+              duration: 40, 
               repeat: Infinity, 
               ease: "linear",
-              repeatType: "loop" 
-            }}
+              repeatType: "loop"
+            } : {}}
           >
             {repeatedText} {repeatedText}
           </motion.span>
@@ -76,20 +80,20 @@ export function BackgroundText({
         <div className="overflow-hidden -mt-4">
           <motion.span
             className="inline-block"
-            initial={{ x: "-10%" }}
-            animate={{ x: "0%" }}
-            transition={{ 
-              duration: 30, 
+            style={{ y: animation === "scroll" ? y2 : 0 }}
+            animate={animation === "marquee" ? { x: ["-50%", "0%"] } : {}}
+            transition={animation === "marquee" ? { 
+              duration: 40, 
               repeat: Infinity, 
               ease: "linear",
-              repeatType: "loop" 
-            }}
+              repeatType: "loop"
+            } : {}}
           >
             {repeatedText} {repeatedText}
           </motion.span>
         </div>
       </div>
-    </motion.div>
+    </div>
   );
 }
 

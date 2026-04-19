@@ -1,20 +1,19 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { ArrowRight, Calendar, MapPin, Plus, Trophy, GraduationCap } from "lucide-react";
+import { Calendar, MapPin, Trophy, Plus } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import { StaggerContainer, staggerItemVariants } from "../ui/animations";
-import { StripedBackground } from "../ui/StripedBackground";
-import { BackgroundText } from "../ui/BackgroundText";
-import SubtleBackground from "../ui/SubtleBackground";
+import { PretextBackground } from "../ui/PretextBackground";
+import { PretextHeadline } from "../ui/PretextHeadline";
 
 const events = [
   {
     id: 1,
     title: "SUPER SIX RUGBY LEAGUE",
     subtitle: "PREMIER CLUB COMPETITION",
-    date: "MAY - SEP 2025",
+    date: "MAY - SEP 2026",
     location: "HARARE & BULAWAYO",
     description: "Zimbabwe's top clubs including Old Hararians, Old Georgians, and Old Miltonians battle for supremacy.",
     tags: ["Premier League", "Club Rugby"],
@@ -26,7 +25,7 @@ const events = [
     id: 2,
     title: "SABLE LAGER GRID CUP",
     subtitle: "FRANCHISE RUGBY",
-    date: "OCT - NOV 2025",
+    date: "OCT - NOV 2026",
     location: "HARARE SPORTS CLUB",
     description: "The new franchise-style format boosting excitement and participation in the local scene.",
     tags: ["Franchise", "Sable Lager"],
@@ -62,111 +61,112 @@ const events = [
 
 export default function EventsBlock() {
   return (
-    <section className="relative bg-gray-50 py-16 lg:py-24 overflow-hidden">
+    <section className="relative bg-[#0A0A0A] py-32" id="events-block">
       
-      {/* Background text - "WHAT'S ON? A GAME FOR ALL" style */}
-      <BackgroundText text="WHAT'S ON?" repeat={3} color="green" className="mt-32" />
+      {/* Background text - Restored big interactive text */}
+      <PretextBackground 
+        text="WHAT'S ON? "
+        className="absolute -top-[15vh] -bottom-[15vh] left-0 right-0 opacity-80 overflow-visible" 
+      />
       
-
-      <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+      <div className="max-w-[1440px] mx-auto px-6 relative z-10">
+        <div className="flex flex-col lg:flex-row gap-20">
           
-          {/* Left: Title Block (Navy blue like HK Rugby) */}
-          <motion.div
-            initial={{ opacity: 0, x: -30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="lg:col-span-3 bg-[#091F40] p-8 lg:p-10 rounded-lg flex flex-col justify-center"
-          >
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-black text-white uppercase leading-tight mb-4">
-              WHAT'S<br />ON?
-            </h2>
-            
-            <p className="text-white/70 text-sm leading-relaxed mb-6">
-              Want to watch action-packed rugby matches? Or be a part of our wide range of community and corporate events? Our What's On listings have you covered!
-            </p>
-            
-            <Link href="/events">
-              <motion.button
-                className="bg-zru-green hover:bg-green-800 text-white px-6 py-3 text-xs font-bold uppercase tracking-wider flex items-center gap-2 rounded transition-all"
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-              >
-                View Listings
-                <Plus className="w-4 h-4" />
-              </motion.button>
-            </Link>
-          </motion.div>
-
-          {/* Right: Events Cards */}
-          <StaggerContainer 
-            className="lg:col-span-9 grid grid-cols-1 md:grid-cols-2 gap-6" 
-            staggerDelay={0.1}
-          >
-            {events.slice(0, 4).map((event) => (
-              <motion.div key={event.id} variants={staggerItemVariants}>
-                <Link href={`/events/${event.id}`} className="block h-full group">
-                  <div className="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 h-full flex flex-col relative group">
-                    <SubtleBackground variant="flow" intensity="low" />
-                    
-                    {/* Image Placeholder or Actual Image */}
-                    <div className={`h-48 relative overflow-hidden group`}>
-                      <Image 
-                        src={event.image || ""} 
-                        alt={event.title}
-                        fill
-                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                        className="object-cover transition-transform duration-700 group-hover:scale-110"
-                      />
-                      <div className={`absolute inset-0 bg-linear-to-br ${event.color} opacity-60 mix-blend-multiply group-hover:opacity-40 transition-opacity duration-300`} />
-                      
-                      {/* Tags */}
-                      <div className="absolute top-3 left-3 z-10 flex gap-1">
-                        {event.tags.map(tag => (
-                          <span 
-                            key={tag}
-                            className="bg-white/90 text-gray-700 text-[9px] px-2 py-0.5 rounded font-bold uppercase backdrop-blur-sm"
-                          >
-                            {tag}
-                          </span>
-                        ))}
-                      </div>
-                      
-                      {/* Icon */}
-                      <div className="absolute top-3 right-3 z-10">
-                         <div className="bg-white/20 backdrop-blur-xs p-2 rounded-full">
-                            <event.icon className="w-5 h-5 text-white" />
-                         </div>
-                      </div>
-                    </div>
-                    
-                    {/* Content */}
-                    <div className="p-5">
-                      <h3 className="text-lg font-black text-gray-900 uppercase mb-1 group-hover:text-zru-green transition-colors">
-                        {event.title}
-                      </h3>
-                      
-                      <p className="text-gray-600 text-sm mb-4">
-                        {event.description}
-                      </p>
-                      
-                      <div className="flex flex-wrap gap-4 text-xs text-gray-500">
-                        <span className="flex items-center gap-1">
-                          <Calendar className="w-3 h-3" />
-                          {event.date}
-                        </span>
-                        <span className="flex items-center gap-1">
-                          <MapPin className="w-3 h-3" />
-                          {event.location}
-                        </span>
-                      </div>
-                    </div>
+          {/* Sticky Header Block */}
+          <div className="lg:w-1/4 lg:sticky lg:top-32 h-fit">
+            <motion.div
+              initial={{ opacity: 0, x: -30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              className="space-y-8"
+            >
+              <div className="space-y-4">
+                <div className="flex items-center gap-2">
+                  <div className="w-8 h-px bg-zru-gold" />
+                  <span className="text-zru-gold text-[10px] font-black uppercase tracking-[0.4em]">The Calendar</span>
+                </div>
+                <div className="pr-4">
+                  <PretextHeadline 
+                    text="WHAT'S ON?" 
+                    maxFontSize={140} 
+                    minFontSize={50}
+                  />
+                </div>
+              </div>
+              
+              <p className="text-white/40 text-sm leading-relaxed font-medium">
+                From Super Six matches to community development festivals, explore the heart of Zimbabwean rugby across the nation.
+              </p>
+              
+              <Link href="/events" className="inline-block group">
+                <div className="flex items-center gap-4 text-[10px] font-black uppercase tracking-[0.3em] text-white">
+                  <span>Explore All</span>
+                  <div className="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center group-hover:bg-zru-gold group-hover:border-zru-gold transition-all">
+                    <Plus className="w-4 h-4" />
                   </div>
-                </Link>
-              </motion.div>
-            ))}
+                </div>
+              </Link>
+            </motion.div>
+          </div>
+
+          {/* Events Grid - Asymmetric Layout */}
+          <div className="lg:w-3/4">
+            <StaggerContainer 
+              className="flex flex-col gap-12 lg:gap-20" 
+              staggerDelay={0.05}
+            >
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-start">
+                {events.map((event, idx) => (
+                  <motion.div 
+                    key={event.id} 
+                    variants={staggerItemVariants}
+                    className={`${idx === 0 ? "lg:col-span-2" : ""} ${idx % 2 === 0 && idx !== 0 ? "lg:mt-32" : ""}`}
+                  >
+                    <Link href={`/events/${event.id}`} className="block group">
+                      <div className={`relative ${idx === 0 ? "aspect-21/9" : "aspect-4/5"} overflow-hidden rounded-2xl bg-neutral-900 shadow-2xl transition-all duration-700 group-hover:-translate-y-2`}>
+                        <Image 
+                          src={event.image || "/images/events/africa-cup.jpg"} 
+                          alt={`${event.title} - ${event.subtitle}`}
+                          fill
+                          sizes="(max-width: 1200px) 100vw, 50vw"
+                          className="object-cover transition-transform duration-1000 group-hover:scale-110 opacity-70 group-hover:opacity-100"
+                        />
+                      
+                      {/* Gradient Overlay */}
+                      <div className="absolute inset-0 bg-linear-to-b from-transparent via-transparent to-black/80" />
+                      
+                      {/* Content Overlay */}
+                      <div className="absolute inset-0 p-8 flex flex-col justify-end gap-6 translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
+                        <div className="space-y-2">
+                          <div className="flex flex-wrap gap-2">
+                            {event.tags.map(tag => (
+                              <span key={tag} className="text-[8px] font-black uppercase tracking-widest text-zru-gold border border-zru-gold/30 px-2 py-1 rounded backdrop-blur-sm">
+                                {tag}
+                              </span>
+                            ))}
+                          </div>
+                          <h3 className="text-2xl md:text-3xl font-black text-white uppercase tracking-tight leading-none group-hover:text-zru-gold transition-colors">
+                            {event.title}
+                          </h3>
+                        </div>
+                        
+                        <div className="flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-100">
+                          <p className="text-white/60 text-xs line-clamp-2 font-medium">
+                            {event.description}
+                          </p>
+                          <div className="flex items-center gap-4 text-[9px] font-bold text-white/40 uppercase tracking-widest pt-4">
+                            <span className="flex items-center gap-2"><Calendar className="w-3 h-3" /> {event.date}</span>
+                            <span className="flex items-center gap-2"><MapPin className="w-3 h-3" /> {event.location}</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </Link>
+                </motion.div>
+              ))}
+            </div>
           </StaggerContainer>
+          </div>
         </div>
       </div>
     </section>

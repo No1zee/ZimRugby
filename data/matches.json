@@ -1,0 +1,92 @@
+[
+  {
+    "id": "4321-fixture-0-1",
+    "homeTeam": {
+      "name": "25 April, 2026"
+    },
+    "awayTeam": {
+      "name": "Zimbabwe"
+    },
+    "date": "Zimbabwe vs Zambia",
+    "time": "TBD",
+    "venue": "Harare Sports Club",
+    "competition": "Africa Cup",
+    "category": "Sables",
+    "status": "upcoming"
+  },
+  {
+    "id": "4321-fixture-0-2",
+    "homeTeam": {
+      "name": "2 May,2026"
+    },
+    "awayTeam": {
+      "name": "Zimbabwe"
+    },
+    "date": "Zimbabwe vs Zambia",
+    "time": "TBD",
+    "venue": "Harare Sports Club",
+    "competition": "Africa Cup",
+    "category": "Sables",
+    "status": "upcoming"
+  },
+  {
+    "id": "4321-fixture-0-3",
+    "homeTeam": {
+      "name": "20 June,2026"
+    },
+    "awayTeam": {
+      "name": "South Africa"
+    },
+    "date": "South Africa ‘A’ vs Zimbabwe Sables",
+    "time": "TBD",
+    "venue": "Harare Sports Club",
+    "competition": "Africa Cup",
+    "category": "Sables",
+    "status": "upcoming"
+  },
+  {
+    "id": "4321-fixture-0-4",
+    "homeTeam": {
+      "name": "4 July,2026"
+    },
+    "awayTeam": {
+      "name": "United States"
+    },
+    "date": "Zimbabwe vs Tonga (Nations Cup)",
+    "time": "TBD",
+    "venue": "Harare Sports Club",
+    "competition": "Africa Cup",
+    "category": "Sables",
+    "status": "upcoming"
+  },
+  {
+    "id": "4321-fixture-0-5",
+    "homeTeam": {
+      "name": "11 July,2026"
+    },
+    "awayTeam": {
+      "name": "United States"
+    },
+    "date": "USA vs Zimbabwe (Nations Cup)",
+    "time": "TBD",
+    "venue": "Harare Sports Club",
+    "competition": "Africa Cup",
+    "category": "Sables",
+    "status": "upcoming"
+  },
+  {
+    "id": "4321-fixture-0-6",
+    "homeTeam": {
+      "name": "18 July,2026"
+    },
+    "awayTeam": {
+      "name": "Canada"
+    },
+    "date": "Canada vs Zimbabwe (Nations Cup)",
+    "time": "TBD",
+    "venue": "Harare Sports Club",
+    "competition": "Africa Cup",
+    "category": "Sables",
+    "status": "upcoming"
+  }
+]

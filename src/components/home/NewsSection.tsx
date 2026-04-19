@@ -45,7 +45,7 @@ const newsItems = [
 
 export default function NewsSection() {
   return (
-    <section className="py-20 bg-rich-black relative border-t border-white/10 overflow-hidden">
+    <section className="py-20 bg-rich-black relative border-t border-white/10">
       {/* Background Image */}
       <div className="absolute inset-0 z-0">
         <Image 

@@ -1,7 +1,7 @@
 import { Metadata } from "next";
 import Navigation from "@/components/layout/Navigation";
 import Footer from "@/components/layout/Footer";
-import { Users, Target, Award, Heart, ArrowRight, Mail, MapPin, Phone } from "lucide-react";
+import { Users, Target, Award, Heart, Mail, MapPin, Phone } from "lucide-react";
 import Image from "next/image";
 
 export const metadata: Metadata = {
@@ -96,7 +96,7 @@ export default function AboutPage() {
               The national team, known as the Sables, made their first major international appearance in the 1987 Rugby World Cup and have been a consistent force in African rugby. In 2024, the Sables achieved their greatest triumph by winning the Africa Cup, cementing their position as continental champions.
             </p>
             <p>
-              Today, Zimbabwe Rugby Union continues to develop the game at all levels, from schools and clubs to the elite international programme, with a particular focus on growing women's rugby through the Lady Sables programme.
+              Today, Zimbabwe Rugby Union continues to develop the game at all levels, from schools and clubs to the elite international programme, with a particular focus on growing women&apos;s rugby through the Lady Sables programme.
             </p>
           </div>
         </div>
@@ -114,6 +114,7 @@ export default function AboutPage() {
               src="/images/leadership/aaron-jani.png"
               alt="Aaron Jani"
               fill
+              sizes="192px"
               className="object-cover"
             />
           </div>

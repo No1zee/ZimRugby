@@ -1,12 +1,14 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowLeft, ArrowRight, Play, Ticket, ChevronLeft, ChevronRight } from "lucide-react";
+import { LucideIcon, ArrowRight, Play, Ticket, ChevronLeft, ChevronRight } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import { FloatingParticles, GlowButton } from "../ui/animations";
-import Button from "../common/Button";
+import MagneticElement from "../ui/MagneticElement";
+import gsap from "gsap";
+import { useGSAP } from "@gsap/react";
 
 // Slide Data Interface
 interface SlideData {
@@ -19,8 +21,8 @@ interface SlideData {
   };
   subtext: string;
   ctas: {
-    primary: { label: string; href: string; icon?: any };
-    secondary: { label: string; href: string; icon?: any };
+    primary: { label: string; href: string; icon?: LucideIcon };
+    secondary: { label: string; href: string; icon?: LucideIcon };
   };
   alignment?: "center" | "left"; // For future flexibility
 }
@@ -28,6 +30,45 @@ interface SlideData {
 const slides: SlideData[] = [
   {
     id: 1,
+    image: "/images/hero/campaign-victoria-falls.png",
+    headline: {
+      line1: "DOMESTIC",
+      line2: "WARRIORS",
+    },
+    subtext: "Experience the pride of Harare and Bulawayo as the Sables clash in the Victoria Falls Domestic Series.",
+    ctas: {
+      primary: { label: "Book Tickets", href: "https://zru.co.zw/tickets", icon: Ticket },
+      secondary: { label: "Match Info", href: "/events", icon: Play },
+    },
+  },
+  {
+    id: 2,
+    image: "/images/hero/campaign-denver-tour.png",
+    headline: {
+      line1: "NATIONS",
+      line2: "CUP",
+    },
+    subtext: "The Sables head to Denver at DICK'S Sporting Goods Park for a high-stakes showdown on July 4th.",
+    ctas: {
+      primary: { label: "Tour Details", href: "https://go.usa.rugby/nations-cup-2026-presale", icon: ArrowRight },
+      secondary: { label: "Watch Live", href: "/live", icon: Play },
+    },
+  },
+  {
+    id: 3,
+    image: "/images/hero/campaign-springboks-match.png",
+    headline: {
+      line1: "LEGENDS",
+      line2: "COLLIDE",
+    },
+    subtext: "A historic battle in Port Elizabeth as the Sables face the Springboks 'A' on June 20, 2026.",
+    ctas: {
+      primary: { label: "Get Tickets", href: "https://springboks.tmtickets.co.za/", icon: Ticket },
+      secondary: { label: "Sables Squad", href: "/teams/sables", icon: ArrowRight },
+    },
+  },
+  {
+    id: 4,
     image: "/images/teams/sables.jpg",
     headline: {
       line1: "THE SABLES",
@@ -40,30 +81,30 @@ const slides: SlideData[] = [
     },
   },
   {
-    id: 2,
+    id: 5,
     image: "/images/teams/african-champions-2025.jpg", 
     headline: {
       line1: "AFRICAN",
       line2: "CHAMPIONS",
     },
-    subtext: "Celebrating the victorious journey of the Zimbabwe Sables.",
+    subtext: "Celebrating the victorious journey of the Zimbabwe Sables as they conquer the continent.",
     ctas: {
       primary: { label: "Celebrate With Us", href: "/sables", icon: Ticket },
       secondary: { label: "View Gallery", href: "/gallery", icon: ArrowRight },
     },
   },
   {
-    id: 3,
+    id: 6,
     image: "/images/media/vid1.jpg", 
     video: "/images/zim-rugby-slow-mo-2.mp4",
     headline: {
       line1: "A CUT ABOVE",
       line2: "THE COMPETITION",
     },
-    subtext: "Join the African Champions on their first world cup campaign since 1991.",
+    subtext: "Witness the elite athleticism of Zimbabwe's finest. Precision, power, and the pursuit of excellence.",
     ctas: {
-      primary: { label: "Support the Team", href: "/tickets", icon: Ticket },
-      secondary: { label: "Learn More", href: "/about", icon: ArrowRight },
+      primary: { label: "Watch Highlights", href: "/media", icon: Play },
+      secondary: { label: "Fixture News", href: "/news", icon: ArrowRight },
     },
   },
 ];
@@ -71,8 +112,44 @@ const slides: SlideData[] = [
 export default function HeroCarousel() {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isLoaded, setIsLoaded] = useState(false);
+  const containerRef = useRef<HTMLElement>(null);
+  const headlineRef = useRef<HTMLHeadingElement>(null);
+
+  // Use GSAP for the "Bloom" reveal and text transitions
+  useGSAP(() => {
+    if (!isLoaded) return;
+
+    const tl = gsap.timeline();
+    
+    // Initial Bloom/Focus reveal
+    tl.fromTo(".hero-bg-media", 
+      { filter: "blur(20px) brightness(1.5) scale(1.1)" },
+      { filter: "blur(0px) brightness(1) scale(1)", duration: 2, ease: "power3.out" }
+    );
+
+    // Text reveal sequence
+    tl.from(".hero-text-item", {
+      y: 100,
+      opacity: 0,
+      stagger: 0.2,
+      duration: 1.2,
+      ease: "power4.out",
+      clipPath: "polygon(0 0, 100% 0, 100% 0, 0 0)"
+    }, "-=1.5");
+
+  }, { scope: containerRef, dependencies: [currentSlide, isLoaded] });
 
   // Auto-play functionality
+  const nextSlide = () => {
+    setIsLoaded(false);
+    setCurrentSlide((prev) => (prev + 1) % slides.length);
+  };
+
+  const prevSlide = () => {
+    setIsLoaded(false);
+    setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length);
+  };
+
   useEffect(() => {
     const timer = setInterval(() => {
       nextSlide();
@@ -81,22 +158,10 @@ export default function HeroCarousel() {
     return () => clearInterval(timer);
   }, [currentSlide]);
 
-  const nextSlide = () => {
-    setCurrentSlide((prev) => (prev + 1) % slides.length);
-  };
-
-  const prevSlide = () => {
-    setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length);
-  };
-
-  const setSlide = (index: number) => {
-    setCurrentSlide(index);
-  };
-
   const activeSlide = slides[currentSlide];
 
   return (
-    <section className="relative h-screen bg-rich-black overflow-hidden flex items-center justify-center">
+    <section ref={containerRef} className="relative h-screen bg-rich-black overflow-hidden flex items-center justify-center cursor-none">
       
       {/* Background & Transitions */}
       <AnimatePresence mode="wait">
@@ -106,17 +171,12 @@ export default function HeroCarousel() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          transition={{ duration: 1 }}
+          transition={{ duration: 1.5 }}
         >
-          {/* Image/Video Background with Ken Burns Effect */}
+          {/* Image/Video Background with GSAP-controlled media */}
           <div className="relative w-full h-full overflow-hidden">
-             <div className={`absolute inset-0 bg-rich-black z-10 transition-opacity duration-1000 ${isLoaded ? 'opacity-0' : 'opacity-100'}`} />
-            <motion.div
-                className="relative w-full h-full"
-                initial={{ scale: 1.1 }}
-                animate={{ scale: 1.0 }}
-                transition={{ duration: 10, ease: "linear" }}
-            >
+             <div className={`absolute inset-0 bg-rich-black z-10 transition-opacity duration-1000 ${isLoaded ? "opacity-0" : "opacity-100"}`} />
+            <div className="relative w-full h-full hero-bg-media">
                 {activeSlide.video ? (
                   <video
                     src={activeSlide.video}
@@ -139,121 +199,114 @@ export default function HeroCarousel() {
                     onLoad={() => setIsLoaded(true)}
                   />
                 )}
-            </motion.div>
+            </div>
             {/* Overlay */}
-            <div className="absolute inset-0 bg-linear-to-b from-black/30 via-black/50 to-rich-black z-10" />
+            <div className="absolute inset-0 bg-linear-to-b from-black/40 via-black/20 to-rich-black z-10" />
           </div>
         </motion.div>
       </AnimatePresence>
 
       {/* Floating Particles (Global) */}
       <div className="absolute inset-0 z-10 pointer-events-none">
-          <FloatingParticles count={20} />
+          <FloatingParticles count={15} />
       </div>
 
       {/* Content Layer */}
-      <div className="relative z-20 w-full max-w-7xl mx-auto px-6 h-full flex items-center justify-center pt-[10vh]">
+      <div className="relative z-20 w-full max-w-7xl mx-auto px-6 h-full flex items-center justify-center pt-[5vh]">
         <div className="text-center w-full max-w-5xl mx-auto">
             
             <AnimatePresence mode="wait">
-                <motion.div
-                    key={currentSlide}
-                    initial="hidden"
-                    animate="visible"
-                    exit="hidden"
-                    variants={{
-                        hidden: { opacity: 0 },
-                        visible: { 
-                            opacity: 1,
-                            transition: {
-                                staggerChildren: 0.3,
-                                delayChildren: 0.5 
-                            }
-                        }
-                    }}
-                >
+                <div key={currentSlide}>
+
+
                     {/* Headline */}
-                    <motion.h1 
-                        className="font-black text-white uppercase tracking-tight leading-[0.9] mb-8 relative"
-                        variants={{
-                            hidden: { opacity: 0, y: 30 },
-                            visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: "easeOut" } }
-                        }}
+                    <h1 
+                        ref={headlineRef}
+                        className="font-black text-white uppercase tracking-tight leading-[0.8] mb-8 relative hero-text-item"
                     >
-                        {/* Spotlights for Slide 1 mainly, but can apply to all for effect */}
-                        <div className="absolute -inset-x-32 -top-64 bottom-0 pointer-events-none z-0 opacity-50">
-                            <div className="absolute top-0 left-0 w-0 h-0 border-l-120 border-l-transparent border-r-120 border-r-transparent border-t-400 border-t-zru-green/20 -rotate-12 blur-xl origin-top" />
-                            <div className="absolute top-0 right-0 w-0 h-0 border-l-120 border-l-transparent border-r-120 border-r-transparent border-t-400 border-t-zru-green/20 rotate-12 blur-xl origin-top" />
+                        {/* Spotlights */}
+                        <div className="absolute -inset-x-32 -top-64 bottom-0 pointer-events-none z-0 opacity-40">
+                            <div className="absolute top-0 left-0 w-0 h-0 border-l-120 border-l-transparent border-r-120 border-r-transparent border-t-400 border-t-zru-green/20 -rotate-12 blur-3xl origin-top" />
+                            <div className="absolute top-0 right-0 w-0 h-0 border-l-120 border-l-transparent border-r-120 border-r-transparent border-t-400 border-t-zru-green/20 rotate-12 blur-3xl origin-top" />
                         </div>
 
                         <span 
-                            className="block relative z-20 text-4xl sm:text-6xl md:text-7xl lg:text-8xl mb-2"
-                            style={{ textShadow: '0 4px 20px rgba(0, 0, 0, 0.5)' }}
+                            className="block relative z-20 text-6xl sm:text-8xl md:text-9xl lg:text-[11rem] text-glow-heavy"
                         >
                             {activeSlide.headline.line1}
                         </span>
                         <span 
-                            className="block text-white italic relative z-20 text-5xl sm:text-7xl md:text-8xl lg:text-9xl"
-                            style={{ 
-                                textShadow: '0 0 40px rgba(0, 150, 70, 0.5), 0 4px 20px rgba(0, 0, 0, 0.5)',
-                            }}
+                            className="block text-white italic relative z-20 text-7xl sm:text-9xl md:text-[10rem] lg:text-[12rem] -mt-4 lg:-mt-10 text-glow-green"
                         >
                             {activeSlide.headline.line2}
                         </span>
-                    </motion.h1>
+                    </h1>
 
                     {/* Subtext */}
-                    <motion.p 
-                        className="text-white/90 text-lg md:text-2xl font-medium mb-12 max-w-3xl mx-auto leading-relaxed drop-shadow-md"
-                        variants={{
-                            hidden: { opacity: 0, y: 20 },
-                            visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: "easeOut" } }
-                        }}
+                    <p 
+                        className="text-white/80 text-lg md:text-xl font-medium mb-12 max-w-2xl mx-auto leading-relaxed drop-shadow-2xl hero-text-item"
                     >
                     {activeSlide.subtext}
-                    </motion.p>
+                    </p>
 
                     {/* CTAs */}
-                    <motion.div 
-                        className="flex flex-col sm:flex-row gap-6 justify-center items-center"
-                        variants={{
-                            hidden: { opacity: 0, y: 20 },
-                            visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } }
-                        }}
-                    >
-                        <Link href={activeSlide.ctas.primary.href}>
-                            <GlowButton 
-                            className="bg-zru-green hover:bg-green-800 text-white px-10 py-5 text-base font-bold uppercase tracking-widest flex items-center gap-3 rounded transition-all duration-300 min-w-[220px] justify-center shadow-lg hover:shadow-zru-green/50"
-                            glowColor="rgba(0, 96, 57, 0.5)"
-                            >
-                            {activeSlide.ctas.primary.icon && <activeSlide.ctas.primary.icon className="w-5 h-5" />}
-                            {activeSlide.ctas.primary.label}
-                            </GlowButton>
-                        </Link>
+                    <div className="flex flex-col sm:flex-row gap-6 justify-center items-center hero-text-item">
+                        <MagneticElement intensity={0.25}>
+                           <Link href={activeSlide.ctas.primary.href}>
+                              <GlowButton 
+                                className="bg-white text-zru-green hover:bg-gray-100 px-12 py-5 text-sm font-black uppercase tracking-[0.2em] flex items-center gap-3 rounded-full transition-all duration-500 min-w-[240px] justify-center shadow-2xl cursor-none"
+                                glowColor="rgba(255, 255, 255, 0.4)"
+                              >
+                                {activeSlide.ctas.primary.icon && <activeSlide.ctas.primary.icon className="w-5 h-5" />}
+                                {activeSlide.ctas.primary.label}
+                              </GlowButton>
+                           </Link>
+                        </MagneticElement>
                         
-                        <Link href={activeSlide.ctas.secondary.href}>
-                            <motion.button 
-                            className="bg-white/10 backdrop-blur-md border border-white/30 text-white px-10 py-5 text-base font-bold uppercase tracking-widest flex items-center gap-3 rounded hover:bg-white/20 transition-all duration-300 min-w-[220px] justify-center"
-                            whileHover={{ scale: 1.05 }}
-                            whileTap={{ scale: 0.95 }}
-                            >
-                            {activeSlide.ctas.secondary.icon && <activeSlide.ctas.secondary.icon className="w-5 h-5" />}
-                            {activeSlide.ctas.secondary.label}
-                            </motion.button>
-                        </Link>
-                    </motion.div>
-                </motion.div>
+                        <MagneticElement intensity={0.25}>
+                           <Link href={activeSlide.ctas.secondary.href}>
+                              <button 
+                                className="bg-white/5 backdrop-blur-xl border border-white/20 text-white px-12 py-5 text-sm font-black uppercase tracking-[0.2em] flex items-center gap-3 rounded-full hover:bg-white/10 transition-all duration-500 min-w-[240px] justify-center cursor-none"
+                              >
+                                {activeSlide.ctas.secondary.icon && <activeSlide.ctas.secondary.icon className="w-5 h-5" />}
+                                {activeSlide.ctas.secondary.label}
+                              </button>
+                           </Link>
+                        </MagneticElement>
+                    </div>
+                </div>
             </AnimatePresence>
 
         </div>
       </div>
 
-      {/* Navigation Controls Removed */}
-
-      {/* Pagination Dots Removed */}
+      {/* Slide Navigation Hints */}
+      <div className="absolute bottom-12 left-1/2 -translate-x-1/2 z-30 flex items-center gap-8">
+          <button 
+            onClick={prevSlide} 
+            className="text-white/30 hover:text-white transition-colors cursor-none"
+            aria-label="Previous Slide"
+            title="Previous Slide"
+          >
+              <ChevronLeft size={32} />
+          </button>
+          <div className="flex gap-3">
+             {slides.map((_, i) => (
+               <div key={i} className={`h-1.5 transition-all duration-500 rounded-full ${i === currentSlide ? 'w-16 bg-zru-gold' : 'w-6 bg-white/40'}`} />
+             ))}
+          </div>
+          <button 
+            onClick={nextSlide} 
+            className="text-white/30 hover:text-white transition-colors cursor-none"
+            aria-label="Next Slide"
+            title="Next Slide"
+          >
+              <ChevronRight size={32} />
+          </button>
+      </div>
 
       {/* Bottom Fade */}
-      <div className="absolute bottom-0 left-0 w-full h-32 bg-linear-to-t from-rich-black to-transparent pointer-events-none z-10" />
+      <div className="absolute bottom-0 left-0 w-full h-48 bg-linear-to-t from-rich-black via-rich-black/50 to-transparent pointer-events-none z-10" />
 
     </section>
   );

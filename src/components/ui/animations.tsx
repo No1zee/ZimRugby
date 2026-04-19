@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef, useEffect, useState, ReactNode } from "react";
-import { motion, useInView, useSpring, useTransform, MotionValue } from "framer-motion";
+import { motion, useInView } from "framer-motion";
 
 // =============================================================================
 // SCROLL REVEAL - Animate elements when they enter viewport
@@ -131,19 +131,23 @@ export function AnimatedCounter({
   const [displayValue, setDisplayValue] = useState(0);
 
   useEffect(() => {
-    if (isInView) {
-      let startTime: number;
-      const animate = (currentTime: number) => {
-        if (!startTime) startTime = currentTime;
-        const progress = Math.min((currentTime - startTime) / (duration * 1000), 1);
-        const easeOut = 1 - Math.pow(1 - progress, 3);
-        setDisplayValue(Math.floor(easeOut * value));
-        if (progress < 1) {
-          requestAnimationFrame(animate);
-        }
-      };
-      requestAnimationFrame(animate);
-    }
+    if (!isInView) return;
+
+    let requestId: number;
+    let startTime: number;
+    
+    const animate = (currentTime: number) => {
+      if (!startTime) startTime = currentTime;
+      const progress = Math.min((currentTime - startTime) / (duration * 1000), 1);
+      const easeOut = 1 - Math.pow(1 - progress, 3);
+      setDisplayValue(Math.floor(easeOut * value));
+      if (progress < 1) {
+        requestId = requestAnimationFrame(animate);
+      }
+    };
+    
+    requestId = requestAnimationFrame(animate);
+    return () => cancelAnimationFrame(requestId);
   }, [isInView, value, duration]);
 
   return (
@@ -211,10 +215,11 @@ export function Tilt3DCard({
       {children}
       {glareEnabled && (
         <div 
-          className="absolute inset-0 pointer-events-none rounded-inherit overflow-hidden"
+          className="absolute inset-0 pointer-events-none rounded-inherit overflow-hidden bg-[radial-gradient(circle_at_var(--x)_var(--y),rgba(255,255,255,0.15)_0%,transparent_60%)]"
           style={{
-            background: `radial-gradient(circle at ${glarePosition.x}% ${glarePosition.y}%, rgba(255,255,255,0.15) 0%, transparent 60%)`,
-          }}
+            "--x": `${glarePosition.x}%`,
+            "--y": `${glarePosition.y}%`,
+          } as React.CSSProperties}
         />
       )}
     </motion.div>
@@ -273,47 +278,47 @@ export function MagneticButton({
 interface TextScrambleProps {
   text: string;
   className?: string;
-  duration?: number;
   delay?: number;
 }
 
 export function TextScramble({ 
   text, 
   className = "",
-  duration = 1.5,
   delay = 0
 }: TextScrambleProps) {
   const [displayText, setDisplayText] = useState("");
-  const [isAnimating, setIsAnimating] = useState(false);
+  const isAnimatingRef = useRef(false);
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true });
   
   const chars = "!<>-_\\/[]{}—=+*^?#_ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
   useEffect(() => {
-    if (isInView && !isAnimating) {
-      setIsAnimating(true);
-      const timeout = setTimeout(() => {
-        let iteration = 0;
-        const interval = setInterval(() => {
-          setDisplayText(
-            text.split("").map((char, index) => {
-              if (char === " ") return " ";
-              if (index < iteration) return text[index];
-              return chars[Math.floor(Math.random() * chars.length)];
-            }).join("")
-          );
-          
-          if (iteration >= text.length) {
-            clearInterval(interval);
-          }
-          iteration += 1/3;
-        }, 30);
-      }, delay * 1000);
+    if (!isInView || isAnimatingRef.current) return;
+
+    isAnimatingRef.current = true;
+    const timeout = setTimeout(() => {
+      let iteration = 0;
+      const interval = setInterval(() => {
+        setDisplayText(
+          text.split("").map((char, index) => {
+            if (char === " ") return " ";
+            if (index < iteration) return text[index];
+            return chars[Math.floor(Math.random() * chars.length)];
+          }).join("")
+        );
+        
+        if (iteration >= text.length) {
+          clearInterval(interval);
+        }
+        iteration += 1/3;
+      }, 30);
       
-      return () => clearTimeout(timeout);
-    }
-  }, [isInView, text, delay, isAnimating]);
+      return () => clearInterval(interval);
+    }, delay * 1000);
+    
+    return () => clearTimeout(timeout);
+  }, [isInView, text, delay]);
 
   return (
     <span ref={ref} className={className}>
@@ -345,7 +350,6 @@ export function FloatingParticles({ count = 20, className = "" }: FloatingPartic
 
   // Generate particles only on client-side to avoid hydration mismatch
   useEffect(() => {
-    setMounted(true);
     const generatedParticles = Array.from({ length: count }, (_, i) => ({
       id: i,
       x: Math.random() * 100,
@@ -354,7 +358,13 @@ export function FloatingParticles({ count = 20, className = "" }: FloatingPartic
       duration: Math.random() * 20 + 10,
       delay: Math.random() * 5,
     }));
-    setParticles(generatedParticles);
+    
+    // Defer to next tick to avoid cascading render lint error
+    const frameId = requestAnimationFrame(() => {
+      setParticles(generatedParticles);
+      setMounted(true);
+    });
+    return () => cancelAnimationFrame(frameId);
   }, [count]);
 
   // Don't render anything on server or before client hydration

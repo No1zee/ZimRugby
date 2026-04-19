@@ -3,7 +3,7 @@
 import MatchCard from "./MatchCard";
 import { motion } from "framer-motion";
 
-interface Match {
+export interface Match {
   id: string | number;
   competition: string;
   round: string;
@@ -21,6 +21,7 @@ interface Match {
     logo?: string;
   };
   status?: "upcoming" | "live" | "completed";
+  ticketUrl?: string;
 }
 
 interface MatchListProps {

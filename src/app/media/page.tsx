@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Play, Search, Filter } from "lucide-react";
+import { Play, Search } from "lucide-react";
 import Button from "@/components/common/Button";
 import VideoCard from "@/components/media/VideoCard";
 import NewsCard from "@/components/media/NewsCard";
@@ -213,4 +213,4 @@ export default function MediaPage() {
   );
 }
 
-import { ArrowRight } from "lucide-react";
+

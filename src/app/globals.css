@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@import "../styles/grain.css";
 
 /* eslint-disable-next-line */
 /* Note: @theme is standard Tailwind v4 syntax. Ignore "Unknown at rule" warnings. */
@@ -20,6 +21,13 @@
   --color-blue-600: #0A0A0A;
   --color-blue-700: #0A0A0A;
   --color-blue-800: #1A1A1A;
+
+  /* Clubhouse Premium Tokens */
+  --color-clubhouse-green: #004d2e;
+  --color-clubhouse-charcoal: #0e0e0e;
+  --color-clubhouse-gold: #d4af37;
+  --color-clubhouse-copper: #b87333;
+  --color-clubhouse-accent: var(--color-clubhouse-gold);
 }
 
 body {
@@ -36,4 +44,39 @@ body {
   background-blend-mode: soft-light;
   color: white;
   font-family: var(--font-body);
+  /* Use custom cursor */
+  cursor: none;
+}
+
+/* Fallback if user touches screen or uses pointer:coarse */
+@media (pointer: coarse) {
+  body {
+    cursor: auto;
+  }
+}
+
+a, button, [role="button"], input, select, textarea {
+  cursor: none !important;
+}
+
+@media (pointer: coarse) {
+  a, button, [role="button"], input, select, textarea {
+    cursor: pointer !important;
+  }
+}
+
+.clip-reveal {
+  clip-path: polygon(0 100%, 100% 100%, 100% 100%, 0 100%);
+}
+
+.perspective-1000 {
+  perspective: 1000px;
+}
+
+.text-glow-heavy {
+  text-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
+}
+
+.text-glow-green {
+  text-shadow: 0 0 50px rgba(0, 150, 70, 0.4), 0 10px 40px rgba(0, 0, 0, 0.8);
 }

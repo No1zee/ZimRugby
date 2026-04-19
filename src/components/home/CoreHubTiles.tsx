@@ -1,9 +1,8 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Calendar, PlayCircle, Trophy, Users } from "lucide-react";
-import Link from "next/link";
-import { ArrowRight } from "lucide-react";
+import { Calendar, PlayCircle, Trophy, Users, ArrowRight } from "lucide-react";
+
 
 const tiles = [
   {

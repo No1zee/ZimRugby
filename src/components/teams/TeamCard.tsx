@@ -6,7 +6,6 @@ import Link from "next/link";
 import Image from "next/image";
 
 interface TeamCardProps {
-  id: string;
   name: string;
   description: string;
   image: string; // Background image path
@@ -15,7 +14,6 @@ interface TeamCardProps {
 }
 
 export default function TeamCard({
-  id,
   name,
   description,
   image,
