@@ -73,6 +73,7 @@ export function CountdownPromo({
   const [timeLeft, setTimeLeft] = useState<TimeLeft>(calculateTimeLeft(targetDate));
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setMounted(true);
     const timer = setInterval(() => {
       setTimeLeft(calculateTimeLeft(targetDate));

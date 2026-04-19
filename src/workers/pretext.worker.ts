@@ -4,6 +4,7 @@ import { prepareWithSegments, layoutWithLines } from "@chenglou/pretext";
 
 let canvas: OffscreenCanvas | null = null;
 let ctx: OffscreenCanvasRenderingContext2D | null = null;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 let prepared: any = null;
 let lastFontSize: number = 0;
 let baseText: string = "WHAT'S ON?  ";

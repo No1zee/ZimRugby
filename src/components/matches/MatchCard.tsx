@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import { Calendar, Clock, MapPin } from "lucide-react";
 import Button from "../common/Button";
+import Image from "next/image";
 import Link from "next/link";
 
 interface MatchCardProps {
