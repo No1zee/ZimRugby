@@ -8,65 +8,55 @@ import { ScrollReveal } from "../ui/animations";
 import { useState, useEffect } from "react";
 import { getLatestReports, type Report } from "@/lib/data-fetcher";
 
-export default function NewsMediaBlock() {
-  const [reports, setReports] = useState<Report[]>([]);
-  const [loading, setLoading] = useState(true);
+interface NewsMediaBlockProps {
+  initialReports?: Report[];
+}
 
-  useEffect(() => {
-    async function fetchReports() {
-      try {
-        const data = await getLatestReports();
-        setReports(data);
-      } catch (error) {
-        console.error('Failed to fetch reports:', error);
-      } finally {
-        setLoading(false);
-      }
-    }
-    fetchReports();
-  }, []);
+export default function NewsMediaBlock({ initialReports = [] }: NewsMediaBlockProps) {
+  const [activeCategory, setActiveCategory] = useState("All");
 
+  const reports = initialReports;
   const featuredStory = reports[0];
   const mediaItems = reports.slice(1, 4);
 
-  if (loading && reports.length === 0) {
-    return (
-      <section className="bg-rich-black py-32 flex items-center justify-center">
-        <div className="text-white/20 animate-pulse font-black uppercase tracking-widest">Loading Field...</div>
-      </section>
-    );
-  }
 
   if (!featuredStory) return null;
   return (
-    <section className="bg-rich-black py-32 relative overflow-hidden">
+    <section className="py-24 relative overflow-hidden">
       
       {/* Background Polish */}
       <div className="absolute top-0 right-0 w-1/2 h-full bg-[radial-gradient(circle_at_top_right,rgba(80,80,80,0.1),transparent_70%)]" />
 
       <div className="max-w-[1440px] mx-auto px-6 relative z-10">
         
-        {/* Header: Directorial Style */}
+        {/* Header: Institutional Style */}
         <div className="flex flex-col md:flex-row justify-between items-end gap-10 mb-20">
           <div className="space-y-4">
             <div className="flex items-center gap-2">
               <div className="w-8 h-px bg-zru-gold" />
-              <span className="text-zru-gold text-[10px] font-black uppercase tracking-[0.4em]">The Wire</span>
+              <span className="text-zru-gold text-[10px] font-black uppercase tracking-[0.5em]">The Wire</span>
             </div>
             <h2 className="text-5xl md:text-7xl font-black text-white uppercase tracking-tighter leading-none">
               NEWS & <span className="text-stroke-white text-transparent">MEDIA</span>
             </h2>
           </div>
           
-          <div className="flex flex-wrap gap-4">
-            {["All", "Sables", "Lady Sables", "Cheetahs 7s", "Schools"].map((cat) => (
+          <div className="flex flex-wrap gap-3">
+            {["All", "Sables", "Lady Sables", "Cheetahs 7s", "Schools"].map((cat) => {
+              const isActive = activeCategory === cat;
+              return (
               <button
                 key={cat}
-                className="text-[10px] font-black uppercase tracking-widest text-white/40 hover:text-white transition-colors"
+                onClick={() => setActiveCategory(cat)}
+                className={`text-[9px] font-black uppercase tracking-widest px-4 py-2 border transition-all ${
+                  isActive 
+                    ? "bg-zru-gold text-black border-zru-gold shadow-[0_0_15px_rgba(235,178,23,0.3)]" 
+                    : "bg-transparent text-white/50 border-white/20 hover:text-white hover:border-white/50"
+                }`}
               >
                 {cat}
               </button>
-            ))}
+            )})}
           </div>
         </div>
 
@@ -91,7 +81,7 @@ export default function NewsMediaBlock() {
                     {featuredStory.date}
                   </span>
                 </div>
-                <h3 className="text-4xl md:text-6xl font-black text-white uppercase tracking-tighter leading-[0.9]">
+                <h3 className="text-4xl md:text-5xl lg:text-6xl font-black text-white uppercase tracking-tighter leading-[0.9] line-clamp-3">
                   {featuredStory.title}
                 </h3>
                 <p className="text-white/60 text-lg font-medium leading-relaxed line-clamp-2 md:block hidden">
@@ -112,7 +102,7 @@ export default function NewsMediaBlock() {
           {mediaItems.map((item) => (
             <motion.div key={item.id} className="group cursor-pointer">
               <Link href={`/media/${item.id}`} className="space-y-6 block">
-                 <div className="relative aspect-video overflow-hidden rounded-2xl bg-neutral-900 transition-all duration-700 group-hover:-translate-y-1">
+                 <div className="relative aspect-video overflow-hidden rounded-2xl bg-neutral-900 transition-all duration-700 group-hover:-translate-y-1 glow-green-card">
                     <Image 
                       src={item.image} 
                       alt={item.title} 
@@ -134,7 +124,7 @@ export default function NewsMediaBlock() {
                        <div className="w-1 h-1 rounded-full bg-white/20" />
                        <span className="text-[9px] font-bold text-white/40 uppercase tracking-widest">{item.date}</span>
                     </div>
-                    <h4 className="text-xl font-black text-white uppercase tracking-tight leading-tight group-hover:text-clubhouse-gold transition-colors">
+                    <h4 className="text-lg lg:text-xl font-black text-white uppercase tracking-tight leading-tight group-hover:text-clubhouse-gold transition-colors line-clamp-3">
                       {item.title}
                     </h4>
                     <p className="text-white/40 text-xs font-medium line-clamp-2 leading-relaxed">

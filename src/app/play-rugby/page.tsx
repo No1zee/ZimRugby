@@ -3,6 +3,7 @@ import Navigation from "@/components/layout/Navigation";
 import Footer from "@/components/layout/Footer";
 import { MapPin, Users, Search, ArrowRight, Heart, GraduationCap } from "lucide-react";
 import Link from "next/link";
+import PlayRugbyDevelopment from "@/components/home/PlayRugbyDevelopment";
 
 export const metadata: Metadata = {
   title: "Play Rugby | Zimbabwe Rugby Union",
@@ -57,10 +58,7 @@ export default function PlayRugbyPage() {
       {/* Hero */}
       <section className="pt-32 pb-16 bg-zru-green relative overflow-hidden">
         <div 
-          className="absolute inset-0 opacity-10"
-          style={{
-            backgroundImage: "url(\"data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='20' cy='20' r='4' fill='%23fff'/%3E%3C/svg%3E\")",
-          }}
+          className="absolute inset-0 opacity-10 bg-pattern-dots"
         />
         <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-black text-white uppercase mb-4">
@@ -71,6 +69,9 @@ export default function PlayRugbyPage() {
           </p>
         </div>
       </section>
+
+      {/* Development Programs */}
+      <PlayRugbyDevelopment />
 
       {/* Programmes Grid */}
       <section className="py-16 bg-white">

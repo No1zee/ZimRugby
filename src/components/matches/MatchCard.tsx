@@ -5,6 +5,7 @@ import { Calendar, Clock, MapPin } from "lucide-react";
 import Button from "../common/Button";
 import Image from "next/image";
 import Link from "next/link";
+import { getFlagUrl } from "@/lib/flags";
 
 interface MatchCardProps {
   competition: string;
@@ -53,8 +54,14 @@ export default function MatchCard({
           {/* Home Team */}
           <div className="flex flex-col items-center gap-3 w-1/3">
             <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center p-2 overflow-hidden relative">
-              {homeTeam.logo ? (
-                <Image src={homeTeam.logo} alt={homeTeam.name} fill sizes="64px" className="object-contain p-2" />
+              {homeTeam.logo || getFlagUrl(homeTeam.name) ? (
+                <Image 
+                  src={homeTeam.logo || getFlagUrl(homeTeam.name)} 
+                  alt={homeTeam.name} 
+                  fill 
+                  sizes="64px" 
+                  className="object-contain p-2" 
+                />
               ) : (
                 <span className="text-black font-heading font-bold text-xl">
                   {homeTeam.name.substring(0, 3).toUpperCase()}
@@ -90,8 +97,14 @@ export default function MatchCard({
           {/* Away Team */}
           <div className="flex flex-col items-center gap-3 w-1/3">
             <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center p-2 border-2 border-transparent group-hover:border-zru-green transition-colors overflow-hidden relative">
-               {awayTeam.logo ? (
-                 <Image src={awayTeam.logo} alt={awayTeam.name} fill sizes="64px" className="object-contain p-2" />
+               {awayTeam.logo || getFlagUrl(awayTeam.name) ? (
+                 <Image 
+                  src={awayTeam.logo || getFlagUrl(awayTeam.name)} 
+                  alt={awayTeam.name} 
+                  fill 
+                  sizes="64px" 
+                  className="object-contain p-2" 
+                 />
                ) : (
                  <span className="text-black font-heading font-bold text-xl">
                     {awayTeam.name.substring(0, 3).toUpperCase()}

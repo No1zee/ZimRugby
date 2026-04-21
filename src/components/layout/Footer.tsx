@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { Facebook, Twitter, Instagram, Youtube, Linkedin } from "lucide-react";
 
 const socialLinks = [
@@ -33,12 +34,15 @@ const footerLinks = {
   "Resources": [
     { label: "Downloads", href: "/resources" },
     { label: "Laws of the Game", href: "/resources/laws" },
-    { label: "Shop", href: "/shop" },
+    { label: "Shop", href: "/clubhouse" },
     { label: "FAQs", href: "/faqs" },
   ],
 };
 
 export default function Footer() {
+  const pathname = usePathname();
+  if (pathname?.startsWith('/clubhouse')) return null;
+
   return (
     <footer className="bg-clubhouse-charcoal text-white relative overflow-hidden pt-32 pb-12">
       
@@ -125,7 +129,7 @@ export default function Footer() {
               <span className="text-[9px] font-black uppercase tracking-widest text-white/20">© 2026 ZRU OFFICIAL</span>
               <div className="hidden md:flex gap-8">
                 {['Privacy Policy', 'Terms of Use', 'Accessibility'].map((item) => (
-                  <Link key={item} href="#" className="text-[9px] font-black uppercase tracking-widest text-white/20 hover:text-white transition-colors">
+                  <Link key={item} href={`/${item.toLowerCase().replace(/\s+/g, '-')}`} className="text-[9px] font-black uppercase tracking-widest text-white/20 hover:text-white transition-colors">
                     {item}
                   </Link>
                 ))}

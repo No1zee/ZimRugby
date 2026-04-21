@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { getLiveMatches, type Match } from "@/lib/data-fetcher";
+import type { Match } from "@/lib/data-fetcher";
 import { Save, RefreshCw, AlertCircle } from "lucide-react";
 
 export default function AdminMatchesPage() {
@@ -11,9 +11,16 @@ export default function AdminMatchesPage() {
 
   useEffect(() => {
     async function load() {
-      const data = await getLiveMatches();
-      setMatches(data);
-      setLoading(false);
+      try {
+        const res = await fetch('/data/matches.json');
+        if (!res.ok) throw new Error('Failed to fetch');
+        const data = await res.json();
+        setMatches(data.filter((m: Match) => m.homeTeam?.name !== 'Date'));
+      } catch (error) {
+        console.error('Error fetching matches:', error);
+      } finally {
+        setLoading(false);
+      }
     }
     load();
   }, []);

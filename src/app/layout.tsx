@@ -34,9 +34,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" className="overflow-x-hidden">
       <body
-        className={`${montserrat.variable} ${bebasNeue.variable} ${inter.variable} antialiased`}
+        className={`${montserrat.variable} ${bebasNeue.variable} ${inter.variable} antialiased overflow-x-hidden`}
       >
         <SmoothScrollProvider>
           <CustomCursor />

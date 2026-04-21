@@ -92,7 +92,7 @@ export function CountdownPromo({
   const isClient = mounted;
 
   return (
-    <section className={`relative py-20 lg:py-32 bg-rich-black overflow-hidden ${className}`}>
+    <section className={`relative py-16 lg:py-24 bg-rich-black overflow-hidden ${className}`}>
       
       {/* Visual Background Accent */}
       <div className="absolute inset-0 z-0">
@@ -156,14 +156,15 @@ export function CountdownPromo({
               {isClient ? formattedDate : "\u00A0"}
             </p>
             
-            {/* Title */}
-            <h2 className="text-sm font-black text-zru-gold uppercase tracking-[0.4em] mb-4">
-              {title}
-            </h2>
+            {/* Title - Standardized */}
+            <div className="flex items-center gap-2 mb-4">
+              <div className="w-8 h-1 bg-zru-gold" />
+              <span className="text-zru-gold text-xs font-black uppercase tracking-[0.3em]">{title}</span>
+            </div>
             
             {/* Subtitle */}
             {subtitle && (
-              <p className="text-4xl md:text-6xl font-black text-white uppercase mb-8 leading-[0.9] tracking-tighter">
+              <p className="text-4xl md:text-6xl font-black text-white uppercase mb-8 leading-[0.9] tracking-tighter italic">
                 {subtitle}
               </p>
             )}
@@ -177,10 +178,10 @@ export function CountdownPromo({
 
             {/* Countdown */}
             <div className="mb-8">
-              <p className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-3">
+              <p className="text-[10px] font-black text-white/40 uppercase tracking-[0.2em] mb-4">
                 {countdownLabel}
               </p>
-              <div className="flex gap-4">
+              <div className="flex flex-wrap justify-start gap-x-6 gap-y-4 md:gap-8 min-w-0">
                 {[
                   { value: timeLeft.days, label: "DAYS" },
                   { value: timeLeft.hours, label: "HOURS" },
@@ -213,24 +214,27 @@ export function CountdownPromo({
             )}
 
             {/* CTAs */}
-            <div className="flex flex-wrap gap-3">
+            <div className="flex flex-wrap items-center gap-6 mt-8">
               {ctas.map((cta, i) => (
-                <Link key={i} href={cta.href}>
-                  <motion.button
-                    className={`
-                      px-6 py-3 text-xs font-bold uppercase tracking-wider flex items-center gap-2 rounded transition-all
-                      ${cta.variant === "outline" 
-                        ? "border-2 border-gray-300 text-gray-700 hover:border-zru-red hover:text-zru-red bg-transparent" 
-                        : "bg-zru-red hover:bg-red-700 text-white"
-                      }
-                    `}
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
-                  >
+               cta.variant === "outline" ? (
+                <Link key={i} href={cta.href} className="group flex items-center gap-3">
+                  <span className="text-[10px] font-black uppercase tracking-[0.2em] text-white/50 group-hover:text-white transition-colors">
                     {cta.label}
-                    <ArrowRight className="w-4 h-4" />
-                  </motion.button>
+                  </span>
+                  <div className="w-8 h-8 rounded-full border border-white/10 flex items-center justify-center group-hover:bg-white group-hover:text-rich-black transition-all">
+                    <ArrowRight className="w-3 h-3 transition-transform group-hover:translate-x-0.5" />
+                  </div>
                 </Link>
+               ) : (
+                <Link 
+                  key={i} 
+                  href={cta.href}
+                  className="inline-flex items-center justify-center gap-3 bg-white text-black px-8 py-4 rounded-none font-bold text-xs uppercase tracking-[0.2em] transition-all duration-300 hover:bg-zru-gold hover:text-black group shadow-[0_0_20px_rgba(255,255,255,0.1)] hover:shadow-[0_0_25px_rgba(235,178,23,0.3)]"
+                >
+                  <span>{cta.label}</span>
+                  <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+                </Link>
+               )
               ))}
             </div>
           </motion.div>

@@ -91,15 +91,7 @@ export function PretextBackground({
     <div ref={containerRef} className={wrapperClass}>
       <canvas
         ref={canvasRef}
-        style={{ 
-          position: 'absolute', 
-          width: '150%', 
-          height: '150%', 
-          left: '-25%', 
-          top: '-25%',
-          pointerEvents: 'none'
-        }}
-        className="block"
+        className="block absolute w-[150%] h-[150%] -left-1/4 -top-1/4 pointer-events-none"
       />
     </div>
   );

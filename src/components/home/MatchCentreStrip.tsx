@@ -10,15 +10,6 @@ import { RugbyDecorations, CornerAccent } from "../ui/RugbyDecorations";
 
 import { getLiveMatches, type Match as DataMatch } from "@/lib/data-fetcher";
 
-// Match types for filtering
-const matchCategories = [
-  { id: "all", label: "All Matches" },
-  { id: "Sables", label: "International" },
-  { id: "domestic", label: "Domestic" },
-  { id: "women", label: "Women" },
-  { id: "youth", label: "Youth" },
-];
-
 interface Fixture {
   id: string;
   competition: string;
@@ -33,54 +24,33 @@ interface Fixture {
   isFeatured?: boolean;
 }
 
-export default function MatchCentreStrip() {
-  const [activeFilter, setActiveFilter] = useState("all");
-  const [fixtures, setFixtures] = useState<Fixture[]>([]);
+interface MatchCentreStripProps {
+  initialMatches?: DataMatch[];
+}
 
-  useEffect(() => {
-    async function fetchFixtures() {
-      try {
-        const data = await getLiveMatches();
-        const allFixtures: Fixture[] = data.map((m: DataMatch, idx: number) => ({
-          id: m.id,
-          competition: m.competition,
-          round: 'Standard',
-          date: m.date,
-          time: m.time,
-          venue: m.venue,
-          homeTeam: { ...m.homeTeam, score: m.score?.home },
-          awayTeam: { ...m.awayTeam, score: m.score?.away },
-          status: m.status,
-          category: m.category,
-          isFeatured: idx === 0, // Feature the first upcoming match
-        }));
-        setFixtures(allFixtures);
-      } catch (error) {
-        console.error('Failed to fetch fixtures:', error);
-      }
-    }
-    fetchFixtures();
-  }, []);
+export default function MatchCentreStrip({ initialMatches = [] }: MatchCentreStripProps) {
+  const fixtures: Fixture[] = initialMatches.map((m: DataMatch, idx: number) => ({
+    id: m.id,
+    competition: m.competition,
+    round: 'Standard',
+    date: m.date,
+    time: m.time,
+    venue: m.venue,
+    homeTeam: { ...m.homeTeam, score: m.score?.home },
+    awayTeam: { ...m.awayTeam, score: m.score?.away },
+    status: m.status,
+    category: m.category,
+    isFeatured: idx === 0, // Feature the first upcoming match
+  }));
+
   
-  const filteredMatches = activeFilter === "all" 
-    ? fixtures 
-    : fixtures.filter(m => m.category === activeFilter);
-
   const featuredMatch = fixtures.find(f => f.isFeatured) || fixtures[0];
-
-  const getCategoryColor = (category: string) => {
-    switch(category) {
-      case "international": return "bg-zru-gold text-rich-black";
-      case "women": return "bg-pink-500 text-white";
-      case "youth": return "bg-blue-500 text-white";
-      case "domestic": return "bg-zru-green text-white";
-      default: return "bg-gray-500 text-white";
-    }
-  };
+  const secondaryMatches = fixtures.filter(m => m.id !== featuredMatch?.id).slice(0, 3);
 
   return (
     <section 
-      className="bg-rich-black py-20 lg:py-32 relative overflow-hidden"
+      className="py-16 lg:py-24 relative overflow-hidden"
+      id="match-centre"
     >
       {/* Background Media with Parallax-ready feel */}
       <div className="absolute inset-0 z-0 opacity-20">
@@ -105,39 +75,25 @@ export default function MatchCentreStrip() {
             <div>
               <div className="flex items-center gap-2 mb-4">
                 <div className="w-8 h-1 bg-zru-gold" />
-                <span className="text-zru-gold text-xs font-black uppercase tracking-[0.3em]">Live & Upcoming</span>
+                <span className="text-zru-gold text-xs font-black uppercase tracking-[0.3em]">Season Teaser</span>
               </div>
               <h2 className="text-4xl md:text-6xl font-black text-white uppercase tracking-tighter">
                 Match Centre
               </h2>
             </div>
             
-            {/* Filter Bar - Horizontal Scroll on Mobile */}
-            <div className="flex gap-2 overflow-x-auto pb-4 lg:pb-0 no-scrollbar -mx-4 px-4 lg:mx-0 lg:px-0">
-              {matchCategories.map((cat) => (
-                <button
-                  key={cat.id}
-                  onClick={() => setActiveFilter(cat.id)}
-                  className={`
-                    whitespace-nowrap px-6 py-3 text-[10px] font-black uppercase tracking-[0.15em] rounded-full transition-all border
-                    ${activeFilter === cat.id 
-                      ? "bg-zru-gold text-rich-black border-zru-gold scale-105 shadow-[0_0_20px_rgba(255,215,0,0.3)]" 
-                      : "bg-white/5 text-white/60 border-white/5 hover:border-white/20 hover:text-white"
-                    }
-                  `}
-                >
-                  {cat.label}
-                </button>
-              ))}
-            </div>
+            <Link href="/match-centre" className="group flex items-center gap-2 text-white/40 hover:text-white transition-colors">
+              <span className="text-[10px] font-black uppercase tracking-widest">View Full Schedule</span>
+              <ChevronRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+            </Link>
           </div>
         </ScrollReveal>
 
-        {/* Featured Match - Cinematic Redesign */}
+        {/* Featured Match - Cinematic Teaser */}
         {featuredMatch && (
           <ScrollReveal delay={0.1}>
-            <Tilt3DCard tiltAmount={2}>
-              <div className="relative bg-white/5 rounded-2xl overflow-hidden mb-12 border border-white/10 group">
+            <Tilt3DCard tiltAmount={1}>
+              <div className="relative bg-white/5 rounded-2xl overflow-hidden mb-12 border border-white/10 group glow-green-card">
                 <div className="absolute inset-0 z-0">
                   <Image 
                     src="/images/media/vid2.jpg" 
@@ -149,87 +105,89 @@ export default function MatchCentreStrip() {
                   <div className="absolute inset-0 bg-linear-to-r from-rich-black via-rich-black/60 to-transparent" />
                 </div>
 
-                <div className="relative p-10 lg:p-16">
+                <div className="relative p-6 md:p-10 lg:p-16">
                   <div className="flex flex-col lg:flex-row items-center justify-between gap-16">
                     
                     {/* Rivalry Visuals */}
-                    <div className="flex items-center gap-8 md:gap-16">
-                      <div className="flex flex-col items-center gap-4">
-                        <motion.div 
-                          whileHover={{ scale: 1.1, rotate: -5 }}
-                          className="w-24 h-24 md:w-32 md:h-32 relative drop-shadow-[0_0_30px_rgba(255,255,255,0.2)]"
-                        >
-                          {featuredMatch.homeTeam.logo ? (
-                            <Image src={featuredMatch.homeTeam.logo} alt={featuredMatch.homeTeam.name} fill sizes="128px" className="object-contain" />
-                          ) : (
-                            <div className="w-full h-full bg-white/10 rounded-full flex items-center justify-center text-white/20 font-black">ZIM</div>
-                          )}
-                        </motion.div>
-                        <span className="text-white font-black text-xl md:text-2xl uppercase tracking-widest">{featuredMatch.homeTeam.name}</span>
-                      </div>
-
-                      <div className="flex flex-col items-center">
-                        <div className="h-20 w-px bg-white/10 mb-4" />
-                        <span className="text-zru-gold italic font-black text-3xl md:text-4xl">VS</span>
-                        <div className="h-20 w-px bg-white/10 mt-4" />
-                      </div>
-
-                      <div className="flex flex-col items-center gap-4">
-                        <motion.div 
-                          whileHover={{ scale: 1.1, rotate: 5 }}
-                          className="w-24 h-24 md:w-32 md:h-32 relative drop-shadow-[0_0_30px_rgba(255,255,255,0.2)]"
-                        >
-                          {featuredMatch.awayTeam.logo ? (
-                            <Image src={featuredMatch.awayTeam.logo} alt={featuredMatch.awayTeam.name} fill sizes="128px" className="object-contain" />
-                          ) : (
-                            <div className="w-full h-full bg-white/10 rounded-full flex items-center justify-center text-white/20 font-black">OPP</div>
-                          )}
-                        </motion.div>
-                        <span className="text-white font-black text-xl md:text-2xl uppercase tracking-widest">{featuredMatch.awayTeam.name}</span>
-                      </div>
-                    </div>
-
-                    {/* Match Info & CTA */}
-                    <div className="flex-1 max-w-md text-center lg:text-left space-y-8">
-                      <div className="space-y-2">
-                        <div className="flex items-center justify-center lg:justify-start gap-3">
-                          <span className={`${getCategoryColor(featuredMatch.category)} px-3 py-1 text-[10px] font-black uppercase rounded shadow-lg`}>
-                            {featuredMatch.category}
-                          </span>
-                          <span className="text-white/40 text-[10px] font-black uppercase tracking-[0.3em]">
-                            {featuredMatch.competition}
-                          </span>
-                        </div>
-                        <h3 className="text-4xl md:text-5xl lg:text-6xl font-black text-white uppercase italic leading-[0.8] tracking-tighter text-glow-green">
-                          The Africa Cup Defence
-                        </h3>
-                      </div>
-
-                      <div className="grid grid-cols-2 gap-6 pb-8 border-b border-white/10">
-                        <div className="space-y-1">
-                          <span className="text-white/30 text-[9px] font-black uppercase tracking-widest block">Date & Time</span>
-                          <span className="text-white font-bold text-sm block">{featuredMatch.date} • {featuredMatch.time}</span>
-                        </div>
-                        <div className="space-y-1">
-                          <span className="text-white/30 text-[9px] font-black uppercase tracking-widest block">Venue</span>
-                          <span className="text-white font-bold text-sm block">{featuredMatch.venue}</span>
-                        </div>
-                      </div>
-
-                      <div className="flex flex-wrap items-center justify-center lg:justify-start gap-6">
-                        <Link href={`/matches/${featuredMatch.id}`}>
-                          <GlowButton 
-                            className="bg-white text-rich-black px-10 py-5 text-[10px] font-black uppercase tracking-[0.2em] rounded transition-all"
-                            glowColor="rgba(255, 255, 255, 0.3)"
+                    <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-20">
+                      
+                      {/* Teams - Large Visual */}
+                      <div className="flex items-center gap-8 md:gap-12">
+                        <div className="flex flex-col items-center gap-4">
+                          <motion.div 
+                            whileHover={{ scale: 1.1, rotate: -3 }}
+                            className="w-16 h-16 sm:w-24 sm:h-24 md:w-32 md:h-32 relative drop-shadow-[0_0_30px_rgba(255,255,255,0.1)]"
                           >
-                            Get Tickets
-                          </GlowButton>
-                        </Link>
-                        <Link href={`/matches/${featuredMatch.id}`} className="text-white/60 hover:text-white flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] transition-all">
-                          Match Insights <ArrowRight className="w-4 h-4" />
-                        </Link>
+                            {featuredMatch.homeTeam.logo ? (
+                              <Image src={featuredMatch.homeTeam.logo} alt={featuredMatch.homeTeam.name} fill sizes="128px" className="object-contain" />
+                            ) : (
+                              <div className="w-full h-full bg-white/10 rounded-full flex items-center justify-center text-white/20 font-black uppercase">
+                                {featuredMatch.homeTeam.name.substring(0, 3)}
+                              </div>
+                            )}
+                          </motion.div>
+                          <span className="text-white font-black text-xl md:text-2xl uppercase tracking-widest leading-none">{featuredMatch.homeTeam.name}</span>
+                        </div>
+
+                        <div className="flex flex-col items-center">
+                          <div className="h-4 md:h-10 w-px bg-white/10 mb-2" />
+                          <span className="text-zru-gold italic font-black text-2xl md:text-4xl">VS</span>
+                          <div className="h-4 md:h-10 w-px bg-white/10 mt-2" />
+                        </div>
+
+                        <div className="flex flex-col items-center gap-4">
+                          <motion.div 
+                            whileHover={{ scale: 1.1, rotate: 3 }}
+                            className="w-16 h-16 sm:w-24 sm:h-24 md:w-32 md:h-32 relative drop-shadow-[0_0_30px_rgba(255,255,255,0.1)]"
+                          >
+                            {featuredMatch.awayTeam.logo ? (
+                              <Image src={featuredMatch.awayTeam.logo} alt={featuredMatch.awayTeam.name} fill sizes="128px" className="object-contain" />
+                            ) : (
+                              <div className="w-full h-full bg-white/10 rounded-full flex items-center justify-center text-white/20 font-black uppercase">
+                                {featuredMatch.awayTeam.name.substring(0, 3)}
+                              </div>
+                            )}
+                          </motion.div>
+                          <span className="text-white font-black text-xl md:text-2xl uppercase tracking-widest leading-none">{featuredMatch.awayTeam.name}</span>
+                        </div>
+                      </div>
+
+                      {/* Match Info - Simplified Teaser */}
+                      <div className="flex-1 max-w-md text-center lg:text-left space-y-8">
+                        <div className="space-y-4">
+                          <span className="text-zru-gold text-xs font-black uppercase tracking-[0.3em] block">{featuredMatch.competition}</span>
+                          <h3 className="text-3xl sm:text-4xl md:text-6xl font-black text-white uppercase italic leading-[0.8] tracking-tighter text-glow-green">
+                            The Sables Return
+                          </h3>
+                          <p className="text-white/60 text-sm font-medium tracking-tight max-w-xs mx-auto lg:mx-0">
+                            Witness the African Champions in action. Zimbabwe hosts the first major test of the 2026 season.
+                          </p>
+                        </div>
+
+                        <div className="grid grid-cols-2 gap-6 pb-8 border-b border-white/10">
+                          <div className="space-y-1">
+                            <span className="text-white/30 text-[9px] font-black uppercase tracking-widest block">Date & Time</span>
+                            <span className="text-white font-bold text-sm block tracking-tighter">{featuredMatch.date} • {featuredMatch.time}</span>
+                          </div>
+                          <div className="space-y-1">
+                            <span className="text-white/30 text-[9px] font-black uppercase tracking-widest block">Venue</span>
+                            <span className="text-white font-bold text-sm block tracking-tighter">{featuredMatch.venue}</span>
+                          </div>
+                        </div>
+
+                        <div className="flex flex-wrap items-center justify-center lg:justify-start gap-6">
+                          <Link href={`/matches/${featuredMatch.id}`}>
+                            <GlowButton 
+                              className="bg-white text-rich-black px-6 py-4 md:px-10 md:py-5 text-[10px] font-black uppercase tracking-[0.2em] rounded transition-all"
+                              glowColor="rgba(255, 255, 255, 0.3)"
+                            >
+                              Match Tickets
+                            </GlowButton>
+                          </Link>
+                        </div>
                       </div>
                     </div>
+
                   </div>
                 </div>
               </div>
@@ -237,52 +195,49 @@ export default function MatchCentreStrip() {
           </ScrollReveal>
         )}
 
-        {/* Secondary Match Cards */}
+        {/* Secondary Match Cards - Limited to 3 */}
         <StaggerContainer className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" staggerDelay={0.08}>
-          {filteredMatches.filter(m => !m.isFeatured).map((match) => (
+          {secondaryMatches.map((match) => (
             <motion.div key={match.id} variants={staggerItemVariants}>
               <Link href={`/matches/${match.id}`} className="block group">
-                <div className="bg-white/5 hover:bg-white/10 border border-white/5 hover:border-white/10 p-6 rounded-xl transition-all duration-500 h-full flex flex-col justify-between group-hover:-translate-y-1">
+                <div className="bg-white/5 hover:bg-white/10 border border-white/5 hover:border-white/10 p-6 rounded-xl transition-all duration-500 h-full flex flex-col justify-between group-hover:-translate-y-1 glow-green-card">
                   
                   <div className="space-y-6">
-
-
-                    <div className="flex items-center justify-between px-2">
-                      <div className="flex flex-col items-center gap-2 w-1/3">
-                         <div className="w-10 h-10 relative flex items-center justify-center overflow-hidden">
-                            {match.homeTeam.logo ? (
-                                <Image src={match.homeTeam.logo} alt={match.homeTeam.name} fill sizes="40px" className="object-contain opacity-80 group-hover:opacity-100 transition-opacity" />
-                            ) : (
-                                <div className="w-full h-full bg-white/5 rounded-full border border-white/10 flex items-center justify-center text-[10px] font-black text-white/40 group-hover:text-white transition-colors">
-                                    {match.homeTeam.name.substring(0, 3).toUpperCase()}
-                                </div>
-                            )}
-                         </div>
-                         <span className="text-white/80 font-bold text-[10px] uppercase text-center">{match.homeTeam.name}</span>
+                    <div className="border-b border-white/5 pb-4">
+                      <span className="text-white text-2xl font-black italic tracking-tighter block uppercase">{match.date}</span>
+                      <span className="text-white/40 text-[9px] font-bold block uppercase tracking-widest mt-1">{match.competition}</span>
+                    </div>
+                    
+                    <div className="flex items-center justify-between gap-4">
+                      <div className="flex items-center gap-3">
+                        <div className="w-8 h-8 relative opacity-80">
+                          {match.homeTeam.logo ? (
+                            <Image src={match.homeTeam.logo} alt={match.homeTeam.name} fill sizes="32px" className="object-contain" />
+                          ) : (
+                            <div className="w-full h-full bg-white/10 rounded-full flex items-center justify-center text-[8px] font-black">{match.homeTeam.name.substring(0, 3)}</div>
+                          )}
+                        </div>
+                        <span className="text-white font-black text-[10px] uppercase tracking-widest leading-none">{match.homeTeam.name}</span>
                       </div>
                       
-                      <span className="text-white/20 italic font-black text-sm">VS</span>
+                      <span className="text-white/20 italic font-black text-[10px]">VS</span>
 
-                      <div className="flex flex-col items-center gap-2 w-1/3">
-                         <div className="w-10 h-10 relative flex items-center justify-center overflow-hidden">
-                            {match.awayTeam.logo ? (
-                                <Image src={match.awayTeam.logo} alt={match.awayTeam.name} fill sizes="40px" className="object-contain opacity-80 group-hover:opacity-100 transition-opacity" />
-                            ) : (
-                                <div className="w-full h-full bg-white/5 rounded-full border border-white/10 flex items-center justify-center text-[10px] font-black text-white/40 group-hover:text-white transition-colors">
-                                    {match.awayTeam.name.substring(0, 3).toUpperCase()}
-                                </div>
-                            )}
-                         </div>
-                         <span className="text-white/80 font-bold text-[10px] uppercase text-center">{match.awayTeam.name}</span>
+                      <div className="flex items-center gap-3 text-right">
+                        <span className="text-white font-black text-[10px] uppercase tracking-widest leading-none">{match.awayTeam.name}</span>
+                        <div className="w-8 h-8 relative opacity-80">
+                          {match.awayTeam.logo ? (
+                            <Image src={match.awayTeam.logo} alt={match.awayTeam.name} fill sizes="32px" className="object-contain" />
+                          ) : (
+                            <div className="w-full h-full bg-white/10 rounded-full flex items-center justify-center text-[8px] font-black">{match.awayTeam.name.substring(0, 3)}</div>
+                          )}
+                        </div>
                       </div>
                     </div>
+
                   </div>
 
                   <div className="mt-8 pt-5 border-t border-white/5 flex items-center justify-between">
-                    <div className="space-y-1">
-                      <span className="text-white/60 font-bold text-[10px] block">{match.date}</span>
-                      <span className="text-white/40 text-[9px] block uppercase">{match.venue}</span>
-                    </div>
+                    <span className="text-[9px] font-black uppercase text-zru-gold tracking-[0.2em] group-hover:text-white transition-colors">Match Details</span>
                     <div className="w-8 h-8 rounded-full border border-white/10 flex items-center justify-center group-hover:bg-white group-hover:text-rich-black transition-all">
                       <ChevronRight className="w-4 h-4" />
                     </div>
@@ -293,6 +248,7 @@ export default function MatchCentreStrip() {
           ))}
         </StaggerContainer>
 
+        {/* Portal to Full Match Centre */}
         <ScrollReveal delay={0.4}>
           <div className="text-center mt-16">
             <Link href="/match-centre">
@@ -302,9 +258,14 @@ export default function MatchCentreStrip() {
                 <div className="w-12 h-12 rounded-full border border-white/10 flex items-center justify-center group-hover:border-zru-gold group-hover:bg-zru-gold transition-all">
                   <ArrowRight className="w-5 h-5 text-white transition-transform group-hover:translate-x-1" />
                 </div>
-                <span className="text-white/30 group-hover:text-white text-[10px] font-black uppercase tracking-[0.3em] transition-colors">
-                  Explore Full Season
-                </span>
+                <div className="flex flex-col items-center">
+                  <span className="text-white/80 group-hover:text-white text-xs font-black uppercase tracking-[0.3em] transition-colors mb-1">
+                    View Full Season
+                  </span>
+                  <span className="text-white/30 text-[9px] font-bold uppercase tracking-[0.4em]">
+                    Portfolio
+                  </span>
+                </div>
               </button>
             </Link>
           </div>

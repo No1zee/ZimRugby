@@ -53,11 +53,7 @@ export function BackgroundText({
       className={`absolute inset-0 overflow-hidden pointer-events-none z-0 ${className}`}
     >
       <div
-        className="whitespace-nowrap select-none font-heading font-black leading-[1.1] tracking-[0.05em] text-[clamp(100px,18vw,250px)]"
-        style={{
-          color: colorMap[color],
-          transform: orientation === "diagonal" ? "rotate(-5deg)" : "none",
-        }}
+        className={`whitespace-nowrap select-none font-heading font-black leading-[1.1] tracking-[0.05em] text-[clamp(100px,18vw,250px)] text-color-${color} ${orientation === "diagonal" ? "rotate-diagonal" : ""}`}
       >
         {/* First line */}
         <div className="overflow-hidden">

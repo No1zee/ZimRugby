@@ -27,7 +27,7 @@ export default function EventCard({
   return (
     <motion.div
         whileHover={{ y: -5 }}
-        className="bg-white/5 border border-white/10 rounded-xl overflow-hidden hover:border-zru-green/50 transition-all duration-300 group flex flex-col h-full"
+        className="bg-white/5 border border-white/10 rounded-xl overflow-hidden hover:border-white/20 transition-all duration-300 group flex flex-col h-full glow-green-card"
     >
         {/* Date Banner */}
         <div className="bg-white/5 p-4 flex items-center justify-between border-b border-white/5">

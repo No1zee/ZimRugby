@@ -11,7 +11,7 @@ const shopNavItems = [
   { label: "Women", href: "/clubhouse/women" },
   { label: "Kits", href: "/clubhouse/kits" },
   { label: "Collections", href: "/clubhouse/collections" },
-  { label: "Clubhouse", href: "/clubhouse/loyalty" },
+  { label: "Loyalty", href: "/clubhouse/loyalty" },
   { label: "Journal", href: "/clubhouse/journal" },
 ];
 
@@ -60,7 +60,7 @@ export default function ClubhouseHeader() {
         {/* Logo - Center */}
         <Link href="/clubhouse" className="absolute left-1/2 -translate-x-1/2 text-center group">
           <span className="block text-xl md:text-2xl font-black uppercase tracking-[0.3em] text-white group-hover:text-clubhouse-gold transition-colors">
-            ZIMRUGBY
+            THE
           </span>
           <span className="block text-[8px] md:text-[10px] uppercase tracking-[0.5em] text-clubhouse-gold mt-1">
             CLUBHOUSE
@@ -132,7 +132,7 @@ export default function ClubhouseHeader() {
                 <User className="w-6 h-6 text-white/60" />
                 <Heart className="w-6 h-6 text-white/60" />
               </div>
-              <span className="text-[10px] uppercase tracking-widest text-white/40">ZimRugby Clubhouse © 2026</span>
+              <span className="text-[10px] uppercase tracking-widest text-white/40">The Clubhouse © 2026</span>
             </div>
           </motion.div>
         )}

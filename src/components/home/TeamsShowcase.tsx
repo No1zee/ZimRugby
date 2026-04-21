@@ -38,7 +38,7 @@ const players = [
 
 export default function TeamsShowcase() {
   return (
-    <section className="py-20 bg-rich-black relative border-t border-white/10 overflow-hidden" id="teams">
+    <section className="py-24 bg-rich-black relative border-t border-white/10 overflow-hidden" id="teams">
       {/* Background Image */}
       <div className="absolute inset-0 z-0">
         <Image 
@@ -51,15 +51,16 @@ export default function TeamsShowcase() {
         <div className="absolute inset-0 bg-linear-to-b from-rich-black via-rich-black/90 to-rich-black" />
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="flex justify-between items-end mb-12">
           <div>
-            <h2 className="text-zru-orange font-heading text-xl tracking-widest mb-2">
-              MEET THE SQUAD
+            <div className="flex items-center gap-2 mb-4">
+              <div className="w-8 h-1 bg-zru-gold" />
+              <span className="text-zru-gold text-xs font-black uppercase tracking-[0.3em]">Meet the Squad</span>
+            </div>
+            <h2 className="text-4xl md:text-6xl font-black text-white uppercase tracking-tighter italic">
+              The Sables
             </h2>
-            <h3 className="text-4xl md:text-5xl font-heading text-white">
-              THE SABLES
-            </h3>
           </div>
           <Button variant="ghost" rightIcon={<ArrowRight className="w-5 h-5" />} className="hidden md:flex">
             VIEW FULL SQUAD
