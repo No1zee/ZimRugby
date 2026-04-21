@@ -52,6 +52,11 @@ const nextConfig: NextConfig = {
         hostname: 'r2.thesportsdb.com',
         pathname: '/**',
       },
+      {
+        protocol: 'https',
+        hostname: 'flagcdn.com',
+        pathname: '/**',
+      },
     ],
   },
 };

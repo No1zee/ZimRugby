@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { Search, User, Heart, ShoppingBag, Menu, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import CartDrawer from "./CartDrawer";
 
 const shopNavItems = [
   { label: "Shop", href: "/clubhouse" },
@@ -18,6 +19,7 @@ const shopNavItems = [
 export default function ClubhouseHeader() {
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const [isCartOpen, setIsCartOpen] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -85,13 +87,19 @@ export default function ClubhouseHeader() {
             <button className="hover:text-white transition-colors" aria-label="Search"><Search className="w-5 h-5" /></button>
             <button className="hidden sm:block hover:text-white transition-colors" aria-label="My Account"><User className="w-5 h-5" /></button>
             <button className="hidden sm:block hover:text-white transition-colors" aria-label="Wishlist"><Heart className="w-5 h-5" /></button>
-            <button className="relative hover:text-white transition-colors" aria-label="Shopping Cart">
+            <button 
+              className="relative hover:text-white transition-colors" 
+              aria-label="Shopping Cart"
+              onClick={() => setIsCartOpen(true)}
+            >
               <ShoppingBag className="w-5 h-5" />
-              <span className="absolute -top-1 -right-1 bg-clubhouse-gold text-clubhouse-charcoal text-[8px] font-bold w-4 h-4 rounded-full flex items-center justify-center">0</span>
+              <span className="absolute -top-1 -right-1 bg-clubhouse-gold text-clubhouse-charcoal text-[8px] font-bold w-4 h-4 rounded-full flex items-center justify-center">1</span>
             </button>
           </div>
         </div>
       </div>
+
+      <CartDrawer isOpen={isCartOpen} onClose={() => setIsCartOpen(false)} />
 
       {/* Mobile Drawer */}
       <AnimatePresence>

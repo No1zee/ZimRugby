@@ -123,21 +123,20 @@ export default function HeroCarousel() {
 
     const tl = gsap.timeline();
     
-    // Initial Bloom/Focus reveal
+    // Initial Focus reveal (reduced scale/filter for performance)
     tl.fromTo(".hero-bg-media", 
-      { filter: "blur(20px) brightness(1.5) scale(1.1)" },
-      { filter: "blur(0px) brightness(1) scale(1)", duration: 2, ease: "power3.out" }
+      { brightness: 1.5, scale: 1.05 },
+      { brightness: 1, scale: 1, duration: 1.5, ease: "power3.out" }
     );
 
     // Text reveal sequence
     tl.from(".hero-text-item", {
-      y: 100,
+      y: 40,
       opacity: 0,
-      stagger: 0.2,
-      duration: 1.2,
+      stagger: 0.15,
+      duration: 1,
       ease: "power4.out",
-      clipPath: "polygon(0 0, 100% 0, 100% 0, 0 0)"
-    }, "-=1.5");
+    }, "-=1.2");
 
   }, { scope: containerRef, dependencies: [currentSlide, isLoaded] });
 
@@ -165,8 +164,8 @@ export default function HeroCarousel() {
   return (
     <section ref={containerRef} className="relative h-screen bg-rich-black overflow-hidden flex items-center justify-center cursor-none">
       
-      {/* Background & Transitions */}
-      <AnimatePresence mode="wait">
+      {/* Background & Transitions - Mode changed to crossfade for performance and LCP */}
+      <AnimatePresence>
         <motion.div
           key={currentSlide}
           className="absolute inset-0 z-0 w-full h-full"
@@ -176,9 +175,8 @@ export default function HeroCarousel() {
           transition={{ duration: 1.5 }}
         >
           {/* Image/Video Background with GSAP-controlled media */}
-          <div className="relative w-full h-full overflow-hidden">
-             <div className={`absolute inset-0 bg-rich-black z-10 transition-opacity duration-1000 ${isLoaded ? "opacity-0" : "opacity-100"}`} />
-            <div className="relative w-full h-full hero-bg-media">
+            {/* Performance Hint: Removed heavy black overlay that delayed LCP */}
+            <div className="relative w-full h-full hero-bg-media will-change-transform">
                 {activeSlide.video ? (
                   <video
                     src={activeSlide.video}
@@ -204,7 +202,6 @@ export default function HeroCarousel() {
             </div>
             {/* Overlay */}
             <div className="absolute inset-0 bg-linear-to-b from-black/40 via-black/20 to-rich-black z-10" />
-          </div>
         </motion.div>
       </AnimatePresence>
 
