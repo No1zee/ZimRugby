@@ -24,22 +24,24 @@ import Link from "next/link";
 import Navigation from "@/components/layout/Navigation";
 import Footer from "@/components/layout/Footer";
 import Button from "@/components/common/Button";
+import { FixtureCard, type Fixture } from "@/components/tickets/FixtureCard";
 import { StripedBackground } from "@/components/ui/StripedBackground";
 import { registerTicketingInterest } from "@/lib/crm";
 
 // --- Mock Data ---
 
-const FIXTURES = [
+const FIXTURES: Fixture[] = [
   {
     id: "f1",
     competition: "Battle of the Zambezi",
     teams: "Sables vs Namibia",
     date: "Sat 24 August",
     time: "16:00",
-    venue: "National Sports Stadium, Harare",
-    tags: ["Test", "World Cup Pathway Fixture"],
-    status: "ON SALE",
-    url: "https://paynow.co.zw/zru-sables-namibia", // Example link
+    venue: "National Sports Stadium",
+    city: "Harare",
+    isWorldCupPathway: true,
+    status: "ON_SALE",
+    url: "https://paynow.co.zw/zru-sables-namibia",
     category: "Sables"
   },
   {
@@ -48,9 +50,10 @@ const FIXTURES = [
     teams: "Sables vs Kenya",
     date: "Sun 6 October",
     time: "15:00",
-    venue: "Hartsfield, Bulawayo",
-    tags: ["Test", "World Cup Pathway Fixture"],
-    status: "COMING SOON",
+    venue: "Hartsfield",
+    city: "Bulawayo",
+    isWorldCupPathway: true,
+    status: "COMING_SOON",
     category: "Sables"
   },
   {
@@ -59,9 +62,9 @@ const FIXTURES = [
     teams: "Old Georgians vs Old Hararians",
     date: "Sat 30 September",
     time: "14:00",
-    venue: "Police Grounds, Harare",
-    tags: ["Domestic"],
-    status: "ON SALE",
+    venue: "Police Grounds",
+    city: "Harare",
+    status: "ON_SALE",
     url: "https://paynow.co.zw/zru-super-six-final",
     category: "Domestic"
   },
@@ -71,20 +74,19 @@ const FIXTURES = [
     teams: "Lady Sables vs Madagascar",
     date: "Sat 12 November",
     time: "13:00",
-    venue: "Old Hararians, Harare",
-    tags: ["International"],
-    status: "COMING SOON",
+    venue: "Old Hararians",
+    city: "Harare",
+    status: "COMING_SOON",
     category: "Lady Sables"
   },
   {
     id: "f5",
     competition: "Zambezi Sevens",
-    teams: "ZRU Cheetahs International Invitational",
+    teams: "ZRU Cheetahs Invitational",
     date: "Fri 15 Dec - Sun 17 Dec",
     time: "All Day",
     venue: "Vic Falls",
-    tags: ["Sevens"],
-    status: "SOLD OUT",
+    status: "SOLD_OUT",
     category: "Sevens"
   }
 ];
@@ -104,99 +106,6 @@ const OfficialChannelBadge = () => (
   </motion.div>
 );
 
-const FixtureCard = ({ fixture, onRegister }: { fixture: any, onRegister: (f: any) => void }) => {
-  const isWorldCupPathway = fixture.tags.includes("World Cup Pathway Fixture");
-  
-  return (
-    <motion.div 
-      layout
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      className={`relative group bg-white/[0.02] border border-white/5 rounded-xl overflow-hidden hover:border-white/10 transition-all duration-500 flex flex-col h-full ${fixture.status === 'SOLD OUT' ? 'opacity-60 grayscale' : ''}`}
-    >
-      {/* Card Header Tags */}
-      <div className="p-4 flex justify-between items-start gap-4">
-        <span className="text-[10px] font-black text-white/40 uppercase tracking-widest bg-white/5 px-2 py-1 rounded">
-          {fixture.competition}
-        </span>
-        {isWorldCupPathway && (
-          <span className="px-3 py-1 bg-clubhouse-gold text-rich-black text-[9px] font-black uppercase tracking-widest rounded-full shadow-[0_0_10px_rgba(212,175,55,0.2)]">
-            World Cup Pathway
-          </span>
-        )}
-      </div>
-
-      {/* Main Content */}
-      <div className="px-6 py-4 flex-1">
-        <h3 className="text-2xl md:text-3xl font-black text-white uppercase tracking-tighter leading-none mb-6">
-          {fixture.teams}
-        </h3>
-        
-        <div className="space-y-3">
-          <div className="flex items-center gap-3 text-gray-400">
-            <Calendar className="w-4 h-4 text-clubhouse-gold/60" />
-            <span className="text-sm font-medium">{fixture.date}</span>
-          </div>
-          <div className="flex items-center gap-3 text-gray-400">
-            <Clock className="w-4 h-4 text-clubhouse-gold/60" />
-            <span className="text-sm font-medium">{fixture.time}</span>
-          </div>
-          <div className="flex items-center gap-3 text-gray-400">
-            <MapPin className="w-4 h-4 text-clubhouse-gold/60" />
-            <span className="text-sm font-medium line-clamp-1">{fixture.venue}</span>
-          </div>
-        </div>
-      </div>
-
-      {/* Action Footer */}
-      <div className="p-6 mt-auto border-t border-white/5 flex flex-col gap-4">
-        <div className="flex items-center justify-between">
-          <div className={`flex items-center gap-2 text-[10px] font-black uppercase tracking-widest
-            ${fixture.status === 'ON SALE' ? 'text-green-500' : 
-              fixture.status === 'COMING SOON' ? 'text-clubhouse-gold' : 
-              'text-white/30'}
-          `}>
-            <div className={`w-1.5 h-1.5 rounded-full animate-pulse
-              ${fixture.status === 'ON SALE' ? 'bg-green-500' : 
-                fixture.status === 'COMING SOON' ? 'bg-clubhouse-gold' : 
-                'bg-white/30'}
-            `} />
-            {fixture.status}
-          </div>
-          {fixture.status === 'SOLD OUT' && (
-            <span className="text-[10px] font-bold text-white/20 italic">Check resale</span>
-          )}
-        </div>
-
-        {fixture.status === 'ON SALE' ? (
-          <Button 
-            variant="secondary" 
-            className="w-full group"
-            onClick={() => window.open(fixture.url, '_blank')}
-          >
-            Buy Tickets
-            <ExternalLink className="ml-2 w-4 h-4 opacity-70 group-hover:opacity-100 transition-opacity" />
-          </Button>
-        ) : fixture.status === 'COMING SOON' ? (
-          <Button 
-            variant="ghost" 
-            className="w-full"
-            onClick={() => onRegister(fixture)}
-          >
-            Register Interest
-          </Button>
-        ) : (
-          <button 
-            disabled 
-            className="w-full py-3 bg-white/5 border border-white/10 text-white/20 rounded font-black text-xs uppercase tracking-widest"
-          >
-            Sold Out
-          </button>
-        )}
-      </div>
-    </motion.div>
-  );
-};
 
 const FAQItem = ({ question, answer }: { question: string, answer: string }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -262,7 +171,7 @@ export default function TicketsPage() {
   
   const filteredFixtures = FIXTURES.filter(f => {
     if (filter === "All") return true;
-    if (filter === "World Cup Pathway") return f.tags.includes("World Cup Pathway Fixture");
+    if (filter === "World Cup Pathway") return f.isWorldCupPathway || f.tags?.includes("World Cup Pathway Fixture");
     return f.category === filter;
   });
 
@@ -285,6 +194,10 @@ export default function TicketsPage() {
           />
           <div className="absolute inset-0 bg-linear-to-b from-rich-black via-rich-black/40 to-rich-black" />
           <div className="absolute inset-0 bg-[url('/noise.png')] opacity-20 pointer-events-none" />
+          {/* Splash of Green */}
+          <div className="absolute top-1/4 -left-10 w-96 h-96 bg-green-900/10 blur-[120px] rounded-full pointer-events-none" />
+          <div className="absolute bottom-1/4 -right-10 w-96 h-96 bg-green-900/10 blur-[120px] rounded-full pointer-events-none" />
+          <StripedBackground color="green" variant="subtle" position="left" className="opacity-10" />
         </div>
 
         <div className="max-w-[1440px] mx-auto px-6 md:px-12 w-full relative z-10">
@@ -299,7 +212,7 @@ export default function TicketsPage() {
               <OfficialChannelBadge />
               <h1 className="text-6xl md:text-8xl lg:text-9xl font-black text-white leading-[0.9] uppercase tracking-tighter mt-8 mb-8">
                 OFFICIAL <br />
-                <span className="text-clubhouse-gold">TICKETS</span>
+                <span className="text-clubhouse-gold text-glow-green">TICKETS</span>
               </h1>
               <p className="text-lg md:text-xl text-gray-400 max-w-xl mb-12 font-medium leading-relaxed">
                 Welcome to the official home of Sables and ZRU tickets. Every link on this page takes you to an authorised partner, with transparent pricing and secure checkout.
