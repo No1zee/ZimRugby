@@ -100,7 +100,7 @@ export default function VariantsPage() {
               </span>
               <FixtureCard 
                 fixture={fixture} 
-                onRegisterInterest={(f) => console.log("Registering for:", f.teams)} 
+                onRegister={(f) => console.log("Registering for:", f.teams)} 
               />
             </div>
           ))}

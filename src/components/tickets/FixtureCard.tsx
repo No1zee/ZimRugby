@@ -39,10 +39,10 @@ export interface Fixture {
 
 interface FixtureCardProps {
   fixture: Fixture;
-  onRegisterInterest?: (fixture: Fixture) => void;
+  onRegister?: (fixture: Fixture) => void;
 }
 
-export const FixtureCard = ({ fixture, onRegisterInterest }: FixtureCardProps) => {
+export const FixtureCard = ({ fixture, onRegister }: FixtureCardProps) => {
   const isWorldCupPathway = fixture.isWorldCupPathway || fixture.tags?.includes("World Cup Pathway Fixture");
   
   const renderStatus = () => {
@@ -106,7 +106,7 @@ export const FixtureCard = ({ fixture, onRegisterInterest }: FixtureCardProps) =
         <Button 
           variant="ghost" 
           className="w-full"
-          onClick={() => onRegisterInterest?.(fixture)}
+          onClick={() => onRegister?.(fixture)}
         >
           Register Interest
         </Button>
