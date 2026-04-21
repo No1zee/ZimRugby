@@ -20,6 +20,7 @@ const footerLinks = {
     { label: "Contact", href: "/contact" },
   ],
   "Rugby": [
+    { label: "Tickets", href: "/tickets" },
     { label: "Match Centre", href: "/match-centre" },
     { label: "Our Teams", href: "/teams" },
     { label: "Events", href: "/events" },
@@ -29,7 +30,7 @@ const footerLinks = {
     { label: "Play Rugby", href: "/play-rugby" },
     { label: "Find a Club", href: "/clubs" },
     { label: "Volunteer", href: "/volunteer" },
-    { label: "Donate", href: "/donate" },
+    { label: "Back the Sables", href: "/world-cup-campaign", descriptor: "Monthly pledges. Direct impact." },
   ],
   "Resources": [
     { label: "Downloads", href: "/resources" },
@@ -113,9 +114,18 @@ export default function Footer() {
             <div key={title} className="space-y-8">
               <h4 className="text-[10px] font-black uppercase tracking-[0.3em] text-clubhouse-gold">{title}</h4>
               <ul className="space-y-4">
-                 {links.map((link) => (
+                 {links.map((link: any) => (
                     <li key={link.label}>
-                       <Link href={link.href} className="text-sm font-bold text-white/40 hover:text-white transition-colors">{link.label}</Link>
+                       <Link href={link.href} className="flex flex-col group/link">
+                         <span className="text-sm font-bold text-white/40 group-hover/link:text-white transition-colors">
+                           {link.label}
+                         </span>
+                         {link.descriptor && (
+                           <span className="text-[10px] font-medium text-white/20">
+                             {link.descriptor}
+                           </span>
+                         )}
+                       </Link>
                     </li>
                  ))}
               </ul>
@@ -125,17 +135,21 @@ export default function Footer() {
 
         {/* Bottom Bar */}
         <div className="pt-12 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-8">
-           <div className="flex items-center gap-8">
-              <span className="text-[9px] font-black uppercase tracking-widest text-white/20">© 2026 ZRU OFFICIAL</span>
-              <div className="hidden md:flex gap-8">
-                {['Privacy Policy', 'Terms of Use', 'Accessibility'].map((item) => (
-                  <Link key={item} href={`/${item.toLowerCase().replace(/\s+/g, '-')}`} className="text-[9px] font-black uppercase tracking-widest text-white/20 hover:text-white transition-colors">
-                    {item}
-                  </Link>
-                ))}
+           <div className="flex flex-col md:flex-row items-center gap-8 w-full justify-between">
+              <Link href="/world-cup-campaign" className="text-[9px] font-black uppercase tracking-[0.4em] text-clubhouse-gold hover:text-white transition-colors">
+                Fueling the pathway, one pledge at a time.
+              </Link>
+              <div className="flex items-center gap-8">
+                <span className="text-[9px] font-black uppercase tracking-widest text-white/20">© 2026 ZRU OFFICIAL</span>
+                <div className="hidden md:flex gap-8">
+                  {['Privacy Policy', 'Terms of Use', 'Accessibility'].map((item) => (
+                    <Link key={item} href={`/${item.toLowerCase().replace(/\s+/g, '-')}`} className="text-[9px] font-black uppercase tracking-widest text-white/20 hover:text-white transition-colors">
+                      {item}
+                    </Link>
+                  ))}
+                </div>
               </div>
            </div>
-
         </div>
 
       </div>

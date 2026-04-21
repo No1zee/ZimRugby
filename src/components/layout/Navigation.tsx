@@ -28,6 +28,7 @@ const navItems = [
       { label: "Volunteer", href: "/volunteer" },
     ]
   },
+  { label: "WORLD CUP CAMPAIGN", href: "/world-cup-campaign" },
   { label: "THE CLUBHOUSE", href: "/clubhouse" },
   { label: "ABOUT", href: "/about" },
 ];
@@ -166,23 +167,45 @@ export default function Navigation() {
               </div>
             ))}
 
+            {/* CAMPAIGN IDENTITY TAB */}
+            <Link 
+              href="/world-cup-campaign" 
+              className="ml-4 flex items-center gap-2 group/campaign"
+              title="Fuel the Sables' journey to the world stage."
+            >
+              <div className="px-4 py-2 bg-clubhouse-gold text-rich-black font-black text-[10px] uppercase tracking-[0.2em] rounded-full shadow-[0_0_20px_rgba(212,175,55,0.4)] group-hover/campaign:scale-105 group-hover/campaign:shadow-[0_0_25px_rgba(212,175,55,0.6)] transition-all flex items-center gap-2">
+                <div className="w-1.5 h-1.5 bg-rich-black rounded-full animate-pulse" />
+                SUPPORT THE ROAD
+              </div>
+            </Link>
+
             {/* TICKETS CTA */}
             <Link 
               href="/tickets" 
-              className="ml-4 px-6 py-2 bg-white text-zru-green font-black text-sm uppercase tracking-wider rounded-full hover:bg-gray-100 hover:scale-105 transition-all shadow-lg"
+              className="ml-2 px-6 py-2 bg-white text-zru-green font-black text-sm uppercase tracking-wider rounded-full hover:bg-gray-100 hover:scale-105 transition-all shadow-lg"
             >
               Tickets
             </Link>
           </div>
 
-          {/* Mobile Menu Button */}
-          <button
-            onClick={toggleMenu}
-            className="lg:hidden text-white hover:text-zru-gold p-2 transition-colors"
-            aria-label="Toggle menu"
-          >
-            {isOpen ? <X className="w-7 h-7" /> : <Menu className="w-7 h-7" />}
-          </button>
+          {/* Mobile Back the Sables Hook */}
+          <div className="lg:hidden flex items-center gap-3">
+            <Link 
+              href="/world-cup-campaign" 
+              className="px-3 py-1.5 bg-clubhouse-gold text-rich-black font-black text-[9px] uppercase tracking-[0.2em] rounded-full shadow-[0_0_15px_rgba(212,175,55,0.3)]"
+            >
+              BACK THE SABLES
+            </Link>
+            
+            {/* Mobile Menu Button */}
+            <button
+              onClick={toggleMenu}
+              className="text-white hover:text-zru-gold p-2 transition-colors"
+              aria-label="Toggle menu"
+            >
+              {isOpen ? <X className="w-7 h-7" /> : <Menu className="w-7 h-7" />}
+            </button>
+          </div>
         </div>
       </nav>
 

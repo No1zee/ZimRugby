@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { motion } from "framer-motion";
 import { Calendar, Clock, MapPin } from "lucide-react";
 import Button from "../common/Button";
@@ -36,6 +37,14 @@ export default function MatchCard({
   awayTeam,
   status = "upcoming",
 }: MatchCardProps) {
+  const [imgError, setImgError] = useState<{ home: boolean; away: boolean }>({
+    home: false,
+    away: false,
+  });
+
+  const homeLogo = !imgError.home && homeTeam.logo ? homeTeam.logo : getFlagUrl(homeTeam.name);
+  const awayLogo = !imgError.away && awayTeam.logo ? awayTeam.logo : getFlagUrl(awayTeam.name);
+
   return (
     <motion.div
       whileHover={{ y: -5 }}
@@ -54,13 +63,14 @@ export default function MatchCard({
           {/* Home Team */}
           <div className="flex flex-col items-center gap-3 w-1/3">
             <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center p-2 overflow-hidden relative">
-              {homeTeam.logo || getFlagUrl(homeTeam.name) ? (
+              {homeLogo ? (
                 <Image 
-                  src={homeTeam.logo || getFlagUrl(homeTeam.name)} 
+                  src={homeLogo} 
                   alt={homeTeam.name} 
                   fill 
                   sizes="64px" 
-                  className="object-contain p-2" 
+                  className="object-contain p-2"
+                  onError={() => setImgError(prev => ({ ...prev, home: true }))}
                 />
               ) : (
                 <span className="text-black font-heading font-bold text-xl">
@@ -97,13 +107,14 @@ export default function MatchCard({
           {/* Away Team */}
           <div className="flex flex-col items-center gap-3 w-1/3">
             <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center p-2 border-2 border-transparent group-hover:border-zru-green transition-colors overflow-hidden relative">
-               {awayTeam.logo || getFlagUrl(awayTeam.name) ? (
+               {awayLogo ? (
                  <Image 
-                  src={awayTeam.logo || getFlagUrl(awayTeam.name)} 
+                  src={awayLogo} 
                   alt={awayTeam.name} 
                   fill 
                   sizes="64px" 
                   className="object-contain p-2" 
+                  onError={() => setImgError(prev => ({ ...prev, away: true }))}
                  />
                ) : (
                  <span className="text-black font-heading font-bold text-xl">
