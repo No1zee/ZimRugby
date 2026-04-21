@@ -13,7 +13,7 @@ const events = [
     id: 1,
     title: "SUPER SIX RUGBY LEAGUE",
     subtitle: "PREMIER CLUB COMPETITION",
-    date: "MAY - SEP 2026",
+    date: "May - Sep 2026",
     location: "HARARE & BULAWAYO",
     description: "Zimbabwe's top clubs including Old Hararians, Old Georgians, and Old Miltonians battle for supremacy.",
     tags: ["Premier League", "Club Rugby"],
@@ -25,7 +25,7 @@ const events = [
     id: 2,
     title: "SABLE LAGER GRID CUP",
     subtitle: "FRANCHISE RUGBY",
-    date: "OCT - NOV 2026",
+    date: "Oct - Nov 2026",
     location: "HARARE SPORTS CLUB",
     description: "The new franchise-style format boosting excitement and participation in the local scene.",
     tags: ["Franchise", "Sable Lager"],
@@ -37,7 +37,7 @@ const events = [
     id: 3,
     title: "NEDBANK CHALLENGE CUP",
     subtitle: "KNOCKOUT TOURNAMENT",
-    date: "MARCH 2026",
+    date: "Mar 2026",
     location: "OLD HARARIANS",
     description: "The 4th edition of the prominent knockout tournament highlighting provincial and club talent.",
     tags: ["Knockout", "Nedbank"],
@@ -49,7 +49,7 @@ const events = [
     id: 4,
     title: "HARARE UNDER-20 LEAGUE",
     subtitle: "YOUTH DEVELOPMENT",
-    date: "JAN 2026",
+    date: "Jan 2026",
     location: "OLD HARARIANS",
     description: "Future stars in action at the Harare Under-20 League, rescheduled for January.",
     tags: ["Youth", "U20 League"],
@@ -61,12 +61,12 @@ const events = [
 
 export default function EventsBlock() {
   return (
-    <section className="relative bg-[#0A0A0A] py-32" id="events-block">
+    <section className="relative py-24 overflow-hidden" id="events-block">
       
       {/* Background text - Restored big interactive text */}
       <PretextBackground 
         text="WHAT'S ON? "
-        className="absolute -top-[15vh] -bottom-[15vh] left-0 right-0 opacity-80 overflow-visible" 
+        className="absolute -top-[15vh] -bottom-[15vh] left-0 right-0 opacity-80" 
       />
       
       <div className="max-w-[1440px] mx-auto px-6 relative z-10">
@@ -98,13 +98,12 @@ export default function EventsBlock() {
                 From Super Six matches to community development festivals, explore the heart of Zimbabwean rugby across the nation.
               </p>
               
-              <Link href="/events" className="inline-block group">
-                <div className="flex items-center gap-4 text-[10px] font-black uppercase tracking-[0.3em] text-white">
-                  <span>Explore All</span>
-                  <div className="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center group-hover:bg-zru-gold group-hover:border-zru-gold transition-all">
-                    <Plus className="w-4 h-4" />
-                  </div>
-                </div>
+              <Link 
+                href="/events" 
+                className="inline-flex items-center justify-center gap-3 bg-white text-black px-8 py-4 rounded-none font-bold text-xs uppercase tracking-[0.2em] transition-all duration-300 hover:bg-zru-gold hover:text-black group shadow-[0_0_20px_rgba(255,255,255,0.1)] hover:shadow-[0_0_25px_rgba(235,178,23,0.3)]"
+              >
+                <span>Explore All</span>
+                <Plus className="w-4 h-4 transition-transform group-hover:rotate-90" />
               </Link>
             </motion.div>
           </div>
@@ -123,7 +122,7 @@ export default function EventsBlock() {
                     className={`${idx === 0 ? "lg:col-span-2" : ""} ${idx % 2 === 0 && idx !== 0 ? "lg:mt-32" : ""}`}
                   >
                     <Link href={`/events/${event.id}`} className="block group">
-                      <div className={`relative ${idx === 0 ? "aspect-21/9" : "aspect-4/5"} overflow-hidden rounded-2xl bg-neutral-900 shadow-2xl transition-all duration-700 group-hover:-translate-y-2`}>
+                      <div className={`relative ${idx === 0 ? "aspect-21/9" : "aspect-4/5"} overflow-hidden rounded-2xl bg-neutral-900 shadow-2xl transition-all duration-700 group-hover:-translate-y-2 glow-green-card`}>
                         <Image 
                           src={event.image || "/images/events/africa-cup.jpg"} 
                           alt={`${event.title} - ${event.subtitle}`}
@@ -138,9 +137,16 @@ export default function EventsBlock() {
                       {/* Content Overlay */}
                       <div className="absolute inset-0 p-8 flex flex-col justify-end gap-6 translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
                         <div className="space-y-2">
-                          <div className="flex flex-wrap gap-2">
-                            {event.tags.map(tag => (
-                              <span key={tag} className="text-[8px] font-black uppercase tracking-widest text-zru-gold border border-zru-gold/30 px-2 py-1 rounded backdrop-blur-sm">
+                          <div className="flex flex-wrap gap-2 mb-2">
+                            {event.tags.map((tag, i) => (
+                              <span 
+                                key={tag} 
+                                className={`text-[9px] font-black uppercase tracking-widest px-2.5 py-1 rounded backdrop-blur-sm ${
+                                  i === 0 
+                                    ? "bg-zru-gold text-black shadow-sm" 
+                                    : "text-white border border-white/20 bg-black/20"
+                                }`}
+                              >
                                 {tag}
                               </span>
                             ))}

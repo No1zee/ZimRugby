@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import Link from "next/link";
+import Image from "next/image";
 
 export default function StorySection() {
   return (
@@ -16,6 +17,13 @@ export default function StorySection() {
             viewport={{ once: true }}
             className="aspect-4/5 bg-gray-100 relative grayscale hover:grayscale-0 transition-all duration-1000 group overflow-hidden"
           >
+            <Image 
+              src="/images/shop/story-main.png" 
+              alt="Clubhouse Heritage" 
+              fill 
+              sizes="(max-width: 768px) 100vw, 50vw"
+              className="object-cover transition-transform duration-1000 group-hover:scale-110"
+            />
             <div className="absolute inset-0 bg-clubhouse-charcoal opacity-10 group-hover:opacity-0 transition-opacity" />
             
             {/* Overlay Info */}
@@ -41,7 +49,7 @@ export default function StorySection() {
             </h2>
             <div className="space-y-6 text-sm md:text-base text-clubhouse-charcoal/70 leading-relaxed font-medium">
               <p>
-                Founded in Harare, ZimRugby Clubhouse is an independent label bridging the gap between professional-grade rugby engineering and contemporary African street style.
+                Founded in Harare, The Clubhouse is an independent label bridging the gap between professional-grade rugby engineering and contemporary African street style.
               </p>
               <p>
                 We believe that the discipline of the pitch should reflect in the precision of the garment. Every stitch in our Clubhouse collection is tested for elite performance while maintaining a silhouette that belongs in the metropolitan landscape.

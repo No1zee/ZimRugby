@@ -3,6 +3,7 @@ import Navigation from "@/components/layout/Navigation";
 import Footer from "@/components/layout/Footer";
 import { Users, Target, Award, Heart, Mail, MapPin, Phone } from "lucide-react";
 import Image from "next/image";
+import PartnersSection from "@/components/home/PartnersSection";
 
 export const metadata: Metadata = {
   title: "About | Zimbabwe Rugby Union",
@@ -29,10 +30,7 @@ export default function AboutPage() {
       {/* Hero */}
       <section className="pt-32 pb-16 bg-zru-green relative overflow-hidden">
         <div 
-          className="absolute inset-0 opacity-10"
-          style={{
-            backgroundImage: "url(\"data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 40 L40 0' stroke='%23fff' stroke-width='1' fill='none'/%3E%3C/svg%3E\")",
-          }}
+          className="absolute inset-0 opacity-10 bg-pattern-diagonal-lines"
         />
         <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-black text-white uppercase mb-4">
@@ -174,6 +172,9 @@ export default function AboutPage() {
           </div>
         </div>
       </section>
+
+      {/* Partners Section */}
+      <PartnersSection />
 
       <Footer />
     </main>

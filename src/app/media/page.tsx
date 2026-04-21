@@ -6,6 +6,7 @@ import Button from "@/components/common/Button";
 import VideoCard from "@/components/media/VideoCard";
 import NewsCard from "@/components/media/NewsCard";
 import { useState } from "react";
+import JournalStrip from "@/components/home/JournalStrip";
 
 const latestVideos = [
   {
@@ -209,6 +210,10 @@ export default function MediaPage() {
         )}
 
       </div>
+      
+      <section className="mt-24 border-t border-white/5 pt-24">
+        <JournalStrip />
+      </section>
     </main>
   );
 }

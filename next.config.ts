@@ -47,6 +47,11 @@ const nextConfig: NextConfig = {
         hostname: 'zru.co.zw',
         pathname: '/**',
       },
+      {
+        protocol: 'https',
+        hostname: 'r2.thesportsdb.com',
+        pathname: '/**',
+      },
     ],
   },
 };

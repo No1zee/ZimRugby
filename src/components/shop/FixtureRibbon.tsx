@@ -42,7 +42,7 @@ export default function FixtureRibbon() {
           initial={{ height: 0, opacity: 0 }}
           animate={{ height: "auto", opacity: 1 }}
           transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-          className="bg-clubhouse-gold text-clubhouse-charcoal overflow-hidden relative z-[60]"
+          className="bg-clubhouse-gold text-clubhouse-charcoal overflow-hidden relative z-60"
         >
           <div className="max-w-[1440px] mx-auto px-6 py-2 flex items-center justify-between">
             
@@ -77,7 +77,7 @@ export default function FixtureRibbon() {
             initial={{ scaleX: 0 }}
             animate={{ scaleX: 1 }}
             transition={{ duration: 1.5, delay: 0.5, ease: "easeOut" }}
-            className="h-[1px] bg-clubhouse-charcoal/20 w-full origin-left"
+            className="h-px bg-clubhouse-charcoal/20 w-full origin-left"
           />
         </motion.div>
       )}

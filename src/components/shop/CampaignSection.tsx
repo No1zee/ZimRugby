@@ -29,11 +29,11 @@ export default function CampaignSection() {
             <span className="block text-[10px] font-black uppercase tracking-[0.4em] text-clubhouse-gold mb-12">
               The Heritage Drop
             </span>
-            <h2 className="text-5xl md:text-7xl font-black uppercase tracking-tighter text-white leading-[0.9] mb-8">
+            <h2 className="text-5xl md:text-7xl font-black uppercase tracking-tighter text-white leading-[1.1] mb-8">
               SABLES <br /> <span className="text-clubhouse-gold/80 italic">HERITAGE</span> & PERFORMANCE
             </h2>
-            <p className="text-sm md:text-lg text-white/50 mb-12 leading-relaxed max-w-lg tracking-wide font-medium">
-              A celebration of legacy and a commitment to the future. Our 2024 Heritage collection merges historic motifs with peak performance engineering.
+            <p className="text-sm md:text-lg text-white/50 mb-12 leading-[1.6] max-w-lg tracking-wide font-medium">
+              A celebration of legacy and a commitment to the future. Our 2026 Heritage collection merges historic motifs with peak performance engineering.
             </p>
             <Link 
               href="/clubhouse/campaign"

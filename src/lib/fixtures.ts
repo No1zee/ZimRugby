@@ -22,36 +22,47 @@ export async function getAllFixtures(): Promise<Fixture[]> {
 function getVerifiedStaticFixtures(): Fixture[] {
   return [
     {
-      id: 'static-zru-zambia-1',
-      competition: 'International Series',
-      round: 'Final',
+      id: 'zru-zambia-2026',
+      competition: 'Battle of the Zambezi',
+      round: 'International',
       date: new Date('2026-04-25T15:00:00'),
       time: '15:00',
-      venue: 'Hartsfield, Bulawayo',
-      homeTeam: { name: 'Zimbabwe' },
-      awayTeam: { name: 'Zambia' },
+      venue: 'Harare Sports Club',
+      homeTeam: { name: 'Zimbabwe', logo: 'https://r2.thesportsdb.com/common/standard/logo/zimbabwe_rugby_union-v3.png' },
+      awayTeam: { name: 'Zambia', logo: 'https://r2.thesportsdb.com/common/standard/logo/zambia_rugby_union-v3.png' },
       status: 'upcoming',
     },
     {
-      id: 'static-zru-zambia-2',
-      competition: 'International Series',
-      round: 'Final',
-      date: new Date('2026-05-02T15:00:00'),
-      time: '15:00',
-      venue: 'Prince Edward School, Harare',
-      homeTeam: { name: 'Zimbabwe' },
-      awayTeam: { name: 'Zambia' },
+      id: 'zru-tonga-2026',
+      competition: 'International Tour',
+      round: 'Nations Cup',
+      date: new Date('2026-06-12T19:00:00'),
+      time: '19:00',
+      venue: 'Teufaiva Stadium, Nukuʻalofa',
+      homeTeam: { name: 'Tonga', logo: 'https://r2.thesportsdb.com/common/standard/logo/tonga_rugby_union-v3.png' },
+      awayTeam: { name: 'Zimbabwe', logo: 'https://r2.thesportsdb.com/common/standard/logo/zimbabwe_rugby_union-v3.png' },
       status: 'upcoming',
     },
     {
-      id: 'static-zru-sa-a',
-      competition: 'International Double Header',
-      round: 'Exhibition',
-      date: new Date('2026-06-20T17:00:00'),
-      time: '17:00',
-      venue: 'Nelson Mandela Bay Stadium, SA',
-      homeTeam: { name: 'South Africa A' },
-      awayTeam: { name: 'Zimbabwe' },
+      id: 'zru-usa-2026',
+      competition: 'International Tour',
+      round: 'Nations Cup',
+      date: new Date('2026-07-04T16:00:00'),
+      time: '16:00',
+      venue: 'Infinity Park, Denver',
+      homeTeam: { name: 'USA', logo: 'https://r2.thesportsdb.com/common/standard/logo/usa_rugby-v3.png' },
+      awayTeam: { name: 'Zimbabwe', logo: 'https://r2.thesportsdb.com/common/standard/logo/zimbabwe_rugby_union-v3.png' },
+      status: 'upcoming',
+    },
+    {
+      id: 'zru-canada-2026',
+      competition: 'International Tour',
+      round: 'Nations Cup',
+      date: new Date('2026-07-18T14:00:00'),
+      time: '14:00',
+      venue: 'BMO Field, Toronto',
+      homeTeam: { name: 'Canada', logo: 'https://r2.thesportsdb.com/common/standard/logo/rugby_canada-v3.png' },
+      awayTeam: { name: 'Zimbabwe', logo: 'https://r2.thesportsdb.com/common/standard/logo/zimbabwe_rugby_union-v3.png' },
       status: 'upcoming',
     }
   ];
@@ -86,17 +97,32 @@ export function formatFixtureForUI(fixture: Fixture) {
   const dateOptions: Intl.DateTimeFormatOptions = { day: '2-digit', month: 'short', year: 'numeric' };
   const formattedDate = fixture.date.toLocaleDateString('en-GB', dateOptions).toUpperCase();
   
-  const getLogo = (name: string) => {
-    const n = name.toLowerCase();
-    if (n.includes('zimbabwe')) return '/images/teams/zimbabwe.png';
-    if (n.includes('tonga')) return '/images/teams/tonga.png';
-    if (n.includes('usa')) return '/images/teams/usa.svg';
-    if (n.includes('canada')) return '/images/teams/canada.svg';
-    if (n.includes('chile')) return '/images/teams/chile.png';
-    if (n.includes('samoa')) return '/images/teams/samoa.png';
-    if (n.includes('uruguay')) return '/images/teams/uruguay.png';
+  const getLogo = (team: { name: string, logo?: string }) => {
+    if (team.logo) return team.logo;
 
-    if (n.includes('south africa')) return '/images/teams/south-africa.png';
+    const n = team.name.toLowerCase();
+    
+    // Explicit high-quality team logos where available
+    if (n.includes('zimbabwe')) return 'https://r2.thesportsdb.com/common/standard/logo/zimbabwe_rugby_union-v3.png';
+    if (n.includes('tonga')) return 'https://r2.thesportsdb.com/common/standard/logo/tonga_rugby_union-v3.png';
+    if (n.includes('usa')) return 'https://r2.thesportsdb.com/common/standard/logo/usa_rugby-v3.png';
+    if (n.includes('canada')) return 'https://r2.thesportsdb.com/common/standard/logo/rugby_canada-v3.png';
+    if (n.includes('chile')) return 'https://r2.thesportsdb.com/common/standard/logo/chilean_rugby_federation-v3.png';
+    if (n.includes('zambia')) return 'https://r2.thesportsdb.com/common/standard/logo/zambia_rugby_union-v3.png';
+
+    // Comprehensive public flag CDN fallback using standard ISO codes
+    const nameToISO: Record<string, string> = {
+      'south africa': 'za', 'new zealand': 'nz', 'australia': 'au', 'england': 'gb-eng',
+      'ireland': 'ie', 'france': 'fr', 'scotland': 'gb-sct', 'wales': 'gb-wls',
+      'argentina': 'ar', 'fiji': 'fj', 'japan': 'jp', 'italy': 'it', 'samoa': 'ws',
+      'georgia': 'ge', 'portugal': 'pt', 'uruguay': 'uy', 'spain': 'es', 'romania': 'ro',
+      'namibia': 'na', 'uganda': 'ug', 'kenya': 'ke', 'botswana': 'bw', 'madagascar': 'mg',
+    };
+
+    for (const [key, code] of Object.entries(nameToISO)) {
+      if (n.includes(key)) return `https://flagcdn.com/w160/${code}.png`;
+    }
+
     return undefined;
   };
 
@@ -105,11 +131,11 @@ export function formatFixtureForUI(fixture: Fixture) {
     date: formattedDate,
     homeTeam: {
       ...fixture.homeTeam,
-      logo: getLogo(fixture.homeTeam.name)
+      logo: getLogo(fixture.homeTeam)
     },
     awayTeam: {
       ...fixture.awayTeam,
-      logo: getLogo(fixture.awayTeam.name)
+      logo: getLogo(fixture.awayTeam)
     }
   };
 }

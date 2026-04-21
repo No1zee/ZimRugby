@@ -148,18 +148,14 @@ export default function HeroVideoHub() {
           
           {/* THE SABLES - regular size - Mobile Optimized */}
           <span 
-            className="block relative z-20 text-4xl sm:text-6xl md:text-7xl lg:text-8xl"
-            style={{ textShadow: '0 4px 20px rgba(0, 0, 0, 0.5)' }}
+            className="block relative z-20 text-4xl sm:text-6xl md:text-7xl lg:text-8xl text-shadow-hero"
           >
             THE SABLES
           </span>
           
           {/* ARE HOME - Mobile Optimized */}
           <span 
-            className="block text-white italic relative z-20 text-5xl sm:text-7xl md:text-8xl lg:text-9xl"
-            style={{ 
-              textShadow: '0 0 40px rgba(0, 150, 70, 0.5), 0 4px 20px rgba(0, 0, 0, 0.5)',
-            }}
+            className="block text-white italic relative z-20 text-5xl sm:text-7xl md:text-8xl lg:text-9xl text-shadow-hero-glow"
           >
             ARE HOME
           </span>

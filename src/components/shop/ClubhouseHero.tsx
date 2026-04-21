@@ -32,22 +32,25 @@ export default function ClubhouseHero() {
           transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
           className="max-w-4xl"
         >
-          <motion.span 
+          <motion.div 
             initial={{ opacity: 0, letterSpacing: "1.5em" }}
             animate={{ opacity: 1, letterSpacing: "0.5em" }}
             transition={{ duration: 1.5, ease: "easeOut" }}
-            className="block text-xs md:text-sm font-bold uppercase tracking-[0.5em] text-clubhouse-gold mb-6"
+            className="flex items-center justify-center gap-3 mb-6"
           >
-            Establishing the New Standard
-          </motion.span>
-          <h1 className="text-5xl md:text-8xl lg:text-9xl font-black uppercase tracking-tighter text-white leading-[0.9] mb-10 overflow-hidden">
+            <div className="w-1.5 h-1.5 rounded-full bg-clubhouse-gold animate-pulse" />
+            <span className="block text-xs md:text-sm font-bold uppercase text-clubhouse-gold whitespace-nowrap">
+              Members Only Access
+            </span>
+          </motion.div>
+          <h1 className="text-5xl md:text-8xl lg:text-9xl font-black uppercase tracking-tighter text-white leading-[1.1] mb-10 overflow-hidden">
             <motion.span
               initial={{ y: "100%" }}
               animate={{ y: 0 }}
               transition={{ duration: 1, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
               className="block"
             >
-              HERITAGE
+              THE ELITE
             </motion.span>
             <motion.span 
               initial={{ y: "100%" }}
@@ -55,17 +58,16 @@ export default function ClubhouseHero() {
               transition={{ duration: 1, delay: 0.4, ease: [0.16, 1, 0.3, 1] }}
               className="text-transparent bg-clip-text bg-linear-to-r from-clubhouse-gold via-white/80 to-white/20 block"
             >
-              REDEFINED
+              RESERVE
             </motion.span>
           </h1>
           <motion.p 
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 1.5, delay: 0.8 }}
-            className="text-sm md:text-lg text-white/60 max-w-xl mx-auto mb-12 font-medium leading-relaxed tracking-wide"
+            className="text-sm md:text-lg text-white/60 max-w-xl mx-auto mb-12 font-medium leading-[1.6] tracking-wide"
           >
-            The 2024 collection blends historic motifs with next-generation fabrics.
-            Engineered for the elite. Designed for the legacy.
+            Strictly limited allocations. The 2026 archival collection is restricted to verified members and players. Engineered for the peak. Reserved for the legacy.
           </motion.p>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
@@ -75,14 +77,14 @@ export default function ClubhouseHero() {
             >
               <div className="absolute inset-0 bg-clubhouse-gold -translate-x-full group-hover:translate-x-0 transition-transform duration-500" />
               <span className="relative z-10 flex items-center">
-                Shop Matchday Kits <ArrowRight className="ml-2 w-4 h-4" />
+                Secure Allocation <ArrowRight className="ml-2 w-4 h-4" />
               </span>
             </Link>
             <Link 
               href="/clubhouse/lifestyle"
               className="px-10 py-5 border border-white/20 text-white text-xs font-black uppercase tracking-[0.2em] hover:bg-white/5 transition-all hover:scale-105"
             >
-              Explore Clubhouse
+              Apply For Membership
             </Link>
           </div>
         </motion.div>
@@ -92,10 +94,10 @@ export default function ClubhouseHero() {
       <div className="relative z-20 bg-white/5 backdrop-blur-sm border-t border-white/10">
         <div className="max-w-[1440px] mx-auto grid grid-cols-2 md:grid-cols-4 divide-x divide-white/10 py-5">
           {[
-            "Free Worldwide Shipping",
-            "Express Local Delivery",
-            "Clubhouse Early Access",
-            "Ethically Crafted in Zim"
+            "White Glove Delivery",
+            "Concierge Support",
+            "Tier-1 Early Access",
+            "Bespoke Zim Craftsmanship"
           ].map((benefit) => (
             <div key={benefit} className="flex justify-center items-center px-4">
               <span className="text-[9px] md:text-[10px] font-bold uppercase tracking-[0.2em] text-white/50 text-center">

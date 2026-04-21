@@ -20,6 +20,7 @@ interface SlideData {
     line2: string;
   };
   subtext: string;
+  tag?: string; // e.g. "AFRICAN CHAMPIONS"
   ctas: {
     primary: { label: string; href: string; icon?: LucideIcon };
     secondary: { label: string; href: string; icon?: LucideIcon };
@@ -32,8 +33,8 @@ const slides: SlideData[] = [
     id: 1,
     image: "/images/hero/campaign-victoria-falls.png",
     headline: {
-      line1: "DOMESTIC",
-      line2: "WARRIORS",
+      line1: "VICTORIA FALLS",
+      line2: "SERIES",
     },
     subtext: "Experience the pride of Harare and Bulawayo as the Sables clash in the Victoria Falls Domestic Series.",
     ctas: {
@@ -95,6 +96,7 @@ const slides: SlideData[] = [
   },
   {
     id: 6,
+    tag: "AFRICAN CHAMPIONS",
     image: "/images/media/vid1.jpg", 
     video: "/images/zim-rugby-slow-mo-2.mp4",
     headline: {
@@ -103,8 +105,8 @@ const slides: SlideData[] = [
     },
     subtext: "Witness the elite athleticism of Zimbabwe's finest. Precision, power, and the pursuit of excellence.",
     ctas: {
-      primary: { label: "Watch Highlights", href: "/media", icon: Play },
-      secondary: { label: "Fixture News", href: "/news", icon: ArrowRight },
+      primary: { label: "Secure Your Seat", href: "/tickets", icon: Ticket },
+      secondary: { label: "Watch Highlights", href: "/media", icon: Play },
     },
   },
 ];
@@ -229,14 +231,20 @@ export default function HeroCarousel() {
                             <div className="absolute top-0 left-0 w-0 h-0 border-l-120 border-l-transparent border-r-120 border-r-transparent border-t-400 border-t-zru-green/20 -rotate-12 blur-3xl origin-top" />
                             <div className="absolute top-0 right-0 w-0 h-0 border-l-120 border-l-transparent border-r-120 border-r-transparent border-t-400 border-t-zru-green/20 rotate-12 blur-3xl origin-top" />
                         </div>
+                        
+                        {activeSlide.tag && (
+                          <span className="block text-zru-gold text-sm md:text-xl font-black uppercase tracking-[0.4em] mb-4 sm:mb-8">
+                             {activeSlide.tag}
+                          </span>
+                        )}
 
                         <span 
-                            className="block relative z-20 text-6xl sm:text-8xl md:text-9xl lg:text-[11rem] text-glow-heavy"
+                            className="block relative z-20 text-5xl sm:text-7xl md:text-9xl lg:text-[11rem] text-glow-heavy"
                         >
                             {activeSlide.headline.line1}
                         </span>
                         <span 
-                            className="block text-white italic relative z-20 text-7xl sm:text-9xl md:text-[10rem] lg:text-[12rem] -mt-4 lg:-mt-10 text-glow-green"
+                            className="block text-white italic relative z-20 text-6xl sm:text-8xl md:text-[10rem] lg:text-[12rem] -mt-2 sm:-mt-4 lg:-mt-10 text-glow-green"
                         >
                             {activeSlide.headline.line2}
                         </span>

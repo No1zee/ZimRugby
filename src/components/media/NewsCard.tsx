@@ -25,8 +25,8 @@ export default function NewsCard({
   return (
     <Link href={slug}>
         <motion.div 
-            whileHover={{ x: 5 }}
-            className="flex flex-col md:flex-row gap-6 group cursor-pointer border-b border-white/5 pb-8 last:border-0"
+            whileHover={{ y: -2 }}
+            className="flex flex-col md:flex-row gap-6 group cursor-pointer bg-white/5 hover:bg-white/10 p-4 md:p-6 rounded-2xl border border-white/5 transition-all glow-green-card"
         >
             {image && (
                 <div className="w-full md:w-48 h-32 relative rounded-lg overflow-hidden shrink-0">

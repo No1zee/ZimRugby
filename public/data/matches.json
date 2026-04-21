@@ -1,91 +1,103 @@
 [
   {
-    "id": "4321-fixture-0-1",
+    "id": "2026-fixture-01",
     "homeTeam": {
-      "name": "25 April, 2026"
+      "name": "Zimbabwe",
+      "logo": "https://r2.thesportsdb.com/images/media/team/badge/6iaf541773658274.png"
     },
     "awayTeam": {
-      "name": "Zimbabwe"
+      "name": "Zambia",
+      "logo": "https://r2.thesportsdb.com/images/media/team/badge/k4axcx1773657710.png"
     },
-    "date": "Zimbabwe vs Zambia",
-    "time": "TBD",
+    "date": "25 April, 2026",
+    "time": "15:00",
     "venue": "Harare Sports Club",
-    "competition": "Africa Cup",
+    "competition": "Battle of the Zambezi",
     "category": "Sables",
     "status": "upcoming"
   },
   {
-    "id": "4321-fixture-0-2",
+    "id": "2026-fixture-02",
     "homeTeam": {
-      "name": "2 May,2026"
+      "name": "Uganda",
+      "logo": "https://r2.thesportsdb.com/images/media/team/badge/7vehya1738931872.png"
     },
     "awayTeam": {
-      "name": "Zimbabwe"
+      "name": "Zimbabwe",
+      "logo": "https://r2.thesportsdb.com/images/media/team/badge/6iaf541773658274.png"
     },
-    "date": "Zimbabwe vs Zambia",
-    "time": "TBD",
-    "venue": "Harare Sports Club",
-    "competition": "Africa Cup",
+    "date": "30 May, 2026",
+    "time": "15:30",
+    "venue": "Kyadondo Stadium, Kampala",
+    "competition": "Victoria Cup",
     "category": "Sables",
     "status": "upcoming"
   },
   {
-    "id": "4321-fixture-0-3",
+    "id": "2026-fixture-03",
     "homeTeam": {
-      "name": "20 June,2026"
+      "name": "South Africa 'A'",
+      "logo": "https://r2.thesportsdb.com/images/media/team/badge/k5174f1721829684.png"
     },
     "awayTeam": {
-      "name": "South Africa"
+      "name": "Zimbabwe",
+      "logo": "https://r2.thesportsdb.com/images/media/team/badge/6iaf541773658274.png"
     },
-    "date": "South Africa ‘A’ vs Zimbabwe Sables",
-    "time": "TBD",
-    "venue": "Harare Sports Club",
-    "competition": "Africa Cup",
+    "date": "20 June, 2026",
+    "time": "16:00",
+    "venue": "Nelson Mandela Bay Stadium",
+    "competition": "International Challenge",
     "category": "Sables",
     "status": "upcoming"
   },
   {
-    "id": "4321-fixture-0-4",
+    "id": "2026-fixture-04",
     "homeTeam": {
-      "name": "4 July,2026"
+      "name": "Tonga",
+      "logo": "https://r2.thesportsdb.com/images/media/team/badge/c17bu51566382452.png"
     },
     "awayTeam": {
-      "name": "United States"
+      "name": "Zimbabwe",
+      "logo": "https://r2.thesportsdb.com/images/media/team/badge/6iaf541773658274.png"
     },
-    "date": "Zimbabwe vs Tonga (Nations Cup)",
-    "time": "TBD",
-    "venue": "Harare Sports Club",
-    "competition": "Africa Cup",
+    "date": "4 July, 2026",
+    "time": "15:00",
+    "venue": "Infinity Park, Denver",
+    "competition": "Nations Cup",
     "category": "Sables",
     "status": "upcoming"
   },
   {
-    "id": "4321-fixture-0-5",
+    "id": "2026-fixture-05",
     "homeTeam": {
-      "name": "11 July,2026"
+      "name": "USA",
+      "logo": "https://r2.thesportsdb.com/images/media/team/badge/umtlrj1566382360.png"
     },
     "awayTeam": {
-      "name": "United States"
+      "name": "Zimbabwe",
+      "logo": "https://r2.thesportsdb.com/images/media/team/badge/6iaf541773658274.png"
     },
-    "date": "USA vs Zimbabwe (Nations Cup)",
-    "time": "TBD",
-    "venue": "Harare Sports Club",
-    "competition": "Africa Cup",
+    "date": "11 July, 2026",
+    "time": "14:00",
+    "venue": "American Legion Memorial",
+    "competition": "Nations Cup",
     "category": "Sables",
     "status": "upcoming"
   },
   {
-    "id": "4321-fixture-0-6",
+    "id": "2026-fixture-06",
     "homeTeam": {
-      "name": "18 July,2026"
+      "name": "Canada",
+      "logo": "https://r2.thesportsdb.com/images/media/team/badge/euxlik1566381764.png"
     },
     "awayTeam": {
-      "name": "Canada"
+      "name": "Zimbabwe",
+      "logo": "https://r2.thesportsdb.com/images/media/team/badge/6iaf541773658274.png"
     },
-    "date": "Canada vs Zimbabwe (Nations Cup)",
-    "time": "TBD",
-    "venue": "Harare Sports Club",
-    "competition": "Africa Cup",
+    "date": "18 July, 2026",
+    "time": "15:00",
+    "venue": "Princess Auto Stadium, Winnipeg",
+    "competition": "Nations Cup",
     "category": "Sables",
     "status": "upcoming"
   }

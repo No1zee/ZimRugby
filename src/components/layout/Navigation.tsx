@@ -28,7 +28,7 @@ const navItems = [
       { label: "Volunteer", href: "/volunteer" },
     ]
   },
-  { label: "SHOP", href: "/clubhouse" },
+  { label: "THE CLUBHOUSE", href: "/clubhouse" },
   { label: "ABOUT", href: "/about" },
 ];
 
@@ -61,6 +61,8 @@ export default function Navigation() {
   });
 
   const isActive = (href: string) => pathname === href || pathname.startsWith(href + "/");
+
+  if (pathname?.startsWith('/clubhouse')) return null;
 
   return (
     <header 

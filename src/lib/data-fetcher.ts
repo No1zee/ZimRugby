@@ -1,5 +1,5 @@
-// Data Fetcher Utility
-// Handles fetching of matches and reports from the generated data store.
+import fs from 'fs';
+import path from 'path';
 
 export interface Match {
   id: string;
@@ -26,27 +26,31 @@ export interface Report {
   type?: 'news' | 'video';
 }
 
-export async function getLiveMatches(): Promise<Match[]> {
+const isServer = typeof window === 'undefined';
+
+async function readStaticJson<T>(filename: string): Promise<T[]> {
   try {
-    // In a production environment, this would be a transition from 
-    // Static JSON -> Firebase Firestore real-time subscription.
-    const res = await fetch('/data/matches.json');
-    if (!res.ok) throw new Error('Failed to fetch matches');
-    const data = await res.json();
-    return data.filter((m: Match) => m.homeTeam.name !== 'Date'); // Filter header row
+    if (isServer) {
+      const filePath = path.join(process.cwd(), 'public', 'data', filename);
+      const fileContent = fs.readFileSync(filePath, 'utf8');
+      return JSON.parse(fileContent);
+    } else {
+      const res = await fetch(`/data/${filename}`);
+      if (!res.ok) throw new Error(`Failed to fetch ${filename}`);
+      return await res.json();
+    }
   } catch (error) {
-    console.error('Error fetching matches:', error);
+    console.error(`Error loading ${filename}:`, error);
     return [];
   }
 }
 
-export async function getLatestReports(): Promise<Report[]> {
-  try {
-    const res = await fetch('/data/reports.json');
-    if (!res.ok) throw new Error('Failed to fetch reports');
-    return await res.json();
-  } catch (error) {
-    console.error('Error fetching reports:', error);
-    return [];
-  }
+export async function getLiveMatches(): Promise<Match[]> {
+  const data = await readStaticJson<Match>('matches.json');
+  return data.filter((m: Match) => m.homeTeam?.name !== 'Date'); // Filter header row if present
 }
+
+export async function getLatestReports(): Promise<Report[]> {
+  return await readStaticJson<Report>('reports.json');
+}
+

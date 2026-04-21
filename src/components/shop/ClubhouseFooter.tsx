@@ -109,7 +109,7 @@ export default function ClubhouseFooter() {
           </div>
 
           <div className="text-[10px] tracking-[0.3em] text-white/40 uppercase">
-            ZimRugby Clubhouse © 2026. All rights reserved.
+            The Clubhouse © 2026. All rights reserved.
           </div>
 
           <div className="flex space-x-6 text-[10px] tracking-widest text-white/30 uppercase">

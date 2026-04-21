@@ -22,9 +22,9 @@ export default function VideoCard({
   return (
     <motion.div
         whileHover={{ y: -5 }}
-        className="group cursor-pointer"
+        className="group cursor-pointer bg-white/5 p-4 rounded-2xl border border-white/5 hover:border-white/10 transition-all glow-green-card"
     >
-        <div className="relative aspect-video bg-white/10 rounded-xl overflow-hidden mb-4 border border-white/10 group-hover:border-zru-green/50 transition-colors">
+        <div className="relative aspect-video bg-white/10 rounded-xl overflow-hidden mb-4 transition-colors">
             {/* Background Image Placeholder */}
             <div className="absolute inset-0 bg-gray-800">
                 <Image 
