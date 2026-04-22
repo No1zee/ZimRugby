@@ -214,7 +214,7 @@ export default function WorldCupCampaignPage() {
   };
 
   return (
-    <main className="bg-rich-black min-h-screen selection:bg-clubhouse-gold selection:text-rich-black">
+    <main className="relative bg-rich-black min-h-screen selection:bg-clubhouse-gold selection:text-rich-black">
       <Navigation />
 
       {/* SECTION 1: HERO */}

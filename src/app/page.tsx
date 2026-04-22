@@ -14,7 +14,7 @@ export default async function Home() {
   ]);
 
   return (
-    <main className="bg-rich-black min-h-screen">
+    <main className="bg-rich-black min-h-screen relative">
       
       {/* 1. Hero Carousel */}
       <HeroCarousel />
