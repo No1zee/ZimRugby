@@ -1,11 +1,11 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Filter, Search, Loader2 } from "lucide-react";
+import { Filter, Search } from "lucide-react";
 import Navigation from "@/components/layout/Navigation";
 import Footer from "@/components/layout/Footer";
 import Button from "@/components/common/Button";
-import MatchList, { Match } from "@/components/matches/MatchList";
+import MatchList, { Match, MatchListSkeleton } from "@/components/matches/MatchList";
 import LeagueTable from "@/components/matches/LeagueTable";
 import { useState, useEffect } from "react";
 
@@ -93,10 +93,7 @@ export default function MatchCentre() {
         {/* Content Area */}
         <div className="min-h-[500px]">
             {isLoading ? (
-                <div className="flex flex-col items-center justify-center py-20 gap-4">
-                    <Loader2 className="w-12 h-12 text-zru-gold animate-spin" />
-                    <p className="text-gray-400 font-heading tracking-widest">SYNCING FIXTURES...</p>
-                </div>
+                <MatchListSkeleton />
             ) : error ? (
                 <div className="text-center py-20">
                     <p className="text-red-500 mb-4">Error: {error}</p>
