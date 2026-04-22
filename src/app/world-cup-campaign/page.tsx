@@ -258,9 +258,9 @@ export default function WorldCupCampaignPage() {
               </motion.div>
 
               <h1 className="text-6xl md:text-8xl lg:text-9xl font-black text-white leading-[0.9] uppercase tracking-tighter mb-8 drop-shadow-2xl">
-                THE ROAD TO <br />
+                ROAD TO <br />
                 <span className="text-transparent bg-clip-text bg-linear-to-r from-clubhouse-gold to-white">
-                  WORLD STAGE
+                  WORLD CUP
                 </span>
               </h1>
 
