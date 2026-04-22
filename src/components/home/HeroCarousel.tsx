@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef, CSSProperties } from "react";
+import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { LucideIcon, ArrowRight, Play, Ticket, ChevronLeft, ChevronRight } from "lucide-react";
 import Link from "next/link";
@@ -177,8 +177,7 @@ export default function HeroCarousel() {
           {/* Image/Video Background with GSAP-controlled media */}
             {/* Performance Hint: Removed heavy black overlay that delayed LCP */}
             <div 
-              className="relative w-full h-full hero-bg-media will-change-transform"
-              style={{ filter: "brightness(var(--hero-brightness, 1))" } as CSSProperties}
+              className="relative w-full h-full hero-bg-media will-change-transform [filter:brightness(var(--hero-brightness,1))]"
             >
                 {activeSlide.video ? (
                   <video
