@@ -54,3 +54,7 @@ export async function getLatestReports(): Promise<Report[]> {
   return await readStaticJson<Report>('reports.json');
 }
 
+export async function getSocialPosts(): Promise<Report[]> {
+  return await readStaticJson<Report>('social.json');
+}
+

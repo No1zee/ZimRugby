@@ -1,12 +1,13 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Play, Search } from "lucide-react";
+import { Play, Search, Facebook } from "lucide-react";
 import Button from "@/components/common/Button";
 import VideoCard from "@/components/media/VideoCard";
 import NewsCard from "@/components/media/NewsCard";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import JournalStrip from "@/components/home/JournalStrip";
+import { getSocialPosts } from "@/lib/data-fetcher";
 
 const latestVideos = [
   {
@@ -75,7 +76,22 @@ const newsArchive = [
 ];
 
 export default function MediaPage() {
-  const [activeTab, setActiveTab] = useState<"all" | "videos" | "news">("all");
+  const [activeTab, setActiveTab] = useState<"all" | "videos" | "news" | "social">("all");
+  const [socialPosts, setSocialPosts] = useState<any[]>([]);
+
+  useEffect(() => {
+    getSocialPosts().then(setSocialPosts);
+  }, []);
+
+  const allNews = [...newsArchive, ...socialPosts.map(p => ({
+    ...p,
+    slug: p.url,
+    source: 'facebook' as const
+  }))].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+
+  const filteredNews = activeTab === "all" ? allNews : 
+                      activeTab === "news" ? newsArchive : 
+                      activeTab === "social" ? allNews.filter(n => n.source === 'facebook') : [];
 
   return (
     <main className="bg-rich-black min-h-screen pt-24 pb-24">
@@ -87,32 +103,38 @@ export default function MediaPage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             >
-            <h1 className="text-5xl md:text-7xl font-heading text-white mb-4">MEDIA HUB</h1>
-            <p className="text-xl text-gray-400 max-w-2xl">
-                Watch highlights, interviews, and full matches. Stay up to date with the latest news from Zimbabwean rugby.
+            <h1 className="text-5xl md:text-7xl font-heading text-white mb-4 uppercase">Media Hub</h1>
+            <p className="text-xl text-gray-400 max-w-2xl font-medium">
+                Watch highlights, interviews, and full matches. Stay up to date with the latest news and social updates.
             </p>
             </motion.div>
 
             {/* Filters */}
             <div className="flex flex-col gap-4 w-full md:w-auto">
-                <div className="flex p-1 bg-white/5 rounded-xl border border-white/10 w-fit">
+                <div className="flex p-1 bg-white/5 rounded-xl border border-white/10 w-fit overflow-x-auto no-scrollbar">
                     <button 
                         onClick={() => setActiveTab("all")}
-                        className={`px-6 py-2 rounded-lg text-sm font-bold tracking-widest uppercase transition-all ${activeTab === "all" ? "bg-zru-gold text-rich-black shadow-lg" : "text-gray-400 hover:text-white"}`}
+                        className={`px-6 py-2 rounded-lg text-[10px] font-black tracking-[0.2em] uppercase transition-all whitespace-nowrap ${activeTab === "all" ? "bg-zru-green text-white shadow-lg shadow-zru-green/20" : "text-gray-400 hover:text-white"}`}
                     >
                         All
                     </button>
                     <button 
                         onClick={() => setActiveTab("videos")}
-                        className={`px-6 py-2 rounded-lg text-sm font-bold tracking-widest uppercase transition-all ${activeTab === "videos" ? "bg-zru-gold text-rich-black shadow-lg" : "text-gray-400 hover:text-white"}`}
+                        className={`px-6 py-2 rounded-lg text-[10px] font-black tracking-[0.2em] uppercase transition-all whitespace-nowrap ${activeTab === "videos" ? "bg-zru-green text-white shadow-lg shadow-zru-green/20" : "text-gray-400 hover:text-white"}`}
                     >
                         Videos
                     </button>
                     <button 
                         onClick={() => setActiveTab("news")}
-                        className={`px-6 py-2 rounded-lg text-sm font-bold tracking-widest uppercase transition-all ${activeTab === "news" ? "bg-zru-gold text-rich-black shadow-lg" : "text-gray-400 hover:text-white"}`}
+                        className={`px-6 py-2 rounded-lg text-[10px] font-black tracking-[0.2em] uppercase transition-all whitespace-nowrap ${activeTab === "news" ? "bg-zru-green text-white shadow-lg shadow-zru-green/20" : "text-gray-400 hover:text-white"}`}
                     >
-                        News
+                        Official
+                    </button>
+                    <button 
+                        onClick={() => setActiveTab("social")}
+                        className={`px-6 py-2 rounded-lg text-[10px] font-black tracking-[0.2em] uppercase transition-all whitespace-nowrap flex items-center gap-2 ${activeTab === "social" ? "bg-zru-green text-white shadow-lg shadow-zru-green/20" : "text-gray-400 hover:text-white"}`}
+                    >
+                        Social <Facebook className={`w-3 h-3 ${activeTab === "social" ? "text-white" : "text-gray-500"}`} />
                     </button>
                 </div>
 
@@ -121,7 +143,7 @@ export default function MediaPage() {
                     <input 
                         type="text" 
                         placeholder="Search news & videos..." 
-                        className="w-full bg-white/5 border border-white/10 rounded-lg pl-10 pr-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-zru-gold text-sm"
+                        className="w-full bg-white/5 border border-white/10 rounded-lg pl-10 pr-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-zru-green text-sm transition-all"
                     />
                 </div>
             </div>
@@ -135,14 +157,14 @@ export default function MediaPage() {
                 className="mb-24"
             >
                 <div className="flex items-center gap-4 mb-8">
-                    <h2 className="text-2xl font-heading text-white flex items-center gap-3">
-                        <Play className="w-6 h-6 text-zru-orange" fill="currentColor" />
-                        LATEST VIDEOS
+                    <h2 className="text-2xl font-heading text-white flex items-center gap-3 uppercase">
+                        <Play className="w-6 h-6 text-zru-green" fill="currentColor" />
+                        Latest Videos
                     </h2>
                     <div className="h-px flex-1 bg-white/10" />
                     {activeTab === "all" && (
-                        <button onClick={() => setActiveTab("videos")} className="text-zru-orange text-xs font-bold tracking-widest hover:text-white transition-colors">
-                            VIEW ALL
+                        <button onClick={() => setActiveTab("videos")} className="text-zru-green text-[10px] font-black tracking-[0.2em] hover:text-white transition-colors uppercase">
+                            View All
                         </button>
                     )}
                 </div>
@@ -162,8 +184,8 @@ export default function MediaPage() {
                 </div>
                 
                 {activeTab === "videos" && (
-                     <div className="mt-8 text-center flex justify-center">
-                        <Button variant="outline" className="text-white border-white/20 hover:bg-white/10">
+                     <div className="mt-12 text-center flex justify-center">
+                        <Button variant="outline" className="text-white border-white/20 hover:bg-white/10 px-12">
                             LOAD MORE VIDEOS
                         </Button>
                     </div>
@@ -171,24 +193,31 @@ export default function MediaPage() {
             </motion.section>
         )}
 
-        {/* News Archive */}
-        {(activeTab === "all" || activeTab === "news") && (
+        {/* News & Social Archive */}
+        {(activeTab === "all" || activeTab === "news" || activeTab === "social") && (
             <motion.section
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
             >
                 <div className="flex items-center gap-4 mb-8">
-                    <h2 className="text-2xl font-heading text-white">LATEST NEWS</h2>
+                    <h2 className="text-2xl font-heading text-white uppercase">
+                        {activeTab === "social" ? "Social Feed" : activeTab === "news" ? "Official News" : "Recent Updates"}
+                    </h2>
                     <div className="h-px flex-1 bg-white/10" />
                      {activeTab === "all" && (
-                        <button onClick={() => setActiveTab("news")} className="text-zru-orange text-xs font-bold tracking-widest hover:text-white transition-colors">
-                            VIEW ALL
-                        </button>
+                        <div className="flex gap-4">
+                            <button onClick={() => setActiveTab("news")} className="text-zru-green text-[10px] font-black tracking-[0.2em] hover:text-white transition-colors uppercase">
+                                News
+                            </button>
+                            <button onClick={() => setActiveTab("social")} className="text-zru-green text-[10px] font-black tracking-[0.2em] hover:text-white transition-colors uppercase">
+                                Social
+                            </button>
+                        </div>
                     )}
                 </div>
                 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-6">
-                    {newsArchive.map((news, index) => (
+                    {filteredNews.map((news, index) => (
                         <motion.div 
                             key={news.id}
                             initial={{ opacity: 0, x: -10 }}
@@ -202,8 +231,8 @@ export default function MediaPage() {
                 </div>
 
                 <div className="mt-12 flex justify-center">
-                     <Button variant="primary" className="bg-white text-rich-black hover:bg-gray-200">
-                        LOAD MORE NEWS
+                     <Button variant="primary" className="bg-white text-rich-black hover:bg-gray-200 px-12">
+                        LOAD MORE UPDATES
                      </Button>
                 </div>
             </motion.section>
