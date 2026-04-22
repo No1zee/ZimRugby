@@ -11,11 +11,7 @@ import {
   HelpCircle,
   ExternalLink,
   Info,
-  Calendar,
-  MapPin,
-  Clock,
   Search,
-  Filter,
   X
 } from "lucide-react";
 import Image from "next/image";
@@ -143,7 +139,7 @@ const FAQItem = ({ question, answer }: { question: string, answer: string }) => 
 
 export default function TicketsPage() {
   const [filter, setFilter] = useState("All");
-  const [isRegistering, setIsRegistering] = useState<any>(null);
+  const [isRegistering, setIsRegistering] = useState<Fixture | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   
@@ -246,7 +242,7 @@ export default function TicketsPage() {
                <motion.div 
                  animate={{ y: [0, -20, 0] }}
                  transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-                 className="relative w-64 h-64 border border-white/5 rounded-2xl bg-white/[0.02] p-8 flex flex-center items-center justify-center rotate-3"
+                 className="relative w-64 h-64 border border-white/5 rounded-2xl bg-white/2 p-8 flex flex-center items-center justify-center rotate-3"
                >
                   <Ticket className="w-32 h-32 text-clubhouse-gold/10" />
                   <div className="absolute inset-0 bg-linear-to-tr from-clubhouse-gold/5 to-transparent rounded-2xl" />
@@ -309,7 +305,7 @@ export default function TicketsPage() {
               <motion.div 
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                className="py-32 text-center border border-dashed border-white/10 rounded-2xl bg-white/[0.01]"
+                className="py-32 text-center border border-dashed border-white/10 rounded-2xl bg-white/1"
               >
                 <div className="mb-6 opacity-20">
                    <Ticket className="w-16 h-16 mx-auto text-white" />
@@ -324,7 +320,7 @@ export default function TicketsPage() {
           </AnimatePresence>
 
           {/* Helper Text */}
-          <div className="mt-16 flex items-start gap-4 p-6 bg-white/[0.02] border border-white/5 rounded-xl max-w-4xl">
+          <div className="mt-16 flex items-start gap-4 p-6 bg-white/2 border border-white/5 rounded-xl max-w-4xl">
             <Info className="w-5 h-5 text-clubhouse-gold shrink-0 mt-0.5" />
             <p className="text-xs text-gray-400 font-medium leading-relaxed">
               All ticket purchases for Sables and ZRU fixtures are handled by our authorised ticketing partners. You’ll complete your booking on their secure platforms.
@@ -370,7 +366,7 @@ export default function TicketsPage() {
             ].map((step, i) => (
               <div key={i} className="relative group">
                 <div className="text-[60px] font-black text-white/5 absolute -top-10 -left-4 pointer-events-none group-hover:text-clubhouse-gold/5 transition-colors">{step.step}</div>
-                <div className="p-8 rounded-xl bg-white/[0.02] border border-white/5 hover:border-clubhouse-gold/20 transition-all duration-500 h-full">
+                <div className="p-8 rounded-xl bg-white/2 border border-white/5 hover:border-clubhouse-gold/20 transition-all duration-500 h-full">
                   <div className="w-12 h-12 bg-clubhouse-gold/10 rounded flex items-center justify-center mb-8">
                     <step.icon className="w-6 h-6 text-clubhouse-gold" />
                   </div>
@@ -398,7 +394,7 @@ export default function TicketsPage() {
                 Different fixtures and venues use different seating maps, but most matches follow a similar structure. Use this as a guide before you buy.
               </p>
               
-              <div className="p-6 bg-white/[0.02] border border-white/5 rounded-xl">
+              <div className="p-6 bg-white/2 border border-white/5 rounded-xl">
                  <div className="flex items-center gap-3 text-clubhouse-gold mb-4 font-black uppercase text-[10px] tracking-widest">
                     <Info className="w-4 h-4" />
                     Dynamic Pricing
@@ -417,7 +413,7 @@ export default function TicketsPage() {
                 { name: "Family & supporter zones", text: "Sections designed for families and organised supporter groups. Expect more singing and atmosphere." },
                 { name: "Accessible seating", text: "Reserved areas for supporters with accessibility needs, with companion seating where available." }
               ].map((c, i) => (
-                <div key={i} className="p-6 bg-white/[0.01] border border-white/5 rounded-lg hover:border-white/10 transition-colors">
+                <div key={i} className="p-6 bg-white/1 border border-white/5 rounded-lg hover:border-white/10 transition-colors">
                   <h3 className="text-sm font-black text-white uppercase tracking-widest mb-2">{c.name}</h3>
                   <p className="text-xs text-gray-500 font-medium leading-relaxed">{c.text}</p>
                 </div>
@@ -463,7 +459,7 @@ export default function TicketsPage() {
               </div>
             </div>
             
-            <div className="lg:col-span-2 bg-white/[0.01] border border-white/5 rounded-2xl p-8 md:p-12">
+            <div className="lg:col-span-2 bg-white/1 border border-white/5 rounded-2xl p-8 md:p-12">
               <FAQItem 
                 question="How do I know this is the official ticket source?"
                 answer="This page lists every official ticket outlet for ZRU fixtures. If you’re following a link from zimrugby.co.zw or this Tickets page, you are on an approved route."
@@ -510,9 +506,10 @@ export default function TicketsPage() {
               exit={{ opacity: 0, scale: 0.9, y: 20 }}
               className="relative w-full max-w-lg bg-[#111] border border-white/10 rounded-2xl overflow-hidden shadow-2xl"
             >
-              <button 
+              <button
                 onClick={() => setIsRegistering(null)}
                 className="absolute top-6 right-6 text-white/40 hover:text-white p-2"
+                aria-label="Close"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -528,11 +525,11 @@ export default function TicketsPage() {
                     animate={{ opacity: 1, y: 0 }}
                     className="p-6 bg-green-500/10 border border-green-500/20 rounded-xl mb-8"
                   >
-                    <p className="text-sm text-green-500 font-bold">Priority registration recorded! We'll alert you via email as soon as tickets go on sale.</p>
+                    <p className="text-sm text-green-500 font-bold">Priority registration recorded! We&apos;ll alert you via email as soon as tickets go on sale.</p>
                   </motion.div>
                 ) : (
                   <p className="text-sm text-gray-400 font-medium mb-8 pr-12">
-                    Registration for this fixture hasn't opened yet. Be the first to know when tickets go live.
+                    Registration for this fixture hasn&apos;t opened yet. Be the first to know when tickets go live.
                   </p>
                 )}
               </div>
@@ -571,7 +568,6 @@ export default function TicketsPage() {
                       variant="secondary" 
                       size="xl" 
                       className="w-full" 
-                      as="button" 
                       type="submit" 
                       disabled={isSubmitting}
                     >

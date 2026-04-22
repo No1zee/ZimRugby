@@ -11,6 +11,7 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: "primary" | "secondary" | "outline" | "ghost" | "link";
   size?: "sm" | "md" | "lg" | "xl";
   href?: string;
+  as?: React.ElementType;
   isLoading?: boolean;
   leftIcon?: React.ReactNode;
   rightIcon?: React.ReactNode;
@@ -23,6 +24,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       variant = "primary",
       size = "md",
       href,
+      as: Component = "button",
       isLoading,
       leftIcon,
       rightIcon,
@@ -70,7 +72,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     }
 
     return (
-      <button
+      <Component
         ref={ref}
         className={combinedClassName}
         disabled={isLoading || props.disabled}
@@ -101,7 +103,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         {leftIcon && <span className="mr-2">{leftIcon}</span>}
         {children}
         {rightIcon && <span className="ml-2">{rightIcon}</span>}
-      </button>
+      </Component>
     );
   }
 );

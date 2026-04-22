@@ -5,8 +5,8 @@ import { ArrowRight, Play } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import { ScrollReveal } from "../ui/animations";
-import { useState, useEffect } from "react";
-import { getLatestReports, type Report } from "@/lib/data-fetcher";
+import { useState } from "react";
+import { type Report } from "@/lib/data-fetcher";
 
 interface NewsMediaBlockProps {
   initialReports?: Report[];

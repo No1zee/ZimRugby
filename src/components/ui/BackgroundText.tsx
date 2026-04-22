@@ -39,11 +39,7 @@ export function BackgroundText({
   const y1 = useTransform(scrollYProgress, [0, 1], [0, -200]);
   const y2 = useTransform(scrollYProgress, [0, 1], [0, 200]);
   
-  const colorMap = {
-    navy: "rgba(9, 31, 64, 0.5)",
-    gray: "rgba(200, 200, 200, 0.12)",
-    green: "rgba(0, 150, 80, 0.55)",
-  };
+
 
   const repeatedText = Array(repeat).fill(text).join(" ");
 

@@ -114,7 +114,7 @@ export default function Footer() {
             <div key={title} className="space-y-8">
               <h4 className="text-[10px] font-black uppercase tracking-[0.3em] text-clubhouse-gold">{title}</h4>
               <ul className="space-y-4">
-                 {links.map((link: any) => (
+                 {links.map((link: { label: string; href: string; descriptor?: string }) => (
                     <li key={link.label}>
                        <Link href={link.href} className="flex flex-col group/link">
                          <span className="text-sm font-bold text-white/40 group-hover/link:text-white transition-colors">

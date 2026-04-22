@@ -204,18 +204,14 @@ export function Tilt3DCard({
       ref={cardRef}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
-      style={{
-        transformStyle: "preserve-3d",
-        perspective: "1000px",
-      }}
       animate={{ rotateX, rotateY }}
       transition={{ type: "spring", stiffness: 300, damping: 30 }}
-      className={`relative ${className}`}
+      className={`relative perspective-1000 transform-style-3d ${className}`}
     >
       {children}
       {glareEnabled && (
-        <div 
-          className="absolute inset-0 pointer-events-none rounded-inherit overflow-hidden bg-[radial-gradient(circle_at_var(--x)_var(--y),rgba(255,255,255,0.15)_0%,transparent_60%)]"
+        <motion.div 
+          className="absolute inset-0 pointer-events-none rounded-inherit overflow-hidden glare-effect"
           style={{
             "--x": `${glarePosition.x}%`,
             "--y": `${glarePosition.y}%`,
@@ -422,10 +418,10 @@ export function GlowButton({
       whileTap={{ scale: 0.98 }}
     >
       <motion.div
-        className="absolute inset-0 opacity-0"
+        className="absolute inset-0 opacity-0 glow-button-bg"
         style={{
-          background: `radial-gradient(circle, ${glowColor} 0%, transparent 70%)`,
-        }}
+          "--glow-color": glowColor,
+        } as React.CSSProperties}
         whileHover={{ opacity: 1 }}
         transition={{ duration: 0.3 }}
       />

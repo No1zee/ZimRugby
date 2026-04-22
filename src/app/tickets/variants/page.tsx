@@ -106,13 +106,13 @@ export default function VariantsPage() {
           ))}
         </div>
 
-        <div className="mt-32 p-12 bg-white/[0.02] border border-white/5 rounded-2xl">
+        <div className="mt-32 p-12 bg-white/2 border border-white/5 rounded-2xl">
           <h2 className="text-2xl font-black text-white uppercase tracking-tight mb-8">Logic Implementation Checklist</h2>
           <div className="grid md:grid-cols-2 gap-12">
             <div className="space-y-4">
               <h3 className="text-xs font-black text-clubhouse-gold uppercase tracking-widest">Happy Path (On Sale)</h3>
               <ul className="text-sm text-gray-500 space-y-2 font-medium list-disc ml-4">
-                <li>Primary Gold Button with "ExternalLink" icon if URl present</li>
+                <li>Primary Gold Button with &quot;ExternalLink&quot; icon if URl present</li>
                 <li>Green pulsing status chip</li>
                 <li>Full opacity / No grayscale</li>
               </ul>

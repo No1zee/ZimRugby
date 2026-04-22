@@ -23,11 +23,11 @@ export interface Fixture {
  * A lightweight, zero-dependency ICS parser for World Rugby fixtures.
  */
 function parseICS(text: string) {
-  const events: any[] = [];
+  const events: Record<string, string>[] = [];
   const lines = text.split(/\r?\n/);
-  let currentEvent: any = null;
+  let currentEvent: Record<string, string> | null = null;
 
-  for (let line of lines) {
+  for (const line of lines) {
     if (line.startsWith('BEGIN:VEVENT')) {
       currentEvent = {};
     } else if (line.startsWith('END:VEVENT')) {

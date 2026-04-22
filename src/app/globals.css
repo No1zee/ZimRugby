@@ -73,6 +73,10 @@ a, button, [role="button"], input, select, textarea {
   perspective: 1000px;
 }
 
+.transform-style-3d {
+  transform-style: preserve-3d;
+}
+
 .text-glow-heavy {
   text-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
 }
@@ -83,7 +87,6 @@ a, button, [role="button"], input, select, textarea {
 
 .text-stroke-charcoal {
   -webkit-text-stroke: 1px var(--color-clubhouse-charcoal);
-  text-stroke: 1px var(--color-clubhouse-charcoal);
 }
 
 .glow-green-card {
@@ -128,3 +131,11 @@ a, button, [role="button"], input, select, textarea {
 
 .text-shadow-hero { text-shadow: 0 4px 20px rgba(0, 0, 0, 0.5); }
 .text-shadow-hero-glow { text-shadow: 0 0 40px rgba(0, 150, 70, 0.5), 0 4px 20px rgba(0, 0, 0, 0.5); }
+
+.glare-effect {
+  background: radial-gradient(circle at var(--x) var(--y), rgba(255, 255, 255, 0.15) 0%, transparent 60%);
+}
+
+.glow-button-bg {
+  background: radial-gradient(circle, var(--glow-color) 0%, transparent 70%);
+}

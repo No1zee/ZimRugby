@@ -3,10 +3,8 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion";
 import { 
-  ChevronRight, 
   ArrowRight, 
   Shield, 
-  Users, 
   CheckCircle2, 
   HelpCircle,
   Zap,
@@ -79,7 +77,16 @@ const CampaignBadge = () => (
   </motion.div>
 );
 
-const PledgeCard = ({ tier, amount, name, description, benefits, highlight = false }: any) => (
+interface PledgeProps {
+  tier: number;
+  amount: string;
+  name: string;
+  description: string;
+  benefits: string[];
+  highlight?: boolean;
+}
+
+const PledgeCard = ({ tier, amount, name, description, benefits, highlight = false }: PledgeProps) => (
   <motion.div
     whileHover={{ y: -10 }}
     className={`relative p-8 rounded-xl border flex flex-col h-full bg-linear-to-b transition-all duration-500 overflow-hidden group
@@ -211,7 +218,7 @@ export default function WorldCupCampaignPage() {
       <Navigation />
 
       {/* SECTION 1: HERO */}
-      <section className="relative h-[100vh] w-full overflow-hidden flex items-center pt-20">
+      <section className="relative h-screen w-full overflow-hidden flex items-center pt-20">
         {/* Cinematic Backdrop */}
         <motion.div 
           style={{ y: heroY }}
@@ -317,14 +324,14 @@ export default function WorldCupCampaignPage() {
               </div>
 
               {/* Stats Grid */}
-              <div className="grid grid-cols-3 mt-16 border border-white/5 bg-white/[0.02] rounded-lg">
+              <div className="grid grid-cols-3 mt-16 border border-white/5 bg-white/2 rounded-lg">
                 <ImpactStat value="15k+" label="Players" />
                 <ImpactStat value="120+" label="Youth Teams" />
                 <ImpactStat value="12" label="HP Camps" />
               </div>
 
               <p className="mt-8 text-xs font-black text-white/30 uppercase tracking-[0.2em] italic">
-                “Join 5,000+ backers already fueling the Sables' journey as we push for 2027.”
+                “Join 5,000+ backers already fueling the Sables&apos; journey as we push for 2027.”
               </p>
             </div>
 
@@ -412,7 +419,7 @@ export default function WorldCupCampaignPage() {
             />
             
             {/* Custom Pledge Card */}
-            <div className="relative p-8 rounded-xl border border-white/5 flex flex-col justify-center text-center bg-white/[0.01]">
+            <div className="relative p-8 rounded-xl border border-white/5 flex flex-col justify-center text-center bg-white/1">
               <Zap className="w-10 h-10 text-clubhouse-gold mx-auto mb-6 opacity-30" />
               <h3 className="text-xl font-bold text-white uppercase mb-4">Set Custom Amount</h3>
               <p className="text-xs text-gray-500 mb-8 font-medium">Choose the level that fits you—every pledge counts toward the shield.</p>
@@ -421,7 +428,7 @@ export default function WorldCupCampaignPage() {
           </div>
 
           <div className="mt-16 text-center">
-            <div className="inline-flex items-center gap-4 px-6 py-3 rounded-lg bg-white/[0.02] border border-white/5 text-[10px] font-black text-white/40 uppercase tracking-widest">
+            <div className="inline-flex items-center gap-4 px-6 py-3 rounded-lg bg-white/2 border border-white/5 text-[10px] font-black text-white/40 uppercase tracking-widest">
               Secure payments powered by Stripe & Paynow • Cancel anytime
             </div>
           </div>
@@ -461,7 +468,7 @@ export default function WorldCupCampaignPage() {
               </ul>
             </div>
 
-            <div className="bg-white/[0.03] backdrop-blur-xl border border-white/10 p-10 rounded-2xl">
+            <div className="bg-white/3 backdrop-blur-xl border border-white/10 p-10 rounded-2xl">
               <AnimatePresence mode="wait">
                 {!isSubmitted ? (
                   <motion.form 
@@ -543,7 +550,7 @@ export default function WorldCupCampaignPage() {
                 WEAR THE <br /> <span className="text-white/40">SHIELD.</span>
               </h2>
               <p className="mt-8 text-lg text-gray-400 font-medium max-w-lg">
-                Carry the campaign with you. Every piece from the World Cup Collection contributes a portion of proceeds directly to the Sables' preparation fund.
+                Carry the campaign with you. Every piece from the World Cup Collection contributes a portion of proceeds directly to the Sables&apos; preparation fund.
               </p>
             </div>
             <Link href="/clubhouse" className="flex items-center gap-4 group">
@@ -563,7 +570,7 @@ export default function WorldCupCampaignPage() {
                 whileHover={{ y: -10 }}
                 className="group cursor-pointer"
               >
-                <div className="relative aspect-3/4 mb-6 bg-white/[0.03] border border-white/5 rounded overflow-hidden">
+                <div className="relative aspect-3/4 mb-6 bg-white/3 border border-white/5 rounded overflow-hidden">
                   <div className="absolute top-4 left-4 z-20">
                     <span className="px-3 py-1 bg-clubhouse-gold text-rich-black text-[9px] font-black uppercase tracking-widest rounded-full">
                       Campaign Ed.
@@ -623,7 +630,7 @@ export default function WorldCupCampaignPage() {
                 role: "ZRU Nation Member"
               }
             ].map((t, i) => (
-              <div key={i} className="relative p-8 bg-white/[0.02] border border-white/5 rounded-lg">
+              <div key={i} className="relative p-8 bg-white/2 border border-white/5 rounded-lg">
                 <Quote className="w-10 h-10 text-clubhouse-gold/20 absolute -top-4 -left-4" />
                 <p className="text-gray-300 italic text-lg leading-relaxed mb-8 relative z-10">“{t.quote}”</p>
                 <div>
@@ -683,7 +690,7 @@ export default function WorldCupCampaignPage() {
             OUR MOMENT <br /> IS NOW.
           </h2>
           <p className="text-xl text-white/60 font-medium leading-relaxed mb-12 tracking-wide">
-            History isn't just made on the pitch; it's made by the nation that stands behind it. Be part of the team that takes Zimbabwe back to the world stage.
+            History isn&apos;t just made on the pitch; it&apos;s made by the nation that stands behind it. Be part of the team that takes Zimbabwe back to the world stage.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-8">
             <Link href="#pledges" className="text-[10px] font-black text-white uppercase tracking-[0.4em] hover:text-clubhouse-gold transition-colors">Pledge Support</Link>
