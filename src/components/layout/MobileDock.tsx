@@ -5,7 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion } from "framer-motion";
 import { Home, Ticket, LayoutGrid, ShoppingBag, Menu } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { cn } from "../../lib/utils";
 
 const dockItems = [
   { label: "Home", icon: Home, href: "/" },

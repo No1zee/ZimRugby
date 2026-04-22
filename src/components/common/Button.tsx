@@ -1,3 +1,4 @@
+import React from "react";
 import Link from "next/link";
 import { motion, HTMLMotionProps } from "framer-motion";
 import { cn } from "@/lib/utils";
@@ -67,7 +68,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
           transition={{ type: "spring", stiffness: 400, damping: 17 }}
         >
           {leftIcon && <span className="mr-2">{leftIcon}</span>}
-          {children}
+          {children as React.ReactNode}
           {rightIcon && <span className="ml-2">{rightIcon}</span>}
         </MotionLink>
       );
@@ -105,7 +106,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
           </svg>
         ) : null}
         {leftIcon && <span className="mr-2">{leftIcon}</span>}
-        {children}
+        {children as React.ReactNode}
         {rightIcon && <span className="ml-2">{rightIcon}</span>}
       </motion.button>
     );
