@@ -123,10 +123,10 @@ export default function HeroCarousel() {
 
     const tl = gsap.timeline();
     
-    // Initial Focus reveal (reduced scale/filter for performance)
+    // Initial Focus reveal (using CSS variables for property stability)
     tl.fromTo(".hero-bg-media", 
-      { brightness: 1.5, scale: 1.05 },
-      { brightness: 1, scale: 1, duration: 1.5, ease: "power3.out" }
+      { "--hero-brightness": 1.5, scale: 1.05 },
+      { "--hero-brightness": 1, scale: 1, duration: 1.5, ease: "power3.out" }
     );
 
     // Text reveal sequence
@@ -176,7 +176,10 @@ export default function HeroCarousel() {
         >
           {/* Image/Video Background with GSAP-controlled media */}
             {/* Performance Hint: Removed heavy black overlay that delayed LCP */}
-            <div className="relative w-full h-full hero-bg-media will-change-transform">
+            <div 
+              className="relative w-full h-full hero-bg-media will-change-transform"
+              style={{ filter: "brightness(var(--hero-brightness, 1))" } as any}
+            >
                 {activeSlide.video ? (
                   <video
                     src={activeSlide.video}

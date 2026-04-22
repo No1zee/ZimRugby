@@ -31,6 +31,7 @@
 }
 
 body {
+  position: relative;
   background-color: #050505;
   background-image: 
     /* Subtle diagonal lines - 45deg, 100px spacing, ~7% opacity */
