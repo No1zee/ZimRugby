@@ -8,7 +8,7 @@ const nextConfig: NextConfig = {
         headers: [
           {
             key: "Content-Security-Policy",
-            value: "upgrade-insecure-requests; object-src 'none'; require-trusted-types-for 'script';"
+            value: "upgrade-insecure-requests; object-src 'none';"
           },
           {
             key: "X-Frame-Options",
