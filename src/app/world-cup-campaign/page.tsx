@@ -300,7 +300,7 @@ export default function WorldCupCampaignPage() {
       </section>
 
       {/* SECTION 2: STORY */}
-      <section className="py-32 relative overflow-hidden bg-rich-black">
+      <section className="py-32 relative overflow-hidden bg-rich-black [content-visibility:auto]">
         <StripedBackground position="left" variant="subtle" color="gold" />
         
         <div className="max-w-[1440px] mx-auto px-6 md:px-12 relative z-10">
@@ -369,7 +369,7 @@ export default function WorldCupCampaignPage() {
       </section>
 
       {/* SECTION 3: PLEDGES */}
-      <section id="pledges" className="py-32 bg-linear-to-b from-rich-black to-[#0a0a0a] relative">
+      <section id="pledges" className="py-32 bg-linear-to-b from-rich-black to-[#0a0a0a] relative [content-visibility:auto]">
         <div className="max-w-[1440px] mx-auto px-6 md:px-12 relative z-10">
           <div className="text-center max-w-3xl mx-auto mb-20">
             <span className="inline-block text-[10px] font-black uppercase tracking-[0.4em] text-clubhouse-gold mb-6 border-b border-clubhouse-gold/30 pb-2">
@@ -437,7 +437,7 @@ export default function WorldCupCampaignPage() {
       </section>
 
       {/* SECTION 4: MEMBERSHIP */}
-      <section id="zru-nation" className="relative h-[80vh] min-h-[600px] flex items-center overflow-hidden border-y border-white/5">
+      <section id="zru-nation" className="relative h-[80vh] min-h-[600px] flex items-center overflow-hidden border-y border-white/5 [content-visibility:auto]">
         {/* Background Image: Blurred Player Profile */}
         <div className="absolute inset-0 z-0">
           <Image src="/images/campaign/huddle.png" alt="ZRU Nation" fill sizes="100vw" className="object-cover opacity-20 blur-sm scale-110" />
@@ -539,7 +539,7 @@ export default function WorldCupCampaignPage() {
       </section>
 
       {/* SECTION 5: MERCH */}
-      <section className="py-32 bg-rich-black relative">
+      <section className="py-32 bg-rich-black relative [content-visibility:auto]">
         <BackgroundText text="CLUBHOUSE" color="gray" />
         <div className="max-w-[1440px] mx-auto px-6 md:px-12 relative z-10">
           <div className="flex flex-col lg:flex-row lg:items-end justify-between mb-20 gap-8">
