@@ -59,6 +59,7 @@ export default function MatchCentreStrip({ initialMatches = [] }: MatchCentreStr
           alt="Stadium Background" 
           fill 
           sizes="100vw"
+          quality={60}
           className="object-cover"
         />
         <div className="absolute inset-0 bg-linear-to-b from-rich-black via-transparent to-rich-black" />
@@ -100,6 +101,7 @@ export default function MatchCentreStrip({ initialMatches = [] }: MatchCentreStr
                     alt="Focus background" 
                     fill
                     sizes="100vw"
+                    quality={60}
                     className="object-cover opacity-30 blur-xs transition-transform duration-1000 group-hover:scale-105"
                   />
                   <div className="absolute inset-0 bg-linear-to-r from-rich-black via-rich-black/60 to-transparent" />
@@ -119,7 +121,7 @@ export default function MatchCentreStrip({ initialMatches = [] }: MatchCentreStr
                             className="w-16 h-16 sm:w-24 sm:h-24 md:w-32 md:h-32 relative drop-shadow-[0_0_30px_rgba(255,255,255,0.1)]"
                           >
                             {featuredMatch.homeTeam.logo ? (
-                              <Image src={featuredMatch.homeTeam.logo} alt={featuredMatch.homeTeam.name} fill sizes="128px" className="object-contain" />
+                              <Image src={featuredMatch.homeTeam.logo} alt={featuredMatch.homeTeam.name} fill sizes="(max-width: 640px) 64px, 128px" className="object-contain" />
                             ) : (
                               <div className="w-full h-full bg-white/10 rounded-full flex items-center justify-center text-white/50 font-black uppercase">
                                 {featuredMatch.homeTeam.name.substring(0, 3)}
@@ -141,7 +143,7 @@ export default function MatchCentreStrip({ initialMatches = [] }: MatchCentreStr
                             className="w-16 h-16 sm:w-24 sm:h-24 md:w-32 md:h-32 relative drop-shadow-[0_0_30px_rgba(255,255,255,0.1)]"
                           >
                             {featuredMatch.awayTeam.logo ? (
-                              <Image src={featuredMatch.awayTeam.logo} alt={featuredMatch.awayTeam.name} fill sizes="128px" className="object-contain" />
+                              <Image src={featuredMatch.awayTeam.logo} alt={featuredMatch.awayTeam.name} fill sizes="(max-width: 640px) 64px, 128px" className="object-contain" />
                             ) : (
                               <div className="w-full h-full bg-white/10 rounded-full flex items-center justify-center text-white/50 font-black uppercase">
                                 {featuredMatch.awayTeam.name.substring(0, 3)}
