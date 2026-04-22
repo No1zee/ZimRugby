@@ -56,7 +56,7 @@ export default function AdminMatchesPage() {
         <header className="flex flex-col md:flex-row md:items-end justify-between gap-6">
           <div className="space-y-2">
             <h1 className="text-4xl font-extrabold text-white uppercase italic">Fixture Management</h1>
-            <p className="text-white/40 text-sm">Update live scores and manage match statuses for the Match Centre.</p>
+            <p className="text-white/60 text-sm">Update live scores and manage match statuses for the Match Centre.</p>
           </div>
           
           <button 
@@ -72,10 +72,10 @@ export default function AdminMatchesPage() {
           <table className="w-full text-left">
             <thead>
               <tr className="border-b border-white/10 bg-white/5">
-                <th className="p-4 text-[10px] font-black uppercase text-white/40 tracking-widest">Match Details</th>
-                <th className="p-4 text-[10px] font-black uppercase text-white/40 tracking-widest">Status</th>
-                <th className="p-4 text-[10px] font-black uppercase text-white/40 tracking-widest">Score (H - A)</th>
-                <th className="p-4 text-[10px] font-black uppercase text-white/40 tracking-widest text-right">Actions</th>
+                <th className="p-4 text-[10px] font-black uppercase text-white/60 tracking-widest">Match Details</th>
+                <th className="p-4 text-[10px] font-black uppercase text-white/60 tracking-widest">Status</th>
+                <th className="p-4 text-[10px] font-black uppercase text-white/60 tracking-widest">Score (H - A)</th>
+                <th className="p-4 text-[10px] font-black uppercase text-white/60 tracking-widest text-right">Actions</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-white/5">
@@ -84,7 +84,7 @@ export default function AdminMatchesPage() {
                   <td className="p-4">
                     <div className="flex flex-col">
                       <span className="text-white font-bold text-sm">{match.homeTeam.name} vs {match.awayTeam.name}</span>
-                      <span className="text-white/40 text-[10px] uppercase tracking-wider">{match.date} • {match.venue}</span>
+                      <span className="text-white/60 text-[10px] uppercase tracking-wider">{match.date} • {match.venue}</span>
                     </div>
                   </td>
                   <td className="p-4">
@@ -108,7 +108,7 @@ export default function AdminMatchesPage() {
                         onChange={(e) => handleScoreChange(match.id, 'home', parseInt(e.target.value))}
                         className="w-12 bg-white/5 border border-white/10 text-white text-center p-2 rounded text-xs"
                       />
-                      <span className="text-white/20">-</span>
+                      <span className="text-white/50">-</span>
                       <input 
                         type="number"
                         title="Away Score"
@@ -119,7 +119,7 @@ export default function AdminMatchesPage() {
                     </div>
                   </td>
                   <td className="p-4 text-right">
-                    <button className="text-white/40 hover:text-white p-2" title="Save Changes">
+                    <button className="text-white/60 hover:text-white p-2" title="Save Changes">
                       <Save className="w-4 h-4" />
                     </button>
                   </td>
@@ -131,7 +131,7 @@ export default function AdminMatchesPage() {
           {matches.length === 0 && (
             <div className="p-20 text-center space-y-4">
               <AlertCircle className="w-12 h-12 text-white/10 mx-auto" />
-              <p className="text-white/40 font-bold uppercase tracking-widest">No active fixtures found</p>
+              <p className="text-white/60 font-bold uppercase tracking-widest">No active fixtures found</p>
             </div>
           )}
         </div>

@@ -198,6 +198,7 @@ export default function HeroCarousel() {
                     fill
                     priority
                     sizes="100vw"
+                    quality={60}
                     className="object-cover"
                     onLoad={() => setIsLoaded(true)}
                   />

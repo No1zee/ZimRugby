@@ -140,7 +140,7 @@ export default function ClubhouseHeader() {
                 <User className="w-6 h-6 text-white/60" />
                 <Heart className="w-6 h-6 text-white/60" />
               </div>
-              <span className="text-[10px] uppercase tracking-widest text-white/40">The Clubhouse © 2026</span>
+              <span className="text-[10px] uppercase tracking-widest text-white/60">The Clubhouse © 2026</span>
             </div>
           </motion.div>
         )}

@@ -26,7 +26,7 @@ export default function LeagueTable() {
     <div className="overflow-x-auto">
       <table className="w-full text-left border-collapse">
         <thead>
-          <tr className="text-white/40 text-xs font-bold uppercase tracking-widest border-b border-white/10">
+          <tr className="text-white/60 text-xs font-bold uppercase tracking-widest border-b border-white/10">
             <th className="p-4 w-12 text-center">Pos</th>
             <th className="p-4">Team</th>
             <th className="p-4 w-12 text-center">P</th>

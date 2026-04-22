@@ -102,7 +102,7 @@ export default function ClubhouseBanner() {
                 <input 
                   type="email" 
                   placeholder="ENTER YOUR EMAIL"
-                  className="flex-1 bg-white/5 border border-white/10 px-8 py-6 text-[11px] font-bold tracking-[0.3em] text-white focus:outline-none focus:border-clubhouse-gold transition-all duration-500 rounded-none placeholder:text-white/20"
+                  className="flex-1 bg-white/5 border border-white/10 px-8 py-6 text-[11px] font-bold tracking-[0.3em] text-white focus:outline-none focus:border-clubhouse-gold transition-all duration-500 rounded-none placeholder:text-white/50"
                   required
                 />
                 <button 
@@ -128,7 +128,7 @@ export default function ClubhouseBanner() {
                     transition={{ delay: 1.2 + (idx * 0.1), duration: 0.8 }}
                     className="flex flex-col items-center group/perk"
                   >
-                    <span className="text-[9px] font-black uppercase tracking-[0.3em] text-white/40 group-hover/perk:text-clubhouse-gold transition-colors">{perk}</span>
+                    <span className="text-[9px] font-black uppercase tracking-[0.3em] text-white/60 group-hover/perk:text-clubhouse-gold transition-colors">{perk}</span>
                     <div className="w-4 h-px bg-clubhouse-gold/0 group-hover/perk:bg-clubhouse-gold group-hover/perk:w-8 transition-all mt-2" />
                   </motion.div>
                 ))}

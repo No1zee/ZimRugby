@@ -62,7 +62,7 @@ export const FixtureCard = ({ fixture, onRegister }: FixtureCardProps) => {
         );
       case 'SOLD_OUT':
         return (
-          <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-white/40">
+          <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-white/60">
             <Ticket className="w-3 h-3" />
             Sold Out
           </div>
@@ -114,7 +114,7 @@ export const FixtureCard = ({ fixture, onRegister }: FixtureCardProps) => {
 
     if (fixture.status === 'SOLD_OUT') {
       return (
-        <div className="w-full py-3 bg-white/5 border border-white/10 text-white/20 rounded font-black text-xs uppercase tracking-widest text-center">
+        <div className="w-full py-3 bg-white/5 border border-white/10 text-white/50 rounded font-black text-xs uppercase tracking-widest text-center">
           Allocation Exhausted
         </div>
       );
@@ -129,7 +129,7 @@ export const FixtureCard = ({ fixture, onRegister }: FixtureCardProps) => {
     }
 
     return (
-      <div className="w-full py-3 bg-white/5 border border-white/10 text-white/20 rounded font-black text-xs uppercase tracking-widest text-center italic">
+      <div className="w-full py-3 bg-white/5 border border-white/10 text-white/50 rounded font-black text-xs uppercase tracking-widest text-center italic">
         Viewing Only
       </div>
     );
@@ -149,7 +149,7 @@ export const FixtureCard = ({ fixture, onRegister }: FixtureCardProps) => {
       
       {/* Card Header Tags */}
       <div className="p-4 flex justify-between items-start gap-4 relative z-10">
-        <span className="text-[10px] font-black text-white/40 uppercase tracking-[0.2em] bg-white/5 px-2 py-1 rounded">
+        <span className="text-[10px] font-black text-white/60 uppercase tracking-[0.2em] bg-white/5 px-2 py-1 rounded">
           {fixture.competition}
         </span>
         {isWorldCupPathway && (
@@ -192,7 +192,7 @@ export const FixtureCard = ({ fixture, onRegister }: FixtureCardProps) => {
         <div className="flex items-center justify-between">
           {renderStatus()}
           {fixture.status === 'SOLD_OUT' && (
-            <span className="text-[10px] font-bold text-white/20 italic tracking-wide">Check official resale</span>
+            <span className="text-[10px] font-bold text-white/50 italic tracking-wide">Check official resale</span>
           )}
         </div>
 

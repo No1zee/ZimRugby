@@ -114,7 +114,7 @@ const FAQItem = ({ question, answer }: { question: string, answer: string }) => 
         <span className="text-lg font-bold text-white uppercase tracking-tight group-hover:text-clubhouse-gold transition-colors pr-8 leading-tight">
           {question}
         </span>
-        <HelpCircle className={`w-6 h-6 shrink-0 transition-transform duration-500 ${isOpen ? "rotate-180 text-clubhouse-gold" : "text-white/20"}`} />
+        <HelpCircle className={`w-6 h-6 shrink-0 transition-transform duration-500 ${isOpen ? "rotate-180 text-clubhouse-gold" : "text-white/50"}`} />
       </button>
       <AnimatePresence>
         {isOpen && (
@@ -276,7 +276,7 @@ export default function TicketsPage() {
                     className={`px-6 py-2.5 rounded-full text-[10px] font-black uppercase tracking-widest transition-all
                       ${filter === cat 
                         ? 'bg-clubhouse-gold text-rich-black shadow-[0_0_20px_rgba(212,175,55,0.3)]' 
-                        : 'bg-white/5 text-white/40 hover:text-white hover:bg-white/10'}
+                        : 'bg-white/5 text-white/60 hover:text-white hover:bg-white/10'}
                     `}
                   >
                     {cat}
@@ -377,7 +377,7 @@ export default function TicketsPage() {
             ))}
           </div>
           
-          <p className="mt-12 text-center text-xs font-bold text-white/20 uppercase tracking-[0.2em] italic">
+          <p className="mt-12 text-center text-xs font-bold text-white/50 uppercase tracking-[0.2em] italic">
             You’ll always see our name or crest on official partner pages. If something feels off, return here and follow the links.
           </p>
         </div>
@@ -508,7 +508,7 @@ export default function TicketsPage() {
             >
               <button
                 onClick={() => setIsRegistering(null)}
-                className="absolute top-6 right-6 text-white/40 hover:text-white p-2"
+                className="absolute top-6 right-6 text-white/60 hover:text-white p-2"
                 aria-label="Close"
               >
                 <X className="w-5 h-5" />
@@ -538,7 +538,7 @@ export default function TicketsPage() {
                 <form onSubmit={handleRegister} className="p-8 pt-0 space-y-6">
                   <div className="space-y-4">
                     <div>
-                      <label htmlFor="reg-name" className="block text-[10px] font-black text-white/40 uppercase tracking-widest mb-2">FULL NAME</label>
+                      <label htmlFor="reg-name" className="block text-[10px] font-black text-white/60 uppercase tracking-widest mb-2">FULL NAME</label>
                       <input 
                         id="reg-name"
                         type="text" 
@@ -550,7 +550,7 @@ export default function TicketsPage() {
                       />
                     </div>
                     <div>
-                      <label htmlFor="reg-email" className="block text-[10px] font-black text-white/40 uppercase tracking-widest mb-2">EMAIL ADDRESS</label>
+                      <label htmlFor="reg-email" className="block text-[10px] font-black text-white/60 uppercase tracking-widest mb-2">EMAIL ADDRESS</label>
                       <input 
                         id="reg-email"
                         type="email" 
@@ -573,7 +573,7 @@ export default function TicketsPage() {
                     >
                       {isSubmitting ? "Processing..." : "Register Interest"}
                     </Button>
-                    <p className="text-center text-[10px] font-bold text-white/20 uppercase tracking-widest">
+                    <p className="text-center text-[10px] font-bold text-white/50 uppercase tracking-widest">
                       Already a ZRU Nation member? <Link href="/auth" className="text-clubhouse-gold underline">Sign in for one-click interest</Link>
                     </p>
                   </div>

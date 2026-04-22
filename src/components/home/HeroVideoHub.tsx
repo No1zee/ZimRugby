@@ -32,6 +32,7 @@ export default function HeroVideoHub() {
             src="/images/teams/sables.jpg"
             alt="The Sables"
             fill
+            sizes="100vw"
             priority
             className={`object-cover transition-opacity duration-1000 ${isLoaded ? 'opacity-100' : 'opacity-0'}`}
             onLoad={() => setIsLoaded(true)}
@@ -234,7 +235,7 @@ export default function HeroVideoHub() {
         transition={{ delay: 1.5 }}
         className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
       >
-        <span className="text-white/40 text-xs font-bold uppercase tracking-widest">Scroll</span>
+        <span className="text-white/60 text-xs font-bold uppercase tracking-widest">Scroll</span>
         <div className="w-5 h-8 border-2 border-white/30 rounded-full flex justify-center pt-2">
           <motion.div 
             animate={{ y: [0, 8, 0] }}

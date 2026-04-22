@@ -82,7 +82,7 @@ export default function MatchCentreStrip({ initialMatches = [] }: MatchCentreStr
               </h2>
             </div>
             
-            <Link href="/match-centre" className="group flex items-center gap-2 text-white/40 hover:text-white transition-colors">
+            <Link href="/match-centre" className="group flex items-center gap-2 text-white/60 hover:text-white transition-colors">
               <span className="text-[10px] font-black uppercase tracking-widest">View Full Schedule</span>
               <ChevronRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
             </Link>
@@ -121,7 +121,7 @@ export default function MatchCentreStrip({ initialMatches = [] }: MatchCentreStr
                             {featuredMatch.homeTeam.logo ? (
                               <Image src={featuredMatch.homeTeam.logo} alt={featuredMatch.homeTeam.name} fill sizes="128px" className="object-contain" />
                             ) : (
-                              <div className="w-full h-full bg-white/10 rounded-full flex items-center justify-center text-white/20 font-black uppercase">
+                              <div className="w-full h-full bg-white/10 rounded-full flex items-center justify-center text-white/50 font-black uppercase">
                                 {featuredMatch.homeTeam.name.substring(0, 3)}
                               </div>
                             )}
@@ -143,7 +143,7 @@ export default function MatchCentreStrip({ initialMatches = [] }: MatchCentreStr
                             {featuredMatch.awayTeam.logo ? (
                               <Image src={featuredMatch.awayTeam.logo} alt={featuredMatch.awayTeam.name} fill sizes="128px" className="object-contain" />
                             ) : (
-                              <div className="w-full h-full bg-white/10 rounded-full flex items-center justify-center text-white/20 font-black uppercase">
+                              <div className="w-full h-full bg-white/10 rounded-full flex items-center justify-center text-white/50 font-black uppercase">
                                 {featuredMatch.awayTeam.name.substring(0, 3)}
                               </div>
                             )}
@@ -205,7 +205,7 @@ export default function MatchCentreStrip({ initialMatches = [] }: MatchCentreStr
                   <div className="space-y-6">
                     <div className="border-b border-white/5 pb-4">
                       <span className="text-white text-2xl font-black italic tracking-tighter block uppercase">{match.date}</span>
-                      <span className="text-white/40 text-[9px] font-bold block uppercase tracking-widest mt-1">{match.competition}</span>
+                      <span className="text-white/60 text-[9px] font-bold block uppercase tracking-widest mt-1">{match.competition}</span>
                     </div>
                     
                     <div className="flex items-center justify-between gap-4">
@@ -220,7 +220,7 @@ export default function MatchCentreStrip({ initialMatches = [] }: MatchCentreStr
                         <span className="text-white font-black text-[10px] uppercase tracking-widest leading-none">{match.homeTeam.name}</span>
                       </div>
                       
-                      <span className="text-white/20 italic font-black text-[10px]">VS</span>
+                      <span className="text-white/50 italic font-black text-[10px]">VS</span>
 
                       <div className="flex items-center gap-3 text-right">
                         <span className="text-white font-black text-[10px] uppercase tracking-widest leading-none">{match.awayTeam.name}</span>

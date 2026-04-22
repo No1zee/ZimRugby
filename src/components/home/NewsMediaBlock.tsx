@@ -68,6 +68,7 @@ export default function NewsMediaBlock({ initialReports = [] }: NewsMediaBlockPr
                 src={featuredStory.image}
                 alt={featuredStory.title}
                 fill
+                sizes="100vw"
                 className="object-cover transition-transform duration-1000 group-hover:scale-105 opacity-60 group-hover:opacity-100"
               />
               <div className="absolute inset-0 bg-linear-to-t from-black via-black/20 to-transparent" />
@@ -122,12 +123,12 @@ export default function NewsMediaBlock({ initialReports = [] }: NewsMediaBlockPr
                     <div className="flex items-center gap-3">
                        <span className="text-[9px] font-black uppercase tracking-widest text-clubhouse-gold">{item.category}</span>
                        <div className="w-1 h-1 rounded-full bg-white/20" />
-                       <span className="text-[9px] font-bold text-white/40 uppercase tracking-widest">{item.date}</span>
+                       <span className="text-[9px] font-bold text-white/60 uppercase tracking-widest">{item.date}</span>
                     </div>
                     <h4 className="text-lg lg:text-xl font-black text-white uppercase tracking-tight leading-tight group-hover:text-clubhouse-gold transition-colors line-clamp-3">
                       {item.title}
                     </h4>
-                    <p className="text-white/40 text-xs font-medium line-clamp-2 leading-relaxed">
+                    <p className="text-white/60 text-xs font-medium line-clamp-2 leading-relaxed">
                       {item.excerpt?.split('. ')[0] || item.excerpt}.
                     </p>
                  </div>
@@ -138,7 +139,7 @@ export default function NewsMediaBlock({ initialReports = [] }: NewsMediaBlockPr
 
         {/* Archive Action */}
         <div className="mt-24 pt-10 border-t border-white/5 flex justify-center">
-          <Link href="/media" className="inline-flex items-center gap-4 text-[10px] font-black uppercase tracking-[0.5em] text-white/40 hover:text-white transition-colors">
+          <Link href="/media" className="inline-flex items-center gap-4 text-[10px] font-black uppercase tracking-[0.5em] text-white/60 hover:text-white transition-colors">
              Full Media Archives <div className="w-12 h-px bg-current" />
           </Link>
         </div>

@@ -128,6 +128,8 @@ const ProductCard = ({ item, idx }: { item: typeof previewItems[0], idx: number 
                 alt={item.name} 
                 width={300}
                 height={400}
+                sizes="(max-width: 768px) 50vw, 300px"
+                quality={60}
                 className="object-contain drop-shadow-[0_20px_50px_rgba(0,0,0,0.15)] group-hover:scale-110 transition-transform duration-1000 ease-out"
                 priority={idx === 0}
                 />
