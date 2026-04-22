@@ -9,7 +9,6 @@ import {
   ExternalLink, 
   AlertCircle,
   Ticket,
-  CheckCircle2,
   XCircle
 } from "lucide-react";
 import Button from "@/components/common/Button";
@@ -143,7 +142,7 @@ export const FixtureCard = ({ fixture, onRegister }: FixtureCardProps) => {
       layout
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className={`relative group bg-white/[0.02] border border-white/5 rounded-xl overflow-hidden hover:border-white/10 transition-all duration-500 flex flex-col h-full glow-green-card ${isGrayscale ? 'opacity-60 grayscale' : ''}`}
+      className={`relative group bg-white/2 border border-white/5 rounded-xl overflow-hidden hover:border-white/10 transition-all duration-500 flex flex-col h-full glow-green-card ${isGrayscale ? 'opacity-60 grayscale' : ''}`}
     >
       {/* Cinematic Grain Overlay */}
       <div className="absolute inset-0 bg-[url('/noise.png')] opacity-20 pointer-events-none" />
@@ -189,7 +188,7 @@ export const FixtureCard = ({ fixture, onRegister }: FixtureCardProps) => {
       </div>
 
       {/* Action Footer */}
-      <div className="p-6 mt-auto border-t border-white/5 flex flex-col gap-4 relative z-10 bg-white/[0.01]">
+      <div className="p-6 mt-auto border-t border-white/5 flex flex-col gap-4 relative z-10 bg-white/1">
         <div className="flex items-center justify-between">
           {renderStatus()}
           {fixture.status === 'SOLD_OUT' && (
@@ -201,7 +200,7 @@ export const FixtureCard = ({ fixture, onRegister }: FixtureCardProps) => {
       </div>
 
       {/* Hover Background Glow */}
-      <div className="absolute inset-0 bg-linear-to-tr from-clubhouse-gold/0 via-transparent to-clubhouse-gold/[0.02] opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
+      <div className="absolute inset-0 bg-linear-to-tr from-clubhouse-gold/0 via-transparent to-clubhouse-gold/2 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
     </motion.div>
   );
 };

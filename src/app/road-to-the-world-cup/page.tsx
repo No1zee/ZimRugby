@@ -10,12 +10,10 @@ import {
   AnimatedCounter,
   Tilt3DCard,
   MagneticButton,
-  TextScramble,
   FloatingParticles,
   GlowButton,
-  ImageReveal
 } from "@/components/ui/animations";
-import { ChevronRight, Target, Trophy, Users, Heart, Globe, Star } from "lucide-react";
+import { ChevronRight, Trophy, Globe, Star } from "lucide-react";
 
 export default function RoadToWorldCupPage() {
   return (
@@ -33,8 +31,8 @@ export default function RoadToWorldCupPage() {
             className="object-cover opacity-60 scale-105"
             priority
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-rich-black via-rich-black/20 to-transparent" />
-          <div className="absolute inset-0 bg-gradient-to-b from-rich-black/40 via-transparent to-transparent" />
+          <div className="absolute inset-0 bg-linear-to-t from-rich-black via-rich-black/20 to-transparent" />
+          <div className="absolute inset-0 bg-linear-to-b from-rich-black/40 via-transparent to-transparent" />
         </div>
 
         <div className="relative z-10 container mx-auto px-6 text-center">
@@ -56,7 +54,7 @@ export default function RoadToWorldCupPage() {
           <ScrollReveal delay={0.8} className="max-w-2xl mx-auto mb-10">
             <p className="text-lg md:text-xl text-gray-100/80 font-subheading leading-relaxed">
               Establishing a legacy that transcends borders. We are not just building a team; 
-              we are building a nation's pride. Join the movement.
+              we are building a nation&apos;s pride. Join the movement.
             </p>
           </ScrollReveal>
 
@@ -70,7 +68,7 @@ export default function RoadToWorldCupPage() {
               
               <Link href="#vision" className="font-subheading text-white/60 hover:text-white transition-colors tracking-widest text-sm uppercase flex items-center gap-3 group">
                 EXPLORE THE MISSION
-                <div className="w-12 h-[1px] bg-white/20 group-hover:w-16 group-hover:bg-zru-green transition-all" />
+                <div className="w-12 h-px bg-white/20 group-hover:w-16 group-hover:bg-zru-green transition-all" />
               </Link>
             </div>
           </ScrollReveal>
@@ -79,7 +77,7 @@ export default function RoadToWorldCupPage() {
         {/* Scroll indicator */}
         <div className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-white/30 italic font-subheading text-xs tracking-[0.3em] uppercase">
           <span>Scroll</span>
-          <div className="w-[1px] h-12 bg-gradient-to-b from-white/30 to-transparent" />
+          <div className="w-px h-12 bg-linear-to-b from-white/30 to-transparent" />
         </div>
       </section>
 
@@ -114,14 +112,14 @@ export default function RoadToWorldCupPage() {
             <ScrollReveal direction="right">
               <div className="relative group">
                 <div className="absolute -inset-4 bg-zru-green/10 rounded-lg blur-2xl group-hover:bg-zru-green/20 transition-all duration-700" />
-                <Tilt3DCard className="relative z-10 rounded-lg overflow-hidden aspect-[4/5] md:aspect-square">
+                <Tilt3DCard className="relative z-10 rounded-lg overflow-hidden aspect-4/5 md:aspect-square">
                   <Image
                     src="/images/campaign/hero.png" // Using the same one for now or placeholder if needed
                     alt="The Sables Spirit"
                     fill
                     className="object-cover"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-zru-green/60 via-transparent to-transparent opacity-60" />
+                  <div className="absolute inset-0 bg-linear-to-t from-zru-green/60 via-transparent to-transparent opacity-60" />
                 </Tilt3DCard>
               </div>
             </ScrollReveal>
@@ -135,7 +133,7 @@ export default function RoadToWorldCupPage() {
               
               <ScrollReveal delay={0.4} className="space-y-6 text-gray-100/70 font-subheading text-lg leading-relaxed">
                 <p>
-                  The Road to Australia is not just about 80 minutes on a pitch. It's about the decades of resilience that brought us here. It's about every Zimbabwean who ever dreamed of seeing our flag fly high on the world's stage.
+                  The Road to Australia is not just about 80 minutes on a pitch. It&apos;s about the decades of resilience that brought us here. It&apos;s about every Zimbabwean who ever dreamed of seeing our flag fly high on the world&apos;s stage.
                 </p>
                 <p>
                   Our strategy is built on three pillars: <span className="text-white font-semibold">Elite High Performance</span>, <span className="text-white font-semibold">Institutional Stability</span>, and <span className="text-white font-semibold">Global Community Engagement</span>.
@@ -154,7 +152,7 @@ export default function RoadToWorldCupPage() {
 
       {/* Support Tiers Section */}
       <section className="py-32 bg-gray-900/40 relative overflow-hidden">
-        <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-white/10 to-transparent" />
+        <div className="absolute top-0 left-0 w-full h-px bg-linear-to-r from-transparent via-white/10 to-transparent" />
         
         <div className="container mx-auto px-6">
           <div className="text-center mb-20">
@@ -172,7 +170,7 @@ export default function RoadToWorldCupPage() {
                   <Star className="w-6 h-6 text-zru-green" />
                 </div>
                 <h3 className="text-3xl font-heading mb-2">SUPPORTER</h3>
-                <p className="text-white/50 text-sm font-subheading mb-8 flex-grow">Join the community and get exclusive monthly updates and early access to match tickets.</p>
+                <p className="text-white/50 text-sm font-subheading mb-8 grow">Join the community and get exclusive monthly updates and early access to match tickets.</p>
                 <div className="text-3xl font-heading text-white mb-8">$10 <span className="text-xs text-white/30 font-subheading uppercase">/ month</span></div>
                 <button className="w-full py-4 bg-white/5 border border-white/10 text-white font-subheading text-sm uppercase tracking-widest transition-all hover:bg-white hover:text-rich-black">Join Club</button>
               </div>
@@ -180,14 +178,14 @@ export default function RoadToWorldCupPage() {
 
             {/* Tier 2 - Featured */}
             <motion.div variants={staggerItemVariants} className="group h-full relative">
-              <div className="absolute -inset-px bg-gradient-to-b from-zru-green/40 to-transparent blur-[2px] opacity-0 group-hover:opacity-100 transition-opacity" />
+              <div className="absolute -inset-px bg-linear-to-b from-zru-green/40 to-transparent blur-[2px] opacity-0 group-hover:opacity-100 transition-opacity" />
               <div className="p-8 h-full rounded-sm border border-zru-green/40 bg-gray-900/80 transition-all duration-500 hover:-translate-y-2 flex flex-col relative z-10">
                 <div className="absolute top-4 right-4 px-2 py-1 rounded-sm bg-zru-green text-[10px] font-subheading font-bold uppercase tracking-widest">Most Popular</div>
                 <div className="w-12 h-12 rounded-full bg-zru-green/20 flex items-center justify-center mb-6">
                   <Trophy className="w-6 h-6 text-white" />
                 </div>
                 <h3 className="text-3xl font-heading mb-2">INNER CIRCLE</h3>
-                <p className="text-white/50 text-sm font-subheading mb-8 flex-grow">Directly fund our high-performance camps. Includes signed merch and virtual meet-and-greets.</p>
+                <p className="text-white/50 text-sm font-subheading mb-8 grow">Directly fund our high-performance camps. Includes signed merch and virtual meet-and-greets.</p>
                 <div className="text-3xl font-heading text-zru-green mb-8">$50 <span className="text-xs text-white/30 font-subheading uppercase">/ month</span></div>
                 <button className="w-full py-4 bg-zru-green text-white font-subheading text-sm uppercase tracking-widest transition-all hover:shadow-[0_0_20px_rgba(0,150,80,0.3)]">Back The Boys</button>
               </div>
@@ -200,7 +198,7 @@ export default function RoadToWorldCupPage() {
                   <Globe className="w-6 h-6 text-zru-green" />
                 </div>
                 <h3 className="text-3xl font-heading mb-2">GLOBAL PATRON</h3>
-                <p className="text-white/50 text-sm font-subheading mb-8 flex-grow">Institutional-level impact. Corporate visibility, VIP hospitality at Australia 2027, and more.</p>
+                <p className="text-white/50 text-sm font-subheading mb-8 grow">Institutional-level impact. Corporate visibility, VIP hospitality at Australia 2027, and more.</p>
                 <div className="text-3xl font-heading text-white mb-8">INQUIRE <span className="text-xs text-white/30 font-subheading uppercase">/ Year</span></div>
                 <button className="w-full py-4 bg-white/5 border border-white/10 text-white font-subheading text-sm uppercase tracking-widest transition-all hover:bg-white hover:text-rich-black">Contact Relations</button>
               </div>

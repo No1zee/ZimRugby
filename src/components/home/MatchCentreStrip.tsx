@@ -1,14 +1,14 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { useState, useEffect } from "react";
+
 import { ArrowRight, ChevronRight } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import { ScrollReveal, StaggerContainer, staggerItemVariants, Tilt3DCard, GlowButton } from "../ui/animations";
 import { RugbyDecorations, CornerAccent } from "../ui/RugbyDecorations";
 
-import { getLiveMatches, type Match as DataMatch } from "@/lib/data-fetcher";
+import { type Match as DataMatch } from "@/lib/data-fetcher";
 
 interface Fixture {
   id: string;

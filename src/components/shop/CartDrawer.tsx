@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, ShoppingBag, Trash2, ArrowRight, Shield, Heart } from "lucide-react";
 import Image from "next/image";
-import Link from "next/link";
+
 import Button from "@/components/common/Button";
 
 interface CartItem {
@@ -22,7 +22,7 @@ interface CartDrawerProps {
 
 export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
   const [pledgeActive, setPledgeActive] = useState(false);
-  const [cartItems, setCartItems] = useState<CartItem[]>([
+  const [cartItems] = useState<CartItem[]>([
     {
       id: "1",
       name: "Sables 2024 Home Jersey",
@@ -46,7 +46,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={onClose}
-            className="fixed inset-0 bg-rich-black/80 backdrop-blur-sm z-[100]"
+            className="fixed inset-0 bg-rich-black/80 backdrop-blur-sm z-100"
           />
 
           {/* Drawer */}
@@ -55,7 +55,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
             animate={{ x: 0 }}
             exit={{ x: "100%" }}
             transition={{ type: "spring", damping: 30, stiffness: 300 }}
-            className="fixed right-0 top-0 bottom-0 w-full max-w-md bg-clubhouse-charcoal border-l border-white/5 z-[101] shadow-2xl flex flex-col"
+            className="fixed right-0 top-0 bottom-0 w-full max-w-md bg-clubhouse-charcoal border-l border-white/5 z-101 shadow-2xl flex flex-col"
           >
             {/* Header */}
             <div className="p-6 md:p-8 flex justify-between items-center border-b border-white/5">
@@ -67,6 +67,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
               <button 
                 onClick={onClose}
                 className="p-2 text-white/40 hover:text-white transition-colors"
+                aria-label="Close cart"
               >
                 <X className="w-6 h-6" />
               </button>
