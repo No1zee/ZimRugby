@@ -8,7 +8,7 @@ const nextConfig: NextConfig = {
         headers: [
           {
             key: "Content-Security-Policy",
-            value: "upgrade-insecure-requests" // A basic CSP that requires trusted types and secure connections. Adjust based on needs.
+            value: "upgrade-insecure-requests; object-src 'none'; require-trusted-types-for 'script';"
           },
           {
             key: "X-Frame-Options",

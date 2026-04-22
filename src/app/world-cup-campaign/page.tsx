@@ -168,7 +168,7 @@ const FAQItem = ({ question, answer }: { question: string, answer: string }) => 
         <span className="text-lg font-bold text-white uppercase tracking-tight group-hover:text-clubhouse-gold transition-colors">
           {question}
         </span>
-        <HelpCircle className={`w-6 h-6 transition-transform duration-500 ${isOpen ? "rotate-180 text-clubhouse-gold" : "text-white/20"}`} />
+        <HelpCircle className={`w-6 h-6 transition-transform duration-500 ${isOpen ? "rotate-180 text-clubhouse-gold" : "text-white/50"}`} />
       </button>
       <AnimatePresence>
         {isOpen && (
@@ -228,6 +228,7 @@ export default function WorldCupCampaignPage() {
             src="/images/campaign/hero.png" 
             alt="Zimbabwe Sables High Performance"
             fill
+            sizes="100vw"
             className="object-cover opacity-60 grayscale-[0.3]"
             priority
           />
@@ -277,7 +278,7 @@ export default function WorldCupCampaignPage() {
                 </Button>
               </div>
 
-              <div className="flex items-center gap-4 text-white/40 text-[10px] font-black uppercase tracking-[0.2em]">
+              <div className="flex items-center gap-4 text-white/60 text-[10px] font-black uppercase tracking-[0.2em]">
                 <Shield className="w-4 h-4 text-clubhouse-gold" />
                 Transparent reporting • Secure Payments • Real Impact
               </div>
@@ -343,7 +344,7 @@ export default function WorldCupCampaignPage() {
                 viewport={{ once: true }}
                 className="relative row-span-2 col-span-1 rounded-sm overflow-hidden border border-white/5 grayscale"
               >
-                <Image src="/images/campaign/youth.png" alt="Youth Pathway" fill className="object-cover" />
+                <Image src="/images/campaign/youth.png" alt="Youth Pathway" fill sizes="(max-width: 768px) 100vw, 50vw" className="object-cover" />
               </motion.div>
               <motion.div 
                 initial={{ opacity: 0, y: 50 }}
@@ -351,7 +352,7 @@ export default function WorldCupCampaignPage() {
                 viewport={{ once: true }}
                 className="relative rounded-sm overflow-hidden border border-white/5"
               >
-                <Image src="/images/campaign/huddle.png" alt="Sables Training" fill className="object-cover" />
+                <Image src="/images/campaign/huddle.png" alt="Sables Training" fill sizes="(max-width: 768px) 100vw, 50vw" className="object-cover" />
               </motion.div>
               <motion.div 
                 initial={{ opacity: 0, x: 50 }}
@@ -359,7 +360,7 @@ export default function WorldCupCampaignPage() {
                 viewport={{ once: true }}
                 className="relative rounded-sm overflow-hidden border border-white/5 grayscale"
               >
-                <Image src="/images/campaign/jersey.png" alt="Heritage Gear" fill className="object-cover" />
+                <Image src="/images/campaign/jersey.png" alt="Heritage Gear" fill sizes="(max-width: 768px) 100vw, 50vw" className="object-cover" />
               </motion.div>
             </div>
 
@@ -428,7 +429,7 @@ export default function WorldCupCampaignPage() {
           </div>
 
           <div className="mt-16 text-center">
-            <div className="inline-flex items-center gap-4 px-6 py-3 rounded-lg bg-white/2 border border-white/5 text-[10px] font-black text-white/40 uppercase tracking-widest">
+            <div className="inline-flex items-center gap-4 px-6 py-3 rounded-lg bg-white/2 border border-white/5 text-[10px] font-black text-white/60 uppercase tracking-widest">
               Secure payments powered by Stripe & Paynow • Cancel anytime
             </div>
           </div>
@@ -439,7 +440,7 @@ export default function WorldCupCampaignPage() {
       <section id="zru-nation" className="relative h-[80vh] min-h-[600px] flex items-center overflow-hidden border-y border-white/5">
         {/* Background Image: Blurred Player Profile */}
         <div className="absolute inset-0 z-0">
-          <Image src="/images/campaign/huddle.png" alt="ZRU Nation" fill className="object-cover opacity-20 blur-sm scale-110" />
+          <Image src="/images/campaign/huddle.png" alt="ZRU Nation" fill sizes="100vw" className="object-cover opacity-20 blur-sm scale-110" />
           <div className="absolute inset-0 bg-rich-black/80" />
         </div>
 
@@ -480,7 +481,7 @@ export default function WorldCupCampaignPage() {
                     className="space-y-6"
                   >
                     <div>
-                      <label htmlFor="nation-name" className="block text-[10px] font-black text-white/40 uppercase tracking-widest mb-2">FULL NAME</label>
+                      <label htmlFor="nation-name" className="block text-[10px] font-black text-white/60 uppercase tracking-widest mb-2">FULL NAME</label>
                       <input 
                         id="nation-name"
                         type="text" 
@@ -492,7 +493,7 @@ export default function WorldCupCampaignPage() {
                       />
                     </div>
                     <div>
-                      <label htmlFor="nation-email" className="block text-[10px] font-black text-white/40 uppercase tracking-widest mb-2">EMAIL ADDRESS</label>
+                      <label htmlFor="nation-email" className="block text-[10px] font-black text-white/60 uppercase tracking-widest mb-2">EMAIL ADDRESS</label>
                       <input 
                         id="nation-email"
                         type="email" 
@@ -513,7 +514,7 @@ export default function WorldCupCampaignPage() {
                     >
                       {isSubmitting ? "Processing..." : "Initialize Membership"}
                     </Button>
-                    <p className="text-center text-[10px] font-bold text-white/20 uppercase tracking-widest">
+                    <p className="text-center text-[10px] font-bold text-white/50 uppercase tracking-widest">
                       Already a member? <Link href="/auth" className="text-clubhouse-gold underline">Sign in</Link>
                     </p>
                   </motion.form>
@@ -547,7 +548,7 @@ export default function WorldCupCampaignPage() {
                 Official Gear
               </span>
               <h2 className="text-5xl md:text-7xl font-black text-white uppercase tracking-tighter leading-[0.9]">
-                WEAR THE <br /> <span className="text-white/40">SHIELD.</span>
+                WEAR THE <br /> <span className="text-white/60">SHIELD.</span>
               </h2>
               <p className="mt-8 text-lg text-gray-400 font-medium max-w-lg">
                 Carry the campaign with you. Every piece from the World Cup Collection contributes a portion of proceeds directly to the Sables&apos; preparation fund.
@@ -576,7 +577,13 @@ export default function WorldCupCampaignPage() {
                       Campaign Ed.
                     </span>
                   </div>
-                  <Image src={product.img || "/images/placeholder.jpg"} alt={product.name} fill className="object-cover grayscale-[0.2] group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700" />
+                  <Image 
+                    src={product.img || "/images/placeholder.jpg"} 
+                    alt={product.name} 
+                    fill 
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                    className="object-cover grayscale-[0.2] group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700" 
+                  />
                 </div>
                 <h3 className="text-lg font-black text-white uppercase tracking-tight mb-1">{product.name}</h3>
                 <p className="text-xs text-gray-500 font-bold mb-4 uppercase tracking-tighter">{product.desc}</p>

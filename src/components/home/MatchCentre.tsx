@@ -120,7 +120,7 @@ export default function MatchCentre() {
                             </div>
 
                             <div className="text-center flex flex-col items-center">
-                                <span className="text-5xl font-heading text-white/20 mb-2">VS</span>
+                                <span className="text-5xl font-heading text-white/50 mb-2">VS</span>
                                 <div className="bg-white/10 backdrop-blur px-6 py-2 rounded border border-white/5">
                                     <span className="text-2xl font-bold text-white block">{nextMatch.time}</span>
                                     <span className="text-xs text-zru-orange font-bold tracking-widest uppercase">{nextMatch.date}</span>

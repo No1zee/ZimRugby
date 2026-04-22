@@ -38,7 +38,7 @@ export default function PartnersSection() {
             </h2>
           </div>
           <div className="md:text-right space-y-6">
-            <p className="text-white/40 text-sm font-medium leading-relaxed max-w-sm ml-auto">
+            <p className="text-white/60 text-sm font-medium leading-relaxed max-w-sm ml-auto">
               Fueling the engine of Zimbabwean rugby. We thank our partners for their tireless commitment to the game.
             </p>
             <Link href="/partners" className="inline-block group">
@@ -115,7 +115,7 @@ export default function PartnersSection() {
                       className="object-contain grayscale brightness-150 opacity-40 hover:opacity-100 hover:grayscale-0 transition-all duration-500" 
                     />
                   </div>
-                  <span className="text-[10px] font-black uppercase tracking-[0.2em] text-white/20">{partner.name}</span>
+                  <span className="text-[10px] font-black uppercase tracking-[0.2em] text-white/50">{partner.name}</span>
                 </div>
               ))}
             </motion.div>

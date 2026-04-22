@@ -55,7 +55,7 @@ export default function MatchCard({
         <span className="text-white text-xs font-bold tracking-widest uppercase truncate max-w-[70%]">
           {competition}
         </span>
-        <span className="text-white/40 text-xs font-bold uppercase">{round}</span>
+        <span className="text-white/60 text-xs font-bold uppercase">{round}</span>
       </div>
 
       <div className="p-6">
@@ -91,7 +91,7 @@ export default function MatchCard({
               </div>
             ) : (
                 <div className="flex flex-col items-center">
-                    <span className="text-3xl font-heading text-white/20 mb-2">VS</span>
+                    <span className="text-3xl font-heading text-white/50 mb-2">VS</span>
                     <div className="px-3 py-1 bg-white/10 rounded text-xs font-bold uppercase text-zru-green">
                         UPCOMING
                     </div>

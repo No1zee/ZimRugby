@@ -124,7 +124,7 @@ export default function PlayRugbyDevelopment() {
              <h3 className="text-3xl md:text-5xl font-black text-white uppercase tracking-tighter leading-[0.9]">
                Join The <br /><span className="text-clubhouse-gold">Ranks of Impact</span>
              </h3>
-             <p className="text-white/40 font-medium">
+             <p className="text-white/60 font-medium">
                Whether as a volunteer, donor, or strategic partner, your involvement drives the next era of Zimbabwe Rugby.
              </p>
           </div>

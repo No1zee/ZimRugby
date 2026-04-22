@@ -94,7 +94,7 @@ export default function EventsBlock() {
                 </div>
               </div>
               
-              <p className="text-white/40 text-sm leading-relaxed font-medium">
+              <p className="text-white/60 text-sm leading-relaxed font-medium">
                 From Super Six matches to community development festivals, explore the heart of Zimbabwean rugby across the nation.
               </p>
               
@@ -160,7 +160,7 @@ export default function EventsBlock() {
                           <p className="text-white/60 text-xs line-clamp-2 font-medium">
                             {event.description}
                           </p>
-                          <div className="flex items-center gap-4 text-[9px] font-bold text-white/40 uppercase tracking-widest pt-4">
+                          <div className="flex items-center gap-4 text-[9px] font-bold text-white/60 uppercase tracking-widest pt-4">
                             <span className="flex items-center gap-2"><Calendar className="w-3 h-3" /> {event.date}</span>
                             <span className="flex items-center gap-2"><MapPin className="w-3 h-3" /> {event.location}</span>
                           </div>

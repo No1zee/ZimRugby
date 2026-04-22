@@ -60,11 +60,11 @@ export default function Footer() {
                 <span className="text-6xl font-black text-white tracking-tighter block leading-none">ZIMBABWE <br /><span className="text-clubhouse-gold">RUGBY</span></span>
                 <div className="flex items-center gap-3">
                    <div className="w-10 h-px bg-white/20" />
-                   <span className="text-[10px] font-black uppercase tracking-[0.4em] text-white/40">The Pride of Zimbabwe</span>
+                   <span className="text-[10px] font-black uppercase tracking-[0.4em] text-white/60">The Pride of Zimbabwe</span>
                 </div>
               </div>
             </Link>
-            <p className="text-white/40 font-medium leading-relaxed">
+            <p className="text-white/60 font-medium leading-relaxed">
               Founded in 1895, the Zimbabwe Rugby Union is the custodian of the game&apos;s rich heritage and its ambitious future on the world stage.
             </p>
             <div className="flex gap-6">
@@ -72,7 +72,7 @@ export default function Footer() {
                 <a 
                   key={label} 
                   href={href} 
-                  className="text-white/20 hover:text-clubhouse-gold transition-colors"
+                  className="text-white/50 hover:text-clubhouse-gold transition-colors"
                   aria-label={label}
                   target="_blank"
                   rel="noopener noreferrer"
@@ -117,11 +117,11 @@ export default function Footer() {
                  {links.map((link: { label: string; href: string; descriptor?: string }) => (
                     <li key={link.label}>
                        <Link href={link.href} className="flex flex-col group/link">
-                         <span className="text-sm font-bold text-white/40 group-hover/link:text-white transition-colors">
+                         <span className="text-sm font-bold text-white/60 group-hover/link:text-white transition-colors">
                            {link.label}
                          </span>
                          {link.descriptor && (
-                           <span className="text-[10px] font-medium text-white/20">
+                           <span className="text-[10px] font-medium text-white/50">
                              {link.descriptor}
                            </span>
                          )}
@@ -140,10 +140,10 @@ export default function Footer() {
                 Fueling the pathway, one pledge at a time.
               </Link>
               <div className="flex items-center gap-8">
-                <span className="text-[9px] font-black uppercase tracking-widest text-white/20">© 2026 ZRU OFFICIAL</span>
+                <span className="text-[9px] font-black uppercase tracking-widest text-white/50">© 2026 ZRU OFFICIAL</span>
                 <div className="hidden md:flex gap-8">
                   {['Privacy Policy', 'Terms of Use', 'Accessibility'].map((item) => (
-                    <Link key={item} href={`/${item.toLowerCase().replace(/\s+/g, '-')}`} className="text-[9px] font-black uppercase tracking-widest text-white/20 hover:text-white transition-colors">
+                    <Link key={item} href={`/${item.toLowerCase().replace(/\s+/g, '-')}`} className="text-[9px] font-black uppercase tracking-widest text-white/50 hover:text-white transition-colors">
                       {item}
                     </Link>
                   ))}

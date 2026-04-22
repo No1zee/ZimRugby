@@ -138,7 +138,7 @@ export function CountdownPromo({
                 </div>
               ) : (
                 <div className="w-full h-full bg-linear-to-br from-zru-green via-green-700 to-green-900 flex items-center justify-center">
-                  <span className="text-white/20 text-4xl font-black">DEBUG: Placeholder</span>
+                  <span className="text-white/50 text-4xl font-black">DEBUG: Placeholder</span>
                 </div>
               )}
             </div>
@@ -178,7 +178,7 @@ export function CountdownPromo({
 
             {/* Countdown */}
             <div className="mb-8">
-              <p className="text-[10px] font-black text-white/40 uppercase tracking-[0.2em] mb-4">
+              <p className="text-[10px] font-black text-white/60 uppercase tracking-[0.2em] mb-4">
                 {countdownLabel}
               </p>
               <div className="flex flex-wrap justify-start gap-x-6 gap-y-4 md:gap-8 min-w-0">

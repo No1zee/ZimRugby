@@ -103,12 +103,12 @@ export default function ClubhouseFooter() {
 
         {/* Bottom Bar */}
         <div className="flex flex-col md:flex-row justify-between items-center pt-10 border-t border-white/5 gap-6">
-          <div className="flex items-center space-x-2 text-[10px] tracking-widest text-white/40">
+          <div className="flex items-center space-x-2 text-[10px] tracking-widest text-white/60">
             <Globe className="w-4 h-4" />
             <span className="uppercase">Zimbabwe / English / USD</span>
           </div>
 
-          <div className="text-[10px] tracking-[0.3em] text-white/40 uppercase">
+          <div className="text-[10px] tracking-[0.3em] text-white/60 uppercase">
             The Clubhouse © 2026. All rights reserved.
           </div>
 

@@ -95,7 +95,7 @@ export default function VariantsPage() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {VARIANT_MATCHES.map((fixture) => (
             <div key={fixture.id} className="space-y-4">
-              <span className="text-[10px] font-bold text-white/20 uppercase tracking-widest pl-2">
+              <span className="text-[10px] font-bold text-white/50 uppercase tracking-widest pl-2">
                 Scenario: {fixture.status} {fixture.isWorldCupPathway ? "+ Pathway" : ""} {(!fixture.url && fixture.status === 'ON_SALE') ? "(No URL)" : ""}
               </span>
               <FixtureCard 

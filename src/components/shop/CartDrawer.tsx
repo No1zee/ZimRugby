@@ -62,11 +62,11 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
               <div className="flex items-center gap-3">
                 <ShoppingBag className="w-5 h-5 text-clubhouse-gold" />
                 <h2 className="text-xl font-black text-white uppercase tracking-tighter">Your Bag</h2>
-                <span className="text-[10px] font-bold text-white/40 bg-white/5 px-2 py-0.5 rounded-full uppercase tracking-widest">{cartItems.length} Items</span>
+                <span className="text-[10px] font-bold text-white/60 bg-white/5 px-2 py-0.5 rounded-full uppercase tracking-widest">{cartItems.length} Items</span>
               </div>
               <button 
                 onClick={onClose}
-                className="p-2 text-white/40 hover:text-white transition-colors"
+                className="p-2 text-white/60 hover:text-white transition-colors"
                 aria-label="Close cart"
               >
                 <X className="w-6 h-6" />
@@ -91,8 +91,8 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                         <h3 className="text-sm font-bold text-white uppercase tracking-tight truncate pr-4">{item.name}</h3>
                         <span className="text-sm font-bold text-white">${item.price}</span>
                       </div>
-                      <p className="text-[10px] font-medium text-white/40 uppercase tracking-widest mb-4">Size: L | Qty: {item.quantity}</p>
-                      <button className="flex items-center gap-2 text-[9px] font-black text-white/20 hover:text-red-500 uppercase tracking-[0.2em] transition-colors">
+                      <p className="text-[10px] font-medium text-white/60 uppercase tracking-widest mb-4">Size: L | Qty: {item.quantity}</p>
+                      <button className="flex items-center gap-2 text-[9px] font-black text-white/50 hover:text-red-500 uppercase tracking-[0.2em] transition-colors">
                         <Trash2 className="w-3 h-3" />
                         Remove
                       </button>
@@ -102,9 +102,9 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
               ) : (
                 <div className="py-20 text-center space-y-6">
                   <div className="w-16 h-16 bg-white/5 rounded-full flex items-center justify-center mx-auto">
-                    <ShoppingBag className="w-6 h-6 text-white/20" />
+                    <ShoppingBag className="w-6 h-6 text-white/50" />
                   </div>
-                  <p className="text-sm font-bold text-white/40 uppercase tracking-widest">Your bag is empty</p>
+                  <p className="text-sm font-bold text-white/60 uppercase tracking-widest">Your bag is empty</p>
                   <Button variant="ghost" onClick={onClose}>Continue Shopping</Button>
                 </div>
               )}
@@ -136,7 +136,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                         <div className={`w-5 h-5 rounded flex items-center justify-center transition-colors
                           ${pledgeActive ? 'bg-rich-black' : 'bg-white/10'}
                         `}>
-                          <Heart className={`w-3 h-3 ${pledgeActive ? 'text-clubhouse-gold fill-current' : 'text-white/20'}`} />
+                          <Heart className={`w-3 h-3 ${pledgeActive ? 'text-clubhouse-gold fill-current' : 'text-white/50'}`} />
                         </div>
                         <span className={`text-[10px] font-black uppercase tracking-widest
                           ${pledgeActive ? 'text-rich-black' : 'text-white/60'}
@@ -157,7 +157,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
             <div className="p-6 md:p-8 bg-black/40 border-t border-white/5 space-y-6">
                <div className="space-y-2">
                   <div className="flex justify-between items-center text-sm">
-                    <span className="font-medium text-white/40 uppercase tracking-widest">Subtotal</span>
+                    <span className="font-medium text-white/60 uppercase tracking-widest">Subtotal</span>
                     <span className="font-bold text-white">${subtotal.toFixed(2)}</span>
                   </div>
                   {pledgeActive && (
@@ -180,7 +180,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                     Checkout Now
                     <ArrowRight className="ml-2 w-4 h-4" />
                   </Button>
-                  <p className="text-center text-[9px] font-bold text-white/20 uppercase tracking-[0.2em]">
+                  <p className="text-center text-[9px] font-bold text-white/50 uppercase tracking-[0.2em]">
                     Taxes and shipping calculated at checkout
                   </p>
                </div>

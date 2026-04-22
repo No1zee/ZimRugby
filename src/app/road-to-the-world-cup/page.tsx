@@ -87,19 +87,19 @@ export default function RoadToWorldCupPage() {
           <StaggerContainer className="grid grid-cols-2 lg:grid-cols-4 gap-12 text-center">
             <motion.div variants={staggerItemVariants}>
               <AnimatedCounter value={2027} className="text-5xl md:text-7xl font-heading text-zru-green block mb-2" />
-              <span className="text-white/40 uppercase tracking-widest text-xs font-subheading">Target Year</span>
+              <span className="text-white/60 uppercase tracking-widest text-xs font-subheading">Target Year</span>
             </motion.div>
             <motion.div variants={staggerItemVariants}>
               <AnimatedCounter value={8} suffix="M+" className="text-5xl md:text-7xl font-heading text-white block mb-2" />
-              <span className="text-white/40 uppercase tracking-widest text-xs font-subheading">Fans Globally</span>
+              <span className="text-white/60 uppercase tracking-widest text-xs font-subheading">Fans Globally</span>
             </motion.div>
             <motion.div variants={staggerItemVariants}>
               <AnimatedCounter value={32} className="text-5xl md:text-7xl font-heading text-zru-green block mb-2" />
-              <span className="text-white/40 uppercase tracking-widest text-xs font-subheading">Elite Athletes</span>
+              <span className="text-white/60 uppercase tracking-widest text-xs font-subheading">Elite Athletes</span>
             </motion.div>
             <motion.div variants={staggerItemVariants}>
               <AnimatedCounter value={100} suffix="%" className="text-5xl md:text-7xl font-heading text-white block mb-2" />
-              <span className="text-white/40 uppercase tracking-widest text-xs font-subheading">Commitment</span>
+              <span className="text-white/60 uppercase tracking-widest text-xs font-subheading">Commitment</span>
             </motion.div>
           </StaggerContainer>
         </div>
@@ -158,7 +158,7 @@ export default function RoadToWorldCupPage() {
           <div className="text-center mb-20">
             <ScrollReveal>
               <h2 className="text-5xl md:text-7xl font-heading mb-4">CHOOSE YOUR <span className="text-zru-green">IMPACT</span></h2>
-              <p className="text-white/40 font-subheading tracking-widest uppercase text-sm">Become an Institutional Partner or a Global Member</p>
+              <p className="text-white/60 font-subheading tracking-widest uppercase text-sm">Become an Institutional Partner or a Global Member</p>
             </ScrollReveal>
           </div>
 
@@ -232,7 +232,7 @@ export default function RoadToWorldCupPage() {
       <footer className="py-12 border-t border-white/5 text-center">
         <div className="container mx-auto px-6">
           <ScrollReveal>
-             <div className="text-2xl font-heading text-white/20 mb-4 tracking-[0.2em]">ZIMBABWE RUGBY UNION</div>
+             <div className="text-2xl font-heading text-white/50 mb-4 tracking-[0.2em]">ZIMBABWE RUGBY UNION</div>
              <p className="text-white/30 font-subheading text-[10px] tracking-widest uppercase">© 2026 Institutional Excellence | Antigravity Design</p>
           </ScrollReveal>
         </div>
