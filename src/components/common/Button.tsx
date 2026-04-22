@@ -1,5 +1,5 @@
-import React from "react";
 import Link from "next/link";
+import { motion, HTMLMotionProps } from "framer-motion";
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 
@@ -7,15 +7,17 @@ function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+interface ButtonProps extends Omit<HTMLMotionProps<"button">, "variant"> {
   variant?: "primary" | "secondary" | "outline" | "ghost" | "link";
   size?: "sm" | "md" | "lg" | "xl";
   href?: string;
-  as?: React.ElementType;
+  as?: any;
   isLoading?: boolean;
   leftIcon?: React.ReactNode;
   rightIcon?: React.ReactNode;
 }
+
+const MotionLink = motion(Link);
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   (
@@ -63,19 +65,26 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
 
     if (href) {
       return (
-        <Link href={href} className={combinedClassName}>
+        <MotionLink 
+          href={href} 
+          className={combinedClassName}
+          whileTap={{ scale: 0.95 }}
+          transition={{ type: "spring", stiffness: 400, damping: 17 }}
+        >
           {leftIcon && <span className="mr-2">{leftIcon}</span>}
           {children}
           {rightIcon && <span className="ml-2">{rightIcon}</span>}
-        </Link>
+        </MotionLink>
       );
     }
 
     return (
-      <Component
+      <motion.button
         ref={ref}
         className={combinedClassName}
-        disabled={isLoading || props.disabled}
+        disabled={isLoading || (props as any).disabled}
+        whileTap={{ scale: 0.95 }}
+        transition={{ type: "spring", stiffness: 400, damping: 17 }}
         {...props}
       >
         {isLoading ? (
@@ -103,7 +112,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         {leftIcon && <span className="mr-2">{leftIcon}</span>}
         {children}
         {rightIcon && <span className="ml-2">{rightIcon}</span>}
-      </Component>
+      </motion.button>
     );
   }
 );

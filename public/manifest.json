@@ -1,0 +1,36 @@
+{
+  "name": "Zimbabwe Rugby Union",
+  "short_name": "ZRU",
+  "description": "Official website of the Zimbabwe Rugby Union. Champions of Africa.",
+  "start_url": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#000000",
+  "theme_color": "#006432",
+  "icons": [
+    {
+      "src": "/images/zru-logo.webp",
+      "sizes": "192x192",
+      "type": "image/webp",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/images/zru-logo.webp",
+      "sizes": "512x512",
+      "type": "image/webp",
+      "purpose": "any maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Tickets",
+      "url": "/tickets",
+      "icons": [{ "src": "/images/zru-logo.webp", "sizes": "192x192" }]
+    },
+    {
+      "name": "Match Centre",
+      "url": "/match-centre",
+      "icons": [{ "src": "/images/zru-logo.webp", "sizes": "192x192" }]
+    }
+  ]
+}
