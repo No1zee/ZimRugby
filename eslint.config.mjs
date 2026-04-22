@@ -12,6 +12,11 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Embedded projects and scratch files — not part of the Next.js app
+    "Proxima/**",
+    "scratch/**",
+    "Gallery/**",
+    "scripts/**",
   ]),
 ]);
 
