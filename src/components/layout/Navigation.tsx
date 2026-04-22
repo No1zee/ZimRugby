@@ -85,11 +85,11 @@ export default function Navigation() {
           <Link href="/" className="flex items-center gap-3 group relative">
             <motion.div whileHover={{ scale: 1.05 }} className="relative z-50">
               <Image
-                src="/zru logo monotone.svg"
+                src="/zru logo main.svg"
                 alt="ZRU Logo"
-                width={80}
-                height={80}
-                className="object-contain drop-shadow-2xl w-auto h-8 lg:h-9"
+                width={96}
+                height={96}
+                className="object-contain drop-shadow-2xl w-auto h-10 lg:h-12"
                 priority
               />
             </motion.div>

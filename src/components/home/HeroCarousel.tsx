@@ -33,8 +33,8 @@ const slides: SlideData[] = [
     id: 1,
     image: "/images/hero/campaign-victoria-falls.png",
     headline: {
-      line1: "VICTORIA FALLS",
-      line2: "SERIES",
+      line1: "BATTLE OF",
+      line2: "MOSI OA TUNYA",
     },
     subtext: "Experience the pride of Harare and Bulawayo as the Sables clash in the Victoria Falls Domestic Series.",
     ctas: {
@@ -177,7 +177,7 @@ export default function HeroCarousel() {
           {/* Image/Video Background with GSAP-controlled media */}
             {/* Performance Hint: Removed heavy black overlay that delayed LCP */}
             <div 
-              className="relative w-full h-full hero-bg-media will-change-transform [filter:brightness(var(--hero-brightness,1))]"
+              className="relative w-full h-full hero-bg-media will-change-transform filter-[brightness(var(--hero-brightness,1))]"
             >
                 {activeSlide.video ? (
                   <video
