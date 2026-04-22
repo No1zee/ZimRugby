@@ -1,11 +1,6 @@
 import Link from "next/link";
 import { motion, HTMLMotionProps } from "framer-motion";
-import { clsx, type ClassValue } from "clsx";
-import { twMerge } from "tailwind-merge";
-
-function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs));
-}
+import { cn } from "@/lib/utils";
 
 interface ButtonProps extends Omit<HTMLMotionProps<"button">, "variant"> {
   variant?: "primary" | "secondary" | "outline" | "ghost" | "link";

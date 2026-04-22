@@ -215,9 +215,10 @@ export default function HeroCarousel() {
                     src={activeSlide.image}
                     alt={`${activeSlide.headline.line1} ${activeSlide.headline.line2}`}
                     fill
-                    priority
+                    priority={currentSlide === 0}
+                    loading={currentSlide === 0 ? "eager" : "lazy"}
                     sizes="100vw"
-                    quality={60}
+                    quality={75}
                     className="object-cover"
                     onLoad={() => setIsLoaded(true)}
                   />
