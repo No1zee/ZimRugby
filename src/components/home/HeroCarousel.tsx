@@ -186,7 +186,7 @@ export default function HeroCarousel() {
                     muted
                     loop
                     playsInline
-                    preload="auto"
+                    preload="metadata"
                     className="absolute inset-0 w-full h-full object-cover"
                     onLoadedData={() => setIsLoaded(true)}
                   />
@@ -209,7 +209,7 @@ export default function HeroCarousel() {
       </AnimatePresence>
 
       {/* Floating Particles (Global) */}
-      <div className="absolute inset-0 z-10 pointer-events-none">
+      <div className="hidden md:block absolute inset-0 z-10 pointer-events-none">
           <FloatingParticles count={15} />
       </div>
 
