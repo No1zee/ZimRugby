@@ -140,6 +140,15 @@ export default function HeroCarousel() {
 
   }, { scope: containerRef, dependencies: [currentSlide, isLoaded] });
 
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 768);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
   // Auto-play functionality
   const nextSlide = () => {
     setIsLoaded(false);
@@ -180,16 +189,27 @@ export default function HeroCarousel() {
               className="relative w-full h-full hero-bg-media will-change-transform filter-[brightness(var(--hero-brightness,1))]"
             >
                 {activeSlide.video ? (
-                  <video
-                    src={activeSlide.video}
-                    autoPlay
-                    muted
-                    loop
-                    playsInline
-                    preload="metadata"
-                    className="absolute inset-0 w-full h-full object-cover"
-                    onLoadedData={() => setIsLoaded(true)}
-                  />
+                  isMobile ? (
+                    /* Mobile Fallback: Animated WebP bypasses all autoplay restrictions */
+                    <img
+                      src={activeSlide.video.replace('.mp4', '.webp')}
+                      alt=""
+                      className="absolute inset-0 w-full h-full object-cover"
+                      onLoad={() => setIsLoaded(true)}
+                    />
+                  ) : (
+                    <video
+                      src={activeSlide.video}
+                      autoPlay
+                      muted
+                      loop
+                      playsInline
+                      preload="auto"
+                      poster={activeSlide.image}
+                      className="absolute inset-0 w-full h-full object-cover"
+                      onLoadedData={() => setIsLoaded(true)}
+                    />
+                  )
                 ) : (
                   <Image
                     src={activeSlide.image}
