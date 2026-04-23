@@ -39,13 +39,14 @@ export function PretextBackground({
       dpr: window.devicePixelRatio || 1
     }, [offscreen]);
 
-    const resize = () => {
-      const rect = container.getBoundingClientRect();
+    const resize = (width?: number, height?: number) => {
+      const targetWidth = width || container.offsetWidth;
+      const targetHeight = height || container.offsetHeight;
       const overscan = 1.2;
       worker.postMessage({
         type: "resize",
-        width: rect.width * overscan,
-        height: rect.height * overscan,
+        width: targetWidth * overscan,
+        height: targetHeight * overscan,
         dpr: window.devicePixelRatio || 1
       });
     };
@@ -67,14 +68,20 @@ export function PretextBackground({
       });
     };
 
-    window.addEventListener("resize", resize);
+    const ro = new ResizeObserver((entries) => {
+      for (const entry of entries) {
+        resize(entry.contentRect.width, entry.contentRect.height);
+      }
+    });
+    ro.observe(container);
+
     window.addEventListener("mousemove", handlePointerMove);
     window.addEventListener("touchmove", handlePointerMove, { passive: true });
     
     resize();
 
     return () => {
-      window.removeEventListener("resize", resize);
+      ro.disconnect();
       window.removeEventListener("mousemove", handlePointerMove);
       window.removeEventListener("touchmove", handlePointerMove);
       worker.terminate();

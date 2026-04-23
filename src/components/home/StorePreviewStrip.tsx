@@ -67,13 +67,29 @@ const ProductCard = ({ item, idx }: { item: typeof previewItems[0], idx: number 
   const shineOpacity = useTransform(mouseYSpring, [-0.5, 0.5], [0, 0.2]);
   const shineX = useTransform(mouseXSpring, [-0.5, 0.5], ["-50%", "50%"]);
 
-  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+  const boundsRef = useRef<DOMRect | null>(null);
+
+  React.useEffect(() => {
     if (!ref.current) return;
-    const rect = ref.current.getBoundingClientRect();
-    const width = rect.width;
-    const height = rect.height;
-    const mouseX = e.clientX - rect.left;
-    const mouseY = e.clientY - rect.top;
+    const observer = new ResizeObserver(() => {
+      if (ref.current) boundsRef.current = ref.current.getBoundingClientRect();
+    });
+    observer.observe(ref.current);
+    return () => observer.disconnect();
+  }, []);
+
+  const handleMouseEnter = () => {
+    if (ref.current) boundsRef.current = ref.current.getBoundingClientRect();
+  };
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    const bounds = boundsRef.current;
+    if (!bounds) return;
+    
+    const width = bounds.width;
+    const height = bounds.height;
+    const mouseX = e.clientX - bounds.left;
+    const mouseY = e.clientY - bounds.top;
     
     const xPct = mouseX / width - 0.5;
     const yPct = mouseY / height - 0.5;
@@ -98,6 +114,7 @@ const ProductCard = ({ item, idx }: { item: typeof previewItems[0], idx: number 
       <Link href="/clubhouse" className="block relative">
         <motion.div 
           ref={ref}
+          onMouseEnter={handleMouseEnter}
           onMouseMove={handleMouseMove}
           onMouseLeave={handleMouseLeave}
           style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}

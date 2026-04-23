@@ -10,11 +10,19 @@ interface MagneticElementProps {
 
 export default function MagneticElement({ children, intensity = 0.2 }: MagneticElementProps) {
   const ref = useRef<HTMLDivElement>(null);
+  const boundsRef = useRef<DOMRect | null>(null);
   const [position, setPosition] = useState({ x: 0, y: 0 });
 
+  const handleMouseEnter = () => {
+    if (ref.current) {
+      boundsRef.current = ref.current.getBoundingClientRect();
+    }
+  };
+
   const handleMouse = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!boundsRef.current) return;
     const { clientX, clientY } = e;
-    const { height, width, left, top } = ref.current!.getBoundingClientRect();
+    const { height, width, left, top } = boundsRef.current;
     const middleX = clientX - (left + width / 2);
     const middleY = clientY - (top + height / 2);
     setPosition({ x: middleX * intensity, y: middleY * intensity });
@@ -22,11 +30,13 @@ export default function MagneticElement({ children, intensity = 0.2 }: MagneticE
 
   const reset = () => {
     setPosition({ x: 0, y: 0 });
+    boundsRef.current = null;
   };
 
   return (
     <motion.div
       ref={ref}
+      onMouseEnter={handleMouseEnter}
       onMouseMove={handleMouse}
       onMouseLeave={reset}
       animate={{ x: position.x, y: position.y }}
