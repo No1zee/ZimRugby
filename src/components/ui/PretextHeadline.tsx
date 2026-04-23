@@ -89,7 +89,7 @@ export const PretextHeadline: React.FC<PretextHeadlineProps> = ({
 
   return (
     <div ref={containerRef} className={`w-full ${className}`}>
-      <canvas ref={canvasRef} style={{ width: '100%', height: 'auto', display: 'block' }} />
+      <canvas ref={canvasRef} className="w-full h-auto block" />
     </div>
   );
 };
