@@ -58,6 +58,7 @@ export default function MatchCentreStrip({ initialMatches = [] }: MatchCentreStr
           src="/images/events/africa-cup.jpg" 
           alt="Stadium Background" 
           fill 
+          priority
           sizes="100vw"
           quality={60}
           className="object-cover"

@@ -27,9 +27,9 @@ export const PretextHeadline: React.FC<PretextHeadlineProps> = ({
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
-    const render = () => {
-      const rect = container.getBoundingClientRect();
-      const targetWidth = rect.width;
+    const render = (width?: number) => {
+      const targetWidth = width || container.offsetWidth;
+      if (targetWidth === 0) return;
       
       // Binary search for the perfect font size to fill width
       let low = minFontSize;
@@ -76,7 +76,11 @@ export const PretextHeadline: React.FC<PretextHeadlineProps> = ({
       });
     };
 
-    const ro = new ResizeObserver(render);
+    const ro = new ResizeObserver((entries) => {
+      for (const entry of entries) {
+        render(entry.contentRect.width);
+      }
+    });
     ro.observe(container);
     render();
 

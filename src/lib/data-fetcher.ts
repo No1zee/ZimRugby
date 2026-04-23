@@ -1,6 +1,3 @@
-import fs from 'fs';
-import path from 'path';
-
 export interface Match {
   id: string;
   homeTeam: { name: string; logo?: string };
@@ -18,6 +15,7 @@ export interface Report {
   id: string;
   title: string;
   excerpt: string;
+  content?: string;
   date: string;
   image: string;
   category: string;
@@ -26,11 +24,14 @@ export interface Report {
   type?: 'news' | 'video';
 }
 
-const isServer = typeof window === 'undefined';
-
 async function readStaticJson<T>(filename: string): Promise<T[]> {
   try {
-    if (isServer) {
+    if (typeof window === 'undefined') {
+      // Use dynamic imports to avoid bundling fs/path in the browser
+      const [fs, path] = await Promise.all([
+        import('fs'),
+        import('path')
+      ]);
       const filePath = path.join(process.cwd(), 'public', 'data', filename);
       const fileContent = fs.readFileSync(filePath, 'utf8');
       return JSON.parse(fileContent);
@@ -58,3 +59,7 @@ export async function getSocialPosts(): Promise<Report[]> {
   return await readStaticJson<Report>('social.json');
 }
 
+export async function getReportById(id: string): Promise<Report | undefined> {
+  const reports = await getLatestReports();
+  return reports.find(r => r.id === id);
+}

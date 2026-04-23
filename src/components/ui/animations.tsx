@@ -174,13 +174,20 @@ export function Tilt3DCard({
   glareEnabled = true
 }: Tilt3DCardProps) {
   const cardRef = useRef<HTMLDivElement>(null);
+  const boundsRef = useRef<DOMRect | null>(null);
   const [rotateX, setRotateX] = useState(0);
   const [rotateY, setRotateY] = useState(0);
   const [glarePosition, setGlarePosition] = useState({ x: 50, y: 50 });
 
+  const handleMouseEnter = () => {
+    if (cardRef.current) {
+      boundsRef.current = cardRef.current.getBoundingClientRect();
+    }
+  };
+
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (!cardRef.current) return;
-    const rect = cardRef.current.getBoundingClientRect();
+    if (!boundsRef.current) return;
+    const rect = boundsRef.current;
     const centerX = rect.left + rect.width / 2;
     const centerY = rect.top + rect.height / 2;
     const mouseX = e.clientX - centerX;
@@ -197,11 +204,13 @@ export function Tilt3DCard({
   const handleMouseLeave = () => {
     setRotateX(0);
     setRotateY(0);
+    boundsRef.current = null;
   };
 
   return (
     <motion.div
       ref={cardRef}
+      onMouseEnter={handleMouseEnter}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
       animate={{ rotateX, rotateY }}
@@ -237,11 +246,18 @@ export function MagneticButton({
   strength = 0.3
 }: MagneticButtonProps) {
   const buttonRef = useRef<HTMLButtonElement>(null);
+  const boundsRef = useRef<DOMRect | null>(null);
   const [position, setPosition] = useState({ x: 0, y: 0 });
 
+  const handleMouseEnter = () => {
+    if (buttonRef.current) {
+      boundsRef.current = buttonRef.current.getBoundingClientRect();
+    }
+  };
+
   const handleMouseMove = (e: React.MouseEvent<HTMLButtonElement>) => {
-    if (!buttonRef.current) return;
-    const rect = buttonRef.current.getBoundingClientRect();
+    if (!boundsRef.current) return;
+    const rect = boundsRef.current;
     const centerX = rect.left + rect.width / 2;
     const centerY = rect.top + rect.height / 2;
     setPosition({
@@ -252,11 +268,13 @@ export function MagneticButton({
 
   const handleMouseLeave = () => {
     setPosition({ x: 0, y: 0 });
+    boundsRef.current = null;
   };
 
   return (
     <motion.button
       ref={buttonRef}
+      onMouseEnter={handleMouseEnter}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
       animate={position}
