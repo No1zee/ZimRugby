@@ -74,7 +74,11 @@ export default async function ReportPage({ params }: { params: { id: string } })
               </div>
             </div>
             <div className="flex gap-3">
-              <button className="w-12 h-12 rounded-full bg-white/5 hover:bg-white/10 transition-all border border-white/10 flex items-center justify-center group">
+              <button 
+                className="w-12 h-12 rounded-full bg-white/5 hover:bg-white/10 transition-all border border-white/10 flex items-center justify-center group"
+                aria-label="Share Article"
+                title="Share Article"
+              >
                 <Share2 className="w-4 h-4 text-white/40 group-hover:text-clubhouse-gold" />
               </button>
             </div>
@@ -94,7 +98,7 @@ export default async function ReportPage({ params }: { params: { id: string } })
             {report.id === 'heritage-1991' && (
               <div className="mt-20 p-1 bg-linear-to-r from-clubhouse-gold/50 via-clubhouse-gold/20 to-transparent rounded-3xl">
                 <div className="bg-rich-black rounded-[22px] p-10 md:p-16 flex flex-col md:flex-row items-center gap-12 border border-white/5">
-                  <div className="relative w-48 h-48 md:w-64 md:h-64 flex-shrink-0">
+                  <div className="relative w-48 h-48 md:w-64 md:h-64 shrink-0">
                      <Image 
                         src="/images/media/1991-jersey-original.jpg" 
                         alt="1991 Jersey Detail" 
