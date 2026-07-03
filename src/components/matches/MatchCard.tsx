@@ -9,6 +9,7 @@ import Link from "next/link";
 import { getFlagUrl } from "@/lib/flags";
 
 interface MatchCardProps {
+  id: string | number;
   competition: string;
   round: string;
   date: string;
@@ -28,6 +29,7 @@ interface MatchCardProps {
 }
 
 export default function MatchCard({
+  id,
   competition,
   round,
   date,
@@ -154,9 +156,9 @@ export default function MatchCard({
 
         {/* Action Button */}
         <div className="mt-6">
-                <Link href="/match-centre" className="flex-1">
+                <Link href={`/matches/${id}`} className="flex-1">
                     <Button variant="outline" className="w-full border-white/10 hover:bg-white/5 text-xs h-9">
-                        <span>MATCH CENTRE</span>
+                        <span>VIEW DETAILS</span>
                     </Button>
                 </Link>
         </div>
