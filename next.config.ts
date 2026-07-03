@@ -30,6 +30,20 @@ const nextConfig: NextConfig = {
       }
     ];
   },
+  async redirects() {
+    return [
+      {
+        source: '/sables',
+        destination: '/teams/sables',
+        permanent: true,
+      },
+      {
+        source: '/road-to-the-world-cup',
+        destination: '/world-cup-campaign',
+        permanent: true,
+      },
+    ];
+  },
   images: {
     remotePatterns: [
       {
