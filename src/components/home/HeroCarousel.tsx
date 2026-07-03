@@ -141,8 +141,8 @@ export default function HeroCarousel({ slides }: { slides: HeroSlideData[] }) {
       </div>
 
       {/* Content Layer */}
-      <div className="relative z-20 w-full max-w-7xl mx-auto px-6 h-full flex items-center justify-center pt-[5vh]">
-        <div className="text-center w-full max-w-5xl mx-auto">
+      <div className="relative z-20 w-full max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 h-full flex items-center justify-start pt-[5vh]">
+        <div className="text-left w-full max-w-5xl mr-auto">
             
             <AnimatePresence mode="wait">
                 <div key={currentSlide}>
@@ -179,13 +179,13 @@ export default function HeroCarousel({ slides }: { slides: HeroSlideData[] }) {
 
                     {/* Subtext */}
                     <p 
-                        className="text-white/80 text-lg md:text-xl font-medium mb-12 max-w-2xl mx-auto leading-relaxed drop-shadow-2xl hero-text-item"
+                        className="text-white/80 text-lg md:text-xl font-medium mb-12 max-w-2xl leading-relaxed drop-shadow-2xl hero-text-item"
                     >
                     {activeSlide.subtext}
                     </p>
 
                     {/* CTAs */}
-                    <div className="flex flex-col sm:flex-row gap-6 justify-center items-center hero-text-item">
+                    <div className="flex flex-col sm:flex-row gap-6 justify-start items-center hero-text-item">
                         <MagneticElement intensity={0.25}>
                            <Link href={activeSlide.ctas.primary.href}>
                               <GlowButton 
