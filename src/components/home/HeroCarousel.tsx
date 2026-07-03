@@ -9,109 +9,15 @@ import { FloatingParticles, GlowButton } from "../ui/animations";
 import MagneticElement from "../ui/MagneticElement";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
+import type { HeroSlideData } from "@/lib/api/hero";
 
-// Slide Data Interface
-interface SlideData {
-  id: number;
-  image: string;
-  video?: string; // Optional video background
-  headline: {
-    line1: string;
-    line2: string;
-  };
-  subtext: string;
-  tag?: string; // e.g. "AFRICAN CHAMPIONS"
-  ctas: {
-    primary: { label: string; href: string; icon?: LucideIcon };
-    secondary: { label: string; href: string; icon?: LucideIcon };
-  };
-  alignment?: "center" | "left"; // For future flexibility
-}
+const iconMap: Record<string, LucideIcon> = {
+  Ticket,
+  ArrowRight,
+  Play,
+};
 
-const slides: SlideData[] = [
-  {
-    id: 1,
-    image: "/images/hero/campaign-victoria-falls.png",
-    headline: {
-      line1: "BATTLE OF",
-      line2: "MOSI OA TUNYA",
-    },
-    subtext: "Experience the pride of Harare and Bulawayo as the Sables clash in the Victoria Falls Domestic Series.",
-    ctas: {
-      primary: { label: "Book Tickets", href: "https://zru.co.zw/tickets", icon: Ticket },
-      secondary: { label: "Match Info", href: "/events", icon: Play },
-    },
-  },
-  {
-    id: 2,
-    image: "/images/hero/campaign-denver-tour.png",
-    headline: {
-      line1: "NATIONS",
-      line2: "CUP",
-    },
-    subtext: "The Sables head to Denver at DICK'S Sporting Goods Park for a high-stakes showdown on July 4th.",
-    ctas: {
-      primary: { label: "Tour Details", href: "https://go.usa.rugby/nations-cup-2026-presale", icon: ArrowRight },
-      secondary: { label: "Watch Live", href: "/live", icon: Play },
-    },
-  },
-  {
-    id: 3,
-    image: "/images/hero/campaign-springboks-match.png",
-    headline: {
-      line1: "LEGENDS",
-      line2: "COLLIDE",
-    },
-    subtext: "A historic battle in Port Elizabeth as the Sables face the Springboks 'A' on June 20, 2026.",
-    ctas: {
-      primary: { label: "Get Tickets", href: "https://springboks.tmtickets.co.za/", icon: Ticket },
-      secondary: { label: "Sables Squad", href: "/teams/sables", icon: ArrowRight },
-    },
-  },
-  {
-    id: 4,
-    image: "/images/teams/sables.jpg",
-    headline: {
-      line1: "THE SABLES",
-      line2: "ARE HOME",
-    },
-    subtext: "Experience the roar of the National Sports Stadium as Zimbabwe defends the Africa Cup title.",
-    ctas: {
-      primary: { label: "Book Tickets", href: "/tickets", icon: Ticket },
-      secondary: { label: "Match Centre", href: "/match-centre", icon: Play },
-    },
-  },
-  {
-    id: 5,
-    image: "/images/teams/african-champions-2025.jpg", 
-    headline: {
-      line1: "AFRICAN",
-      line2: "CHAMPIONS",
-    },
-    subtext: "Celebrating the victorious journey of the Zimbabwe Sables as they conquer the continent.",
-    ctas: {
-      primary: { label: "Celebrate With Us", href: "/sables", icon: Ticket },
-      secondary: { label: "View Gallery", href: "/gallery", icon: ArrowRight },
-    },
-  },
-  {
-    id: 6,
-    tag: "AFRICAN CHAMPIONS",
-    image: "/images/media/vid1.jpg", 
-    video: "/images/zim-rugby-slow-mo-2.mp4",
-    headline: {
-      line1: "A CUT ABOVE",
-      line2: "THE COMPETITION",
-    },
-    subtext: "Witness the elite athleticism of Zimbabwe's finest. Precision, power, and the pursuit of excellence.",
-    ctas: {
-      primary: { label: "Secure Your Seat", href: "/tickets", icon: Ticket },
-      secondary: { label: "Watch Highlights", href: "/media", icon: Play },
-    },
-  },
-];
-
-export default function HeroCarousel() {
+export default function HeroCarousel({ slides }: { slides: HeroSlideData[] }) {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isLoaded, setIsLoaded] = useState(false);
   const containerRef = useRef<HTMLElement>(null);
@@ -171,7 +77,7 @@ export default function HeroCarousel() {
   const activeSlide = slides[currentSlide];
 
   return (
-    <section ref={containerRef} className="relative h-screen bg-rich-black overflow-hidden flex items-center justify-center cursor-none">
+    <section ref={containerRef} className="relative h-[100svh] md:h-[85vh] md:min-h-[600px] md:max-h-[1000px] md:aspect-[21/9] bg-rich-black overflow-hidden flex items-center justify-center cursor-none">
       
       {/* Background & Transitions - Mode changed to crossfade for performance and LCP */}
       <AnimatePresence>
@@ -286,7 +192,10 @@ export default function HeroCarousel() {
                                 className="bg-white text-zru-green hover:bg-gray-100 px-12 py-5 text-sm font-black uppercase tracking-[0.2em] flex items-center gap-3 rounded-full transition-all duration-500 min-w-[240px] justify-center shadow-2xl cursor-none"
                                 glowColor="rgba(255, 255, 255, 0.4)"
                               >
-                                {activeSlide.ctas.primary.icon && <activeSlide.ctas.primary.icon className="w-5 h-5" />}
+                                {activeSlide.ctas.primary.iconName && iconMap[activeSlide.ctas.primary.iconName] && (() => {
+                                  const Icon = iconMap[activeSlide.ctas.primary.iconName];
+                                  return <Icon className="w-5 h-5" />;
+                                })()}
                                 {activeSlide.ctas.primary.label}
                               </GlowButton>
                            </Link>
@@ -297,7 +206,10 @@ export default function HeroCarousel() {
                               <button 
                                 className="bg-white/5 backdrop-blur-xl border border-white/20 text-white px-12 py-5 text-sm font-black uppercase tracking-[0.2em] flex items-center gap-3 rounded-full hover:bg-white/10 transition-all duration-500 min-w-[240px] justify-center cursor-none"
                               >
-                                {activeSlide.ctas.secondary.icon && <activeSlide.ctas.secondary.icon className="w-5 h-5" />}
+                                {activeSlide.ctas.secondary.iconName && iconMap[activeSlide.ctas.secondary.iconName] && (() => {
+                                  const Icon = iconMap[activeSlide.ctas.secondary.iconName];
+                                  return <Icon className="w-5 h-5" />;
+                                })()}
                                 {activeSlide.ctas.secondary.label}
                               </button>
                            </Link>

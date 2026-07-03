@@ -5,19 +5,21 @@ import NewsMediaBlock from "@/components/home/NewsMediaBlock";
 import EventsBlock from "@/components/home/EventsBlock";
 import { CountdownPromo } from "@/components/ui/CountdownPromo";
 import { getLiveMatches, getLatestReports } from "@/lib/data-fetcher";
+import { getHeroSlides } from "@/lib/api/hero";
 
 export default async function Home() {
   // Fetch data on the server
-  const [matches, reports] = await Promise.all([
+  const [matches, reports, heroSlides] = await Promise.all([
     getLiveMatches(),
-    getLatestReports()
+    getLatestReports(),
+    getHeroSlides()
   ]);
 
   return (
     <main className="bg-rich-black min-h-screen relative">
       
       {/* 1. Hero Carousel */}
-      <HeroCarousel />
+      <HeroCarousel slides={heroSlides} />
 
       <div className="relative z-10 bg-rich-black overflow-hidden">
         
