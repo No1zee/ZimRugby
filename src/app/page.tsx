@@ -6,13 +6,17 @@ import EventsBlock from "@/components/home/EventsBlock";
 import { CountdownPromo } from "@/components/ui/CountdownPromo";
 import { getLiveMatches, getLatestReports } from "@/lib/data-fetcher";
 import { getHeroSlides } from "@/lib/api/hero";
+import { getFixtureTwinData } from "@/lib/api/fixtures";
+import { getRankingsData } from "@/lib/api/rankings";
 
 export default async function Home() {
   // Fetch data on the server
-  const [matches, reports, heroSlides] = await Promise.all([
+  const [matches, reports, heroSlides, twinData, rankingsData] = await Promise.all([
     getLiveMatches(),
     getLatestReports(),
-    getHeroSlides()
+    getHeroSlides(),
+    getFixtureTwinData(),
+    getRankingsData()
   ]);
 
   return (
@@ -29,7 +33,7 @@ export default async function Home() {
         <div className="pointer-events-none absolute bottom-[15%] left-[10%] w-[50vw] h-[50vw] rounded-full bg-[#006039] opacity-[0.15] blur-[120px] mix-blend-screen" />
 
         {/* 2. Match Centre Strip (Horizontal List) */}
-        <MatchCentreStrip initialMatches={matches} />
+        <MatchCentreStrip initialMatches={matches} twinData={twinData} rankingsData={rankingsData} />
 
         {/* 2.5 Store Preview Strip (Interaction Portal) */}
         <StorePreviewStrip />
