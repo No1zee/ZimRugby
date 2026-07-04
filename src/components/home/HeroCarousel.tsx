@@ -137,7 +137,7 @@ export default function HeroCarousel({ slides }: { slides: HeroSlideData[] }) {
   const activeSlide = slides[currentSlide];
 
   return (
-    <section ref={containerRef} className="relative h-[100svh] md:h-[85vh] md:min-h-[600px] md:max-h-[1000px] md:aspect-[21/9] bg-rich-black overflow-hidden flex items-center justify-center cursor-none">
+    <section ref={containerRef} className="relative w-full h-[100svh] md:h-[85vh] md:min-h-[600px] md:max-h-[1000px] bg-rich-black overflow-hidden flex items-center justify-center cursor-none">
       
       {/* Background & Transitions - Mode changed to crossfade for performance and LCP */}
       <AnimatePresence>
