@@ -104,19 +104,31 @@ export function PretextBackground({
       for (let rowIdx = 0; rowIdx < rowsNeeded; rowIdx++) {
         const layerIdx = rowIdx % numLayers;
         const depth = (layerIdx + 1) / numLayers;
-
         const isGreen = rowIdx % 2 === 0;
+
+        const rowY = startY + (currentY * 20) + (rowIdx * layerSpacingY);
+
+        // Calculate dynamic edge fade based on vertical position to prevent clashing with other sections
+        const rowCenterY = rowY + fontSize / 2;
+        const normalizedY = rowCenterY / h;
+        
+        let edgeFade = 1;
+        if (normalizedY < 0.25) {
+          edgeFade = normalizedY / 0.25; // fade to 0 at top edge
+        } else if (normalizedY > 0.75) {
+          edgeFade = (1 - normalizedY) / 0.25; // fade to 0 at bottom edge
+        }
+        edgeFade = Math.max(0, Math.min(1, edgeFade));
+
         const baseOpacity = isGreen ? 0.15 : 0.12;
-        const layerOpacity = baseOpacity * (depth + 0.3);
+        const finalOpacity = baseOpacity * (depth + 0.3) * edgeFade;
 
         ctx.fillStyle = isGreen
-          ? `rgba(0, 200, 100, ${layerOpacity})`
-          : `rgba(255, 255, 255, ${layerOpacity})`;
+          ? `rgba(0, 200, 100, ${finalOpacity})`
+          : `rgba(255, 255, 255, ${finalOpacity})`;
 
         ctx.font = fontString;
         ctx.textBaseline = "top";
-
-        const rowY = startY + (currentY * 20) + (rowIdx * layerSpacingY);
 
         const mouseXOffset = currentX * (depth * 60);
         const horizontalStride = textWidth * 1.5;
