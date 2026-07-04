@@ -61,15 +61,15 @@ const events = [
 
 export default function EventsBlock() {
   return (
-    <section className="relative py-section overflow-x-hidden" id="events-block">
+    <section className="relative py-section" id="events-block">
       
       {/* Background text - Restored big interactive text */}
       <PretextBackground 
         text="WHAT'S ON? "
-        className="absolute -top-[15vh] -bottom-[15vh] left-0 right-0 opacity-80" 
+        className="absolute -top-[15vh] -bottom-[15vh] left-0 right-0 opacity-80 z-10" 
       />
       
-      <div className="max-w-[1440px] mx-auto px-6 relative z-10">
+      <div className="max-w-[1440px] mx-auto px-6 relative z-20">
         <div className="flex flex-col lg:flex-row gap-20">
           
           {/* Sticky Header Block */}

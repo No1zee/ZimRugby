@@ -155,16 +155,17 @@ export function PretextBackground({
   }, [text]);
 
   const isCustomPositioning = className.includes("absolute") || className.includes("fixed") || className.includes("inset-");
+  const hasZIndex = className.includes("z-");
   const wrapperClass = isCustomPositioning 
-    ? `pointer-events-none z-0 ${className}` 
-    : `absolute inset-0 pointer-events-none overflow-hidden z-0 ${className}`;
+    ? `pointer-events-none ${hasZIndex ? "" : "z-0"} ${className}` 
+    : `absolute inset-0 pointer-events-none overflow-hidden ${hasZIndex ? "" : "z-0"} ${className}`;
 
   return (
     <div ref={containerRef} className={wrapperClass}>
       <canvas
         key={text}
         ref={canvasRef}
-        className="block absolute w-[150%] h-[150%] -left-1/4 -top-1/4 pointer-events-none"
+        className="block absolute w-full h-full left-0 top-0 pointer-events-none"
       />
     </div>
   );
