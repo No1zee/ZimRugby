@@ -12,7 +12,8 @@ import {
   ExternalLink,
   Info,
   Search,
-  X
+  X,
+  AlertCircle
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -22,7 +23,7 @@ import Footer from "@/components/layout/Footer";
 import Button from "@/components/common/Button";
 import { FixtureCard, type Fixture } from "@/components/tickets/FixtureCard";
 import { StripedBackground } from "@/components/ui/StripedBackground";
-import { registerTicketingInterest } from "@/lib/crm";
+import { saveSubmission } from "@/lib/mockStorage";
 
 // --- Mock Data ---
 
@@ -142,6 +143,7 @@ export default function TicketsPage() {
   const [isRegistering, setIsRegistering] = useState<Fixture | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+  const [submitError, setSubmitError] = useState("");
   
   const [formData, setFormData] = useState({ name: "", email: "" });
 
@@ -150,16 +152,21 @@ export default function TicketsPage() {
     if (!isRegistering) return;
     
     setIsSubmitting(true);
+    setSubmitError("");
     try {
-      await registerTicketingInterest(isRegistering.id, formData);
-      setIsSuccess(true);
-      setTimeout(() => {
-        setIsRegistering(null);
-        setIsSuccess(false);
-        setFormData({ name: "", email: "" });
-      }, 2500);
+      const res = await saveSubmission("ticket_interest", { fixtureId: isRegistering.id, name: formData.name, email: formData.email });
+      if (res.success) {
+        setIsSuccess(true);
+        setTimeout(() => {
+          setIsRegistering(null);
+          setIsSuccess(false);
+          setFormData({ name: "", email: "" });
+        }, 2500);
+      } else {
+        setSubmitError(res.message);
+      }
     } catch (err) {
-      console.error(err);
+      setSubmitError("An error occurred during submission.");
     } finally {
       setIsSubmitting(false);
     }
@@ -536,6 +543,12 @@ export default function TicketsPage() {
 
               {!isSuccess && (
                 <form onSubmit={handleRegister} className="p-8 pt-0 space-y-6">
+                  {submitError && (
+                    <div className="bg-red-500/10 border border-red-500/20 rounded-xl p-4 flex items-center gap-3 text-red-500 text-xs font-semibold">
+                      <AlertCircle className="w-4 h-4 shrink-0" />
+                      <span>{submitError}</span>
+                    </div>
+                  )}
                   <div className="space-y-4">
                     <div>
                       <label htmlFor="reg-name" className="block text-[10px] font-black text-white/60 uppercase tracking-widest mb-2">FULL NAME</label>

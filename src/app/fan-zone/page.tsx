@@ -2,7 +2,8 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Mail, CheckCircle2, Ticket, Percent, Newspaper, Trophy, ShieldCheck, ArrowRight } from "lucide-react";
+import { Mail, CheckCircle2, Ticket, Percent, Newspaper, Trophy, ShieldCheck, ArrowRight, AlertCircle } from "lucide-react";
+import { saveSubmission } from "@/lib/mockStorage";
 
 export default function FanZonePage() {
   const [name, setName] = useState("");
@@ -11,6 +12,9 @@ export default function FanZonePage() {
   const [favTeam, setFavTeam] = useState("Zimbabwe Sables");
   const [agreed, setAgreed] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState("");
 
   const countries = [
     "Zimbabwe",
@@ -39,10 +43,24 @@ export default function FanZonePage() {
     { title: "VIP Fan Competitions", desc: "Enter monthly draws to win signed memorabilia and VIP matchday passes.", icon: Trophy }
   ];
 
-  const handleSubscribe = (e: React.FormEvent) => {
+  const handleSubscribe = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (name && email && agreed) {
-      setSubmitted(true);
+    if (!name || !email || !agreed) return;
+    
+    setIsSubmitting(true);
+    setSubmitError("");
+    
+    try {
+      const res = await saveSubmission("newsletter", { name, email, country, favoriteTeam: favTeam });
+      if (res.success) {
+        setSubmitted(true);
+      } else {
+        setSubmitError(res.message);
+      }
+    } catch (err) {
+      setSubmitError("An error occurred during registration.");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -116,6 +134,12 @@ export default function FanZonePage() {
 
             {!submitted ? (
               <form onSubmit={handleSubscribe} className="space-y-4">
+                {submitError && (
+                  <div className="bg-red-900/20 border border-red-500/20 rounded-xl p-3 flex items-center gap-2 text-red-500 text-[11px] font-semibold">
+                    <AlertCircle className="w-3.5 h-3.5 shrink-0" />
+                    <span>{submitError}</span>
+                  </div>
+                )}
                 
                 {/* Full Name */}
                 <div className="space-y-1.5">
@@ -193,9 +217,10 @@ export default function FanZonePage() {
                 {/* Submit button */}
                 <button
                   type="submit"
-                  className="w-full bg-zru-gold hover:bg-white hover:text-rich-black text-rich-black font-black text-xs uppercase tracking-[0.2em] py-3.5 rounded-xl flex items-center justify-center gap-2 transition-all shadow-lg mt-6"
+                  disabled={isSubmitting}
+                  className="w-full bg-zru-gold hover:bg-white hover:text-rich-black text-rich-black font-black text-xs uppercase tracking-[0.2em] py-3.5 rounded-xl flex items-center justify-center gap-2 transition-all shadow-lg mt-6 disabled:opacity-50"
                 >
-                  <span>Register supporters card</span>
+                  <span>{isSubmitting ? "Registering..." : "Register supporters card"}</span>
                   <ArrowRight className="w-4 h-4" />
                 </button>
 
