@@ -1,29 +1,15 @@
-export interface TeamDetails {
-  name: string;
-  logo?: string;
-  score?: number;
-}
-
-export interface MatchDetails {
-  id: string;
-  competition: string;
-  round: string;
-  date: string;
-  time: string;
-  venue: string;
-  homeTeam: TeamDetails;
-  awayTeam: TeamDetails;
-  status: 'upcoming' | 'completed' | 'live';
-  ticketUrl?: string;
-}
+import { Match } from "@/types";
 
 export interface FixtureTwinData {
-  previous: MatchDetails;
-  upcoming: MatchDetails;
+  previous: Match;
+  upcoming: Match;
 }
 
+/**
+ * CMS_SWAP_TODO: Replace mock implementation with actual REST/GraphQL endpoints once backend is available.
+ * Fully compatible with React Native / Mobile platforms for direct cross-platform consumption.
+ */
 export async function getFixtureTwinData(): Promise<FixtureTwinData> {
-  // Mock data representing recent and upcoming Sables matches
   return {
     previous: {
       id: "prev-sables-alg",
@@ -42,7 +28,8 @@ export async function getFixtureTwinData(): Promise<FixtureTwinData> {
         logo: "https://flagcdn.com/w160/dz.png",
         score: 3
       },
-      status: "completed"
+      status: "completed",
+      category: "Sables"
     },
     upcoming: {
       id: "zru-zambia-2026",
@@ -60,7 +47,8 @@ export async function getFixtureTwinData(): Promise<FixtureTwinData> {
         logo: "https://flagcdn.com/w160/zm.png"
       },
       status: "upcoming",
-      ticketUrl: "/tickets"
+      ticketUrl: "/tickets",
+      category: "Sables"
     }
   };
 }

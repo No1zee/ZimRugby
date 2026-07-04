@@ -3,7 +3,8 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Landmark, FileText, Download, Award, Calendar, Bell, Shield, ArrowRight, CheckCircle2 } from "lucide-react";
-import { getRefereeResources, getRefereeCourses, getRefereeNotices, type RefereeResource, type RefereeCourse, type RefereeNotice } from "@/lib/api/referees";
+import { getRefereeResources, getRefereeCourses, getRefereeNotices } from "@/lib/api/referees";
+import { RefereeResource, RefereeCourse, RefereeNotice } from "@/types";
 
 export default function RefereesPortalPage() {
   const [resources, setResources] = useState<RefereeResource[]>([]);

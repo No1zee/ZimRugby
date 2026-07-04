@@ -1,4 +1,5 @@
-import { getLiveMatches, type Match } from "@/lib/data-fetcher";
+import { Match } from "@/types";
+import { getLiveMatches } from "@/lib/data-fetcher";
 
 export interface LineupPlayer {
   number: number;
@@ -32,9 +33,13 @@ export interface MatchDetailData {
   };
 }
 
+/**
+ * CMS_SWAP_TODO: Replace mock implementation with actual REST/GraphQL endpoints once backend is available.
+ * Fully compatible with React Native / Mobile platforms for direct cross-platform consumption.
+ */
 export async function getMatchDetail(id: string): Promise<MatchDetailData | null> {
   const matches = await getLiveMatches();
-  const match = matches.find(m => m.id === id);
+  const match = matches.find(m => String(m.id) === id) as Match | undefined;
   if (!match) return null;
 
   // Mock lineups based on Sables team structure
@@ -98,22 +103,22 @@ export async function getMatchDetail(id: string): Promise<MatchDetailData | null
       "A brace of tries from winger Edward Sigauke, combined with stellar kicking from fly-half Ian Prior, built a comfortable lead by halftime. The second half saw a physical battle in the forward packs, but Zimbabwe's superior scrum efficiency sealed the victory."
     ],
     scorerTimeline: [
-      { minute: 12, team: 'home', type: 'penalty', player: 'Ian Prior' },
-      { minute: 22, team: 'home', type: 'try', player: 'Edward Sigauke' },
-      { minute: 23, team: 'home', type: 'conversion', player: 'Ian Prior' },
-      { minute: 35, team: 'away', type: 'penalty', player: 'Laston Mukosa' },
-      { minute: 45, team: 'home', type: 'try', player: 'Tapiwa Mafura' },
-      { minute: 60, team: 'home', type: 'try', player: 'Edward Sigauke' },
-      { minute: 61, team: 'home', type: 'conversion', player: 'Ian Prior' },
-      { minute: 78, team: 'home', type: 'try', player: 'Hilton Mudariki' }
-    ] as const
+      { minute: 12, team: 'home' as const, type: 'penalty' as const, player: 'Ian Prior' },
+      { minute: 22, team: 'home' as const, type: 'try' as const, player: 'Edward Sigauke' },
+      { minute: 23, team: 'home' as const, type: 'conversion' as const, player: 'Ian Prior' },
+      { minute: 35, team: 'away' as const, type: 'penalty' as const, player: 'Laston Mukosa' },
+      { minute: 45, team: 'home' as const, type: 'try' as const, player: 'Tapiwa Mafura' },
+      { minute: 60, team: 'home' as const, type: 'try' as const, player: 'Edward Sigauke' },
+      { minute: 61, team: 'home' as const, type: 'conversion' as const, player: 'Ian Prior' },
+      { minute: 78, team: 'home' as const, type: 'try' as const, player: 'Hilton Mudariki' }
+    ]
   };
 
   return {
     match,
     homeLineup,
     awayLineup,
-    stats: match.status === 'finished' || match.status === 'live' ? stats : undefined,
-    report: match.status === 'finished' ? report : undefined
+    stats: match.status === 'finished' || match.status === 'completed' || match.status === 'live' ? stats : undefined,
+    report: match.status === 'finished' || match.status === 'completed' ? report : undefined
   };
 }

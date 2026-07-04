@@ -1,43 +1,11 @@
-export interface Player {
-  name: string;
-  position: string;
-  club: string;
-  caps: number;
-  image?: string;
-}
+import { Team } from "@/types";
 
-export interface Coach {
-  name: string;
-  role: string;
-  image?: string;
-}
-
-export interface TeamMatch {
-  opponent: string;
-  opponentLogo?: string;
-  date: string;
-  venue: string;
-  score?: string; // e.g. "29 - 3" for results, undefined for upcoming
-  status: 'upcoming' | 'completed';
-}
-
-export interface TeamData {
-  id: string;
-  name: string;
-  tagline: string;
-  history: string;
-  stats: {
-    label: string;
-    value: string;
-  }[];
-  coachingStaff: Coach[];
-  squad: Player[];
-  matches: TeamMatch[];
-  gallery: string[];
-}
-
-export async function getTeamData(slug: string): Promise<TeamData | null> {
-  const teams: Record<string, TeamData> = {
+/**
+ * CMS_SWAP_TODO: Replace mock implementation with actual REST/GraphQL endpoints once backend is available.
+ * Fully compatible with React Native / Mobile platforms for direct cross-platform consumption.
+ */
+export async function getTeamData(slug: string): Promise<Team | null> {
+  const teams: Record<string, Team> = {
     "sables": {
       id: "sables",
       name: "Zimbabwe Sables",

@@ -4,12 +4,13 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import { Camera, X, Calendar, Grid, Layers, Eye } from "lucide-react";
-import { getPhotos, type PhotoItem } from "@/lib/api/gallery";
+import { getPhotos } from "@/lib/api/gallery";
+import { Photo } from "@/types";
 
 export default function GalleryPage() {
-  const [photos, setPhotos] = useState<PhotoItem[]>([]);
+  const [photos, setPhotos] = useState<Photo[]>([]);
   const [activeAlbum, setActiveAlbum] = useState<string>("All");
-  const [activePhoto, setActivePhoto] = useState<PhotoItem | null>(null);
+  const [activePhoto, setActivePhoto] = useState<Photo | null>(null);
 
   useEffect(() => {
     getPhotos().then(setPhotos);

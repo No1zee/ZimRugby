@@ -17,8 +17,11 @@ export interface RankingsData {
   }[];
 }
 
+/**
+ * CMS_SWAP_TODO: Replace mock implementation with actual REST/GraphQL endpoints once backend is available.
+ * Fully compatible with React Native / Mobile platforms for direct cross-platform consumption.
+ */
 export async function getRankingsData(): Promise<RankingsData> {
-  // Mock data representing realistic rankings for Zimbabwe Sables after Africa Cup 2025 victory
   return {
     world: {
       position: 28,
@@ -28,7 +31,7 @@ export async function getRankingsData(): Promise<RankingsData> {
       lastUpdated: "June 2026"
     },
     africa: {
-      position: 2, // Namibia is #1, Zimbabwe #2 (or vice versa, but Africa Cup champions)
+      position: 2,
       previousPosition: 3,
       points: 54.12,
       trend: "up",
