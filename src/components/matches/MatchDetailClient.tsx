@@ -70,10 +70,10 @@ export default function MatchDetailClient({ data }: MatchDetailClientProps) {
 
               {/* Score / Status Badge */}
               <div className="flex flex-col items-center shrink-0">
-                {match.status === "finished" ? (
+                {match.status === "finished" || match.status === "completed" ? (
                   <div className="flex flex-col items-center">
                     <span className="text-4xl md:text-6xl font-black italic tracking-tighter text-glow-green text-white">
-                      {match.score?.home} - {match.score?.away}
+                      {match.homeTeam.score ?? 0} - {match.awayTeam.score ?? 0}
                     </span>
                     <span className="bg-white/10 text-white text-[9px] font-black uppercase tracking-widest px-3 py-1 rounded-full mt-3">
                       FULL TIME
@@ -82,7 +82,7 @@ export default function MatchDetailClient({ data }: MatchDetailClientProps) {
                 ) : match.status === "live" ? (
                   <div className="flex flex-col items-center">
                     <span className="text-4xl md:text-6xl font-black italic tracking-tighter text-glow-green text-white">
-                      {match.score?.home} - {match.score?.away}
+                      {match.homeTeam.score ?? 0} - {match.awayTeam.score ?? 0}
                     </span>
                     <span className="bg-zru-green text-white text-[9px] font-black uppercase tracking-widest px-3 py-1 rounded-full mt-3 animate-pulse">
                       ● LIVE
