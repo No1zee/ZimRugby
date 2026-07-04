@@ -172,10 +172,10 @@ const ProductCard = ({ item, idx }: { item: typeof previewItems[0], idx: number 
             </span>
           </div>
           <div>
-            <h3 className="text-xl font-black uppercase tracking-tighter text-clubhouse-charcoal leading-none mb-2">
+            <h3 className="heading-4 text-clubhouse-charcoal mb-2">
               {item.name}
             </h3>
-            <p className="text-[10px] text-black/60 font-medium leading-relaxed mb-4 min-h-[30px]">
+            <p className="body-small text-black/60 font-medium mb-4 min-h-[30px]">
               {item.description}
             </p>
           </div>
@@ -196,7 +196,7 @@ const ProductCard = ({ item, idx }: { item: typeof previewItems[0], idx: number 
 
 export default function StorePreviewStrip() {
   return (
-    <section className="bg-white py-24 relative overflow-hidden bg-pattern-dots">
+    <section className="bg-white py-section relative overflow-hidden bg-pattern-dots">
       {/* Background Aesthetic Watermark */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[25vw] md:text-[20vw] font-black text-neutral-50 uppercase leading-none pointer-events-none select-none tracking-tighter mix-blend-multiply opacity-50 whitespace-nowrap">
         RESTRICTED
@@ -222,7 +222,7 @@ export default function StorePreviewStrip() {
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              className="text-3xl sm:text-4xl md:text-5xl font-black uppercase tracking-tighter text-clubhouse-charcoal leading-[1.1]"
+              className="heading-2 text-clubhouse-charcoal"
             >
               THE <br /><span className="text-stroke-charcoal text-transparent drop-shadow-sm">CLUBHOUSE</span>
             </motion.h2>

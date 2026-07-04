@@ -22,7 +22,7 @@ export default function NewsMediaBlock({ initialReports = [] }: NewsMediaBlockPr
 
   if (!featuredStory) return null;
   return (
-    <section className="py-24 relative overflow-hidden">
+    <section className="py-section relative overflow-hidden">
       
       {/* Background Polish */}
       <div className="absolute top-0 right-0 w-1/2 h-full bg-[radial-gradient(circle_at_top_right,rgba(80,80,80,0.1),transparent_70%)]" />
@@ -36,7 +36,7 @@ export default function NewsMediaBlock({ initialReports = [] }: NewsMediaBlockPr
               <div className="w-8 h-px bg-zru-gold" />
               <span className="text-zru-gold text-[10px] font-black uppercase tracking-[0.5em]">The Wire</span>
             </div>
-            <h2 className="text-5xl md:text-7xl font-black text-white uppercase tracking-tighter leading-none">
+            <h2 className="heading-1 text-white">
               NEWS & <span className="text-stroke-white text-transparent">MEDIA</span>
             </h2>
           </div>
@@ -82,10 +82,10 @@ export default function NewsMediaBlock({ initialReports = [] }: NewsMediaBlockPr
                     {featuredStory.date}
                   </span>
                 </div>
-                <h3 className="text-4xl md:text-5xl lg:text-6xl font-black text-white uppercase tracking-tighter leading-[0.9] line-clamp-3">
+                <h3 className="heading-2 text-white line-clamp-3">
                   {featuredStory.title}
                 </h3>
-                <p className="text-white/60 text-lg font-medium leading-relaxed line-clamp-2 md:block hidden">
+                <p className="body-large text-white/60 line-clamp-2 md:block hidden">
                   {featuredStory.excerpt.split('. ')[0]}.
                 </p>
                 <div className="pt-6">
@@ -125,10 +125,10 @@ export default function NewsMediaBlock({ initialReports = [] }: NewsMediaBlockPr
                        <div className="w-1 h-1 rounded-full bg-white/20" />
                        <span className="text-[9px] font-bold text-white/60 uppercase tracking-widest">{item.date}</span>
                     </div>
-                    <h4 className="text-lg lg:text-xl font-black text-white uppercase tracking-tight leading-tight group-hover:text-clubhouse-gold transition-colors line-clamp-3">
+                    <h4 className="heading-4 text-white group-hover:text-clubhouse-gold transition-colors line-clamp-3">
                       {item.title}
                     </h4>
-                    <p className="text-white/60 text-xs font-medium line-clamp-2 leading-relaxed">
+                    <p className="body-small text-white/60 font-medium line-clamp-2">
                       {item.excerpt?.split('. ')[0] || item.excerpt}.
                     </p>
                  </div>
