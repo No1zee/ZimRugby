@@ -34,6 +34,7 @@ export function PretextBackground({
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     let prepared: any = null;
     let lastFontSize = 0;
+    let cachedTextWidth = 0;
 
     let currentX = 0;
     let currentY = 0;
@@ -75,11 +76,13 @@ export function PretextBackground({
       if (!prepared || lastFontSize !== fontSize) {
         prepared = prepareWithSegments(text, fontString);
         lastFontSize = fontSize;
+        
+        // Measure and cache layout only when font size changes (huge performance saving on older devices)
+        const layoutData = layoutWithLines(prepared, 8000, fontSize * 1.5);
+        cachedTextWidth = (layoutData.lines[0]?.width || w) * 1.2;
       }
 
-      // Layout a single instance to get width
-      const layoutData = layoutWithLines(prepared, 8000, fontSize * 1.5);
-      const textWidth = (layoutData.lines[0]?.width || w) * 1.2;
+      const textWidth = cachedTextWidth;
 
       // 2. Interaction Physics (Lerp)
       currentX += (targetX - currentX) * 0.05;
