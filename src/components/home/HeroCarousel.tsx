@@ -33,7 +33,7 @@ function SlideContent({ slide }: { slide: HeroSlideData }) {
   return (
     <div ref={containerRef} className="space-y-6">
       {/* Headline */}
-      <h1 className="font-black text-white uppercase tracking-tight leading-[0.8] mb-8 relative hero-text-item">
+      <h1 className="font-black text-white uppercase tracking-tight leading-[0.8] relative hero-text-item">
         {/* Spotlights */}
         <div className="absolute -inset-x-32 -top-64 bottom-0 pointer-events-none z-0 opacity-40">
           <div className="absolute top-0 left-0 w-0 h-0 border-l-120 border-l-transparent border-r-120 border-r-transparent border-t-400 border-t-zru-green/20 -rotate-12 blur-3xl origin-top" />
@@ -46,16 +46,16 @@ function SlideContent({ slide }: { slide: HeroSlideData }) {
           </span>
         )}
 
-        <span className="block relative z-20 text-5xl sm:text-7xl md:text-8xl lg:text-[6rem] xl:text-[8rem] 2xl:text-[11rem] text-glow-heavy leading-none">
+        <span className="block relative z-20 text-5xl sm:text-7xl md:text-8xl lg:text-[4rem] xl:text-[5.5rem] 2xl:text-[8rem] text-glow-heavy leading-none">
           {slide.headline.line1}
         </span>
-        <span className="block text-white italic relative z-20 text-6xl sm:text-8xl md:text-[8rem] lg:text-[7rem] xl:text-[9rem] 2xl:text-[12rem] -mt-2 sm:-mt-4 lg:-mt-6 xl:-mt-8 2xl:-mt-10 text-glow-green leading-none">
+        <span className="block text-white italic relative z-20 text-6xl sm:text-8xl md:text-[8rem] lg:text-[4.5rem] xl:text-[6rem] 2xl:text-[9rem] -mt-2 sm:-mt-4 lg:-mt-6 xl:-mt-8 2xl:-mt-10 text-glow-green leading-none">
           {slide.headline.line2}
         </span>
       </h1>
 
       {/* Subtext */}
-      <p className="text-white/80 text-lg md:text-xl font-medium mb-12 max-w-2xl leading-relaxed drop-shadow-2xl hero-text-item">
+      <p className="text-white/80 text-lg md:text-xl font-medium max-w-2xl leading-relaxed drop-shadow-2xl hero-text-item">
         {slide.subtext}
       </p>
 
@@ -201,7 +201,7 @@ export default function HeroCarousel({ slides }: { slides: HeroSlideData[] }) {
       </div>
 
       {/* Content Layer */}
-      <div className="relative z-20 w-full max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 h-full flex items-center justify-start pt-[5vh]">
+      <div className="relative z-20 w-full max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 h-full flex items-center justify-start pt-24 lg:pt-32">
         <div className="text-left w-full max-w-5xl mr-auto">
           <AnimatePresence mode="wait">
             <div key={currentSlide}>

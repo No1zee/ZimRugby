@@ -104,8 +104,8 @@ export default function Navigation() {
               <Image
                 src="/zru logo main.svg"
                 alt="ZRU Logo"
-                width={96}
-                height={96}
+                width={81}
+                height={101}
                 className="object-contain drop-shadow-2xl w-auto h-12 lg:h-14"
                 priority
               />
