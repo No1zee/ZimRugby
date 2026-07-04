@@ -92,7 +92,7 @@ export function CountdownPromo({
   const isClient = mounted;
 
   return (
-    <section className={`relative py-16 lg:py-24 bg-rich-black overflow-hidden ${className}`}>
+    <section className={`relative py-section bg-rich-black overflow-hidden ${className}`}>
       
       {/* Visual Background Accent */}
       <div className="absolute inset-0 z-0">
@@ -154,7 +154,7 @@ export function CountdownPromo({
             transition={{ duration: 0.8, delay: 0.2 }}
           >
             {/* Date */}
-            <p className="text-3xl md:text-5xl font-black text-white italic mb-4 h-[1em] tracking-tighter">
+            <p className="heading-2 text-white mb-4">
               {isClient ? formattedDate : "\u00A0"}
             </p>
             
@@ -166,14 +166,14 @@ export function CountdownPromo({
             
             {/* Subtitle */}
             {subtitle && (
-              <p className="text-4xl md:text-6xl font-black text-white uppercase mb-8 leading-[0.9] tracking-tighter italic">
+              <p className="heading-1 text-white mb-8">
                 {subtitle}
               </p>
             )}
             
             {/* Description */}
             {description && (
-              <p className="text-white/60 text-base leading-relaxed mb-10 max-w-md font-medium">
+              <p className="body-base text-white/60 mb-10 max-w-md font-medium">
                 {description}
               </p>
             )}

@@ -1,0 +1,131 @@
+/* Zimbabwe Rugby Typography System */
+
+/* Headings */
+.heading-hero {
+  font-family: var(--font-heading);
+  font-size: 3rem; /* 48px */
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
+  font-style: italic;
+  line-height: 0.95;
+}
+@media (min-width: 768px) {
+  .heading-hero {
+    font-size: 4.5rem; /* 72px */
+  }
+}
+@media (min-width: 1024px) {
+  .heading-hero {
+    font-size: 5.5rem; /* 88px */
+  }
+}
+
+.heading-1 {
+  font-family: var(--font-heading);
+  font-size: 2.25rem; /* 36px */
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
+  font-style: italic;
+  line-height: 1.0;
+}
+@media (min-width: 768px) {
+  .heading-1 {
+    font-size: 3.5rem; /* 56px */
+  }
+}
+
+.heading-2 {
+  font-family: var(--font-heading);
+  font-size: 1.875rem; /* 30px */
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: -0.01em;
+  font-style: italic;
+  line-height: 1.1;
+}
+@media (min-width: 768px) {
+  .heading-2 {
+    font-size: 2.5rem; /* 40px */
+  }
+}
+
+.heading-3 {
+  font-family: var(--font-subheading);
+  font-size: 1.5rem; /* 24px */
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: -0.01em;
+  line-height: 1.2;
+}
+@media (min-width: 768px) {
+  .heading-3 {
+    font-size: 1.875rem; /* 30px */
+  }
+}
+
+.heading-4 {
+  font-family: var(--font-subheading);
+  font-size: 1.25rem; /* 20px */
+  font-weight: 700;
+  text-transform: uppercase;
+  line-height: 1.3;
+}
+@media (min-width: 768px) {
+  .heading-4 {
+    font-size: 1.5rem; /* 24px */
+  }
+}
+
+.heading-5 {
+  font-family: var(--font-subheading);
+  font-size: 1.125rem; /* 18px */
+  font-weight: 700;
+  text-transform: uppercase;
+  line-height: 1.4;
+}
+
+/* Body text */
+.body-large {
+  font-family: var(--font-body);
+  font-size: 1.125rem; /* 18px */
+  line-height: 1.7;
+  color: rgba(255, 255, 255, 0.7);
+}
+@media (min-width: 768px) {
+  .body-large {
+    font-size: 1.25rem; /* 20px */
+  }
+}
+
+.body-base {
+  font-family: var(--font-body);
+  font-size: 1rem; /* 16px */
+  line-height: 1.625;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.body-small {
+  font-family: var(--font-body);
+  font-size: 0.875rem; /* 14px */
+  line-height: 1.57;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+/* Labels & UI */
+.label {
+  font-family: var(--font-subheading);
+  font-size: 0.75rem; /* 12px */
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: var(--color-clubhouse-gold);
+}
+
+.caption {
+  font-family: var(--font-body);
+  font-size: 0.75rem; /* 12px */
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.4);
+}

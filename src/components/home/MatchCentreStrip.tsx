@@ -51,7 +51,7 @@ export default function MatchCentreStrip({ initialMatches = [], twinData, rankin
 
   return (
     <section 
-      className="py-16 lg:py-24 relative overflow-hidden"
+      className="py-section relative overflow-hidden"
       id="match-centre"
     >
       {/* Background Media with Parallax-ready feel */}
@@ -81,7 +81,7 @@ export default function MatchCentreStrip({ initialMatches = [], twinData, rankin
                 <div className="w-8 h-1 bg-zru-gold" />
                 <span className="text-zru-gold text-xs font-black uppercase tracking-[0.3em]">Season Teaser</span>
               </div>
-              <h2 className="text-4xl md:text-6xl font-black text-white uppercase tracking-tighter">
+              <h2 className="heading-1 text-white">
                 Match Centre
               </h2>
             </div>

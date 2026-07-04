@@ -61,7 +61,7 @@ const events = [
 
 export default function EventsBlock() {
   return (
-    <section className="relative py-24 overflow-hidden" id="events-block">
+    <section className="relative py-section overflow-hidden" id="events-block">
       
       {/* Background text - Restored big interactive text */}
       <PretextBackground 
@@ -94,7 +94,7 @@ export default function EventsBlock() {
                 </div>
               </div>
               
-              <p className="text-white/60 text-sm leading-relaxed font-medium">
+              <p className="body-small text-white/60 font-medium">
                 From Super Six matches to community development festivals, explore the heart of Zimbabwean rugby across the nation.
               </p>
               
@@ -151,13 +151,13 @@ export default function EventsBlock() {
                               </span>
                             ))}
                           </div>
-                          <h3 className="text-2xl md:text-3xl font-black text-white uppercase tracking-tight leading-none group-hover:text-zru-gold transition-colors">
+                          <h3 className="heading-3 text-white group-hover:text-zru-gold transition-colors">
                             {event.title}
                           </h3>
                         </div>
                         
                         <div className="flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-100">
-                          <p className="text-white/60 text-xs line-clamp-2 font-medium">
+                          <p className="body-small text-white/60 font-medium line-clamp-2">
                             {event.description}
                           </p>
                           <div className="flex items-center gap-4 text-[9px] font-bold text-white/60 uppercase tracking-widest pt-4">

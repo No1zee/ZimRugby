@@ -17,35 +17,89 @@ const iconMap: Record<string, LucideIcon> = {
   Play,
 };
 
-export default function HeroCarousel({ slides }: { slides: HeroSlideData[] }) {
-  const [currentSlide, setCurrentSlide] = useState(0);
-  const [isLoaded, setIsLoaded] = useState(false);
-  const containerRef = useRef<HTMLElement>(null);
-  const headlineRef = useRef<HTMLHeadingElement>(null);
+function SlideContent({ slide }: { slide: HeroSlideData }) {
+  const containerRef = useRef<HTMLDivElement>(null);
 
-  // Use GSAP for the "Bloom" reveal and text transitions
   useGSAP(() => {
-    if (!isLoaded) return;
-
-    const tl = gsap.timeline();
-    
-    // Initial Focus reveal (using CSS variables for property stability)
-    tl.fromTo(".hero-bg-media", 
-      { "--hero-brightness": 1.5, scale: 1.05 },
-      { "--hero-brightness": 1, scale: 1, duration: 1.5, ease: "power3.out" }
-    );
-
-    // Text reveal sequence
-    tl.from(".hero-text-item", {
+    gsap.from(".hero-text-item", {
       y: 40,
       opacity: 0,
       stagger: 0.15,
       duration: 1,
       ease: "power4.out",
-    }, "-=1.2");
+    });
+  }, { scope: containerRef, dependencies: [slide] });
 
-  }, { scope: containerRef, dependencies: [currentSlide, isLoaded] });
+  return (
+    <div ref={containerRef} className="space-y-6">
+      {/* Headline */}
+      <h1 className="font-black text-white uppercase tracking-tight leading-[0.8] mb-8 relative hero-text-item">
+        {/* Spotlights */}
+        <div className="absolute -inset-x-32 -top-64 bottom-0 pointer-events-none z-0 opacity-40">
+          <div className="absolute top-0 left-0 w-0 h-0 border-l-120 border-l-transparent border-r-120 border-r-transparent border-t-400 border-t-zru-green/20 -rotate-12 blur-3xl origin-top" />
+          <div className="absolute top-0 right-0 w-0 h-0 border-l-120 border-l-transparent border-r-120 border-r-transparent border-t-400 border-t-zru-green/20 rotate-12 blur-3xl origin-top" />
+        </div>
+        
+        {slide.tag && (
+          <span className="block text-zru-gold text-sm md:text-xl font-black uppercase tracking-[0.4em] mb-4 sm:mb-8">
+            {slide.tag}
+          </span>
+        )}
 
+        <span className="block relative z-20 text-5xl sm:text-7xl md:text-8xl lg:text-[6rem] xl:text-[8rem] 2xl:text-[11rem] text-glow-heavy leading-none">
+          {slide.headline.line1}
+        </span>
+        <span className="block text-white italic relative z-20 text-6xl sm:text-8xl md:text-[8rem] lg:text-[7rem] xl:text-[9rem] 2xl:text-[12rem] -mt-2 sm:-mt-4 lg:-mt-6 xl:-mt-8 2xl:-mt-10 text-glow-green leading-none">
+          {slide.headline.line2}
+        </span>
+      </h1>
+
+      {/* Subtext */}
+      <p className="text-white/80 text-lg md:text-xl font-medium mb-12 max-w-2xl leading-relaxed drop-shadow-2xl hero-text-item">
+        {slide.subtext}
+      </p>
+
+      {/* CTAs */}
+      <div className="flex flex-col sm:flex-row gap-6 justify-start items-center hero-text-item">
+        <MagneticElement intensity={0.25}>
+          <Link href={slide.ctas.primary.href}>
+            <GlowButton 
+              className="bg-white text-zru-green hover:bg-gray-100 px-12 py-5 text-sm font-black uppercase tracking-[0.2em] flex items-center gap-3 rounded-full transition-all duration-500 min-w-[240px] justify-center shadow-2xl cursor-none"
+              glowColor="rgba(255, 255, 255, 0.4)"
+            >
+              {slide.ctas.primary.iconName && iconMap[slide.ctas.primary.iconName] && (() => {
+                const Icon = iconMap[slide.ctas.primary.iconName];
+                return <Icon className="w-5 h-5" />;
+              })()}
+              {slide.ctas.primary.label}
+            </GlowButton>
+          </Link>
+        </MagneticElement>
+        
+        {slide.ctas.secondary && (
+          <MagneticElement intensity={0.25}>
+            <Link href={slide.ctas.secondary.href}>
+              <button 
+                className="bg-white/5 backdrop-blur-xl border border-white/20 text-white px-12 py-5 text-sm font-black uppercase tracking-[0.2em] flex items-center gap-3 rounded-full hover:bg-white/10 transition-all duration-500 min-w-[240px] justify-center cursor-none"
+              >
+                {slide.ctas.secondary.iconName && iconMap[slide.ctas.secondary.iconName] && (() => {
+                  const Icon = iconMap[slide.ctas.secondary.iconName];
+                  return <Icon className="w-5 h-5" />;
+                })()}
+                {slide.ctas.secondary.label}
+              </button>
+            </Link>
+          </MagneticElement>
+        )}
+      </div>
+    </div>
+  );
+}
+
+export default function HeroCarousel({ slides }: { slides: HeroSlideData[] }) {
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const [isLoaded, setIsLoaded] = useState(false);
+  const containerRef = useRef<HTMLElement>(null);
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
@@ -57,14 +111,20 @@ export default function HeroCarousel({ slides }: { slides: HeroSlideData[] }) {
 
   // Auto-play functionality
   const nextSlide = () => {
-    setIsLoaded(false);
     setCurrentSlide((prev) => (prev + 1) % slides.length);
   };
 
   const prevSlide = () => {
-    setIsLoaded(false);
     setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length);
   };
+
+  useEffect(() => {
+    setIsLoaded(false);
+    const animTimer = setTimeout(() => {
+      setIsLoaded(true);
+    }, 50);
+    return () => clearTimeout(animTimer);
+  }, [currentSlide]);
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -143,81 +203,11 @@ export default function HeroCarousel({ slides }: { slides: HeroSlideData[] }) {
       {/* Content Layer */}
       <div className="relative z-20 w-full max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 h-full flex items-center justify-start pt-[5vh]">
         <div className="text-left w-full max-w-5xl mr-auto">
-            
-            <AnimatePresence mode="wait">
-                <div key={currentSlide}>
-
-
-                    {/* Headline */}
-                    <h1 
-                        ref={headlineRef}
-                        className="font-black text-white uppercase tracking-tight leading-[0.8] mb-8 relative hero-text-item"
-                    >
-                        {/* Spotlights */}
-                        <div className="absolute -inset-x-32 -top-64 bottom-0 pointer-events-none z-0 opacity-40">
-                            <div className="absolute top-0 left-0 w-0 h-0 border-l-120 border-l-transparent border-r-120 border-r-transparent border-t-400 border-t-zru-green/20 -rotate-12 blur-3xl origin-top" />
-                            <div className="absolute top-0 right-0 w-0 h-0 border-l-120 border-l-transparent border-r-120 border-r-transparent border-t-400 border-t-zru-green/20 rotate-12 blur-3xl origin-top" />
-                        </div>
-                        
-                        {activeSlide.tag && (
-                          <span className="block text-zru-gold text-sm md:text-xl font-black uppercase tracking-[0.4em] mb-4 sm:mb-8">
-                             {activeSlide.tag}
-                          </span>
-                        )}
-
-                        <span 
-                            className="block relative z-20 text-5xl sm:text-7xl md:text-9xl lg:text-[11rem] text-glow-heavy"
-                        >
-                            {activeSlide.headline.line1}
-                        </span>
-                        <span 
-                            className="block text-white italic relative z-20 text-6xl sm:text-8xl md:text-[10rem] lg:text-[12rem] -mt-2 sm:-mt-4 lg:-mt-10 text-glow-green"
-                        >
-                            {activeSlide.headline.line2}
-                        </span>
-                    </h1>
-
-                    {/* Subtext */}
-                    <p 
-                        className="text-white/80 text-lg md:text-xl font-medium mb-12 max-w-2xl leading-relaxed drop-shadow-2xl hero-text-item"
-                    >
-                    {activeSlide.subtext}
-                    </p>
-
-                    {/* CTAs */}
-                    <div className="flex flex-col sm:flex-row gap-6 justify-start items-center hero-text-item">
-                        <MagneticElement intensity={0.25}>
-                           <Link href={activeSlide.ctas.primary.href}>
-                              <GlowButton 
-                                className="bg-white text-zru-green hover:bg-gray-100 px-12 py-5 text-sm font-black uppercase tracking-[0.2em] flex items-center gap-3 rounded-full transition-all duration-500 min-w-[240px] justify-center shadow-2xl cursor-none"
-                                glowColor="rgba(255, 255, 255, 0.4)"
-                              >
-                                {activeSlide.ctas.primary.iconName && iconMap[activeSlide.ctas.primary.iconName] && (() => {
-                                  const Icon = iconMap[activeSlide.ctas.primary.iconName];
-                                  return <Icon className="w-5 h-5" />;
-                                })()}
-                                {activeSlide.ctas.primary.label}
-                              </GlowButton>
-                           </Link>
-                        </MagneticElement>
-                        
-                        <MagneticElement intensity={0.25}>
-                           <Link href={activeSlide.ctas.secondary.href}>
-                              <button 
-                                className="bg-white/5 backdrop-blur-xl border border-white/20 text-white px-12 py-5 text-sm font-black uppercase tracking-[0.2em] flex items-center gap-3 rounded-full hover:bg-white/10 transition-all duration-500 min-w-[240px] justify-center cursor-none"
-                              >
-                                {activeSlide.ctas.secondary.iconName && iconMap[activeSlide.ctas.secondary.iconName] && (() => {
-                                  const Icon = iconMap[activeSlide.ctas.secondary.iconName];
-                                  return <Icon className="w-5 h-5" />;
-                                })()}
-                                {activeSlide.ctas.secondary.label}
-                              </button>
-                           </Link>
-                        </MagneticElement>
-                    </div>
-                </div>
-            </AnimatePresence>
-
+          <AnimatePresence mode="wait">
+            <div key={currentSlide}>
+              <SlideContent slide={activeSlide} />
+            </div>
+          </AnimatePresence>
         </div>
       </div>
 

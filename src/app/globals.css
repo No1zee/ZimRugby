@@ -1,5 +1,6 @@
 @import "tailwindcss";
 @import "../styles/grain.css";
+@import "../styles/typography.css";
 
 /* eslint-disable-next-line */
 /* Note: @theme is standard Tailwind v4 syntax. Ignore "Unknown at rule" warnings. */
@@ -28,6 +29,26 @@
   --color-clubhouse-gold: #d4af37;
   --color-clubhouse-copper: #b87333;
   --color-clubhouse-accent: var(--color-clubhouse-gold);
+
+  /* Consistent Spacing Scale overrides */
+  --spacing-section: 5rem;
+  --spacing-section-sm: 3rem;
+  --spacing-card-padding: 2rem;
+
+  /* Premium Shadows system */
+  --shadow-card: 0 1px 3px 0 rgba(0,0,0,0.1);
+  --shadow-card-hover: 0 10px 25px -5px rgba(0,0,0,0.25), 0 0 30px rgba(0,150,70,0.05);
+  --shadow-hero: 0 20px 50px -12px rgba(0,0,0,0.5), 0 0 60px rgba(0,150,70,0.1);
+
+  /* Uniform Border Radii */
+  --radius-card: 0.75rem;
+  --radius-button: 0.5rem;
+  --radius-input: 0.5rem;
+}
+
+*:focus-visible {
+  outline: var(--color-clubhouse-gold) solid 2px;
+  outline-offset: 2px;
 }
 
 body {
