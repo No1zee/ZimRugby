@@ -5,10 +5,10 @@ import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
 import { ChevronRight, Calendar, MapPin, Users, Award, ShieldAlert, Image as ImageIcon } from "lucide-react";
-import type { TeamData } from "@/lib/api/teams";
+import { Team } from "@/types";
 
 interface TeamPageClientProps {
-  team: TeamData;
+  team: Team;
 }
 
 export default function TeamPageClient({ team }: TeamPageClientProps) {

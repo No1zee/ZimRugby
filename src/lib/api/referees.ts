@@ -1,27 +1,9 @@
-export interface RefereeResource {
-  title: string;
-  category: 'laws' | 'guides' | 'forms';
-  size: string;
-  downloadUrl: string;
-}
+import { RefereeResource, RefereeCourse, RefereeNotice } from "@/types";
 
-export interface RefereeCourse {
-  title: string;
-  level: string;
-  date: string;
-  venue: string;
-  instructor: string;
-  status: 'open' | 'closed';
-}
-
-export interface RefereeNotice {
-  id: string;
-  title: string;
-  date: string;
-  excerpt: string;
-  content: string;
-}
-
+/**
+ * CMS_SWAP_TODO: Replace mock implementation with actual REST/GraphQL endpoints once backend is available.
+ * Fully compatible with React Native / Mobile platforms for direct cross-platform consumption.
+ */
 export async function getRefereeResources(): Promise<RefereeResource[]> {
   return [
     { title: "World Rugby Laws of the Game 2026", category: "laws", size: "8.5 MB", downloadUrl: "#" },
@@ -33,6 +15,10 @@ export async function getRefereeResources(): Promise<RefereeResource[]> {
   ];
 }
 
+/**
+ * CMS_SWAP_TODO: Replace mock implementation with actual REST/GraphQL endpoints once backend is available.
+ * Fully compatible with React Native / Mobile platforms for direct cross-platform consumption.
+ */
 export async function getRefereeCourses(): Promise<RefereeCourse[]> {
   return [
     {
@@ -62,6 +48,10 @@ export async function getRefereeCourses(): Promise<RefereeCourse[]> {
   ];
 }
 
+/**
+ * CMS_SWAP_TODO: Replace mock implementation with actual REST/GraphQL endpoints once backend is available.
+ * Fully compatible with React Native / Mobile platforms for direct cross-platform consumption.
+ */
 export async function getRefereeNotices(): Promise<RefereeNotice[]> {
   return [
     {

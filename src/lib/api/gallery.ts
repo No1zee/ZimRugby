@@ -1,13 +1,10 @@
-export interface PhotoItem {
-  id: string;
-  title: string;
-  album: 'Match Day' | 'Historical Collections' | 'Community Rugby' | 'Training Camps';
-  image: string;
-  date: string;
-  description: string;
-}
+import { Photo } from "@/types";
 
-export async function getPhotos(): Promise<PhotoItem[]> {
+/**
+ * CMS_SWAP_TODO: Replace mock implementation with actual REST/GraphQL endpoints once backend is available.
+ * Fully compatible with React Native / Mobile platforms for direct cross-platform consumption.
+ */
+export async function getPhotos(): Promise<Photo[]> {
   return [
     {
       id: "photo-africa-cup-2025",

@@ -1,15 +1,10 @@
-export interface VideoItem {
-  id: string;
-  title: string;
-  category: 'Match Highlights' | 'Press Conferences' | 'Player Features' | 'Rugby Explained';
-  duration: string;
-  date: string;
-  thumbnail: string;
-  embedUrl: string; // The URL to embed in the sandboxed iframe
-  description: string;
-}
+import { Video } from "@/types";
 
-export async function getVideos(): Promise<VideoItem[]> {
+/**
+ * CMS_SWAP_TODO: Replace mock implementation with actual REST/GraphQL endpoints once backend is available.
+ * Fully compatible with React Native / Mobile platforms for direct cross-platform consumption.
+ */
+export async function getVideos(): Promise<Video[]> {
   return [
     {
       id: "vid-sables-namibia-2025",

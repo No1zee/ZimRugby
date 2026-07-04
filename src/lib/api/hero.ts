@@ -15,7 +15,10 @@ export interface HeroSlideData {
   alignment?: "center" | "left";
 }
 
-// In Phase 2, this will be fetched from Directus
+/**
+ * CMS_SWAP_TODO: Replace mock implementation with actual REST/GraphQL endpoints once backend is available.
+ * Fully compatible with React Native / Mobile platforms for direct cross-platform consumption.
+ */
 export async function getHeroSlides(): Promise<HeroSlideData[]> {
   return [
     {
@@ -63,7 +66,7 @@ export async function getHeroSlides(): Promise<HeroSlideData[]> {
     {
       id: 4,
       tag: "LADY SABLES",
-      image: "/images/teams/sables.jpg", // Using placeholder image for now
+      image: "/images/teams/sables.jpg",
       headline: {
         line1: "THE LADY SABLES",
         line2: "ARE HOME",

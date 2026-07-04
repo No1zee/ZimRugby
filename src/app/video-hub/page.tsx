@@ -4,14 +4,15 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import { Play, Search, X, Clock, Calendar, Film } from "lucide-react";
-import { getVideos, type VideoItem } from "@/lib/api/videos";
+import { getVideos } from "@/lib/api/videos";
+import { Video } from "@/types";
 import { GlowButton } from "@/components/ui/animations";
 
 export default function VideoHubPage() {
-  const [videos, setVideos] = useState<VideoItem[]>([]);
+  const [videos, setVideos] = useState<Video[]>([]);
   const [activeCategory, setActiveCategory] = useState<string>("All");
   const [searchQuery, setSearchQuery] = useState<string>("");
-  const [activeVideo, setActiveVideo] = useState<VideoItem | null>(null);
+  const [activeVideo, setActiveVideo] = useState<Video | null>(null);
 
   useEffect(() => {
     getVideos().then(setVideos);
