@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { getReportById, getLatestReports } from "@/lib/data-fetcher";
 import Navigation from "@/components/layout/Navigation";
 import Footer from "@/components/layout/Footer";
@@ -6,8 +7,35 @@ import Link from "next/link";
 import { ArrowLeft, Share2, Calendar } from "lucide-react";
 import { notFound } from "next/navigation";
 
-export default async function ReportPage({ params }: { params: { id: string } }) {
-  const report = await getReportById(params.id);
+interface PageProps {
+  params: Promise<{ slug: string }>;
+}
+
+export async function generateStaticParams() {
+  const reports = await getLatestReports();
+  return reports.map((r) => ({
+    slug: r.id
+  }));
+}
+
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  const { slug } = await params;
+  const report = await getReportById(slug);
+  if (!report) return {};
+  return {
+    title: `${report.title} | Zimbabwe Rugby Union`,
+    description: report.excerpt,
+    openGraph: {
+      title: report.title,
+      description: report.excerpt,
+      images: [{ url: report.image }]
+    }
+  };
+}
+
+export default async function ReportPage({ params }: PageProps) {
+  const { slug } = await params;
+  const report = await getReportById(slug);
   
   if (!report) {
     notFound();
