@@ -112,7 +112,7 @@ export default function PlayRugbyPage() {
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
               <input 
                 type="text"
-                placeholder="Search by city or club name..."
+                placeholder="Search by city or club name… e.g. Harare"
                 className="pl-10 pr-4 py-3 border border-gray-200 rounded-lg w-full md:w-80 focus:outline-none focus:border-zru-green"
               />
             </div>

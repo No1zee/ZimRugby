@@ -306,7 +306,7 @@ export default function RefereesPortalPage() {
                     disabled={isSubmitting}
                     className="w-full bg-zru-gold hover:bg-white hover:text-rich-black text-rich-black font-black text-xs uppercase tracking-[0.15em] py-3 rounded-xl flex items-center justify-center gap-2 transition-all shadow-md mt-6 disabled:opacity-50"
                   >
-                    <span>{isSubmitting ? "Submitting..." : "Submit Registration"}</span>
+                    <span>{isSubmitting ? "Submitting…" : "Submit Registration"}</span>
                     <ArrowRight className="w-4 h-4" />
                   </button>
                 </form>

@@ -80,7 +80,7 @@ export default function MatchCentre() {
                   <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
                   <input 
                      type="text" 
-                     placeholder="Search opponent..." 
+                     placeholder="Search opponent… e.g. Zambia" 
                      className="w-full bg-black/20 border border-white/10 rounded-lg pl-10 pr-4 py-2 text-white placeholder-gray-500 focus:outline-none focus:border-zru-gold text-sm"
                   />
                </div>

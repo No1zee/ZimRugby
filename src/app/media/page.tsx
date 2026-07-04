@@ -142,7 +142,7 @@ export default function MediaPage() {
                     <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
                     <input 
                         type="text" 
-                        placeholder="Search news & videos..." 
+                        placeholder="Search news & videos… e.g. Sables" 
                         className="w-full bg-white/5 border border-white/10 rounded-lg pl-10 pr-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-zru-green text-sm transition-all"
                     />
                 </div>

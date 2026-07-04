@@ -512,7 +512,7 @@ export default function WorldCupCampaignPage() {
                       type="submit"
                       disabled={isSubmitting}
                     >
-                      {isSubmitting ? "Processing..." : "Initialize Membership"}
+                      {isSubmitting ? "Processing…" : "Initialize Membership"}
                     </Button>
                     <p className="text-center text-[10px] font-bold text-white/50 uppercase tracking-widest">
                       Already a member? <Link href="/auth" className="text-clubhouse-gold underline">Sign in</Link>
