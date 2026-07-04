@@ -47,7 +47,7 @@ export default function AdminMatchesPage() {
     }));
   };
 
-  if (loading) return <div className="p-20 text-white">Loading fixtures...</div>;
+  if (loading) return <div className="p-20 text-white">Loading fixtures…</div>;
 
   return (
     <div className="min-h-screen bg-rich-black p-8 md:p-20">

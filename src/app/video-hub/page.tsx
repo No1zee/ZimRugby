@@ -116,7 +116,7 @@ export default function VideoHubPage() {
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
               <input
                 type="text"
-                placeholder="Search videos..."
+                placeholder="Search videos… e.g. Highlights"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="w-full bg-white/5 border border-white/10 rounded-full pl-10 pr-4 py-2.5 text-white placeholder-gray-500 focus:outline-none focus:border-zru-gold text-sm transition-all"

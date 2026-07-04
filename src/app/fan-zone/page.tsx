@@ -220,7 +220,7 @@ export default function FanZonePage() {
                   disabled={isSubmitting}
                   className="w-full bg-zru-gold hover:bg-white hover:text-rich-black text-rich-black font-black text-xs uppercase tracking-[0.2em] py-3.5 rounded-xl flex items-center justify-center gap-2 transition-all shadow-lg mt-6 disabled:opacity-50"
                 >
-                  <span>{isSubmitting ? "Registering..." : "Register supporters card"}</span>
+                  <span>{isSubmitting ? "Registering…" : "Register supporters card"}</span>
                   <ArrowRight className="w-4 h-4" />
                 </button>
 

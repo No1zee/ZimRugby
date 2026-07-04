@@ -184,7 +184,7 @@ export default function ContactPage() {
                     rows={5}
                     value={message}
                     onChange={(e) => setMessage(e.target.value)}
-                    placeholder="Describe your request in detail..."
+                    placeholder="Describe your request in detail… e.g. Ticketing query"
                     className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-2.5 text-white placeholder-white/20 focus:outline-none focus:border-zru-gold text-xs transition-colors resize-none"
                   />
                 </div>
@@ -194,7 +194,7 @@ export default function ContactPage() {
                   disabled={isSubmitting}
                   className="w-full bg-zru-gold hover:bg-white hover:text-rich-black text-rich-black font-black text-xs uppercase tracking-[0.2em] py-3.5 rounded-xl flex items-center justify-center gap-2 transition-all shadow-lg disabled:opacity-50"
                 >
-                  <span>{isSubmitting ? "Sending..." : "Submit message"}</span>
+                  <span>{isSubmitting ? "Sending…" : "Submit message"}</span>
                   <Send className="w-4 h-4" />
                 </button>
 

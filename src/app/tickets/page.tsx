@@ -584,7 +584,7 @@ export default function TicketsPage() {
                       type="submit" 
                       disabled={isSubmitting}
                     >
-                      {isSubmitting ? "Processing..." : "Register Interest"}
+                      {isSubmitting ? "Processing…" : "Register Interest"}
                     </Button>
                     <p className="text-center text-[10px] font-bold text-white/50 uppercase tracking-widest">
                       Already a ZRU Nation member? <Link href="/auth" className="text-clubhouse-gold underline">Sign in for one-click interest</Link>
