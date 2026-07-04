@@ -2,9 +2,10 @@
 
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Landmark, FileText, Download, Award, Calendar, Bell, Shield, ArrowRight, CheckCircle2 } from "lucide-react";
+import { Landmark, FileText, Download, Award, Calendar, Bell, Shield, ArrowRight, CheckCircle2, AlertCircle } from "lucide-react";
 import { getRefereeResources, getRefereeCourses, getRefereeNotices } from "@/lib/api/referees";
 import { RefereeResource, RefereeCourse, RefereeNotice } from "@/types";
+import { saveSubmission } from "@/lib/mockStorage";
 
 export default function RefereesPortalPage() {
   const [resources, setResources] = useState<RefereeResource[]>([]);
@@ -17,6 +18,8 @@ export default function RefereesPortalPage() {
   const [formEmail, setFormEmail] = useState("");
   const [formCourse, setFormCourse] = useState("");
   const [formSubmitted, setFormSubmitted] = useState(false);
+  const [submitError, setSubmitError] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
     Promise.all([
@@ -33,10 +36,24 @@ export default function RefereesPortalPage() {
     });
   }, []);
 
-  const handleRegister = (e: React.FormEvent) => {
+  const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (formName && formEmail && formCourse) {
-      setFormSubmitted(true);
+    if (!formName || !formEmail || !formCourse) return;
+    
+    setIsSubmitting(true);
+    setSubmitError("");
+    
+    try {
+      const res = await saveSubmission("referee_course", { name: formName, email: formEmail, course: formCourse });
+      if (res.success) {
+        setFormSubmitted(true);
+      } else {
+        setSubmitError(res.message);
+      }
+    } catch (err) {
+      setSubmitError("An error occurred during submission.");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -238,6 +255,13 @@ export default function RefereesPortalPage() {
 
               {!formSubmitted ? (
                 <form onSubmit={handleRegister} className="space-y-4">
+                  {submitError && (
+                    <div className="bg-zru-red/10 border border-zru-red/20 rounded-xl p-3 flex items-center gap-2 text-zru-red text-[11px] font-semibold">
+                      <AlertCircle className="w-3.5 h-3.5 shrink-0" />
+                      <span>{submitError}</span>
+                    </div>
+                  )}
+
                   <div className="space-y-1.5">
                     <label className="text-[10px] text-white/50 font-black uppercase tracking-wider block">Full Name</label>
                     <input 
@@ -279,9 +303,10 @@ export default function RefereesPortalPage() {
 
                   <button
                     type="submit"
-                    className="w-full bg-zru-gold hover:bg-white hover:text-rich-black text-rich-black font-black text-xs uppercase tracking-[0.15em] py-3 rounded-xl flex items-center justify-center gap-2 transition-all shadow-md mt-6"
+                    disabled={isSubmitting}
+                    className="w-full bg-zru-gold hover:bg-white hover:text-rich-black text-rich-black font-black text-xs uppercase tracking-[0.15em] py-3 rounded-xl flex items-center justify-center gap-2 transition-all shadow-md mt-6 disabled:opacity-50"
                   >
-                    <span>Submit Registration</span>
+                    <span>{isSubmitting ? "Submitting..." : "Submit Registration"}</span>
                     <ArrowRight className="w-4 h-4" />
                   </button>
                 </form>
