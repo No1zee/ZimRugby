@@ -61,7 +61,7 @@ const events = [
 
 export default function EventsBlock() {
   return (
-    <section className="relative py-section overflow-hidden" id="events-block">
+    <section className="relative py-section overflow-x-hidden" id="events-block">
       
       {/* Background text - Restored big interactive text */}
       <PretextBackground 
