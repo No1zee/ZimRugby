@@ -33,7 +33,7 @@ const itemVariants = {
     opacity: 1,
     transition: {
       duration: 0.8,
-      ease: [0.25, 1, 0.5, 1], // Upgraded cubic-bezier ease for whip and settle
+      ease: [0.25, 1, 0.5, 1] as const, // Upgraded cubic-bezier ease for whip and settle
     },
   },
 };
@@ -45,7 +45,7 @@ const lineVariants = {
     opacity: 1,
     transition: {
       duration: 0.8,
-      ease: [0.25, 1, 0.5, 1],
+      ease: [0.25, 1, 0.5, 1] as const,
     },
   },
 };
