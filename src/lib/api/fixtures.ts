@@ -50,7 +50,7 @@ export async function getFixtureTwinData(): Promise<FixtureTwinData> {
     upcoming: {
       id: "next-1",
       competition: "Africa Cup",
-      round: "Final",
+      round: "Cup Final",
       date: "06 July 2026",
       time: "16:00",
       venue: "Mweru Stadium, Lusaka",

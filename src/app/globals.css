@@ -9,24 +9,32 @@
   --font-subheading: var(--font-montserrat);
   --font-body: var(--font-inter);
 
-  --color-zru-green: #006039;
+  /* Unified Brand Colors from Audit Spec */
+  --color-green-primary: #006B3F;
+  --color-green-dark: #00452A;
+  --color-gold: #F2A900;
+  --color-neutral-dark: #121212;
+  --color-neutral-mid: #3A3A3A;
+  --color-neutral-light: #F5F5F5;
+  --color-white: #FFFFFF;
+
+  /* Backward Compatibility Mapping */
+  --color-zru-green: var(--color-green-primary);
+  --color-zru-gold: var(--color-gold);
   --color-rich-black: #0A0A0A;
-  --color-gray-900: #1A1A1A;
-  --color-gray-100: #F5F5F5;
-  /* Mapped for backward compatibility but forced to allowed palette */
-  --color-zru-gold: #ffffff; 
-  --color-zru-orange: #006039;
-  --color-zru-red: #006039;
-  --color-gold: #ffffff;
-  --color-red: #006039;
+  --color-gray-900: var(--color-neutral-dark);
+  --color-gray-100: var(--color-neutral-light);
+  --color-zru-orange: var(--color-green-primary);
+  --color-zru-red: var(--color-green-primary);
+  --color-red: var(--color-green-primary);
   --color-blue-600: #0A0A0A;
   --color-blue-700: #0A0A0A;
   --color-blue-800: #1A1A1A;
 
   /* Clubhouse Premium Tokens */
-  --color-clubhouse-green: #004d2e;
+  --color-clubhouse-green: var(--color-green-dark);
   --color-clubhouse-charcoal: #0e0e0e;
-  --color-clubhouse-gold: #d4af37;
+  --color-clubhouse-gold: var(--color-gold);
   --color-clubhouse-copper: #b87333;
   --color-clubhouse-accent: var(--color-clubhouse-gold);
 

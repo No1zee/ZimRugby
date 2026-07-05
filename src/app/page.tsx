@@ -34,9 +34,6 @@ export default async function Home() {
         {/* 2. Match Centre Strip (Horizontal List) */}
         <MatchCentreStrip initialMatches={matches} twinData={twinData} rankingsData={rankingsData} />
 
-        {/* 2.5 Store Preview Strip (Interaction Portal) */}
-        <StorePreviewStrip />
-
         {/* 3. Featured Match Countdown (HK Rugby style) */}
         <CountdownPromo
           title="BATTLE OF THE ZAMBEZI"
@@ -57,6 +54,9 @@ export default async function Home() {
 
         {/* 5. Latest News */}
         <NewsMediaBlock initialReports={reports} />
+
+        {/* 6. Store Preview Strip (Interaction Portal / Clubhouse) */}
+        <StorePreviewStrip />
 
       </div>
     </main>

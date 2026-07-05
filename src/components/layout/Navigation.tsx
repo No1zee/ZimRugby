@@ -9,24 +9,18 @@ import { motion, AnimatePresence, useScroll, useMotionValueEvent } from "framer-
 
 const navItems = [
   { 
-    label: "OUR TEAMS", 
+    label: "RUGBY", 
     href: "/teams",
     isMega: true,
     children: [
-      { label: "Sables", href: "/teams/sables" },
-      { label: "Lady Sables", href: "/teams/lady-sables" },
-      { label: "Junior Sables", href: "/teams/junior-sables" },
-      { label: "Cheetahs", href: "/teams/cheetahs" },
-      { label: "U20", href: "/teams/u20" },
+      { label: "Book Tickets", href: "/tickets" },
+      { label: "Match Centre", href: "/match-centre" },
+      { label: "Our Teams", href: "/teams" },
     ]
   },
   { 
-    label: "MATCH CENTRE", 
-    href: "/match-centre",
-    children: [
-      { label: "Fixtures & Results", href: "/match-centre/fixtures" },
-      { label: "Standings", href: "/match-centre/standings" },
-    ]
+    label: "EVENTS", 
+    href: "/events",
   },
   { 
     label: "NEWS & MEDIA", 
@@ -37,14 +31,8 @@ const navItems = [
     ]
   },
   { 
-    label: "PLAY RUGBY", 
-    href: "/play-rugby",
-    children: [
-      { label: "Rugby Pathways", href: "/play-rugby", highlight: true },
-      { label: "Clubs", href: "/clubs" },
-      { label: "Schools", href: "/schools" },
-      { label: "Volunteer", href: "/volunteer" },
-    ]
+    label: "CLUBHOUSE", 
+    href: "/clubhouse",
   },
   { label: "ABOUT", href: "/about" },
 ];
@@ -188,6 +176,13 @@ export default function Navigation() {
                 </div>
               ))}
             </div>
+          </div>
+
+          {/* Book Tickets Gold CTA (Desktop) */}
+          <div className="hidden lg:flex items-center shrink-0">
+            <Link href="/tickets" className="inline-flex items-center justify-center font-subheading tracking-widest text-[10px] uppercase bg-zru-gold text-rich-black hover:bg-white hover:text-zru-green font-black px-6 py-3 clip-slanted shadow-xl transition-all duration-300">
+              Book Tickets
+            </Link>
           </div>
 
           {/* Mobile Actions */}

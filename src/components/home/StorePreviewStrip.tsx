@@ -3,7 +3,7 @@
 import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowRight, Lock, ChevronRight } from "lucide-react";
+import { ArrowRight, ShoppingBag, ChevronRight } from "lucide-react";
 import React, { useRef } from "react";
 import MagneticElement from "../ui/MagneticElement";
 
@@ -20,7 +20,7 @@ const previewItems = [
     price: "$110", 
     category: "Matchday Elite", 
     image: "/images/shop/jersey-home.png", 
-    badge: "Tier-1 Exclusive",
+    badge: "Official Matchday",
     color: "bg-zru-green/5",
     description: "Matchday jersey worn for Africa Cup 2026 campaign."
   },
@@ -29,7 +29,7 @@ const previewItems = [
     price: "$85", 
     category: "Lifestyle / Gold", 
     image: "/images/shop/polo-heritage.png", 
-    badge: "Archival Release",
+    badge: "Official Crest",
     color: "bg-zru-gold/5",
     description: "Post-match premium cotton blend. Classic fit."
   },
@@ -38,7 +38,7 @@ const previewItems = [
     price: "$180", 
     category: "Technical Carry", 
     image: "/images/shop/bag-duffel.png", 
-    badge: "Bespoke Carry",
+    badge: "Pathway Support",
     color: "bg-neutral-100",
     description: "Water-resistant institutional travel companion."
   },
@@ -47,7 +47,7 @@ const previewItems = [
     price: "$95", 
     category: "High Intensity", 
     image: "/images/shop/vest-performance.png",
-    badge: "Members Only",
+    badge: "Sables XV",
     color: "bg-zru-red/5",
     description: "Engineered for elite conditioning and dynamic drills."
   },
@@ -130,7 +130,7 @@ const ProductCard = ({ item, idx }: { item: typeof previewItems[0], idx: number 
           {/* Icon Portal */}
           <div className="absolute top-6 right-6 z-30 opacity-0 group-hover:opacity-100 transition-all duration-500 transform translate-y-[-10px] group-hover:translate-y-0">
              <div className="bg-white/80 backdrop-blur-md p-2 rounded-full shadow-[0_4px_15px_rgba(0,0,0,0.1)]">
-               <Lock className="w-3.5 h-3.5 text-rich-black" />
+               <ShoppingBag className="w-3.5 h-3.5 text-rich-black" />
              </div>
           </div>
 
@@ -182,7 +182,7 @@ const ProductCard = ({ item, idx }: { item: typeof previewItems[0], idx: number 
           
           <div className="flex items-center justify-between pt-3 border-t border-black/5">
             <span className="text-[10px] font-black uppercase text-zru-gold tracking-[0.3em] flex items-center gap-2">
-              Secure Allocation <ChevronRight className="w-3 h-3 group-hover:translate-x-1 transition-transform" />
+              Shop Now <ChevronRight className="w-3 h-3 group-hover:translate-x-1 transition-transform" />
             </span>
             <span className="text-sm font-black text-black/70 bg-black/5 px-2 py-0.5 rounded shadow-xs">
                 <span className="text-[9px] mr-1 align-top opacity-60">USD</span>{item.price.replace('$', '')}
@@ -199,7 +199,7 @@ export default function StorePreviewStrip() {
     <section className="bg-white py-section relative overflow-hidden bg-pattern-dots">
       {/* Background Aesthetic Watermark */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[25vw] md:text-[20vw] font-black text-neutral-50 uppercase leading-none pointer-events-none select-none tracking-tighter mix-blend-multiply opacity-50 whitespace-nowrap">
-        RESTRICTED
+        EST 1895
       </div>
 
       <div className="max-w-[1440px] mx-auto px-6 relative z-10">
@@ -216,7 +216,7 @@ export default function StorePreviewStrip() {
               <div className="flex items-center justify-center w-4 h-4 rounded-full bg-zru-red/10 border border-zru-red/30">
                 <div className="w-1.5 h-1.5 rounded-full bg-zru-red animate-pulse" />
               </div>
-              <span className="text-[10px] font-black uppercase tracking-[0.6em] text-zru-red/80">Tier-1 Access Only</span>
+              <span className="text-[10px] font-black uppercase tracking-[0.6em] text-zru-red/80">Official Merchandise</span>
             </motion.div>
             <motion.h2 
               initial={{ opacity: 0, y: 20 }}
@@ -230,14 +230,14 @@ export default function StorePreviewStrip() {
 
           <div className="flex flex-col items-start md:items-end gap-4">
             <p className="text-[10px] text-black/40 font-black uppercase tracking-[0.2em] max-w-[200px] text-left md:text-right">
-                Strictly limited allocations. <br />Reserved for the inner circle.
+                Official Zimbabwe Rugby Collection. <br />Wear the pride. Every purchase fuels the pathway.
             </p>
             <MagneticElement intensity={0.2}>
                 <Link 
                 href="/clubhouse"
                 className="flex items-center gap-3 text-[10px] font-black uppercase tracking-[0.3em] text-white bg-rich-black px-8 py-4 rounded-full group transition-all hover:scale-105 hover:bg-zru-gold hover:text-black hover:shadow-lg hover:shadow-zru-gold/20 relative overflow-hidden"
                 >
-                <span className="relative z-10 flex items-center gap-3">Request Access <Lock className="w-3.5 h-3.5 group-hover:hidden" /><ArrowRight className="w-3.5 h-3.5 hidden group-hover:block transition-transform" /></span>
+                <span className="relative z-10 flex items-center gap-3">Shop Collection <ArrowRight className="w-3.5 h-3.5 transition-transform" /></span>
                 <div className="absolute inset-0 bg-linear-to-r from-transparent via-white/20 to-transparent -translate-x-[150%] group-hover:translate-x-[150%] transition-transform duration-700 ease-in-out z-0" />
                 </Link>
             </MagneticElement>
