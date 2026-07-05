@@ -8,6 +8,9 @@ import { ScrollReveal } from "../ui/animations";
 import { useState } from "react";
 import { type Report } from "@/lib/data-fetcher";
 
+import { BentoGrid, BentoCard } from "../ui/BentoGrid";
+import SlantedButton from "../ui/SlantedButton";
+
 interface NewsMediaBlockProps {
   initialReports?: Report[];
 }
@@ -17,8 +20,9 @@ export default function NewsMediaBlock({ initialReports = [] }: NewsMediaBlockPr
 
   const reports = initialReports;
   const featuredStory = reports[0];
-  const mediaItems = reports.slice(1, 4);
-
+  const item1 = reports[1];
+  const item2 = reports[2];
+  const item3 = reports[3];
 
   if (!featuredStory) return null;
   return (
@@ -29,15 +33,15 @@ export default function NewsMediaBlock({ initialReports = [] }: NewsMediaBlockPr
 
       <div className="max-w-[1440px] mx-auto px-6 relative z-10">
         
-        {/* Header: Institutional Style */}
-        <div className="flex flex-col md:flex-row justify-between items-end gap-10 mb-20">
+        {/* Header */}
+        <div className="flex flex-col md:flex-row justify-between items-end gap-10 mb-12">
           <div className="space-y-4">
             <div className="flex items-center gap-2">
-              <div className="w-8 h-px bg-zru-gold" />
-              <span className="text-zru-gold text-[10px] font-black uppercase tracking-[0.5em]">The Wire</span>
+              <div className="w-8 h-px bg-white/40" />
+              <span className="text-white/60 text-[10px] font-black uppercase tracking-[0.5em]">The Wire</span>
             </div>
-            <h2 className="heading-1 text-white">
-              NEWS & <span className="text-stroke-white text-transparent">MEDIA</span>
+            <h2 className="font-heading text-5xl md:text-7xl tracking-wider text-white">
+              NEWS & <span className="text-stroke-charcoal text-transparent">MEDIA</span>
             </h2>
           </div>
           
@@ -48,9 +52,9 @@ export default function NewsMediaBlock({ initialReports = [] }: NewsMediaBlockPr
               <button
                 key={cat}
                 onClick={() => setActiveCategory(cat)}
-                className={`text-[9px] font-black uppercase tracking-widest px-4 py-2 border transition-all ${
+                className={`text-[9px] font-black uppercase tracking-widest px-6 py-2 border transition-colors clip-slanted-sm ${
                   isActive 
-                    ? "bg-zru-gold text-black border-zru-gold shadow-[0_0_15px_rgba(235,178,23,0.3)]" 
+                    ? "bg-zru-green text-white border-zru-green" 
                     : "bg-transparent text-white/50 border-white/20 hover:text-white hover:border-white/50"
                 }`}
               >
@@ -60,88 +64,108 @@ export default function NewsMediaBlock({ initialReports = [] }: NewsMediaBlockPr
           </div>
         </div>
 
-        {/* Featured Story: Cinematic Hero Card */}
-        <ScrollReveal>
-          <Link href={`/media/${featuredStory.id}`} className="block group mb-12">
-            <div className="relative aspect-video md:aspect-21/9 overflow-hidden rounded-4xl bg-neutral-900 shadow-2xl transition-all duration-700 group-hover:-translate-y-2">
+        {/* Bento Grid */}
+        <BentoGrid className="grid-cols-1 md:grid-cols-4 grid-rows-[auto_auto] gap-4 md:gap-6">
+          
+          {/* Featured Story - 2 cols, 2 rows */}
+          <Link href={`/media/${featuredStory.id}`} className="col-span-1 md:col-span-2 md:row-span-2 block group">
+            <BentoCard className="h-full min-h-[400px] md:min-h-full relative overflow-hidden rounded-2xl p-0 border-0">
               <Image
                 src={featuredStory.image}
                 alt={featuredStory.title}
                 fill
-                sizes="100vw"
+                sizes="(max-width: 768px) 100vw, 50vw"
                 className="object-cover transition-transform duration-1000 group-hover:scale-105 opacity-60 group-hover:opacity-100"
               />
-              <div className="absolute inset-0 bg-linear-to-t from-black via-black/20 to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent" />
               
-              <div className="absolute inset-0 p-8 md:p-16 flex flex-col justify-end space-y-6 max-w-3xl">
+              <div className="absolute inset-0 p-8 flex flex-col justify-end space-y-4">
                 <div className="flex items-center gap-4">
-                  <span className="bg-clubhouse-gold text-white px-4 py-1.5 text-[10px] font-black uppercase tracking-widest rounded-full">
+                  <span className="bg-zru-green text-white px-4 py-1 text-[10px] font-black uppercase tracking-widest clip-slanted-sm">
                     {featuredStory.category}
                   </span>
-                  <span className="text-white/60 text-xs font-bold font-mono uppercase">
+                  <span className="text-white/80 text-xs font-bold uppercase tracking-widest">
                     {featuredStory.date}
                   </span>
                 </div>
-                <h3 className="heading-2 text-white line-clamp-3">
+                <h3 className="font-heading text-3xl md:text-5xl tracking-wide text-white line-clamp-3">
                   {featuredStory.title}
                 </h3>
-                <p className="body-large text-white/60 line-clamp-2 md:block hidden">
+                <p className="font-body text-white/70 line-clamp-2">
                   {featuredStory.excerpt.split('. ')[0]}.
                 </p>
-                <div className="pt-6">
-                  <span className="inline-flex items-center gap-3 text-[10px] font-black uppercase tracking-[0.4em] text-white">
-                    Read Full Story <ArrowRight className="w-4 h-4 text-clubhouse-gold" />
+                <div className="pt-4">
+                  <span className="inline-flex items-center gap-3 text-xs font-heading tracking-widest uppercase text-white group-hover:text-zru-green transition-colors">
+                    Read Full Story <ArrowRight className="w-5 h-5" />
                   </span>
                 </div>
               </div>
-            </div>
+            </BentoCard>
           </Link>
-        </ScrollReveal>
 
-        {/* secondary Grid: Bulletin Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
-          {mediaItems.map((item) => (
-            <motion.div key={item.id} className="group cursor-pointer">
-              <Link href={`/media/${item.id}`} className="space-y-6 block">
-                 <div className="relative aspect-video overflow-hidden rounded-2xl bg-neutral-900 transition-all duration-700 group-hover:-translate-y-1 glow-green-card">
-                    <Image 
-                      src={item.image} 
-                      alt={item.title} 
-                      fill
-                      sizes="(max-width: 768px) 100vw, 33vw"
-                      className="object-cover opacity-50 group-hover:opacity-100 transition-all duration-700" 
-                    />
-                    {item.type === "video" && (
-                      <div className="absolute inset-0 flex items-center justify-center">
-                         <div className="w-16 h-16 rounded-full bg-white/10 backdrop-blur-md flex items-center justify-center group-hover:bg-white group-hover:text-black transition-all">
-                            <Play className="w-6 h-6 ml-1" />
-                         </div>
-                      </div>
-                    )}
-                 </div>
-                 <div className="space-y-4">
+          {/* Item 1 - 2 cols, 1 row */}
+          {item1 && (
+            <Link href={`/media/${item1.id}`} className="col-span-1 md:col-span-2 md:row-span-1 block group">
+              <BentoCard className="h-full min-h-[250px] relative overflow-hidden rounded-2xl p-0 border-0">
+                 <Image 
+                    src={item1.image} 
+                    alt={item1.title} 
+                    fill
+                    sizes="(max-width: 768px) 100vw, 50vw"
+                    className="object-cover opacity-40 group-hover:opacity-80 transition-all duration-700" 
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent" />
+                  <div className="absolute inset-0 p-6 flex flex-col justify-end space-y-3">
                     <div className="flex items-center gap-3">
-                       <span className="text-[9px] font-black uppercase tracking-widest text-clubhouse-gold">{item.category}</span>
-                       <div className="w-1 h-1 rounded-full bg-white/20" />
-                       <span className="text-[9px] font-bold text-white/60 uppercase tracking-widest">{item.date}</span>
+                        <span className="text-[10px] font-black uppercase tracking-widest text-zru-green">{item1.category}</span>
+                        <div className="w-1 h-1 bg-white/40" />
+                        <span className="text-[10px] font-bold text-white/60 uppercase tracking-widest">{item1.date}</span>
                     </div>
-                    <h4 className="heading-4 text-white group-hover:text-clubhouse-gold transition-colors line-clamp-3">
-                      {item.title}
+                    <h4 className="font-heading text-2xl md:text-3xl tracking-wide text-white group-hover:text-zru-green transition-colors line-clamp-2">
+                      {item1.title}
                     </h4>
-                    <p className="body-small text-white/60 font-medium line-clamp-2">
-                      {item.excerpt?.split('. ')[0] || item.excerpt}.
-                    </p>
-                 </div>
-              </Link>
-            </motion.div>
-          ))}
-        </div>
+                  </div>
+              </BentoCard>
+            </Link>
+          )}
+
+          {/* Item 2 - 1 col, 1 row */}
+          {item2 && (
+            <Link href={`/media/${item2.id}`} className="col-span-1 md:col-span-1 md:row-span-1 block group">
+              <BentoCard className="h-full min-h-[250px] p-6 justify-end space-y-4 hover:border-zru-green/50">
+                <div className="flex items-center gap-3">
+                  <span className="text-[10px] font-black uppercase tracking-widest text-zru-green">{item2.category}</span>
+                </div>
+                <h4 className="font-heading text-xl tracking-wide text-white group-hover:text-zru-green transition-colors line-clamp-3">
+                  {item2.title}
+                </h4>
+                <span className="text-[10px] font-bold text-white/40 uppercase tracking-widest">{item2.date}</span>
+              </BentoCard>
+            </Link>
+          )}
+
+          {/* Item 3 - 1 col, 1 row */}
+          {item3 && (
+            <Link href={`/media/${item3.id}`} className="col-span-1 md:col-span-1 md:row-span-1 block group">
+              <BentoCard className="h-full min-h-[250px] p-6 justify-end space-y-4 hover:border-zru-green/50">
+                <div className="flex items-center gap-3">
+                  <span className="text-[10px] font-black uppercase tracking-widest text-zru-green">{item3.category}</span>
+                </div>
+                <h4 className="font-heading text-xl tracking-wide text-white group-hover:text-zru-green transition-colors line-clamp-3">
+                  {item3.title}
+                </h4>
+                <span className="text-[10px] font-bold text-white/40 uppercase tracking-widest">{item3.date}</span>
+              </BentoCard>
+            </Link>
+          )}
+
+        </BentoGrid>
 
         {/* Archive Action */}
-        <div className="mt-24 pt-10 border-t border-white/5 flex justify-center">
-          <Link href="/media" className="inline-flex items-center gap-4 text-[10px] font-black uppercase tracking-[0.5em] text-white/60 hover:text-white transition-colors">
-             Full Media Archives <div className="w-12 h-px bg-current" />
-          </Link>
+        <div className="mt-16 flex justify-center">
+          <SlantedButton href="/media" variant="outline" size="sm">
+             Full Media Archives
+          </SlantedButton>
         </div>
 
       </div>

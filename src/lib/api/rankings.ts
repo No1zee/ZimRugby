@@ -1,3 +1,6 @@
+import directus from "@/lib/directus/client";
+import { readItems } from "@directus/sdk";
+
 export interface RankingDetail {
   position: number;
   previousPosition?: number;
@@ -17,12 +20,8 @@ export interface RankingsData {
   }[];
 }
 
-/**
- * CMS_SWAP_TODO: Replace mock implementation with actual REST/GraphQL endpoints once backend is available.
- * Fully compatible with React Native / Mobile platforms for direct cross-platform consumption.
- */
 export async function getRankingsData(): Promise<RankingsData> {
-  return {
+  const mockRankings: RankingsData = {
     world: {
       position: 28,
       previousPosition: 31,
@@ -58,4 +57,49 @@ export async function getRankingsData(): Promise<RankingsData> {
       }
     ]
   };
+
+  try {
+    if (process.env.NEXT_PUBLIC_DIRECTUS_URL) {
+      const response = await directus.request(
+        readItems('rankings' as any, {
+          limit: 1
+        })
+      );
+      const rivalsResponse = await directus.request(
+        readItems('ranking_rivals' as any, {
+          sort: ['position' as any]
+        })
+      );
+      
+      if (response?.[0]) {
+        const mainRank = response[0];
+        return {
+          world: {
+            position: Number(mainRank.world_position),
+            previousPosition: mainRank.world_previous_position ? Number(mainRank.world_previous_position) : undefined,
+            points: Number(mainRank.world_points),
+            trend: mainRank.world_trend || "stable",
+            lastUpdated: mainRank.last_updated || "June 2026"
+          },
+          africa: {
+            position: Number(mainRank.africa_position),
+            previousPosition: mainRank.africa_previous_position ? Number(mainRank.africa_previous_position) : undefined,
+            points: Number(mainRank.africa_points),
+            trend: mainRank.africa_trend || "stable",
+            lastUpdated: mainRank.last_updated || "June 2026"
+          },
+          rivals: (rivalsResponse || []).map((rival: any) => ({
+            name: rival.name,
+            position: Number(rival.position),
+            points: Number(rival.points),
+            logo: rival.logo ? `${process.env.NEXT_PUBLIC_DIRECTUS_URL}/assets/${rival.logo}` : rival.logo_url
+          }))
+        };
+      }
+    }
+  } catch (error) {
+    console.warn("Directus fetch failed for rankings data, falling back to mock data:", error);
+  }
+
+  return mockRankings;
 }

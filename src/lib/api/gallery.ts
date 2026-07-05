@@ -1,11 +1,9 @@
 import { Photo } from "@/types";
+import directus from "@/lib/directus/client";
+import { readItems } from "@directus/sdk";
 
-/**
- * CMS_SWAP_TODO: Replace mock implementation with actual REST/GraphQL endpoints once backend is available.
- * Fully compatible with React Native / Mobile platforms for direct cross-platform consumption.
- */
 export async function getPhotos(): Promise<Photo[]> {
-  return [
+  const mockPhotos: Photo[] = [
     {
       id: "photo-africa-cup-2025",
       title: "Africa Cup Triumph",
@@ -55,4 +53,28 @@ export async function getPhotos(): Promise<Photo[]> {
       description: "Heavy contact during the ZRU Super League club championship final."
     }
   ];
+
+  try {
+    if (process.env.NEXT_PUBLIC_DIRECTUS_URL) {
+      const response = await directus.request(
+        readItems('photos' as any, {
+          sort: ['-date' as any]
+        })
+      );
+      if (response && response.length > 0) {
+        return response.map((photo: any) => ({
+          id: String(photo.id),
+          title: photo.title || "",
+          album: photo.album || "General",
+          image: photo.image ? `${process.env.NEXT_PUBLIC_DIRECTUS_URL}/assets/${photo.image}` : photo.image_url,
+          date: photo.date_label || new Date(photo.date).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }).toUpperCase(),
+          description: photo.description || ""
+        }));
+      }
+    }
+  } catch (error) {
+    console.warn("Directus fetch failed for photo gallery, falling back to mock data:", error);
+  }
+
+  return mockPhotos;
 }

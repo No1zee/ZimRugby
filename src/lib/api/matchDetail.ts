@@ -1,5 +1,7 @@
 import { Match } from "@/types";
 import { getLiveMatches } from "@/lib/data-fetcher";
+import directus from "@/lib/directus/client";
+import { readItem } from "@directus/sdk";
 
 export interface LineupPlayer {
   number: number;
@@ -33,16 +35,141 @@ export interface MatchDetailData {
   };
 }
 
-/**
- * CMS_SWAP_TODO: Replace mock implementation with actual REST/GraphQL endpoints once backend is available.
- * Fully compatible with React Native / Mobile platforms for direct cross-platform consumption.
- */
+interface DirectusMatchDetailItem {
+  id: string | number;
+  competition?: string;
+  round?: string;
+  date: string;
+  date_label?: string;
+  time?: string;
+  venue?: string;
+  home_team_name?: string;
+  home_team_logo?: string;
+  home_team_score?: number | null;
+  away_team_name?: string;
+  away_team_logo?: string;
+  away_team_score?: number | null;
+  status: string;
+  category?: string;
+  home_lineup?: {
+    number: number;
+    name: string;
+    position: string;
+    club?: string;
+  }[];
+  away_lineup?: {
+    number: number;
+    name: string;
+    position: string;
+    club?: string;
+  }[];
+  stats?: {
+    possession_home: number | string;
+    possession_away: number | string;
+    territory_home: number | string;
+    territory_away: number | string;
+    scrums_home: number;
+    scrums_away: number;
+    penalties_home: number | string;
+    penalties_away: number | string;
+    tries_home: number | string;
+    tries_away: number | string;
+  };
+  report?: {
+    summary?: string;
+    paragraphs?: string[];
+    scorer_timeline?: {
+      minute: number;
+      team: 'home' | 'away';
+      type: 'try' | 'conversion' | 'penalty' | 'drop-goal';
+      player: string;
+    }[];
+  };
+}
+
 export async function getMatchDetail(id: string): Promise<MatchDetailData | null> {
+  try {
+    if (process.env.NEXT_PUBLIC_DIRECTUS_URL) {
+      const matchData = await directus.request(
+        readItem('matches', id, {
+          fields: ['*', 'home_lineup.*', 'away_lineup.*', 'stats.*', 'report.*']
+        })
+      );
+      
+      if (matchData) {
+        const m = matchData as unknown as DirectusMatchDetailItem;
+        const match: Match = {
+          id: String(m.id),
+          competition: m.competition || "International Match",
+          round: m.round || "Standard",
+          date: m.date_label || new Date(m.date).toLocaleDateString('en-US', { day: 'numeric', month: 'long', year: 'numeric' }),
+          time: m.time || new Date(m.date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false }),
+          venue: m.venue || "TBA",
+          homeTeam: {
+            name: m.home_team_name || "Zimbabwe Sables",
+            logo: m.home_team_logo ? `${process.env.NEXT_PUBLIC_DIRECTUS_URL}/assets/${m.home_team_logo}` : undefined,
+            score: m.home_team_score !== null ? Number(m.home_team_score) : undefined
+          },
+          awayTeam: {
+            name: m.away_team_name || "Opponent",
+            logo: m.away_team_logo ? `${process.env.NEXT_PUBLIC_DIRECTUS_URL}/assets/${m.away_team_logo}` : undefined,
+            score: m.away_team_score !== null ? Number(m.away_team_score) : undefined
+          },
+          status: m.status as any,
+          category: m.category || "Sables"
+        };
+
+        const homeLineup: LineupPlayer[] = (m.home_lineup || []).map((p: any) => ({
+          number: Number(p.number),
+          name: p.name,
+          position: p.position,
+          club: p.club
+        }));
+
+        const awayLineup: LineupPlayer[] = (m.away_lineup || []).map((p: any) => ({
+          number: Number(p.number),
+          name: p.name,
+          position: p.position,
+          club: p.club
+        }));
+
+        const stats: MatchStats | undefined = m.stats ? {
+          possession: { home: Number(m.stats.possession_home), away: Number(m.stats.possession_away) },
+          territory: { home: Number(m.stats.territory_home), away: Number(m.stats.territory_away) },
+          scrums: { home: String(m.stats.scrums_home), away: String(m.stats.scrums_away) },
+          penalties: { home: Number(m.stats.penalties_home), away: Number(m.stats.penalties_away) },
+          tries: { home: Number(m.stats.tries_home), away: Number(m.stats.tries_away) }
+        } : undefined;
+
+        const report = m.report ? {
+          summary: m.report.summary || "",
+          paragraphs: Array.isArray(m.report.paragraphs) ? m.report.paragraphs : [m.report.summary || ""],
+          scorerTimeline: (m.report.scorer_timeline || []).map((item: any) => ({
+            minute: Number(item.minute),
+            team: item.team as 'home' | 'away',
+            type: item.type as 'try' | 'conversion' | 'penalty' | 'drop-goal',
+            player: item.player
+          }))
+        } : undefined;
+
+        return {
+          match,
+          homeLineup,
+          awayLineup,
+          stats: match.status === 'finished' || match.status === 'completed' || match.status === 'live' ? stats : undefined,
+          report: match.status === 'finished' || match.status === 'completed' ? report : undefined
+        };
+      }
+    }
+  } catch (error) {
+    console.warn(`Directus fetch failed for match detail ${id}, falling back to mock data:`, error);
+  }
+
+  // Mock Fallback
   const matches = await getLiveMatches();
   const match = matches.find(m => String(m.id) === id) as Match | undefined;
   if (!match) return null;
 
-  // Mock lineups based on Sables team structure
   const homeLineup: LineupPlayer[] = [
     { number: 1, name: "Cleopas Kundiona", position: "Prop", club: "Nevers" },
     { number: 2, name: "Simbarashe Mandioma", position: "Hooker", club: "Harare Sports Club" },
@@ -59,7 +186,6 @@ export async function getMatchDetail(id: string): Promise<MatchDetailData | null
     { number: 13, name: "Brandon Mudzekenyedzi", position: "Centre", club: "Old Georgians" },
     { number: 14, name: "Takudzwa Musingwini", position: "Winger", club: "Harare Sports Club" },
     { number: 15, name: "Tapiwa Mafura", position: "Full-back", club: "Lions" },
-    // Reserves
     { number: 16, name: "Liam Larkan", position: "Hooker", club: "Old Georgians" },
     { number: 17, name: "Zvikomborero Chimoto", position: "Prop", club: "Harare Sports Club" },
     { number: 18, name: "Vuyo Mupindo", position: "Prop", club: "Old Hararians" },

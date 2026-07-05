@@ -1,30 +1,15 @@
 "use client";
 
 import { motion } from "framer-motion";
-
-import { ArrowRight, ChevronRight, TrendingUp, TrendingDown, Minus, Trophy, Calendar } from "lucide-react";
+import { ArrowRight, ChevronRight, Calendar, Clock, MapPin } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
-import { ScrollReveal, StaggerContainer, staggerItemVariants, Tilt3DCard, GlowButton } from "../ui/animations";
+import { ScrollReveal, Tilt3DCard } from "../ui/animations";
 import { RugbyDecorations, CornerAccent } from "../ui/RugbyDecorations";
 
 import { type Match as DataMatch } from "@/lib/data-fetcher";
 import type { FixtureTwinData } from "@/lib/api/fixtures";
 import type { RankingsData } from "@/lib/api/rankings";
-
-interface Fixture {
-  id: string;
-  competition: string;
-  round: string;
-  date: string;
-  time: string;
-  venue: string;
-  homeTeam: { name: string; logo?: string; score?: number };
-  awayTeam: { name: string; logo?: string; score?: number };
-  status: 'upcoming' | 'live' | 'finished';
-  category: string; 
-  isFeatured?: boolean;
-}
 
 interface MatchCentreStripProps {
   initialMatches?: DataMatch[];
@@ -32,355 +17,249 @@ interface MatchCentreStripProps {
   rankingsData: RankingsData;
 }
 
-export default function MatchCentreStrip({ initialMatches = [], twinData, rankingsData }: MatchCentreStripProps) {
-  const fixtures: Fixture[] = initialMatches.map((m: DataMatch, idx: number) => ({
-    id: m.id,
-    competition: m.competition,
-    round: 'Standard',
-    date: m.date,
-    time: m.time,
-    venue: m.venue,
-    homeTeam: { ...m.homeTeam, score: m.score?.home },
-    awayTeam: { ...m.awayTeam, score: m.score?.away },
-    status: m.status,
-    category: m.category,
-    isFeatured: idx === 0,
-  }));
+export default function MatchCentreStrip({ initialMatches = [], twinData }: MatchCentreStripProps) {
+  // Get upcoming spotlight match from twinData
+  const spotlightMatch = twinData.upcoming;
 
-  const secondaryMatches = fixtures.filter(m => m.id !== twinData.upcoming.id).slice(0, 3);
+  // Find the next upcoming match after the spotlight one from initialMatches
+  const nextMatches = initialMatches.filter(
+    (m) => m.id !== spotlightMatch.id && m.status === "upcoming"
+  );
+  
+  // If we don't have secondary upcoming matches, create a realistic mock one
+  const secondaryMatch: any = nextMatches[0] || {
+    id: "sec-match-nam",
+    competition: "Rugby Africa Cup 2026",
+    round: "Round 1",
+    date: "14 MAY 2026",
+    time: "15:00",
+    venue: "Nelson Mandela Bay Stadium",
+    homeTeam: { name: "Namibia", logo: "https://flagcdn.com/w160/na.png" },
+    awayTeam: { name: "Kenya", logo: "https://flagcdn.com/w160/ke.png" },
+    status: "upcoming"
+  };
+
+  // Helper to parse date string (e.g. "25 APRIL 2026") into day, month, weekday
+  const parseMatchDate = (dateStr: string) => {
+    try {
+      const parts = dateStr.split(" ");
+      if (parts.length >= 2) {
+        return {
+          day: parts[0],
+          month: parts[1].substring(0, 3).toUpperCase(),
+          weekday: "SAT" // Default to Saturday for rugby matches
+        };
+      }
+    } catch (e) {
+      // Fallback
+    }
+    return { day: "19", month: "JUL", weekday: "SUN" };
+  };
+
+  const spotlightDate = parseMatchDate(spotlightMatch.date);
+  const secondaryDate = parseMatchDate(secondaryMatch.date);
 
   return (
     <section 
-      className="py-section relative overflow-hidden"
+      className="py-24 bg-transparent relative overflow-hidden border-t border-white/5"
       id="match-centre"
     >
-      {/* Background Media with Parallax-ready feel */}
-      <div className="absolute inset-0 z-0 opacity-20">
+      {/* Background Media with subtle stadium overlay */}
+      <div className="absolute inset-0 z-0 opacity-8">
         <Image 
           src="/images/events/africa-cup.jpg" 
           alt="Stadium Background" 
           fill 
           priority
           sizes="100vw"
-          quality={60}
+          quality={50}
           className="object-cover"
         />
-        <div className="absolute inset-0 bg-linear-to-b from-rich-black via-transparent to-rich-black" />
+        <div className="absolute inset-0 bg-linear-to-b from-transparent via-transparent to-black/30" />
       </div>
 
       <RugbyDecorations variant="mixed" />
       <CornerAccent position="top-left" />
       
-      <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      <div className="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         
-        {/* Section Header */}
+        {/* Title: MATCH CENTRE */}
         <ScrollReveal>
-          <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-8 mb-12">
-            <div>
-              <div className="flex items-center gap-2 mb-4">
-                <div className="w-8 h-1 bg-zru-gold" />
-                <span className="text-zru-gold text-xs font-black uppercase tracking-[0.3em]">Season Teaser</span>
+          <h2 className="text-4xl md:text-6xl font-heading text-center text-white tracking-widest uppercase mb-16 italic font-bold">
+            Match Centre
+          </h2>
+        </ScrollReveal>
+
+        {/* 1. Spotlight Upcoming Match Card (HK Rugby inspired split-gradient design) */}
+        <ScrollReveal delay={0.1}>
+          <Tilt3DCard tiltAmount={1}>
+            <div className="relative w-full rounded-2xl overflow-hidden border border-white/10 shadow-2xl bg-linear-to-r from-clubhouse-green via-[#003820] to-[#051C12] p-8 md:p-12 mb-10 group hover:border-clubhouse-gold/30 transition-all duration-500">
+              
+              {/* Top Row / Badges */}
+              <div className="flex flex-col md:flex-row items-center justify-between gap-4 mb-8">
+                {/* Slanted Date Badge */}
+                <div className="bg-white text-rich-black font-heading text-lg md:text-xl px-8 py-1.5 transform -skew-x-12 inline-block font-black shadow-lg">
+                  {spotlightDate.day} {spotlightDate.month} | {spotlightDate.weekday}
+                </div>
+                
+                {/* Competition Tag */}
+                <div className="flex flex-col items-center md:items-end">
+                  <span className="text-clubhouse-gold text-[10px] font-black uppercase tracking-[0.25em] mb-1">
+                    Upcoming Match
+                  </span>
+                  <span className="bg-white/10 text-white border border-white/15 text-[10px] font-bold tracking-widest px-4 py-1 rounded-full uppercase">
+                    {spotlightMatch.competition}
+                  </span>
+                </div>
               </div>
-              <h2 className="heading-1 text-white">
-                Match Centre
-              </h2>
+
+              {/* Matchup row (Left Team vs Right Team) */}
+              <div className="grid grid-cols-1 md:grid-cols-12 items-center gap-8 md:gap-4 my-8">
+                
+                {/* Left Team: Home Team */}
+                <div className="md:col-span-4 flex flex-col items-center md:items-end text-center md:text-right">
+                  <div className="w-24 h-24 rounded-full border border-white/10 bg-black/30 flex items-center justify-center overflow-hidden shadow-2xl group-hover:scale-105 transition-transform duration-500 p-4 mb-4">
+                    {spotlightMatch.homeTeam.logo ? (
+                      <Image 
+                        src={spotlightMatch.homeTeam.logo} 
+                        alt={spotlightMatch.homeTeam.name} 
+                        width={80} 
+                        height={80} 
+                        className="object-contain"
+                      />
+                    ) : (
+                      <span className="text-xl font-heading text-white">{spotlightMatch.homeTeam.name.substring(0, 3).toUpperCase()}</span>
+                    )}
+                  </div>
+                  <h3 className="text-2xl md:text-3xl font-heading text-white tracking-wide uppercase leading-none">
+                    {spotlightMatch.homeTeam.name}
+                  </h3>
+                  <span className="text-white/40 text-[10px] font-bold uppercase tracking-wider mt-1">Sables</span>
+                </div>
+
+                {/* Center: VS Circle */}
+                <div className="md:col-span-4 flex flex-col items-center justify-center">
+                  <div className="w-14 h-14 rounded-full bg-rich-black/80 border-2 border-white/10 flex items-center justify-center shadow-lg">
+                    <span className="font-heading text-xl text-clubhouse-gold tracking-wide italic font-black">VS</span>
+                  </div>
+                  <span className="text-[10px] text-white/40 font-bold uppercase tracking-widest mt-2">{spotlightMatch.round}</span>
+                </div>
+
+                {/* Right Team: Away Team */}
+                <div className="md:col-span-4 flex flex-col items-center md:items-start text-center md:text-left">
+                  <div className="w-24 h-24 rounded-full border border-white/10 bg-black/30 flex items-center justify-center overflow-hidden shadow-2xl group-hover:scale-105 transition-transform duration-500 p-4 mb-4">
+                    {spotlightMatch.awayTeam.logo ? (
+                      <Image 
+                        src={spotlightMatch.awayTeam.logo} 
+                        alt={spotlightMatch.awayTeam.name} 
+                        width={80} 
+                        height={80} 
+                        className="object-contain"
+                      />
+                    ) : (
+                      <span className="text-xl font-heading text-white">{spotlightMatch.awayTeam.name.substring(0, 3).toUpperCase()}</span>
+                    )}
+                  </div>
+                  <h3 className="text-2xl md:text-3xl font-heading text-white tracking-wide uppercase leading-none">
+                    {spotlightMatch.awayTeam.name}
+                  </h3>
+                  <span className="text-white/40 text-[10px] font-bold uppercase tracking-wider mt-1">Opponent</span>
+                </div>
+
+              </div>
+
+              {/* Bottom details & CTA */}
+              <div className="flex flex-col md:flex-row items-center justify-between gap-6 pt-8 border-t border-white/10 mt-8">
+                
+                {/* Details info */}
+                <div className="flex flex-wrap justify-center md:justify-start gap-x-8 gap-y-3 text-white/70 text-xs font-body font-medium">
+                  <div className="flex items-center gap-2">
+                    <Clock className="w-4 h-4 text-clubhouse-gold" />
+                    <span>{spotlightMatch.time} CAT</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <MapPin className="w-4 h-4 text-clubhouse-gold" />
+                    <span>{spotlightMatch.venue}</span>
+                  </div>
+                </div>
+
+                {/* Slanted CTA Button */}
+                <Link href="/match-centre">
+                  <button className="relative group/btn font-heading tracking-widest text-xs uppercase bg-clubhouse-gold text-rich-black font-black px-8 py-3.5 clip-slanted shadow-xl hover:bg-white hover:text-clubhouse-green transition-all duration-300">
+                    View Match Details +
+                  </button>
+                </Link>
+              </div>
+
             </div>
+          </Tilt3DCard>
+        </ScrollReveal>
+
+        {/* 2. Secondary Match Row (Bottom Strip) */}
+        <ScrollReveal delay={0.2}>
+          <div className="relative w-full rounded-xl overflow-hidden border border-white/5 bg-[#0F0F0F] flex flex-col md:flex-row items-stretch shadow-lg">
             
-            <Link href="/match-centre" className="group flex items-center gap-2 text-white/60 hover:text-white transition-colors">
-              <span className="text-[10px] font-black uppercase tracking-widest">View Full Schedule</span>
-              <ChevronRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
-            </Link>
+            {/* Left Date Sidebar */}
+            <div className="w-full md:w-28 bg-[#161616] border-b md:border-b-0 md:border-r border-white/5 flex flex-row md:flex-col items-center justify-between md:justify-center p-4 md:py-6 text-center shrink-0 font-heading">
+              <div className="flex md:flex-col items-center gap-2 md:gap-0">
+                <span className="text-3xl text-white font-black leading-none">{secondaryDate.day}</span>
+                <span className="text-xs text-clubhouse-gold font-bold uppercase tracking-widest md:mt-1">{secondaryDate.month}</span>
+              </div>
+              <span className="text-[10px] text-white/40 font-bold uppercase tracking-wider md:mt-2 font-body">
+                {secondaryDate.weekday}
+              </span>
+            </div>
+
+            {/* Main Content Area */}
+            <div className="flex-1 flex flex-col lg:flex-row items-center justify-between p-6 gap-6">
+              
+              {/* Tournament and Matchup details */}
+              <div className="flex flex-col items-center lg:items-start text-center lg:text-left gap-3">
+                <span className="bg-white/5 text-white/60 border border-white/10 text-[9px] font-bold tracking-widest px-2.5 py-0.5 rounded uppercase">
+                  {secondaryMatch.competition} • {secondaryMatch.round}
+                </span>
+                
+                <div className="flex items-center gap-4">
+                  {/* Home Team */}
+                  <span className="text-white font-heading text-lg uppercase tracking-wide">{secondaryMatch.homeTeam.name}</span>
+                  {secondaryMatch.homeTeam.logo && (
+                    <Image src={secondaryMatch.homeTeam.logo} alt={secondaryMatch.homeTeam.name} width={24} height={24} className="object-contain shrink-0" />
+                  )}
+                  
+                  {/* VS */}
+                  <span className="text-clubhouse-gold font-heading text-sm italic font-bold">VS</span>
+                  
+                  {/* Away Team */}
+                  {secondaryMatch.awayTeam.logo && (
+                    <Image src={secondaryMatch.awayTeam.logo} alt={secondaryMatch.awayTeam.name} width={24} height={24} className="object-contain shrink-0" />
+                  )}
+                  <span className="text-white font-heading text-lg uppercase tracking-wide">{secondaryMatch.awayTeam.name}</span>
+                </div>
+              </div>
+
+              {/* Time & Location */}
+              <div className="flex flex-col sm:flex-row items-center gap-6 text-white/50 text-xs font-body font-medium">
+                <div className="flex items-center gap-2">
+                  <Clock className="w-4 h-4 text-clubhouse-gold/60" />
+                  <span>{secondaryMatch.time} CAT</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <MapPin className="w-4 h-4 text-clubhouse-gold/60" />
+                  <span className="max-w-[200px] truncate">{secondaryMatch.venue.split(",")[0]}</span>
+                </div>
+              </div>
+
+            </div>
+
           </div>
         </ScrollReveal>
 
-        {/* Twin Widget + Rankings Grid (SA Rugby inspired) */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
-          
-          {/* Card 1: Previous Match Result */}
-          <ScrollReveal delay={0.1}>
-            <Tilt3DCard tiltAmount={1}>
-              <div className="relative bg-white/5 rounded-2xl border border-white/10 p-6 md:p-8 flex flex-col justify-between h-full group hover:border-zru-gold/30 transition-all duration-500 overflow-hidden glow-green-card">
-                
-                {/* Header tag */}
-                <div className="flex justify-between items-center mb-6">
-                  <span className="text-zru-gold text-[10px] font-black uppercase tracking-[0.2em]">{twinData.previous.competition}</span>
-                  <span className="bg-white/10 text-white px-2 py-0.5 rounded text-[9px] font-bold uppercase tracking-wider">LATEST RESULT</span>
-                </div>
-
-                {/* Score section */}
-                <div className="flex items-center justify-between gap-4 my-4">
-                  {/* Home Team */}
-                  <div className="flex flex-col items-center gap-3 flex-1 text-center">
-                    <div className="w-14 h-14 bg-white/10 rounded-full flex items-center justify-center border border-white/5 relative group-hover:scale-105 transition-transform duration-500 overflow-hidden">
-                      {twinData.previous.homeTeam.logo ? (
-                        <Image src={twinData.previous.homeTeam.logo} alt={twinData.previous.homeTeam.name} width={36} height={36} className="object-contain" />
-                      ) : (
-                        <span className="text-[10px] font-black text-white">{twinData.previous.homeTeam.name.substring(0, 3).toUpperCase()}</span>
-                      )}
-                    </div>
-                    <span className="text-white font-black text-[11px] uppercase tracking-wider leading-tight h-8 flex items-center">{twinData.previous.homeTeam.name}</span>
-                  </div>
-
-                  {/* Score */}
-                  <div className="flex flex-col items-center px-2">
-                    <span className="text-3xl font-black italic tracking-tighter text-glow-green text-white">
-                      {twinData.previous.homeTeam.score} - {twinData.previous.awayTeam.score}
-                    </span>
-                    <span className="text-[9px] text-white/40 font-bold uppercase mt-1">FT</span>
-                  </div>
-
-                  {/* Away Team */}
-                  <div className="flex flex-col items-center gap-3 flex-1 text-center">
-                    <div className="w-14 h-14 bg-white/10 rounded-full flex items-center justify-center border border-white/5 relative group-hover:scale-105 transition-transform duration-500 overflow-hidden">
-                      {twinData.previous.awayTeam.logo ? (
-                        <Image src={twinData.previous.awayTeam.logo} alt={twinData.previous.awayTeam.name} width={36} height={36} className="object-contain" />
-                      ) : (
-                        <span className="text-[10px] font-black text-white">{twinData.previous.awayTeam.name.substring(0, 3).toUpperCase()}</span>
-                      )}
-                    </div>
-                    <span className="text-white font-black text-[11px] uppercase tracking-wider leading-tight h-8 flex items-center">{twinData.previous.awayTeam.name}</span>
-                  </div>
-                </div>
-
-                {/* Footer details */}
-                <div className="mt-6 pt-5 border-t border-white/10 flex flex-col gap-4">
-                  <div className="flex items-center gap-2 text-white/60 text-[10px] font-bold uppercase tracking-tight">
-                    <Calendar className="w-3.5 h-3.5 text-zru-gold" />
-                    <span>{twinData.previous.date}</span>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <span className="text-[10px] text-white/40 font-bold tracking-wider max-w-[150px] truncate">{twinData.previous.venue}</span>
-                    <Link href="/media" className="text-[10px] font-black uppercase text-zru-gold hover:text-white transition-colors tracking-[0.15em] flex items-center gap-1">
-                      <span>Report</span>
-                      <ArrowRight className="w-3 h-3" />
-                    </Link>
-                  </div>
-                </div>
-                
-              </div>
-            </Tilt3DCard>
-          </ScrollReveal>
-
-          {/* Card 2: Upcoming Match Fixture */}
-          <ScrollReveal delay={0.2}>
-            <Tilt3DCard tiltAmount={1}>
-              <div className="relative bg-white/5 rounded-2xl border border-white/10 p-6 md:p-8 flex flex-col justify-between h-full group hover:border-zru-gold/30 transition-all duration-500 overflow-hidden glow-green-card">
-                
-                {/* Header tag */}
-                <div className="flex justify-between items-center mb-6">
-                  <span className="text-zru-gold text-[10px] font-black uppercase tracking-[0.2em]">{twinData.upcoming.competition}</span>
-                  <span className="bg-zru-gold text-rich-black px-2 py-0.5 rounded text-[9px] font-bold uppercase tracking-wider">NEXT FIXTURE</span>
-                </div>
-
-                {/* VS section */}
-                <div className="flex items-center justify-between gap-4 my-4">
-                  {/* Home Team */}
-                  <div className="flex flex-col items-center gap-3 flex-1 text-center">
-                    <div className="w-14 h-14 bg-white/10 rounded-full flex items-center justify-center border border-white/5 relative group-hover:scale-105 transition-transform duration-500 overflow-hidden">
-                      {twinData.upcoming.homeTeam.logo ? (
-                        <Image src={twinData.upcoming.homeTeam.logo} alt={twinData.upcoming.homeTeam.name} width={36} height={36} className="object-contain" />
-                      ) : (
-                        <span className="text-[10px] font-black text-white">{twinData.upcoming.homeTeam.name.substring(0, 3).toUpperCase()}</span>
-                      )}
-                    </div>
-                    <span className="text-white font-black text-[11px] uppercase tracking-wider leading-tight h-8 flex items-center">{twinData.upcoming.homeTeam.name}</span>
-                  </div>
-
-                  {/* VS */}
-                  <div className="flex flex-col items-center px-2">
-                    <span className="text-2xl font-black italic tracking-tighter text-zru-gold">VS</span>
-                    <span className="bg-white/10 text-white px-2.5 py-1 rounded text-[10px] font-bold uppercase tracking-wider mt-2">
-                      {twinData.upcoming.time}
-                    </span>
-                  </div>
-
-                  {/* Away Team */}
-                  <div className="flex flex-col items-center gap-3 flex-1 text-center">
-                    <div className="w-14 h-14 bg-white/10 rounded-full flex items-center justify-center border border-white/5 relative group-hover:scale-105 transition-transform duration-500 overflow-hidden">
-                      {twinData.upcoming.awayTeam.logo ? (
-                        <Image src={twinData.upcoming.awayTeam.logo} alt={twinData.upcoming.awayTeam.name} width={36} height={36} className="object-contain" />
-                      ) : (
-                        <span className="text-[10px] font-black text-white">{twinData.upcoming.awayTeam.name.substring(0, 3).toUpperCase()}</span>
-                      )}
-                    </div>
-                    <span className="text-white font-black text-[11px] uppercase tracking-wider leading-tight h-8 flex items-center">{twinData.upcoming.awayTeam.name}</span>
-                  </div>
-                </div>
-
-                {/* Footer details */}
-                <div className="mt-6 pt-5 border-t border-white/10 flex flex-col gap-4">
-                  <div className="flex items-center gap-2 text-white/60 text-[10px] font-bold uppercase tracking-tight">
-                    <Calendar className="w-3.5 h-3.5 text-zru-gold" />
-                    <span>{twinData.upcoming.date}</span>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <span className="text-[10px] text-white/40 font-bold tracking-wider max-w-[150px] truncate">{twinData.upcoming.venue}</span>
-                    {twinData.upcoming.ticketUrl ? (
-                      <Link href={twinData.upcoming.ticketUrl}>
-                        <GlowButton 
-                          className="bg-white text-rich-black px-4 py-2 text-[9px] font-black uppercase tracking-[0.15em] rounded transition-all cursor-none"
-                          glowColor="rgba(255, 255, 255, 0.4)"
-                        >
-                          Tickets
-                        </GlowButton>
-                      </Link>
-                    ) : (
-                      <span className="text-[10px] text-white/40 uppercase font-black tracking-wider">TBA</span>
-                    )}
-                  </div>
-                </div>
-                
-              </div>
-            </Tilt3DCard>
-          </ScrollReveal>
-
-          {/* Card 3: Africa Rugby Rankings Callout */}
-          <ScrollReveal delay={0.3}>
-            <Tilt3DCard tiltAmount={1}>
-              <div className="relative bg-white/5 rounded-2xl border border-white/10 p-6 md:p-8 flex flex-col justify-between h-full group hover:border-zru-gold/30 transition-all duration-500 overflow-hidden glow-green-card">
-                
-                {/* Header tag */}
-                <div className="flex justify-between items-center mb-6">
-                  <span className="text-zru-gold text-[10px] font-black uppercase tracking-[0.2em] flex items-center gap-1.5">
-                    <Trophy className="w-3.5 h-3.5" />
-                    <span>AFRICA CUP CHAMPIONS</span>
-                  </span>
-                  <span className="bg-white/10 text-white px-2 py-0.5 rounded text-[9px] font-bold uppercase tracking-wider">OFFICIAL RANKINGS</span>
-                </div>
-
-                {/* Rankings details */}
-                <div className="grid grid-cols-2 gap-4 my-2">
-                  {/* Africa Rank */}
-                  <div className="bg-white/5 border border-white/5 rounded-xl p-4 flex flex-col items-center justify-center text-center">
-                    <span className="text-white/40 text-[9px] font-bold uppercase tracking-wider block mb-1">AFRICA</span>
-                    <span className="text-3xl font-black italic text-glow-green text-white">#{rankingsData.africa.position}</span>
-                    <div className="flex items-center gap-1 mt-1 text-[9px] font-bold uppercase tracking-tight text-zru-gold">
-                      {rankingsData.africa.trend === "up" && <TrendingUp className="w-3 h-3" />}
-                      {rankingsData.africa.trend === "down" && <TrendingDown className="w-3 h-3" />}
-                      {rankingsData.africa.trend === "stable" && <Minus className="w-3 h-3" />}
-                      <span>{rankingsData.africa.trend}</span>
-                    </div>
-                  </div>
-
-                  {/* World Rank */}
-                  <div className="bg-white/5 border border-white/5 rounded-xl p-4 flex flex-col items-center justify-center text-center">
-                    <span className="text-white/40 text-[9px] font-bold uppercase tracking-wider block mb-1">WORLD</span>
-                    <span className="text-3xl font-black italic text-glow-green text-white">#{rankingsData.world.position}</span>
-                    <div className="flex items-center gap-1 mt-1 text-[9px] font-bold uppercase tracking-tight text-zru-gold">
-                      {rankingsData.world.trend === "up" && <TrendingUp className="w-3 h-3" />}
-                      {rankingsData.world.trend === "down" && <TrendingDown className="w-3 h-3" />}
-                      {rankingsData.world.trend === "stable" && <Minus className="w-3 h-3" />}
-                      <span>{rankingsData.world.trend}</span>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Regional Rivals */}
-                <div className="space-y-2 mt-4">
-                  <span className="text-white/30 text-[9px] font-black uppercase tracking-widest block">REGIONAL RIVALS</span>
-                  <div className="space-y-1.5">
-                    {rankingsData.rivals.map((rival) => (
-                      <div key={rival.name} className="flex items-center justify-between text-xs py-1 border-b border-white/5 last:border-0">
-                        <div className="flex items-center gap-2">
-                          {rival.logo && (
-                            <div className="w-4 h-3 relative">
-                              <Image src={rival.logo} alt={rival.name} fill className="object-cover rounded-xs" />
-                            </div>
-                          )}
-                          <span className="text-white/80 font-medium uppercase tracking-tight">{rival.name}</span>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <span className="text-white font-bold">#{rival.position}</span>
-                          <span className="text-white/40 text-[9px]">{rival.points}</span>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Footer details */}
-                <div className="mt-6 pt-4 border-t border-white/10 flex justify-between items-center text-[9px] text-white/40 font-bold uppercase tracking-widest">
-                  <span>PTS: {rankingsData.world.points}</span>
-                  <span>AS OF {rankingsData.world.lastUpdated}</span>
-                </div>
-                
-              </div>
-            </Tilt3DCard>
-          </ScrollReveal>
-
-        </div>
-
-        {/* Secondary Match Cards - Limited to 3 */}
-        <StaggerContainer className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" staggerDelay={0.08}>
-          {secondaryMatches.map((match) => (
-            <motion.div key={match.id} variants={staggerItemVariants}>
-              <Link href={`/matches/${match.id}`} className="block group">
-                <div className="bg-white/5 hover:bg-white/10 border border-white/5 hover:border-white/10 p-6 rounded-xl transition-all duration-500 h-full flex flex-col justify-between group-hover:-translate-y-1 glow-green-card">
-                  
-                  <div className="space-y-6">
-                    <div className="border-b border-white/5 pb-4">
-                      <span className="text-white text-2xl font-black italic tracking-tighter block uppercase">{match.date}</span>
-                      <span className="text-white/60 text-[9px] font-bold block uppercase tracking-widest mt-1">{match.competition}</span>
-                    </div>
-                    
-                    <div className="flex items-center justify-between gap-4">
-                      <div className="flex items-center gap-3">
-                        <div className="w-8 h-8 relative opacity-80">
-                          {match.homeTeam.logo ? (
-                            <Image src={match.homeTeam.logo} alt={match.homeTeam.name} fill sizes="32px" className="object-contain" />
-                          ) : (
-                            <div className="w-full h-full bg-white/10 rounded-full flex items-center justify-center text-[8px] font-black">{match.homeTeam.name.substring(0, 3)}</div>
-                          )}
-                        </div>
-                        <span className="text-white font-black text-[10px] uppercase tracking-widest leading-none">{match.homeTeam.name}</span>
-                      </div>
-                      
-                      <span className="text-white/50 italic font-black text-[10px]">VS</span>
-
-                      <div className="flex items-center gap-3 text-right">
-                        <span className="text-white font-black text-[10px] uppercase tracking-widest leading-none">{match.awayTeam.name}</span>
-                        <div className="w-8 h-8 relative opacity-80">
-                          {match.awayTeam.logo ? (
-                            <Image src={match.awayTeam.logo} alt={match.awayTeam.name} fill sizes="32px" className="object-contain" />
-                          ) : (
-                            <div className="w-full h-full bg-white/10 rounded-full flex items-center justify-center text-[8px] font-black">{match.awayTeam.name.substring(0, 3)}</div>
-                          )}
-                        </div>
-                      </div>
-                    </div>
-
-                  </div>
-
-                  <div className="mt-8 pt-5 border-t border-white/5 flex items-center justify-between">
-                    <span className="text-[9px] font-black uppercase text-zru-gold tracking-[0.2em] group-hover:text-white transition-colors">Match Details</span>
-                    <div className="w-8 h-8 rounded-full border border-white/10 flex items-center justify-center group-hover:bg-white group-hover:text-rich-black transition-all">
-                      <ChevronRight className="w-4 h-4" />
-                    </div>
-                  </div>
-                </div>
-              </Link>
-            </motion.div>
-          ))}
-        </StaggerContainer>
-
-        {/* Portal to Full Match Centre */}
-        <ScrollReveal delay={0.4}>
-          <div className="text-center mt-16">
+        {/* 3. Bottom Button: View Match Centre */}
+        <ScrollReveal delay={0.3}>
+          <div className="text-center mt-12">
             <Link href="/match-centre">
-              <button 
-                className="group flex flex-col items-center gap-4 transition-all"
-              >
-                <div className="w-12 h-12 rounded-full border border-white/10 flex items-center justify-center group-hover:border-zru-gold group-hover:bg-zru-gold transition-all">
-                  <ArrowRight className="w-5 h-5 text-white transition-transform group-hover:translate-x-1" />
-                </div>
-                <div className="flex flex-col items-center">
-                  <span className="text-white/80 group-hover:text-white text-xs font-black uppercase tracking-[0.3em] transition-colors mb-1">
-                    View Full Season
-                  </span>
-                  <span className="text-white/30 text-[9px] font-bold uppercase tracking-[0.4em]">
-                    Portfolio
-                  </span>
-                </div>
+              <button className="inline-flex items-center gap-2 font-heading tracking-widest text-xs uppercase border-2 border-white/10 hover:border-clubhouse-gold/50 text-white hover:text-clubhouse-gold px-8 py-3.5 clip-slanted transition-all duration-300 bg-transparent">
+                View Match Centre +
               </button>
             </Link>
           </div>

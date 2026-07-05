@@ -1,11 +1,9 @@
 import { RefereeResource, RefereeCourse, RefereeNotice } from "@/types";
+import directus from "@/lib/directus/client";
+import { readItems } from "@directus/sdk";
 
-/**
- * CMS_SWAP_TODO: Replace mock implementation with actual REST/GraphQL endpoints once backend is available.
- * Fully compatible with React Native / Mobile platforms for direct cross-platform consumption.
- */
 export async function getRefereeResources(): Promise<RefereeResource[]> {
-  return [
+  const mockResources: RefereeResource[] = [
     { title: "World Rugby Laws of the Game 2026", category: "laws", size: "8.5 MB", downloadUrl: "#" },
     { title: "ZRU Domestic Law Variations (Schools & Clubs)", category: "laws", size: "1.4 MB", downloadUrl: "#" },
     { title: "Match Official Positioning Guide (15s)", category: "guides", size: "2.1 MB", downloadUrl: "#" },
@@ -13,14 +11,30 @@ export async function getRefereeResources(): Promise<RefereeResource[]> {
     { title: "Match Official Scorecard & Report Template", category: "forms", size: "450 KB", downloadUrl: "#" },
     { title: "Incident / Red Card Report Form", category: "forms", size: "620 KB", downloadUrl: "#" }
   ];
+
+  try {
+    if (process.env.NEXT_PUBLIC_DIRECTUS_URL) {
+      const response = await directus.request(
+        readItems('referee_resources' as any)
+      );
+      if (response && response.length > 0) {
+        return response.map((res: any) => ({
+          title: res.title,
+          category: res.category || "laws",
+          size: res.size || "Unknown",
+          downloadUrl: res.file ? `${process.env.NEXT_PUBLIC_DIRECTUS_URL}/assets/${res.file}` : (res.download_url || "#")
+        }));
+      }
+    }
+  } catch (error) {
+    console.warn("Directus fetch failed for referee resources, falling back to mock data:", error);
+  }
+
+  return mockResources;
 }
 
-/**
- * CMS_SWAP_TODO: Replace mock implementation with actual REST/GraphQL endpoints once backend is available.
- * Fully compatible with React Native / Mobile platforms for direct cross-platform consumption.
- */
 export async function getRefereeCourses(): Promise<RefereeCourse[]> {
-  return [
+  const mockCourses: RefereeCourse[] = [
     {
       title: "World Rugby Level 1 officiating (15s)",
       level: "Level 1",
@@ -46,14 +60,34 @@ export async function getRefereeCourses(): Promise<RefereeCourse[]> {
       status: "closed"
     }
   ];
+
+  try {
+    if (process.env.NEXT_PUBLIC_DIRECTUS_URL) {
+      const response = await directus.request(
+        readItems('referee_courses' as any, {
+          sort: ['date' as any]
+        })
+      );
+      if (response && response.length > 0) {
+        return response.map((course: any) => ({
+          title: course.title,
+          level: course.level || "Standard",
+          date: course.date_label || new Date(course.date).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }).toUpperCase(),
+          venue: course.venue || "TBA",
+          instructor: course.instructor || "TBA",
+          status: course.status || "open"
+        }));
+      }
+    }
+  } catch (error) {
+    console.warn("Directus fetch failed for referee courses, falling back to mock data:", error);
+  }
+
+  return mockCourses;
 }
 
-/**
- * CMS_SWAP_TODO: Replace mock implementation with actual REST/GraphQL endpoints once backend is available.
- * Fully compatible with React Native / Mobile platforms for direct cross-platform consumption.
- */
 export async function getRefereeNotices(): Promise<RefereeNotice[]> {
-  return [
+  const mockNotices: RefereeNotice[] = [
     {
       id: "ref-notice-2026-01",
       title: "Implementation of World Rugby 2026 Global Law Trials",
@@ -69,4 +103,27 @@ export async function getRefereeNotices(): Promise<RefereeNotice[]> {
       content: "Active match officials on panels A and B must undergo the mandatory pre-season fitness assessment. The shuttle beep test will take place at Harare Sports Club and Bulawayo Athletic Club. Minimum entry requirements must be met to secure appointments."
     }
   ];
+
+  try {
+    if (process.env.NEXT_PUBLIC_DIRECTUS_URL) {
+      const response = await directus.request(
+        readItems('referee_notices' as any, {
+          sort: ['-date' as any]
+        })
+      );
+      if (response && response.length > 0) {
+        return response.map((notice: any) => ({
+          id: String(notice.id),
+          title: notice.title,
+          date: notice.date_label || new Date(notice.date).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }).toUpperCase(),
+          excerpt: notice.excerpt || "",
+          content: notice.content || ""
+        }));
+      }
+    }
+  } catch (error) {
+    console.warn("Directus fetch failed for referee notices, falling back to mock data:", error);
+  }
+
+  return mockNotices;
 }

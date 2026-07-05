@@ -7,6 +7,7 @@ import Image from "next/image";
 import { StaggerContainer, staggerItemVariants } from "../ui/animations";
 import { PretextBackground } from "../ui/PretextBackground";
 import { PretextHeadline } from "../ui/PretextHeadline";
+import SlantedButton from "../ui/SlantedButton";
 
 const events = [
   {
@@ -98,13 +99,14 @@ export default function EventsBlock() {
                 From Super Six matches to community development festivals, explore the heart of Zimbabwean rugby across the nation.
               </p>
               
-              <Link 
+              <SlantedButton 
                 href="/events" 
-                className="inline-flex items-center justify-center gap-3 bg-white text-black px-8 py-4 rounded-none font-bold text-xs uppercase tracking-[0.2em] transition-all duration-300 hover:bg-zru-gold hover:text-black group shadow-[0_0_20px_rgba(255,255,255,0.1)] hover:shadow-[0_0_25px_rgba(235,178,23,0.3)]"
+                variant="primary"
+                className="inline-flex items-center justify-center gap-3 shadow-[0_0_20px_rgba(255,255,255,0.1)] hover:shadow-[0_0_25px_rgba(235,178,23,0.3)] w-fit group"
               >
                 <span>Explore All</span>
-                <Plus className="w-4 h-4 transition-transform group-hover:rotate-90" />
-              </Link>
+                <Plus className="w-5 h-5 transition-transform group-hover:rotate-90" />
+              </SlantedButton>
             </motion.div>
           </div>
 
@@ -151,7 +153,7 @@ export default function EventsBlock() {
                               </span>
                             ))}
                           </div>
-                          <h3 className="heading-3 text-white group-hover:text-zru-gold transition-colors">
+                          <h3 className="font-heading text-4xl tracking-widest text-white group-hover:text-zru-gold transition-colors">
                             {event.title}
                           </h3>
                         </div>

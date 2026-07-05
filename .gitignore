@@ -42,3 +42,6 @@ next-env.d.ts
 
 # Antigravity artifacts
 /artifacts
+
+# Headroom Cache
+.headroom/
