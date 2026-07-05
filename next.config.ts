@@ -17,25 +17,19 @@ const securityHeaders = [
   },
   {
     key: "Content-Security-Policy",
-    value: isDev
-      ? [
-          "default-src 'self'",
-          "script-src 'self' 'unsafe-inline' 'unsafe-eval'",
-          "style-src 'self' 'unsafe-inline'",
-          "img-src 'self' data: blob: https://assets.directus.io",
-          "font-src 'self' https://fonts.gstatic.com",
-          "frame-src 'self' https://www.youtube.com https://player.vimeo.com",
-          "connect-src 'self' https://YOUR_DIRECTUS_URL https://YOUR_SUPABASE_URL"
-        ].join("; ")
-      : [
-          "default-src 'self'",
-          "script-src 'self'",
-          "style-src 'self'",
-          "img-src 'self' data: blob: https://assets.directus.io",
-          "font-src 'self' https://fonts.gstatic.com",
-          "frame-src 'self' https://www.youtube.com https://player.vimeo.com",
-          "connect-src 'self' https://YOUR_DIRECTUS_URL https://YOUR_SUPABASE_URL"
-        ].join("; ")
+    value: [
+      "default-src 'self'",
+      // Allow inline script and eval for Next.js hydration, Turbopack, and Vercel toolbar
+      "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://vercel.live https://vercel.com https://*.vercel.live",
+      "style-src 'self' 'unsafe-inline' https://vercel.live https://*.vercel.live",
+      // Allow image loading from Directus, flags, and Vercel assets
+      "img-src 'self' data: blob: https://assets.directus.io https://vercel.com https://vercel.live https://*.vercel.live https://images.unsplash.com https://plus.unsplash.com https://r2.thesportsdb.com https://flagcdn.com",
+      // Allow Google Fonts, Perplexity CDN fonts, and inline data-uri fonts
+      "font-src 'self' data: https://fonts.gstatic.com https://frontend-cdn.perplexity.ai",
+      "frame-src 'self' https://www.youtube.com https://player.vimeo.com https://vercel.live https://*.vercel.live",
+      // Allow development hot-reload websockets, Vercel feedback streams, and Directus/Supabase endpoints
+      "connect-src 'self' ws: wss: https://vercel.live https://*.vercel.live wss://*.vercel.live wss://*.vercel.com https://*.supabase.co https://*.directus.app"
+    ].join("; ")
   }
 ];
 
