@@ -74,8 +74,6 @@ export default function Footer() {
                   href={href} 
                   className="text-white/50 hover:text-clubhouse-gold transition-colors"
                   aria-label={label}
-                  target="_blank"
-                  rel="noopener noreferrer"
                 >
                   <Icon className="w-5 h-5" />
                 </a>
