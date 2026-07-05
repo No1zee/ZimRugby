@@ -63,7 +63,6 @@ const nextConfig: NextConfig = {
       },
     ];
   },
-  swcMinify: true,
   images: {
     deviceSizes: [640, 750, 828, 1080, 1200, 1351, 1366, 1440, 1920, 2048],
     imageSizes: [16, 18, 22, 32, 48, 62, 64, 96, 128, 256, 262, 384, 620],

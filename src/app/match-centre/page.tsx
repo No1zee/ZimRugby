@@ -7,6 +7,7 @@ import Footer from "@/components/layout/Footer";
 import Button from "@/components/common/Button";
 import MatchList, { Match, MatchListSkeleton } from "@/components/matches/MatchList";
 import LeagueTable from "@/components/matches/LeagueTable";
+import { TableSkeleton } from "@/components/ui/Skeleton";
 import { useState, useEffect } from "react";
 
 export default function MatchCentre() {
@@ -93,7 +94,7 @@ export default function MatchCentre() {
         {/* Content Area */}
         <div className="min-h-[500px]">
             {isLoading ? (
-                <MatchListSkeleton />
+                activeTab === "standings" ? <TableSkeleton /> : <MatchListSkeleton />
             ) : error ? (
                 <div className="text-center py-20">
                     <p className="text-red-500 mb-4">Error: {error}</p>
