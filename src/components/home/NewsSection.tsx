@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 import { ArrowRight, Calendar, ChevronRight, Share2 } from "lucide-react";
-import Button from "../common/Button";
+import SlantedButton from "../ui/SlantedButton";
 import Link from "next/link";
 import Image from "next/image";
 
@@ -68,9 +68,10 @@ export default function NewsSection() {
               NEWS & MEDIA
             </h3>
           </div>
-          <Button variant="ghost" rightIcon={<ArrowRight className="w-5 h-5" />} className="hidden md:flex">
+          <SlantedButton variant="outline" size="sm" className="hidden md:flex gap-2">
             VIEW ALL NEWS
-          </Button>
+            <ArrowRight className="w-5 h-5" />
+          </SlantedButton>
         </div>
 
         <motion.div 
@@ -121,9 +122,10 @@ export default function NewsSection() {
                   {newsItems[0].excerpt}
                 </p>
                 <div className="flex items-center gap-4">
-                   <Button variant="primary" rightIcon={<ChevronRight className="w-4 h-4" />}>
+                   <SlantedButton variant="primary" size="sm" className="gap-2">
                      READ FULL STORY
-                   </Button>
+                     <ChevronRight className="w-4 h-4" />
+                   </SlantedButton>
                    <button className="p-3 bg-white/10 rounded-full hover:bg-white/20 text-white transition-colors">
                      <Share2 className="w-5 h-5" />
                    </button>
@@ -173,9 +175,10 @@ export default function NewsSection() {
         </motion.div>
 
         <div className="mt-12 md:hidden flex justify-center">
-            <Button variant="outline" rightIcon={<ArrowRight className="w-5 h-5" />}>
+            <SlantedButton variant="outline" className="gap-2">
                 VIEW ALL NEWS
-            </Button>
+                <ArrowRight className="w-5 h-5" />
+            </SlantedButton>
         </div>
       </div>
     </section>

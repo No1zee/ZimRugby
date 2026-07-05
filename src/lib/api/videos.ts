@@ -1,11 +1,9 @@
 import { Video } from "@/types";
+import directus from "@/lib/directus/client";
+import { readItems } from "@directus/sdk";
 
-/**
- * CMS_SWAP_TODO: Replace mock implementation with actual REST/GraphQL endpoints once backend is available.
- * Fully compatible with React Native / Mobile platforms for direct cross-platform consumption.
- */
 export async function getVideos(): Promise<Video[]> {
-  return [
+  const mockVideos: Video[] = [
     {
       id: "vid-sables-namibia-2025",
       title: "HIGHLIGHTS: Zimbabwe Sables vs Namibia | Africa Cup Final",
@@ -13,7 +11,7 @@ export async function getVideos(): Promise<Video[]> {
       duration: "12:45",
       date: "22 JUL 2025",
       thumbnail: "/images/media/vid1.jpg",
-      embedUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ", // Placeholder video url
+      embedUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
       description: "Catch all the thrilling action, tries, and celebrations from the Sables' historic victory over Namibia to claim the 2025 Rugby Africa Cup title."
     },
     {
@@ -67,4 +65,30 @@ export async function getVideos(): Promise<Video[]> {
       description: "Assistant coach Ricky Chirengende analyzes the team's tactical performance, defensive adjustments, and areas of improvement following the international friendly."
     }
   ];
+
+  try {
+    if (process.env.NEXT_PUBLIC_DIRECTUS_URL) {
+      const response = await directus.request(
+        readItems('videos' as any, {
+          sort: ['-date' as any]
+        })
+      );
+      if (response && response.length > 0) {
+        return response.map((video: any) => ({
+          id: String(video.id),
+          title: video.title || "",
+          category: video.category || "General",
+          duration: video.duration || "0:00",
+          date: video.date_label || new Date(video.date).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }).toUpperCase(),
+          thumbnail: video.thumbnail ? `${process.env.NEXT_PUBLIC_DIRECTUS_URL}/assets/${video.thumbnail}` : video.thumbnail_url,
+          embedUrl: video.embed_url || "",
+          description: video.description || ""
+        }));
+      }
+    }
+  } catch (error) {
+    console.warn("Directus fetch failed for videos list, falling back to mock data:", error);
+  }
+
+  return mockVideos;
 }

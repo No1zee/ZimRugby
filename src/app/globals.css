@@ -5,9 +5,9 @@
 /* eslint-disable-next-line */
 /* Note: @theme is standard Tailwind v4 syntax. Ignore "Unknown at rule" warnings. */
 @theme {
-  --font-heading: var(--font-bebas-neue), sans-serif;
-  --font-subheading: var(--font-montserrat), sans-serif;
-  --font-body: var(--font-inter), sans-serif;
+  --font-heading: var(--font-bebas-neue);
+  --font-subheading: var(--font-montserrat);
+  --font-body: var(--font-inter);
 
   --color-zru-green: #006039;
   --color-rich-black: #0A0A0A;
@@ -89,6 +89,41 @@ a, button, [role="button"], input, select, textarea {
 
 .clip-reveal {
   clip-path: polygon(0 100%, 100% 100%, 100% 100%, 0 100%);
+}
+
+/* Athletic Slant for buttons and shapes */
+.clip-slanted {
+  clip-path: polygon(15px 0, 100% 0, calc(100% - 15px) 100%, 0% 100%);
+}
+.clip-slanted-sm {
+  clip-path: polygon(8px 0, 100% 0, calc(100% - 8px) 100%, 0% 100%);
+}
+.clip-slanted-lg {
+  clip-path: polygon(40px 0, 100% 0, calc(100% - 40px) 100%, 0% 100%);
+}
+
+@utility font-heading {
+  font-family: var(--font-bebas-neue), "Bebas Neue", sans-serif;
+}
+@utility font-subheading {
+  font-family: var(--font-montserrat), sans-serif;
+}
+@utility font-body {
+  font-family: var(--font-inter), sans-serif;
+}
+
+/* Bento Card styling */
+.bento-card {
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  background: rgba(15, 15, 15, 0.4);
+  backdrop-filter: blur(16px);
+  border-radius: 16px;
+  overflow: hidden;
+  transition: border-color 0.3s ease, background 0.3s ease;
+}
+.bento-card:hover {
+  border-color: rgba(255, 255, 255, 0.15);
+  background: rgba(25, 25, 25, 0.6);
 }
 
 .perspective-1000 {

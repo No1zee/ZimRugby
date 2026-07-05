@@ -96,7 +96,7 @@ export default function Navigation() {
       
       {/* Main Navigation */}
       <nav className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
-        <div className={`flex justify-between items-center transition-all duration-300 ${isScrolled ? "h-16" : "h-20"}`}>
+        <div className={`flex justify-between items-center transition-all duration-300 ${isScrolled ? "h-20 lg:h-24" : "h-24 lg:h-28"}`}>
           
           {/* Logo */}
           <Link href="/" className="flex items-center gap-3 group relative">
@@ -106,118 +106,92 @@ export default function Navigation() {
                 alt="ZRU Logo"
                 width={81}
                 height={101}
-                className="object-contain drop-shadow-2xl w-auto h-12 lg:h-14"
+                className="object-contain drop-shadow-2xl w-auto h-16 lg:h-20"
                 priority
               />
             </motion.div>
           </Link>
 
-          {/* Desktop Nav */}
-          <div className="hidden lg:flex items-center gap-2">
-            {navItems.map((item) => (
-              <div 
-                key={item.label}
-                className="relative group"
-                onMouseEnter={() => item.children && setActiveDropdown(item.label)}
-                onMouseLeave={() => setActiveDropdown(null)}
-              >
-                <Link 
-                  href={item.href} 
-                  className={`
-                    relative px-3 py-2 text-sm font-bold uppercase tracking-wider transition-colors z-10
-                    flex items-center gap-1
-                    ${isActive(item.href) ? "text-white" : "text-white/80 hover:text-white"}
-                  `}
+          {/* Desktop Nav Links (Centered) */}
+          <div className="hidden lg:flex flex-1 items-center justify-center px-4 xl:px-8">
+            <div className="flex items-center gap-1 xl:gap-2">
+              {navItems.map((item) => (
+                <div 
+                  key={item.label}
+                  className="relative group"
+                  onMouseEnter={() => item.children && setActiveDropdown(item.label)}
+                  onMouseLeave={() => setActiveDropdown(null)}
                 >
-                  {/* Floating Pill Background */}
-                  {activeDropdown === item.label ? (
-                    <motion.div
-                      layoutId="navBackground"
-                      className="absolute inset-0 bg-white/10 rounded-full -z-10"
-                      initial={false}
-                      transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
-                    />
-                  ) : null}
-
-                  {/* Active Indicator - Bottom Border */}
-                  {isActive(item.href) && (
-                    <motion.div
-                      layoutId="activeNavIndicator"
-                      className="absolute bottom-0 left-0 right-0 h-0.5 bg-zru-gold"
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      transition={{ duration: 0.3 }}
-                    />
-                  )}
-
-                  {item.label}
-                  {item.children && <ChevronDown className="w-3 h-3 transition-transform group-hover:rotate-180" />}
-                </Link>
-
-                {/* Dropdown Menu (Mega or Standard) */}
-                {item.children && (
-                  <AnimatePresence>
-                    {activeDropdown === item.label && (
+                  <Link 
+                    href={item.href} 
+                    className={`
+                      relative px-3 py-2 text-sm font-bold uppercase tracking-wider transition-colors z-10
+                      flex items-center gap-1
+                      ${isActive(item.href) ? "text-white" : "text-white/80 hover:text-white"}
+                    `}
+                  >
+                    {/* Floating Pill Background */}
+                    {activeDropdown === item.label ? (
                       <motion.div
-                        initial={{ opacity: 0, y: 10, scale: 0.95 }}
-                        animate={{ opacity: 1, y: 0, scale: 1 }}
-                        exit={{ opacity: 0, y: 10, scale: 0.95 }}
-                        transition={{ duration: 0.2 }}
-                        className={`absolute top-full left-1/2 -translate-x-1/2 mt-2 bg-zru-green/95 backdrop-blur-xl rounded-xl shadow-2xl py-4 border border-white/10 overflow-hidden ${
-                          item.isMega ? 'w-[400px] grid grid-cols-2 gap-x-4 px-4' : 'min-w-[220px] px-2'
-                        }`}
-                      >
-                        {item.children.map((child) => (
-                          <Link
-                            key={child.label}
-                            href={child.href}
-                            className={`
-                              block px-4 py-3 text-sm font-medium transition-all rounded-lg hover:bg-white/10
-                              ${isActive(child.href) ? "text-zru-gold bg-white/5" : "text-white"}
-                              ${item.isMega ? 'hover:pl-6' : 'hover:pl-5'}
-                            `}
-                          >
-                            {child.label}
-                          </Link>
-                        ))}
-                      </motion.div>
+                        layoutId="navBackground"
+                        className="absolute inset-0 bg-white/10 rounded-full -z-10"
+                        initial={false}
+                        transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
+                      />
+                    ) : null}
+
+                    {/* Active Indicator - Bottom Border */}
+                    {isActive(item.href) && (
+                      <motion.div
+                        layoutId="activeNavIndicator"
+                        className="absolute bottom-0 left-0 right-0 h-0.5 bg-zru-gold"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ duration: 0.3 }}
+                      />
                     )}
-                  </AnimatePresence>
-                )}
-              </div>
-            ))}
 
-            {/* FAN ZONE CTA PILL */}
-            <Link 
-              href="/fan-zone" 
-              className="ml-4 flex items-center gap-2 group/fanzone"
-              title="Join the Fan Zone"
-            >
-              <div className="px-5 py-2 bg-clubhouse-gold text-rich-black font-black text-[11px] uppercase tracking-widest rounded-full shadow-[0_0_15px_rgba(212,175,55,0.4)] group-hover/fanzone:scale-105 group-hover/fanzone:shadow-[0_0_20px_rgba(212,175,55,0.6)] transition-all flex items-center gap-2">
-                <div className="w-2 h-2 bg-rich-black rounded-full animate-pulse" />
-                FAN ZONE
-              </div>
-            </Link>
+                    {item.label}
+                    {item.children && <ChevronDown className="w-3 h-3 transition-transform group-hover:rotate-180" />}
+                  </Link>
 
-            {/* TICKETS CTA */}
-            <Link 
-              href="/tickets" 
-              className="ml-2 px-6 py-2 bg-white text-zru-green font-black text-sm uppercase tracking-wider rounded-full hover:bg-gray-100 hover:scale-105 transition-all shadow-lg"
-            >
-              Tickets
-            </Link>
+                  {/* Dropdown Menu (Mega or Standard) */}
+                  {item.children && (
+                    <AnimatePresence>
+                      {activeDropdown === item.label && (
+                        <motion.div
+                          initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                          animate={{ opacity: 1, y: 0, scale: 1 }}
+                          exit={{ opacity: 0, y: 10, scale: 0.95 }}
+                          transition={{ duration: 0.2 }}
+                          className={`absolute top-full left-1/2 -translate-x-1/2 mt-2 bg-zru-green/95 backdrop-blur-xl rounded-xl shadow-2xl py-4 border border-white/10 overflow-hidden ${
+                            item.isMega ? 'w-[400px] grid grid-cols-2 gap-x-4 px-4' : 'min-w-[220px] px-2'
+                          }`}
+                        >
+                          {item.children.map((child) => (
+                            <Link
+                              key={child.label}
+                              href={child.href}
+                              className={`
+                                block px-4 py-3 text-sm font-medium transition-all rounded-lg hover:bg-white/10
+                                ${isActive(child.href) ? "text-zru-gold bg-white/5" : "text-white"}
+                                ${item.isMega ? 'hover:pl-6' : 'hover:pl-5'}
+                              `}
+                            >
+                              {child.label}
+                            </Link>
+                          ))}
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  )}
+                </div>
+              ))}
+            </div>
           </div>
 
           {/* Mobile Actions */}
           <div className="lg:hidden flex items-center gap-3">
-            {/* Mobile Fan Zone Pill */}
-            <Link 
-              href="/fan-zone" 
-              className="px-4 py-1.5 bg-clubhouse-gold text-rich-black font-black text-[10px] uppercase tracking-widest rounded-full shadow-[0_0_10px_rgba(212,175,55,0.3)]"
-            >
-              FAN ZONE
-            </Link>
-            
             {/* Mobile Hamburger Menu Button */}
             <button
               onClick={toggleMenu}
@@ -288,21 +262,6 @@ export default function Navigation() {
                   )}
                 </motion.div>
               ))}
-              
-              <motion.div 
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.5 }}
-                className="pt-6 mt-6 border-t border-white/10 space-y-4"
-              >
-                <Link 
-                  href="/tickets" 
-                  className="block w-full py-4 text-center bg-white text-zru-green font-black text-lg uppercase tracking-wider rounded-xl shadow-lg"
-                  onClick={toggleMenu}
-                >
-                  BUY TICKETS
-                </Link>
-              </motion.div>
             </div>
           </motion.div>
         )}

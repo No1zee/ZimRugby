@@ -1,9 +1,7 @@
 import { Team } from "@/types";
+import directus from "@/lib/directus/client";
+import { readItems } from "@directus/sdk";
 
-/**
- * CMS_SWAP_TODO: Replace mock implementation with actual REST/GraphQL endpoints once backend is available.
- * Fully compatible with React Native / Mobile platforms for direct cross-platform consumption.
- */
 export async function getTeamData(slug: string): Promise<Team | null> {
   const teams: Record<string, Team> = {
     "sables": {
@@ -151,6 +149,53 @@ export async function getTeamData(slug: string): Promise<Team | null> {
       ]
     }
   };
+
+  try {
+    if (process.env.NEXT_PUBLIC_DIRECTUS_URL) {
+      const response = await directus.request(
+        readItems('teams', {
+          filter: {
+            slug: { _eq: slug }
+          },
+          fields: ['*', 'coaching_staff.*', 'squad.*', 'matches.*', 'gallery.*'],
+          limit: 1
+        })
+      );
+      if (response?.[0]) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const team = response[0] as any;
+        
+        return {
+          id: team.slug || team.id,
+          name: team.name || "",
+          tagline: team.tagline || "",
+          history: team.history || "",
+          stats: (team.stats || []).map((s: any) => ({ label: s.label, value: s.value })),
+          coachingStaff: (team.coaching_staff || []).map((c: any) => ({ name: c.name, role: c.role })),
+          squad: (team.squad || []).map((s: any) => ({
+            name: s.name,
+            position: s.position,
+            club: s.club,
+            caps: s.caps ? Number(s.caps) : undefined,
+            image: s.image ? `${process.env.NEXT_PUBLIC_DIRECTUS_URL}/assets/${s.image}` : (s.image_url || "/images/teams/player-placeholder.webp")
+          })),
+          matches: (team.matches || []).map((m: any) => ({
+            opponent: m.opponent,
+            opponentLogo: m.opponent_logo ? `${process.env.NEXT_PUBLIC_DIRECTUS_URL}/assets/${m.opponent_logo}` : m.opponent_logo_url,
+            date: m.date_label || new Date(m.date).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }),
+            venue: m.venue || "TBA",
+            score: m.score,
+            status: m.status || "upcoming"
+          })),
+          gallery: (team.gallery || []).map((img: any) => 
+            img.image ? `${process.env.NEXT_PUBLIC_DIRECTUS_URL}/assets/${img.image}` : img.image_url
+          )
+        };
+      }
+    }
+  } catch (error) {
+    console.warn(`Directus fetch failed for team ${slug}, falling back to mock data:`, error);
+  }
 
   return teams[slug] || null;
 }

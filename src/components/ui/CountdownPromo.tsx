@@ -6,6 +6,7 @@ import { ArrowRight, MapPin } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import { StripedBackground } from "./StripedBackground";
+import SlantedButton from "./SlantedButton";
 
 interface CountdownPromoProps {
   /** Event title */
@@ -54,10 +55,6 @@ function calculateTimeLeft(targetDate: string): TimeLeft {
   };
 }
 
-/**
- * Hero-style countdown promo inspired by HK Rugby "HONG KONG SEVENS" section.
- * Features clipped image, diagonal stripes, and live countdown.
- */
 export function CountdownPromo({
   title,
   subtitle,
@@ -81,7 +78,6 @@ export function CountdownPromo({
     return () => clearInterval(timer);
   }, [targetDate]);
 
-  // Format date for display
   const dateObj = new Date(targetDate);
   const formattedDate = dateObj.toLocaleDateString("en-GB", {
     day: "numeric",
@@ -92,17 +88,14 @@ export function CountdownPromo({
   const isClient = mounted;
 
   return (
-    <section className={`relative py-section bg-rich-black overflow-hidden ${className}`}>
+    <section className={`relative py-section bg-transparent overflow-hidden ${className}`}>
       
       {/* Visual Background Accent */}
       <div className="absolute inset-0 z-0">
-        <div className="absolute inset-0 bg-linear-to-r from-rich-black via-transparent to-rich-black z-10" />
-        <div className="absolute inset-0 bg-zru-green/10 z-0" />
-        <div className="absolute top-0 right-0 w-1/2 h-full bg-[radial-gradient(circle_at_top_right,rgba(255,215,0,0.1),transparent_70%)]" />
+        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-transparent to-transparent z-10" />
+        <div className="absolute inset-0 bg-zru-green/5 z-0" />
+        <div className="absolute top-0 right-0 w-1/2 h-full bg-[radial-gradient(circle_at_top_right,rgba(0,96,57,0.1),transparent_70%)]" />
       </div>
-
-      {/* Stripes */}
-      <StripedBackground variant="accent" position="right" color="gold" className="opacity-10" />
 
       <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 relative z-20">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
@@ -118,14 +111,12 @@ export function CountdownPromo({
             {/* Diagonal lines behind */}
             <div className="absolute -left-8 -top-8 -bottom-8 w-32">
               <div
-                className="h-full bg-[repeating-linear-gradient(-45deg,transparent,transparent_8px,rgba(215,25,32,0.15)_8px,rgba(215,25,32,0.15)_12px)]"
+                className="h-full bg-[repeating-linear-gradient(-45deg,transparent,transparent_8px,rgba(255,255,255,0.03)_8px,rgba(255,255,255,0.03)_12px)]"
               />
             </div>
             
             {/* Image with clip-path */}
-            <div
-              className="relative z-10 aspect-4/3 rounded-lg overflow-hidden [clip-path:polygon(0_10%,100%_0%,100%_90%,0%_100%)]"
-            >
+            <div className="relative z-10 aspect-4/3 overflow-hidden clip-slanted-lg group shadow-2xl">
               {image ? (
                 <div className="relative w-full h-full">
                   <Image 
@@ -135,11 +126,15 @@ export function CountdownPromo({
                     priority
                     sizes="(max-width: 768px) 100vw, 50vw"
                     quality={60}
-                    className="object-cover"
+                    className="object-cover transition-transform duration-1000 group-hover:scale-105"
                   />
+                  {/* Premium Cinematic Overlays */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-rich-black/80 via-transparent to-rich-black/30" />
+                  <div className="absolute inset-0 bg-zru-green/20 mix-blend-multiply transition-opacity duration-700 group-hover:opacity-0" />
+                  <div className="absolute inset-0 ring-1 ring-inset ring-white/10" />
                 </div>
               ) : (
-                <div className="w-full h-full bg-linear-to-br from-zru-green via-green-700 to-green-900 flex items-center justify-center">
+                <div className="w-full h-full bg-gradient-to-br from-zru-green via-green-700 to-green-900 flex items-center justify-center">
                   <span className="text-white/50 text-4xl font-black">DEBUG: Placeholder</span>
                 </div>
               )}
@@ -154,33 +149,33 @@ export function CountdownPromo({
             transition={{ duration: 0.8, delay: 0.2 }}
           >
             {/* Date */}
-            <p className="heading-2 text-white mb-4">
+            <p className="font-heading tracking-widest text-xl text-white/50 mb-4">
               {isClient ? formattedDate : "\u00A0"}
             </p>
             
             {/* Title - Standardized */}
             <div className="flex items-center gap-2 mb-4">
-              <div className="w-8 h-1 bg-zru-gold" />
-              <span className="text-zru-gold text-xs font-black uppercase tracking-[0.3em]">{title}</span>
+              <div className="w-8 h-1 bg-white/40" />
+              <span className="text-white/60 text-[10px] font-black uppercase tracking-[0.4em]">{title}</span>
             </div>
             
             {/* Subtitle */}
             {subtitle && (
-              <p className="heading-1 text-white mb-8">
+              <h2 className="font-heading text-6xl md:text-8xl tracking-wider text-white mb-6 uppercase">
                 {subtitle}
-              </p>
+              </h2>
             )}
             
             {/* Description */}
             {description && (
-              <p className="body-base text-white/60 mb-10 max-w-md font-medium">
+              <p className="font-body text-white/70 mb-10 max-w-md">
                 {description}
               </p>
             )}
 
             {/* Countdown */}
             <div className="mb-8">
-              <p className="text-[10px] font-black text-white/60 uppercase tracking-[0.2em] mb-4">
+              <p className="text-[10px] font-black text-white/40 uppercase tracking-[0.2em] mb-4">
                 {countdownLabel}
               </p>
               <div className="flex flex-wrap justify-start gap-x-6 gap-y-4 md:gap-8 min-w-0">
@@ -195,11 +190,11 @@ export function CountdownPromo({
                       key={`${unit.label}-${unit.value}`}
                       initial={{ scale: 1.1 }}
                       animate={{ scale: 1 }}
-                      className="block text-5xl md:text-7xl font-black text-zru-gold leading-none tracking-tighter"
+                      className="block font-heading text-6xl md:text-8xl text-zru-green leading-none tracking-wider"
                     >
                       {isClient ? String(unit.value).padStart(2, "0") : "00"}
                     </motion.span>
-                    <span className="text-[9px] font-black text-white/30 uppercase tracking-[0.3em] block mt-2">
+                    <span className="text-[10px] font-bold text-white/40 uppercase tracking-[0.3em] block mt-2">
                       {unit.label}
                     </span>
                   </div>
@@ -209,33 +204,23 @@ export function CountdownPromo({
 
             {/* Location */}
             {location && (
-              <div className="flex items-center gap-2 text-gray-500 text-sm mb-6">
+              <div className="flex items-center gap-2 text-white/40 text-sm mb-6">
                 <MapPin className="w-4 h-4" />
                 {location}
               </div>
             )}
 
             {/* CTAs */}
-            <div className="flex flex-wrap items-center gap-6 mt-8">
+            <div className="flex flex-wrap items-center gap-4 mt-8">
               {ctas.map((cta, i) => (
                cta.variant === "outline" ? (
-                <Link key={i} href={cta.href} className="group flex items-center gap-3">
-                  <span className="text-[10px] font-black uppercase tracking-[0.2em] text-white/50 group-hover:text-white transition-colors">
-                    {cta.label}
-                  </span>
-                  <div className="w-8 h-8 rounded-full border border-white/10 flex items-center justify-center group-hover:bg-white group-hover:text-rich-black transition-all">
-                    <ArrowRight className="w-3 h-3 transition-transform group-hover:translate-x-0.5" />
-                  </div>
-                </Link>
+                 <SlantedButton key={i} href={cta.href} variant="outline" size="sm">
+                   {cta.label}
+                 </SlantedButton>
                ) : (
-                <Link 
-                  key={i} 
-                  href={cta.href}
-                  className="inline-flex items-center justify-center gap-3 bg-white text-black px-8 py-4 rounded-none font-bold text-xs uppercase tracking-[0.2em] transition-all duration-300 hover:bg-zru-gold hover:text-black group shadow-[0_0_20px_rgba(255,255,255,0.1)] hover:shadow-[0_0_25px_rgba(235,178,23,0.3)]"
-                >
-                  <span>{cta.label}</span>
-                  <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
-                </Link>
+                 <SlantedButton key={i} href={cta.href} variant="primary" size="md">
+                   {cta.label}
+                 </SlantedButton>
                )
               ))}
             </div>
