@@ -61,7 +61,7 @@ export default function MatchCentreStrip({ initialMatches = [], twinData, rankin
 
   return (
     <section 
-      className="py-24 bg-transparent relative overflow-hidden border-t border-white/5"
+      className="py-12 lg:py-24 bg-transparent relative overflow-hidden border-t border-white/5"
       id="match-centre"
     >
       {/* Background Media with subtle stadium overlay */}
@@ -84,11 +84,11 @@ export default function MatchCentreStrip({ initialMatches = [], twinData, rankin
         
         {/* Title: MATCH CENTRE */}
         <ScrollReveal>
-          <div className="text-center mb-16 space-y-2">
+          <div className="text-center mb-8 lg:mb-16 space-y-2">
             <span className="text-zru-gold text-[10px] font-black uppercase tracking-[0.4em] font-subheading block">
               ZRU Control Hub
             </span>
-            <h2 className="text-4xl md:text-5xl lg:text-6xl font-heading text-center text-white tracking-widest uppercase italic font-black">
+            <h2 className="text-3xl md:text-5xl lg:text-6xl font-heading text-center text-white tracking-widest uppercase italic font-black">
               Match Centre
             </h2>
           </div>
@@ -101,14 +101,14 @@ export default function MatchCentreStrip({ initialMatches = [], twinData, rankin
           <div className="lg:col-span-8 flex">
             <ScrollReveal className="w-full flex" delay={0.1}>
               <Tilt3DCard className="w-full flex" tiltAmount={0.8}>
-                <div className="relative w-full rounded-2xl overflow-hidden border border-white/5 shadow-2xl bg-neutral-950/40 backdrop-blur-xl p-8 md:p-12 flex flex-col justify-between group hover:border-zru-gold/20 transition-all duration-500">
+                <div className="relative w-full rounded-2xl overflow-hidden border border-white/5 shadow-2xl bg-neutral-950/40 backdrop-blur-xl p-5 md:p-12 flex flex-col justify-between group hover:border-zru-gold/20 transition-all duration-500">
                   
                   {/* Dynamic Radial Spotlights inside the card */}
                   <div className="absolute -right-32 -top-32 w-96 h-96 rounded-full bg-zru-green/5 blur-3xl pointer-events-none z-0" />
                   <div className="absolute -left-32 -bottom-32 w-96 h-96 rounded-full bg-zru-gold/5 blur-3xl pointer-events-none z-0" />
 
                   {/* Top Row / Badges */}
-                  <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mb-8 z-10">
+                  <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mb-6 md:mb-8 z-10">
                     {/* Slanted Date Badge */}
                     <div className="bg-neutral-900/90 border border-white/10 text-white font-heading text-base px-6 py-2 transform -skew-x-12 inline-block font-black shadow-lg">
                       <span className="border-l-2 border-zru-gold pl-3 block transform skew-x-12">
@@ -128,68 +128,68 @@ export default function MatchCentreStrip({ initialMatches = [], twinData, rankin
                   </div>
 
                   {/* Matchup row (Left Team vs Right Team) */}
-                  <div className="grid grid-cols-1 md:grid-cols-12 items-center gap-8 md:gap-4 my-8 z-10 relative">
+                  <div className="grid grid-cols-3 md:grid-cols-12 items-center gap-2 md:gap-4 my-6 md:my-8 z-10 relative">
                     
                     {/* Background Neon Clashing Line */}
                     <div className="hidden md:block absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-[1px] bg-gradient-to-r from-transparent via-white/10 to-transparent z-0" />
                     <div className="hidden md:block absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[1px] h-[150px] bg-gradient-to-b from-transparent via-zru-green/30 to-transparent z-0" />
 
                     {/* Left Team: Zimbabwe Sables */}
-                    <div className="md:col-span-4 flex flex-col items-center md:items-end text-center md:text-right z-10">
+                    <div className="col-span-1 md:col-span-4 flex flex-col items-center md:items-end text-center md:text-right z-10">
                       {/* Shield Crest Holder */}
-                      <div className="w-24 h-24 rotate-[45deg] rounded-lg border border-zru-green/30 bg-neutral-900/60 flex items-center justify-center overflow-hidden shadow-xl shadow-zru-green/5 group-hover:scale-105 transition-transform duration-500 mb-6 relative">
-                        <div className="-rotate-[45deg] p-4 w-full h-full flex items-center justify-center font-heading text-white font-bold flex-col gap-1 select-none">
+                      <div className="w-16 h-16 md:w-24 md:h-24 rotate-[45deg] rounded-lg border border-zru-green/30 bg-neutral-900/60 flex items-center justify-center overflow-hidden shadow-xl shadow-zru-green/5 group-hover:scale-105 transition-transform duration-500 mb-4 md:mb-6 relative">
+                        <div className="-rotate-[45deg] p-2 md:p-4 w-full h-full flex items-center justify-center font-heading text-white font-bold flex-col gap-1 select-none">
                           {spotlightMatch.homeTeam.logo ? (
                             <Image 
                               src={spotlightMatch.homeTeam.logo} 
                               alt={spotlightMatch.homeTeam.name} 
                               width={70} 
                               height={70} 
-                              className="object-contain filter drop-shadow-[0_4px_8px_rgba(0,0,0,0.3)] -rotate-[45deg]"
+                              className="w-8 h-8 md:w-[70px] md:h-[70px] object-contain filter drop-shadow-[0_4px_8px_rgba(0,0,0,0.3)] -rotate-[45deg]"
                             />
                           ) : (
-                            <span className="text-xl -rotate-[45deg]">{spotlightMatch.homeTeam.name.substring(0, 3).toUpperCase()}</span>
+                            <span className="text-sm md:text-xl -rotate-[45deg]">{spotlightMatch.homeTeam.name.substring(0, 3).toUpperCase()}</span>
                           )}
                         </div>
                       </div>
-                      <h3 className="text-xl md:text-2xl font-heading text-white tracking-wide uppercase leading-none font-bold">
+                      <h3 className="text-xs sm:text-sm md:text-2xl font-heading text-white tracking-wide uppercase leading-tight md:leading-none font-bold break-words w-full">
                         {spotlightMatch.homeTeam.name}
                       </h3>
-                      <span className="text-white/40 text-[9px] font-bold uppercase tracking-wider mt-2 font-body">Sables XV</span>
+                      <span className="text-white/40 text-[8px] md:text-[9px] font-bold uppercase tracking-wider mt-1 md:mt-2 font-body hidden sm:block">Sables XV</span>
                     </div>
 
                     {/* Center: VS Gold Ring */}
-                    <div className="md:col-span-4 flex flex-col items-center justify-center z-10">
-                      <div className="w-14 h-14 rounded-full bg-neutral-900 border border-white/10 flex items-center justify-center shadow-lg relative group/vs">
+                    <div className="col-span-1 md:col-span-4 flex flex-col items-center justify-center z-10">
+                      <div className="w-10 h-10 md:w-14 md:h-14 rounded-full bg-neutral-900 border border-white/10 flex items-center justify-center shadow-lg relative group/vs">
                         {/* Gold Aura */}
                         <div className="absolute inset-0 rounded-full bg-zru-gold/5 blur-md" />
-                        <span className="font-heading text-lg text-zru-gold tracking-wide italic font-black relative z-10">VS</span>
+                        <span className="font-heading text-sm md:text-lg text-zru-gold tracking-wide italic font-black relative z-10">VS</span>
                       </div>
-                      <span className="text-[10px] text-white/50 font-black uppercase tracking-widest mt-3 font-subheading bg-white/5 px-3 py-0.5 rounded-full">{spotlightMatch.round}</span>
+                      <span className="text-[8px] md:text-[10px] text-white/50 font-black uppercase tracking-widest mt-2 md:mt-3 font-subheading bg-white/5 px-2 md:px-3 py-0.5 rounded-full text-center">{spotlightMatch.round}</span>
                     </div>
 
                     {/* Right Team: Opponent */}
-                    <div className="md:col-span-4 flex flex-col items-center md:items-start text-center md:text-left z-10">
+                    <div className="col-span-1 md:col-span-4 flex flex-col items-center md:items-start text-center md:text-left z-10">
                       {/* Shield Crest Holder */}
-                      <div className="w-24 h-24 rotate-[45deg] rounded-lg border border-white/10 bg-neutral-900/60 flex items-center justify-center overflow-hidden shadow-xl group-hover:scale-105 transition-transform duration-500 mb-6 relative">
-                        <div className="-rotate-[45deg] p-4 w-full h-full flex items-center justify-center font-heading text-white font-bold flex-col gap-1 select-none">
+                      <div className="w-16 h-16 md:w-24 md:h-24 rotate-[45deg] rounded-lg border border-white/10 bg-neutral-900/60 flex items-center justify-center overflow-hidden shadow-xl group-hover:scale-105 transition-transform duration-500 mb-4 md:mb-6 relative">
+                        <div className="-rotate-[45deg] p-2 md:p-4 w-full h-full flex items-center justify-center font-heading text-white font-bold flex-col gap-1 select-none">
                           {spotlightMatch.awayTeam.logo ? (
                             <Image 
                               src={spotlightMatch.awayTeam.logo} 
                               alt={spotlightMatch.awayTeam.name} 
                               width={70} 
                               height={70} 
-                              className="object-contain filter drop-shadow-[0_4px_8px_rgba(0,0,0,0.3)] -rotate-[45deg]"
+                              className="w-8 h-8 md:w-[70px] md:h-[70px] object-contain filter drop-shadow-[0_4px_8px_rgba(0,0,0,0.3)] -rotate-[45deg]"
                             />
                           ) : (
-                            <span className="text-xl -rotate-[45deg]">{spotlightMatch.awayTeam.name.substring(0, 3).toUpperCase()}</span>
+                            <span className="text-sm md:text-xl -rotate-[45deg]">{spotlightMatch.awayTeam.name.substring(0, 3).toUpperCase()}</span>
                           )}
                         </div>
                       </div>
-                      <h3 className="text-xl md:text-2xl font-heading text-white tracking-wide uppercase leading-none font-bold">
+                      <h3 className="text-xs sm:text-sm md:text-2xl font-heading text-white tracking-wide uppercase leading-tight md:leading-none font-bold break-words w-full">
                         {spotlightMatch.awayTeam.name}
                       </h3>
-                      <span className="text-white/40 text-[9px] font-bold uppercase tracking-wider mt-2 font-body">Opponent</span>
+                      <span className="text-white/40 text-[8px] md:text-[9px] font-bold uppercase tracking-wider mt-1 md:mt-2 font-body hidden sm:block">Opponent</span>
                     </div>
 
                   </div>
@@ -320,21 +320,31 @@ export default function MatchCentreStrip({ initialMatches = [], twinData, rankin
                   {secondaryMatch.competition} • {secondaryMatch.round}
                 </span>
                 
-                <div className="flex items-center gap-4">
+                <div className="grid grid-cols-3 sm:flex sm:items-center gap-2 sm:gap-4 w-full sm:w-auto mt-2 sm:mt-0">
                   {/* Home Team */}
-                  <span className="text-white font-heading text-base uppercase tracking-wide font-bold">{secondaryMatch.homeTeam.name}</span>
-                  {secondaryMatch.homeTeam.logo && (
-                    <Image src={secondaryMatch.homeTeam.logo} alt={secondaryMatch.homeTeam.name} width={22} height={18} className="object-contain shrink-0" />
-                  )}
+                  <div className="flex flex-col-reverse sm:flex-row items-center sm:justify-end gap-1.5 sm:gap-3 text-center sm:text-right">
+                    <span className="text-white font-heading text-xs sm:text-base uppercase tracking-wide font-bold break-words w-full sm:w-auto leading-tight">{secondaryMatch.homeTeam.name}</span>
+                    {secondaryMatch.homeTeam.logo && (
+                      <div className="w-8 h-8 sm:w-auto sm:h-auto flex items-center justify-center bg-white/5 sm:bg-transparent rounded-full sm:rounded-none shrink-0 p-1 sm:p-0">
+                        <Image src={secondaryMatch.homeTeam.logo} alt={secondaryMatch.homeTeam.name} width={22} height={18} className="object-contain" />
+                      </div>
+                    )}
+                  </div>
                   
                   {/* VS */}
-                  <span className="text-zru-gold font-heading text-xs italic font-bold">VS</span>
+                  <div className="flex justify-center items-center">
+                    <span className="text-zru-gold font-heading text-[10px] sm:text-xs italic font-bold bg-white/5 sm:bg-transparent px-2 py-0.5 rounded-sm">VS</span>
+                  </div>
                   
                   {/* Away Team */}
-                  {secondaryMatch.awayTeam.logo && (
-                    <Image src={secondaryMatch.awayTeam.logo} alt={secondaryMatch.awayTeam.name} width={22} height={18} className="object-contain shrink-0" />
-                  )}
-                  <span className="text-white font-heading text-base uppercase tracking-wide font-bold">{secondaryMatch.awayTeam.name}</span>
+                  <div className="flex flex-col sm:flex-row items-center sm:justify-start gap-1.5 sm:gap-3 text-center sm:text-left">
+                    {secondaryMatch.awayTeam.logo && (
+                      <div className="w-8 h-8 sm:w-auto sm:h-auto flex items-center justify-center bg-white/5 sm:bg-transparent rounded-full sm:rounded-none shrink-0 p-1 sm:p-0">
+                        <Image src={secondaryMatch.awayTeam.logo} alt={secondaryMatch.awayTeam.name} width={22} height={18} className="object-contain" />
+                      </div>
+                    )}
+                    <span className="text-white font-heading text-xs sm:text-base uppercase tracking-wide font-bold break-words w-full sm:w-auto leading-tight">{secondaryMatch.awayTeam.name}</span>
+                  </div>
                 </div>
               </div>
 

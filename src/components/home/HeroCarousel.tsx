@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef, useCallback } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion";
 import { LucideIcon, ArrowRight, Play, Ticket, ChevronLeft, ChevronRight } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
@@ -33,7 +33,7 @@ const itemVariants = {
     opacity: 1,
     transition: {
       duration: 0.8,
-      ease: [0.215, 0.61, 0.355, 1] as const, // Equivalent to power3.out
+      ease: [0.25, 1, 0.5, 1], // Upgraded cubic-bezier ease for whip and settle
     },
   },
 };
@@ -45,7 +45,7 @@ const lineVariants = {
     opacity: 1,
     transition: {
       duration: 0.8,
-      ease: [0.215, 0.61, 0.355, 1] as const,
+      ease: [0.25, 1, 0.5, 1],
     },
   },
 };
@@ -91,10 +91,15 @@ function SlideContent({ slide }: { slide: HeroSlideData }) {
         {/* Headline */}
         <motion.h1 variants={itemVariants} className="font-heading uppercase tracking-wider leading-[1.1] relative">
           {/* Spotlights */}
-          <div className="absolute -inset-x-32 -top-64 bottom-0 pointer-events-none z-0 opacity-40">
+          <motion.div 
+            initial={{ opacity: 0.2 }}
+            animate={{ opacity: 0.6 }}
+            transition={{ duration: 4, repeat: Infinity, repeatType: "reverse", ease: "easeInOut" }}
+            className="absolute -inset-x-32 -top-64 bottom-0 pointer-events-none z-0"
+          >
             <div className={`absolute top-0 left-0 w-0 h-0 border-l-[120px] border-l-transparent border-r-[120px] border-r-transparent border-t-[400px] ${spotlightColor} -rotate-12 blur-3xl origin-top`} />
             <div className={`absolute top-0 right-0 w-0 h-0 border-l-[120px] border-l-transparent border-r-[120px] border-r-transparent border-t-[400px] ${spotlightColor} rotate-12 blur-3xl origin-top`} />
-          </div>
+          </motion.div>
           
           <div className="overflow-hidden block py-0.5">
             <motion.span 
@@ -153,6 +158,17 @@ export default function HeroCarousel({ slides }: { slides: HeroSlideData[] }) {
   const containerRef = useRef<HTMLElement>(null);
   const [isMobile, setIsMobile] = useState(false);
 
+  // Scroll Parallax Hooks
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start start", "end start"],
+  });
+
+  const yBg = useTransform(scrollYProgress, [0, 1], ["0%", "50%"]);
+  const opacityBg = useTransform(scrollYProgress, [0, 1], [1, 0.3]);
+  const yText = useTransform(scrollYProgress, [0, 1], ["0%", "-20%"]);
+  const opacityText = useTransform(scrollYProgress, [0, 0.4], [1, 0]);
+
   useEffect(() => {
     const checkMobile = () => setIsMobile(window.innerWidth < 768);
     checkMobile();
@@ -180,7 +196,7 @@ export default function HeroCarousel({ slides }: { slides: HeroSlideData[] }) {
   const activeSlide = slides[currentSlide];
 
   return (
-    <section ref={containerRef} className="relative w-full h-[100dvh] bg-rich-black overflow-hidden flex items-center justify-center cursor-none">
+    <section ref={containerRef} className="relative w-full h-[100dvh] bg-rich-black overflow-hidden flex items-center justify-center">
       
       {/* Background & Transitions - Mode changed to crossfade for performance and LCP */}
       <AnimatePresence>
@@ -196,8 +212,9 @@ export default function HeroCarousel({ slides }: { slides: HeroSlideData[] }) {
             {/* Performance Hint: Removed heavy black overlay that delayed LCP */}
             <motion.div 
               initial={{ scale: 1 }}
-              animate={{ scale: 1.06 }}
+              animate={{ scale: 1.08 }} // Upgraded from 1.06 to 1.08 for more dramatic Ken Burns
               transition={{ duration: 12, ease: "linear" }}
+              style={{ y: yBg, opacity: opacityBg }} // Apply scroll parallax
               className="relative w-full h-full hero-bg-media will-change-transform filter-[brightness(var(--hero-brightness,1))]"
             >
                 {activeSlide.video ? (
@@ -227,7 +244,7 @@ export default function HeroCarousel({ slides }: { slides: HeroSlideData[] }) {
                     fill
                     priority={currentSlide === 0}
                     loading={currentSlide === 0 ? "eager" : "lazy"}
-                    sizes="100vw"
+                    sizes="(max-width: 768px) 100vw, 100vw"
                     quality={75}
                     className="object-cover"
                   />
@@ -244,11 +261,11 @@ export default function HeroCarousel({ slides }: { slides: HeroSlideData[] }) {
       </div>
 
       {/* Content Layer */}
-      <div className="relative z-20 w-full max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 h-full flex items-center justify-start pt-24 lg:pt-32 pb-24">
+      <motion.div style={{ y: yText, opacity: opacityText }} className="relative z-20 w-full max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 h-full flex items-center justify-start pt-24 lg:pt-32 pb-24">
         <div className="text-left w-full mr-auto">
           <SlideContent slide={activeSlide} />
         </div>
-      </div>
+      </motion.div>
 
       {/* Slide Navigation Hints */}
       <div className="absolute bottom-12 left-0 w-full z-30 pointer-events-none">
@@ -256,7 +273,7 @@ export default function HeroCarousel({ slides }: { slides: HeroSlideData[] }) {
           <div className="flex items-center gap-8 pointer-events-auto">
             <button 
               onClick={prevSlide} 
-              className="text-white/30 hover:text-white transition-colors cursor-none -ml-2"
+              className="text-white/30 hover:text-white transition-colors -ml-2"
               aria-label="Previous Slide"
               title="Previous Slide"
             >
@@ -269,12 +286,13 @@ export default function HeroCarousel({ slides }: { slides: HeroSlideData[] }) {
                    <button
                      key={i}
                      onClick={() => setCurrentSlide(i)}
-                     className={`h-2 transition-all duration-500 clip-slanted-sm relative cursor-none overflow-hidden ${
+                     className={`h-2 transition-all duration-500 clip-slanted-sm relative overflow-hidden ${
                        isActive ? 'w-16 bg-white/20' : 'w-8 bg-white/40 hover:bg-white/60'
                      }`}
                      aria-label={`Go to slide ${i + 1}`}
                      title={`Go to slide ${i + 1}`}
                    >
+                     <span className="sr-only">Go to slide {i + 1}</span>
                      {isActive && (
                        <motion.div
                          key={currentSlide} // Resets the animation when slide changes
@@ -290,7 +308,7 @@ export default function HeroCarousel({ slides }: { slides: HeroSlideData[] }) {
             </div>
             <button 
               onClick={nextSlide} 
-              className="text-white/30 hover:text-white transition-colors cursor-none"
+              className="text-white/30 hover:text-white transition-colors"
               aria-label="Next Slide"
               title="Next Slide"
             >
@@ -313,14 +331,24 @@ export default function HeroCarousel({ slides }: { slides: HeroSlideData[] }) {
       </div>
 
       {/* Decorative Slanted Brand Frames (Angle-Cut Overlays) */}
-      <div className="absolute top-0 right-0 w-[30vw] h-full pointer-events-none z-10 overflow-hidden opacity-20 hidden lg:block">
+      <motion.div 
+        initial={{ x: 100, opacity: 0 }}
+        animate={{ x: 0, opacity: 0.2 }}
+        transition={{ duration: 1.5, ease: "easeOut" }}
+        className="absolute top-0 right-0 w-[30vw] h-full pointer-events-none z-10 overflow-hidden hidden lg:block"
+      >
         <div className="absolute top-[-50%] right-[-10%] w-[150px] h-[200%] bg-zru-green rotate-[24deg] blur-md transform origin-center" />
         <div className="absolute top-[-50%] right-[calc(-10%+170px)] w-[8px] h-[200%] bg-zru-gold rotate-[24deg] transform origin-center" />
-      </div>
-      <div className="absolute bottom-0 left-0 w-[20vw] h-[30vh] pointer-events-none z-10 overflow-hidden opacity-15 hidden lg:block">
+      </motion.div>
+      <motion.div 
+        initial={{ x: -100, opacity: 0 }}
+        animate={{ x: 0, opacity: 0.15 }}
+        transition={{ duration: 1.5, ease: "easeOut" }}
+        className="absolute bottom-0 left-0 w-[20vw] h-[30vh] pointer-events-none z-10 overflow-hidden hidden lg:block"
+      >
         <div className="absolute bottom-[-10%] left-[-5%] w-[80px] h-[200%] bg-zru-green rotate-[24deg] transform origin-center" />
         <div className="absolute bottom-[-10%] left-[calc(-5%+100px)] w-[4px] h-[200%] bg-zru-gold rotate-[24deg] transform origin-center" />
-      </div>
+      </motion.div>
 
     </section>
   );

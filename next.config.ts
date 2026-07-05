@@ -18,6 +18,7 @@ const securityHeaders = [
   {
     key: "Content-Security-Policy",
     value: [
+      "base-uri 'self'",
       "default-src 'self'",
       // Allow inline script and eval for Next.js hydration, Turbopack, and Vercel toolbar
       "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://vercel.live https://vercel.com https://*.vercel.live",
