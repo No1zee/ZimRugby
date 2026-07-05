@@ -5,6 +5,7 @@ import { Play, Search, Facebook } from "lucide-react";
 import Button from "@/components/common/Button";
 import VideoCard from "@/components/media/VideoCard";
 import NewsCard from "@/components/media/NewsCard";
+import { CardSkeleton } from "@/components/ui/Skeleton";
 import { useState, useEffect } from "react";
 import JournalStrip from "@/components/home/JournalStrip";
 import { getSocialPosts } from "@/lib/data-fetcher";
@@ -78,9 +79,14 @@ const newsArchive = [
 export default function MediaPage() {
   const [activeTab, setActiveTab] = useState<"all" | "videos" | "news" | "social">("all");
   const [socialPosts, setSocialPosts] = useState<any[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    getSocialPosts().then(setSocialPosts);
+    setIsLoading(true);
+    getSocialPosts().then((posts) => {
+      setSocialPosts(posts);
+      setIsLoading(false);
+    });
   }, []);
 
   const allNews = [...newsArchive, ...socialPosts.map(p => ({
@@ -217,17 +223,21 @@ export default function MediaPage() {
                 </div>
                 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-6">
-                    {filteredNews.map((news, index) => (
-                        <motion.div 
-                            key={news.id}
-                            initial={{ opacity: 0, x: -10 }}
-                            whileInView={{ opacity: 1, x: 0 }}
-                            viewport={{ once: true }}
-                            transition={{ delay: index * 0.05 }}
-                        >
-                            <NewsCard {...news} />
-                        </motion.div>
-                    ))}
+                    {isLoading && (activeTab === "all" || activeTab === "social") ? (
+                        [...Array(4)].map((_, i) => <CardSkeleton key={i} />)
+                    ) : (
+                        filteredNews.map((news, index) => (
+                            <motion.div 
+                                key={news.id}
+                                initial={{ opacity: 0, x: -10 }}
+                                whileInView={{ opacity: 1, x: 0 }}
+                                viewport={{ once: true }}
+                                transition={{ delay: index * 0.05 }}
+                            >
+                                <NewsCard {...news} />
+                            </motion.div>
+                        ))
+                    )}
                 </div>
 
                 <div className="mt-12 flex justify-center">
