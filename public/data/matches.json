@@ -14,7 +14,11 @@
     "venue": "Harare Sports Club",
     "competition": "Battle of the Zambezi",
     "category": "Sables",
-    "status": "upcoming"
+    "status": "finished",
+    "score": {
+      "home": 28,
+      "away": 14
+    }
   },
   {
     "id": "2026-fixture-02",
@@ -31,7 +35,11 @@
     "venue": "Kyadondo Stadium, Kampala",
     "competition": "Victoria Cup",
     "category": "Sables",
-    "status": "upcoming"
+    "status": "finished",
+    "score": {
+      "home": 19,
+      "away": 25
+    }
   },
   {
     "id": "2026-fixture-03",
@@ -48,7 +56,11 @@
     "venue": "Nelson Mandela Bay Stadium",
     "competition": "International Challenge",
     "category": "Sables",
-    "status": "upcoming"
+    "status": "finished",
+    "score": {
+      "home": 34,
+      "away": 28
+    }
   },
   {
     "id": "2026-fixture-04",
@@ -65,7 +77,11 @@
     "venue": "Infinity Park, Denver",
     "competition": "Nations Cup",
     "category": "Sables",
-    "status": "upcoming"
+    "status": "finished",
+    "score": {
+      "home": 15,
+      "away": 22
+    }
   },
   {
     "id": "2026-fixture-05",

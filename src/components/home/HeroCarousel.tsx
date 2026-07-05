@@ -38,7 +38,29 @@ const itemVariants = {
   },
 };
 
+const lineVariants = {
+  hidden: { y: "100%", opacity: 0 },
+  visible: {
+    y: 0,
+    opacity: 1,
+    transition: {
+      duration: 0.8,
+      ease: [0.215, 0.61, 0.355, 1] as const,
+    },
+  },
+};
+
 function SlideContent({ slide }: { slide: HeroSlideData }) {
+  const tag = slide.tag?.toUpperCase() || "";
+  let spotlightColor = "border-t-zru-green/25";
+  if (tag.includes("LADY")) {
+    spotlightColor = "border-t-white/20";
+  } else if (tag.includes("CHEETAHS")) {
+    spotlightColor = "border-t-zru-gold/20";
+  } else if (tag.includes("JUNIOR") || tag.includes("U20") || tag.includes("DOMESTIC")) {
+    spotlightColor = "border-t-zru-gold/25";
+  }
+
   return (
     <motion.div 
       variants={containerVariants}
@@ -49,34 +71,61 @@ function SlideContent({ slide }: { slide: HeroSlideData }) {
     >
       {/* Left Column / Main Stack */}
       <div className="space-y-6 z-20">
+        
+        {/* ZRU Bible Team Tags / Context pills */}
+        {(slide.tag || slide.contextPill) && (
+          <motion.div variants={itemVariants} className="flex items-center gap-3 flex-wrap">
+            {slide.tag && (
+              <span className="bg-zru-green/20 text-clubhouse-gold border border-zru-green/30 px-3 py-1 text-[10px] font-black tracking-[0.2em] uppercase rounded-sm backdrop-blur-xs">
+                {slide.tag}
+              </span>
+            )}
+            {slide.contextPill && (
+              <span className="text-white/40 text-[10px] font-bold tracking-[0.15em] uppercase">
+                {slide.contextPill}
+              </span>
+            )}
+          </motion.div>
+        )}
+
         {/* Headline */}
-        <motion.h1 variants={itemVariants} className="font-heading uppercase tracking-widest leading-[0.9] relative">
+        <motion.h1 variants={itemVariants} className="font-heading uppercase tracking-wider leading-[1.1] relative">
           {/* Spotlights */}
           <div className="absolute -inset-x-32 -top-64 bottom-0 pointer-events-none z-0 opacity-40">
-            <div className="absolute top-0 left-0 w-0 h-0 border-l-120 border-l-transparent border-r-120 border-r-transparent border-t-400 border-t-zru-green/20 -rotate-12 blur-3xl origin-top" />
-            <div className="absolute top-0 right-0 w-0 h-0 border-l-120 border-l-transparent border-r-120 border-r-transparent border-t-400 border-t-zru-green/20 rotate-12 blur-3xl origin-top" />
+            <div className={`absolute top-0 left-0 w-0 h-0 border-l-[120px] border-l-transparent border-r-[120px] border-r-transparent border-t-[400px] ${spotlightColor} -rotate-12 blur-3xl origin-top`} />
+            <div className={`absolute top-0 right-0 w-0 h-0 border-l-[120px] border-l-transparent border-r-[120px] border-r-transparent border-t-[400px] ${spotlightColor} rotate-12 blur-3xl origin-top`} />
           </div>
           
-          <span className="block relative z-20 text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl text-glow-heavy leading-none text-white drop-shadow-2xl">
-            {slide.headline.line1}
-          </span>
-          <span className="block relative z-20 text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl text-glow-green leading-none text-white drop-shadow-2xl">
-            {slide.headline.line2}
-          </span>
+          <div className="overflow-hidden block py-0.5">
+            <motion.span 
+              variants={lineVariants}
+              className="block relative z-20 text-3xl sm:text-4xl md:text-[44px] tracking-wide leading-[1.1] text-glow-heavy text-white drop-shadow-2xl font-heading font-black"
+            >
+              {slide.headline.line1}
+            </motion.span>
+          </div>
+          <div className="overflow-hidden block py-0.5">
+            <motion.span 
+              variants={lineVariants}
+              className="block relative z-20 text-3xl sm:text-4xl md:text-[44px] tracking-wide leading-[1.1] text-glow-green text-white drop-shadow-2xl font-heading font-black"
+            >
+              {slide.headline.line2}
+            </motion.span>
+          </div>
         </motion.h1>
 
         {/* Subtext */}
-        <motion.p variants={itemVariants} className="text-white/70 text-base md:text-lg font-medium max-w-xl leading-relaxed drop-shadow-2xl font-body">
+        <motion.p variants={itemVariants} className="text-white/60 text-sm sm:text-base font-normal max-w-md leading-relaxed drop-shadow-2xl font-body">
           {slide.subtext}
         </motion.p>
 
         {/* CTAs */}
         <motion.div variants={itemVariants} className="flex flex-col sm:flex-row gap-4 justify-start items-center pt-2">
           <MagneticElement intensity={0.25}>
-            <Link href={slide.ctas.primary.href} className="inline-flex items-center justify-center font-heading tracking-wider uppercase transition-all duration-300 bg-white text-rich-black hover:bg-zru-green hover:text-white px-8 py-3 text-lg clip-slanted shadow-2xl min-w-[200px] gap-3">
+            <Link href={slide.ctas.primary.href} className="inline-flex items-center justify-center font-subheading tracking-widest uppercase transition-all duration-300 bg-white text-rich-black hover:bg-zru-green hover:text-white border border-white hover:border-zru-green px-8 py-3.5 text-xs font-black clip-slanted shadow-2xl min-w-[200px] gap-3">
               {slide.ctas.primary.iconName && iconMap[slide.ctas.primary.iconName] && (() => {
                 const Icon = iconMap[slide.ctas.primary.iconName];
-                return <Icon className="w-4 h-4" />;
+                return <Icon className="w-4.5 h-4.5" />;
               })()}
               {slide.ctas.primary.label}
             </Link>
@@ -84,10 +133,10 @@ function SlideContent({ slide }: { slide: HeroSlideData }) {
           
           {slide.ctas.secondary && (
             <MagneticElement intensity={0.25}>
-              <Link href={slide.ctas.secondary.href} className="inline-flex items-center justify-center font-heading tracking-wider uppercase transition-all duration-300 bg-transparent border-2 border-white/30 text-white hover:bg-white hover:border-white hover:text-rich-black px-8 py-3 text-lg clip-slanted min-w-[200px] gap-3 backdrop-blur-sm">
+              <Link href={slide.ctas.secondary.href} className="inline-flex items-center justify-center font-subheading tracking-widest uppercase transition-all duration-300 bg-transparent border-2 border-white/20 text-white hover:bg-white hover:border-white hover:text-rich-black px-8 py-3.5 text-xs font-black clip-slanted min-w-[200px] gap-3 backdrop-blur-xs">
                 {slide.ctas.secondary.iconName && iconMap[slide.ctas.secondary.iconName] && (() => {
                   const Icon = iconMap[slide.ctas.secondary.iconName];
-                  return <Icon className="w-4 h-4" />;
+                  return <Icon className="w-4.5 h-4.5" />;
                 })()}
                 {slide.ctas.secondary.label}
               </Link>
@@ -145,7 +194,10 @@ export default function HeroCarousel({ slides }: { slides: HeroSlideData[] }) {
         >
           {/* Image/Video Background with GSAP-controlled media */}
             {/* Performance Hint: Removed heavy black overlay that delayed LCP */}
-            <div 
+            <motion.div 
+              initial={{ scale: 1 }}
+              animate={{ scale: 1.06 }}
+              transition={{ duration: 12, ease: "linear" }}
               className="relative w-full h-full hero-bg-media will-change-transform filter-[brightness(var(--hero-brightness,1))]"
             >
                 {activeSlide.video ? (
@@ -180,7 +232,7 @@ export default function HeroCarousel({ slides }: { slides: HeroSlideData[] }) {
                     className="object-cover"
                   />
                 )}
-            </div>
+            </motion.div>
             {/* Overlay */}
             <div className="absolute inset-0 bg-linear-to-b from-black/40 via-black/20 to-rich-black z-10" />
         </motion.div>
@@ -211,9 +263,30 @@ export default function HeroCarousel({ slides }: { slides: HeroSlideData[] }) {
                 <ChevronLeft size={32} />
             </button>
             <div className="flex gap-3">
-               {slides.map((_, i) => (
-                 <div key={i} className={`h-2 transition-all duration-500 clip-slanted-sm ${i === currentSlide ? 'w-16 bg-zru-gold' : 'w-8 bg-white/40 hover:bg-white/60'}`} />
-               ))}
+               {slides.map((_, i) => {
+                 const isActive = i === currentSlide;
+                 return (
+                   <button
+                     key={i}
+                     onClick={() => setCurrentSlide(i)}
+                     className={`h-2 transition-all duration-500 clip-slanted-sm relative cursor-none overflow-hidden ${
+                       isActive ? 'w-16 bg-white/20' : 'w-8 bg-white/40 hover:bg-white/60'
+                     }`}
+                     aria-label={`Go to slide ${i + 1}`}
+                     title={`Go to slide ${i + 1}`}
+                   >
+                     {isActive && (
+                       <motion.div
+                         key={currentSlide} // Resets the animation when slide changes
+                         initial={{ width: "0%" }}
+                         animate={{ width: "100%" }}
+                         transition={{ duration: 12, ease: "linear" }}
+                         className="absolute inset-0 bg-zru-gold"
+                       />
+                     )}
+                   </button>
+                 );
+               })}
             </div>
             <button 
               onClick={nextSlide} 
@@ -237,6 +310,16 @@ export default function HeroCarousel({ slides }: { slides: HeroSlideData[] }) {
           <span className="text-white font-heading text-lg tracking-widest leading-tight">ZIMBABWE</span>
           <span className="text-zru-gold font-heading text-lg tracking-widest leading-tight">RUGBY UNION</span>
         </div>
+      </div>
+
+      {/* Decorative Slanted Brand Frames (Angle-Cut Overlays) */}
+      <div className="absolute top-0 right-0 w-[30vw] h-full pointer-events-none z-10 overflow-hidden opacity-20 hidden lg:block">
+        <div className="absolute top-[-50%] right-[-10%] w-[150px] h-[200%] bg-zru-green rotate-[24deg] blur-md transform origin-center" />
+        <div className="absolute top-[-50%] right-[calc(-10%+170px)] w-[8px] h-[200%] bg-zru-gold rotate-[24deg] transform origin-center" />
+      </div>
+      <div className="absolute bottom-0 left-0 w-[20vw] h-[30vh] pointer-events-none z-10 overflow-hidden opacity-15 hidden lg:block">
+        <div className="absolute bottom-[-10%] left-[-5%] w-[80px] h-[200%] bg-zru-green rotate-[24deg] transform origin-center" />
+        <div className="absolute bottom-[-10%] left-[calc(-5%+100px)] w-[4px] h-[200%] bg-zru-gold rotate-[24deg] transform origin-center" />
       </div>
 
     </section>
