@@ -4,8 +4,9 @@ import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { Menu, X, ChevronDown } from "lucide-react";
+import { ChevronDown } from "lucide-react";
 import { motion, AnimatePresence, useScroll, useMotionValueEvent } from "framer-motion";
+import { useEffect } from "react";
 
 const navItems = [
   { 
@@ -46,6 +47,12 @@ export default function Navigation() {
   const { scrollY } = useScroll();
 
   const toggleMenu = () => setIsOpen(!isOpen);
+
+  useEffect(() => {
+    const handleToggle = () => setIsOpen(prev => !prev);
+    window.addEventListener('toggleMobileMenu', handleToggle);
+    return () => window.removeEventListener('toggleMobileMenu', handleToggle);
+  }, []);
 
   useMotionValueEvent(scrollY, "change", (latest) => {
     const previous = scrollY.getPrevious() || 0;
@@ -185,27 +192,7 @@ export default function Navigation() {
             </Link>
           </div>
 
-          {/* Mobile Actions */}
-          <div className="lg:hidden flex items-center gap-3">
-            {/* Mobile Hamburger Menu Button */}
-            <button
-              onClick={toggleMenu}
-              className="text-white hover:text-zru-gold p-2 transition-colors relative z-50"
-              aria-label="Toggle menu"
-            >
-              <AnimatePresence mode="wait">
-                {isOpen ? (
-                  <motion.div key="close" initial={{ rotate: -90, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }} exit={{ rotate: 90, opacity: 0 }}>
-                    <X className="w-8 h-8" />
-                  </motion.div>
-                ) : (
-                  <motion.div key="menu" initial={{ rotate: 90, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }} exit={{ rotate: -90, opacity: 0 }}>
-                    <Menu className="w-8 h-8" />
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </button>
-          </div>
+          {/* Mobile hamburger menu removed in favor of MobileDock */}
         </div>
       </nav>
 

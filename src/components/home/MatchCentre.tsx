@@ -71,9 +71,26 @@ export default function MatchCentre() {
         </div>
 
         {isLoading ? (
-            <div className="flex flex-col items-center justify-center py-20 gap-4">
-                <Loader2 className="w-10 h-10 text-zru-orange animate-spin" />
-                <p className="text-gray-400 font-heading tracking-widest text-sm">FETCHING LIVE DATA…</p>
+            <div className="w-full flex flex-col gap-12 mb-12">
+              {/* Skeleton for Next Match Card */}
+              <div className="relative bg-gray-900 rounded-2xl overflow-hidden border border-white/5 shadow-2xl min-h-[300px] animate-pulse">
+                <div className="absolute inset-0 bg-linear-to-r from-black/80 to-transparent" />
+                <div className="relative z-10 p-8 md:p-12 flex flex-col md:flex-row justify-between items-center gap-8 h-full">
+                  <div className="flex-1 w-full flex flex-col items-center md:items-start gap-4">
+                    <div className="h-6 bg-white/10 w-24 rounded"></div>
+                    <div className="h-8 bg-white/20 w-48 rounded"></div>
+                    <div className="h-4 bg-white/10 w-32 rounded"></div>
+                  </div>
+                  <div className="flex items-center gap-8 md:gap-16">
+                    <div className="w-24 h-24 bg-white/10 rounded-full border-2 border-white/5"></div>
+                    <div className="h-16 bg-white/10 w-32 rounded"></div>
+                    <div className="w-24 h-24 bg-white/10 rounded-full border-2 border-white/5"></div>
+                  </div>
+                  <div className="flex-1 w-full flex justify-center md:justify-end mt-6 md:mt-0">
+                    <div className="h-12 bg-white/10 w-full md:w-32 rounded"></div>
+                  </div>
+                </div>
+              </div>
             </div>
         ) : fixtures.length === 0 ? (
             <div className="text-center py-20 border border-dashed border-white/10 rounded-2xl bg-white/5">

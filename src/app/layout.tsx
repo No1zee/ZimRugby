@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Script from "next/script";
 import { Montserrat, Bebas_Neue, Inter } from "next/font/google";
 import "./globals.css";
 import Navigation from "@/components/layout/Navigation";
@@ -25,6 +26,22 @@ export const metadata: Metadata = {
   title: "Zimbabwe Rugby Union | The Sables",
   description: "Official website of the Zimbabwe Rugby Union. Follow the Sables, Lady Sables, and stay updated with the latest news, fixtures, and results.",
   manifest: "/manifest.json",
+  openGraph: {
+    title: "Zimbabwe Rugby Union | The Sables",
+    description: "Official website of the Zimbabwe Rugby Union. Follow the Sables, Lady Sables, and stay updated with the latest news, fixtures, and results.",
+    url: "https://zimrugby.vercel.app/",
+    siteName: "Zimbabwe Rugby Union",
+    images: [
+      {
+        url: "/images/og-default.jpg",
+        width: 1200,
+        height: 630,
+        alt: "Zimbabwe Rugby Union Cover",
+      },
+    ],
+    locale: "en_ZW",
+    type: "website",
+  },
 };
 
 export default function RootLayout({
@@ -37,6 +54,7 @@ export default function RootLayout({
       <body
         className={`${montserrat.variable} ${bebasNeue.variable} ${inter.variable} antialiased overflow-x-hidden`}
       >
+        <Script src="https://t.contentsquare.net/uxa/97d0dc6c80d47.js" strategy="afterInteractive" />
         <ClientLayoutShell>
           <Navigation />
           <main className="pb-24">

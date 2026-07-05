@@ -1,45 +1,76 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { motion } from "framer-motion";
-import { Home, Ticket, LayoutGrid, ShoppingBag, Menu } from "lucide-react";
+import { motion, useScroll, useMotionValueEvent } from "framer-motion";
+import { Home, Trophy, Newspaper, Users, Menu } from "lucide-react";
 import { cn } from "../../lib/utils";
 
 const dockItems = [
   { label: "Home", icon: Home, href: "/" },
-  { label: "Tickets", icon: Ticket, href: "/tickets" },
-  { label: "Matches", icon: LayoutGrid, href: "/match-centre" },
-  { label: "Store", icon: ShoppingBag, href: "/store" },
+  { label: "Matches", icon: Trophy, href: "/match-centre" },
+  { label: "Media", icon: Newspaper, href: "/media" },
+  { label: "Clubhouse", icon: Users, href: "/clubhouse" },
   { label: "Menu", icon: Menu, href: "#menu", isMenu: true },
 ];
 
 export default function MobileDock() {
   const pathname = usePathname();
+  const { scrollY } = useScroll();
+  const [isHidden, setIsHidden] = useState(false);
+
+  // Hide on scroll down, show on scroll up
+  useMotionValueEvent(scrollY, "change", (latest) => {
+    const previous = scrollY.getPrevious() || 0;
+    if (latest > previous && latest > 150) {
+      setIsHidden(true);
+    } else {
+      setIsHidden(false);
+    }
+  });
+
+  const handleInteraction = (item: typeof dockItems[0], e: React.MouseEvent) => {
+    // Haptic feedback (supported devices only)
+    if (typeof navigator !== 'undefined' && navigator.vibrate) {
+      navigator.vibrate(50);
+    }
+
+    if (item.isMenu) {
+      e.preventDefault();
+      // Dispatch custom event to Navigation.tsx
+      window.dispatchEvent(new CustomEvent('toggleMobileMenu'));
+    }
+  };
 
   return (
     <motion.div 
       initial={{ y: 100 }}
-      animate={{ y: 0 }}
-      className="fixed bottom-0 left-0 right-0 z-50 md:hidden pb-safe"
+      animate={{ y: isHidden ? 150 : 0 }}
+      transition={{ type: "spring", bounce: 0, duration: 0.4 }}
+      className="fixed bottom-0 left-0 right-0 z-50 md:hidden pb-[max(env(safe-area-inset-bottom),16px)] pointer-events-none"
     >
       {/* Glassmorphism Background */}
-      <div className="mx-4 mb-4 rounded-2xl bg-rich-black/80 backdrop-blur-xl border border-white/10 shadow-2xl flex items-center justify-around p-2">
+      <div className="mx-4 mt-4 rounded-2xl bg-rich-black/90 backdrop-blur-xl border border-white/10 shadow-[0_-10px_40px_-15px_rgba(0,0,0,0.5)] flex items-center justify-around p-2 pointer-events-auto">
         {dockItems.map((item) => {
-          const isActive = pathname === item.href;
+          const isActive = !item.isMenu && (pathname === item.href || (item.href !== "/" && pathname.startsWith(item.href)));
           const Icon = item.icon;
 
+          const LinkWrapper = item.isMenu ? motion.button : motion(Link);
+          const linkProps = item.isMenu ? { type: "button" } : { href: item.href };
+
           return (
-            <Link
+            <LinkWrapper
               key={item.label}
-              href={item.href}
-              className="relative flex flex-col items-center justify-center p-2 min-w-[64px]"
+              {...(linkProps as Record<string, unknown>)}
+              onClick={(e: React.MouseEvent) => handleInteraction(item, e)}
+              whileTap={{ scale: 0.85 }}
+              className="relative flex flex-col items-center justify-center p-2 min-w-[64px] outline-none"
             >
               {isActive && (
                 <motion.div
                   layoutId="activeDock"
-                  className="absolute inset-0 bg-zru-gold/10 rounded-xl"
+                  className="absolute inset-0 bg-zru-gold/15 rounded-xl"
                   transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
                 />
               )}
@@ -47,11 +78,11 @@ export default function MobileDock() {
               <Icon 
                 className={cn(
                   "w-6 h-6 transition-colors",
-                  isActive ? "text-zru-gold" : "text-gray-400"
+                  isActive ? "text-zru-gold drop-shadow-[0_0_8px_rgba(255,190,0,0.4)]" : "text-gray-400"
                 )} 
               />
               <span className={cn(
-                "text-[10px] mt-1 font-medium tracking-tight uppercase",
+                "text-[10px] mt-1 font-medium tracking-tight uppercase transition-colors",
                 isActive ? "text-zru-gold" : "text-gray-500"
               )}>
                 {item.label}
@@ -59,11 +90,11 @@ export default function MobileDock() {
 
               {isActive && (
                 <motion.div 
-                  className="absolute -bottom-1 w-1 h-1 bg-zru-gold rounded-full"
+                  className="absolute -bottom-1 w-1.5 h-1.5 bg-zru-gold rounded-full shadow-[0_0_8px_rgba(255,190,0,0.8)]"
                   layoutId="activeDot"
                 />
               )}
-            </Link>
+            </LinkWrapper>
           );
         })}
       </div>

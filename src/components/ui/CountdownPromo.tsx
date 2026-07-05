@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { ArrowRight, MapPin } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
@@ -186,14 +186,21 @@ export function CountdownPromo({
                   { value: timeLeft.seconds, label: "SECONDS" },
                 ].map((unit) => (
                   <div key={unit.label} className="text-center min-w-[70px]">
-                    <motion.span
-                      key={`${unit.label}-${unit.value}`}
-                      initial={{ scale: 1.1 }}
-                      animate={{ scale: 1 }}
-                      className="block font-heading text-6xl md:text-8xl text-zru-green leading-none tracking-wider"
-                    >
-                      {isClient ? String(unit.value).padStart(2, "0") : "00"}
-                    </motion.span>
+                    <div className="relative h-[60px] md:h-[96px] overflow-hidden flex justify-center items-center">
+                      <AnimatePresence mode="popLayout">
+                        <motion.span
+                          key={`${unit.label}-${unit.value}`}
+                          initial={{ y: -40, opacity: 0, rotateX: -90 }}
+                          animate={{ y: 0, opacity: 1, rotateX: 0 }}
+                          exit={{ y: 40, opacity: 0, rotateX: 90 }}
+                          transition={{ duration: 0.4, ease: "backOut" }}
+                          className="absolute block font-heading text-6xl md:text-8xl text-zru-green leading-none tracking-wider origin-center"
+                          style={{ perspective: 1000, transformStyle: "preserve-3d" }}
+                        >
+                          {isClient ? String(unit.value).padStart(2, "0") : "00"}
+                        </motion.span>
+                      </AnimatePresence>
+                    </div>
                     <span className="text-[10px] font-bold text-white/40 uppercase tracking-[0.3em] block mt-2">
                       {unit.label}
                     </span>

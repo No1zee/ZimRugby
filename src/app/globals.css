@@ -74,26 +74,9 @@ body {
   background-blend-mode: soft-light;
   color: white;
   font-family: var(--font-body);
-  /* Use custom cursor */
-  cursor: none;
 }
 
-/* Fallback if user touches screen or uses pointer:coarse */
-@media (pointer: coarse) {
-  body {
-    cursor: auto;
-  }
-}
 
-a, button, [role="button"], input, select, textarea {
-  cursor: none !important;
-}
-
-@media (pointer: coarse) {
-  a, button, [role="button"], input, select, textarea {
-    cursor: pointer !important;
-  }
-}
 
 .clip-reveal {
   clip-path: polygon(0 100%, 100% 100%, 100% 100%, 0 100%);

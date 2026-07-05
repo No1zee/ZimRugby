@@ -64,7 +64,7 @@ export default function VideoHubPage() {
               <div className="flex flex-wrap items-center gap-6 pt-2">
                 <GlowButton 
                   onClick={() => setActiveVideo(featuredVideo)}
-                  className="bg-white text-rich-black px-8 py-3.5 text-xs font-black uppercase tracking-[0.2em] rounded-full flex items-center gap-2 cursor-none"
+                  className="bg-white text-rich-black px-8 py-3.5 text-xs font-black uppercase tracking-[0.2em] rounded-full flex items-center gap-2"
                   glowColor="rgba(255, 255, 255, 0.3)"
                 >
                   <Play className="w-4 h-4 fill-current" />

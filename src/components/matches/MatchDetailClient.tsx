@@ -134,7 +134,7 @@ export default function MatchDetailClient({ data }: MatchDetailClientProps) {
                 <Link href="/tickets">
                   <motion.button 
                     whileHover={{ scale: 1.05 }}
-                    className="bg-zru-gold text-rich-black font-black text-xs uppercase tracking-[0.2em] px-8 py-3 rounded-full flex items-center gap-2 shadow-lg hover:shadow-zru-gold/20 transition-all cursor-none"
+                    className="bg-zru-gold text-rich-black font-black text-xs uppercase tracking-[0.2em] px-8 py-3 rounded-full flex items-center gap-2 shadow-lg hover:shadow-zru-gold/20 transition-all"
                   >
                     <Ticket className="w-4 h-4" />
                     <span>Purchase Match Tickets</span>
