@@ -185,7 +185,7 @@ export default function TeamPageClient({ team }: TeamPageClientProps) {
                         <div className="flex items-center gap-4">
                           {match.opponentLogo ? (
                             <div className="w-10 h-7 relative shrink-0">
-                              <Image src={match.opponentLogo} alt={match.opponent} fill className="object-cover rounded-xs" />
+                              <Image src={match.opponentLogo} alt={match.opponent} fill sizes="60px" className="object-cover rounded-xs" />
                             </div>
                           ) : (
                             <div className="w-10 h-7 bg-white/10 rounded-xs flex items-center justify-center shrink-0">
