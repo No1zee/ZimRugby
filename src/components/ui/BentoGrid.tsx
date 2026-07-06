@@ -1,4 +1,5 @@
 import React from 'react';
+import { motion } from 'framer-motion';
 
 export function BentoGrid({
   className = '',
@@ -24,10 +25,12 @@ export function BentoCard({
   children: React.ReactNode;
 }) {
   return (
-    <div
-      className={`bento-card group/bento p-6 flex flex-col justify-between ${className}`}
+    <motion.div
+      whileHover={{ y: -4 }}
+      transition={{ type: "spring", stiffness: 350, damping: 22 }}
+      className={`bento-card group/bento p-6 flex flex-col justify-between relative overflow-hidden ${className}`}
     >
       {children}
-    </div>
+    </motion.div>
   );
 }
