@@ -136,10 +136,11 @@ export default function Navigation() {
                     ) : null}
 
                     {/* Active Indicator - Bottom Border */}
+                    {/* Active Indicator - Bottom Border */}
                     {isActive(item.href) && (
                       <motion.div
                         layoutId="activeNavIndicator"
-                        className="absolute bottom-0 left-0 right-0 h-0.5 bg-zru-gold"
+                        className="absolute bottom-0 left-0 right-0 h-0.5 bg-zru-green"
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         transition={{ duration: 0.3 }}
@@ -147,7 +148,7 @@ export default function Navigation() {
                     )}
 
                     {item.label}
-                    {item.children && <ChevronDown className="w-3 h-3 transition-transform group-hover:rotate-180" />}
+                    {item.children && <ChevronDown className="w-3.5 h-3.5 transition-transform group-hover:rotate-180" />}
                   </Link>
 
                   {/* Dropdown Menu (Mega or Standard) */}
@@ -165,13 +166,13 @@ export default function Navigation() {
                         >
                           {item.children.map((child) => (
                             <Link
-                              key={child.label}
-                              href={child.href}
-                              className={`
-                                block px-4 py-3 text-sm font-medium transition-all rounded-lg hover:bg-white/10
-                                ${isActive(child.href) ? "text-zru-gold bg-white/5" : "text-white"}
-                                ${item.isMega ? 'hover:pl-6' : 'hover:pl-5'}
-                              `}
+                               key={child.label}
+                               href={child.href}
+                               className={`
+                                 block px-4 py-3 text-sm font-medium transition-all rounded-lg hover:bg-white/10
+                                 ${isActive(child.href) ? "text-zru-green bg-white/5 font-bold" : "text-white"}
+                                 ${item.isMega ? 'hover:pl-6' : 'hover:pl-5'}
+                               `}
                             >
                               {child.label}
                             </Link>
@@ -185,9 +186,9 @@ export default function Navigation() {
             </div>
           </div>
 
-          {/* Book Tickets Gold CTA (Desktop) */}
+          {/* Book Tickets CTA (Desktop) */}
           <div className="hidden lg:flex items-center shrink-0">
-            <Link href="/tickets" className="inline-flex items-center justify-center font-subheading tracking-widest text-[10px] uppercase bg-zru-gold text-rich-black hover:bg-white hover:text-zru-green font-black px-6 py-3 clip-slanted shadow-xl transition-all duration-300">
+            <Link href="/tickets" className="inline-flex items-center justify-center font-subheading tracking-widest text-[10px] uppercase bg-white text-black hover:bg-zru-green hover:text-white font-black px-6 py-3 clip-slanted shadow-xl transition-all duration-300">
               Book Tickets
             </Link>
           </div>
