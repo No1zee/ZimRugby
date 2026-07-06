@@ -8,34 +8,42 @@ import { ChevronDown } from "lucide-react";
 import { motion, AnimatePresence, useScroll, useMotionValueEvent } from "framer-motion";
 import { useEffect } from "react";
 
-const navItems = [
+interface NavItem {
+  label: string;
+  href: string;
+  isMega?: boolean;
+  children?: { label: string; href: string }[];
+}
+
+const navItems: NavItem[] = [
   { 
-    label: "RUGBY", 
+    label: "TEAMS", 
     href: "/teams",
-    isMega: true,
-    children: [
-      { label: "Book Tickets", href: "/tickets" },
-      { label: "Match Centre", href: "/match-centre" },
-      { label: "Our Teams", href: "/teams" },
-    ]
+  },
+  { 
+    label: "FIXTURES & RESULTS", 
+    href: "/match-centre",
+  },
+  { 
+    label: "COMPETITIONS", 
+    href: "/events?tab=competitions",
   },
   { 
     label: "EVENTS", 
-    href: "/events",
+    href: "/events?tab=events",
   },
   { 
-    label: "NEWS & MEDIA", 
+    label: "NEWS", 
     href: "/media",
-    children: [
-      { label: "Latest News", href: "/media" },
-      { label: "What's On", href: "/events" },
-    ]
   },
   { 
     label: "CLUBHOUSE", 
     href: "/clubhouse",
   },
-  { label: "ABOUT", href: "/about" },
+  { 
+    label: "ABOUT", 
+    href: "/about" 
+  },
 ];
 
 export default function Navigation() {
@@ -217,7 +225,7 @@ export default function Navigation() {
                     href={item.href}
                     className={`
                       block py-2 text-xl font-black uppercase tracking-wider transition-colors
-                      ${isActive(item.href) ? "text-zru-gold" : "text-white hover:text-zru-gold"}
+                      ${isActive(item.href) ? "text-white" : "text-white/70 hover:text-white"}
                     `}
                     onClick={!item.children ? toggleMenu : undefined}
                   >
@@ -231,7 +239,7 @@ export default function Navigation() {
                           href={child.href}
                           className={`
                             block py-2 px-4 text-base font-medium transition-colors rounded-r-lg
-                            ${isActive(child.href) ? "text-zru-gold bg-white/5 border-l-2 border-zru-gold -ml-[2px]" : "text-white/70 hover:text-zru-gold hover:bg-white/5"}
+                            ${isActive(child.href) ? "text-white bg-white/5 border-l-2 border-white -ml-[2px]" : "text-white/70 hover:text-white hover:bg-white/5"}
                           `}
                           onClick={toggleMenu}
                         >
