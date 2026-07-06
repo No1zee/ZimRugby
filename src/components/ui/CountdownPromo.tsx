@@ -125,7 +125,7 @@ export function CountdownPromo({
                     src={image} 
                     alt={title}
                     fill
-                    priority
+                    loading="lazy"
                     sizes="(max-width: 768px) 100vw, 50vw"
                     quality={60}
                     className="object-cover transition-transform duration-1000 group-hover:scale-105"
