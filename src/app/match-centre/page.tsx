@@ -54,25 +54,28 @@ export default function MatchCentre() {
         <div className="flex flex-col lg:flex-row justify-between items-center gap-6 mb-12">
            
            {/* Tabs */}
-           <div className="flex p-1 bg-white/5 rounded-xl border border-white/10">
-              <button 
-                onClick={() => setActiveTab("fixtures")}
-                className={`px-6 py-2 rounded-lg text-sm font-bold tracking-widest uppercase transition-all ${activeTab === "fixtures" ? "bg-zru-gold text-rich-black shadow-lg" : "text-gray-400 hover:text-white"}`}
-              >
-                Fixtures
-              </button>
-              <button 
-                onClick={() => setActiveTab("results")}
-                className={`px-6 py-2 rounded-lg text-sm font-bold tracking-widest uppercase transition-all ${activeTab === "results" ? "bg-zru-gold text-rich-black shadow-lg" : "text-gray-400 hover:text-white"}`}
-              >
-                Results
-              </button>
-              <button 
-                onClick={() => setActiveTab("standings")}
-                className={`px-6 py-2 rounded-lg text-sm font-bold tracking-widest uppercase transition-all ${activeTab === "standings" ? "bg-zru-gold text-rich-black shadow-lg" : "text-gray-400 hover:text-white"}`}
-              >
-                Standings
-              </button>
+           <div className="flex p-1 bg-white/5 rounded-xl border border-white/10 relative z-0">
+             {(["fixtures", "results", "standings"] as const).map((tab) => {
+               const isActive = activeTab === tab;
+               return (
+                 <button
+                   key={tab}
+                   onClick={() => setActiveTab(tab)}
+                   className={`relative px-6 py-2 rounded-lg text-sm font-bold tracking-widest uppercase transition-colors duration-300 select-none z-10 ${
+                     isActive ? "text-white" : "text-gray-400 hover:text-white"
+                   }`}
+                 >
+                   {isActive && (
+                     <motion.div
+                       layoutId="activeTabIndicator"
+                       className="absolute inset-0 bg-zru-green rounded-lg shadow-lg -z-10"
+                       transition={{ type: "spring", stiffness: 380, damping: 26 }}
+                     />
+                   )}
+                   {tab}
+                 </button>
+               );
+             })}
            </div>
            
            {/* Search & Team Filter */}
@@ -82,7 +85,7 @@ export default function MatchCentre() {
                   <input 
                      type="text" 
                      placeholder="Search opponent… e.g. Zambia" 
-                     className="w-full bg-black/20 border border-white/10 rounded-lg pl-10 pr-4 py-2 text-white placeholder-gray-500 focus:outline-none focus:border-zru-gold text-sm"
+                     className="w-full bg-black/20 border border-white/10 rounded-lg pl-10 pr-4 py-2 text-white placeholder-gray-500 focus:outline-none focus:border-zru-green text-sm"
                   />
                </div>
                <Button variant="outline" className="text-white border-white/20 hover:bg-white/10 px-3">

@@ -8,16 +8,16 @@ interface SkeletonProps {
 
 export function Skeleton({ className = "" }: SkeletonProps) {
   return (
-    <div className={`relative overflow-hidden bg-white/5 rounded-lg ${className}`}>
+    <div className={`relative overflow-hidden bg-white/3 border border-white/5 rounded-lg ${className}`}>
       <motion.div
-        className="absolute inset-0 bg-linear-to-r from-transparent via-white/10 to-transparent"
+        className="absolute inset-0 bg-gradient-to-r from-transparent via-zru-green/15 to-transparent"
         animate={{
           x: ["-100%", "100%"],
         }}
         transition={{
           repeat: Infinity,
-          duration: 1.5,
-          ease: "linear",
+          duration: 1.6,
+          ease: "easeInOut",
         }}
       />
     </div>

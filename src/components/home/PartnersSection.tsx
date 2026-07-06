@@ -22,7 +22,7 @@ export default function PartnersSection() {
     <section className="bg-rich-black py-32 relative overflow-hidden">
       
       {/* Abstract Background Element */}
-      <div className="absolute top-0 right-0 w-1/3 h-full bg-linear-to-l from-zru-gold/5 to-transparent pointer-events-none" />
+      <div className="absolute top-0 right-0 w-1/3 h-full bg-linear-to-l from-zru-green/5 to-transparent pointer-events-none" />
 
       <div className="max-w-[1440px] mx-auto px-6 relative z-10">
         
@@ -30,8 +30,8 @@ export default function PartnersSection() {
         <div className="flex flex-col md:flex-row justify-between items-end gap-10 mb-24">
           <div className="max-w-xl space-y-4">
             <div className="flex items-center gap-2">
-              <div className="w-8 h-px bg-zru-gold" />
-              <span className="text-zru-gold text-[10px] font-black uppercase tracking-[0.4em]">Institutional</span>
+              <div className="w-8 h-px bg-zru-green" />
+              <span className="text-zru-green text-[10px] font-black uppercase tracking-[0.4em]">Institutional</span>
             </div>
             <h2 className="text-4xl md:text-6xl font-black text-white uppercase tracking-tighter leading-[0.9]">
               STRATEGIC <br /><span className="text-stroke-white text-transparent">PARTNERS</span>
@@ -43,8 +43,8 @@ export default function PartnersSection() {
             </p>
             <Link href="/partners" className="inline-block group">
               <div className="flex items-center gap-4 text-[10px] font-black uppercase tracking-[0.3em] text-white">
-                <span className="pb-1 border-b border-white/20 group-hover:border-zru-gold transition-colors">Join the Network</span>
-                <Plus className="w-4 h-4 text-zru-gold" />
+                <span className="pb-1 border-b border-white/20 group-hover:border-zru-green transition-colors">Join the Network</span>
+                <Plus className="w-4 h-4 text-zru-green" />
               </div>
             </Link>
           </div>
@@ -52,8 +52,8 @@ export default function PartnersSection() {
 
         {/* Principal Sponsors Header */}
         <div className="flex flex-col items-center gap-2 mb-12">
-            <div className="w-8 h-1 bg-zru-gold mb-2" />
-            <span className="text-zru-gold text-[10px] font-black uppercase tracking-[0.4em]">Principal Sponsors</span>
+            <div className="w-8 h-1 bg-zru-green mb-2" />
+            <span className="text-zru-green text-[10px] font-black uppercase tracking-[0.4em]">Principal Sponsors</span>
         </div>
 
         {/* Principal Sponsors Grid */}
@@ -81,7 +81,7 @@ export default function PartnersSection() {
                 <motion.div 
                   initial={{ scaleX: 0 }}
                   whileHover={{ scaleX: 1 }}
-                  className="absolute bottom-0 left-0 right-0 h-1 bg-zru-gold origin-center rounded-b-2xl"
+                  className="absolute bottom-0 left-0 right-0 h-1 bg-zru-green origin-center rounded-b-2xl"
                 />
               </div>
             </motion.div>
@@ -98,13 +98,13 @@ export default function PartnersSection() {
             <span className="text-white/30 text-[9px] font-black uppercase tracking-[0.4em]">Official Partners</span>
           </div>
 
-          <div className="overflow-hidden py-10">
+          <div className="overflow-hidden py-10 w-full">
             <motion.div 
-              animate={{ x: [0, -100 * partners.length * 10] }}
-              transition={{ duration: 40, repeat: Infinity, ease: "linear" }}
-              className="flex items-center gap-24 whitespace-nowrap"
+              animate={{ x: [0, "-50%"] }}
+              transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
+              className="flex items-center gap-24 w-max"
             >
-              {[...partners, ...partners].map((partner, i) => (
+              {[...partners, ...partners, ...partners, ...partners].map((partner, i) => (
                 <div key={i} className="flex items-center gap-4 shrink-0">
                   <div className="w-16 h-16 relative">
                     <Image 
