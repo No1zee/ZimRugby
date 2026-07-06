@@ -125,29 +125,38 @@ function SlideContent({ slide }: { slide: HeroSlideData }) {
         </motion.p>
 
         {/* CTAs */}
-        <motion.div variants={itemVariants} className="flex flex-col sm:flex-row gap-4 justify-start items-center pt-2">
-          <MagneticElement intensity={0.25}>
-            <Link href={slide.ctas.primary.href} className="inline-flex items-center justify-center font-subheading tracking-widest uppercase transition-all duration-300 bg-white text-rich-black hover:bg-zru-green hover:text-white border border-white hover:border-zru-green px-8 py-3.5 text-xs font-black clip-slanted shadow-2xl min-w-[200px] gap-3">
-              {slide.ctas.primary.iconName && iconMap[slide.ctas.primary.iconName] && (() => {
-                const Icon = iconMap[slide.ctas.primary.iconName];
-                return <Icon className="w-4.5 h-4.5" />;
-              })()}
-              {slide.ctas.primary.label}
-            </Link>
-          </MagneticElement>
-          
-          {slide.ctas.secondary && (
+        <div className="flex flex-col sm:flex-row gap-4 justify-start items-center pt-2">
+          {/* Primary CTA: Sign In (delayed animation so it loads last) */}
+          <motion.div
+            initial={{ opacity: 0, y: 15 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 1.0, duration: 0.6, ease: [0.25, 1, 0.5, 1] }}
+          >
             <MagneticElement intensity={0.25}>
-              <Link href={slide.ctas.secondary.href} className="inline-flex items-center justify-center font-subheading tracking-widest uppercase transition-all duration-300 bg-transparent border-2 border-white/20 text-white hover:bg-white hover:border-white hover:text-rich-black px-8 py-3.5 text-xs font-black clip-slanted min-w-[200px] gap-3 backdrop-blur-xs">
-                {slide.ctas.secondary.iconName && iconMap[slide.ctas.secondary.iconName] && (() => {
-                  const Icon = iconMap[slide.ctas.secondary.iconName];
+              <Link href={slide.ctas.primary.href} className="inline-flex items-center justify-center font-subheading tracking-widest uppercase transition-all duration-300 bg-white text-rich-black hover:bg-zru-green hover:text-white border border-white hover:border-zru-green px-8 py-3.5 text-xs font-black clip-slanted shadow-2xl min-w-[200px] gap-3">
+                {slide.ctas.primary.iconName && iconMap[slide.ctas.primary.iconName] && (() => {
+                  const Icon = iconMap[slide.ctas.primary.iconName];
                   return <Icon className="w-4.5 h-4.5" />;
                 })()}
-                {slide.ctas.secondary.label}
+                {slide.ctas.primary.label}
               </Link>
             </MagneticElement>
+          </motion.div>
+          
+          {slide.ctas.secondary && (
+            <motion.div variants={itemVariants}>
+              <MagneticElement intensity={0.25}>
+                <Link href={slide.ctas.secondary.href} className="inline-flex items-center justify-center font-subheading tracking-widest uppercase transition-all duration-300 bg-transparent border-2 border-white/20 text-white hover:bg-white hover:border-white hover:text-rich-black px-8 py-3.5 text-xs font-black clip-slanted min-w-[200px] gap-3 backdrop-blur-xs">
+                  {slide.ctas.secondary.iconName && iconMap[slide.ctas.secondary.iconName] && (() => {
+                    const Icon = iconMap[slide.ctas.secondary.iconName];
+                    return <Icon className="w-4.5 h-4.5" />;
+                  })()}
+                  {slide.ctas.secondary.label}
+                </Link>
+              </MagneticElement>
+            </motion.div>
           )}
-        </motion.div>
+        </div>
       </div>
     </motion.div>
   );
