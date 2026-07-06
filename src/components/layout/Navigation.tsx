@@ -19,30 +19,72 @@ const navItems: NavItem[] = [
   { 
     label: "TEAMS", 
     href: "/teams",
+    isMega: true,
+    children: [
+      { label: "Sables (Men's XV)", href: "/teams/sables" },
+      { label: "Lady Sables (Women's XV)", href: "/teams/lady-sables" },
+      { label: "Junior Sables (U20)", href: "/teams/junior-sables" },
+      { label: "National Sevens", href: "/teams" },
+    ]
   },
   { 
     label: "FIXTURES & RESULTS", 
     href: "/match-centre",
+    children: [
+      { label: "Match Centre", href: "/match-centre" },
+      { label: "Book Tickets", href: "/tickets" },
+      { label: "Live Matches", href: "/live" },
+    ]
   },
   { 
     label: "COMPETITIONS", 
     href: "/events?tab=competitions",
+    children: [
+      { label: "Sevens Series", href: "/events?tab=competitions" },
+      { label: "Club Championship", href: "/events?tab=competitions" },
+      { label: "Schools Rugby", href: "/events?tab=competitions" },
+    ]
   },
   { 
     label: "EVENTS", 
     href: "/events?tab=events",
+    children: [
+      { label: "Coaching Courses", href: "/events?tab=events" },
+      { label: "AGM & Admin", href: "/events?tab=events" },
+      { label: "Gala Dinners", href: "/events?tab=events" },
+    ]
   },
   { 
     label: "NEWS", 
     href: "/media",
+    children: [
+      { label: "Latest News", href: "/media" },
+      { label: "Video Hub", href: "/video-hub" },
+      { label: "Gallery", href: "/gallery" },
+    ]
   },
   { 
     label: "CLUBHOUSE", 
     href: "/clubhouse",
+    children: [
+      { label: "Shop Merchandise", href: "/clubhouse" },
+      { label: "Fan Zone", href: "/fan-zone" },
+      { label: "Referees", href: "/referees" },
+      { label: "Volunteer", href: "/volunteer" },
+    ]
   },
   { 
     label: "ABOUT", 
-    href: "/about" 
+    href: "/about",
+    isMega: true,
+    children: [
+      { label: "ZRU History", href: "/about/history" },
+      { label: "Board & Governance", href: "/about/governance" },
+      { label: "Safeguarding", href: "/about/safeguarding" },
+      { label: "Partners", href: "/partners" },
+      { label: "Careers", href: "/about/careers" },
+      { label: "Contact Us", href: "/contact" },
+    ]
   },
 ];
 
