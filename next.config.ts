@@ -43,7 +43,7 @@ const nextConfig: NextConfig = {
           ...securityHeaders,
           {
             key: "Vary",
-            value: "Accept-Encoding"
+            value: "Accept-Encoding, User-Agent"
           }
         ]
       }
