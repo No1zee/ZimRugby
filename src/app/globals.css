@@ -6,7 +6,7 @@
 /* Note: @theme is standard Tailwind v4 syntax. Ignore "Unknown at rule" warnings. */
 @theme {
   --font-heading: var(--font-bebas-neue);
-  --font-subheading: var(--font-montserrat);
+  --font-subheading: var(--font-outfit);
   --font-body: var(--font-inter);
 
   /* Unified Brand Colors from Audit Spec */
@@ -39,8 +39,8 @@
   --color-clubhouse-accent: var(--color-clubhouse-gold);
 
   /* Consistent Spacing Scale overrides */
-  --spacing-section: 5rem;
-  --spacing-section-sm: 3rem;
+  --spacing-section: 7.5rem;
+  --spacing-section-sm: 4.5rem;
   --spacing-card-padding: 2rem;
 
   /* Premium Shadows system */
@@ -97,7 +97,7 @@ body {
   font-family: var(--font-bebas-neue), "Bebas Neue", sans-serif;
 }
 @utility font-subheading {
-  font-family: var(--font-montserrat), sans-serif;
+  font-family: var(--font-outfit), sans-serif;
 }
 @utility font-body {
   font-family: var(--font-inter), sans-serif;

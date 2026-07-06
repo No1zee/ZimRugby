@@ -1,14 +1,14 @@
 import type { Metadata } from "next";
 import Script from "next/script";
-import { Montserrat, Bebas_Neue, Inter } from "next/font/google";
+import { Outfit, Bebas_Neue, Inter } from "next/font/google";
 import "./globals.css";
 import Navigation from "@/components/layout/Navigation";
 import Footer from "@/components/layout/Footer";
 import ClientLayoutShell from "@/components/layout/ClientLayoutShell";
 
-const montserrat = Montserrat({
+const outfit = Outfit({
   subsets: ["latin"],
-  variable: "--font-montserrat",
+  variable: "--font-outfit",
 });
 
 const bebasNeue = Bebas_Neue({
@@ -52,7 +52,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="overflow-x-hidden">
       <body
-        className={`${montserrat.variable} ${bebasNeue.variable} ${inter.variable} antialiased overflow-x-hidden`}
+        className={`${outfit.variable} ${bebasNeue.variable} ${inter.variable} antialiased overflow-x-hidden`}
       >
         <Script src="https://t.contentsquare.net/uxa/97d0dc6c80d47.js" strategy="afterInteractive" />
         <ClientLayoutShell>
