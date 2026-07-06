@@ -1,10 +1,13 @@
 import HeroCarousel from "@/components/home/HeroCarousel";
 import MatchCentreStrip from "@/components/home/MatchCentreStrip";
-import StorePreviewStrip from "@/components/home/StorePreviewStrip";
 import NewsMediaBlock from "@/components/home/NewsMediaBlock";
-import EventsBlock from "@/components/home/EventsBlock";
 import { CountdownPromo } from "@/components/ui/CountdownPromo";
 import EdgyGradient from "@/components/ui/EdgyGradient";
+import dynamic from "next/dynamic";
+
+const StorePreviewStrip = dynamic(() => import("@/components/home/StorePreviewStrip"));
+
+const EventsBlock = dynamic(() => import("@/components/home/EventsBlock"));
 import { getLiveMatches, getLatestReports } from "@/lib/data-fetcher";
 import { getHeroSlides } from "@/lib/api/hero";
 import { getFixtureTwinData } from "@/lib/api/fixtures";
