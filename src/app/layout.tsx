@@ -55,7 +55,7 @@ export default function RootLayout({
         className={`${outfit.variable} ${bebasNeue.variable} ${inter.variable} antialiased overflow-x-hidden`}
       >
         <noscript>
-          <div style={{ backgroundColor: "#7f1d1d", color: "#ffffff", padding: "1rem", textAlign: "center", fontWeight: "bold", fontSize: "0.875rem", fontFamily: "sans-serif" }}>
+          <div className="bg-red-950 text-white p-4 text-center font-bold text-sm font-sans">
             JavaScript is disabled. For the best experience on the Zimbabwe Rugby Union platform, please enable JavaScript in your browser settings.
           </div>
         </noscript>
