@@ -2,7 +2,7 @@ import type { NextConfig } from "next";
 
 const isDev = process.env.NODE_ENV === 'development';
 
-const securityHeaders = [
+const globalSecurityHeaders = [
   { key: "X-DNS-Prefetch-Control", value: "on" },
   {
     key: "Strict-Transport-Security",
@@ -10,7 +10,10 @@ const securityHeaders = [
   },
   { key: "X-Frame-Options", value: "SAMEORIGIN" },
   { key: "X-Content-Type-Options", value: "nosniff" },
-  { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
+  { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" }
+];
+
+const pageSpecificHeaders = [
   {
     key: "Permissions-Policy",
     value: "camera=(), microphone=(), geolocation=()"
@@ -20,17 +23,17 @@ const securityHeaders = [
     value: [
       "base-uri 'self'",
       "default-src 'self'",
-      // Allow inline script and eval for Next.js hydration, Turbopack, and Vercel toolbar
       "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://vercel.live https://vercel.com https://*.vercel.live",
       "style-src 'self' 'unsafe-inline' https://vercel.live https://*.vercel.live",
-      // Allow image loading from Directus, flags, and Vercel assets
       "img-src 'self' data: blob: https://assets.directus.io https://vercel.com https://vercel.live https://*.vercel.live https://images.unsplash.com https://plus.unsplash.com https://r2.thesportsdb.com https://flagcdn.com",
-      // Allow Google Fonts, Perplexity CDN fonts, and inline data-uri fonts
       "font-src 'self' data: https://fonts.gstatic.com https://frontend-cdn.perplexity.ai",
       "frame-src 'self' https://www.youtube.com https://player.vimeo.com https://vercel.live https://*.vercel.live",
-      // Allow development hot-reload websockets, Vercel feedback streams, and Directus/Supabase endpoints
       "connect-src 'self' ws: wss: https://vercel.live https://*.vercel.live wss://*.vercel.live wss://*.vercel.com https://*.supabase.co https://*.directus.app"
     ].join("; ")
+  },
+  {
+    key: "Vary",
+    value: "Accept-Encoding, User-Agent"
   }
 ];
 
@@ -38,14 +41,14 @@ const nextConfig: NextConfig = {
   async headers() {
     return [
       {
+        // 1. Global Security Headers applied to ALL files (including static JS/CSS chunks)
+        source: "/(.*)",
+        headers: globalSecurityHeaders
+      },
+      {
+        // 2. Page-Specific Headers applied ONLY to pages and dynamic endpoints (excludes static chunks, images, fonts)
         source: "/((?!_next/static|_next/image|favicon.ico|images/|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)",
-        headers: [
-          ...securityHeaders,
-          {
-            key: "Vary",
-            value: "Accept-Encoding, User-Agent"
-          }
-        ]
+        headers: pageSpecificHeaders
       }
     ];
   },
