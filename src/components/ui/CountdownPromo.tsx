@@ -116,9 +116,11 @@ export function CountdownPromo({
             </div>
             
             {/* Image with clip-path */}
-            <div className="relative z-10 aspect-4/3 overflow-hidden clip-slanted-lg group shadow-2xl">
+            <div className="relative z-10 aspect-4/3 overflow-hidden clip-slanted-lg group shadow-[0_20px_50px_rgba(0,0,0,0.6)]">
+              {/* Outer offset frame accent */}
+              <div className="absolute inset-0 border border-zru-green/30 clip-slanted-lg translate-x-2 translate-y-2 z-0 pointer-events-none group-hover:border-zru-green/50 transition-colors duration-500" />
               {image ? (
-                <div className="relative w-full h-full">
+                <div className="relative w-full h-full z-10">
                   <Image 
                     src={image} 
                     alt={title}
@@ -154,14 +156,14 @@ export function CountdownPromo({
             </p>
             
             {/* Title - Standardized */}
-            <div className="flex items-center gap-2 mb-4">
-              <div className="w-8 h-1 bg-white/40" />
-              <span className="text-white/60 text-[10px] font-black uppercase tracking-[0.4em]">{title}</span>
+            <div className="flex items-center gap-2.5 mb-4">
+              <div className="w-8 h-[2px] bg-zru-green" />
+              <span className="text-zru-green text-[10px] font-black uppercase tracking-[0.3em] font-subheading">{title}</span>
             </div>
             
             {/* Subtitle */}
             {subtitle && (
-              <h2 className="font-heading text-6xl md:text-8xl tracking-wider text-white mb-6 uppercase">
+              <h2 className="font-heading text-6xl md:text-8xl tracking-wider text-white mb-6 uppercase font-black drop-shadow-md">
                 {subtitle}
               </h2>
             )}
@@ -178,15 +180,18 @@ export function CountdownPromo({
               <p className="text-[10px] font-black text-white/40 uppercase tracking-[0.2em] mb-4">
                 {countdownLabel}
               </p>
-              <div className="flex flex-wrap justify-start gap-x-6 gap-y-4 md:gap-8 min-w-0">
+              <div className="flex flex-wrap justify-start gap-4 md:gap-6 min-w-0">
                 {[
                   { value: timeLeft.days, label: "DAYS" },
                   { value: timeLeft.hours, label: "HOURS" },
                   { value: timeLeft.minutes, label: "MINUTES" },
                   { value: timeLeft.seconds, label: "SECONDS" },
                 ].map((unit) => (
-                  <div key={unit.label} className="text-center min-w-[70px]">
-                    <div className="relative h-[60px] md:h-[96px] overflow-hidden flex justify-center items-center">
+                  <div key={unit.label} className="text-center bg-gradient-to-b from-white/5 via-white/[0.01] to-transparent border border-white/10 rounded-xl px-4 py-3 md:py-5 min-w-[85px] md:min-w-[110px] shadow-lg shadow-black/40 backdrop-blur-md relative group/timer">
+                    {/* Inner dividing horizontal strip (clock digit split) */}
+                    <div className="absolute left-0 right-0 top-1/2 h-[1px] bg-black/30 z-20 pointer-events-none" />
+                    
+                    <div className="relative h-[48px] md:h-[76px] overflow-hidden flex justify-center items-center z-10">
                       <AnimatePresence mode="popLayout">
                         <motion.span
                           key={`${unit.label}-${unit.value}`}
@@ -194,14 +199,14 @@ export function CountdownPromo({
                           animate={{ y: 0, opacity: 1, rotateX: 0 }}
                           exit={{ y: 40, opacity: 0, rotateX: 90 }}
                           transition={{ duration: 0.4, ease: "backOut" }}
-                          className="absolute block font-heading text-6xl md:text-8xl text-zru-green leading-none tracking-wider origin-center"
+                          className="absolute block font-heading text-5xl md:text-7xl text-white font-black leading-none tracking-wider origin-center drop-shadow-[0_4px_10px_rgba(0,107,63,0.4)]"
                           style={{ perspective: 1000, transformStyle: "preserve-3d" }}
                         >
                           {isClient ? String(unit.value).padStart(2, "0") : "00"}
                         </motion.span>
                       </AnimatePresence>
                     </div>
-                    <span className="text-[10px] font-bold text-white/40 uppercase tracking-[0.3em] block mt-2">
+                    <span className="text-[9px] font-black text-white/50 uppercase tracking-[0.2em] block mt-3 font-subheading">
                       {unit.label}
                     </span>
                   </div>
