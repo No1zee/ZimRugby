@@ -52,7 +52,7 @@ export async function getHeroSlides(): Promise<HeroSlideData[]> {
         tag: "UPCOMING FIXTURE"
       },
       ctas: {
-        primary: { label: "Book Lady Sables Tickets", href: "/tickets", iconName: "Ticket" },
+        primary: { label: "Sign In", href: "/login", iconName: "ArrowRight" },
         secondary: { label: "Lady Sables Match Centre", href: "/match-centre", iconName: "Play" },
       },
     },
@@ -67,7 +67,7 @@ export async function getHeroSlides(): Promise<HeroSlideData[]> {
       },
       subtext: "Experience the pride of Harare and Bulawayo as the Sables clash in the Victoria Falls Domestic Series.",
       ctas: {
-        primary: { label: "Book Tickets", href: "/tickets", iconName: "Ticket" },
+        primary: { label: "Sign In", href: "/login", iconName: "ArrowRight" },
         secondary: { label: "Match Info", href: "/events", iconName: "Play" },
       },
     },
@@ -105,7 +105,7 @@ export async function getHeroSlides(): Promise<HeroSlideData[]> {
         tag: "UPCOMING FIXTURE"
       },
       ctas: {
-        primary: { label: "Get Tickets", href: "/tickets", iconName: "Ticket" },
+        primary: { label: "Sign In", href: "/login", iconName: "ArrowRight" },
         secondary: { label: "Sables Squad", href: "/teams/sables", iconName: "ArrowRight" },
       },
     },
@@ -134,7 +134,7 @@ export async function getHeroSlides(): Promise<HeroSlideData[]> {
       },
       subtext: "Witness the elite athleticism of Zimbabwe's 7s finest. Precision, power, and the pursuit of excellence.",
       ctas: {
-        primary: { label: "Secure Your Seat", href: "/tickets", iconName: "Ticket" },
+        primary: { label: "Sign In", href: "/login", iconName: "ArrowRight" },
         secondary: { label: "Watch Highlights", href: "/media", iconName: "Play" },
       },
     },
@@ -169,9 +169,9 @@ export async function getHeroSlides(): Promise<HeroSlideData[]> {
           } : undefined,
           ctas: {
             primary: {
-              label: slide.cta_primary_label || "Get Tickets",
-              href: slide.cta_primary_href || "/tickets",
-              iconName: slide.cta_primary_icon,
+              label: slide.cta_primary_label || "Sign In",
+              href: slide.cta_primary_href || "/login",
+              iconName: slide.cta_primary_icon || "ArrowRight",
             },
             secondary: slide.cta_secondary_label ? {
               label: slide.cta_secondary_label,
