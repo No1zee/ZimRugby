@@ -308,7 +308,7 @@ export default function HeroCarousel({ slides }: { slides: HeroSlideData[] }) {
                          initial={{ width: "0%" }}
                          animate={{ width: "100%" }}
                          transition={{ duration: 12, ease: "linear" }}
-                         className="absolute inset-0 bg-zru-gold"
+                         className="absolute inset-0 bg-zru-green"
                        />
                      )}
                    </button>
@@ -332,10 +332,10 @@ export default function HeroCarousel({ slides }: { slides: HeroSlideData[] }) {
 
       {/* ZRU Crest Overlay */}
       <div className="absolute bottom-8 left-8 z-40 hidden md:flex items-center gap-4 pointer-events-none">
-        <Image src="/zru logo main.svg" alt="ZRU Crest" width={60} height={75} priority className="drop-shadow-2xl opacity-90 object-contain w-auto h-16" />
+        <img src="/zru logo main.svg" alt="ZRU Crest" className="drop-shadow-2xl opacity-90 object-contain w-auto h-16" />
         <div className="flex flex-col">
           <span className="text-white font-heading text-lg tracking-widest leading-tight">ZIMBABWE</span>
-          <span className="text-zru-gold font-heading text-lg tracking-widest leading-tight">RUGBY UNION</span>
+          <span className="text-zru-green font-heading text-lg tracking-widest leading-tight">RUGBY UNION</span>
         </div>
       </div>
 
@@ -347,7 +347,7 @@ export default function HeroCarousel({ slides }: { slides: HeroSlideData[] }) {
         className="absolute top-0 right-0 w-[30vw] h-full pointer-events-none z-10 overflow-hidden hidden lg:block"
       >
         <div className="absolute top-[-50%] right-[-10%] w-[150px] h-[200%] bg-zru-green rotate-[24deg] blur-md transform origin-center" />
-        <div className="absolute top-[-50%] right-[calc(-10%+170px)] w-[8px] h-[200%] bg-zru-gold rotate-[24deg] transform origin-center" />
+        <div className="absolute top-[-50%] right-[calc(-10%+170px)] w-[8px] h-[200%] bg-white/10 rotate-[24deg] transform origin-center" />
       </motion.div>
       <motion.div 
         initial={{ x: -100, opacity: 0 }}
@@ -356,7 +356,7 @@ export default function HeroCarousel({ slides }: { slides: HeroSlideData[] }) {
         className="absolute bottom-0 left-0 w-[20vw] h-[30vh] pointer-events-none z-10 overflow-hidden hidden lg:block"
       >
         <div className="absolute bottom-[-10%] left-[-5%] w-[80px] h-[200%] bg-zru-green rotate-[24deg] transform origin-center" />
-        <div className="absolute bottom-[-10%] left-[calc(-5%+100px)] w-[4px] h-[200%] bg-zru-gold rotate-[24deg] transform origin-center" />
+        <div className="absolute bottom-[-10%] left-[calc(-5%+100px)] w-[4px] h-[200%] bg-white/10 rotate-[24deg] transform origin-center" />
       </motion.div>
 
     </section>

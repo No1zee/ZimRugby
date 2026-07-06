@@ -272,7 +272,7 @@ export default function MatchCentreStrip({ initialMatches = [], twinData, rankin
                       <div key={index} className="flex items-center justify-between bg-gradient-to-r from-white/3 to-transparent hover:from-zru-green/10 hover:to-transparent border border-white/5 hover:border-zru-green/20 px-4 py-2.5 rounded-lg transition-all duration-300">
                         <div className="flex items-center gap-3">
                           {rival.logo && (
-                            <Image src={rival.logo} alt={rival.name} width={18} height={14} className="object-cover rounded-xs" />
+                            <img src={rival.logo} alt={rival.name} className="w-[18px] h-[14px] object-cover rounded-xs" />
                           )}
                           <span className="text-[11px] font-body font-bold text-white/80">{rival.name}</span>
                         </div>
@@ -326,7 +326,7 @@ export default function MatchCentreStrip({ initialMatches = [], twinData, rankin
                     <span className="text-white font-heading text-xs sm:text-base uppercase tracking-wide font-bold break-words w-full sm:w-auto leading-tight">{secondaryMatch.homeTeam.name}</span>
                     {secondaryMatch.homeTeam.logo && (
                       <div className="w-8 h-8 sm:w-auto sm:h-auto flex items-center justify-center bg-white/5 sm:bg-transparent rounded-full sm:rounded-none shrink-0 p-1 sm:p-0">
-                        <Image src={secondaryMatch.homeTeam.logo} alt={secondaryMatch.homeTeam.name} width={22} height={18} className="object-contain" />
+                        <img src={secondaryMatch.homeTeam.logo} alt={secondaryMatch.homeTeam.name} className="w-[22px] h-[18px] object-contain" />
                       </div>
                     )}
                   </div>
@@ -340,7 +340,7 @@ export default function MatchCentreStrip({ initialMatches = [], twinData, rankin
                   <div className="flex flex-col sm:flex-row items-center sm:justify-start gap-1.5 sm:gap-3 text-center sm:text-left">
                     {secondaryMatch.awayTeam.logo && (
                       <div className="w-8 h-8 sm:w-auto sm:h-auto flex items-center justify-center bg-white/5 sm:bg-transparent rounded-full sm:rounded-none shrink-0 p-1 sm:p-0">
-                        <Image src={secondaryMatch.awayTeam.logo} alt={secondaryMatch.awayTeam.name} width={22} height={18} className="object-contain" />
+                        <img src={secondaryMatch.awayTeam.logo} alt={secondaryMatch.awayTeam.name} className="w-[22px] h-[18px] object-contain" />
                       </div>
                     )}
                     <span className="text-white font-heading text-xs sm:text-base uppercase tracking-wide font-bold break-words w-full sm:w-auto leading-tight">{secondaryMatch.awayTeam.name}</span>
