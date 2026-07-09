@@ -1,6 +1,7 @@
 import { Video } from "@/types";
 import directus from "@/lib/directus/client";
 import { readItems } from "@directus/sdk";
+import { directusAsset, fetchFromDirectus, formatShortDate } from "@/lib/directus/helpers";
 
 export async function getVideos(): Promise<Video[]> {
   const mockVideos: Video[] = [
@@ -66,29 +67,22 @@ export async function getVideos(): Promise<Video[]> {
     }
   ];
 
-  try {
-    if (process.env.NEXT_PUBLIC_DIRECTUS_URL) {
-      const response = await directus.request(
-        readItems('videos' as any, {
-          sort: ['-date' as any]
-        })
-      );
-      if (response && response.length > 0) {
-        return response.map((video: any) => ({
-          id: String(video.id),
-          title: video.title || "",
-          category: video.category || "General",
-          duration: video.duration || "0:00",
-          date: video.date_label || new Date(video.date).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }).toUpperCase(),
-          thumbnail: video.thumbnail ? `${process.env.NEXT_PUBLIC_DIRECTUS_URL}/assets/${video.thumbnail}` : video.thumbnail_url,
-          embedUrl: video.embed_url || "",
-          description: video.description || ""
-        }));
-      }
-    }
-  } catch (error) {
-    console.warn("Directus fetch failed for videos list, falling back to mock data:", error);
-  }
-
-  return mockVideos;
+  return fetchFromDirectus<Video[]>(async () => {
+    const response = await directus.request(
+      readItems('videos' as any, {
+        sort: ['-date' as any]
+      })
+    );
+    if (!response || response.length === 0) return null;
+    return response.map((video: any) => ({
+      id: String(video.id),
+      title: video.title || "",
+      category: video.category || "General",
+      duration: video.duration || "0:00",
+      date: video.date_label || formatShortDate(video.date),
+      thumbnail: directusAsset(video.thumbnail) ?? video.thumbnail_url,
+      embedUrl: video.embed_url || "",
+      description: video.description || ""
+    }));
+  }, mockVideos, "videos list");
 }

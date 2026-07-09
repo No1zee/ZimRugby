@@ -30,6 +30,7 @@ export interface HeroSlideData {
  */
 import directus from "@/lib/directus/client";
 import { readItems } from "@directus/sdk";
+import { directusAsset, fetchFromDirectus } from "@/lib/directus/helpers";
 
 export async function getHeroSlides(): Promise<HeroSlideData[]> {
   const mockSlides: HeroSlideData[] = [
@@ -140,20 +141,19 @@ export async function getHeroSlides(): Promise<HeroSlideData[]> {
     },
   ];
 
-  try {
-    if (process.env.NEXT_PUBLIC_DIRECTUS_URL) {
-      const response = await directus.request(
-        readItems('hero_slides' as any, {
-          sort: ['sort' as any],
-        })
-      );
-      if (response && response.length > 0) {
-        return response.map((slide: any) => ({
+  return fetchFromDirectus<HeroSlideData[]>(async () => {
+    const response = await directus.request(
+      readItems('hero_slides' as any, {
+        sort: ['sort' as any],
+      })
+    );
+    if (!response || response.length === 0) return null;
+    return response.map((slide: any) => ({
           id: Number(slide.id),
           tag: slide.tag,
           contextPill: slide.context_pill,
-          image: slide.image ? `${process.env.NEXT_PUBLIC_DIRECTUS_URL}/assets/${slide.image}` : slide.image_url,
-          video: slide.video ? `${process.env.NEXT_PUBLIC_DIRECTUS_URL}/assets/${slide.video}` : slide.video_url,
+          image: directusAsset(slide.image) ?? slide.image_url,
+          video: directusAsset(slide.video) ?? slide.video_url,
           headline: {
             line1: slide.headline_line1 || "",
             line2: slide.headline_line2 || "",
@@ -181,11 +181,5 @@ export async function getHeroSlides(): Promise<HeroSlideData[]> {
           },
           alignment: slide.alignment || "left",
         }));
-      }
-    }
-  } catch (error) {
-    console.warn("Directus fetch failed for hero slides, falling back to mock data:", error);
-  }
-
-  return mockSlides;
+  }, mockSlides, "hero slides");
 }

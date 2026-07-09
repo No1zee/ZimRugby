@@ -1,5 +1,6 @@
 import directus from "@/lib/directus/client";
 import { readItems } from "@directus/sdk";
+import { directusAsset, fetchFromDirectus } from "@/lib/directus/helpers";
 
 export interface RankingDetail {
   position: number;
@@ -58,22 +59,21 @@ export async function getRankingsData(): Promise<RankingsData> {
     ]
   };
 
-  try {
-    if (process.env.NEXT_PUBLIC_DIRECTUS_URL) {
-      const response = await directus.request(
-        readItems('rankings' as any, {
-          limit: 1
-        })
-      );
-      const rivalsResponse = await directus.request(
-        readItems('ranking_rivals' as any, {
-          sort: ['position' as any]
-        })
-      );
-      
-      if (response?.[0]) {
-        const mainRank = response[0];
-        return {
+  return fetchFromDirectus<RankingsData>(async () => {
+    const response = await directus.request(
+      readItems('rankings' as any, {
+        limit: 1
+      })
+    );
+    const rivalsResponse = await directus.request(
+      readItems('ranking_rivals' as any, {
+        sort: ['position' as any]
+      })
+    );
+
+    if (!response?.[0]) return null;
+    const mainRank = response[0];
+    return {
           world: {
             position: Number(mainRank.world_position),
             previousPosition: mainRank.world_previous_position ? Number(mainRank.world_previous_position) : undefined,
@@ -92,14 +92,8 @@ export async function getRankingsData(): Promise<RankingsData> {
             name: rival.name,
             position: Number(rival.position),
             points: Number(rival.points),
-            logo: rival.logo ? `${process.env.NEXT_PUBLIC_DIRECTUS_URL}/assets/${rival.logo}` : rival.logo_url
+            logo: directusAsset(rival.logo) ?? rival.logo_url
           }))
         };
-      }
-    }
-  } catch (error) {
-    console.warn("Directus fetch failed for rankings data, falling back to mock data:", error);
-  }
-
-  return mockRankings;
+  }, mockRankings, "rankings data");
 }
