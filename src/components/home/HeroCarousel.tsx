@@ -6,6 +6,7 @@ import { LucideIcon, ArrowRight, Play, Ticket, ChevronLeft, ChevronRight } from 
 import Link from "next/link";
 import Image from "next/image";
 import { FloatingParticles } from "../ui/animations";
+import Logo from "../ui/Logo";
 import MagneticElement from "../ui/MagneticElement";
 import type { HeroSlideData } from "@/lib/api/hero";
 
@@ -232,10 +233,10 @@ export default function HeroCarousel({ slides }: { slides: HeroSlideData[] }) {
 
       {/* ZRU Crest Overlay */}
       <div className="absolute bottom-8 left-8 z-40 hidden md:flex items-center gap-4 pointer-events-none">
-        <Image src="/zru logo main.svg" alt="ZRU Crest" width={60} height={75} priority className="drop-shadow-2xl opacity-90 object-contain w-auto h-16" />
+        <Logo variant="white-on-black" alt="ZRU Crest" width={60} height={75} priority clearSpaceRatio={0.08} minHeightPx={56} imageClassName="drop-shadow-2xl opacity-90 w-auto h-16" />
         <div className="flex flex-col">
-          <span className="text-white font-heading text-lg tracking-widest leading-tight">ZIMBABWE</span>
-          <span className="text-zru-gold font-heading text-lg tracking-widest leading-tight">RUGBY UNION</span>
+          <span className="text-white font-display text-lg tracking-widest leading-tight">ZIMBABWE</span>
+          <span className="text-zru-gold font-display text-lg tracking-widest leading-tight">RUGBY UNION</span>
         </div>
       </div>
 

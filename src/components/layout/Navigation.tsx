@@ -2,8 +2,8 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import Image from "next/image";
 import { usePathname } from "next/navigation";
+import Logo from "@/components/ui/Logo";
 import { Menu, X, ChevronDown } from "lucide-react";
 import { motion, AnimatePresence, useScroll, useMotionValueEvent } from "framer-motion";
 
@@ -101,13 +101,15 @@ export default function Navigation() {
           {/* Logo */}
           <Link href="/" className="flex items-center gap-3 group relative">
             <motion.div whileHover={{ scale: 1.05 }} className="relative z-50">
-              <Image
-                src="/zru logo main.svg"
-                alt="ZRU Logo"
+              <Logo
+                variant="white-on-black"
                 width={81}
                 height={101}
-                className="object-contain drop-shadow-2xl w-auto h-16 lg:h-20"
                 priority
+                alt="ZRU Logo"
+                clearSpaceRatio={0.08}
+                minHeightPx={56}
+                imageClassName="drop-shadow-2xl w-auto h-16 lg:h-20"
               />
             </motion.div>
           </Link>

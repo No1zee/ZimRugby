@@ -27,7 +27,7 @@ export function StripedBackground({
   const colorMap = {
     red: "#D71920",
     gold: "#FFD200",
-    green: "#006039",
+    green: "#036936",
     white: "#FFFFFF",
   };
 

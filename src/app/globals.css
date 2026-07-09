@@ -8,23 +8,28 @@
   --font-heading: var(--font-bebas-neue);
   --font-subheading: var(--font-montserrat);
   --font-body: var(--font-inter);
+  /* Optional brand display face (Unison Pro). Falls back to the default
+     heading face until the licensed local font is loaded, so it is safe to
+     opt into `font-display` before the files are wired in layout.tsx. */
+  --font-display: var(--font-unison-pro), var(--font-bebas-neue), "Bebas Neue", sans-serif;
 
-  --color-zru-green: #006039;
+  /* Official ZRU brand green (Pantone 349C) */
+  --color-zru-green: #036936;
   --color-rich-black: #0A0A0A;
   --color-gray-900: #1A1A1A;
   --color-gray-100: #F5F5F5;
-  /* Mapped for backward compatibility but forced to allowed palette */
-  --color-zru-gold: #ffffff; 
-  --color-zru-orange: #006039;
-  --color-zru-red: #006039;
-  --color-gold: #ffffff;
-  --color-red: #006039;
+  /* Legacy aliases resolved to the confirmed brand palette (green + gold accent) */
+  --color-zru-gold: #d4af37;
+  --color-zru-orange: #036936;
+  --color-zru-red: #036936;
+  --color-gold: #d4af37;
+  --color-red: #036936;
   --color-blue-600: #0A0A0A;
   --color-blue-700: #0A0A0A;
   --color-blue-800: #1A1A1A;
 
   /* Clubhouse Premium Tokens */
-  --color-clubhouse-green: #004d2e;
+  --color-clubhouse-green: #036936;
   --color-clubhouse-charcoal: #0e0e0e;
   --color-clubhouse-gold: #d4af37;
   --color-clubhouse-copper: #b87333;
@@ -104,6 +109,9 @@ a, button, [role="button"], input, select, textarea {
 
 @utility font-heading {
   font-family: var(--font-bebas-neue), "Bebas Neue", sans-serif;
+}
+@utility font-display {
+  font-family: var(--font-display);
 }
 @utility font-subheading {
   font-family: var(--font-montserrat), sans-serif;
