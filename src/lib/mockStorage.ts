@@ -83,7 +83,7 @@ export async function saveSubmission(
       list.push(submission);
       localStorage.setItem("zru_form_submissions", JSON.stringify(list));
     } catch (e) {
-      console.warn("localStorage quota exceeded or disabled, fallback to in-memory.");
+      console.warn("localStorage quota exceeded or disabled, falling back to in-memory storage:", e);
     }
   }
   
@@ -105,7 +105,7 @@ export function getSubmissions(type?: FormSubmission["formType"]): FormSubmissio
       const list: FormSubmission[] = existing ? JSON.parse(existing) : [];
       return type ? list.filter(item => item.formType === type) : list;
     } catch (e) {
-      // Fallback to in-memory
+      console.warn("Failed to read submissions from localStorage, falling back to in-memory storage:", e);
     }
   }
   return type ? mockDatabase.filter(item => item.formType === type) : mockDatabase;

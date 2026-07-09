@@ -51,7 +51,7 @@ export default function MatchCentreStrip({ initialMatches = [], twinData }: Matc
         };
       }
     } catch (e) {
-      // Fallback
+      console.warn(`Failed to parse match date "${dateStr}", using fallback:`, e);
     }
     return { day: "19", month: "JUL", weekday: "SUN" };
   };

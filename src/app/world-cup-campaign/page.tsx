@@ -198,16 +198,22 @@ export default function WorldCupCampaignPage() {
   const [formData, setFormData] = useState({ name: "", email: "" });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [submitError, setSubmitError] = useState("");
 
   const handleMembershipSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
+    setSubmitError("");
     try {
-      await joinZRUNation(formData);
+      const res = await joinZRUNation(formData);
+      if (!res.success) {
+        throw new Error("Membership registration was not successful.");
+      }
       setIsSubmitted(true);
       setFormData({ name: "", email: "" });
     } catch (err) {
-      console.error(err);
+      console.error("ZRU Nation membership submission failed:", err);
+      setSubmitError("We couldn't complete your registration. Please try again.");
     } finally {
       setIsSubmitting(false);
     }
@@ -514,6 +520,11 @@ export default function WorldCupCampaignPage() {
                     >
                       {isSubmitting ? "Processing…" : "Initialize Membership"}
                     </Button>
+                    {submitError && (
+                      <p className="text-center text-[10px] font-bold text-red-400 uppercase tracking-widest">
+                        {submitError}
+                      </p>
+                    )}
                     <p className="text-center text-[10px] font-bold text-white/50 uppercase tracking-widest">
                       Already a member? <Link href="/auth" className="text-clubhouse-gold underline">Sign in</Link>
                     </p>
