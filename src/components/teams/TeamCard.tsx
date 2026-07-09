@@ -24,7 +24,7 @@ export default function TeamCard({
     <Link href={href}>
         <motion.div
         whileHover={{ y: -10 }}
-        className="group relative h-[400px] rounded-2xl overflow-hidden cursor-pointer"
+        className="group relative h-[400px] rounded-2xl overflow-hidden cursor-pointer border border-white/5 hover:border-zru-green/40 hover:shadow-[0_0_30px_rgba(3,105,54,0.25)] transition-[border-color,box-shadow] duration-500"
         >
         {/* Background Image Placeholder if no real image */}
         <div className={`absolute inset-0 bg-gray-800 transition-transform duration-700 group-hover:scale-110`}>

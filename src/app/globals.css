@@ -8,9 +8,14 @@
   --font-heading: var(--font-bebas-neue);
   --font-subheading: var(--font-outfit);
   --font-body: var(--font-inter);
+  /* Optional brand display face (Unison Pro). Falls back to the default
+     heading face until the licensed local font is loaded, so it is safe to
+     opt into `font-display` before the files are wired in layout.tsx. */
+  --font-display: var(--font-unison-pro, var(--font-bebas-neue));
 
   /* Unified Brand Colors from Audit Spec */
-  --color-green-primary: #006B3F;
+  /* Official ZRU brand green (Pantone 349C) */
+  --color-green-primary: #036936;
   --color-green-dark: #00452A;
   --color-neutral-dark: #121212;
   --color-neutral-mid: #3A3A3A;
@@ -59,6 +64,10 @@
 }
 
 body {
+  /* next/font exposes its variables (--font-bebas-neue, --font-unison-pro)
+     on <body>, so the display-face token must be resolved here rather than
+     in @theme (:root), where those variables are not visible. */
+  --font-display: var(--font-unison-pro, var(--font-bebas-neue));
   position: relative;
   background-color: #050505;
   background-image: 
@@ -94,6 +103,9 @@ body {
 
 @utility font-heading {
   font-family: var(--font-bebas-neue), "Bebas Neue", sans-serif;
+}
+@utility font-display {
+  font-family: var(--font-unison-pro, var(--font-bebas-neue)), "Bebas Neue", sans-serif;
 }
 @utility font-subheading {
   font-family: var(--font-outfit), sans-serif;
@@ -157,6 +169,14 @@ body {
 
 .glow-green-card:hover::before {
   background: radial-gradient(circle at center, rgba(0, 150, 70, 0.12) 0%, transparent 50%);
+}
+
+/* Alternating inner-page section band — pairs with bg-rich-black (#0A0A0A)
+   to give long pages visual rhythm without changing layout. */
+.section-alt {
+  background: linear-gradient(180deg, #060606 0%, #0d0d0d 100%);
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 /* ============================================================
