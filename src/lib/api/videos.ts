@@ -69,12 +69,13 @@ export async function getVideos(): Promise<Video[]> {
   try {
     if (process.env.NEXT_PUBLIC_DIRECTUS_URL) {
       const response = await directus.request(
-        readItems('videos' as any, {
-          sort: ['-date' as any]
+        readItems('videos', {
+          sort: ['-date']
         })
-      );
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      ) as any[];
       if (response && response.length > 0) {
-        return response.map((video: any) => ({
+        return response.map((video) => ({
           id: String(video.id),
           title: video.title || "",
           category: video.category || "General",

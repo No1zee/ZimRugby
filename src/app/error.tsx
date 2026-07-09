@@ -25,6 +25,7 @@ export default function GlobalError({
 
       {/* Watermark */}
       <div className="absolute inset-0 flex items-center justify-center pointer-events-none select-none opacity-[0.025]">
+        {/* eslint-disable-next-line @next/next/no-img-element -- decorative inline SVG watermark; next/image does not optimize SVGs */}
         <img src="/zru logo main.svg" alt="" aria-hidden="true" className="w-[500px] object-contain" />
       </div>
 

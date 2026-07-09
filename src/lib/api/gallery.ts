@@ -57,12 +57,13 @@ export async function getPhotos(): Promise<Photo[]> {
   try {
     if (process.env.NEXT_PUBLIC_DIRECTUS_URL) {
       const response = await directus.request(
-        readItems('photos' as any, {
-          sort: ['-date' as any]
+        readItems('photos', {
+          sort: ['-date']
         })
-      );
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      ) as any[];
       if (response && response.length > 0) {
-        return response.map((photo: any) => ({
+        return response.map((photo) => ({
           id: String(photo.id),
           title: photo.title || "",
           album: photo.album || "General",

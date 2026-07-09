@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { ChevronRight, MapPin, Loader2 } from "lucide-react";
+import { ChevronRight, MapPin } from "lucide-react";
 import Button from "../common/Button";
 import { motion } from "framer-motion";
 import Image from "next/image";

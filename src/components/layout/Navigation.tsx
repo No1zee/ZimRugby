@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { ChevronDown } from "lucide-react";
 import { motion, AnimatePresence, useScroll, useMotionValueEvent } from "framer-motion";
@@ -173,6 +172,7 @@ export default function Navigation() {
           {/* Logo */}
           <Link href="/" className="flex items-center gap-3 group relative">
             <motion.div whileHover={{ scale: 1.05 }} className="relative z-50">
+              {/* eslint-disable-next-line @next/next/no-img-element -- SVG logo; next/image does not optimize SVGs */}
               <img
                 src="/zru logo main.svg"
                 alt="ZRU Logo"

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import { Mail, CheckCircle2, Ticket, Percent, Newspaper, Trophy, ShieldCheck, ArrowRight, AlertCircle } from "lucide-react";
 import { saveSubmission } from "@/lib/mockStorage";
 
@@ -57,7 +57,7 @@ export default function FanZonePage() {
       } else {
         setSubmitError(res.message);
       }
-    } catch (err) {
+    } catch {
       setSubmitError("An error occurred during registration.");
     } finally {
       setIsSubmitting(false);

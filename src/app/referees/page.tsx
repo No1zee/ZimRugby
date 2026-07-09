@@ -51,7 +51,7 @@ export default function RefereesPortalPage() {
       } else {
         setSubmitError(res.message);
       }
-    } catch (err) {
+    } catch {
       setSubmitError("An error occurred during submission.");
     } finally {
       setIsSubmitting(false);

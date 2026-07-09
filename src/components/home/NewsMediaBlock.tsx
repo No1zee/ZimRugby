@@ -1,10 +1,8 @@
 "use client";
 
-import { motion } from "framer-motion";
-import { ArrowRight, Play } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
-import { ScrollReveal } from "../ui/animations";
 import { useState } from "react";
 import { type Report } from "@/lib/data-fetcher";
 

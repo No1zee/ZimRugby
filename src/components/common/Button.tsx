@@ -7,7 +7,6 @@ interface ButtonProps extends Omit<HTMLMotionProps<"button">, "variant"> {
   variant?: "primary" | "secondary" | "outline" | "ghost" | "link";
   size?: "sm" | "md" | "lg" | "xl";
   href?: string;
-  as?: any;
   isLoading?: boolean;
   leftIcon?: React.ReactNode;
   rightIcon?: React.ReactNode;
@@ -22,7 +21,6 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       variant = "primary",
       size = "md",
       href,
-      as: Component = "button",
       isLoading,
       leftIcon,
       rightIcon,
@@ -78,7 +76,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       <motion.button
         ref={ref}
         className={combinedClassName}
-        disabled={isLoading || (props as any).disabled}
+        disabled={isLoading || props.disabled}
         whileTap={{ scale: 0.95 }}
         transition={{ type: "spring", stiffness: 400, damping: 17 }}
         {...props}

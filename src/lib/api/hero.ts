@@ -143,12 +143,13 @@ export async function getHeroSlides(): Promise<HeroSlideData[]> {
   try {
     if (process.env.NEXT_PUBLIC_DIRECTUS_URL) {
       const response = await directus.request(
-        readItems('hero_slides' as any, {
-          sort: ['sort' as any],
+        readItems('hero_slides', {
+          sort: ['sort'],
         })
-      );
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      ) as any[];
       if (response && response.length > 0) {
-        return response.map((slide: any) => ({
+        return response.map((slide) => ({
           id: Number(slide.id),
           tag: slide.tag,
           contextPill: slide.context_pill,

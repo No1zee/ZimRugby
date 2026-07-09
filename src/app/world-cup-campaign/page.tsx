@@ -508,7 +508,6 @@ export default function WorldCupCampaignPage() {
                       variant="secondary" 
                       size="xl" 
                       className="w-full"
-                      as="button"
                       type="submit"
                       disabled={isSubmitting}
                     >
