@@ -1,6 +1,22 @@
 import type { NextConfig } from "next";
 
-const isDev = process.env.NODE_ENV === 'development';
+const toOrigin = (url?: string): string | null => {
+  if (!url) return null;
+  try {
+    return new URL(url).origin;
+  } catch {
+    return null;
+  }
+};
+
+const connectSrc = [
+  "'self'",
+  "https://*.vercel.com",
+  "https://*.vercel.live",
+  "wss://*.vercel.com",
+  toOrigin(process.env.NEXT_PUBLIC_DIRECTUS_URL),
+  toOrigin(process.env.NEXT_PUBLIC_SUPABASE_URL),
+].filter(Boolean).join(" ");
 
 const securityHeaders = [
   { key: "X-DNS-Prefetch-Control", value: "on" },
@@ -25,7 +41,7 @@ const securityHeaders = [
       "img-src 'self' data: blob: https://images.unsplash.com https://plus.unsplash.com https://zru.co.zw https://r2.thesportsdb.com https://flagcdn.com https://assets.directus.io",
       "font-src 'self' data: https://fonts.gstatic.com https://frontend-cdn.perplexity.ai",
       "frame-src 'self' https://www.youtube.com https://player.vimeo.com",
-      "connect-src 'self' https://*.vercel.com https://*.vercel.live wss://*.vercel.com https://YOUR_DIRECTUS_URL https://YOUR_SUPABASE_URL",
+      `connect-src ${connectSrc}`,
       "frame-ancestors 'self' https://vercel.com https://*.vercel.sh https://*.vercel.com https://*.perplexity.ai",
       "object-src 'none'",
       "upgrade-insecure-requests"
