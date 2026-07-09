@@ -66,4 +66,7 @@ async function updateSocialFeed() {
   }
 }
 
-updateSocialFeed();
+updateSocialFeed().catch((error) => {
+  console.error('Fatal error updating social feed:', error);
+  process.exit(1);
+});

@@ -136,4 +136,7 @@ async function sync() {
   console.log(`--- Sync Complete: ${reports.length} Reports, ${allMatches.length} Matches ---`);
 }
 
-sync();
+sync().catch((error) => {
+  console.error('--- Sync Failed ---', error);
+  process.exit(1);
+});

@@ -38,6 +38,11 @@ export async function getTicketmasterFixtures(): Promise<Fixture[]> {
 
   try {
     const res = await fetch(url, { next: { revalidate: 3600 } });
+
+    if (!res.ok) {
+      throw new Error(`Ticketmaster API request failed: ${res.status} ${res.statusText}`);
+    }
+
     const data = await res.json();
     
     const events: TMEvent[] = data._embedded?.events ?? [];
