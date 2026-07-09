@@ -61,7 +61,7 @@ export default function AdminMatchesPage() {
           
           <button 
             disabled={syncing}
-            className="flex items-center gap-2 bg-zru-gold text-rich-black px-6 py-3 rounded-lg font-bold text-xs uppercase tracking-widest hover:brightness-110 transition-all disabled:opacity-50"
+            className="flex items-center gap-2 bg-zru-green text-rich-black px-6 py-3 rounded-lg font-bold text-xs uppercase tracking-widest hover:brightness-110 transition-all disabled:opacity-50"
           >
             <RefreshCw className={`w-4 h-4 ${syncing ? 'animate-spin' : ''}`} />
             Sync from Official Website
@@ -92,7 +92,7 @@ export default function AdminMatchesPage() {
                       value={match.status}
                       title="Match Status"
                       onChange={(e) => handleStatusChange(match.id, e.target.value as Match['status'])}
-                      className="bg-rich-black border border-white/10 text-white text-xs p-2 rounded focus:outline-none focus:border-zru-gold"
+                      className="bg-rich-black border border-white/10 text-white text-xs p-2 rounded focus:outline-none focus:border-zru-green"
                     >
                       <option value="upcoming">Upcoming</option>
                       <option value="live">Live</option>

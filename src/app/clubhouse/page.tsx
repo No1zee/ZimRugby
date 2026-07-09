@@ -27,7 +27,7 @@ import FixtureRibbon from "@/components/shop/FixtureRibbon";
 
 export default function ClubhousePage() {
   return (
-    <main className="bg-clubhouse-charcoal min-h-screen selection:bg-clubhouse-gold selection:text-clubhouse-charcoal">
+    <main className="bg-clubhouse-charcoal min-h-screen selection:bg-zru-green selection:text-clubhouse-charcoal">
       <FixtureRibbon />
       <ClubhouseHeader />
       

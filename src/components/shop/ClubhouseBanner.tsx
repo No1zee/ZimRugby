@@ -6,7 +6,7 @@ export default function ClubhouseBanner() {
   return (
     <section className="bg-white py-32 px-6 md:px-12 relative overflow-hidden grain-texture">
       <div className="max-w-[1440px] mx-auto">
-        <div className="bg-clubhouse-charcoal relative overflow-hidden group rounded-sm border border-white/5 transition-all duration-700 hover:border-clubhouse-gold/50 shadow-2xl">
+        <div className="bg-clubhouse-charcoal relative overflow-hidden group rounded-sm border border-white/5 transition-all duration-700 hover:border-zru-green/50 shadow-2xl">
           
           {/* Members Only Cinematic Pulse */}
           <motion.div 
@@ -22,7 +22,7 @@ export default function ClubhouseBanner() {
             }}
             className="absolute inset--20 z-0 pointer-events-none blur-3xl"
           >
-            <div className="w-full h-full bg-[radial-gradient(circle_at_center,var(--color-clubhouse-gold)_0%,transparent_70%)] opacity-20" />
+            <div className="w-full h-full bg-[radial-gradient(circle_at_center,var(--color-zru-green)_0%,transparent_70%)] opacity-20" />
           </motion.div>
           
           {/* Interactive Shine Effect */}
@@ -38,7 +38,7 @@ export default function ClubhouseBanner() {
              <motion.div 
                whileInView={{ y: [20, -20] }}
                transition={{ duration: 12, repeat: Infinity, repeatType: "reverse", ease: "linear" }}
-               className="absolute bottom-0 left-0 w-1/4 h-full bg-clubhouse-gold transform -skew-x-12 -translate-x-10 blur-3xl opacity-10" 
+               className="absolute bottom-0 left-0 w-1/4 h-full bg-zru-green transform -skew-x-12 -translate-x-10 blur-3xl opacity-10" 
              />
           </div>
 
@@ -55,7 +55,7 @@ export default function ClubhouseBanner() {
                 whileInView={{ opacity: 1, letterSpacing: "0.5em" }}
                 viewport={{ once: true }}
                 transition={{ duration: 1.5, delay: 0.2 }}
-                className="block text-[10px] font-black uppercase tracking-[0.5em] text-clubhouse-gold mb-12"
+                className="block text-[10px] font-black uppercase tracking-[0.5em] text-zru-green mb-12"
               >
                 Establish Your Legacy
               </motion.span>
@@ -75,7 +75,7 @@ export default function ClubhouseBanner() {
                   whileInView={{ y: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 1, delay: 0.5, ease: [0.16, 1, 0.3, 1] }}
-                  className="text-clubhouse-gold/90 block"
+                  className="text-zru-green/90 block"
                 >
                   CLUBHOUSE
                 </motion.span>
@@ -102,12 +102,12 @@ export default function ClubhouseBanner() {
                 <input 
                   type="email" 
                   placeholder="ENTER YOUR EMAIL"
-                  className="flex-1 bg-white/5 border border-white/10 px-8 py-6 text-[11px] font-bold tracking-[0.3em] text-white focus:outline-none focus:border-clubhouse-gold transition-all duration-500 rounded-none placeholder:text-white/50"
+                  className="flex-1 bg-white/5 border border-white/10 px-8 py-6 text-[11px] font-bold tracking-[0.3em] text-white focus:outline-none focus:border-zru-green transition-all duration-500 rounded-none placeholder:text-white/50"
                   required
                 />
                 <button 
                   type="submit"
-                  className="px-14 py-6 bg-white text-clubhouse-charcoal text-[11px] font-black uppercase tracking-[0.3em] hover:bg-clubhouse-gold transition-all duration-500 rounded-none shadow-2xl"
+                  className="px-14 py-6 bg-white text-clubhouse-charcoal text-[11px] font-black uppercase tracking-[0.3em] hover:bg-zru-green transition-all duration-500 rounded-none shadow-2xl"
                 >
                   APPLY FOR ACCESS
                 </button>
@@ -128,8 +128,8 @@ export default function ClubhouseBanner() {
                     transition={{ delay: 1.2 + (idx * 0.1), duration: 0.8 }}
                     className="flex flex-col items-center group/perk"
                   >
-                    <span className="text-[9px] font-black uppercase tracking-[0.3em] text-white/60 group-hover/perk:text-clubhouse-gold transition-colors">{perk}</span>
-                    <div className="w-4 h-px bg-clubhouse-gold/0 group-hover/perk:bg-clubhouse-gold group-hover/perk:w-8 transition-all mt-2" />
+                    <span className="text-[9px] font-black uppercase tracking-[0.3em] text-white/60 group-hover/perk:text-zru-green transition-colors">{perk}</span>
+                    <div className="w-4 h-px bg-zru-green/0 group-hover/perk:bg-zru-green group-hover/perk:w-8 transition-all mt-2" />
                   </motion.div>
                 ))}
               </div>

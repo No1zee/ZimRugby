@@ -41,7 +41,7 @@ export default function StorySection() {
             viewport={{ once: true }}
             transition={{ duration: 1 }}
           >
-            <span className="block text-[10px] font-black uppercase tracking-[0.4em] text-clubhouse-gold mb-8">
+            <span className="block text-[10px] font-black uppercase tracking-[0.4em] text-zru-green mb-8">
               The Manifesto
             </span>
             <h2 className="text-4xl md:text-6xl font-black uppercase tracking-tighter text-clubhouse-charcoal mb-10 leading-[1.1]">
@@ -59,7 +59,7 @@ export default function StorySection() {
             <div className="mt-12">
               <Link 
                 href="/about"
-                className="inline-block text-[10px] font-black uppercase tracking-[0.3em] text-clubhouse-charcoal border-b-2 border-clubhouse-charcoal pb-1 hover:text-clubhouse-gold hover:border-clubhouse-gold transition-colors"
+                className="inline-block text-[10px] font-black uppercase tracking-[0.3em] text-clubhouse-charcoal border-b-2 border-clubhouse-charcoal pb-1 hover:text-zru-green hover:border-zru-green transition-colors"
               >
                 Read our story
               </Link>

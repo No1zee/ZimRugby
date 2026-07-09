@@ -59,7 +59,7 @@ export default function ProductCarousel() {
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.8, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
-              className="block text-[10px] font-black uppercase tracking-[0.5em] text-clubhouse-gold mb-4"
+              className="block text-[10px] font-black uppercase tracking-[0.5em] text-zru-green mb-4"
             >
               The Current Drop
             </motion.span>
@@ -74,7 +74,7 @@ export default function ProductCarousel() {
             </motion.h2>
           </motion.div>
           
-          <button className="hidden md:block text-[10px] font-black uppercase tracking-[0.3em] text-clubhouse-charcoal border-b-2 border-clubhouse-charcoal pb-1 hover:text-clubhouse-gold hover:border-clubhouse-gold transition-colors">
+          <button className="hidden md:block text-[10px] font-black uppercase tracking-[0.3em] text-clubhouse-charcoal border-b-2 border-clubhouse-charcoal pb-1 hover:text-zru-green hover:border-zru-green transition-colors">
             View All Series
           </button>
         </div>
@@ -125,17 +125,17 @@ export default function ProductCarousel() {
                 
                 {/* Fabric Detail Mock // Overlay on Hover */}
                 <div className="absolute inset-0 bg-clubhouse-charcoal/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-20 backdrop-blur-[2px]">
-                   <span className="text-[9px] font-bold text-clubhouse-gold uppercase tracking-[0.4em] border border-clubhouse-gold/30 px-4 py-2">Fabric Detail</span>
+                   <span className="text-[9px] font-bold text-zru-green uppercase tracking-[0.4em] border border-zru-green/30 px-4 py-2">Fabric Detail</span>
                 </div>
 
                 {/* Directorial Actions */}
                 <div className="absolute inset-x-0 bottom-0 p-4 translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-[0.16, 1, 0.3, 1] z-30">
                   <div className="flex gap-2">
-                    <button className="flex-1 bg-clubhouse-charcoal text-white text-[9px] font-bold uppercase tracking-widest py-3.5 flex items-center justify-center space-x-2 hover:bg-clubhouse-gold transition-colors shadow-2xl">
+                    <button className="flex-1 bg-clubhouse-charcoal text-white text-[9px] font-bold uppercase tracking-widest py-3.5 flex items-center justify-center space-x-2 hover:bg-zru-green transition-colors shadow-2xl">
                       <ShoppingBag className="w-3.5 h-3.5" />
                       <span>Quick Add</span>
                     </button>
-                    <button className="p-3.5 bg-white text-clubhouse-charcoal hover:bg-clubhouse-gold group/heart transition-colors shadow-2xl" aria-label="Add to Wishlist">
+                    <button className="p-3.5 bg-white text-clubhouse-charcoal hover:bg-zru-green group/heart transition-colors shadow-2xl" aria-label="Add to Wishlist">
                       <Heart className="w-4 h-4 group-hover/heart:fill-clubhouse-charcoal" />
                     </button>
                   </div>
@@ -183,7 +183,7 @@ export default function ProductCarousel() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.6, delay: (idx * 0.1) + 0.9, ease: [0.16, 1, 0.3, 1] }}
-                  className="text-sm font-bold text-clubhouse-gold"
+                  className="text-sm font-bold text-zru-green"
                 >
                   {product.price}
                 </motion.p>

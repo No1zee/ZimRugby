@@ -55,8 +55,8 @@ export default function TeamsShowcase() {
         <div className="flex justify-between items-end mb-12">
           <div>
             <div className="flex items-center gap-2 mb-4">
-              <div className="w-8 h-1 bg-zru-gold" />
-              <span className="text-zru-gold text-xs font-black uppercase tracking-[0.3em]">Meet the Squad</span>
+              <div className="w-8 h-1 bg-zru-green" />
+              <span className="text-zru-green text-xs font-black uppercase tracking-[0.3em]">Meet the Squad</span>
             </div>
             <h2 className="text-4xl md:text-6xl font-black text-white uppercase tracking-tighter italic">
               The Sables
@@ -94,7 +94,7 @@ export default function TeamsShowcase() {
 
               <div className="absolute bottom-0 left-0 w-full p-8">
                  {player.role && (
-                    <span className="bg-zru-gold text-rich-black text-xs font-bold px-3 py-1 rounded uppercase tracking-wider mb-3 inline-block">
+                    <span className="bg-zru-green text-rich-black text-xs font-bold px-3 py-1 rounded uppercase tracking-wider mb-3 inline-block">
                         {player.role}
                     </span>
                  )}

@@ -60,7 +60,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
             {/* Header */}
             <div className="p-6 md:p-8 flex justify-between items-center border-b border-white/5">
               <div className="flex items-center gap-3">
-                <ShoppingBag className="w-5 h-5 text-clubhouse-gold" />
+                <ShoppingBag className="w-5 h-5 text-zru-green" />
                 <h2 className="text-xl font-black text-white uppercase tracking-tighter">Your Bag</h2>
                 <span className="text-[10px] font-bold text-white/60 bg-white/5 px-2 py-0.5 rounded-full uppercase tracking-widest">{cartItems.length} Items</span>
               </div>
@@ -111,13 +111,13 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
 
               {/* CAMPAIGN PLEDGE HOOK */}
               {cartItems.length > 0 && (
-                <div className="mt-12 p-6 bg-clubhouse-gold/5 border border-clubhouse-gold/20 rounded-2xl relative overflow-hidden group">
-                  <div className="absolute top-0 right-0 w-32 h-32 bg-clubhouse-gold/10 blur-3xl pointer-events-none group-hover:bg-clubhouse-gold/20 transition-all duration-700" />
+                <div className="mt-12 p-6 bg-zru-green/5 border border-zru-green/20 rounded-2xl relative overflow-hidden group">
+                  <div className="absolute top-0 right-0 w-32 h-32 bg-zru-green/10 blur-3xl pointer-events-none group-hover:bg-zru-green/20 transition-all duration-700" />
                   
                   <div className="relative z-10">
                     <div className="flex items-center gap-3 mb-4">
-                      <Shield className="w-4 h-4 text-clubhouse-gold" fill="currentColor" opacity={0.2} />
-                      <span className="text-[10px] font-black text-clubhouse-gold uppercase tracking-[0.2em]">World Cup Campaign</span>
+                      <Shield className="w-4 h-4 text-zru-green" fill="currentColor" opacity={0.2} />
+                      <span className="text-[10px] font-black text-zru-green uppercase tracking-[0.2em]">World Cup Campaign</span>
                     </div>
                     <h3 className="text-lg font-black text-white uppercase tracking-tighter mb-2">Back the Sables</h3>
                     <p className="text-xs text-white/50 font-medium leading-relaxed mb-6">
@@ -128,15 +128,15 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                       onClick={() => setPledgeActive(!pledgeActive)}
                       className={`w-full p-4 border rounded-xl flex items-center justify-between transition-all duration-300
                         ${pledgeActive 
-                          ? 'bg-clubhouse-gold border-clubhouse-gold' 
-                          : 'bg-white/5 border-white/10 hover:border-clubhouse-gold/50'}
+                          ? 'bg-zru-green border-zru-green' 
+                          : 'bg-white/5 border-white/10 hover:border-zru-green/50'}
                       `}
                     >
                       <div className="flex items-center gap-3">
                         <div className={`w-5 h-5 rounded flex items-center justify-center transition-colors
                           ${pledgeActive ? 'bg-rich-black' : 'bg-white/10'}
                         `}>
-                          <Heart className={`w-3 h-3 ${pledgeActive ? 'text-clubhouse-gold fill-current' : 'text-white/50'}`} />
+                          <Heart className={`w-3 h-3 ${pledgeActive ? 'text-zru-green fill-current' : 'text-white/50'}`} />
                         </div>
                         <span className={`text-[10px] font-black uppercase tracking-widest
                           ${pledgeActive ? 'text-rich-black' : 'text-white/60'}
@@ -162,11 +162,11 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                   </div>
                   {pledgeActive && (
                     <div className="flex justify-between items-center text-sm">
-                      <span className="font-medium text-clubhouse-gold uppercase tracking-widest flex items-center gap-2">
+                      <span className="font-medium text-zru-green uppercase tracking-widest flex items-center gap-2">
                         <Heart className="w-3 h-3 fill-current" />
                         Campaign Pledge
                       </span>
-                      <span className="font-bold text-clubhouse-gold">+${pledgeAmount.toFixed(2)}</span>
+                      <span className="font-bold text-zru-green">+${pledgeAmount.toFixed(2)}</span>
                     </div>
                   )}
                   <div className="flex justify-between items-center pt-4 border-t border-white/10">

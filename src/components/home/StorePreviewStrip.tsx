@@ -30,7 +30,7 @@ const previewItems = [
     category: "Lifestyle / Gold", 
     image: "/images/shop/polo-heritage.png", 
     badge: "Official Crest",
-    color: "bg-zru-gold/5",
+    color: "bg-zru-green/5",
     description: "Post-match premium cotton blend. Classic fit."
   },
   { 
@@ -118,7 +118,7 @@ const ProductCard = ({ item, idx }: { item: typeof previewItems[0], idx: number 
           onMouseMove={handleMouseMove}
           onMouseLeave={handleMouseLeave}
           style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
-          className={`relative aspect-3/4 ${item.color} overflow-hidden mb-8 shadow-sm group-hover:shadow-3xl transition-all duration-700 ease-out border border-black/5 group-hover:border-zru-gold/30`}
+          className={`relative aspect-3/4 ${item.color} overflow-hidden mb-8 shadow-sm group-hover:shadow-3xl transition-all duration-700 ease-out border border-black/5 group-hover:border-zru-green/30`}
         >
           {/* Badge: Minimalist Designer Label */}
           {item.badge && (
@@ -162,7 +162,7 @@ const ProductCard = ({ item, idx }: { item: typeof previewItems[0], idx: number 
         </motion.div>
         
         {/* Designer Credits Typography */}
-        <div className="space-y-3 px-1 border-l-2 border-black/5 pl-4 group-hover:border-zru-gold transition-colors duration-500">
+        <div className="space-y-3 px-1 border-l-2 border-black/5 pl-4 group-hover:border-zru-green transition-colors duration-500">
           <div className="flex justify-between items-baseline">
             <span className="text-[10px] font-black uppercase tracking-[0.4em] text-black/40">
                 {item.category}
@@ -181,7 +181,7 @@ const ProductCard = ({ item, idx }: { item: typeof previewItems[0], idx: number 
           </div>
           
           <div className="flex items-center justify-between pt-3 border-t border-black/5">
-            <span className="text-[10px] font-black uppercase text-zru-gold tracking-[0.3em] flex items-center gap-2">
+            <span className="text-[10px] font-black uppercase text-zru-green tracking-[0.3em] flex items-center gap-2">
               Shop Now <ChevronRight className="w-3 h-3 group-hover:translate-x-1 transition-transform" />
             </span>
             <span className="text-sm font-black text-black/70 bg-black/5 px-2 py-0.5 rounded shadow-xs">
@@ -235,7 +235,7 @@ export default function StorePreviewStrip() {
             <MagneticElement intensity={0.2}>
                 <Link 
                 href="/clubhouse"
-                className="flex items-center gap-3 text-[10px] font-black uppercase tracking-[0.3em] text-white bg-rich-black px-8 py-4 rounded-full group transition-all hover:scale-105 hover:bg-zru-gold hover:text-black hover:shadow-lg hover:shadow-zru-gold/20 relative overflow-hidden"
+                className="flex items-center gap-3 text-[10px] font-black uppercase tracking-[0.3em] text-white bg-rich-black px-8 py-4 rounded-full group transition-all hover:scale-105 hover:bg-zru-green hover:text-black hover:shadow-lg hover:shadow-zru-green/20 relative overflow-hidden"
                 >
                 <span className="relative z-10 flex items-center gap-3">Shop Collection <ArrowRight className="w-3.5 h-3.5 transition-transform" /></span>
                 <div className="absolute inset-0 bg-linear-to-r from-transparent via-white/20 to-transparent -translate-x-[150%] group-hover:translate-x-[150%] transition-transform duration-700 ease-in-out z-0" />
@@ -257,7 +257,7 @@ export default function StorePreviewStrip() {
           {/* Magnetic Scroll Indicators (Subtle) */}
           <div className="absolute -bottom-4 left-0 w-full flex justify-center gap-2">
             {previewItems.map((_, i) => (
-                <div key={i} className="w-8 h-px bg-neutral-200 transition-colors duration-300 hover:bg-zru-gold cursor-pointer" />
+                <div key={i} className="w-8 h-px bg-neutral-200 transition-colors duration-300 hover:bg-zru-green cursor-pointer" />
             ))}
           </div>
         </div>

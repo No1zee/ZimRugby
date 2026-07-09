@@ -55,8 +55,8 @@ export const FixtureCard = ({ fixture, onRegister }: FixtureCardProps) => {
         );
       case 'COMING_SOON':
         return (
-          <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-clubhouse-gold">
-            <div className="w-1.5 h-1.5 rounded-full bg-clubhouse-gold animate-pulse" />
+          <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-zru-green">
+            <div className="w-1.5 h-1.5 rounded-full bg-zru-green animate-pulse" />
             Coming Soon
           </div>
         );
@@ -156,7 +156,7 @@ export const FixtureCard = ({ fixture, onRegister }: FixtureCardProps) => {
           <motion.span 
             initial={{ scale: 0.8, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
-            className="px-3 py-1 bg-clubhouse-gold text-rich-black text-[9px] font-black uppercase tracking-[0.2em] rounded-full shadow-[0_0_20px_rgba(212,175,55,0.4)]"
+            className="px-3 py-1 bg-zru-green text-rich-black text-[9px] font-black uppercase tracking-[0.2em] rounded-full shadow-[0_0_20px_rgba(0,107,63,0.4)]"
           >
             World Cup Pathway
           </motion.span>
@@ -165,7 +165,7 @@ export const FixtureCard = ({ fixture, onRegister }: FixtureCardProps) => {
 
       {/* Main Content */}
       <div className="px-6 py-4 flex-1 relative z-10">
-        <h3 className="text-2xl md:text-3xl font-black text-white uppercase tracking-tighter leading-none mb-6 group-hover:text-clubhouse-gold transition-colors duration-300">
+        <h3 className="text-2xl md:text-3xl font-black text-white uppercase tracking-tighter leading-none mb-6 group-hover:text-zru-green transition-colors duration-300">
           {fixture.teams}
         </h3>
         
@@ -200,7 +200,7 @@ export const FixtureCard = ({ fixture, onRegister }: FixtureCardProps) => {
       </div>
 
       {/* Hover Background Glow */}
-      <div className="absolute inset-0 bg-linear-to-tr from-clubhouse-gold/0 via-transparent to-clubhouse-gold/2 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
+      <div className="absolute inset-0 bg-linear-to-tr from-zru-green/0 via-transparent to-zru-green/2 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
     </motion.div>
   );
 };

@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import TeamCard from "../../components/teams/TeamCard";
+import PageHero from "@/components/ui/PageHero";
 
 const teams = [
   {
@@ -48,20 +49,18 @@ const teams = [
 
 export default function TeamsPage() {
   return (
-    <main className="bg-rich-black min-h-screen pt-24 pb-24">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        
-        <motion.div 
-           initial={{ opacity: 0, y: 20 }}
-           animate={{ opacity: 1, y: 0 }}
-           className="text-center mb-16"
-        >
-           <h1 className="text-5xl md:text-7xl font-heading text-white mb-6">OUR TEAMS</h1>
-           <p className="text-xl text-gray-400 max-w-3xl mx-auto">
-              From the flagship Sables to the rising stars of the Junior Sables, discover the teams that carry our nation&apos;s hopes and dreams.
-           </p>
-        </motion.div>
+    <main className="bg-rich-black min-h-screen pb-24">
+      <div className="pt-24">
+        <PageHero
+          title="Our Teams"
+          subtitle="From the flagship Sables to the rising stars of the Junior Sables, discover the teams that carry our nation's hopes and dreams."
+          tag="National Representatives"
+          backgroundImage="/images/media/vid1.jpg"
+          breadcrumb={[{ label: "Teams", href: "/teams" }]}
+        />
+      </div>
 
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 pb-6">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
            {teams.map((team, index) => (
               <motion.div
@@ -75,7 +74,6 @@ export default function TeamsPage() {
               </motion.div>
            ))}
         </div>
-
       </div>
     </main>
   );

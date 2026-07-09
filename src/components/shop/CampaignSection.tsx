@@ -26,11 +26,11 @@ export default function CampaignSection() {
             viewport={{ once: true }}
             transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
           >
-            <span className="block text-[10px] font-black uppercase tracking-[0.4em] text-clubhouse-gold mb-12">
+            <span className="block text-[10px] font-black uppercase tracking-[0.4em] text-zru-green mb-12">
               The Heritage Drop
             </span>
             <h2 className="text-5xl md:text-7xl font-black uppercase tracking-tighter text-white leading-[1.1] mb-8">
-              SABLES <br /> <span className="text-clubhouse-gold/80 italic">HERITAGE</span> & PERFORMANCE
+              SABLES <br /> <span className="text-zru-green/80 italic">HERITAGE</span> & PERFORMANCE
             </h2>
             <p className="text-sm md:text-lg text-white/50 mb-12 leading-[1.6] max-w-lg tracking-wide font-medium">
               A celebration of legacy and a commitment to the future. Our 2026 Heritage collection merges historic motifs with peak performance engineering.
@@ -39,10 +39,10 @@ export default function CampaignSection() {
               href="/clubhouse/campaign"
               className="inline-flex items-center space-x-6 group"
             >
-              <span className="text-xs font-black uppercase tracking-[0.3em] text-white group-hover:text-clubhouse-gold transition-colors">
+              <span className="text-xs font-black uppercase tracking-[0.3em] text-white group-hover:text-zru-green transition-colors">
                 View the drop
               </span>
-              <div className="w-20 h-[2px] bg-white/20 group-hover:bg-clubhouse-gold group-hover:w-32 transition-all duration-700 ease-in-out" />
+              <div className="w-20 h-[2px] bg-white/20 group-hover:bg-zru-green group-hover:w-32 transition-all duration-700 ease-in-out" />
             </Link>
           </motion.div>
         </div>
@@ -70,7 +70,7 @@ export default function CampaignSection() {
               />
               <div className="absolute inset-0 bg-clubhouse-green/30 mix-blend-multiply" />
               <div className="absolute inset-x-0 bottom-0 p-6 bg-linear-to-t from-black to-transparent">
-                <span className="text-[9px] font-black uppercase tracking-[0.4em] text-clubhouse-gold">Fabric Detail // MK-1</span>
+                <span className="text-[9px] font-black uppercase tracking-[0.4em] text-zru-green">Fabric Detail // MK-1</span>
               </div>
             </motion.div>
           </motion.div>

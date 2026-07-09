@@ -44,7 +44,7 @@ export default function TeamPageClient({ team }: TeamPageClientProps) {
         <div className="relative z-10 w-full max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 pb-10">
           <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6">
             <div>
-              <span className="text-zru-gold text-xs font-black uppercase tracking-[0.4em] mb-3 block">
+              <span className="text-zru-green text-xs font-black uppercase tracking-[0.4em] mb-3 block">
                 NATIONAL REPRESENTATIVE TEAM
               </span>
               <h1 className="text-5xl sm:text-7xl font-black uppercase italic tracking-tighter text-glow-green leading-none">
@@ -60,7 +60,7 @@ export default function TeamPageClient({ team }: TeamPageClientProps) {
               {team.stats.map((stat, idx) => (
                 <div key={idx} className="flex flex-col border-r border-white/10 last:border-0 pr-6 last:pr-0">
                   <span className="text-[10px] text-white/40 font-bold uppercase tracking-wider">{stat.label}</span>
-                  <span className="text-xl font-black text-zru-gold uppercase italic mt-1">{stat.value}</span>
+                  <span className="text-xl font-black text-zru-green uppercase italic mt-1">{stat.value}</span>
                 </div>
               ))}
             </div>
@@ -81,7 +81,7 @@ export default function TeamPageClient({ team }: TeamPageClientProps) {
                   onClick={() => setActiveTab(tab.id)}
                   className={`flex items-center gap-2 px-5 py-2.5 rounded-full text-xs font-black uppercase tracking-wider transition-all duration-300 ${
                     isActive 
-                      ? "bg-zru-gold text-rich-black shadow-lg shadow-white/5" 
+                      ? "bg-zru-green text-white shadow-lg shadow-zru-green/20" 
                       : "text-white/60 hover:text-white hover:bg-white/5"
                   }`}
                 >
@@ -108,7 +108,7 @@ export default function TeamPageClient({ team }: TeamPageClientProps) {
             {/* Squad tab content */}
             {activeTab === "squad" && (
               <div className="space-y-12">
-                <div className="border-l-4 border-zru-gold pl-4">
+                <div className="border-l-4 border-zru-green pl-4">
                   <h2 className="text-2xl font-black uppercase tracking-wider">ACTIVE SQUAD</h2>
                   <p className="text-sm text-white/50 mt-1">Current player selection representing {team.name} on the international stage.</p>
                 </div>
@@ -121,12 +121,12 @@ export default function TeamPageClient({ team }: TeamPageClientProps) {
                       className="bg-white/5 border border-white/5 hover:border-white/10 rounded-xl p-5 flex flex-col items-center text-center transition-all duration-300 hover:-translate-y-1 shadow-lg group glow-green-card"
                     >
                       {/* Player photo placeholder */}
-                      <div className="w-24 h-24 bg-white/10 rounded-full flex items-center justify-center border border-white/10 relative overflow-hidden mb-4 group-hover:border-zru-gold/50 transition-colors">
+                      <div className="w-24 h-24 bg-white/10 rounded-full flex items-center justify-center border border-white/10 relative overflow-hidden mb-4 group-hover:border-zru-green/50 transition-colors">
                         <Users className="w-10 h-10 text-white/30" />
                       </div>
                       
                       <h3 className="font-black text-lg uppercase tracking-tight text-white">{player.name}</h3>
-                      <span className="text-zru-gold text-xs font-bold uppercase tracking-wider mt-1">{player.position}</span>
+                      <span className="text-zru-green text-xs font-bold uppercase tracking-wider mt-1">{player.position}</span>
                       
                       <div className="mt-4 pt-4 border-t border-white/5 w-full flex justify-between text-[11px] text-white/40 font-bold uppercase">
                         <span>Club: <strong className="text-white/80 font-semibold">{player.club}</strong></span>
@@ -141,7 +141,7 @@ export default function TeamPageClient({ team }: TeamPageClientProps) {
             {/* Coaching Staff tab content */}
             {activeTab === "coaching" && (
               <div className="space-y-12">
-                <div className="border-l-4 border-zru-gold pl-4">
+                <div className="border-l-4 border-zru-green pl-4">
                   <h2 className="text-2xl font-black uppercase tracking-wider">COACHING & MANAGEMENT</h2>
                   <p className="text-sm text-white/50 mt-1">The strategic minds behind {team.name}&apos;s performances and preparation.</p>
                 </div>
@@ -150,14 +150,14 @@ export default function TeamPageClient({ team }: TeamPageClientProps) {
                   {team.coachingStaff.map((coach, idx) => (
                     <div 
                       key={idx} 
-                      className="bg-white/5 border border-white/10 rounded-xl p-6 flex items-center gap-6 group hover:border-zru-gold/30 transition-all duration-300"
+                      className="bg-white/5 border border-white/10 rounded-xl p-6 flex items-center gap-6 group hover:border-zru-green/30 transition-all duration-300"
                     >
                       <div className="w-16 h-16 bg-white/10 rounded-full flex items-center justify-center border border-white/15 relative overflow-hidden shrink-0 group-hover:scale-105 transition-transform duration-300">
                         <Award className="w-8 h-8 text-white/40" />
                       </div>
                       <div>
                         <h3 className="font-black text-lg uppercase tracking-tight text-white">{coach.name}</h3>
-                        <span className="text-zru-gold text-xs font-bold uppercase tracking-widest mt-1 block">{coach.role}</span>
+                        <span className="text-zru-green text-xs font-bold uppercase tracking-widest mt-1 block">{coach.role}</span>
                       </div>
                     </div>
                   ))}
@@ -168,7 +168,7 @@ export default function TeamPageClient({ team }: TeamPageClientProps) {
             {/* Fixtures & Results tab content */}
             {activeTab === "matches" && (
               <div className="space-y-12">
-                <div className="border-l-4 border-zru-gold pl-4">
+                <div className="border-l-4 border-zru-green pl-4">
                   <h2 className="text-2xl font-black uppercase tracking-wider">FIXTURES & RESULTS</h2>
                   <p className="text-sm text-white/50 mt-1">Track the match history and upcoming international campaigns for {team.name}.</p>
                 </div>
@@ -207,7 +207,7 @@ export default function TeamPageClient({ team }: TeamPageClientProps) {
                             </div>
                           ) : (
                             <div className="flex flex-col md:items-center">
-                              <span className="text-[9px] text-zru-gold font-black uppercase tracking-wider">UPCOMING FIXTURE</span>
+                              <span className="text-[9px] text-zru-green font-black uppercase tracking-wider">UPCOMING FIXTURE</span>
                               <span className="text-xs font-bold uppercase text-white mt-1">KICK OFF SCHEDULED</span>
                             </div>
                           )}
@@ -237,7 +237,7 @@ export default function TeamPageClient({ team }: TeamPageClientProps) {
             {/* History tab content */}
             {activeTab === "history" && (
               <div className="space-y-12">
-                <div className="border-l-4 border-zru-gold pl-4">
+                <div className="border-l-4 border-zru-green pl-4">
                   <h2 className="text-2xl font-black uppercase tracking-wider">TEAM HISTORY & LEGACY</h2>
                   <p className="text-sm text-white/50 mt-1">Understanding the origins, historic achievements, and identity of {team.name}.</p>
                 </div>
@@ -253,7 +253,7 @@ export default function TeamPageClient({ team }: TeamPageClientProps) {
             {/* Gallery tab content */}
             {activeTab === "gallery" && (
               <div className="space-y-12">
-                <div className="border-l-4 border-zru-gold pl-4">
+                <div className="border-l-4 border-zru-green pl-4">
                   <h2 className="text-2xl font-black uppercase tracking-wider">PHOTO GALLERY</h2>
                   <p className="text-sm text-white/50 mt-1">Cinematic snapshots of {team.name} in action, during training campaigns and historic matches.</p>
                 </div>
@@ -262,7 +262,7 @@ export default function TeamPageClient({ team }: TeamPageClientProps) {
                   {team.gallery.map((img, idx) => (
                     <div 
                       key={idx} 
-                      className="relative h-64 bg-white/5 border border-white/10 rounded-xl overflow-hidden group shadow-lg hover:border-zru-gold/30 transition-all duration-300"
+                      className="relative h-64 bg-white/5 border border-white/10 rounded-xl overflow-hidden group shadow-lg hover:border-zru-green/30 transition-all duration-300"
                     >
                       <Image 
                         src={img} 

@@ -30,7 +30,7 @@ const CampaignBadge = () => (
     transition={{ duration: 1.5, ease: "easeOut" }}
     className="relative w-32 h-32 md:w-48 md:h-48 flex items-center justify-center"
   >
-    <div className="absolute inset-0 bg-clubhouse-gold/20 rounded-full blur-3xl animate-pulse" />
+    <div className="absolute inset-0 bg-zru-green/20 rounded-full blur-3xl animate-pulse" />
     <svg viewBox="0 0 100 100" className="w-full h-full drop-shadow-2xl">
       <defs>
         <linearGradient id="goldGradient" x1="0%" y1="0%" x2="100%" y2="100%">
@@ -91,18 +91,18 @@ const PledgeCard = ({ tier, amount, name, description, benefits, highlight = fal
     whileHover={{ y: -10 }}
     className={`relative p-8 rounded-xl border flex flex-col h-full bg-linear-to-b transition-all duration-500 overflow-hidden group
       ${highlight 
-        ? "from-clubhouse-gold/20 to-rich-black border-clubhouse-gold shadow-[0_0_40px_rgba(212,175,55,0.15)]" 
+        ? "from-zru-green/20 to-rich-black border-zru-green shadow-[0_0_40px_rgba(0,107,63,0.15)]" 
         : "from-white/5 to-transparent border-white/10 hover:border-white/20"
       }`}
   >
     {highlight && (
-      <div className="absolute top-0 right-0 p-3 bg-clubhouse-gold text-rich-black font-black text-[10px] uppercase tracking-widest rounded-bl-lg">
+      <div className="absolute top-0 right-0 p-3 bg-zru-green text-rich-black font-black text-[10px] uppercase tracking-widest rounded-bl-lg">
         Most Impact
       </div>
     )}
     
     <div className="mb-6">
-      <span className="block text-[10px] font-black uppercase tracking-[0.3em] text-clubhouse-gold mb-2">
+      <span className="block text-[10px] font-black uppercase tracking-[0.3em] text-zru-green mb-2">
         Tier {tier}
       </span>
       <h3 className="text-2xl font-black text-white uppercase tracking-tighter">
@@ -123,7 +123,7 @@ const PledgeCard = ({ tier, amount, name, description, benefits, highlight = fal
     <ul className="space-y-4 mb-10 flex-1">
       {benefits.map((benefit: string, i: number) => (
         <li key={i} className="flex items-start gap-3">
-          <CheckCircle2 className={`w-5 h-5 shrink-0 ${highlight ? "text-clubhouse-gold" : "text-gray-600"}`} />
+          <CheckCircle2 className={`w-5 h-5 shrink-0 ${highlight ? "text-zru-green" : "text-gray-600"}`} />
           <span className="text-xs text-gray-300 font-medium leading-tight">
             {benefit}
           </span>
@@ -151,7 +151,7 @@ const ImpactStat = ({ value, label }: { value: string, label: string }) => (
     >
       {value}
     </motion.div>
-    <div className="text-[10px] font-black text-clubhouse-gold uppercase tracking-[0.3em]">
+    <div className="text-[10px] font-black text-zru-green uppercase tracking-[0.3em]">
       {label}
     </div>
   </div>
@@ -165,10 +165,10 @@ const FAQItem = ({ question, answer }: { question: string, answer: string }) => 
         onClick={() => setIsOpen(!isOpen)}
         className="w-full py-6 flex items-center justify-between text-left group"
       >
-        <span className="text-lg font-bold text-white uppercase tracking-tight group-hover:text-clubhouse-gold transition-colors">
+        <span className="text-lg font-bold text-white uppercase tracking-tight group-hover:text-zru-green transition-colors">
           {question}
         </span>
-        <HelpCircle className={`w-6 h-6 transition-transform duration-500 ${isOpen ? "rotate-180 text-clubhouse-gold" : "text-white/50"}`} />
+        <HelpCircle className={`w-6 h-6 transition-transform duration-500 ${isOpen ? "rotate-180 text-zru-green" : "text-white/50"}`} />
       </button>
       <AnimatePresence>
         {isOpen && (
@@ -214,7 +214,7 @@ export default function WorldCupCampaignPage() {
   };
 
   return (
-    <main className="relative bg-rich-black min-h-screen selection:bg-clubhouse-gold selection:text-rich-black">
+    <main className="relative bg-rich-black min-h-screen selection:bg-zru-green selection:text-rich-black">
       <Navigation />
 
       {/* SECTION 1: HERO */}
@@ -251,7 +251,7 @@ export default function WorldCupCampaignPage() {
                 transition={{ delay: 0.3 }}
                 className="mb-8 hidden md:block"
               >
-                <div className="inline-flex items-center gap-3 px-4 py-1.5 rounded-full bg-clubhouse-gold/10 border border-clubhouse-gold/20 text-clubhouse-gold text-[10px] font-black uppercase tracking-widest">
+                <div className="inline-flex items-center gap-3 px-4 py-1.5 rounded-full bg-zru-green/10 border border-zru-green/20 text-zru-green text-[10px] font-black uppercase tracking-widest">
                   <Star className="w-3 h-3 fill-current" />
                   Official 2027 World Cup Campaign
                 </div>
@@ -259,7 +259,7 @@ export default function WorldCupCampaignPage() {
 
               <h1 className="text-6xl md:text-8xl lg:text-9xl font-black text-white leading-[0.9] uppercase tracking-tighter mb-8 drop-shadow-2xl">
                 ROAD TO <br />
-                <span className="text-transparent bg-clip-text bg-linear-to-r from-clubhouse-gold to-white">
+                <span className="text-transparent bg-clip-text bg-linear-to-r from-zru-green to-white">
                   WORLD CUP
                 </span>
               </h1>
@@ -269,7 +269,7 @@ export default function WorldCupCampaignPage() {
               </p>
 
               <div className="flex flex-col sm:flex-row gap-4 mb-8">
-                <Button size="xl" variant="secondary" className="group shadow-[0_0_30px_rgba(212,175,55,0.2)]">
+                <Button size="xl" variant="secondary" className="group shadow-[0_0_30px_rgba(0,107,63,0.2)]">
                   Become a Backer
                   <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
                 </Button>
@@ -279,7 +279,7 @@ export default function WorldCupCampaignPage() {
               </div>
 
               <div className="flex items-center gap-4 text-white/60 text-[10px] font-black uppercase tracking-[0.2em]">
-                <Shield className="w-4 h-4 text-clubhouse-gold" />
+                <Shield className="w-4 h-4 text-zru-green" />
                 Transparent reporting • Secure Payments • Real Impact
               </div>
             </motion.div>
@@ -308,7 +308,7 @@ export default function WorldCupCampaignPage() {
             
             {/* Story Text */}
             <div className="order-2 lg:order-1">
-              <span className="block text-[10px] font-black uppercase tracking-[0.4em] text-clubhouse-gold mb-8">
+              <span className="block text-[10px] font-black uppercase tracking-[0.4em] text-zru-green mb-8">
                 The Mission
               </span>
               <h2 className="text-4xl md:text-6xl font-black text-white uppercase tracking-tighter mb-10 leading-[1.1]">
@@ -372,7 +372,7 @@ export default function WorldCupCampaignPage() {
       <section id="pledges" className="py-32 bg-linear-to-b from-rich-black to-[#0a0a0a] relative [content-visibility:auto]">
         <div className="max-w-[1440px] mx-auto px-6 md:px-12 relative z-10">
           <div className="text-center max-w-3xl mx-auto mb-20">
-            <span className="inline-block text-[10px] font-black uppercase tracking-[0.4em] text-clubhouse-gold mb-6 border-b border-clubhouse-gold/30 pb-2">
+            <span className="inline-block text-[10px] font-black uppercase tracking-[0.4em] text-zru-green mb-6 border-b border-zru-green/30 pb-2">
               Monthly Pledges
             </span>
             <h2 className="text-5xl md:text-7xl font-black text-white uppercase tracking-tighter mb-8 italic">
@@ -421,7 +421,7 @@ export default function WorldCupCampaignPage() {
             
             {/* Custom Pledge Card */}
             <div className="relative p-8 rounded-xl border border-white/5 flex flex-col justify-center text-center bg-white/1">
-              <Zap className="w-10 h-10 text-clubhouse-gold mx-auto mb-6 opacity-30" />
+              <Zap className="w-10 h-10 text-zru-green mx-auto mb-6 opacity-30" />
               <h3 className="text-xl font-bold text-white uppercase mb-4">Set Custom Amount</h3>
               <p className="text-xs text-gray-500 mb-8 font-medium">Choose the level that fits you—every pledge counts toward the shield.</p>
               <Button variant="ghost" className="w-full">Choose Amount</Button>
@@ -448,7 +448,7 @@ export default function WorldCupCampaignPage() {
           <div className="grid lg:grid-cols-2 gap-24 items-center">
             <div>
               <h2 className="text-5xl md:text-7xl font-black text-white uppercase tracking-tighter mb-8 leading-[0.9]">
-                JOIN THE <br /> <span className="text-clubhouse-gold">ZRU NATION.</span>
+                JOIN THE <br /> <span className="text-zru-green">ZRU NATION.</span>
               </h2>
               <p className="text-lg text-gray-400 font-medium mb-12 max-w-lg leading-relaxed">
                 ZRU Nation is the official home for the inner circle. It’s free to join, and it’s where the real story of the World Cup campaign unfolds.
@@ -462,7 +462,7 @@ export default function WorldCupCampaignPage() {
                   "Early Clubhouse drop access"
                 ].map((item, i) => (
                   <li key={i} className="flex items-center gap-3">
-                    <div className="w-2 h-2 bg-clubhouse-gold rounded-full" />
+                    <div className="w-2 h-2 bg-zru-green rounded-full" />
                     <span className="text-xs font-black text-white uppercase tracking-widest">{item}</span>
                   </li>
                 ))}
@@ -486,7 +486,7 @@ export default function WorldCupCampaignPage() {
                         id="nation-name"
                         type="text" 
                         required
-                        className="w-full bg-white/5 border border-white/10 rounded p-4 text-white font-medium focus:outline-none focus:border-clubhouse-gold transition-colors" 
+                        className="w-full bg-white/5 border border-white/10 rounded p-4 text-white font-medium focus:outline-none focus:border-zru-green transition-colors" 
                         placeholder="Enter your name" 
                         value={formData.name}
                         onChange={(e) => setFormData({...formData, name: e.target.value})}
@@ -498,7 +498,7 @@ export default function WorldCupCampaignPage() {
                         id="nation-email"
                         type="email" 
                         required
-                        className="w-full bg-white/5 border border-white/10 rounded p-4 text-white font-medium focus:outline-none focus:border-clubhouse-gold transition-colors" 
+                        className="w-full bg-white/5 border border-white/10 rounded p-4 text-white font-medium focus:outline-none focus:border-zru-green transition-colors" 
                         placeholder="your@email.com" 
                         value={formData.email}
                         onChange={(e) => setFormData({...formData, email: e.target.value})}
@@ -515,7 +515,7 @@ export default function WorldCupCampaignPage() {
                       {isSubmitting ? "Processing…" : "Initialize Membership"}
                     </Button>
                     <p className="text-center text-[10px] font-bold text-white/50 uppercase tracking-widest">
-                      Already a member? <Link href="/auth" className="text-clubhouse-gold underline">Sign in</Link>
+                      Already a member? <Link href="/auth" className="text-zru-green underline">Sign in</Link>
                     </p>
                   </motion.form>
                 ) : (
@@ -525,7 +525,7 @@ export default function WorldCupCampaignPage() {
                     animate={{ opacity: 1, scale: 1 }}
                     className="text-center py-12"
                   >
-                    <div className="w-20 h-20 bg-clubhouse-gold rounded-full flex items-center justify-center mx-auto mb-8">
+                    <div className="w-20 h-20 bg-zru-green rounded-full flex items-center justify-center mx-auto mb-8">
                       <CheckCircle2 className="w-10 h-10 text-rich-black" />
                     </div>
                     <h3 className="text-2xl font-black text-white uppercase tracking-tight mb-4">Welcome to the Nation.</h3>
@@ -544,7 +544,7 @@ export default function WorldCupCampaignPage() {
         <div className="max-w-[1440px] mx-auto px-6 md:px-12 relative z-10">
           <div className="flex flex-col lg:flex-row lg:items-end justify-between mb-20 gap-8">
             <div className="max-w-2xl">
-              <span className="block text-[10px] font-black uppercase tracking-[0.4em] text-clubhouse-gold mb-8">
+              <span className="block text-[10px] font-black uppercase tracking-[0.4em] text-zru-green mb-8">
                 Official Gear
               </span>
               <h2 className="text-5xl md:text-7xl font-black text-white uppercase tracking-tighter leading-[0.9]">
@@ -556,7 +556,7 @@ export default function WorldCupCampaignPage() {
             </div>
             <Link href="/clubhouse" className="flex items-center gap-4 group">
               <span className="text-[10px] font-black uppercase tracking-[0.4em] text-white">Full Collection</span>
-              <div className="w-12 h-[2px] bg-clubhouse-gold group-hover:w-20 transition-all duration-500" />
+              <div className="w-12 h-[2px] bg-zru-green group-hover:w-20 transition-all duration-500" />
             </Link>
           </div>
 
@@ -573,7 +573,7 @@ export default function WorldCupCampaignPage() {
               >
                 <div className="relative aspect-3/4 mb-6 bg-white/3 border border-white/5 rounded overflow-hidden">
                   <div className="absolute top-4 left-4 z-20">
-                    <span className="px-3 py-1 bg-clubhouse-gold text-rich-black text-[9px] font-black uppercase tracking-widest rounded-full">
+                    <span className="px-3 py-1 bg-zru-green text-rich-black text-[9px] font-black uppercase tracking-widest rounded-full">
                       Campaign Ed.
                     </span>
                   </div>
@@ -589,7 +589,7 @@ export default function WorldCupCampaignPage() {
                 <p className="text-xs text-gray-500 font-bold mb-4 uppercase tracking-tighter">{product.desc}</p>
                 <div className="flex items-center justify-between">
                   <span className="text-xl font-black text-white">USD {product.price}</span>
-                  <div className="w-8 h-8 rounded-full border border-white/10 flex items-center justify-center group-hover:bg-clubhouse-gold group-hover:border-clubhouse-gold transition-colors">
+                  <div className="w-8 h-8 rounded-full border border-white/10 flex items-center justify-center group-hover:bg-zru-green group-hover:border-zru-green transition-colors">
                     <ArrowRight className="w-4 h-4 text-white group-hover:text-rich-black transition-colors" />
                   </div>
                 </div>
@@ -605,7 +605,7 @@ export default function WorldCupCampaignPage() {
           
           <div className="mb-24">
             <div className="flex items-center justify-between mb-6">
-              <span className="text-[10px] font-black text-clubhouse-gold uppercase tracking-[0.4em]">CAMPAIGN MOMENTUM</span>
+              <span className="text-[10px] font-black text-zru-green uppercase tracking-[0.4em]">CAMPAIGN MOMENTUM</span>
               <span className="text-xl font-black text-white italic">42% OF PREP GOAL REACHED</span>
             </div>
             <div className="w-full h-4 bg-white/5 rounded-full overflow-hidden p-1 border border-white/10">
@@ -614,7 +614,7 @@ export default function WorldCupCampaignPage() {
                 whileInView={{ width: "42%" }}
                 viewport={{ once: true }}
                 transition={{ duration: 1.5, ease: "easeOut" }}
-                className="h-full bg-linear-to-r from-clubhouse-gold to-white rounded-full shadow-[0_0_20px_rgba(212,175,55,0.4)]"
+                className="h-full bg-linear-to-r from-zru-green to-white rounded-full shadow-[0_0_20px_rgba(0,107,63,0.4)]"
               />
             </div>
           </div>
@@ -638,11 +638,11 @@ export default function WorldCupCampaignPage() {
               }
             ].map((t, i) => (
               <div key={i} className="relative p-8 bg-white/2 border border-white/5 rounded-lg">
-                <Quote className="w-10 h-10 text-clubhouse-gold/20 absolute -top-4 -left-4" />
+                <Quote className="w-10 h-10 text-zru-green/20 absolute -top-4 -left-4" />
                 <p className="text-gray-300 italic text-lg leading-relaxed mb-8 relative z-10">“{t.quote}”</p>
                 <div>
                   <div className="text-sm font-black text-white uppercase tracking-tighter">{t.author}</div>
-                  <div className="text-[10px] font-bold text-clubhouse-gold uppercase tracking-widest">{t.role}</div>
+                  <div className="text-[10px] font-bold text-zru-green uppercase tracking-widest">{t.role}</div>
                 </div>
               </div>
             ))}
@@ -655,7 +655,7 @@ export default function WorldCupCampaignPage() {
         <div className="max-w-[1440px] mx-auto px-6 md:px-12">
           <div className="grid lg:grid-cols-3 gap-24">
             <div>
-              <span className="block text-[10px] font-black uppercase tracking-[0.4em] text-clubhouse-gold mb-8">Transparency</span>
+              <span className="block text-[10px] font-black uppercase tracking-[0.4em] text-zru-green mb-8">Transparency</span>
               <h2 className="text-4xl font-black text-white uppercase tracking-tighter leading-tight mb-8">
                 FREQUENTLY <br /> ASKED <br /> QUESTIONS.
               </h2>
@@ -700,11 +700,11 @@ export default function WorldCupCampaignPage() {
             History isn&apos;t just made on the pitch; it&apos;s made by the nation that stands behind it. Be part of the team that takes Zimbabwe back to the world stage.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-8">
-            <Link href="#pledges" className="text-[10px] font-black text-white uppercase tracking-[0.4em] hover:text-clubhouse-gold transition-colors">Pledge Support</Link>
+            <Link href="#pledges" className="text-[10px] font-black text-white uppercase tracking-[0.4em] hover:text-zru-green transition-colors">Pledge Support</Link>
             <div className="w-1.5 h-1.5 rounded-full bg-white/20 hidden sm:block" />
-            <Link href="#zru-nation" className="text-[10px] font-black text-white uppercase tracking-[0.4em] hover:text-clubhouse-gold transition-colors">Join the Nation</Link>
+            <Link href="#zru-nation" className="text-[10px] font-black text-white uppercase tracking-[0.4em] hover:text-zru-green transition-colors">Join the Nation</Link>
             <div className="w-1.5 h-1.5 rounded-full bg-white/20 hidden sm:block" />
-            <Link href="/clubhouse" className="text-[10px] font-black text-white uppercase tracking-[0.4em] hover:text-clubhouse-gold transition-colors">Shop Collection</Link>
+            <Link href="/clubhouse" className="text-[10px] font-black text-white uppercase tracking-[0.4em] hover:text-zru-green transition-colors">Shop Collection</Link>
           </div>
         </div>
       </section>

@@ -70,7 +70,7 @@ export default function MobileDock() {
               {isActive && (
                 <motion.div
                   layoutId="activeDock"
-                  className="absolute inset-0 bg-zru-gold/15 rounded-xl"
+                  className="absolute inset-0 bg-zru-green/15 rounded-xl"
                   transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
                 />
               )}
@@ -78,19 +78,19 @@ export default function MobileDock() {
               <Icon 
                 className={cn(
                   "w-6 h-6 transition-colors",
-                  isActive ? "text-zru-gold drop-shadow-[0_0_8px_rgba(255,190,0,0.4)]" : "text-gray-400"
+                  isActive ? "text-zru-green drop-shadow-[0_0_8px_rgba(0,107,63,0.5)]" : "text-gray-400"
                 )} 
               />
               <span className={cn(
                 "text-[10px] mt-1 font-medium tracking-tight uppercase transition-colors",
-                isActive ? "text-zru-gold" : "text-gray-500"
+                isActive ? "text-zru-green" : "text-gray-500"
               )}>
                 {item.label}
               </span>
 
               {isActive && (
                 <motion.div 
-                  className="absolute -bottom-1 w-1.5 h-1.5 bg-zru-gold rounded-full shadow-[0_0_8px_rgba(255,190,0,0.8)]"
+                  className="absolute -bottom-1 w-1.5 h-1.5 bg-zru-green rounded-full shadow-[0_0_8px_rgba(0,107,63,0.9)]"
                   layoutId="activeDot"
                 />
               )}

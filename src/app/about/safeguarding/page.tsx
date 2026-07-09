@@ -11,7 +11,7 @@ export default function SafeguardingPage() {
     <div className="space-y-12">
       
       {/* Overview header */}
-      <div className="border-l-4 border-zru-gold pl-4">
+      <div className="border-l-4 border-zru-green pl-4">
         <h2 className="text-2xl font-black uppercase tracking-wider text-white">SAFEGUARDING & PLAYER WELFARE</h2>
         <p className="text-sm text-white/50 mt-1">Inspired by SA Rugby safeguarding principles to protect our youth and players.</p>
       </div>
@@ -23,14 +23,14 @@ export default function SafeguardingPage() {
       {/* Policies grid */}
       <div className="pt-6 border-t border-white/5 space-y-6">
         <h3 className="text-lg font-black uppercase tracking-wide text-white flex items-center gap-2">
-          <Shield className="w-5 h-5 text-zru-gold" />
+          <Shield className="w-5 h-5 text-zru-green" />
           <span>SAFEGUARDING PRINCIPLES</span>
         </h3>
         
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {policies.map((p, idx) => (
-            <div key={idx} className="bg-white/5 border border-white/5 rounded-2xl p-6 space-y-4 hover:border-zru-gold/20 transition-all">
-              <div className="w-10 h-10 bg-zru-green/20 rounded-xl flex items-center justify-center border border-white/5 text-zru-gold">
+            <div key={idx} className="bg-white/5 border border-white/5 rounded-2xl p-6 space-y-4 hover:border-zru-green/20 transition-all">
+              <div className="w-10 h-10 bg-zru-green/20 rounded-xl flex items-center justify-center border border-white/5 text-zru-green">
                 <CheckCircle className="w-5 h-5" />
               </div>
               <h4 className="font-black text-sm text-white uppercase tracking-tight leading-tight">{p.title}</h4>

@@ -94,12 +94,12 @@ const OfficialChannelBadge = () => (
   <motion.div 
     initial={{ opacity: 0, x: 20 }}
     animate={{ opacity: 1, x: 0 }}
-    className="inline-flex items-center gap-3 px-4 py-2 bg-clubhouse-gold/10 border border-clubhouse-gold/20 rounded-full"
+    className="inline-flex items-center gap-3 px-4 py-2 bg-zru-green/10 border border-zru-green/20 rounded-full"
   >
-    <div className="w-5 h-5 bg-clubhouse-gold rounded-full flex items-center justify-center shadow-[0_0_15px_rgba(212,175,55,0.4)]">
+    <div className="w-5 h-5 bg-zru-green rounded-full flex items-center justify-center shadow-[0_0_15px_rgba(0,107,63,0.4)]">
       <Shield className="w-3 h-3 text-rich-black" fill="currentColor" />
     </div>
-    <span className="text-[10px] font-black text-clubhouse-gold uppercase tracking-[0.2em]">Official ZRU Ticketing Channel</span>
+    <span className="text-[10px] font-black text-zru-green uppercase tracking-[0.2em]">Official ZRU Ticketing Channel</span>
   </motion.div>
 );
 
@@ -112,10 +112,10 @@ const FAQItem = ({ question, answer }: { question: string, answer: string }) => 
         onClick={() => setIsOpen(!isOpen)}
         className="w-full py-6 flex items-center justify-between text-left group"
       >
-        <span className="text-lg font-bold text-white uppercase tracking-tight group-hover:text-clubhouse-gold transition-colors pr-8 leading-tight">
+        <span className="text-lg font-bold text-white uppercase tracking-tight group-hover:text-zru-green transition-colors pr-8 leading-tight">
           {question}
         </span>
-        <HelpCircle className={`w-6 h-6 shrink-0 transition-transform duration-500 ${isOpen ? "rotate-180 text-clubhouse-gold" : "text-white/50"}`} />
+        <HelpCircle className={`w-6 h-6 shrink-0 transition-transform duration-500 ${isOpen ? "rotate-180 text-zru-green" : "text-white/50"}`} />
       </button>
       <AnimatePresence>
         {isOpen && (
@@ -181,7 +181,7 @@ export default function TicketsPage() {
   const CATEGORIES = ["All", "Sables", "Lady Sables", "Sevens", "Domestic", "World Cup Pathway"];
 
   return (
-    <main className="bg-rich-black min-h-screen selection:bg-clubhouse-gold selection:text-rich-black">
+    <main className="bg-rich-black min-h-screen selection:bg-zru-green selection:text-rich-black">
       <Navigation />
 
       {/* SECTION A: HERO */}
@@ -215,28 +215,28 @@ export default function TicketsPage() {
               <OfficialChannelBadge />
               <h1 className="text-6xl md:text-8xl lg:text-9xl font-black text-white leading-[0.9] uppercase tracking-tighter mt-8 mb-8">
                 OFFICIAL <br />
-                <span className="text-clubhouse-gold text-glow-green">TICKETS</span>
+                <span className="text-zru-green text-glow-green">TICKETS</span>
               </h1>
               <p className="text-lg md:text-xl text-gray-400 max-w-xl mb-12 font-medium leading-relaxed">
                 Welcome to the official home of Sables and ZRU tickets. Every link on this page takes you to an authorised partner, with transparent pricing and secure checkout.
               </p>
               
-              <div className="bg-white/5 border-l-2 border-clubhouse-gold p-4 mb-12 max-w-lg">
+              <div className="bg-white/5 border-l-2 border-zru-green p-4 mb-12 max-w-lg">
                 <p className="text-xs font-bold text-white/60 uppercase tracking-widest leading-loose">
-                  <Shield className="inline-block w-3 h-3 mr-2 mb-0.5 text-clubhouse-gold" />
+                  <Shield className="inline-block w-3 h-3 mr-2 mb-0.5 text-zru-green" />
                   If you didn’t start from <span className="text-white">zimrugby.co.zw</span> or this page, double‑check before you buy.
                 </p>
               </div>
 
               <div className="flex flex-wrap gap-6 items-center">
                 <Link href="#fixtures">
-                  <button className="text-[10px] font-black text-white uppercase tracking-[0.4em] flex items-center gap-2 group hover:text-clubhouse-gold transition-colors">
+                  <button className="text-[10px] font-black text-white uppercase tracking-[0.4em] flex items-center gap-2 group hover:text-zru-green transition-colors">
                     View upcoming fixtures
                     <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                   </button>
                 </Link>
                 <Link href="#faqs">
-                  <button className="text-[10px] font-black text-white uppercase tracking-[0.4em] flex items-center gap-2 group hover:text-clubhouse-gold transition-colors opacity-40 hover:opacity-100">
+                  <button className="text-[10px] font-black text-white uppercase tracking-[0.4em] flex items-center gap-2 group hover:text-zru-green transition-colors opacity-40 hover:opacity-100">
                     Ticket FAQs & safety
                     <ChevronRight className="w-4 h-4" />
                   </button>
@@ -251,10 +251,10 @@ export default function TicketsPage() {
                  transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
                  className="relative w-64 h-64 border border-white/5 rounded-2xl bg-white/2 p-8 flex flex-center items-center justify-center rotate-3"
                >
-                  <Ticket className="w-32 h-32 text-clubhouse-gold/10" />
-                  <div className="absolute inset-0 bg-linear-to-tr from-clubhouse-gold/5 to-transparent rounded-2xl" />
+                  <Ticket className="w-32 h-32 text-zru-green/10" />
+                  <div className="absolute inset-0 bg-linear-to-tr from-zru-green/5 to-transparent rounded-2xl" />
                   <div className="absolute -top-4 -right-4 w-12 h-12 bg-rich-black border border-white/10 rounded-full flex items-center justify-center shadow-2xl">
-                    <CheckCircle2 className="w-6 h-6 text-clubhouse-gold" />
+                    <CheckCircle2 className="w-6 h-6 text-zru-green" />
                   </div>
                </motion.div>
             </div>
@@ -269,7 +269,7 @@ export default function TicketsPage() {
           {/* Header & Filter */}
           <div className="flex flex-col lg:flex-row justify-between items-start lg:items-end gap-10 mb-16">
             <div className="max-w-xl">
-               <span className="block text-[10px] font-black uppercase tracking-[0.4em] text-clubhouse-gold mb-6">Upcoming Matches</span>
+               <span className="block text-[10px] font-black uppercase tracking-[0.4em] text-zru-green mb-6">Upcoming Matches</span>
                <h2 className="text-4xl md:text-5xl font-black text-white uppercase tracking-tighter">FIXTURES & TICKETS</h2>
             </div>
             
@@ -282,7 +282,7 @@ export default function TicketsPage() {
                     onClick={() => setFilter(cat)}
                     className={`px-6 py-2.5 rounded-full text-[10px] font-black uppercase tracking-widest transition-all
                       ${filter === cat 
-                        ? 'bg-clubhouse-gold text-rich-black shadow-[0_0_20px_rgba(212,175,55,0.3)]' 
+                        ? 'bg-zru-green text-rich-black shadow-[0_0_20px_rgba(0,107,63,0.3)]' 
                         : 'bg-white/5 text-white/60 hover:text-white hover:bg-white/10'}
                     `}
                   >
@@ -328,7 +328,7 @@ export default function TicketsPage() {
 
           {/* Helper Text */}
           <div className="mt-16 flex items-start gap-4 p-6 bg-white/2 border border-white/5 rounded-xl max-w-4xl">
-            <Info className="w-5 h-5 text-clubhouse-gold shrink-0 mt-0.5" />
+            <Info className="w-5 h-5 text-zru-green shrink-0 mt-0.5" />
             <p className="text-xs text-gray-400 font-medium leading-relaxed">
               All ticket purchases for Sables and ZRU fixtures are handled by our authorised ticketing partners. You’ll complete your booking on their secure platforms.
             </p>
@@ -340,7 +340,7 @@ export default function TicketsPage() {
       <section className="py-24 bg-linear-to-b from-rich-black to-[#0a0a0a]">
         <div className="max-w-[1440px] mx-auto px-6 md:px-12">
           <div className="max-w-2xl mb-20">
-             <span className="block text-[10px] font-black uppercase tracking-[0.4em] text-clubhouse-gold mb-6">Simple Entry</span>
+             <span className="block text-[10px] font-black uppercase tracking-[0.4em] text-zru-green mb-6">Simple Entry</span>
              <h2 className="text-4xl md:text-5xl font-black text-white uppercase tracking-tighter">HOW TO GET YOUR TICKETS</h2>
           </div>
 
@@ -372,10 +372,10 @@ export default function TicketsPage() {
               }
             ].map((step, i) => (
               <div key={i} className="relative group">
-                <div className="text-[60px] font-black text-white/5 absolute -top-10 -left-4 pointer-events-none group-hover:text-clubhouse-gold/5 transition-colors">{step.step}</div>
-                <div className="p-8 rounded-xl bg-white/2 border border-white/5 hover:border-clubhouse-gold/20 transition-all duration-500 h-full">
-                  <div className="w-12 h-12 bg-clubhouse-gold/10 rounded flex items-center justify-center mb-8">
-                    <step.icon className="w-6 h-6 text-clubhouse-gold" />
+                <div className="text-[60px] font-black text-white/5 absolute -top-10 -left-4 pointer-events-none group-hover:text-zru-green/5 transition-colors">{step.step}</div>
+                <div className="p-8 rounded-xl bg-white/2 border border-white/5 hover:border-zru-green/20 transition-all duration-500 h-full">
+                  <div className="w-12 h-12 bg-zru-green/10 rounded flex items-center justify-center mb-8">
+                    <step.icon className="w-6 h-6 text-zru-green" />
                   </div>
                   <h3 className="text-xl font-bold text-white uppercase tracking-tight mb-4">{step.title}</h3>
                   <p className="text-sm text-gray-500 font-medium leading-relaxed">{step.desc}</p>
@@ -395,14 +395,14 @@ export default function TicketsPage() {
         <div className="max-w-[1440px] mx-auto px-6 md:px-12">
           <div className="grid lg:grid-cols-2 gap-24 items-start">
             <div>
-              <span className="block text-[10px] font-black uppercase tracking-[0.4em] text-clubhouse-gold mb-8">Seating Overview</span>
+              <span className="block text-[10px] font-black uppercase tracking-[0.4em] text-zru-green mb-8">Seating Overview</span>
               <h2 className="text-4xl md:text-5xl font-black text-white uppercase tracking-tighter leading-none mb-8">TICKET TYPES <br />& AREAS</h2>
               <p className="text-lg text-gray-400 font-medium mb-12 max-w-lg leading-relaxed">
                 Different fixtures and venues use different seating maps, but most matches follow a similar structure. Use this as a guide before you buy.
               </p>
               
               <div className="p-6 bg-white/2 border border-white/5 rounded-xl">
-                 <div className="flex items-center gap-3 text-clubhouse-gold mb-4 font-black uppercase text-[10px] tracking-widest">
+                 <div className="flex items-center gap-3 text-zru-green mb-4 font-black uppercase text-[10px] tracking-widest">
                     <Info className="w-4 h-4" />
                     Dynamic Pricing
                  </div>
@@ -431,7 +431,7 @@ export default function TicketsPage() {
       </section>
 
       {/* SECTION E: CAMPAIGN HOOK */}
-      <section className="py-16 bg-clubhouse-gold relative overflow-hidden group">
+      <section className="py-16 bg-zru-green relative overflow-hidden group">
         <Link href="/world-cup-campaign" className="absolute inset-0 z-10" />
         <div className="absolute inset-0 bg-black/off-5 opacity-0 group-hover:opacity-100 transition-opacity" />
         <div className="max-w-[1440px] mx-auto px-6 md:px-12 relative z-20 flex flex-col md:flex-row items-center justify-between gap-8">
@@ -455,12 +455,12 @@ export default function TicketsPage() {
         <div className="max-w-[1440px] mx-auto px-6 md:px-12">
           <div className="grid lg:grid-cols-3 gap-24">
             <div>
-              <span className="block text-[10px] font-black uppercase tracking-[0.4em] text-clubhouse-gold mb-8">Security First</span>
+              <span className="block text-[10px] font-black uppercase tracking-[0.4em] text-zru-green mb-8">Security First</span>
               <h2 className="text-4xl font-black text-white uppercase tracking-tighter leading-tight mb-8">TICKET FAQs <br />& SAFETY</h2>
               <p className="text-gray-500 font-medium leading-relaxed mb-8">Direct answers for your peace of mind.</p>
               <div className="pt-8 border-t border-white/5">
                  <p className="text-xs font-bold text-white/30 uppercase tracking-widest mb-4">Still unsure?</p>
-                 <Link href="/contact" className="inline-flex items-center gap-2 text-xs font-black text-clubhouse-gold uppercase tracking-widest hover:underline">
+                 <Link href="/contact" className="inline-flex items-center gap-2 text-xs font-black text-zru-green uppercase tracking-widest hover:underline">
                     Contact support team <ChevronRight className="w-3 h-3" />
                  </Link>
               </div>
@@ -522,7 +522,7 @@ export default function TicketsPage() {
               </button>
 
               <div className="p-8 pb-0">
-                <span className="inline-block text-[10px] font-black uppercase text-clubhouse-gold mb-2 tracking-widest">Priority Alert List</span>
+                <span className="inline-block text-[10px] font-black uppercase text-zru-green mb-2 tracking-widest">Priority Alert List</span>
                 <h3 className="text-3xl font-black text-white uppercase tracking-tighter mb-4">
                   {isRegistering.teams}
                 </h3>
@@ -556,7 +556,7 @@ export default function TicketsPage() {
                         id="reg-name"
                         type="text" 
                         required
-                        className="w-full bg-white/5 border border-white/10 rounded p-4 text-white font-medium focus:outline-none focus:border-clubhouse-gold transition-colors" 
+                        className="w-full bg-white/5 border border-white/10 rounded p-4 text-white font-medium focus:outline-none focus:border-zru-green transition-colors" 
                         placeholder="Enter your name" 
                         value={formData.name}
                         onChange={(e) => setFormData({...formData, name: e.target.value})}
@@ -568,7 +568,7 @@ export default function TicketsPage() {
                         id="reg-email"
                         type="email" 
                         required
-                        className="w-full bg-white/5 border border-white/10 rounded p-4 text-white font-medium focus:outline-none focus:border-clubhouse-gold transition-colors" 
+                        className="w-full bg-white/5 border border-white/10 rounded p-4 text-white font-medium focus:outline-none focus:border-zru-green transition-colors" 
                         placeholder="your@email.com" 
                         value={formData.email}
                         onChange={(e) => setFormData({...formData, email: e.target.value})}
@@ -587,7 +587,7 @@ export default function TicketsPage() {
                       {isSubmitting ? "Processing…" : "Register Interest"}
                     </Button>
                     <p className="text-center text-[10px] font-bold text-white/50 uppercase tracking-widest">
-                      Already a ZRU Nation member? <Link href="/auth" className="text-clubhouse-gold underline">Sign in for one-click interest</Link>
+                      Already a ZRU Nation member? <Link href="/auth" className="text-zru-green underline">Sign in for one-click interest</Link>
                     </p>
                   </div>
                 </form>

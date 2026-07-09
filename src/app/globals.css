@@ -12,15 +12,14 @@
   /* Unified Brand Colors from Audit Spec */
   --color-green-primary: #006B3F;
   --color-green-dark: #00452A;
-  --color-gold: #F2A900;
   --color-neutral-dark: #121212;
   --color-neutral-mid: #3A3A3A;
   --color-neutral-light: #F5F5F5;
   --color-white: #FFFFFF;
 
-  /* Backward Compatibility Mapping */
+  /* Backward Compatibility Mapping (Mapped to green per design constraints) */
   --color-zru-green: var(--color-green-primary);
-  --color-zru-gold: var(--color-gold);
+  --color-zru-gold: var(--color-green-primary);
   --color-rich-black: #0A0A0A;
   --color-gray-900: var(--color-neutral-dark);
   --color-gray-100: var(--color-neutral-light);
@@ -34,9 +33,9 @@
   /* Clubhouse Premium Tokens */
   --color-clubhouse-green: var(--color-green-dark);
   --color-clubhouse-charcoal: #0e0e0e;
-  --color-clubhouse-gold: var(--color-gold);
+  --color-clubhouse-gold: var(--color-green-primary);
   --color-clubhouse-copper: #b87333;
-  --color-clubhouse-accent: var(--color-clubhouse-gold);
+  --color-clubhouse-accent: var(--color-clubhouse-green);
 
   /* Consistent Spacing Scale overrides */
   --spacing-section: 7.5rem;
@@ -55,7 +54,7 @@
 }
 
 *:focus-visible {
-  outline: var(--color-clubhouse-gold) solid 2px;
+  outline: var(--color-zru-green) solid 2px;
   outline-offset: 2px;
 }
 
@@ -159,6 +158,70 @@ body {
 .glow-green-card:hover::before {
   background: radial-gradient(circle at center, rgba(0, 150, 70, 0.12) 0%, transparent 50%);
 }
+
+/* ============================================================
+   CARD SURFACE ELEVATION SYSTEM (2025)
+   Luminance-based depth for dark mode — replaces flat bg-white/5
+   ============================================================ */
+
+/* L1 — Standard elevated card surface */
+.card-surface {
+  background: linear-gradient(135deg, rgba(255,255,255,0.065) 0%, rgba(255,255,255,0.02) 100%);
+  border: 1px solid rgba(255,255,255,0.08);
+  box-shadow:
+    0 4px 24px rgba(0,0,0,0.35),
+    inset 0 1px 0 rgba(255,255,255,0.07);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Top rim light — creates a physical bevel illusion */
+.card-surface::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 15%; right: 15%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.14), transparent);
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Hero-level variant — adds backdrop blur (max 3 cards per page) */
+.card-surface-blur {
+  background: linear-gradient(135deg, rgba(255,255,255,0.075) 0%, rgba(255,255,255,0.025) 100%);
+  border: 1px solid rgba(255,255,255,0.10);
+  box-shadow:
+    0 8px 40px rgba(0,0,0,0.45),
+    inset 0 1px 0 rgba(255,255,255,0.09);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  position: relative;
+  overflow: hidden;
+}
+
+.card-surface-blur::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 10%; right: 10%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.18), transparent);
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* ZRU Green brand glow on hover */
+.card-glow-green {
+  transition: border-color 300ms ease, box-shadow 300ms ease, background 300ms ease;
+}
+.card-glow-green:hover {
+  border-color: rgba(0, 107, 63, 0.22) !important;
+  box-shadow:
+    0 8px 32px rgba(0,0,0,0.45),
+    0 0 28px rgba(0,107,63,0.09),
+    inset 0 1px 0 rgba(255,255,255,0.09);
+  background: linear-gradient(135deg, rgba(255,255,255,0.08) 0%, rgba(0,107,63,0.03) 100%);
+}
+
 
 .bg-pattern-diagonal-lines {
   background-image: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 40 L40 0' stroke='%23fff' stroke-width='1' fill='none'/%3E%3C/svg%3E");

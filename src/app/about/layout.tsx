@@ -27,7 +27,7 @@ export default function AboutLayout({
       <section className="bg-zru-green relative overflow-hidden py-16 border-b border-white/10 mb-12">
         <div className="absolute inset-0 opacity-10 bg-pattern-diagonal-lines" />
         <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <span className="text-zru-gold text-xs font-black uppercase tracking-[0.4em] mb-2 block">
+          <span className="text-zru-green text-xs font-black uppercase tracking-[0.4em] mb-2 block">
             INSTITUTIONAL PORTAL
           </span>
           <h1 className="text-4xl md:text-6xl font-black text-white uppercase italic tracking-tighter">
@@ -46,7 +46,7 @@ export default function AboutLayout({
           {/* Responsive Left Sidebar */}
           <aside className="lg:col-span-1">
             <div className="sticky top-28 bg-white/5 border border-white/10 rounded-2xl p-6 backdrop-blur-md">
-              <h2 className="text-xs font-black uppercase tracking-widest text-zru-gold mb-6 border-b border-white/5 pb-3">
+              <h2 className="text-xs font-black uppercase tracking-widest text-zru-green mb-6 border-b border-white/5 pb-3">
                 PORTAL NAVIGATION
               </h2>
               
@@ -61,7 +61,7 @@ export default function AboutLayout({
                       href={item.href}
                       className={`flex items-center gap-3 px-4 py-3 rounded-xl text-xs font-black uppercase tracking-wider transition-all duration-300 ${
                         isActive
-                          ? "bg-zru-gold text-rich-black shadow-lg"
+                          ? "bg-zru-green text-rich-black shadow-lg"
                           : "text-white/60 hover:text-white hover:bg-white/5"
                       }`}
                     >
@@ -83,7 +83,7 @@ export default function AboutLayout({
                       href={item.href}
                       className={`flex items-center gap-2 px-4 py-2.5 rounded-full text-[10px] font-black uppercase tracking-widest transition-all duration-300 whitespace-nowrap ${
                         isActive
-                          ? "bg-zru-gold text-rich-black shadow-md"
+                          ? "bg-zru-green text-rich-black shadow-md"
                           : "text-white/60 hover:text-white hover:bg-white/5"
                       }`}
                     >

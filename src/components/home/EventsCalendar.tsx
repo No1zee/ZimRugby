@@ -54,7 +54,7 @@ export default function EventsCalendar() {
       case "SABLES":
         return "bg-sables-green text-white";
       case "SCHOOLS RUGBY":
-        return "bg-zru-gold text-rich-black";
+        return "bg-zru-green text-rich-black";
       case "RUGBY AFRICA CUP":
         return "bg-zru-orange text-white";
       default:
