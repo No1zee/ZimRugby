@@ -1,6 +1,7 @@
 import { Photo } from "@/types";
 import directus from "@/lib/directus/client";
 import { readItems } from "@directus/sdk";
+import { directusAsset, fetchFromDirectus, formatShortDate } from "@/lib/directus/helpers";
 
 export async function getPhotos(): Promise<Photo[]> {
   const mockPhotos: Photo[] = [
@@ -54,27 +55,20 @@ export async function getPhotos(): Promise<Photo[]> {
     }
   ];
 
-  try {
-    if (process.env.NEXT_PUBLIC_DIRECTUS_URL) {
-      const response = await directus.request(
-        readItems('photos' as any, {
-          sort: ['-date' as any]
-        })
-      );
-      if (response && response.length > 0) {
-        return response.map((photo: any) => ({
-          id: String(photo.id),
-          title: photo.title || "",
-          album: photo.album || "General",
-          image: photo.image ? `${process.env.NEXT_PUBLIC_DIRECTUS_URL}/assets/${photo.image}` : photo.image_url,
-          date: photo.date_label || new Date(photo.date).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }).toUpperCase(),
-          description: photo.description || ""
-        }));
-      }
-    }
-  } catch (error) {
-    console.warn("Directus fetch failed for photo gallery, falling back to mock data:", error);
-  }
-
-  return mockPhotos;
+  return fetchFromDirectus<Photo[]>(async () => {
+    const response = await directus.request(
+      readItems('photos' as any, {
+        sort: ['-date' as any]
+      })
+    );
+    if (!response || response.length === 0) return null;
+    return response.map((photo: any) => ({
+      id: String(photo.id),
+      title: photo.title || "",
+      album: photo.album || "General",
+      image: directusAsset(photo.image) ?? photo.image_url,
+      date: photo.date_label || formatShortDate(photo.date),
+      description: photo.description || ""
+    }));
+  }, mockPhotos, "photo gallery");
 }

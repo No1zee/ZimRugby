@@ -2,6 +2,7 @@ import { Match } from "@/types";
 import { getLiveMatches } from "@/lib/data-fetcher";
 import directus from "@/lib/directus/client";
 import { readItem } from "@directus/sdk";
+import { DirectusMatchItem, fetchFromDirectus, mapDirectusMatch } from "@/lib/directus/helpers";
 
 export interface LineupPlayer {
   number: number;
@@ -35,22 +36,7 @@ export interface MatchDetailData {
   };
 }
 
-interface DirectusMatchDetailItem {
-  id: string | number;
-  competition?: string;
-  round?: string;
-  date: string;
-  date_label?: string;
-  time?: string;
-  venue?: string;
-  home_team_name?: string;
-  home_team_logo?: string;
-  home_team_score?: number | null;
-  away_team_name?: string;
-  away_team_logo?: string;
-  away_team_score?: number | null;
-  status: string;
-  category?: string;
+interface DirectusMatchDetailItem extends DirectusMatchItem {
   home_lineup?: {
     number: number;
     name: string;
@@ -88,84 +74,62 @@ interface DirectusMatchDetailItem {
 }
 
 export async function getMatchDetail(id: string): Promise<MatchDetailData | null> {
-  try {
-    if (process.env.NEXT_PUBLIC_DIRECTUS_URL) {
-      const matchData = await directus.request(
-        readItem('matches', id, {
-          fields: ['*', 'home_lineup.*', 'away_lineup.*', 'stats.*', 'report.*']
-        })
-      );
-      
-      if (matchData) {
-        const m = matchData as unknown as DirectusMatchDetailItem;
-        const match: Match = {
-          id: String(m.id),
-          competition: m.competition || "International Match",
-          round: m.round || "Standard",
-          date: m.date_label || new Date(m.date).toLocaleDateString('en-US', { day: 'numeric', month: 'long', year: 'numeric' }),
-          time: m.time || new Date(m.date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false }),
-          venue: m.venue || "TBA",
-          homeTeam: {
-            name: m.home_team_name || "Zimbabwe Sables",
-            logo: m.home_team_logo ? `${process.env.NEXT_PUBLIC_DIRECTUS_URL}/assets/${m.home_team_logo}` : undefined,
-            score: m.home_team_score !== null ? Number(m.home_team_score) : undefined
-          },
-          awayTeam: {
-            name: m.away_team_name || "Opponent",
-            logo: m.away_team_logo ? `${process.env.NEXT_PUBLIC_DIRECTUS_URL}/assets/${m.away_team_logo}` : undefined,
-            score: m.away_team_score !== null ? Number(m.away_team_score) : undefined
-          },
-          status: m.status as any,
-          category: m.category || "Sables"
-        };
+  return fetchFromDirectus<MatchDetailData | null>(async () => {
+    const matchData = await directus.request(
+      readItem('matches', id, {
+        fields: ['*', 'home_lineup.*', 'away_lineup.*', 'stats.*', 'report.*']
+      })
+    );
 
-        const homeLineup: LineupPlayer[] = (m.home_lineup || []).map((p: any) => ({
-          number: Number(p.number),
-          name: p.name,
-          position: p.position,
-          club: p.club
-        }));
+    if (!matchData) return null;
 
-        const awayLineup: LineupPlayer[] = (m.away_lineup || []).map((p: any) => ({
-          number: Number(p.number),
-          name: p.name,
-          position: p.position,
-          club: p.club
-        }));
+    const m = matchData as unknown as DirectusMatchDetailItem;
+    const match = mapDirectusMatch(m);
 
-        const stats: MatchStats | undefined = m.stats ? {
-          possession: { home: Number(m.stats.possession_home), away: Number(m.stats.possession_away) },
-          territory: { home: Number(m.stats.territory_home), away: Number(m.stats.territory_away) },
-          scrums: { home: String(m.stats.scrums_home), away: String(m.stats.scrums_away) },
-          penalties: { home: Number(m.stats.penalties_home), away: Number(m.stats.penalties_away) },
-          tries: { home: Number(m.stats.tries_home), away: Number(m.stats.tries_away) }
-        } : undefined;
+    const homeLineup: LineupPlayer[] = (m.home_lineup || []).map((p) => ({
+      number: Number(p.number),
+      name: p.name,
+      position: p.position,
+      club: p.club
+    }));
 
-        const report = m.report ? {
-          summary: m.report.summary || "",
-          paragraphs: Array.isArray(m.report.paragraphs) ? m.report.paragraphs : [m.report.summary || ""],
-          scorerTimeline: (m.report.scorer_timeline || []).map((item: any) => ({
-            minute: Number(item.minute),
-            team: item.team as 'home' | 'away',
-            type: item.type as 'try' | 'conversion' | 'penalty' | 'drop-goal',
-            player: item.player
-          }))
-        } : undefined;
+    const awayLineup: LineupPlayer[] = (m.away_lineup || []).map((p) => ({
+      number: Number(p.number),
+      name: p.name,
+      position: p.position,
+      club: p.club
+    }));
 
-        return {
-          match,
-          homeLineup,
-          awayLineup,
-          stats: match.status === 'finished' || match.status === 'completed' || match.status === 'live' ? stats : undefined,
-          report: match.status === 'finished' || match.status === 'completed' ? report : undefined
-        };
-      }
-    }
-  } catch (error) {
-    console.warn(`Directus fetch failed for match detail ${id}, falling back to mock data:`, error);
-  }
+    const stats: MatchStats | undefined = m.stats ? {
+      possession: { home: Number(m.stats.possession_home), away: Number(m.stats.possession_away) },
+      territory: { home: Number(m.stats.territory_home), away: Number(m.stats.territory_away) },
+      scrums: { home: String(m.stats.scrums_home), away: String(m.stats.scrums_away) },
+      penalties: { home: Number(m.stats.penalties_home), away: Number(m.stats.penalties_away) },
+      tries: { home: Number(m.stats.tries_home), away: Number(m.stats.tries_away) }
+    } : undefined;
 
-  // Mock Fallback
+    const report = m.report ? {
+      summary: m.report.summary || "",
+      paragraphs: Array.isArray(m.report.paragraphs) ? m.report.paragraphs : [m.report.summary || ""],
+      scorerTimeline: (m.report.scorer_timeline || []).map((item) => ({
+        minute: Number(item.minute),
+        team: item.team as 'home' | 'away',
+        type: item.type as 'try' | 'conversion' | 'penalty' | 'drop-goal',
+        player: item.player
+      }))
+    } : undefined;
+
+    return {
+      match,
+      homeLineup,
+      awayLineup,
+      stats: match.status === 'finished' || match.status === 'completed' || match.status === 'live' ? stats : undefined,
+      report: match.status === 'finished' || match.status === 'completed' ? report : undefined
+    };
+  }, () => getMatchDetailFallback(id), `match detail ${id}`);
+}
+
+async function getMatchDetailFallback(id: string): Promise<MatchDetailData | null> {
   const matches = await getLiveMatches();
   const match = matches.find(m => String(m.id) === id) as Match | undefined;
   if (!match) return null;

@@ -1,6 +1,7 @@
 import { RefereeResource, RefereeCourse, RefereeNotice } from "@/types";
 import directus from "@/lib/directus/client";
 import { readItems } from "@directus/sdk";
+import { directusAsset, fetchFromDirectus, formatShortDate } from "@/lib/directus/helpers";
 
 export async function getRefereeResources(): Promise<RefereeResource[]> {
   const mockResources: RefereeResource[] = [
@@ -12,25 +13,18 @@ export async function getRefereeResources(): Promise<RefereeResource[]> {
     { title: "Incident / Red Card Report Form", category: "forms", size: "620 KB", downloadUrl: "#" }
   ];
 
-  try {
-    if (process.env.NEXT_PUBLIC_DIRECTUS_URL) {
-      const response = await directus.request(
-        readItems('referee_resources' as any)
-      );
-      if (response && response.length > 0) {
-        return response.map((res: any) => ({
-          title: res.title,
-          category: res.category || "laws",
-          size: res.size || "Unknown",
-          downloadUrl: res.file ? `${process.env.NEXT_PUBLIC_DIRECTUS_URL}/assets/${res.file}` : (res.download_url || "#")
-        }));
-      }
-    }
-  } catch (error) {
-    console.warn("Directus fetch failed for referee resources, falling back to mock data:", error);
-  }
-
-  return mockResources;
+  return fetchFromDirectus<RefereeResource[]>(async () => {
+    const response = await directus.request(
+      readItems('referee_resources' as any)
+    );
+    if (!response || response.length === 0) return null;
+    return response.map((res: any) => ({
+      title: res.title,
+      category: res.category || "laws",
+      size: res.size || "Unknown",
+      downloadUrl: directusAsset(res.file) ?? (res.download_url || "#")
+    }));
+  }, mockResources, "referee resources");
 }
 
 export async function getRefereeCourses(): Promise<RefereeCourse[]> {
@@ -61,29 +55,22 @@ export async function getRefereeCourses(): Promise<RefereeCourse[]> {
     }
   ];
 
-  try {
-    if (process.env.NEXT_PUBLIC_DIRECTUS_URL) {
-      const response = await directus.request(
-        readItems('referee_courses' as any, {
-          sort: ['date' as any]
-        })
-      );
-      if (response && response.length > 0) {
-        return response.map((course: any) => ({
-          title: course.title,
-          level: course.level || "Standard",
-          date: course.date_label || new Date(course.date).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }).toUpperCase(),
-          venue: course.venue || "TBA",
-          instructor: course.instructor || "TBA",
-          status: course.status || "open"
-        }));
-      }
-    }
-  } catch (error) {
-    console.warn("Directus fetch failed for referee courses, falling back to mock data:", error);
-  }
-
-  return mockCourses;
+  return fetchFromDirectus<RefereeCourse[]>(async () => {
+    const response = await directus.request(
+      readItems('referee_courses' as any, {
+        sort: ['date' as any]
+      })
+    );
+    if (!response || response.length === 0) return null;
+    return response.map((course: any) => ({
+      title: course.title,
+      level: course.level || "Standard",
+      date: course.date_label || formatShortDate(course.date),
+      venue: course.venue || "TBA",
+      instructor: course.instructor || "TBA",
+      status: course.status || "open"
+    }));
+  }, mockCourses, "referee courses");
 }
 
 export async function getRefereeNotices(): Promise<RefereeNotice[]> {
@@ -104,26 +91,19 @@ export async function getRefereeNotices(): Promise<RefereeNotice[]> {
     }
   ];
 
-  try {
-    if (process.env.NEXT_PUBLIC_DIRECTUS_URL) {
-      const response = await directus.request(
-        readItems('referee_notices' as any, {
-          sort: ['-date' as any]
-        })
-      );
-      if (response && response.length > 0) {
-        return response.map((notice: any) => ({
-          id: String(notice.id),
-          title: notice.title,
-          date: notice.date_label || new Date(notice.date).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }).toUpperCase(),
-          excerpt: notice.excerpt || "",
-          content: notice.content || ""
-        }));
-      }
-    }
-  } catch (error) {
-    console.warn("Directus fetch failed for referee notices, falling back to mock data:", error);
-  }
-
-  return mockNotices;
+  return fetchFromDirectus<RefereeNotice[]>(async () => {
+    const response = await directus.request(
+      readItems('referee_notices' as any, {
+        sort: ['-date' as any]
+      })
+    );
+    if (!response || response.length === 0) return null;
+    return response.map((notice: any) => ({
+      id: String(notice.id),
+      title: notice.title,
+      date: notice.date_label || formatShortDate(notice.date),
+      excerpt: notice.excerpt || "",
+      content: notice.content || ""
+    }));
+  }, mockNotices, "referee notices");
 }
