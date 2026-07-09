@@ -8,7 +8,7 @@ import NewsCard from "@/components/media/NewsCard";
 import { CardSkeleton } from "@/components/ui/Skeleton";
 import { useState, useEffect } from "react";
 import JournalStrip from "@/components/home/JournalStrip";
-import { getSocialPosts } from "@/lib/data-fetcher";
+import { getSocialPosts, type Report } from "@/lib/data-fetcher";
 import PageHero from "@/components/ui/PageHero";
 
 const latestVideos = [
@@ -79,11 +79,10 @@ const newsArchive = [
 
 export default function MediaPage() {
   const [activeTab, setActiveTab] = useState<"all" | "videos" | "news" | "social">("all");
-  const [socialPosts, setSocialPosts] = useState<any[]>([]);
+  const [socialPosts, setSocialPosts] = useState<Report[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    setIsLoading(true);
     getSocialPosts().then((posts) => {
       setSocialPosts(posts);
       setIsLoading(false);
@@ -98,7 +97,7 @@ export default function MediaPage() {
 
   const filteredNews = activeTab === "all" ? allNews : 
                       activeTab === "news" ? newsArchive : 
-                      activeTab === "social" ? allNews.filter(n => n.source === 'facebook') : [];
+                      activeTab === "social" ? allNews.filter(n => 'source' in n && n.source === 'facebook') : [];
 
   return (
     <main className="bg-rich-black min-h-screen pb-24">

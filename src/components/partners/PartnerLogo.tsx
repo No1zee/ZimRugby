@@ -1,5 +1,4 @@
 import React from 'react';
-import Image from 'next/image';
 import { Partner } from '../../data/partners';
 
 interface PartnerLogoProps {
@@ -25,6 +24,7 @@ export default function PartnerLogo({ partner }: PartnerLogoProps) {
       <div className="relative w-full h-auto flex items-center justify-center">
         {/* We use standard img here instead of next/image since we are using data URIs for placeholders.
             For production with real logos, switch to next/image if configured. */}
+        {/* eslint-disable-next-line @next/next/no-img-element -- data-URI placeholder logos; see note above */}
         <img 
           src={partner.logoUrl} 
           alt={`${partner.name} logo`}

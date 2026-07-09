@@ -22,6 +22,7 @@ export default function NotFound() {
 
       {/* Watermark ZRU crest */}
       <div className="absolute inset-0 flex items-center justify-center pointer-events-none select-none opacity-[0.03]">
+        {/* eslint-disable-next-line @next/next/no-img-element -- decorative inline SVG watermark; next/image does not optimize SVGs */}
         <img
           src="/zru logo main.svg"
           alt=""

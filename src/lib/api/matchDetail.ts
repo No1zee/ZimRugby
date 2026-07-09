@@ -115,18 +115,18 @@ export async function getMatchDetail(id: string): Promise<MatchDetailData | null
             logo: m.away_team_logo ? `${process.env.NEXT_PUBLIC_DIRECTUS_URL}/assets/${m.away_team_logo}` : undefined,
             score: m.away_team_score !== null ? Number(m.away_team_score) : undefined
           },
-          status: m.status as any,
+          status: m.status as Match['status'],
           category: m.category || "Sables"
         };
 
-        const homeLineup: LineupPlayer[] = (m.home_lineup || []).map((p: any) => ({
+        const homeLineup: LineupPlayer[] = (m.home_lineup || []).map((p) => ({
           number: Number(p.number),
           name: p.name,
           position: p.position,
           club: p.club
         }));
 
-        const awayLineup: LineupPlayer[] = (m.away_lineup || []).map((p: any) => ({
+        const awayLineup: LineupPlayer[] = (m.away_lineup || []).map((p) => ({
           number: Number(p.number),
           name: p.name,
           position: p.position,
@@ -144,7 +144,7 @@ export async function getMatchDetail(id: string): Promise<MatchDetailData | null
         const report = m.report ? {
           summary: m.report.summary || "",
           paragraphs: Array.isArray(m.report.paragraphs) ? m.report.paragraphs : [m.report.summary || ""],
-          scorerTimeline: (m.report.scorer_timeline || []).map((item: any) => ({
+          scorerTimeline: (m.report.scorer_timeline || []).map((item) => ({
             minute: Number(item.minute),
             team: item.team as 'home' | 'away',
             type: item.type as 'try' | 'conversion' | 'penalty' | 'drop-goal',

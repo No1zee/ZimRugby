@@ -1,4 +1,4 @@
-import { Hourglass, Trophy, Calendar } from "lucide-react";
+import { Trophy } from "lucide-react";
 
 export default function HistoryPage() {
   const milestones = [

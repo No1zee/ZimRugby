@@ -15,10 +15,11 @@ export async function getRefereeResources(): Promise<RefereeResource[]> {
   try {
     if (process.env.NEXT_PUBLIC_DIRECTUS_URL) {
       const response = await directus.request(
-        readItems('referee_resources' as any)
-      );
+        readItems('referee_resources')
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      ) as any[];
       if (response && response.length > 0) {
-        return response.map((res: any) => ({
+        return response.map((res) => ({
           title: res.title,
           category: res.category || "laws",
           size: res.size || "Unknown",
@@ -64,12 +65,13 @@ export async function getRefereeCourses(): Promise<RefereeCourse[]> {
   try {
     if (process.env.NEXT_PUBLIC_DIRECTUS_URL) {
       const response = await directus.request(
-        readItems('referee_courses' as any, {
-          sort: ['date' as any]
+        readItems('referee_courses', {
+          sort: ['date']
         })
-      );
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      ) as any[];
       if (response && response.length > 0) {
-        return response.map((course: any) => ({
+        return response.map((course) => ({
           title: course.title,
           level: course.level || "Standard",
           date: course.date_label || new Date(course.date).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }).toUpperCase(),
@@ -107,12 +109,13 @@ export async function getRefereeNotices(): Promise<RefereeNotice[]> {
   try {
     if (process.env.NEXT_PUBLIC_DIRECTUS_URL) {
       const response = await directus.request(
-        readItems('referee_notices' as any, {
-          sort: ['-date' as any]
+        readItems('referee_notices', {
+          sort: ['-date']
         })
-      );
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      ) as any[];
       if (response && response.length > 0) {
-        return response.map((notice: any) => ({
+        return response.map((notice) => ({
           id: String(notice.id),
           title: notice.title,
           date: notice.date_label || new Date(notice.date).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }).toUpperCase(),

@@ -229,6 +229,7 @@ export default function HeroCarousel({ slides }: { slides: HeroSlideData[] }) {
                 {activeSlide.video ? (
                   isMobile ? (
                     /* Mobile Fallback: Animated WebP bypasses all autoplay restrictions */
+                    // eslint-disable-next-line @next/next/no-img-element -- animated WebP mobile fallback for background video
                     <img
                       src={activeSlide.video.replace('.mp4', '.webp')}
                       alt=""
@@ -332,6 +333,7 @@ export default function HeroCarousel({ slides }: { slides: HeroSlideData[] }) {
 
       {/* ZRU Crest Overlay */}
       <div className="absolute bottom-8 left-8 z-40 hidden md:flex items-center gap-4 pointer-events-none">
+        {/* eslint-disable-next-line @next/next/no-img-element -- SVG crest; next/image does not optimize SVGs */}
         <img src="/zru logo main.svg" alt="ZRU Crest" className="drop-shadow-2xl opacity-90 object-contain w-auto h-16" />
         <div className="flex flex-col">
           <span className="text-white font-heading text-lg tracking-widest leading-tight">ZIMBABWE</span>

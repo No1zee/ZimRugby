@@ -61,15 +61,17 @@ export async function getRankingsData(): Promise<RankingsData> {
   try {
     if (process.env.NEXT_PUBLIC_DIRECTUS_URL) {
       const response = await directus.request(
-        readItems('rankings' as any, {
+        readItems('rankings', {
           limit: 1
         })
-      );
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      ) as any[];
       const rivalsResponse = await directus.request(
-        readItems('ranking_rivals' as any, {
-          sort: ['position' as any]
+        readItems('ranking_rivals', {
+          sort: ['position']
         })
-      );
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      ) as any[];
       
       if (response?.[0]) {
         const mainRank = response[0];
@@ -88,7 +90,7 @@ export async function getRankingsData(): Promise<RankingsData> {
             trend: mainRank.africa_trend || "stable",
             lastUpdated: mainRank.last_updated || "June 2026"
           },
-          rivals: (rivalsResponse || []).map((rival: any) => ({
+          rivals: (rivalsResponse || []).map((rival) => ({
             name: rival.name,
             position: Number(rival.position),
             points: Number(rival.points),

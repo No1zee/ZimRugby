@@ -165,7 +165,7 @@ export default function TicketsPage() {
       } else {
         setSubmitError(res.message);
       }
-    } catch (err) {
+    } catch {
       setSubmitError("An error occurred during submission.");
     } finally {
       setIsSubmitting(false);

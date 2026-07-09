@@ -170,16 +170,32 @@ export async function getTeamData(slug: string): Promise<Team | null> {
           name: team.name || "",
           tagline: team.tagline || "",
           history: team.history || "",
-          stats: (team.stats || []).map((s: any) => ({ label: s.label, value: s.value })),
-          coachingStaff: (team.coaching_staff || []).map((c: any) => ({ name: c.name, role: c.role })),
-          squad: (team.squad || []).map((s: any) => ({
+          stats: (team.stats || []).map((s: { label: string; value: string }) => ({ label: s.label, value: s.value })),
+          coachingStaff: (team.coaching_staff || []).map((c: { name: string; role: string }) => ({ name: c.name, role: c.role })),
+          squad: (team.squad || []).map((s: {
+            name: string;
+            position: string;
+            club: string;
+            caps?: number | string;
+            image?: string;
+            image_url?: string;
+          }) => ({
             name: s.name,
             position: s.position,
             club: s.club,
             caps: s.caps ? Number(s.caps) : undefined,
             image: s.image ? `${process.env.NEXT_PUBLIC_DIRECTUS_URL}/assets/${s.image}` : (s.image_url || "/images/teams/player-placeholder.webp")
           })),
-          matches: (team.matches || []).map((m: any) => ({
+          matches: (team.matches || []).map((m: {
+            opponent: string;
+            opponent_logo?: string;
+            opponent_logo_url?: string;
+            date_label?: string;
+            date: string;
+            venue?: string;
+            score?: string;
+            status?: string;
+          }) => ({
             opponent: m.opponent,
             opponentLogo: m.opponent_logo ? `${process.env.NEXT_PUBLIC_DIRECTUS_URL}/assets/${m.opponent_logo}` : m.opponent_logo_url,
             date: m.date_label || new Date(m.date).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }),
@@ -187,7 +203,7 @@ export async function getTeamData(slug: string): Promise<Team | null> {
             score: m.score,
             status: m.status || "upcoming"
           })),
-          gallery: (team.gallery || []).map((img: any) => 
+          gallery: (team.gallery || []).map((img: { image?: string; image_url?: string }) => 
             img.image ? `${process.env.NEXT_PUBLIC_DIRECTUS_URL}/assets/${img.image}` : img.image_url
           )
         };
