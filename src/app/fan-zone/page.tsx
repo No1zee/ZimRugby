@@ -72,7 +72,7 @@ export default function FanZonePage() {
         <section className="relative w-full h-[40vh] min-h-[300px] rounded-3xl overflow-hidden flex items-end mb-16 shadow-2xl">
           {/* Background image */}
           <div className="absolute inset-0 z-0">
-            <div className="absolute inset-0 bg-[#006039] opacity-30 mix-blend-multiply" />
+            <div className="absolute inset-0 bg-[#036936] opacity-30 mix-blend-multiply" />
             <div className="absolute inset-0 bg-linear-to-t from-rich-black via-rich-black/40 to-transparent" />
             
             {/* Ambient gold splash */}
