@@ -36,6 +36,22 @@ export default function PageHero({
         {/* Soft radial overlay + linear overlay to feed into rich black */}
         <div className="absolute inset-0 bg-radial-gradient(circle at center, transparent 30%, var(--color-rich-black) 90%)" />
         <div className="absolute inset-0 bg-gradient-to-t from-rich-black via-rich-black/60 to-transparent" />
+        {/* Brand green wash anchoring the headline side */}
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_bottom_left,rgba(3,105,54,0.22),transparent_55%)]" />
+      </div>
+
+      {/* Monotone crest watermark */}
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src="/zru logo monotone.svg"
+        alt=""
+        aria-hidden
+        className="absolute -right-10 -bottom-16 h-[130%] w-auto opacity-[0.06] pointer-events-none select-none z-0"
+      />
+
+      {/* Slanted green accent along the bottom edge */}
+      <div className="absolute bottom-0 left-0 right-0 h-1 z-10 pointer-events-none">
+        <div className="h-full w-40 sm:w-64 bg-zru-green clip-slanted-sm" />
       </div>
 
       {/* 2. Content Container */}

@@ -5,6 +5,7 @@ import { ChevronRight, Calendar as CalendarIcon, MapPin, Clock, Award, Users, La
 import Navigation from "@/components/layout/Navigation";
 import Footer from "@/components/layout/Footer";
 import EdgyGradient from "@/components/ui/EdgyGradient";
+import PageHero from "@/components/ui/PageHero";
 import SlantedButton from "@/components/ui/SlantedButton";
 import { useState, useEffect, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
@@ -149,27 +150,24 @@ function EventsInner() {
     : generalEvents;
 
   return (
-    <main className="bg-rich-black min-h-screen pt-24 pb-24 relative overflow-hidden">
+    <main className="bg-rich-black min-h-screen pb-24 relative overflow-hidden">
       
       {/* Ambient Visual Layers */}
       <EdgyGradient opacity={0.5} />
       <div className="absolute top-0 right-0 w-1/2 h-[600px] bg-[radial-gradient(circle_at_top_right,rgba(0,107,63,0.15),transparent_70%)] pointer-events-none" />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        
-        {/* Header Section */}
-        <motion.div 
-           initial={{ opacity: 0, y: 20 }}
-           animate={{ opacity: 1, y: 0 }}
-           className="mb-16 mt-8"
-        >
-           <h1 className="text-5xl md:text-7xl font-heading text-white mb-4 uppercase tracking-wider">
-             COMPETITIONS & <span className="text-stroke-white text-transparent">EVENTS</span>
-           </h1>
-           <p className="text-lg text-gray-400 max-w-2xl font-body">
-             Explore the full heartbeat of Zimbabwean rugby. Drill down into active leagues, regional championships, and official union events.
-           </p>
-        </motion.div>
+      {/* PageHero header */}
+      <div className="pt-24 relative z-10">
+        <PageHero
+          title="Competitions & Events"
+          subtitle="Explore the full heartbeat of Zimbabwean rugby. Drill down into active leagues, regional championships, and official union events."
+          tag="The Season"
+          backgroundImage="/images/events/africa-cup.jpg"
+          breadcrumb={[{ label: "Events", href: "/events" }]}
+        />
+      </div>
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 pt-16">
 
         {/* 1. Browse by Rugby Level Block (First-Class Shortcuts) */}
         <div className="mb-16">

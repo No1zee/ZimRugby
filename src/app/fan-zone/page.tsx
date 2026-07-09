@@ -4,6 +4,7 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Mail, CheckCircle2, Ticket, Percent, Newspaper, Trophy, ShieldCheck, ArrowRight, AlertCircle } from "lucide-react";
 import { saveSubmission } from "@/lib/mockStorage";
+import SectionDivider from "@/components/ui/SectionDivider";
 
 export default function FanZonePage() {
   const [name, setName] = useState("");
@@ -91,6 +92,8 @@ export default function FanZonePage() {
             </p>
           </div>
         </section>
+
+        <SectionDivider className="my-0 mb-16" />
 
         {/* Two-Column Grid: Benefits + Registration */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">

@@ -171,6 +171,14 @@ body {
   background: radial-gradient(circle at center, rgba(0, 150, 70, 0.12) 0%, transparent 50%);
 }
 
+/* Alternating inner-page section band — pairs with bg-rich-black (#0A0A0A)
+   to give long pages visual rhythm without changing layout. */
+.section-alt {
+  background: linear-gradient(180deg, #060606 0%, #0d0d0d 100%);
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
 /* ============================================================
    CARD SURFACE ELEVATION SYSTEM (2025)
    Luminance-based depth for dark mode — replaces flat bg-white/5

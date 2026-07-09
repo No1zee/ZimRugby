@@ -6,6 +6,7 @@ import Navigation from "@/components/layout/Navigation";
 import Footer from "@/components/layout/Footer";
 import Button from "@/components/common/Button";
 import MatchList, { Match, MatchListSkeleton } from "@/components/matches/MatchList";
+import PageHero from "@/components/ui/PageHero";
 import LeagueTable from "@/components/matches/LeagueTable";
 import { TableSkeleton } from "@/components/ui/Skeleton";
 import { useState, useEffect } from "react";
@@ -35,20 +36,19 @@ export default function MatchCentre() {
   return (
     <>
       <Navigation />
-      <main className="bg-rich-black min-h-screen pt-24 pb-24">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          
-          {/* Header */}
-          <motion.div 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="mb-12"
-          >
-            <h1 className="text-5xl md:text-7xl font-heading text-white mb-4">MATCH CENTRE</h1>
-            <p className="text-xl text-gray-400 max-w-2xl">
-              Follow every tackle, try, and triumph. The official schedule and results for all Zimbabwe Rugby Union teams.
-            </p>
-          </motion.div>
+      <main className="bg-rich-black min-h-screen pb-24">
+        {/* PageHero header */}
+        <div className="pt-24">
+          <PageHero
+            title="Match Centre"
+            subtitle="Follow every tackle, try, and triumph. The official schedule and results for all Zimbabwe Rugby Union teams."
+            tag="Fixtures • Results • Standings"
+            backgroundImage="/images/events/africa-cup.jpg"
+            breadcrumb={[{ label: "Match Centre", href: "/match-centre" }]}
+          />
+        </div>
+
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16">
 
         {/* Filters & Tabs */}
         <div className="flex flex-col lg:flex-row justify-between items-center gap-6 mb-12">

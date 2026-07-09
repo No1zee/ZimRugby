@@ -10,6 +10,7 @@ import { useState, useEffect } from "react";
 import JournalStrip from "@/components/home/JournalStrip";
 import { getSocialPosts } from "@/lib/data-fetcher";
 import PageHero from "@/components/ui/PageHero";
+import SectionDivider from "@/components/ui/SectionDivider";
 
 const latestVideos = [
   {
@@ -199,11 +200,14 @@ export default function MediaPage() {
             </motion.section>
         )}
 
+        {activeTab === "all" && <SectionDivider className="my-0 mb-16" />}
+
         {/* News & Social Archive */}
         {(activeTab === "all" || activeTab === "news" || activeTab === "social") && (
             <motion.section
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
+                className="section-alt rounded-3xl p-6 sm:p-10"
             >
                 <div className="flex items-center gap-4 mb-8">
                     <h2 className="text-2xl font-heading text-white uppercase">

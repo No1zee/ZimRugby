@@ -23,7 +23,7 @@ export default function AboutOverviewPage() {
 
       {/* 2. Mission & Vision */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 pt-6 border-t border-white/5">
-        <div className="bg-white/5 border border-white/5 rounded-2xl p-6 hover:border-zru-green/20 transition-all">
+        <div className="card-surface glow-green-card rounded-2xl p-6 hover:border-zru-green/30 hover:-translate-y-1 transition-all duration-300">
           <div className="flex items-center gap-3 mb-4">
             <Target className="w-6 h-6 text-zru-green" />
             <h3 className="text-lg font-black uppercase tracking-wide text-white">OUR MISSION</h3>
@@ -33,7 +33,7 @@ export default function AboutOverviewPage() {
           </p>
         </div>
 
-        <div className="bg-white/5 border border-white/5 rounded-2xl p-6 hover:border-zru-green/20 transition-all">
+        <div className="card-surface glow-green-card rounded-2xl p-6 hover:border-zru-green/30 hover:-translate-y-1 transition-all duration-300">
           <div className="flex items-center gap-3 mb-4">
             <Award className="w-6 h-6 text-zru-green" />
             <h3 className="text-lg font-black uppercase tracking-wide text-white">OUR VISION</h3>
@@ -47,7 +47,7 @@ export default function AboutOverviewPage() {
       {/* 3. Stats */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-6 pt-6 border-t border-white/5 text-center">
         {stats.map((stat) => (
-          <div key={stat.label} className="bg-white/5 border border-white/5 rounded-2xl p-4">
+          <div key={stat.label} className="card-surface glow-green-card rounded-2xl p-4">
             <div className="text-3xl font-black text-zru-green italic mb-1">{stat.value}</div>
             <div className="text-white/40 text-[10px] font-bold uppercase tracking-wider">{stat.label}</div>
           </div>
