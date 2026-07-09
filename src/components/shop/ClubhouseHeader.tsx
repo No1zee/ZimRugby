@@ -61,10 +61,10 @@ export default function ClubhouseHeader() {
 
         {/* Logo - Center */}
         <Link href="/clubhouse" className="absolute left-1/2 -translate-x-1/2 text-center group">
-          <span className="block text-xl md:text-2xl font-black uppercase tracking-[0.3em] text-white group-hover:text-clubhouse-gold transition-colors">
+          <span className="block text-xl md:text-2xl font-black uppercase tracking-[0.3em] text-white group-hover:text-zru-green transition-colors">
             THE
           </span>
-          <span className="block text-[8px] md:text-[10px] uppercase tracking-[0.5em] text-clubhouse-gold mt-1">
+          <span className="block text-[8px] md:text-[10px] uppercase tracking-[0.5em] text-zru-green mt-1">
             CLUBHOUSE
           </span>
         </Link>
@@ -93,7 +93,7 @@ export default function ClubhouseHeader() {
               onClick={() => setIsCartOpen(true)}
             >
               <ShoppingBag className="w-5 h-5" />
-              <span className="absolute -top-1 -right-1 bg-clubhouse-gold text-clubhouse-charcoal text-[8px] font-bold w-4 h-4 rounded-full flex items-center justify-center">1</span>
+              <span className="absolute -top-1 -right-1 bg-zru-green text-clubhouse-charcoal text-[8px] font-bold w-4 h-4 rounded-full flex items-center justify-center">1</span>
             </button>
           </div>
         </div>
@@ -112,7 +112,7 @@ export default function ClubhouseHeader() {
             className="fixed inset-0 bg-clubhouse-charcoal z-60 p-8 flex flex-col"
           >
             <div className="flex justify-between items-center mb-12">
-              <span className="text-xs font-bold uppercase tracking-[0.3em] text-clubhouse-gold">Menu</span>
+              <span className="text-xs font-bold uppercase tracking-[0.3em] text-zru-green">Menu</span>
               <button onClick={() => setIsOpen(false)} aria-label="Close Menu"><X className="w-8 h-8 text-white" /></button>
             </div>
             
@@ -126,7 +126,7 @@ export default function ClubhouseHeader() {
                 >
                   <Link 
                     href={item.href}
-                    className="text-4xl font-black uppercase tracking-tight text-white hover:text-clubhouse-gold transition-colors"
+                    className="text-4xl font-black uppercase tracking-tight text-white hover:text-zru-green transition-colors"
                     onClick={() => setIsOpen(false)}
                   >
                     {item.label}

@@ -30,7 +30,7 @@ const collections = [
     description: "Nurturing the future of Zimbabwean excellence.",
     image: "/images/clubhouse/coll-4.png",
     href: "/clubhouse/junior",
-    color: "from-clubhouse-gold/80",
+    color: "from-zru-green/80",
   },
 ];
 
@@ -97,20 +97,20 @@ export default function CollectionsStrip() {
                     {collection.description}
                   </motion.p>
                   
-                  <div className="mt-8 flex items-center space-x-3 text-[9px] font-black uppercase tracking-[0.4em] text-clubhouse-gold overflow-hidden">
+                  <div className="mt-8 flex items-center space-x-3 text-[9px] font-black uppercase tracking-[0.4em] text-zru-green overflow-hidden">
                     <span className="transform group-hover:translate-x-1 transition-transform">Shop Collection</span>
                     <motion.div 
                       initial={{ scaleX: 0 }}
                       whileInView={{ scaleX: 1 }}
                       viewport={{ once: true }}
                       transition={{ delay: (idx * 0.15) + 0.7, duration: 0.8 }}
-                      className="w-8 h-px bg-clubhouse-gold origin-left" 
+                      className="w-8 h-px bg-zru-green origin-left" 
                     />
                   </div>
                 </div>
 
                 {/* Corner Accent */}
-                <div className="absolute top-0 right-0 w-16 h-16 border-t border-r border-white/5 transition-all duration-500 group-hover:w-full group-hover:h-full group-hover:border-clubhouse-gold/20" />
+                <div className="absolute top-0 right-0 w-16 h-16 border-t border-r border-white/5 transition-all duration-500 group-hover:w-full group-hover:h-full group-hover:border-zru-green/20" />
               </Link>
             </motion.div>
           ))}

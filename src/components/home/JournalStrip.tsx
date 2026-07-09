@@ -56,8 +56,8 @@ export default function JournalStrip() {
             viewport={{ once: true }}
             className="flex items-center gap-3 mb-4"
           >
-            <div className="w-10 h-[1.5px] bg-clubhouse-gold" />
-            <span className="text-[10px] font-black uppercase tracking-[0.4em] text-clubhouse-gold">
+            <div className="w-10 h-[1.5px] bg-zru-green" />
+            <span className="text-[10px] font-black uppercase tracking-[0.4em] text-zru-green">
               Editorial Volume 04 • Our Rugby Magazine
             </span>
           </motion.div>
@@ -109,13 +109,13 @@ export default function JournalStrip() {
                   
                   <div className="space-y-6 max-w-2xl">
                     <div className="flex items-center gap-4">
-                      <span className="text-[10px] font-black uppercase tracking-[0.3em] text-clubhouse-gold">
+                      <span className="text-[10px] font-black uppercase tracking-[0.3em] text-zru-green">
                         {post.tag}
                       </span>
-                      <div className="w-1 h-1 rounded-full bg-clubhouse-gold/30" />
+                      <div className="w-1 h-1 rounded-full bg-zru-green/30" />
                       <span className="text-[9px] font-bold text-clubhouse-charcoal/40 uppercase tracking-widest">{post.date} • {post.readTime}</span>
                     </div>
-                    <h3 className="text-4xl md:text-5xl font-black uppercase tracking-tight text-clubhouse-charcoal group-hover:text-clubhouse-gold transition-colors leading-[0.9]">
+                    <h3 className="text-4xl md:text-5xl font-black uppercase tracking-tight text-clubhouse-charcoal group-hover:text-zru-green transition-colors leading-[0.9]">
                       {post.title}
                     </h3>
                     <p className="text-lg md:text-xl text-clubhouse-charcoal/60 font-medium leading-relaxed">
@@ -154,11 +154,11 @@ export default function JournalStrip() {
                   </div>
                   <div className="space-y-3">
                     <div className="flex items-center gap-3">
-                       <span className="text-[9px] font-black uppercase tracking-widest text-clubhouse-gold">{post.tag}</span>
-                       <div className="w-1 h-1 rounded-full bg-clubhouse-gold/30" />
+                       <span className="text-[9px] font-black uppercase tracking-widest text-zru-green">{post.tag}</span>
+                       <div className="w-1 h-1 rounded-full bg-zru-green/30" />
                        <span className="text-[9px] font-bold text-clubhouse-charcoal/40 uppercase tracking-widest">{post.date} • {post.readTime}</span>
                     </div>
-                    <h4 className="text-xl font-black uppercase tracking-tight text-clubhouse-charcoal group-hover:text-clubhouse-gold transition-colors leading-tight">
+                    <h4 className="text-xl font-black uppercase tracking-tight text-clubhouse-charcoal group-hover:text-zru-green transition-colors leading-tight">
                       {post.title}
                     </h4>
                     <p className="text-sm text-clubhouse-charcoal/60 font-medium line-clamp-2">
@@ -175,7 +175,7 @@ export default function JournalStrip() {
               viewport={{ once: true }}
               className="pt-10 border-t border-neutral-100"
             >
-              <Link href="/journal" className="inline-flex items-center gap-4 text-[10px] font-black uppercase tracking-[0.4em] text-clubhouse-charcoal hover:text-clubhouse-gold transition-colors">
+              <Link href="/journal" className="inline-flex items-center gap-4 text-[10px] font-black uppercase tracking-[0.4em] text-clubhouse-charcoal hover:text-zru-green transition-colors">
                 All Stories <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-2 transition-transform inline-block" />
               </Link>
             </motion.div>

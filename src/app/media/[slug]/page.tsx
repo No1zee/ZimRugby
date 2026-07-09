@@ -47,7 +47,7 @@ export default async function ReportPage({ params }: PageProps) {
     .slice(0, 3);
 
   return (
-    <main className="min-h-screen bg-rich-black text-white selection:bg-clubhouse-gold selection:text-black">
+    <main className="min-h-screen bg-rich-black text-white selection:bg-zru-green selection:text-black">
       <Navigation />
       
       {/* Hero Section */}
@@ -64,17 +64,17 @@ export default async function ReportPage({ params }: PageProps) {
         <div className="absolute inset-0 flex flex-col justify-end px-6 pb-12 md:pb-24 max-w-7xl mx-auto w-full">
           <Link 
             href="/media" 
-            className="group inline-flex items-center gap-3 text-[10px] font-black uppercase tracking-[0.4em] text-clubhouse-gold mb-10 transition-all hover:gap-5"
+            className="group inline-flex items-center gap-3 text-[10px] font-black uppercase tracking-[0.4em] text-zru-green mb-10 transition-all hover:gap-5"
           >
             <ArrowLeft className="w-4 h-4" /> Back to The Wire
           </Link>
           
           <div className="flex flex-wrap items-center gap-6 mb-8">
-            <span className="bg-clubhouse-gold text-black px-6 py-1.5 text-[10px] font-black uppercase tracking-[0.2em] rounded-full shadow-[0_0_20px_rgba(212,175,55,0.3)]">
+            <span className="bg-zru-green text-black px-6 py-1.5 text-[10px] font-black uppercase tracking-[0.2em] rounded-full shadow-[0_0_20px_rgba(0,107,63,0.3)]">
               {report.category}
             </span>
             <div className="flex items-center gap-3 text-white/40 text-[10px] font-bold uppercase tracking-widest">
-              <Calendar className="w-3.5 h-3.5 text-clubhouse-gold" />
+              <Calendar className="w-3.5 h-3.5 text-zru-green" />
               <span>{report.date}</span>
               <span className="w-1 h-1 rounded-full bg-white/20" />
               <span>5 Min Read</span>
@@ -93,8 +93,8 @@ export default async function ReportPage({ params }: PageProps) {
           {/* Author / Social Meta */}
           <div className="flex items-center justify-between py-10 border-y border-white/5 mb-20">
             <div className="flex items-center gap-5">
-              <div className="w-14 h-14 rounded-2xl bg-linear-to-br from-clubhouse-gold/20 to-transparent flex items-center justify-center border border-clubhouse-gold/20 group">
-                <span className="text-clubhouse-gold font-black text-xl group-hover:scale-110 transition-transform">ZR</span>
+              <div className="w-14 h-14 rounded-2xl bg-linear-to-br from-zru-green/20 to-transparent flex items-center justify-center border border-zru-green/20 group">
+                <span className="text-zru-green font-black text-xl group-hover:scale-110 transition-transform">ZR</span>
               </div>
               <div className="space-y-1">
                 <p className="text-[11px] font-black uppercase tracking-[0.2em] text-white">Zimbabwe Rugby Media</p>
@@ -107,14 +107,14 @@ export default async function ReportPage({ params }: PageProps) {
                 aria-label="Share Article"
                 title="Share Article"
               >
-                <Share2 className="w-4 h-4 text-white/40 group-hover:text-clubhouse-gold" />
+                <Share2 className="w-4 h-4 text-white/40 group-hover:text-zru-green" />
               </button>
             </div>
           </div>
 
           {/* Body Typography */}
           <div className="space-y-12">
-            <p className="text-2xl md:text-3xl font-medium text-white/90 leading-relaxed italic border-l-4 border-clubhouse-gold pl-10 mb-16 py-2">
+            <p className="text-2xl md:text-3xl font-medium text-white/90 leading-relaxed italic border-l-4 border-zru-green pl-10 mb-16 py-2">
               {report.excerpt}
             </p>
             
@@ -124,7 +124,7 @@ export default async function ReportPage({ params }: PageProps) {
             
             {/* Call to action for the jersey */}
             {report.id === 'heritage-1991' && (
-              <div className="mt-20 p-1 bg-linear-to-r from-clubhouse-gold/50 via-clubhouse-gold/20 to-transparent rounded-3xl">
+              <div className="mt-20 p-1 bg-linear-to-r from-zru-green/50 via-zru-green/20 to-transparent rounded-3xl">
                 <div className="bg-rich-black rounded-[22px] p-10 md:p-16 flex flex-col md:flex-row items-center gap-12 border border-white/5">
                   <div className="relative w-48 h-48 md:w-64 md:h-64 shrink-0">
                      <Image 
@@ -133,12 +133,12 @@ export default async function ReportPage({ params }: PageProps) {
                         fill 
                         className="object-cover rounded-2xl grayscale group-hover:grayscale-0 transition-all opacity-80"
                      />
-                     <div className="absolute inset-0 border-2 border-clubhouse-gold/20 rounded-2xl" />
+                     <div className="absolute inset-0 border-2 border-zru-green/20 rounded-2xl" />
                   </div>
                   <div className="space-y-6 text-center md:text-left">
-                    <h2 className="text-4xl font-black uppercase tracking-tighter">Own a Piece of <span className="text-clubhouse-gold">History</span></h2>
+                    <h2 className="text-4xl font-black uppercase tracking-tighter">Own a Piece of <span className="text-zru-green">History</span></h2>
                     <p className="text-white/60 text-lg">The 1991 Heritage Jersey is available now in limited quantities. Every stitch tells a story of pride, passion, and the indestructible Sable spirit.</p>
-                    <Link href="/shop" className="inline-flex items-center gap-4 bg-clubhouse-gold text-black px-10 py-4 text-xs font-black uppercase tracking-[0.2em] rounded-full hover:shadow-[0_0_30px_rgba(212,175,55,0.4)] transition-all">
+                    <Link href="/shop" className="inline-flex items-center gap-4 bg-zru-green text-black px-10 py-4 text-xs font-black uppercase tracking-[0.2em] rounded-full hover:shadow-[0_0_30px_rgba(0,107,63,0.4)] transition-all">
                       Visit Clubhouse Store <ArrowLeft className="w-4 h-4 rotate-180" />
                     </Link>
                   </div>
@@ -150,7 +150,7 @@ export default async function ReportPage({ params }: PageProps) {
           {/* Tags */}
           <div className="mt-32 pt-12 border-t border-white/5 flex flex-wrap gap-4">
              {["Sables", "Heritage", "World Cup", "History", "The 1991 Era"].map(tag => (
-               <span key={tag} className="text-[10px] font-black uppercase tracking-widest px-6 py-3 bg-white/5 border border-white/10 rounded-full hover:border-clubhouse-gold/40 transition-colors cursor-default">
+               <span key={tag} className="text-[10px] font-black uppercase tracking-widest px-6 py-3 bg-white/5 border border-white/10 rounded-full hover:border-zru-green/40 transition-colors cursor-default">
                  #{tag}
                </span>
              ))}
@@ -173,7 +173,7 @@ export default async function ReportPage({ params }: PageProps) {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
             {relatedReports.map(item => (
               <Link key={item.id} href={`/media/${item.id}`} className="group block space-y-6">
-                <div className="relative aspect-video overflow-hidden rounded-3xl bg-neutral-900 border border-white/5 transition-all group-hover:border-clubhouse-gold/30 group-hover:-translate-y-2">
+                <div className="relative aspect-video overflow-hidden rounded-3xl bg-neutral-900 border border-white/5 transition-all group-hover:border-zru-green/30 group-hover:-translate-y-2">
                   <Image
                     src={item.image}
                     alt={item.title}
@@ -185,11 +185,11 @@ export default async function ReportPage({ params }: PageProps) {
                 </div>
                 <div className="space-y-3">
                   <div className="flex items-center gap-3">
-                    <span className="text-[9px] font-black uppercase tracking-widest text-clubhouse-gold">{item.category}</span>
+                    <span className="text-[9px] font-black uppercase tracking-widest text-zru-green">{item.category}</span>
                     <span className="w-1 h-1 rounded-full bg-white/20" />
                     <span className="text-[9px] font-bold text-white/40 uppercase tracking-widest">{item.date}</span>
                   </div>
-                  <h3 className="text-2xl font-black uppercase tracking-tight leading-none group-hover:text-clubhouse-gold transition-colors italic">
+                  <h3 className="text-2xl font-black uppercase tracking-tight leading-none group-hover:text-zru-green transition-colors italic">
                     {item.title}
                   </h3>
                 </div>

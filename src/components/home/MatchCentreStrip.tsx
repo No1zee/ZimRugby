@@ -61,7 +61,7 @@ export default function MatchCentreStrip({ initialMatches = [], twinData, rankin
 
   return (
     <section 
-      className="py-12 lg:py-24 bg-transparent relative overflow-hidden border-t border-white/5"
+      className="py-8 lg:py-14 bg-transparent relative overflow-hidden border-t border-white/5"
       id="match-centre"
     >
       {/* Background Media with subtle stadium overlay */}
@@ -82,20 +82,10 @@ export default function MatchCentreStrip({ initialMatches = [], twinData, rankin
       
       <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         
-        {/* Title: MATCH CENTRE */}
-        <ScrollReveal>
-          <div className="text-center mb-8 lg:mb-16 space-y-2">
-            <span className="text-zru-green text-[10px] font-black uppercase tracking-[0.4em] font-subheading block">
-              ZRU Control Hub
-            </span>
-            <h2 className="text-3xl md:text-5xl lg:text-6xl font-heading text-center text-white tracking-widest uppercase italic font-black">
-              Match Centre
-            </h2>
-          </div>
-        </ScrollReveal>
+
 
         {/* 12-Column Grid Layout (Spotlight Fixture + Rankings Sidebar) */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch mb-10">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch mb-6">
           
           {/* Main Card (8-Columns) */}
           <div className="lg:col-span-8 flex">
@@ -231,9 +221,6 @@ export default function MatchCentreStrip({ initialMatches = [], twinData, rankin
                   <span className="text-zru-green text-[9px] font-black uppercase tracking-[0.25em] font-subheading block">
                     Official Standings
                   </span>
-                  <h3 className="text-lg font-heading text-white tracking-wider uppercase font-black">
-                    ZRU Rankings
-                  </h3>
                   <div className="w-12 h-[1.5px] bg-zru-green" />
                 </div>
 

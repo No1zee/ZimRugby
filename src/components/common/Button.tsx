@@ -38,11 +38,11 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       primary:
         "bg-zru-red text-white hover:bg-red-700 focus:ring-zru-red border border-transparent shadow-lg hover:shadow-xl hover:shadow-red-500/20 hover:-translate-y-0.5",
       secondary:
-        "bg-zru-gold text-rich-black hover:bg-yellow-500 focus:ring-zru-gold border border-transparent shadow-md hover:shadow-lg hover:shadow-yellow-500/20",
+        "bg-zru-green text-white hover:bg-green-700 focus:ring-zru-green border border-transparent shadow-md hover:shadow-lg hover:shadow-zru-green/20",
       outline:
-        "bg-transparent border-2 border-zru-gold text-zru-gold hover:bg-zru-gold hover:text-rich-black",
+        "bg-transparent border-2 border-zru-green text-zru-green hover:bg-zru-green hover:text-white",
       ghost: "bg-white/10 text-white hover:bg-white/20 border border-white/20 backdrop-blur-sm",
-      link: "bg-transparent text-zru-gold hover:underline p-0 h-auto",
+      link: "bg-transparent text-zru-green hover:underline p-0 h-auto",
     };
 
     const sizes = {

@@ -80,11 +80,11 @@ export default function PlayRugbyPage() {
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
             {programmes.map((prog) => (
               <Link key={prog.title} href={prog.link} className="group block">
-                <div className="bg-gray-50 rounded-lg p-6 h-full hover:shadow-lg transition-all duration-300 border border-transparent hover:border-zru-gold/30">
+                <div className="bg-gray-50 rounded-lg p-6 h-full hover:shadow-lg transition-all duration-300 border border-transparent hover:border-zru-green/30">
                   <div className={`${prog.color} w-14 h-14 rounded-lg flex items-center justify-center mb-4`}>
                     <prog.icon className="w-7 h-7 text-white" />
                   </div>
-                  <h3 className="font-bold text-lg text-zru-green mb-2 group-hover:text-zru-gold transition-colors">
+                  <h3 className="font-bold text-lg text-zru-green mb-2 group-hover:text-zru-green transition-colors">
                     {prog.title}
                   </h3>
                   <p className="text-gray-600 text-sm leading-relaxed mb-4">
@@ -129,7 +129,7 @@ export default function PlayRugbyPage() {
                       {club.location}
                     </div>
                   </div>
-                  <span className="bg-zru-gold/20 text-zru-green text-[10px] font-bold px-2 py-1 rounded uppercase">
+                  <span className="bg-zru-green/20 text-zru-green text-[10px] font-bold px-2 py-1 rounded uppercase">
                     {club.league}
                   </span>
                 </div>
@@ -138,7 +138,7 @@ export default function PlayRugbyPage() {
           </div>
           
           <div className="text-center mt-8">
-            <Link href="/clubs" className="inline-flex items-center gap-2 text-zru-green font-bold hover:text-zru-gold transition-colors">
+            <Link href="/clubs" className="inline-flex items-center gap-2 text-zru-green font-bold hover:text-zru-green transition-colors">
               View All Clubs <ArrowRight className="w-4 h-4" />
             </Link>
           </div>
@@ -156,7 +156,7 @@ export default function PlayRugbyPage() {
           </p>
           <Link 
             href="/contact"
-            className="inline-flex items-center gap-2 bg-zru-gold text-zru-green px-8 py-4 font-bold uppercase tracking-wider rounded hover:bg-yellow-400 transition-colors"
+            className="inline-flex items-center gap-2 bg-zru-green text-zru-green px-8 py-4 font-bold uppercase tracking-wider rounded hover:bg-green-700 transition-colors"
           >
             Get in Touch <ArrowRight className="w-5 h-5" />
           </Link>

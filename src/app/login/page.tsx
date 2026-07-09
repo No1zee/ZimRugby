@@ -16,7 +16,7 @@ export default function LoginPage() {
               name="email" 
               type="email" 
               required 
-              className="bg-rich-black border border-white/20 rounded p-3 text-white focus:border-zru-gold focus:outline-none transition-colors"
+              className="bg-rich-black border border-white/20 rounded p-3 text-white focus:border-zru-green focus:outline-none transition-colors"
             />
           </div>
           <div className="flex flex-col gap-1.5 mb-4">
@@ -26,7 +26,7 @@ export default function LoginPage() {
               name="password" 
               type="password" 
               required 
-              className="bg-rich-black border border-white/20 rounded p-3 text-white focus:border-zru-gold focus:outline-none transition-colors"
+              className="bg-rich-black border border-white/20 rounded p-3 text-white focus:border-zru-green focus:outline-none transition-colors"
             />
           </div>
           <div className="flex flex-col gap-3">

@@ -45,7 +45,7 @@ export default function ClubhouseFooter() {
           {/* Main Links */}
           {footerLinks.map((column) => (
             <div key={column.title}>
-              <h3 className="text-[10px] font-bold uppercase tracking-[0.3em] text-clubhouse-gold mb-8">
+              <h3 className="text-[10px] font-bold uppercase tracking-[0.3em] text-zru-green mb-8">
                 {column.title}
               </h3>
               <ul className="space-y-4">
@@ -65,7 +65,7 @@ export default function ClubhouseFooter() {
 
           {/* Follow Us */}
           <div>
-            <h3 className="text-[10px] font-bold uppercase tracking-[0.3em] text-clubhouse-gold mb-8">
+            <h3 className="text-[10px] font-bold uppercase tracking-[0.3em] text-zru-green mb-8">
               Follow Us
             </h3>
             <div className="flex space-x-6 text-white/50">
@@ -78,7 +78,7 @@ export default function ClubhouseFooter() {
 
           {/* Newsletter */}
           <div className="col-span-2 md:col-span-1">
-            <h3 className="text-[10px] font-bold uppercase tracking-[0.3em] text-clubhouse-gold mb-8">
+            <h3 className="text-[10px] font-bold uppercase tracking-[0.3em] text-zru-green mb-8">
               Join the Clubhouse
             </h3>
             <p className="text-sm text-white/50 mb-6 leading-relaxed">
@@ -88,12 +88,12 @@ export default function ClubhouseFooter() {
               <input 
                 type="email" 
                 placeholder="EMAIL ADDRESS"
-                className="w-full bg-white/5 border border-white/10 px-4 py-3 text-[10px] tracking-widest text-white focus:outline-none focus:border-clubhouse-gold transition-colors"
+                className="w-full bg-white/5 border border-white/10 px-4 py-3 text-[10px] tracking-widest text-white focus:outline-none focus:border-zru-green transition-colors"
                 required
               />
               <button 
                 type="submit"
-                className="absolute right-2 top-1/2 -translate-y-1/2 text-[10px] font-black uppercase tracking-widest text-clubhouse-gold hover:text-white transition-colors"
+                className="absolute right-2 top-1/2 -translate-y-1/2 text-[10px] font-black uppercase tracking-widest text-zru-green hover:text-white transition-colors"
               >
                 JOIN
               </button>

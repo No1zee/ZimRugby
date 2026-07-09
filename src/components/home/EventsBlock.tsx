@@ -31,7 +31,7 @@ const events = [
     description: "The new franchise-style format boosting excitement and participation in the local scene.",
     tags: ["Franchise", "Sable Lager"],
     icon: Trophy,
-    color: "from-zru-gold to-black",
+    color: "from-zru-green to-black",
     image: "/images/media/vid1.jpg"
   },
   {
@@ -83,8 +83,8 @@ export default function EventsBlock() {
             >
               <div className="space-y-4">
                 <div className="flex items-center gap-2">
-                  <div className="w-8 h-px bg-zru-gold" />
-                  <span className="text-zru-gold text-[10px] font-black uppercase tracking-[0.4em]">The Calendar</span>
+                  <div className="w-8 h-px bg-zru-green" />
+                  <span className="text-zru-green text-[10px] font-black uppercase tracking-[0.4em]">The Calendar</span>
                 </div>
                 <div className="pr-4">
                   <PretextHeadline 
@@ -145,7 +145,7 @@ export default function EventsBlock() {
                                 key={tag} 
                                 className={`text-[9px] font-black uppercase tracking-widest px-2.5 py-1 rounded backdrop-blur-sm ${
                                   i === 0 
-                                    ? "bg-zru-gold text-black shadow-sm" 
+                                    ? "bg-zru-green text-black shadow-sm" 
                                     : "text-white border border-white/20 bg-black/20"
                                 }`}
                               >
@@ -153,7 +153,7 @@ export default function EventsBlock() {
                               </span>
                             ))}
                           </div>
-                          <h3 className="font-heading text-4xl tracking-widest text-white group-hover:text-zru-gold transition-colors">
+                          <h3 className="font-heading text-4xl tracking-widest text-white group-hover:text-zru-green transition-colors">
                             {event.title}
                           </h3>
                         </div>

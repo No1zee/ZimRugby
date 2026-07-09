@@ -51,7 +51,7 @@ export default function VideoHubPage() {
 
           <div className="relative z-10 w-full max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 pb-12">
             <div className="max-w-3xl space-y-6">
-              <span className="bg-zru-gold text-rich-black px-3 py-1 rounded text-[10px] font-black uppercase tracking-wider w-fit block">
+              <span className="bg-zru-green text-rich-black px-3 py-1 rounded text-[10px] font-black uppercase tracking-wider w-fit block">
                 FEATURED VIDEO
               </span>
               <h1 className="text-4xl sm:text-6xl font-black uppercase italic tracking-tighter text-glow-green leading-none">
@@ -72,11 +72,11 @@ export default function VideoHubPage() {
                 </GlowButton>
                 <div className="flex items-center gap-4 text-xs text-white/50 font-bold uppercase">
                   <div className="flex items-center gap-1.5">
-                    <Clock className="w-4 h-4 text-zru-gold" />
+                    <Clock className="w-4 h-4 text-zru-green" />
                     <span>{featuredVideo.duration}</span>
                   </div>
                   <div className="flex items-center gap-1.5">
-                    <Calendar className="w-4 h-4 text-zru-gold" />
+                    <Calendar className="w-4 h-4 text-zru-green" />
                     <span>{featuredVideo.date}</span>
                   </div>
                 </div>
@@ -101,7 +101,7 @@ export default function VideoHubPage() {
                     onClick={() => setActiveCategory(cat)}
                     className={`px-5 py-2.5 rounded-full text-xs font-black uppercase tracking-wider transition-all duration-300 whitespace-nowrap ${
                       isActive 
-                        ? "bg-zru-gold text-rich-black shadow-lg" 
+                        ? "bg-zru-green text-rich-black shadow-lg" 
                         : "text-white/60 hover:text-white hover:bg-white/5"
                     }`}
                   >
@@ -119,7 +119,7 @@ export default function VideoHubPage() {
                 placeholder="Search videos… e.g. Highlights"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full bg-white/5 border border-white/10 rounded-full pl-10 pr-4 py-2.5 text-white placeholder-gray-500 focus:outline-none focus:border-zru-gold text-sm transition-all"
+                className="w-full bg-white/5 border border-white/10 rounded-full pl-10 pr-4 py-2.5 text-white placeholder-gray-500 focus:outline-none focus:border-zru-green text-sm transition-all"
               />
             </div>
 
@@ -131,7 +131,7 @@ export default function VideoHubPage() {
       <section className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <div className="flex items-center gap-4 mb-8">
           <h2 className="text-2xl font-black uppercase tracking-wider flex items-center gap-2">
-            <Film className="w-5 h-5 text-zru-gold" />
+            <Film className="w-5 h-5 text-zru-green" />
             <span>VIDEO ARCHIVE ({filteredVideos.length})</span>
           </h2>
           <div className="h-px flex-1 bg-white/10" />
@@ -169,8 +169,8 @@ export default function VideoHubPage() {
 
                 {/* Video Info */}
                 <div className="p-6 space-y-3">
-                  <span className="text-[9px] font-black uppercase tracking-widest text-zru-gold">{video.category}</span>
-                  <h3 className="text-lg font-black uppercase tracking-tight text-white line-clamp-2 group-hover:text-zru-gold transition-colors duration-300">
+                  <span className="text-[9px] font-black uppercase tracking-widest text-zru-green">{video.category}</span>
+                  <h3 className="text-lg font-black uppercase tracking-tight text-white line-clamp-2 group-hover:text-zru-green transition-colors duration-300">
                     {video.title}
                   </h3>
                   <p className="text-white/50 text-xs leading-relaxed line-clamp-2">
@@ -215,7 +215,7 @@ export default function VideoHubPage() {
               {/* Header */}
               <div className="flex justify-between items-center px-6 py-4 bg-white/5 border-b border-white/10">
                 <div>
-                  <span className="text-[9px] font-black uppercase tracking-widest text-zru-gold block">{activeVideo.category}</span>
+                  <span className="text-[9px] font-black uppercase tracking-widest text-zru-green block">{activeVideo.category}</span>
                   <h2 className="text-base md:text-lg font-black uppercase tracking-tight text-white line-clamp-1 mt-0.5">{activeVideo.title}</h2>
                 </div>
                 <button

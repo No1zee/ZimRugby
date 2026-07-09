@@ -47,13 +47,13 @@ export default function LeagueTable() {
                 transition={{ delay: index * 0.05 }}
                 className="border-b border-white/5 hover:bg-white/5 transition-colors group cursor-pointer"
             >
-              <td className="p-4 text-center font-heading text-xl text-white/60 group-hover:text-zru-gold">{row.position}</td>
-              <td className="p-4 font-heading text-xl text-white group-hover:text-zru-gold transition-colors">{row.team}</td>
+              <td className="p-4 text-center font-heading text-xl text-white/60 group-hover:text-zru-green">{row.position}</td>
+              <td className="p-4 font-heading text-xl text-white group-hover:text-zru-green transition-colors">{row.team}</td>
               <td className="p-4 text-center text-white/80">{row.played}</td>
               <td className="p-4 text-center text-white/80">{row.won}</td>
               <td className="p-4 text-center text-white/80">{row.drawn}</td>
               <td className="p-4 text-center text-white/80">{row.lost}</td>
-              <td className="p-4 text-center font-bold text-zru-gold text-lg">{row.points}</td>
+              <td className="p-4 text-center font-bold text-zru-green text-lg">{row.points}</td>
               <td className="p-4 hidden md:flex items-center justify-center gap-1">
                 {row.form.map((result, i) => (
                     <span 

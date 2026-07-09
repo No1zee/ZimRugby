@@ -27,7 +27,7 @@ const tiles = [
     description: "Upcoming matches, events, and programmes.",
     icon: Calendar,
     href: "/events",
-    color: "bg-zru-gold",
+    color: "bg-zru-green",
   },
   {
     key: "play_rugby",
@@ -62,7 +62,7 @@ export default function CoreHubTiles() {
                     <div className={`w-12 h-12 rounded-full flex items-center justify-center mb-4 ${tile.color} ${tile.textColor || "text-white"}`}>
                         <tile.icon className="w-6 h-6" />
                     </div>
-                    <h3 className="text-2xl font-heading text-white mb-2 tracking-wide group-hover:text-zru-gold transition-colors">
+                    <h3 className="text-2xl font-heading text-white mb-2 tracking-wide group-hover:text-zru-green transition-colors">
                         {tile.label}
                     </h3>
                     <p className="text-gray-400 text-sm font-body leading-relaxed">

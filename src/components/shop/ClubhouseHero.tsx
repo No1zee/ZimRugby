@@ -38,8 +38,8 @@ export default function ClubhouseHero() {
             transition={{ duration: 1.5, ease: "easeOut" }}
             className="flex items-center justify-center gap-3 mb-6"
           >
-            <div className="w-1.5 h-1.5 rounded-full bg-clubhouse-gold animate-pulse" />
-            <span className="block text-xs md:text-sm font-bold uppercase text-clubhouse-gold whitespace-nowrap">
+            <div className="w-1.5 h-1.5 rounded-full bg-zru-green animate-pulse" />
+            <span className="block text-xs md:text-sm font-bold uppercase text-zru-green whitespace-nowrap">
               Members Only Access
             </span>
           </motion.div>
@@ -56,7 +56,7 @@ export default function ClubhouseHero() {
               initial={{ y: "100%" }}
               animate={{ y: 0 }}
               transition={{ duration: 1, delay: 0.4, ease: [0.16, 1, 0.3, 1] }}
-              className="text-transparent bg-clip-text bg-linear-to-r from-clubhouse-gold via-white/80 to-white/20 block"
+              className="text-transparent bg-clip-text bg-linear-to-r from-zru-green via-white/80 to-white/20 block"
             >
               RESERVE
             </motion.span>
@@ -75,7 +75,7 @@ export default function ClubhouseHero() {
               href="/clubhouse/kits"
               className="group relative px-10 py-5 bg-white text-clubhouse-charcoal text-xs font-black uppercase tracking-[0.2em] overflow-hidden transition-all hover:scale-105"
             >
-              <div className="absolute inset-0 bg-clubhouse-gold -translate-x-full group-hover:translate-x-0 transition-transform duration-500" />
+              <div className="absolute inset-0 bg-zru-green -translate-x-full group-hover:translate-x-0 transition-transform duration-500" />
               <span className="relative z-10 flex items-center">
                 Secure Allocation <ArrowRight className="ml-2 w-4 h-4" />
               </span>

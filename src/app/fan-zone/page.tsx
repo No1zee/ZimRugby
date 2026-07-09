@@ -76,11 +76,11 @@ export default function FanZonePage() {
             <div className="absolute inset-0 bg-linear-to-t from-rich-black via-rich-black/40 to-transparent" />
             
             {/* Ambient gold splash */}
-            <div className="absolute -top-12 -right-12 w-64 h-64 bg-zru-gold/10 rounded-full blur-3xl" />
+            <div className="absolute -top-12 -right-12 w-64 h-64 bg-zru-green/10 rounded-full blur-3xl" />
           </div>
 
           <div className="relative z-10 p-8 sm:p-12 max-w-3xl">
-            <span className="text-zru-gold text-xs font-black uppercase tracking-[0.4em] mb-2 block">
+            <span className="text-zru-green text-xs font-black uppercase tracking-[0.4em] mb-2 block">
               OFFICIAL SUPPORTERS CLUB
             </span>
             <h1 className="text-4xl sm:text-6xl font-black uppercase italic tracking-tighter text-glow-green leading-none">
@@ -97,7 +97,7 @@ export default function FanZonePage() {
           
           {/* Column 1: Benefits Preview */}
           <div className="space-y-8">
-            <div className="border-l-4 border-zru-gold pl-4">
+            <div className="border-l-4 border-zru-green pl-4">
               <h2 className="text-2xl font-black uppercase tracking-wider">MEMBERSHIP BENEFITS</h2>
               <p className="text-sm text-white/50 mt-1">What you unlock when you join the Sables Fan Club today.</p>
             </div>
@@ -110,7 +110,7 @@ export default function FanZonePage() {
                     key={idx} 
                     className="bg-white/5 border border-white/5 hover:border-white/10 rounded-2xl p-6 space-y-4 hover:-translate-y-1 transition-all duration-300 shadow-md group glow-green-card"
                   >
-                    <div className="w-10 h-10 bg-zru-green/20 rounded-xl flex items-center justify-center text-zru-gold border border-white/5 group-hover:scale-105 transition-transform duration-300">
+                    <div className="w-10 h-10 bg-zru-green/20 rounded-xl flex items-center justify-center text-zru-green border border-white/5 group-hover:scale-105 transition-transform duration-300">
                       <Icon className="w-5 h-5" />
                     </div>
                     <h3 className="font-black text-sm text-white uppercase tracking-tight">{b.title}</h3>
@@ -125,7 +125,7 @@ export default function FanZonePage() {
           <div className="bg-white/5 border border-white/10 rounded-3xl p-6 md:p-10 backdrop-blur-md shadow-2xl relative overflow-hidden glow-green-card">
             
             <div className="border-b border-white/5 pb-6 mb-6">
-              <h3 className="text-lg font-black uppercase tracking-widest text-zru-gold flex items-center gap-2">
+              <h3 className="text-lg font-black uppercase tracking-widest text-zru-green flex items-center gap-2">
                 <Mail className="w-5 h-5" />
                 <span>JOIN THE WIRE</span>
               </h3>
@@ -150,7 +150,7 @@ export default function FanZonePage() {
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                     placeholder="e.g. Adrian Garvey"
-                    className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-2.5 text-white placeholder-white/20 focus:outline-none focus:border-zru-gold text-xs transition-colors"
+                    className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-2.5 text-white placeholder-white/20 focus:outline-none focus:border-zru-green text-xs transition-colors"
                   />
                 </div>
 
@@ -163,7 +163,7 @@ export default function FanZonePage() {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="e.g. adrian@sables.co.zw"
-                    className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-2.5 text-white placeholder-white/20 focus:outline-none focus:border-zru-gold text-xs transition-colors"
+                    className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-2.5 text-white placeholder-white/20 focus:outline-none focus:border-zru-green text-xs transition-colors"
                   />
                 </div>
 
@@ -173,7 +173,7 @@ export default function FanZonePage() {
                   <select
                     value={country}
                     onChange={(e) => setCountry(e.target.value)}
-                    className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:border-zru-gold text-xs transition-colors"
+                    className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:border-zru-green text-xs transition-colors"
                   >
                     {countries.map((c) => (
                       <option key={c} value={c} className="bg-rich-black text-white">
@@ -189,7 +189,7 @@ export default function FanZonePage() {
                   <select
                     value={favTeam}
                     onChange={(e) => setFavTeam(e.target.value)}
-                    className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:border-zru-gold text-xs transition-colors"
+                    className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:border-zru-green text-xs transition-colors"
                   >
                     {teams.map((t) => (
                       <option key={t} value={t} className="bg-rich-black text-white">
@@ -207,7 +207,7 @@ export default function FanZonePage() {
                     required
                     checked={agreed}
                     onChange={(e) => setAgreed(e.target.checked)}
-                    className="mt-0.5 rounded border-white/10 bg-black/40 focus:ring-0 text-zru-gold"
+                    className="mt-0.5 rounded border-white/10 bg-black/40 focus:ring-0 text-zru-green"
                   />
                   <label htmlFor="agreed" className="text-[10px] text-white/40 font-bold uppercase tracking-wider leading-relaxed cursor-pointer select-none">
                     I agree to join the Sables Supporters Club and receive weekly news, updates, and commercial offerings from ZRU.
@@ -218,7 +218,7 @@ export default function FanZonePage() {
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="w-full bg-zru-gold hover:bg-white hover:text-rich-black text-rich-black font-black text-xs uppercase tracking-[0.2em] py-3.5 rounded-xl flex items-center justify-center gap-2 transition-all shadow-lg mt-6 disabled:opacity-50"
+                  className="w-full bg-zru-green hover:bg-white hover:text-rich-black text-rich-black font-black text-xs uppercase tracking-[0.2em] py-3.5 rounded-xl flex items-center justify-center gap-2 transition-all shadow-lg mt-6 disabled:opacity-50"
                 >
                   <span>{isSubmitting ? "Registering…" : "Register supporters card"}</span>
                   <ArrowRight className="w-4 h-4" />
@@ -231,7 +231,7 @@ export default function FanZonePage() {
                 animate={{ opacity: 1, scale: 1 }}
                 className="text-center py-10 space-y-6"
               >
-                <div className="inline-flex p-4 bg-zru-green/20 rounded-full border border-zru-gold/30 text-zru-gold mb-2">
+                <div className="inline-flex p-4 bg-zru-green/20 rounded-full border border-zru-green/30 text-zru-green mb-2">
                   <CheckCircle2 className="w-10 h-10" />
                 </div>
                 <h4 className="font-black text-lg text-white uppercase tracking-wider leading-none">WELCOME TO THE TEAM!</h4>
@@ -239,8 +239,8 @@ export default function FanZonePage() {
                   Congratulations, <strong>{name}</strong>! Your ZRU Supporter Membership has been successfully activated. A confirmation email and details regarding your <strong>10% Clubhouse discount</strong> have been sent to <strong>{email}</strong>.
                 </p>
                 
-                <div className="border-t border-white/5 pt-6 mt-6 flex items-center gap-3 justify-center text-[10px] font-black uppercase tracking-widest text-zru-gold">
-                  <ShieldCheck className="w-5 h-5 text-zru-gold" />
+                <div className="border-t border-white/5 pt-6 mt-6 flex items-center gap-3 justify-center text-[10px] font-black uppercase tracking-widest text-zru-green">
+                  <ShieldCheck className="w-5 h-5 text-zru-green" />
                   <span>MEMBER COUNTRY: {country.toUpperCase()}</span>
                 </div>
                 

@@ -12,7 +12,7 @@ export default function HistoryPage() {
     <div className="space-y-12">
       
       {/* Overview header */}
-      <div className="border-l-4 border-zru-gold pl-4">
+      <div className="border-l-4 border-zru-green pl-4">
         <h2 className="text-2xl font-black uppercase tracking-wider text-white">HISTORY & HERITAGE</h2>
         <p className="text-sm text-white/50 mt-1">Revisiting 130 years of rugby tradition and Sables milestones.</p>
       </div>
@@ -25,7 +25,7 @@ export default function HistoryPage() {
       {/* Timeline list */}
       <div className="pt-6 border-t border-white/5 space-y-8">
         <h3 className="text-lg font-black uppercase tracking-wide text-white flex items-center gap-2">
-          <Trophy className="w-5 h-5 text-zru-gold" />
+          <Trophy className="w-5 h-5 text-zru-green" />
           <span>HISTORICAL MILESTONES</span>
         </h3>
 
@@ -33,10 +33,10 @@ export default function HistoryPage() {
           {milestones.map((item, idx) => (
             <div key={idx} className="relative">
               {/* Dot */}
-              <div className="absolute -left-[31px] top-1.5 w-4 h-4 bg-zru-gold rounded-full border-4 border-rich-black" />
+              <div className="absolute -left-[31px] top-1.5 w-4 h-4 bg-zru-green rounded-full border-4 border-rich-black" />
               
               <div className="space-y-1.5">
-                <span className="text-zru-gold text-lg font-black italic tracking-tighter block">{item.year}</span>
+                <span className="text-zru-green text-lg font-black italic tracking-tighter block">{item.year}</span>
                 <h4 className="text-sm font-black text-white uppercase tracking-tight">{item.title}</h4>
                 <p className="text-white/60 text-xs leading-relaxed font-medium max-w-2xl">{item.desc}</p>
               </div>

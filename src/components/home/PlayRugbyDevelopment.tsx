@@ -54,9 +54,9 @@ export default function PlayRugbyDevelopment() {
             viewport={{ once: true }}
             className="flex items-center gap-3"
           >
-            <div className="w-8 h-px bg-zru-gold" />
-            <span className="text-[10px] font-black uppercase tracking-[0.4em] text-clubhouse-gold">For the Future</span>
-            <div className="w-8 h-px bg-zru-gold" />
+            <div className="w-8 h-px bg-zru-green" />
+            <span className="text-[10px] font-black uppercase tracking-[0.4em] text-zru-green">For the Future</span>
+            <div className="w-8 h-px bg-zru-green" />
           </motion.div>
           <motion.h2 
             initial={{ opacity: 0, y: 20 }}
@@ -87,7 +87,7 @@ export default function PlayRugbyDevelopment() {
                 <div className={`absolute inset-0 bg-linear-to-br ${program.color} opacity-90 transition-opacity group-hover:opacity-100`} />
                 <div className="absolute inset-0 flex flex-col justify-end p-10 space-y-6">
                   <div className="space-y-2">
-                    <program.icon className="w-8 h-8 text-clubhouse-gold" />
+                    <program.icon className="w-8 h-8 text-zru-green" />
                     <div className="text-6xl font-black text-white px-0 tracking-tighter">
                       <AnimatedCounter value={program.stat} suffix="+" />
                     </div>
@@ -122,14 +122,14 @@ export default function PlayRugbyDevelopment() {
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,215,0,0.1),transparent_50%)]" />
           <div className="space-y-4 relative z-10 max-w-xl">
              <h3 className="text-3xl md:text-5xl font-black text-white uppercase tracking-tighter leading-[0.9]">
-               Join The <br /><span className="text-clubhouse-gold">Ranks of Impact</span>
+               Join The <br /><span className="text-zru-green">Ranks of Impact</span>
              </h3>
              <p className="text-white/60 font-medium">
                Whether as a volunteer, donor, or strategic partner, your involvement drives the next era of Zimbabwe Rugby.
              </p>
           </div>
           <div className="flex gap-4 relative z-10">
-            <Link href="/donate" className="px-10 py-5 bg-zru-gold text-white text-[10px] font-black uppercase tracking-widest rounded-full hover:bg-white hover:text-clubhouse-charcoal transition-all shadow-xl">
+            <Link href="/donate" className="px-10 py-5 bg-zru-green text-white text-[10px] font-black uppercase tracking-widest rounded-full hover:bg-white hover:text-clubhouse-charcoal transition-all shadow-xl">
               Donate Now
             </Link>
             <Link href="/volunteer" className="px-10 py-5 border border-white/20 text-white text-[10px] font-black uppercase tracking-widest rounded-full hover:bg-white/10 transition-all">

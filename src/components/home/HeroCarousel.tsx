@@ -56,9 +56,9 @@ function SlideContent({ slide }: { slide: HeroSlideData }) {
   if (tag.includes("LADY")) {
     spotlightColor = "border-t-white/20";
   } else if (tag.includes("CHEETAHS")) {
-    spotlightColor = "border-t-zru-gold/20";
+    spotlightColor = "border-t-zru-green/20";
   } else if (tag.includes("JUNIOR") || tag.includes("U20") || tag.includes("DOMESTIC")) {
-    spotlightColor = "border-t-zru-gold/25";
+    spotlightColor = "border-t-zru-green/25";
   }
 
   return (
@@ -76,7 +76,7 @@ function SlideContent({ slide }: { slide: HeroSlideData }) {
         {(slide.tag || slide.contextPill) && (
           <motion.div variants={itemVariants} className="flex items-center gap-3 flex-wrap">
             {slide.tag && (
-              <span className="bg-zru-green/20 text-clubhouse-gold border border-zru-green/30 px-3 py-1 text-[10px] font-black tracking-[0.2em] uppercase rounded-sm backdrop-blur-xs">
+              <span className="bg-zru-green/20 text-zru-green border border-zru-green/30 px-3 py-1 text-[10px] font-black tracking-[0.2em] uppercase rounded-sm backdrop-blur-xs">
                 {slide.tag}
               </span>
             )}

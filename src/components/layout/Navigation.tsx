@@ -93,6 +93,7 @@ export default function Navigation() {
   const [hidden, setHidden] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
+  const [dynamicNavItems, setDynamicNavItems] = useState<NavItem[]>(navItems);
   const pathname = usePathname();
   const { scrollY } = useScroll();
 
@@ -102,6 +103,32 @@ export default function Navigation() {
     const handleToggle = () => setIsOpen(prev => !prev);
     window.addEventListener('toggleMobileMenu', handleToggle);
     return () => window.removeEventListener('toggleMobileMenu', handleToggle);
+  }, []);
+
+  useEffect(() => {
+    async function loadDynamicNav() {
+      try {
+        const response = await fetch('/api/navigation');
+        if (response.ok) {
+          const data = await response.json();
+          setDynamicNavItems(prev => prev.map(item => {
+            if (item.label === "TEAMS" && data.teams) {
+              return { ...item, children: data.teams };
+            }
+            if (item.label === "COMPETITIONS" && data.competitions) {
+              return { ...item, children: data.competitions };
+            }
+            if (item.label === "EVENTS" && data.events) {
+              return { ...item, children: data.events };
+            }
+            return item;
+          }));
+        }
+      } catch (e) {
+        console.error("Failed to load dynamic nav:", e);
+      }
+    }
+    loadDynamicNav();
   }, []);
 
   useMotionValueEvent(scrollY, "change", (latest) => {
@@ -157,7 +184,7 @@ export default function Navigation() {
           {/* Desktop Nav Links (Centered) */}
           <div className="hidden lg:flex flex-1 items-center justify-center px-4 xl:px-8">
             <div className="flex items-center gap-1 xl:gap-2">
-              {navItems.map((item) => (
+              {dynamicNavItems.map((item) => (
                 <div 
                   key={item.label}
                   className="relative group"
@@ -256,7 +283,7 @@ export default function Navigation() {
             style={{ height: 'calc(100vh - 4rem)' }}
           >
             <div className="px-6 py-8 space-y-6 max-w-[320px] mx-auto w-full">
-              {navItems.map((item, index) => (
+              {dynamicNavItems.map((item, index) => (
                 <motion.div 
                   key={item.label}
                   initial={{ opacity: 0, x: -20 }}

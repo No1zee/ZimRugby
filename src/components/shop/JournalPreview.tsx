@@ -29,13 +29,13 @@ export default function JournalPreview() {
     <section className="bg-white py-24 px-6 md:px-12 border-t border-gray-100">
       <div className="max-w-[1440px] mx-auto">
         <div className="mb-16">
-          <span className="block text-[10px] font-black uppercase tracking-[0.4em] text-clubhouse-gold mb-4">
+          <span className="block text-[10px] font-black uppercase tracking-[0.4em] text-zru-green mb-4">
             Editorial
           </span>
           <h2 className="text-4xl md:text-5xl font-black uppercase tracking-tighter text-clubhouse-charcoal mb-4">
             The Journal
           </h2>
-          <Link href="/clubhouse/journal" className="text-[10px] font-black uppercase tracking-widest text-clubhouse-charcoal/40 border-b border-clubhouse-charcoal/20 pb-1 hover:text-clubhouse-gold transition-colors">
+          <Link href="/clubhouse/journal" className="text-[10px] font-black uppercase tracking-widest text-clubhouse-charcoal/40 border-b border-clubhouse-charcoal/20 pb-1 hover:text-zru-green transition-colors">
             View All Stories
           </Link>
         </div>
@@ -56,10 +56,10 @@ export default function JournalPreview() {
               </div>
               
               <div className="space-y-4">
-                <span className="text-[9px] font-black uppercase tracking-[0.2em] text-clubhouse-gold">
+                <span className="text-[9px] font-black uppercase tracking-[0.2em] text-zru-green">
                   {post.tag}
                 </span>
-                <h3 className="text-xl font-bold uppercase tracking-tight text-clubhouse-charcoal group-hover:text-clubhouse-gold transition-colors leading-[1.2]">
+                <h3 className="text-xl font-bold uppercase tracking-tight text-clubhouse-charcoal group-hover:text-zru-green transition-colors leading-[1.2]">
                   {post.title}
                 </h3>
                 <p className="text-sm text-clubhouse-charcoal/60 leading-relaxed font-medium">

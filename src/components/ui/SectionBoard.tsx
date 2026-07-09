@@ -53,20 +53,20 @@ export function SectionBoard({
     navy: {
       bg: "bg-[#091F40]",
       text: "text-white",
-      accent: "text-zru-gold",
+      accent: "text-zru-green",
       button: "bg-zru-red hover:bg-red-700 text-white",
     },
     red: {
       bg: "bg-zru-red",
       text: "text-white",
-      accent: "text-zru-gold",
+      accent: "text-zru-green",
       button: "bg-white hover:bg-gray-100 text-zru-red",
     },
     green: {
       bg: "bg-zru-green",
       text: "text-white",
-      accent: "text-zru-gold",
-      button: "bg-zru-gold hover:bg-yellow-500 text-rich-black",
+      accent: "text-zru-green",
+      button: "bg-zru-green hover:bg-green-700 text-rich-black",
     },
   };
 

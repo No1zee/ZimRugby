@@ -83,8 +83,8 @@ export default function VariantsPage() {
       <Navigation />
       
       <div className="pt-40 pb-24 max-w-[1440px] mx-auto px-6 md:px-12">
-        <header className="mb-16 border-l-4 border-clubhouse-gold pl-8">
-          <span className="text-[10px] font-black text-clubhouse-gold uppercase tracking-[0.4em] mb-4 block">Design System / Core Components</span>
+        <header className="mb-16 border-l-4 border-zru-green pl-8">
+          <span className="text-[10px] font-black text-zru-green uppercase tracking-[0.4em] mb-4 block">Design System / Core Components</span>
           <h1 className="text-5xl md:text-7xl font-black text-white uppercase tracking-tighter leading-none mb-4">FixtureCard Variants</h1>
           <p className="text-gray-500 max-w-2xl font-medium">
             This internal preview showcases the FixtureCard component across all possible match states. 
@@ -110,7 +110,7 @@ export default function VariantsPage() {
           <h2 className="text-2xl font-black text-white uppercase tracking-tight mb-8">Logic Implementation Checklist</h2>
           <div className="grid md:grid-cols-2 gap-12">
             <div className="space-y-4">
-              <h3 className="text-xs font-black text-clubhouse-gold uppercase tracking-widest">Happy Path (On Sale)</h3>
+              <h3 className="text-xs font-black text-zru-green uppercase tracking-widest">Happy Path (On Sale)</h3>
               <ul className="text-sm text-gray-500 space-y-2 font-medium list-disc ml-4">
                 <li>Primary Gold Button with &quot;ExternalLink&quot; icon if URl present</li>
                 <li>Green pulsing status chip</li>
@@ -118,7 +118,7 @@ export default function VariantsPage() {
               </ul>
             </div>
             <div className="space-y-4">
-              <h3 className="text-xs font-black text-clubhouse-gold uppercase tracking-widest">Fail-States (Sold Out / Cancelled)</h3>
+              <h3 className="text-xs font-black text-zru-green uppercase tracking-widest">Fail-States (Sold Out / Cancelled)</h3>
               <ul className="text-sm text-gray-500 space-y-2 font-medium list-disc ml-4">
                 <li>Cards set to 60% opacity + Grayscale filter</li>
                 <li>Buttons replaced with static, disabled badges</li>

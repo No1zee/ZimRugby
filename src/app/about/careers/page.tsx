@@ -11,7 +11,7 @@ export default function CareersPage() {
     <div className="space-y-12">
       
       {/* Overview header */}
-      <div className="border-l-4 border-zru-gold pl-4">
+      <div className="border-l-4 border-zru-green pl-4">
         <h2 className="text-2xl font-black uppercase tracking-wider text-white">CAREERS & VACANCIES</h2>
         <p className="text-sm text-white/50 mt-1">Join the team building the future of rugby in Zimbabwe.</p>
       </div>
@@ -23,7 +23,7 @@ export default function CareersPage() {
       {/* Jobs list */}
       <div className="pt-6 border-t border-white/5 space-y-6">
         <h3 className="text-lg font-black uppercase tracking-wide text-white flex items-center gap-2">
-          <Briefcase className="w-5 h-5 text-zru-gold" />
+          <Briefcase className="w-5 h-5 text-zru-green" />
           <span>CURRENT VACANCIES</span>
         </h3>
         
@@ -40,7 +40,7 @@ export default function CareersPage() {
               
               <a 
                 href="mailto:careers@zimbabwerugby.co.zw" 
-                className="inline-flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-zru-gold hover:text-white transition-colors group-hover:gap-3 shrink-0"
+                className="inline-flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-zru-green hover:text-white transition-colors group-hover:gap-3 shrink-0"
               >
                 <span>Apply Now</span>
                 <ArrowRight className="w-3.5 h-3.5" />

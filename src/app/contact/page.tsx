@@ -47,14 +47,14 @@ export default function ContactPage() {
   ];
 
   return (
-    <main className="bg-rich-black min-h-screen text-white flex flex-col justify-between selection:bg-zru-gold selection:text-rich-black">
+    <main className="bg-rich-black min-h-screen text-white flex flex-col justify-between selection:bg-zru-green selection:text-white">
       <Navigation />
 
       <div className="flex-1 max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 pt-32 pb-24 w-full">
         
         {/* Header Section */}
-        <section className="mb-16 border-l-4 border-zru-gold pl-6">
-          <span className="text-zru-gold text-xs font-black uppercase tracking-[0.4em] mb-2 block">
+        <section className="mb-16 border-l-4 border-zru-green pl-6">
+          <span className="text-zru-green text-xs font-black uppercase tracking-[0.4em] mb-2 block">
             GET IN TOUCH
           </span>
           <h1 className="text-5xl md:text-7xl font-black uppercase italic tracking-tighter text-glow-green leading-none">
@@ -77,7 +77,7 @@ export default function ContactPage() {
                   key={idx} 
                   className="bg-white/5 border border-white/5 rounded-2xl p-6 flex items-start gap-4 hover:border-white/10 transition-colors"
                 >
-                  <div className="w-10 h-10 bg-zru-green/20 rounded-xl flex items-center justify-center text-zru-gold border border-white/5 shrink-0">
+                  <div className="w-10 h-10 bg-zru-green/20 rounded-xl flex items-center justify-center text-zru-green border border-white/5 shrink-0">
                     <Icon className="w-5 h-5" />
                   </div>
                   <div className="space-y-1">
@@ -93,7 +93,7 @@ export default function ContactPage() {
           <div className="lg:col-span-2 bg-white/5 border border-white/10 rounded-3xl p-6 md:p-10 backdrop-blur-md shadow-2xl glow-green-card">
             
             <div className="border-b border-white/5 pb-6 mb-6">
-              <h3 className="text-lg font-black uppercase tracking-widest text-zru-gold flex items-center gap-2">
+              <h3 className="text-lg font-black uppercase tracking-widest text-zru-green flex items-center gap-2">
                 <Send className="w-5 h-5" />
                 <span>SEND A SECURE MESSAGE</span>
               </h3>
@@ -108,7 +108,7 @@ export default function ContactPage() {
                 animate={{ opacity: 1, scale: 1 }}
                 className="text-center py-12 space-y-4"
               >
-                <div className="inline-flex p-4 bg-zru-green/20 rounded-full border border-zru-gold/30 text-zru-gold mb-2">
+                <div className="inline-flex p-4 bg-zru-green/20 rounded-full border border-zru-green/30 text-zru-green mb-2">
                   <CheckCircle2 className="w-10 h-10" />
                 </div>
                 <h4 className="font-black text-lg text-white uppercase tracking-wider">MESSAGE SENT SUCCESSFULLY</h4>
@@ -117,7 +117,7 @@ export default function ContactPage() {
                 </p>
                 <button 
                   onClick={() => setSubmitSuccess(false)}
-                  className="text-xs font-black uppercase text-zru-gold hover:text-white transition-colors tracking-widest pt-6 block mx-auto underline"
+                  className="text-xs font-black uppercase text-zru-green hover:text-white transition-colors tracking-widest pt-6 block mx-auto underline"
                 >
                   Send another message
                 </button>
@@ -142,7 +142,7 @@ export default function ContactPage() {
                       value={name}
                       onChange={(e) => setName(e.target.value)}
                       placeholder="e.g. Kennedy Tsimba"
-                      className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-2.5 text-white placeholder-white/20 focus:outline-none focus:border-zru-gold text-xs transition-colors"
+                      className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-2.5 text-white placeholder-white/20 focus:outline-none focus:border-zru-green text-xs transition-colors"
                     />
                   </div>
 
@@ -155,7 +155,7 @@ export default function ContactPage() {
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       placeholder="e.g. kennedy@tsimba.com"
-                      className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-2.5 text-white placeholder-white/20 focus:outline-none focus:border-zru-gold text-xs transition-colors"
+                      className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-2.5 text-white placeholder-white/20 focus:outline-none focus:border-zru-green text-xs transition-colors"
                     />
                   </div>
                 </div>
@@ -166,7 +166,7 @@ export default function ContactPage() {
                   <select
                     value={subject}
                     onChange={(e) => setSubject(e.target.value)}
-                    className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:border-zru-gold text-xs transition-colors"
+                    className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:border-zru-green text-xs transition-colors"
                   >
                     <option className="bg-rich-black text-white" value="General Enquiry">General Enquiry</option>
                     <option className="bg-rich-black text-white" value="Ticketing Support">Ticketing Support</option>
@@ -185,14 +185,14 @@ export default function ContactPage() {
                     value={message}
                     onChange={(e) => setMessage(e.target.value)}
                     placeholder="Describe your request in detail… e.g. Ticketing query"
-                    className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-2.5 text-white placeholder-white/20 focus:outline-none focus:border-zru-gold text-xs transition-colors resize-none"
+                    className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-2.5 text-white placeholder-white/20 focus:outline-none focus:border-zru-green text-xs transition-colors resize-none"
                   />
                 </div>
 
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="w-full bg-zru-gold hover:bg-white hover:text-rich-black text-rich-black font-black text-xs uppercase tracking-[0.2em] py-3.5 rounded-xl flex items-center justify-center gap-2 transition-all shadow-lg disabled:opacity-50"
+                  className="w-full bg-zru-green hover:bg-white hover:text-rich-black text-rich-black font-black text-xs uppercase tracking-[0.2em] py-3.5 rounded-xl flex items-center justify-center gap-2 transition-all shadow-lg disabled:opacity-50"
                 >
                   <span>{isSubmitting ? "Sending…" : "Submit message"}</span>
                   <Send className="w-4 h-4" />

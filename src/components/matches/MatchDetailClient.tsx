@@ -46,7 +46,7 @@ export default function MatchDetailClient({ data }: MatchDetailClientProps) {
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[60%] h-[60%] rounded-full bg-zru-green/10 opacity-30 blur-[100px] pointer-events-none" />
           
           <div className="relative z-10 flex flex-col items-center text-center">
-            <span className="text-zru-gold text-xs font-black uppercase tracking-[0.3em] mb-2">
+            <span className="text-zru-green text-xs font-black uppercase tracking-[0.3em] mb-2">
               {match.competition}
             </span>
             <span className="text-white/40 text-[10px] font-bold uppercase tracking-wider mb-8">
@@ -90,7 +90,7 @@ export default function MatchDetailClient({ data }: MatchDetailClientProps) {
                   </div>
                 ) : (
                   <div className="flex flex-col items-center">
-                    <span className="text-3xl md:text-5xl font-black italic text-zru-gold">VS</span>
+                    <span className="text-3xl md:text-5xl font-black italic text-zru-green">VS</span>
                     <span className="bg-white/10 text-white text-[9px] font-black uppercase tracking-widest px-3 py-1 rounded-full mt-3">
                       UPCOMING
                     </span>
@@ -115,15 +115,15 @@ export default function MatchDetailClient({ data }: MatchDetailClientProps) {
             {/* Stadium, Date & Time */}
             <div className="flex flex-col md:flex-row items-center gap-6 justify-center text-sm text-white/60 border-t border-white/10 pt-6 w-full max-w-2xl">
               <div className="flex items-center gap-2">
-                <Calendar className="w-4 h-4 text-zru-gold" />
+                <Calendar className="w-4 h-4 text-zru-green" />
                 <span className="font-bold uppercase">{match.date}</span>
               </div>
               <div className="flex items-center gap-2">
-                <Clock className="w-4 h-4 text-zru-gold" />
+                <Clock className="w-4 h-4 text-zru-green" />
                 <span className="font-bold uppercase">{match.time} CAT</span>
               </div>
               <div className="flex items-center gap-2">
-                <MapPin className="w-4 h-4 text-zru-gold" />
+                <MapPin className="w-4 h-4 text-zru-green" />
                 <span className="font-bold uppercase">{match.venue}</span>
               </div>
             </div>
@@ -134,7 +134,7 @@ export default function MatchDetailClient({ data }: MatchDetailClientProps) {
                 <Link href="/tickets">
                   <motion.button 
                     whileHover={{ scale: 1.05 }}
-                    className="bg-zru-gold text-rich-black font-black text-xs uppercase tracking-[0.2em] px-8 py-3 rounded-full flex items-center gap-2 shadow-lg hover:shadow-zru-gold/20 transition-all"
+                    className="bg-zru-green text-rich-black font-black text-xs uppercase tracking-[0.2em] px-8 py-3 rounded-full flex items-center gap-2 shadow-lg hover:shadow-zru-green/20 transition-all"
                   >
                     <Ticket className="w-4 h-4" />
                     <span>Purchase Match Tickets</span>
@@ -158,7 +158,7 @@ export default function MatchDetailClient({ data }: MatchDetailClientProps) {
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id)}
                   className={`flex items-center gap-2 pb-4 px-4 text-xs font-black uppercase tracking-wider relative transition-all duration-300 ${
-                    isActive ? "text-zru-gold" : "text-white/60 hover:text-white"
+                    isActive ? "text-zru-green" : "text-white/60 hover:text-white"
                   }`}
                 >
                   <Icon className="w-4 h-4" />
@@ -166,7 +166,7 @@ export default function MatchDetailClient({ data }: MatchDetailClientProps) {
                   {isActive && (
                     <motion.div 
                       layoutId="matchDetailTabLine"
-                      className="absolute bottom-0 left-0 right-0 h-0.5 bg-zru-gold"
+                      className="absolute bottom-0 left-0 right-0 h-0.5 bg-zru-green"
                     />
                   )}
                 </button>
@@ -192,7 +192,7 @@ export default function MatchDetailClient({ data }: MatchDetailClientProps) {
               <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
                 {/* Paragraphs and narrative */}
                 <div className="lg:col-span-2 space-y-6">
-                  <div className="border-l-4 border-zru-gold pl-4 mb-8">
+                  <div className="border-l-4 border-zru-green pl-4 mb-8">
                     <h2 className="text-xl font-black uppercase tracking-wider">MATCH REPORT</h2>
                     <p className="text-sm text-white/50 mt-1">Official match summary and timeline events.</p>
                   </div>
@@ -214,7 +214,7 @@ export default function MatchDetailClient({ data }: MatchDetailClientProps) {
                   <div className="space-y-4">
                     {report.scorerTimeline.map((item, idx) => (
                       <div key={idx} className="flex items-start gap-4">
-                        <span className="text-zru-gold font-black text-xs min-w-[32px] pt-0.5">{item.minute}&apos;</span>
+                        <span className="text-zru-green font-black text-xs min-w-[32px] pt-0.5">{item.minute}&apos;</span>
                         <div className="flex-1">
                           <span className="text-white font-bold text-sm block">{item.player}</span>
                           <span className="text-white/40 text-[10px] font-bold uppercase tracking-wider block mt-0.5">
@@ -231,7 +231,7 @@ export default function MatchDetailClient({ data }: MatchDetailClientProps) {
             {/* Lineups Tab */}
             {activeTab === "lineups" && (
               <div className="space-y-12">
-                <div className="border-l-4 border-zru-gold pl-4">
+                <div className="border-l-4 border-zru-green pl-4">
                   <h2 className="text-xl font-black uppercase tracking-wider">OFFICIAL LINEUPS & TEAM SHEETS</h2>
                   <p className="text-sm text-white/50 mt-1">Starting rosters and tactical reserves selected for this match.</p>
                 </div>
@@ -246,7 +246,7 @@ export default function MatchDetailClient({ data }: MatchDetailClientProps) {
                       {homeLineup.map((player) => (
                         <div key={player.number} className="flex items-center justify-between py-2 border-b border-white/5 last:border-0 text-sm">
                           <div className="flex items-center gap-3">
-                            <span className="w-6 h-6 rounded-full bg-white/10 border border-white/5 flex items-center justify-center text-xs font-black text-zru-gold">
+                            <span className="w-6 h-6 rounded-full bg-white/10 border border-white/5 flex items-center justify-center text-xs font-black text-zru-green">
                               {player.number}
                             </span>
                             <span className="font-semibold text-white uppercase tracking-tight">{player.name}</span>
@@ -288,7 +288,7 @@ export default function MatchDetailClient({ data }: MatchDetailClientProps) {
             {/* Stats Tab */}
             {activeTab === "stats" && stats && (
               <div className="max-w-3xl mx-auto space-y-12">
-                <div className="border-l-4 border-zru-gold pl-4">
+                <div className="border-l-4 border-zru-green pl-4">
                   <h2 className="text-xl font-black uppercase tracking-wider">STATS & PERFORMANCE COMPARISON</h2>
                   <p className="text-sm text-white/50 mt-1">A comparative look at key performance indicators.</p>
                 </div>
@@ -302,7 +302,7 @@ export default function MatchDetailClient({ data }: MatchDetailClientProps) {
                       <span>{stats.possession.away}%</span>
                     </div>
                     <div className="w-full h-2.5 bg-white/10 rounded-full flex overflow-hidden">
-                      <div className="bg-zru-gold h-full" style={{ width: `${stats.possession.home}%` }} />
+                      <div className="bg-zru-green h-full" style={{ width: `${stats.possession.home}%` }} />
                       <div className="bg-white/30 h-full" style={{ width: `${stats.possession.away}%` }} />
                     </div>
                   </div>
@@ -315,7 +315,7 @@ export default function MatchDetailClient({ data }: MatchDetailClientProps) {
                       <span>{stats.territory.away}%</span>
                     </div>
                     <div className="w-full h-2.5 bg-white/10 rounded-full flex overflow-hidden">
-                      <div className="bg-zru-gold h-full" style={{ width: `${stats.territory.home}%` }} />
+                      <div className="bg-zru-green h-full" style={{ width: `${stats.territory.home}%` }} />
                       <div className="bg-white/30 h-full" style={{ width: `${stats.territory.away}%` }} />
                     </div>
                   </div>
