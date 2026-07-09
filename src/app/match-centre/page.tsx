@@ -2,8 +2,6 @@
 
 import { motion } from "framer-motion";
 import { Filter, Search } from "lucide-react";
-import Navigation from "@/components/layout/Navigation";
-import Footer from "@/components/layout/Footer";
 import Button from "@/components/common/Button";
 import MatchList, { Match, MatchListSkeleton } from "@/components/matches/MatchList";
 import PageHero from "@/components/ui/PageHero";
@@ -35,7 +33,6 @@ export default function MatchCentre() {
 
   return (
     <>
-      <Navigation />
       <main className="bg-rich-black min-h-screen pb-24">
         {/* PageHero header */}
         <div className="pt-24">
@@ -155,7 +152,6 @@ export default function MatchCentre() {
 
       </div>
     </main>
-    <Footer />
     </>
   );
 }

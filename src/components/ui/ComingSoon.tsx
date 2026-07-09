@@ -1,6 +1,3 @@
-import Navigation from "@/components/layout/Navigation";
-import Footer from "@/components/layout/Footer";
-
 /**
  * Shared placeholder page for routes that are still under construction.
  * Carries the brand language (crest watermark, green slant accent, Bebas
@@ -9,8 +6,6 @@ import Footer from "@/components/layout/Footer";
 export default function ComingSoon() {
   return (
     <main className="min-h-screen bg-rich-black flex flex-col relative overflow-hidden">
-      <Navigation />
-
       {/* Ambient brand layers */}
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_bottom_left,rgba(3,105,54,0.14),transparent_55%)] pointer-events-none" />
       {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -34,7 +29,6 @@ export default function ComingSoon() {
           back later as we continue to build the future of Zimbabwe Rugby.
         </p>
       </div>
-      <Footer />
     </main>
   );
 }

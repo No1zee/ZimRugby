@@ -2,8 +2,6 @@
 
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronRight, Calendar as CalendarIcon, MapPin, Clock, Award, Users, Layers, Shield, Trophy, Activity, CheckCircle } from "lucide-react";
-import Navigation from "@/components/layout/Navigation";
-import Footer from "@/components/layout/Footer";
 import EdgyGradient from "@/components/ui/EdgyGradient";
 import PageHero from "@/components/ui/PageHero";
 import SlantedButton from "@/components/ui/SlantedButton";
@@ -369,12 +367,8 @@ function EventsInner() {
 
 export default function EventsPage() {
   return (
-    <>
-      <Navigation />
-      <Suspense fallback={<div className="min-h-screen bg-rich-black flex items-center justify-center text-white">Loading Competitions Hub...</div>}>
-        <EventsInner />
-      </Suspense>
-      <Footer />
-    </>
+    <Suspense fallback={<div className="min-h-screen bg-rich-black flex items-center justify-center text-white">Loading Competitions Hub...</div>}>
+      <EventsInner />
+    </Suspense>
   );
 }
