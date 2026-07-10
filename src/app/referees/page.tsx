@@ -242,7 +242,7 @@ export default function RefereesPortalPage() {
 
           {/* Sidebar Area: Interactive Registration Form */}
           <div className="lg:col-span-1">
-            <div className="bg-white/5 border border-white/10 rounded-2xl p-6 backdrop-blur-md sticky top-28 space-y-6 glow-green-card">
+            <div className="card-green border rounded-2xl p-6 backdrop-blur-md sticky top-28 space-y-6 glow-green-card">
               
               <div className="border-b border-white/5 pb-4">
                 <h3 className="text-sm font-black uppercase tracking-widest text-zru-green">COURSE REGISTRATION</h3>

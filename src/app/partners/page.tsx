@@ -13,7 +13,6 @@ export const metadata: Metadata = {
 export default function PartnersPage() {
   return (
     <main className="min-h-screen bg-rich-black overflow-hidden selection:bg-zru-green selection:text-white">
-      <Navigation />
       
       <PartnersHero />
 

@@ -142,7 +142,7 @@ export const FixtureCard = ({ fixture, onRegister }: FixtureCardProps) => {
       layout
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className={`relative group bg-white/2 border border-white/5 rounded-xl overflow-hidden hover:border-white/10 transition-all duration-500 flex flex-col h-full glow-green-card ${isGrayscale ? 'opacity-60 grayscale' : ''}`}
+      className={`relative group card-green border rounded-xl overflow-hidden flex flex-col h-full glow-green-card ${isGrayscale ? 'opacity-60 grayscale' : ''}`}
     >
       {/* Cinematic Grain Overlay */}
       <div className="absolute inset-0 bg-[url('/noise.png')] opacity-20 pointer-events-none" />

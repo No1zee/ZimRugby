@@ -28,7 +28,7 @@ export default function NewsCard({
     <Link href={slug} target={source === 'facebook' ? "_blank" : "_self"} rel={source === 'facebook' ? "noopener noreferrer" : ""}>
         <motion.div 
             whileHover={{ y: -2 }}
-            className="flex flex-col md:flex-row gap-6 group cursor-pointer bg-white/5 hover:bg-white/10 p-4 md:p-6 rounded-2xl border border-white/5 transition-all glow-green-card relative overflow-hidden"
+            className="flex flex-col md:flex-row gap-6 group cursor-pointer card-green p-4 md:p-6 rounded-2xl border glow-green-card relative overflow-hidden"
         >
             {source === 'facebook' && (
                 <div className="absolute top-4 right-4 z-10">

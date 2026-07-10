@@ -50,7 +50,7 @@ export default function MatchCard({
   return (
     <motion.div
       whileHover={{ y: -5 }}
-      className="bg-white/5 border border-white/10 rounded-xl overflow-hidden hover:border-zru-green transition-all duration-300 group"
+      className="card-green border rounded-xl overflow-hidden group"
     >
       {/* Header: Competition & Round */}
       <div className="bg-white/5 px-6 py-3 flex justify-between items-center border-b border-white/5">

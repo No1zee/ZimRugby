@@ -155,16 +155,16 @@ export default function Navigation() {
   if (pathname?.startsWith('/clubhouse') || pathname?.startsWith('/admin')) return null;
 
   return (
-    <header 
-      className={`
-        fixed w-full z-50 transition-all duration-300 border-b border-transparent
-        ${hidden ? "-translate-y-full" : "translate-y-0"}
-        ${isScrolled 
-          ? "bg-zru-green/95 backdrop-blur-xl shadow-lg border-white/10" 
-          : "bg-transparent"
-        }
-      `}
-    >
+      <header 
+        className={`
+          fixed w-full z-50 transition-all duration-300
+          ${hidden ? "-translate-y-full" : "translate-y-0"}
+          ${isScrolled 
+            ? "bg-zru-green/95 backdrop-blur-xl shadow-lg border-b border-white/10" 
+            : "bg-transparent border-b border-transparent"
+          }
+        `}
+      >
       
       {/* Main Navigation */}
       <nav className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">

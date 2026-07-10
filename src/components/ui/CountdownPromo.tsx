@@ -93,7 +93,7 @@ export function CountdownPromo({
       {/* Visual Background Accent */}
       <div className="absolute inset-0 z-0">
         <div className="absolute inset-0 bg-gradient-to-r from-transparent via-transparent to-transparent z-10" />
-        <div className="absolute inset-0 bg-zru-green/5 z-0" />
+        <div className="absolute inset-0 bg-zru-green/10 z-0" />
         <div className="absolute top-0 right-0 w-1/2 h-full bg-[radial-gradient(circle_at_top_right,rgba(0,96,57,0.1),transparent_70%)]" />
       </div>
 
@@ -187,7 +187,7 @@ export function CountdownPromo({
                   { value: timeLeft.minutes, label: "MINUTES" },
                   { value: timeLeft.seconds, label: "SECONDS" },
                 ].map((unit) => (
-                  <div key={unit.label} className="text-center bg-gradient-to-b from-white/5 via-white/[0.01] to-transparent border border-white/10 rounded-xl px-4 py-3 md:py-5 min-w-[85px] md:min-w-[110px] shadow-lg shadow-black/40 backdrop-blur-md relative group/timer">
+                  <div key={unit.label} className="text-center bg-gradient-to-b from-zru-green/[0.12] via-zru-green/[0.04] to-transparent border border-zru-green/20 rounded-xl px-4 py-3 md:py-5 min-w-[85px] md:min-w-[110px] shadow-lg shadow-black/40 backdrop-blur-md relative group/timer">
                     {/* Inner dividing horizontal strip (clock digit split) */}
                     <div className="absolute left-0 right-0 top-1/2 h-[1px] bg-black/30 z-20 pointer-events-none" />
                     

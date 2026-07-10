@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { getReportById, getLatestReports } from "@/lib/data-fetcher";
-import Navigation from "@/components/layout/Navigation";
 import Footer from "@/components/layout/Footer";
 import Image from "next/image";
 import Link from "next/link";
@@ -48,7 +47,6 @@ export default async function ReportPage({ params }: PageProps) {
 
   return (
     <main className="min-h-screen bg-rich-black text-white selection:bg-zru-green selection:text-black">
-      <Navigation />
       
       {/* Hero Section */}
       <div className="relative w-full h-[60vh] md:h-[75vh] overflow-hidden">

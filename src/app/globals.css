@@ -44,7 +44,7 @@
 
   /* Premium Shadows system */
   --shadow-card: 0 1px 3px 0 rgba(0,0,0,0.1);
-  --shadow-card-hover: 0 10px 25px -5px rgba(0,0,0,0.25), 0 0 30px rgba(0,150,70,0.05);
+  --shadow-card-hover: 0 10px 25px -5px rgba(0,0,0,0.25), 0 0 30px rgba(0,150,70,0.12);
   --shadow-hero: 0 20px 50px -12px rgba(0,0,0,0.5), 0 0 60px rgba(0,150,70,0.1);
 
   /* Uniform Border Radii */
@@ -62,7 +62,6 @@ body {
   position: relative;
   background-color: #050505;
   background-image: 
-    /* Subtle diagonal lines - 45deg, 100px spacing, ~7% opacity */
     repeating-linear-gradient(
       135deg,
       rgba(58, 58, 58, 0.07) 0px,
@@ -104,17 +103,17 @@ body {
 
 /* Bento Card styling */
 .bento-card {
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  background: rgba(15, 15, 15, 0.4);
+  border: 1px solid rgba(0, 107, 63, 0.20);
+  background: rgba(15, 15, 15, 0.45);
   backdrop-filter: blur(16px);
   border-radius: 16px;
   overflow: hidden;
   transition: border-color 0.4s cubic-bezier(0.16, 1, 0.3, 1), background 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 .bento-card:hover {
-  border-color: rgba(0, 107, 63, 0.45);
-  background: rgba(20, 20, 20, 0.65);
-  box-shadow: 0 10px 30px -10px rgba(0, 107, 63, 0.25), 0 0 20px rgba(0, 107, 63, 0.12);
+  border-color: rgba(0, 107, 63, 0.55);
+  background: rgba(0, 107, 63, 0.08);
+  box-shadow: 0 10px 30px -10px rgba(0, 107, 63, 0.30), 0 0 20px rgba(0, 107, 63, 0.18);
 }
 
 .perspective-1000 {
@@ -149,14 +148,14 @@ body {
   left: -50%;
   width: 200%;
   height: 200%;
-  background: radial-gradient(circle at center, rgba(0, 150, 70, 0.08) 0%, transparent 40%);
+  background: radial-gradient(circle at center, rgba(0, 150, 70, 0.15) 0%, transparent 40%);
   pointer-events: none;
   z-index: 0;
   transition: opacity 0.5s ease;
 }
 
 .glow-green-card:hover::before {
-  background: radial-gradient(circle at center, rgba(0, 150, 70, 0.12) 0%, transparent 50%);
+  background: radial-gradient(circle at center, rgba(0, 150, 70, 0.22) 0%, transparent 50%);
 }
 
 /* ============================================================
@@ -166,11 +165,11 @@ body {
 
 /* L1 — Standard elevated card surface */
 .card-surface {
-  background: linear-gradient(135deg, rgba(255,255,255,0.065) 0%, rgba(255,255,255,0.02) 100%);
-  border: 1px solid rgba(255,255,255,0.08);
+  background: linear-gradient(135deg, rgba(0,107,63,0.06) 0%, rgba(0,107,63,0.015) 100%);
+  border: 1px solid rgba(0,107,63,0.20);
   box-shadow:
     0 4px 24px rgba(0,0,0,0.35),
-    inset 0 1px 0 rgba(255,255,255,0.07);
+    inset 0 1px 0 rgba(0,150,70,0.10);
   position: relative;
   overflow: hidden;
 }
@@ -181,18 +180,18 @@ body {
   position: absolute;
   top: 0; left: 15%; right: 15%;
   height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.14), transparent);
+  background: linear-gradient(90deg, transparent, rgba(0,150,70,0.20), transparent);
   pointer-events: none;
   z-index: 1;
 }
 
 /* Hero-level variant — adds backdrop blur (max 3 cards per page) */
 .card-surface-blur {
-  background: linear-gradient(135deg, rgba(255,255,255,0.075) 0%, rgba(255,255,255,0.025) 100%);
-  border: 1px solid rgba(255,255,255,0.10);
+  background: linear-gradient(135deg, rgba(0,107,63,0.07) 0%, rgba(0,107,63,0.02) 100%);
+  border: 1px solid rgba(0,107,63,0.22);
   box-shadow:
     0 8px 40px rgba(0,0,0,0.45),
-    inset 0 1px 0 rgba(255,255,255,0.09);
+    inset 0 1px 0 rgba(0,150,70,0.12);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   position: relative;
@@ -204,7 +203,7 @@ body {
   position: absolute;
   top: 0; left: 10%; right: 10%;
   height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.18), transparent);
+  background: linear-gradient(90deg, transparent, rgba(0,150,70,0.22), transparent);
   pointer-events: none;
   z-index: 1;
 }
@@ -214,12 +213,12 @@ body {
   transition: border-color 300ms ease, box-shadow 300ms ease, background 300ms ease;
 }
 .card-glow-green:hover {
-  border-color: rgba(0, 107, 63, 0.22) !important;
+  border-color: rgba(0, 107, 63, 0.35) !important;
   box-shadow:
     0 8px 32px rgba(0,0,0,0.45),
-    0 0 28px rgba(0,107,63,0.09),
-    inset 0 1px 0 rgba(255,255,255,0.09);
-  background: linear-gradient(135deg, rgba(255,255,255,0.08) 0%, rgba(0,107,63,0.03) 100%);
+    0 0 28px rgba(0,107,63,0.15),
+    inset 0 1px 0 rgba(0,150,70,0.12);
+  background: linear-gradient(135deg, rgba(0,107,63,0.08) 0%, rgba(0,107,63,0.03) 100%);
 }
 
 
@@ -243,6 +242,18 @@ body {
 
 .text-shadow-hero { text-shadow: 0 4px 20px rgba(0, 0, 0, 0.5); }
 .text-shadow-hero-glow { text-shadow: 0 0 40px rgba(0, 150, 70, 0.5), 0 4px 20px rgba(0, 0, 0, 0.5); }
+
+/* Card Green — single source of truth for all card backgrounds/borders */
+.card-green {
+  background: linear-gradient(135deg, rgba(0,107,63,0.18) 0%, rgba(0,107,63,0.06) 100%);
+  border-color: rgba(0, 107, 63, 0.35);
+  transition: border-color 300ms ease, box-shadow 300ms ease, background 300ms ease;
+}
+.card-green:hover {
+  border-color: rgba(0, 107, 63, 0.50);
+  background: linear-gradient(135deg, rgba(0,107,63,0.25) 0%, rgba(0,107,63,0.10) 100%);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.45), 0 0 28px rgba(0,107,63,0.25);
+}
 
 .glare-effect {
   background: radial-gradient(circle at var(--x) var(--y), rgba(255, 255, 255, 0.15) 0%, transparent 60%);

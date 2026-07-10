@@ -53,7 +53,6 @@ const clubs = [
 export default function PlayRugbyPage() {
   return (
     <main className="bg-rich-black min-h-screen">
-      <Navigation />
       
       {/* Hero */}
       <section className="pt-32 pb-16 bg-zru-green relative overflow-hidden">

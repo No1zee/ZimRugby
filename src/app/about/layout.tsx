@@ -1,5 +1,6 @@
 "use client";
 
+import EdgyGradient from "@/components/ui/EdgyGradient";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 import { Info, Users, Shield, Landmark, Hourglass, Briefcase } from "lucide-react";
@@ -21,8 +22,11 @@ export default function AboutLayout({
   ];
 
   return (
-    <div className="bg-rich-black min-h-screen text-white pt-24 pb-20">
-      
+    <div className="bg-rich-black min-h-screen text-white pt-24 pb-20 relative overflow-hidden">
+      <div className="absolute inset-0 pointer-events-none select-none z-0">
+        <EdgyGradient opacity={0.4} />
+      </div>
+
       {/* Institutional Banner */}
       <section className="bg-zru-green relative overflow-hidden py-16 border-b border-white/10 mb-12">
         <div className="absolute inset-0 opacity-10 bg-pattern-diagonal-lines" />
