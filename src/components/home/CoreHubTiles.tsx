@@ -53,7 +53,7 @@ export default function CoreHubTiles() {
               viewport={{ once: true }}
               transition={{ delay: index * 0.1, duration: 0.5 }}
               whileHover={{ y: -10 }}
-              className="group relative overflow-hidden rounded-xl bg-white/5 border border-white/10 hover:border-white/20 transition-all duration-300 h-64 flex flex-col justify-between p-6 cursor-pointer"
+               className="group relative overflow-hidden rounded-xl card-green border h-64 flex flex-col justify-between p-6 cursor-pointer"
             >
                 {/* Background Gradient on Hover */}
                 <div className={`absolute inset-0 opacity-0 group-hover:opacity-10 transition-opacity duration-300 ${tile.color}`} />

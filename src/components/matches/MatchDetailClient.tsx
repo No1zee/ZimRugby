@@ -41,7 +41,7 @@ export default function MatchDetailClient({ data }: MatchDetailClientProps) {
 
       {/* Scoreboard / Cinematic Header */}
       <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 mb-12">
-        <div className="relative bg-white/5 border border-white/10 rounded-2xl p-6 md:p-12 overflow-hidden shadow-2xl glow-green-card">
+        <div className="relative card-green border rounded-2xl p-6 md:p-12 overflow-hidden shadow-2xl glow-green-card">
           {/* Subtle background glow */}
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[60%] h-[60%] rounded-full bg-zru-green/10 opacity-30 blur-[100px] pointer-events-none" />
           
@@ -207,7 +207,7 @@ export default function MatchDetailClient({ data }: MatchDetailClientProps) {
                 </div>
 
                 {/* Scorer Timeline */}
-                <div className="bg-white/5 border border-white/10 rounded-xl p-6 h-fit">
+                <div className="card-green border rounded-xl p-6 h-fit">
                   <h3 className="text-base font-black uppercase tracking-widest text-white border-b border-white/10 pb-4 mb-6">
                     SCORING TIMELINE
                   </h3>
@@ -238,7 +238,7 @@ export default function MatchDetailClient({ data }: MatchDetailClientProps) {
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
                   {/* Home Lineup */}
-                  <div className="bg-white/5 border border-white/10 rounded-xl p-6 md:p-8 shadow-xl">
+                  <div className="card-green border rounded-xl p-6 md:p-8 shadow-xl">
                     <h3 className="text-lg font-black uppercase tracking-wider border-b border-white/10 pb-4 mb-6 text-glow-green text-white">
                       {match.homeTeam.name} Squad
                     </h3>
@@ -261,7 +261,7 @@ export default function MatchDetailClient({ data }: MatchDetailClientProps) {
                   </div>
 
                   {/* Away Lineup */}
-                  <div className="bg-white/5 border border-white/10 rounded-xl p-6 md:p-8 shadow-xl">
+                  <div className="card-green border rounded-xl p-6 md:p-8 shadow-xl">
                     <h3 className="text-lg font-black uppercase tracking-wider border-b border-white/10 pb-4 mb-6 text-white/80">
                       {match.awayTeam.name} Squad
                     </h3>
@@ -293,7 +293,7 @@ export default function MatchDetailClient({ data }: MatchDetailClientProps) {
                   <p className="text-sm text-white/50 mt-1">A comparative look at key performance indicators.</p>
                 </div>
 
-                <div className="bg-white/5 border border-white/10 rounded-xl p-6 md:p-10 space-y-8">
+                <div className="card-green border rounded-xl p-6 md:p-10 space-y-8">
                   {/* Possession */}
                   <div>
                     <div className="flex justify-between text-xs font-black uppercase tracking-widest mb-2 text-white">

@@ -60,7 +60,7 @@ export default function Footer() {
   }
 
   return (
-    <footer className="bg-clubhouse-charcoal text-white relative overflow-hidden pt-32 pb-12">
+    <footer className="bg-clubhouse-charcoal text-white relative overflow-hidden pt-16 pb-8">
       
       {/* Dynamic Background */}
       <div className="absolute top-0 right-0 w-1/3 h-full bg-linear-to-l from-zru-green/5 to-transparent pointer-events-none" />
@@ -68,8 +68,8 @@ export default function Footer() {
       <div className="max-w-[1440px] mx-auto px-6 relative z-10">
         
         {/* Top Section: Brand & Newsletter */}
-        <div className="flex flex-col lg:flex-row justify-between gap-20 mb-32">
-          <div className="max-w-md space-y-10">
+        <div className="flex flex-col lg:flex-row justify-between gap-10 mb-16">
+          <div className="max-w-md space-y-6">
             <Link href="/" className="inline-block group">
               <div className="space-y-4">
                 <span className="text-6xl font-black text-white tracking-tighter block leading-none">ZIMBABWE <br /><span className="text-zru-green">RUGBY</span></span>
@@ -96,11 +96,11 @@ export default function Footer() {
             </div>
           </div>
 
-          <div className="bg-white/5 border border-white/10 rounded-4xl p-10 md:p-16 max-w-2xl w-full relative">
-             <div className="space-y-8 relative z-10">
-                <div className="space-y-2">
+          <div className="bg-white/5 border border-white/10 rounded-4xl p-8 md:p-12 max-w-2xl w-full relative">
+             <div className="space-y-6 relative z-10">
+                <div className="space-y-1">
                    <span className="text-zru-green text-[10px] font-black uppercase tracking-[0.4em]">Stay in the Loop</span>
-                   <h3 className="text-3xl font-black text-white uppercase tracking-tighter">THE SABLES <br />BULLETIN</h3>
+                   <h3 className="text-2xl font-black text-white uppercase tracking-tighter">THE SABLES BULLETIN</h3>
                 </div>
                 {submitted ? (
                   <div className="flex items-center gap-3 text-zru-green py-4">
@@ -134,11 +134,11 @@ export default function Footer() {
         </div>
 
         {/* Links Grid */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-12 mb-32">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-16">
           {Object.entries(footerLinks).map(([title, links]) => (
-            <div key={title} className="space-y-8">
+            <div key={title} className="space-y-4">
               <h4 className="text-[10px] font-black uppercase tracking-[0.3em] text-zru-green">{title}</h4>
-              <ul className="space-y-4">
+              <ul className="space-y-3">
                  {links.map((link: { label: string; href: string; descriptor?: string }) => (
                     <li key={link.label}>
                        <Link href={link.href} className="flex flex-col group/link">
@@ -159,7 +159,7 @@ export default function Footer() {
         </div>
 
         {/* Bottom Bar */}
-        <div className="pt-12 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-8">
+        <div className="pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-6">
            <div className="flex flex-col md:flex-row items-center gap-8 w-full justify-between">
               <Link href="/world-cup-campaign" className="text-[9px] font-black uppercase tracking-[0.4em] text-white/50 hover:text-zru-green transition-colors">
                 Fueling the pathway, one pledge at a time.

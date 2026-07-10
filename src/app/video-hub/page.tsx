@@ -143,7 +143,7 @@ export default function VideoHubPage() {
               <motion.div
                 key={video.id}
                 whileHover={{ y: -5 }}
-                className="bg-white/5 border border-white/5 hover:border-white/10 rounded-2xl overflow-hidden transition-all duration-300 group cursor-pointer shadow-xl glow-green-card"
+                className="card-green border rounded-2xl overflow-hidden group cursor-pointer shadow-xl glow-green-card"
                 onClick={() => setActiveVideo(video)}
               >
                 {/* Thumbnail container */}

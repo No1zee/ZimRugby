@@ -182,8 +182,6 @@ export default function TicketsPage() {
 
   return (
     <main className="bg-rich-black min-h-screen selection:bg-zru-green selection:text-rich-black">
-      <Navigation />
-
       {/* SECTION A: HERO */}
       <section className="relative min-h-[60vh] flex items-center pt-32 pb-16 overflow-hidden">
         {/* Stadium Background */}

@@ -93,7 +93,7 @@ export default function MatchCentre() {
               </div>
             </div>
         ) : fixtures.length === 0 ? (
-            <div className="text-center py-20 border border-dashed border-white/10 rounded-2xl bg-white/5">
+            <div className="text-center py-20 border border-dashed rounded-2xl card-green">
                 <p className="text-gray-500 font-heading">NO {activeTab.toUpperCase()} MATCHES FOUND</p>
                 <Link href="/match-centre">
                     <Button variant="ghost" className="mt-4 text-zru-orange">VIEW FULL CALENDAR</Button>
@@ -109,7 +109,7 @@ export default function MatchCentre() {
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     whileHover={{ scale: 1.01, rotate: 0.5 }}
-                    className="relative bg-linear-to-br from-gray-900 to-black rounded-2xl overflow-hidden border border-white/10 shadow-2xl group"
+                    className="relative card-green border rounded-2xl overflow-hidden shadow-2xl group"
                     >
                     {/* Cinematic Background */}
                     <div className="absolute inset-0 opacity-30 bg-[url('/images/stadium-bg.jpg')] bg-cover bg-center grayscale group-hover:grayscale-0 transition-all duration-700" />
@@ -179,10 +179,10 @@ export default function MatchCentre() {
                         viewport={{ once: true }}
                         transition={{ duration: 0.5, delay: index * 0.1 }}
                         whileHover={{ y: -10, rotate: 0.5 }}
-                        className="w-[300px] md:w-[350px] bg-gray-900 border border-white/10 rounded-xl overflow-hidden shadow-xl hover:shadow-2xl hover:border-zru-orange/30 transition-all duration-300 group"
+                        className="w-[300px] md:w-[350px] card-green border rounded-xl overflow-hidden shadow-xl group"
                     >
                         {/* Card Header */}
-                        <div className="bg-white/5 px-6 py-4 border-b border-white/5 flex justify-between items-center group-hover:bg-white/10 transition-colors">
+                        <div className="card-green px-6 py-4 border-b flex justify-between items-center">
                         <div className="flex flex-col">
                             <span className="text-zru-orange text-[10px] font-bold tracking-wider uppercase">
                             {match.competition}

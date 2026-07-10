@@ -80,7 +80,6 @@ const VARIANT_MATCHES: Fixture[] = [
 export default function VariantsPage() {
   return (
     <main className="bg-rich-black min-h-screen">
-      <Navigation />
       
       <div className="pt-40 pb-24 max-w-[1440px] mx-auto px-6 md:px-12">
         <header className="mb-16 border-l-4 border-zru-green pl-8">

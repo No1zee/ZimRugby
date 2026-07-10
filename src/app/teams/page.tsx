@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import EdgyGradient from "@/components/ui/EdgyGradient";
 import TeamCard from "../../components/teams/TeamCard";
 import PageHero from "@/components/ui/PageHero";
 
@@ -50,6 +51,9 @@ const teams = [
 export default function TeamsPage() {
   return (
     <main className="bg-rich-black min-h-screen pb-24">
+      <div className="absolute inset-0 pointer-events-none select-none z-0">
+        <EdgyGradient opacity={0.4} />
+      </div>
       <div className="pt-24">
         <PageHero
           title="Our Teams"

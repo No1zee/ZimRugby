@@ -67,7 +67,7 @@ export default function PartnersSection() {
               transition={{ delay: i * 0.1, duration: 1, ease: [0.16, 1, 0.3, 1] }}
               className="group relative"
             >
-              <div className="relative h-48 bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-8 flex items-center justify-center transition-all duration-700 group-hover:bg-white/10 group-hover:border-white/20">
+              <div className="relative h-48 card-green backdrop-blur-xl border rounded-2xl p-8 flex items-center justify-center">
                 <div className="relative w-full h-full">
                   <Image 
                     src={sponsor.logo} 

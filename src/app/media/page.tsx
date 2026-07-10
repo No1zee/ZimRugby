@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import EdgyGradient from "@/components/ui/EdgyGradient";
 import { Play, Search, Facebook } from "lucide-react";
 import Button from "@/components/common/Button";
 import VideoCard from "@/components/media/VideoCard";
@@ -101,7 +102,10 @@ export default function MediaPage() {
                       activeTab === "social" ? allNews.filter(n => n.source === 'facebook') : [];
 
   return (
-    <main className="bg-rich-black min-h-screen pb-24">
+    <main className="bg-rich-black min-h-screen pb-24 relative overflow-hidden">
+      <div className="absolute inset-0 pointer-events-none select-none z-0">
+        <EdgyGradient opacity={0.4} />
+      </div>
 
       {/* PageHero header */}
       <div className="pt-24">
@@ -121,36 +125,36 @@ export default function MediaPage() {
             <div className="flex p-1 bg-white/5 rounded-xl border border-white/10 w-fit overflow-x-auto no-scrollbar">
                 <button 
                     onClick={() => setActiveTab("all")}
-                    className={`px-6 py-2 rounded-lg text-[10px] font-black tracking-[0.2em] uppercase transition-all whitespace-nowrap ${activeTab === "all" ? "bg-zru-green text-white shadow-lg shadow-zru-green/20" : "text-gray-400 hover:text-white"}`}
+                    className={`px-6 py-2 rounded-lg text-[10px] font-black tracking-[0.2em] uppercase transition-all whitespace-nowrap ${activeTab === "all" ? "bg-zru-green text-white shadow-lg shadow-zru-green/20" : "text-white/70 hover:text-white"}`}
                 >
                     All
                 </button>
                 <button 
                     onClick={() => setActiveTab("videos")}
-                    className={`px-6 py-2 rounded-lg text-[10px] font-black tracking-[0.2em] uppercase transition-all whitespace-nowrap ${activeTab === "videos" ? "bg-zru-green text-white shadow-lg shadow-zru-green/20" : "text-gray-400 hover:text-white"}`}
+                    className={`px-6 py-2 rounded-lg text-[10px] font-black tracking-[0.2em] uppercase transition-all whitespace-nowrap ${activeTab === "videos" ? "bg-zru-green text-white shadow-lg shadow-zru-green/20" : "text-white/70 hover:text-white"}`}
                 >
                     Videos
                 </button>
                 <button 
                     onClick={() => setActiveTab("news")}
-                    className={`px-6 py-2 rounded-lg text-[10px] font-black tracking-[0.2em] uppercase transition-all whitespace-nowrap ${activeTab === "news" ? "bg-zru-green text-white shadow-lg shadow-zru-green/20" : "text-gray-400 hover:text-white"}`}
+                    className={`px-6 py-2 rounded-lg text-[10px] font-black tracking-[0.2em] uppercase transition-all whitespace-nowrap ${activeTab === "news" ? "bg-zru-green text-white shadow-lg shadow-zru-green/20" : "text-white/70 hover:text-white"}`}
                 >
                     Official
                 </button>
                 <button 
                     onClick={() => setActiveTab("social")}
-                    className={`px-6 py-2 rounded-lg text-[10px] font-black tracking-[0.2em] uppercase transition-all whitespace-nowrap flex items-center gap-2 ${activeTab === "social" ? "bg-zru-green text-white shadow-lg shadow-zru-green/20" : "text-gray-400 hover:text-white"}`}
+                    className={`px-6 py-2 rounded-lg text-[10px] font-black tracking-[0.2em] uppercase transition-all whitespace-nowrap flex items-center gap-2 ${activeTab === "social" ? "bg-zru-green text-white shadow-lg shadow-zru-green/20" : "text-white/70 hover:text-white"}`}
                 >
-                    Social <Facebook className={`w-3 h-3 ${activeTab === "social" ? "text-white" : "text-gray-500"}`} />
+                    Social <Facebook className={`w-3 h-3 ${activeTab === "social" ? "text-white" : "text-white/40"}`} />
                 </button>
             </div>
 
             <div className="relative w-full sm:w-80">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/40" />
                 <input 
                     type="text" 
                     placeholder="Search news & videos… e.g. Sables" 
-                    className="w-full bg-white/5 border border-white/10 rounded-lg pl-10 pr-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-zru-green text-sm transition-all"
+                    className="w-full bg-white/5 border border-white/10 rounded-lg pl-10 pr-4 py-3 text-white placeholder-white/40 focus:outline-none focus:border-zru-green text-sm transition-all"
                 />
             </div>
         </div>

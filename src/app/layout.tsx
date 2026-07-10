@@ -62,7 +62,7 @@ export default function RootLayout({
         <Script src="https://t.contentsquare.net/uxa/97d0dc6c80d47.js" strategy="afterInteractive" />
         <ClientLayoutShell>
           <Navigation />
-          <main className="pb-24">
+          <main className="relative overflow-hidden pb-24 min-h-screen bg-rich-black">
             {children}
           </main>
           <Footer />

@@ -1,5 +1,6 @@
 "use client";
 
+import EdgyGradient from "@/components/ui/EdgyGradient";
 import { motion } from "framer-motion";
 import { Filter, Search } from "lucide-react";
 import Navigation from "@/components/layout/Navigation";
@@ -34,8 +35,10 @@ export default function MatchCentre() {
 
   return (
     <>
-      <Navigation />
       <main className="bg-rich-black min-h-screen pt-24 pb-24">
+        <div className="absolute inset-0 pointer-events-none select-none z-0">
+          <EdgyGradient opacity={0.4} />
+        </div>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           
           {/* Header */}
@@ -81,11 +84,11 @@ export default function MatchCentre() {
            {/* Search & Team Filter */}
            <div className="flex items-center gap-4 w-full lg:w-auto">
                <div className="relative flex-1 lg:w-64">
-                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
-                  <input 
-                     type="text" 
-                     placeholder="Search opponent… e.g. Zambia" 
-                     className="w-full bg-black/20 border border-white/10 rounded-lg pl-10 pr-4 py-2 text-white placeholder-gray-500 focus:outline-none focus:border-zru-green text-sm"
+                   <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/40" />
+                   <input 
+                      type="text" 
+                      placeholder="Search opponent… e.g. Zambia" 
+                      className="w-full bg-white/5 border border-white/10 rounded-lg pl-10 pr-4 py-2 text-white placeholder-white/40 focus:outline-none focus:border-zru-green text-sm"
                   />
                </div>
                <Button variant="outline" className="text-white border-white/20 hover:bg-white/10 px-3">

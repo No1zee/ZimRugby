@@ -56,7 +56,7 @@ export default function TeamPageClient({ team }: TeamPageClientProps) {
             </div>
 
             {/* Quick Stats Grid */}
-            <div className="flex flex-wrap gap-4 lg:gap-6 bg-white/5 border border-white/10 rounded-xl p-4 backdrop-blur-md">
+            <div className="flex flex-wrap gap-4 lg:gap-6 card-green border rounded-xl p-4 backdrop-blur-md">
               {team.stats.map((stat, idx) => (
                 <div key={idx} className="flex flex-col border-r border-white/10 last:border-0 pr-6 last:pr-0">
                   <span className="text-[10px] text-white/40 font-bold uppercase tracking-wider">{stat.label}</span>
@@ -118,7 +118,7 @@ export default function TeamPageClient({ team }: TeamPageClientProps) {
                   {team.squad.map((player, idx) => (
                     <div 
                       key={idx} 
-                      className="bg-white/5 border border-white/5 hover:border-white/10 rounded-xl p-5 flex flex-col items-center text-center transition-all duration-300 hover:-translate-y-1 shadow-lg group glow-green-card"
+                      className="card-green border rounded-xl p-5 flex flex-col items-center text-center hover:-translate-y-1 shadow-lg group glow-green-card"
                     >
                       {/* Player photo placeholder */}
                       <div className="w-24 h-24 bg-white/10 rounded-full flex items-center justify-center border border-white/10 relative overflow-hidden mb-4 group-hover:border-zru-green/50 transition-colors">
@@ -150,7 +150,7 @@ export default function TeamPageClient({ team }: TeamPageClientProps) {
                   {team.coachingStaff.map((coach, idx) => (
                     <div 
                       key={idx} 
-                      className="bg-white/5 border border-white/10 rounded-xl p-6 flex items-center gap-6 group hover:border-zru-green/30 transition-all duration-300"
+                      className="card-green border rounded-xl p-6 flex items-center gap-6 group"
                     >
                       <div className="w-16 h-16 bg-white/10 rounded-full flex items-center justify-center border border-white/15 relative overflow-hidden shrink-0 group-hover:scale-105 transition-transform duration-300">
                         <Award className="w-8 h-8 text-white/40" />
@@ -179,7 +179,7 @@ export default function TeamPageClient({ team }: TeamPageClientProps) {
                     return (
                       <div 
                         key={idx} 
-                        className="bg-white/5 border border-white/5 hover:border-white/10 rounded-xl p-6 flex flex-col md:flex-row md:items-center md:justify-between gap-6 transition-colors duration-300"
+                        className="card-green border rounded-xl p-6 flex flex-col md:flex-row md:items-center md:justify-between gap-6"
                       >
                         {/* Match Opponent and details */}
                         <div className="flex items-center gap-4">
@@ -242,7 +242,7 @@ export default function TeamPageClient({ team }: TeamPageClientProps) {
                   <p className="text-sm text-white/50 mt-1">Understanding the origins, historic achievements, and identity of {team.name}.</p>
                 </div>
 
-                <div className="bg-white/5 border border-white/10 rounded-2xl p-8 max-w-4xl">
+                <div className="card-green border rounded-2xl p-8 max-w-4xl">
                   <p className="text-white/80 text-lg leading-relaxed font-medium">
                     {team.history}
                   </p>
@@ -262,7 +262,7 @@ export default function TeamPageClient({ team }: TeamPageClientProps) {
                   {team.gallery.map((img, idx) => (
                     <div 
                       key={idx} 
-                      className="relative h-64 bg-white/5 border border-white/10 rounded-xl overflow-hidden group shadow-lg hover:border-zru-green/30 transition-all duration-300"
+                      className="relative h-64 card-green border rounded-xl overflow-hidden group shadow-lg"
                     >
                       <Image 
                         src={img} 

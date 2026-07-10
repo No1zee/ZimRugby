@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import EdgyGradient from "@/components/ui/EdgyGradient";
 import { Mail, CheckCircle2, Ticket, Percent, Newspaper, Trophy, ShieldCheck, ArrowRight, AlertCircle } from "lucide-react";
 import { saveSubmission } from "@/lib/mockStorage";
 
@@ -65,7 +66,10 @@ export default function FanZonePage() {
   };
 
   return (
-    <main className="bg-rich-black min-h-screen pt-24 pb-24 text-white">
+    <main className="bg-rich-black min-h-screen pt-24 pb-24 text-white relative overflow-hidden">
+      <div className="absolute inset-0 pointer-events-none select-none z-0">
+        <EdgyGradient opacity={0.4} />
+      </div>
       <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Widescreen Hero Banner */}
@@ -108,7 +112,7 @@ export default function FanZonePage() {
                 return (
                   <div 
                     key={idx} 
-                    className="bg-white/5 border border-white/5 hover:border-white/10 rounded-2xl p-6 space-y-4 hover:-translate-y-1 transition-all duration-300 shadow-md group glow-green-card"
+                    className="card-green border rounded-2xl p-6 space-y-4 hover:-translate-y-1 shadow-md group glow-green-card"
                   >
                     <div className="w-10 h-10 bg-zru-green/20 rounded-xl flex items-center justify-center text-zru-green border border-white/5 group-hover:scale-105 transition-transform duration-300">
                       <Icon className="w-5 h-5" />
@@ -122,7 +126,7 @@ export default function FanZonePage() {
           </div>
 
           {/* Column 2: Newsletter Registration Form (SA Rugby Pattern) */}
-          <div className="bg-white/5 border border-white/10 rounded-3xl p-6 md:p-10 backdrop-blur-md shadow-2xl relative overflow-hidden glow-green-card">
+          <div className="card-green border rounded-3xl p-6 md:p-10 backdrop-blur-md shadow-2xl relative overflow-hidden glow-green-card">
             
             <div className="border-b border-white/5 pb-6 mb-6">
               <h3 className="text-lg font-black uppercase tracking-widest text-zru-green flex items-center gap-2">

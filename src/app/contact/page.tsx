@@ -48,8 +48,6 @@ export default function ContactPage() {
 
   return (
     <main className="bg-rich-black min-h-screen text-white flex flex-col justify-between selection:bg-zru-green selection:text-white">
-      <Navigation />
-
       <div className="flex-1 max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 pt-32 pb-24 w-full">
         
         {/* Header Section */}
@@ -90,7 +88,7 @@ export default function ContactPage() {
           </div>
 
           {/* Form Column (2 columns) */}
-          <div className="lg:col-span-2 bg-white/5 border border-white/10 rounded-3xl p-6 md:p-10 backdrop-blur-md shadow-2xl glow-green-card">
+          <div className="lg:col-span-2 card-green border rounded-3xl p-6 md:p-10 backdrop-blur-md shadow-2xl glow-green-card">
             
             <div className="border-b border-white/5 pb-6 mb-6">
               <h3 className="text-lg font-black uppercase tracking-widest text-zru-green flex items-center gap-2">

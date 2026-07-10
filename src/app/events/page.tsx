@@ -1,10 +1,10 @@
 "use client";
 
+import EdgyGradient from "@/components/ui/EdgyGradient";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronRight, Calendar as CalendarIcon, MapPin, Clock, Award, Users, Layers, Shield, Trophy, Activity, CheckCircle } from "lucide-react";
 import Navigation from "@/components/layout/Navigation";
 import Footer from "@/components/layout/Footer";
-import EdgyGradient from "@/components/ui/EdgyGradient";
 import SlantedButton from "@/components/ui/SlantedButton";
 import { useState, useEffect, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
@@ -151,8 +151,12 @@ function EventsInner() {
   return (
     <main className="bg-rich-black min-h-screen pt-24 pb-24 relative overflow-hidden">
       
+      {/* Ambient Background Gradient */}
+      <div className="absolute inset-0 pointer-events-none select-none z-0">
+        <EdgyGradient opacity={0.5} />
+      </div>
+
       {/* Ambient Visual Layers */}
-      <EdgyGradient opacity={0.5} />
       <div className="absolute top-0 right-0 w-1/2 h-[600px] bg-[radial-gradient(circle_at_top_right,rgba(0,107,63,0.15),transparent_70%)] pointer-events-none" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
@@ -372,7 +376,6 @@ function EventsInner() {
 export default function EventsPage() {
   return (
     <>
-      <Navigation />
       <Suspense fallback={<div className="min-h-screen bg-rich-black flex items-center justify-center text-white">Loading Competitions Hub...</div>}>
         <EventsInner />
       </Suspense>

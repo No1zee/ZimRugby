@@ -4,7 +4,7 @@ import SlantedButton from '@/components/ui/SlantedButton'
 export default function LoginPage() {
   return (
     <div className="min-h-screen bg-rich-black flex flex-col items-center justify-center p-4">
-      <div className="w-full max-w-md bg-white/5 border border-white/10 p-8 rounded-2xl glow-green-card">
+      <div className="w-full max-w-md card-green border p-8 rounded-2xl glow-green-card">
         <h1 className="font-heading text-4xl text-white mb-6 tracking-widest text-center uppercase">
           ZRU Portal Login
         </h1>

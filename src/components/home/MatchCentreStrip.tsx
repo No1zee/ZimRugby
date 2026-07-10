@@ -91,7 +91,7 @@ export default function MatchCentreStrip({ initialMatches = [], twinData, rankin
           <div className="lg:col-span-8 flex">
             <ScrollReveal className="w-full flex" delay={0.1}>
               <Tilt3DCard className="w-full flex" tiltAmount={0.8}>
-                <div className="relative w-full rounded-2xl overflow-hidden border border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.5)] bg-gradient-to-br from-white/5 via-white/[0.02] to-transparent backdrop-blur-xl p-5 md:p-12 flex flex-col justify-between group hover:border-zru-green/30 transition-all duration-500">
+                <div className="relative w-full rounded-2xl overflow-hidden border border-zru-green/30 shadow-[0_20px_50px_rgba(0,0,0,0.5)] bg-gradient-to-br from-zru-green/[0.36] via-zru-green/[0.12] to-zru-green/[0.02] backdrop-blur-xl p-5 md:p-12 flex flex-col justify-between group hover:border-zru-green/60 transition-all duration-500">
                   
                   {/* Dynamic Radial Spotlights inside the card */}
                   <div className="absolute -right-32 -top-32 w-96 h-96 rounded-full bg-zru-green/5 blur-3xl pointer-events-none z-0" />
@@ -189,18 +189,18 @@ export default function MatchCentreStrip({ initialMatches = [], twinData, rankin
                     {/* Details info */}
                     <div className="flex flex-wrap justify-center sm:justify-start gap-x-6 gap-y-2 text-white/60 text-[11px] font-body font-medium">
                       <div className="flex items-center gap-2">
-                        <Clock className="w-3.5 h-3.5 text-zru-green/75" />
+                        <Clock className="w-3.5 h-3.5 text-zru-green" />
                         <span>{spotlightMatch.time} CAT</span>
                       </div>
                       <div className="flex items-center gap-2">
-                        <MapPin className="w-3.5 h-3.5 text-zru-green/75" />
+                        <MapPin className="w-3.5 h-3.5 text-zru-green" />
                         <span>{spotlightMatch.venue}</span>
                       </div>
                     </div>
 
                     {/* Slanted CTA Button */}
                     <Link href="/match-centre">
-                      <button className="relative group/btn font-subheading tracking-widest text-[10px] uppercase bg-white text-black font-black px-6 py-3.5 clip-slanted shadow-xl shadow-zru-green/10 hover:bg-zru-green hover:text-white hover:shadow-zru-green/20 transition-all duration-300 cursor-pointer">
+                      <button className="relative group/btn font-subheading tracking-widest text-[10px] uppercase bg-zru-green text-white font-black px-6 py-3.5 clip-slanted shadow-xl shadow-zru-green/30 hover:bg-white hover:text-rich-black transition-all duration-300 cursor-pointer">
                         Match details
                       </button>
                     </Link>
@@ -214,7 +214,7 @@ export default function MatchCentreStrip({ initialMatches = [], twinData, rankin
           {/* Sidebar Rankings Card (4-Columns) */}
           <div className="lg:col-span-4 flex">
             <ScrollReveal className="w-full flex" delay={0.2}>
-              <div className="relative w-full rounded-2xl overflow-hidden border border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.5)] bg-gradient-to-br from-white/5 via-white/[0.02] to-transparent backdrop-blur-xl p-6 flex flex-col justify-between group hover:border-zru-green/30 transition-all duration-500">
+              <div className="relative w-full rounded-2xl overflow-hidden border border-zru-green/20 shadow-[0_20px_50px_rgba(0,0,0,0.5)] bg-gradient-to-br from-zru-green/[0.16] via-zru-green/[0.06] to-zru-green/[0.01] backdrop-blur-xl p-6 flex flex-col justify-between group hover:border-zru-green/40 transition-all duration-500">
                 
                 {/* Header */}
                 <div className="space-y-1 mb-6">
@@ -226,7 +226,7 @@ export default function MatchCentreStrip({ initialMatches = [], twinData, rankin
 
                 {/* Big Stat Row */}
                 <div className="grid grid-cols-2 gap-4 my-4">
-                  <div className="bg-gradient-to-br from-white/5 to-transparent border border-white/10 p-4 rounded-xl relative overflow-hidden flex flex-col justify-between group/card hover:border-white/20 transition-all duration-300">
+                  <div className="card-green border p-4 rounded-xl relative overflow-hidden flex flex-col justify-between group/card">
                     <span className="text-white/40 text-[9px] font-bold uppercase tracking-widest block mb-2 font-subheading">World</span>
                     <div className="flex items-baseline gap-2">
                       <span className="text-3xl font-heading font-black text-white">#{rankingsData.world.position}</span>
@@ -238,7 +238,7 @@ export default function MatchCentreStrip({ initialMatches = [], twinData, rankin
                     </div>
                   </div>
 
-                  <div className="bg-gradient-to-br from-white/5 to-transparent border border-white/10 p-4 rounded-xl relative overflow-hidden flex flex-col justify-between group/card hover:border-white/20 transition-all duration-300">
+                  <div className="card-green border p-4 rounded-xl relative overflow-hidden flex flex-col justify-between group/card">
                     <span className="text-white/40 text-[9px] font-bold uppercase tracking-widest block mb-2 font-subheading">Africa</span>
                     <div className="flex items-baseline gap-2">
                       <span className="text-3xl font-heading font-black text-white">#{rankingsData.africa.position}</span>
@@ -256,7 +256,7 @@ export default function MatchCentreStrip({ initialMatches = [], twinData, rankin
                   <span className="text-white/30 text-[9px] font-black uppercase tracking-widest block font-subheading">African Rivals</span>
                   <div className="space-y-2.5">
                     {rankingsData.rivals.map((rival, index) => (
-                      <div key={index} className="flex items-center justify-between bg-gradient-to-r from-white/3 to-transparent hover:from-zru-green/10 hover:to-transparent border border-white/5 hover:border-zru-green/20 px-4 py-2.5 rounded-lg transition-all duration-300">
+                      <div key={index} className="flex items-center justify-between card-green border px-4 py-2.5 rounded-lg">
                         <div className="flex items-center gap-3">
                           {rival.logo && (
                             <img loading="lazy" src={rival.logo} alt={rival.name} className="w-[18px] h-[14px] object-cover rounded-xs" />
@@ -285,10 +285,10 @@ export default function MatchCentreStrip({ initialMatches = [], twinData, rankin
 
         {/* 2. Secondary Match Row (Bottom Strip) */}
         <ScrollReveal delay={0.25}>
-          <div className="relative w-full rounded-xl overflow-hidden border border-white/5 bg-neutral-950/20 backdrop-blur-md flex flex-col md:flex-row items-stretch shadow-lg hover:border-white/10 transition-colors duration-500">
+          <div className="relative w-full rounded-xl overflow-hidden border border-zru-green/20 bg-gradient-to-r from-zru-green/[0.16] via-zru-green/[0.06] to-zru-green/[0.01] backdrop-blur-md flex flex-col md:flex-row items-stretch shadow-lg hover:border-zru-green/40 transition-colors duration-500">
             
             {/* Left Date Sidebar */}
-            <div className="w-full md:w-28 bg-neutral-950/40 border-b md:border-b-0 md:border-r border-white/5 flex flex-row md:flex-col items-center justify-between md:justify-center p-4 md:py-6 text-center shrink-0 font-heading">
+            <div className="w-full md:w-28 bg-zru-green/[0.24] border-b md:border-b-0 md:border-r border-zru-green/30 flex flex-row md:flex-col items-center justify-between md:justify-center p-4 md:py-6 text-center shrink-0 font-heading">
               <div className="flex md:flex-col items-center gap-2 md:gap-0">
                 <span className="text-2xl text-white font-black leading-none">{secondaryDate.day}</span>
                 <span className="text-[10px] text-zru-green font-bold uppercase tracking-widest md:mt-1">{secondaryDate.month}</span>

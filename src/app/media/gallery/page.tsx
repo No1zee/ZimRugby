@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import { Camera, X, Calendar, Eye } from "lucide-react";
+import EdgyGradient from "@/components/ui/EdgyGradient";
 import { getPhotos } from "@/lib/api/gallery";
 import { Photo } from "@/types";
 import PageHero from "@/components/ui/PageHero";
@@ -24,7 +25,10 @@ export default function GalleryPage() {
   );
 
   return (
-    <main className="bg-rich-black min-h-screen pb-24 text-white">
+    <main className="bg-rich-black min-h-screen pb-24 text-white relative overflow-hidden">
+      <div className="absolute inset-0 pointer-events-none select-none z-0">
+        <EdgyGradient opacity={0.4} />
+      </div>
 
       {/* PageHero header */}
       <div className="pt-24">
@@ -65,7 +69,7 @@ export default function GalleryPage() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.05 }}
               whileHover={{ y: -5 }}
-              className="bg-white/5 border border-white/5 hover:border-white/10 rounded-2xl overflow-hidden transition-all duration-300 group cursor-pointer shadow-xl glow-green-card"
+              className="card-green border rounded-2xl overflow-hidden group cursor-pointer shadow-xl glow-green-card"
               onClick={() => setActivePhoto(photo)}
             >
               {/* Photo container */}

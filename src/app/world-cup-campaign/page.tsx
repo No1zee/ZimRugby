@@ -92,7 +92,7 @@ const PledgeCard = ({ tier, amount, name, description, benefits, highlight = fal
     className={`relative p-8 rounded-xl border flex flex-col h-full bg-linear-to-b transition-all duration-500 overflow-hidden group
       ${highlight 
         ? "from-zru-green/20 to-rich-black border-zru-green shadow-[0_0_40px_rgba(0,107,63,0.15)]" 
-        : "from-white/5 to-transparent border-white/10 hover:border-white/20"
+        : "card-green border"
       }`}
   >
     {highlight && (
@@ -215,8 +215,6 @@ export default function WorldCupCampaignPage() {
 
   return (
     <main className="relative bg-rich-black min-h-screen selection:bg-zru-green selection:text-rich-black">
-      <Navigation />
-
       {/* SECTION 1: HERO */}
       <section className="relative h-screen w-full overflow-hidden flex items-center pt-20">
         {/* Cinematic Backdrop */}

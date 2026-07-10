@@ -1,8 +1,8 @@
+import EdgyGradient from "@/components/ui/EdgyGradient";
 import HeroCarousel from "@/components/home/HeroCarousel";
 import MatchCentreStrip from "@/components/home/MatchCentreStrip";
 import NewsMediaBlock from "@/components/home/NewsMediaBlock";
 import { CountdownPromo } from "@/components/ui/CountdownPromo";
-import EdgyGradient from "@/components/ui/EdgyGradient";
 import dynamic from "next/dynamic";
 
 const StorePreviewStrip = dynamic(() => import("@/components/home/StorePreviewStrip"));
@@ -26,14 +26,16 @@ export default async function Home() {
   return (
     <main className="bg-rich-black min-h-screen relative">
       
+      {/* Ambient Background Gradient */}
+      <div className="absolute inset-0 pointer-events-none select-none z-0">
+        <EdgyGradient opacity={0.65} />
+      </div>
+
       {/* 1. Hero Carousel */}
       <HeroCarousel slides={heroSlides} />
 
       <div className="relative z-10 bg-rich-black overflow-hidden">
         
-        {/* Ambient Edgy Background Glows */}
-        <EdgyGradient opacity={0.65} />
-
         {/* 2. Match Centre Strip (Horizontal List) */}
         <MatchCentreStrip initialMatches={matches} twinData={twinData} rankingsData={rankingsData} />
 
