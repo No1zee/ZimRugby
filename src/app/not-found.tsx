@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { motion } from "framer-motion";
 import { Home, Calendar, Trophy, ArrowRight } from "lucide-react";
 
@@ -22,10 +23,12 @@ export default function NotFound() {
 
       {/* Watermark ZRU crest */}
       <div className="absolute inset-0 flex items-center justify-center pointer-events-none select-none opacity-[0.03]">
-        <img
+        <Image
           src="/zru logo main.svg"
           alt=""
           aria-hidden="true"
+          width={600}
+          height={600}
           className="w-[600px] h-[600px] object-contain"
         />
       </div>

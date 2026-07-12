@@ -102,7 +102,7 @@ export default function VideoHubPage() {
                     className={`px-5 py-2.5 rounded-full text-xs font-black uppercase tracking-wider transition-all duration-300 whitespace-nowrap ${
                       isActive 
                         ? "bg-zru-green text-rich-black shadow-lg" 
-                        : "text-white/60 hover:text-white hover:bg-white/5"
+                        : "text-white/60 hover:text-white hover:bg-zru-green/10"
                     }`}
                   >
                     {cat}
@@ -119,7 +119,7 @@ export default function VideoHubPage() {
                 placeholder="Search videos… e.g. Highlights"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full bg-white/5 border border-white/10 rounded-full pl-10 pr-4 py-2.5 text-white placeholder-gray-500 focus:outline-none focus:border-zru-green text-sm transition-all"
+                className="w-full card-green border rounded-full pl-10 pr-4 py-2.5 text-white placeholder-gray-500 focus:outline-none focus:border-zru-green text-sm transition-all"
               />
             </div>
 
@@ -210,10 +210,10 @@ export default function VideoHubPage() {
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.95, opacity: 0 }}
               transition={{ type: "spring", duration: 0.5 }}
-              className="relative w-full max-w-5xl bg-neutral-900 border border-white/10 rounded-2xl overflow-hidden shadow-2xl z-10 flex flex-col"
+              className="relative w-full max-w-5xl card-green border rounded-2xl overflow-hidden shadow-2xl z-10 flex flex-col"
             >
               {/* Header */}
-              <div className="flex justify-between items-center px-6 py-4 bg-white/5 border-b border-white/10">
+              <div className="flex justify-between items-center px-6 py-4 bg-black/40 border-b border-white/10">
                 <div>
                   <span className="text-[9px] font-black uppercase tracking-widest text-zru-green block">{activeVideo.category}</span>
                   <h2 className="text-base md:text-lg font-black uppercase tracking-tight text-white line-clamp-1 mt-0.5">{activeVideo.title}</h2>
@@ -241,7 +241,7 @@ export default function VideoHubPage() {
               </div>
 
               {/* Footer / Description */}
-              <div className="p-6 md:p-8 bg-white/5 space-y-4">
+              <div className="p-6 md:p-8 bg-black/20 space-y-4">
                 <p className="text-white/80 text-sm md:text-base leading-relaxed">
                   {activeVideo.description}
                 </p>

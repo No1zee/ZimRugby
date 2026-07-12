@@ -20,14 +20,14 @@ interface StripedBackgroundProps {
 export function StripedBackground({
   variant = "subtle",
   position = "right",
-  color = "gold",
+  color = "green",
   className = "",
 }: StripedBackgroundProps) {
   
   const colorMap = {
     red: "#D71920",
-    gold: "#FFD200",
-    green: "#006039",
+    gold: "#006B3F", // Remapped to brand green to avoid gold escapes
+    green: "#006B3F",
     white: "#FFFFFF",
   };
 

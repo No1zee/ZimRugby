@@ -8,6 +8,7 @@ import Footer from "@/components/layout/Footer";
 import SlantedButton from "@/components/ui/SlantedButton";
 import { useState, useEffect, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
+import PageAnnouncements from "@/components/ui/PageAnnouncements";
 
 // Mock Data split into Competitions and Events
 const competitions = [
@@ -129,7 +130,7 @@ function EventsInner() {
   useEffect(() => {
     const tab = searchParams?.get("tab");
     if (tab === "events" || tab === "competitions") {
-      setActiveTab(tab);
+      setTimeout(() => setActiveTab(tab), 0);
     }
   }, [searchParams]);
 
@@ -175,6 +176,9 @@ function EventsInner() {
            </p>
         </motion.div>
 
+        {/* Page Announcements */}
+        <PageAnnouncements scope="events" className="mb-12" />
+
         {/* 1. Browse by Rugby Level Block (First-Class Shortcuts) */}
         <div className="mb-16">
           <span className="text-white/30 text-[9px] font-black uppercase tracking-[0.4em] block mb-6 font-subheading">Browse by Rugby Level</span>
@@ -189,7 +193,7 @@ function EventsInner() {
                   className={`flex flex-col items-center justify-center p-6 border rounded-xl transition-all duration-400 group relative overflow-hidden ${
                     isSelected 
                       ? "bg-zru-green/20 border-zru-green text-white shadow-[0_0_20px_rgba(0,107,63,0.25)]" 
-                      : "bg-white/3 border-white/5 text-white/60 hover:text-white hover:border-white/20 hover:bg-white/5"
+                      : "card-green border text-white/60 hover:text-white hover:border-white/20"
                   }`}
                 >
                   <Icon className={`w-6 h-6 mb-3 transition-transform duration-300 group-hover:scale-110 ${isSelected ? "text-zru-green" : "text-white/40 group-hover:text-white"}`} />
@@ -253,7 +257,7 @@ function EventsInner() {
                 filteredCompetitions.map((comp) => (
                   <div 
                     key={comp.id}
-                    className="bento-card group flex flex-col justify-between p-8 border border-white/5 hover:border-zru-green/30 bg-white/3 rounded-2xl transition-all duration-300"
+                    className="card-green border group flex flex-col justify-between p-8 rounded-2xl transition-all duration-300"
                   >
                     <div>
                       {/* Top Row Status and Level */}
@@ -309,7 +313,7 @@ function EventsInner() {
                 filteredEvents.map((event) => (
                   <div 
                     key={event.id}
-                    className="bento-card group flex flex-col justify-between p-6 border border-white/5 bg-white/3 rounded-2xl"
+                    className="card-green border group flex flex-col justify-between p-6 rounded-2xl"
                   >
                     <div>
                       {/* Event Banner */}
@@ -379,7 +383,6 @@ export default function EventsPage() {
       <Suspense fallback={<div className="min-h-screen bg-rich-black flex items-center justify-center text-white">Loading Competitions Hub...</div>}>
         <EventsInner />
       </Suspense>
-      <Footer />
     </>
   );
 }

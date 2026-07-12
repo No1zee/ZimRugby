@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { directusFetch } from "@/lib/directus/fetch";
 
 // Fallback static nav items used when Directus is unreachable or not configured
 const fallbacks = {
@@ -20,23 +21,6 @@ const fallbacks = {
   ],
 };
 
-/** Thin helper: GET a Directus collection via plain REST (no SDK schema needed) */
-async function fetchCollection(
-  baseUrl: string,
-  collection: string,
-  fields: string,
-  limit = 6
-): Promise<Record<string, string>[]> {
-  const url = `${baseUrl}/items/${collection}?fields=${fields}&limit=${limit}`;
-  const res = await fetch(url, {
-    headers: { "Content-Type": "application/json" },
-    next: { revalidate: 60 }, // ISR – re-fetch every 60 s
-  });
-  if (!res.ok) throw new Error(`Directus ${collection} returned ${res.status}`);
-  const json = await res.json();
-  return json.data ?? [];
-}
-
 export async function GET() {
   const directusUrl = process.env.NEXT_PUBLIC_DIRECTUS_URL;
 
@@ -47,7 +31,7 @@ export async function GET() {
 
   // Parallel fetch – each block falls back independently if it fails
   const [teams, competitions, events] = await Promise.all([
-    fetchCollection(directusUrl, "teams", "id,name", 6)
+    directusFetch<Record<string, string>>("teams", { fields: ["id", "name"], limit: 6 }, 60)
       .then((rows) =>
         rows.length > 0
           ? rows.map((t) => ({ label: t.name, href: `/teams/${t.id}` }))
@@ -55,7 +39,7 @@ export async function GET() {
       )
       .catch(() => fallbacks.teams),
 
-    fetchCollection(directusUrl, "competitions", "id,title", 4)
+    directusFetch<Record<string, string>>("competitions", { fields: ["id", "title"], limit: 4 }, 60)
       .then((rows) =>
         rows.length > 0
           ? rows.map((c) => ({ label: c.title, href: "/events?tab=competitions" }))
@@ -63,7 +47,7 @@ export async function GET() {
       )
       .catch(() => fallbacks.competitions),
 
-    fetchCollection(directusUrl, "events", "id,title", 4)
+    directusFetch<Record<string, string>>("events", { fields: ["id", "title"], limit: 4 }, 60)
       .then((rows) =>
         rows.length > 0
           ? rows.map((e) => ({ label: e.title, href: "/events?tab=events" }))

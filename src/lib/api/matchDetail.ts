@@ -1,7 +1,7 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Match } from "@/types";
 import { getLiveMatches } from "@/lib/data-fetcher";
-import directus from "@/lib/directus/client";
-import { readItem } from "@directus/sdk";
+import { directusFetch } from "@/lib/directus/fetch";
 
 export interface LineupPlayer {
   number: number;
@@ -90,11 +90,14 @@ interface DirectusMatchDetailItem {
 export async function getMatchDetail(id: string): Promise<MatchDetailData | null> {
   try {
     if (process.env.NEXT_PUBLIC_DIRECTUS_URL) {
-      const matchData = await directus.request(
-        readItem('matches', id, {
-          fields: ['*', 'home_lineup.*', 'away_lineup.*', 'stats.*', 'report.*']
-        })
-      );
+      const response = await directusFetch<DirectusMatchDetailItem>('matches', {
+        filter: {
+          id: { _eq: id }
+        },
+        fields: ['*', 'home_lineup.*', 'away_lineup.*', 'stats.*', 'report.*'],
+        limit: 1
+      });
+      const matchData = response?.[0];
       
       if (matchData) {
         const m = matchData as unknown as DirectusMatchDetailItem;

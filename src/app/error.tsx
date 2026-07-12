@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import { motion } from "framer-motion";
 import { RefreshCw, Home } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 
 export default function GlobalError({
   error,
@@ -25,7 +26,7 @@ export default function GlobalError({
 
       {/* Watermark */}
       <div className="absolute inset-0 flex items-center justify-center pointer-events-none select-none opacity-[0.025]">
-        <img src="/zru logo main.svg" alt="" aria-hidden="true" className="w-[500px] object-contain" />
+        <Image src="/zru logo main.svg" alt="" aria-hidden="true" width={500} height={500} className="w-[500px] object-contain" />
       </div>
 
       <div className="relative z-10 text-center max-w-lg mx-auto space-y-8">

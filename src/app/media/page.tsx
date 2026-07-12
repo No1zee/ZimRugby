@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import { motion } from "framer-motion";
@@ -11,6 +12,7 @@ import { useState, useEffect } from "react";
 import JournalStrip from "@/components/home/JournalStrip";
 import { getSocialPosts } from "@/lib/data-fetcher";
 import PageHero from "@/components/ui/PageHero";
+import PageAnnouncements from "@/components/ui/PageAnnouncements";
 
 const latestVideos = [
   {
@@ -84,7 +86,6 @@ export default function MediaPage() {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    setIsLoading(true);
     getSocialPosts().then((posts) => {
       setSocialPosts(posts);
       setIsLoading(false);
@@ -119,6 +120,9 @@ export default function MediaPage() {
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16">
+
+        {/* Page Announcements */}
+        <PageAnnouncements scope="media" className="mb-12" />
 
         {/* Filters */}
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-12">

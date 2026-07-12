@@ -25,9 +25,11 @@ export default function PartnerLogo({ partner }: PartnerLogoProps) {
       <div className="relative w-full h-auto flex items-center justify-center">
         {/* We use standard img here instead of next/image since we are using data URIs for placeholders.
             For production with real logos, switch to next/image if configured. */}
-        <img 
+        <Image 
           src={partner.logoUrl} 
           alt={`${partner.name} logo`}
+          width={300}
+          height={120}
           className="w-full max-w-[200px] md:max-w-[250px] lg:max-w-[300px] h-auto object-contain grayscale opacity-60 transition-all duration-500 group-hover:grayscale-0 group-hover:opacity-100"
         />
       </div>

@@ -1,5 +1,3 @@
-import Footer from "@/components/layout/Footer";
-
 export default function ComingSoonPage() {
   return (
     <main className="min-h-screen bg-rich-black flex flex-col">
@@ -14,7 +12,6 @@ export default function ComingSoonPage() {
           This digital experience is currently under construction. Please check back later as we continue to build the future of Zimbabwe Rugby.
         </p>
       </div>
-      <Footer />
     </main>
   );
 }

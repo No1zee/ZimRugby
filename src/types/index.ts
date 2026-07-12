@@ -118,3 +118,25 @@ export interface RefereeNotice {
   excerpt: string;
   content: string;
 }
+
+// 7. Announcement Entities
+export interface Announcement {
+  id: string;
+  title: string;
+  slug: string;
+  body: string;
+  priority: "critical" | "high" | "normal";
+  scope: ("global" | "homepage" | "tickets" | "match-centre" | "events" | "media" | "clubhouse")[];
+  ctaLabel?: string;
+  ctaUrl?: string;
+  startsAt: string;
+  endsAt: string;
+  segment: "sables" | "lady_sables" | "schools" | "general";
+  designVariant: "banner" | "spotlight-card" | "ticker" | "overlay";
+  isSticky: boolean;
+  badge?: string;
+  relatedMatchId?: string;
+  relatedEventId?: string;
+  relatedArticleId?: string;
+}
+

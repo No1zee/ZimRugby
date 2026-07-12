@@ -55,7 +55,7 @@ const events = [
     description: "Future stars in action at the Harare Under-20 League, rescheduled for January.",
     tags: ["Youth", "U20 League"],
     icon: Trophy,
-    color: "from-blue-900 to-black",
+    color: "from-zru-green to-black",
     image: "/images/events/schools-fest.jpg"
   }
 ];
@@ -67,11 +67,11 @@ export default function EventsBlock() {
       {/* Background text - Restored big interactive text */}
       <PretextBackground 
         text="WHAT'S ON? "
-        className="absolute -top-[15vh] -bottom-[15vh] left-0 right-0 opacity-80 z-10" 
+        className="absolute -top-[15vh] -bottom-[15vh] left-0 right-0 opacity-20 z-10" 
       />
       
       <div className="max-w-[1440px] mx-auto px-6 relative z-20">
-        <div className="flex flex-col lg:flex-row gap-20">
+        <div className="flex flex-col lg:flex-row gap-20 items-start">
           
           {/* Sticky Header Block */}
           <div className="lg:w-1/4 lg:sticky lg:top-32 h-fit">
@@ -101,8 +101,8 @@ export default function EventsBlock() {
               
               <SlantedButton 
                 href="/events" 
-                variant="primary"
-                className="inline-flex items-center justify-center gap-3 shadow-[0_0_20px_rgba(255,255,255,0.1)] hover:shadow-[0_0_25px_rgba(235,178,23,0.3)] w-fit group"
+                variant="secondary"
+                className="inline-flex items-center justify-center gap-3 shadow-[0_0_20px_rgba(255,255,255,0.1)] hover:shadow-[0_0_25px_rgba(0,107,63,0.35)] w-fit group"
               >
                 <span>Explore All</span>
                 <Plus className="w-5 h-5 transition-transform group-hover:rotate-90" />

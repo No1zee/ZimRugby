@@ -1,6 +1,6 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Video } from "@/types";
-import directus from "@/lib/directus/client";
-import { readItems } from "@directus/sdk";
+import { directusFetch } from "@/lib/directus/fetch";
 
 export async function getVideos(): Promise<Video[]> {
   const mockVideos: Video[] = [
@@ -68,11 +68,9 @@ export async function getVideos(): Promise<Video[]> {
 
   try {
     if (process.env.NEXT_PUBLIC_DIRECTUS_URL) {
-      const response = await directus.request(
-        readItems('videos' as any, {
-          sort: ['-date' as any]
-        })
-      );
+      const response = await directusFetch<any>('videos', {
+        sort: ['-date']
+      });
       if (response && response.length > 0) {
         return response.map((video: any) => ({
           id: String(video.id),

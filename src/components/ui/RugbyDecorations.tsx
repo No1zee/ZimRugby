@@ -94,7 +94,7 @@ interface FieldLinesProps {
   direction?: "left" | "right";
 }
 
-export function FieldLines({ className = "", color = "#FFD200", direction = "left" }: FieldLinesProps) {
+export function FieldLines({ className = "", color = "#006B3F", direction = "left" }: FieldLinesProps) {
   return (
     <div className={`absolute ${direction === "left" ? "left-0" : "right-0"} ${className}`}>
       <svg 
@@ -139,7 +139,7 @@ interface ChevronsProps {
   direction?: "left" | "right";
 }
 
-export function Chevrons({ className = "", color = "#FFD200", direction = "left" }: ChevronsProps) {
+export function Chevrons({ className = "", color = "#006B3F", direction = "left" }: ChevronsProps) {
   return (
     <div className={`absolute ${direction === "left" ? "-left-4" : "-right-4"} ${className}`}>
       <motion.div
@@ -214,7 +214,7 @@ export function RugbyDecorations({ variant = "mixed", className = "" }: RugbyDec
           className="absolute -left-12 top-1/4 opacity-20"
           style={{ y: leftY, rotate }}
         >
-          <RugbyBallSVG color="#FFD200" size={150} />
+          <RugbyBallSVG color="#006B3F" size={150} />
         </motion.div>
       )}
 
@@ -223,12 +223,12 @@ export function RugbyDecorations({ variant = "mixed", className = "" }: RugbyDec
           className="absolute -left-6 bottom-1/4 opacity-15"
           style={{ y: rightY }}
         >
-          <GoalpostSVG color="#FFD200" size={120} />
+          <GoalpostSVG color="#006B3F" size={120} />
         </motion.div>
       )}
 
       {(variant === "chevrons" || variant === "mixed") && (
-        <Chevrons direction="left" className="top-1/3" color="#FFD200" />
+        <Chevrons direction="left" className="top-1/3" color="#006B3F" />
       )}
 
       {/* Right side decorations */}
@@ -237,7 +237,7 @@ export function RugbyDecorations({ variant = "mixed", className = "" }: RugbyDec
           className="absolute -right-16 bottom-1/3 opacity-20"
           style={{ y: rightY, rotate: rotateRight }}
         >
-          <RugbyBallSVG color="#FFD200" size={180} />
+          <RugbyBallSVG color="#006B3F" size={180} />
         </motion.div>
       )}
 
@@ -246,12 +246,12 @@ export function RugbyDecorations({ variant = "mixed", className = "" }: RugbyDec
           className="absolute -right-4 top-1/4 opacity-15"
           style={{ y: leftY }}
         >
-          <GoalpostSVG color="#FFD200" size={100} />
+          <GoalpostSVG color="#006B3F" size={100} />
         </motion.div>
       )}
 
       {(variant === "chevrons" || variant === "mixed") && (
-        <Chevrons direction="right" className="bottom-1/3" color="#FFD200" />
+        <Chevrons direction="right" className="bottom-1/3" color="#006B3F" />
       )}
     </div>
   );
@@ -265,7 +265,7 @@ interface CornerAccentProps {
   color?: string;
 }
 
-export function CornerAccent({ position, color = "#FFD200" }: CornerAccentProps) {
+export function CornerAccent({ position, color = "#006B3F" }: CornerAccentProps) {
   const positionClasses = {
     "top-left": "top-0 left-0",
     "top-right": "top-0 right-0 rotate-90",

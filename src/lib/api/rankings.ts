@@ -1,5 +1,5 @@
-import directus from "@/lib/directus/client";
-import { readItems } from "@directus/sdk";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { directusFetch } from "@/lib/directus/fetch";
 
 export interface RankingDetail {
   position: number;
@@ -60,16 +60,12 @@ export async function getRankingsData(): Promise<RankingsData> {
 
   try {
     if (process.env.NEXT_PUBLIC_DIRECTUS_URL) {
-      const response = await directus.request(
-        readItems('rankings' as any, {
-          limit: 1
-        })
-      );
-      const rivalsResponse = await directus.request(
-        readItems('ranking_rivals' as any, {
-          sort: ['position' as any]
-        })
-      );
+      const response = await directusFetch<any>('rankings', {
+        limit: 1
+      });
+      const rivalsResponse = await directusFetch<any>('ranking_rivals', {
+        sort: ['position']
+      });
       
       if (response?.[0]) {
         const mainRank = response[0];

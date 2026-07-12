@@ -52,11 +52,11 @@ export default function EventsCalendar() {
   const getCategoryColor = (category: string) => {
     switch (category) {
       case "SABLES":
-        return "bg-sables-green text-white";
+        return "bg-zru-green text-white";
       case "SCHOOLS RUGBY":
-        return "bg-zru-green text-rich-black";
+        return "bg-zru-green text-white";
       case "RUGBY AFRICA CUP":
-        return "bg-zru-orange text-white";
+        return "bg-zru-green text-white";
       default:
         return "bg-gray-700 text-white";
     }
@@ -66,13 +66,14 @@ export default function EventsCalendar() {
     <section className="py-20 bg-rich-black relative border-t border-white/10" id="events-calendar">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-end mb-12">
-          <div>
-            <h2 className="text-zru-orange font-heading text-xl tracking-widest mb-2">
-              UPCOMING EVENTS
+          <div className="space-y-4">
+            <div className="flex items-center gap-2">
+              <div className="w-8 h-px bg-zru-green" />
+              <span className="text-zru-green text-[10px] font-black uppercase tracking-[0.4em] font-subheading">Upcoming Events</span>
+            </div>
+            <h2 className="text-5xl md:text-7xl font-heading text-white font-black uppercase tracking-tighter">
+              WHAT'S <span className="text-stroke-white text-transparent">HAPPENING</span>
             </h2>
-            <h3 className="text-4xl md:text-5xl font-heading text-white">
-              WHAT&apos;S HAPPENING
-            </h3>
           </div>
           <div className="flex gap-4">
             <button className="p-2 border border-white/20 rounded-full hover:bg-white/10 transition-colors">
@@ -99,7 +100,7 @@ export default function EventsCalendar() {
               key={event.id}
               variants={{ hidden: { opacity: 0, y: 30 }, visible: { opacity: 1, y: 0 } }}
               whileHover={{ y: -5 }}
-              className="bg-gray-900 border border-white/10 rounded-xl overflow-hidden group shadow-lg hover:shadow-[0_0_20px_rgba(255,140,0,0.15)] transition-all duration-300"
+              className="bg-gray-900 border border-white/10 rounded-xl overflow-hidden group shadow-lg hover:shadow-[0_0_20px_rgba(0,107,63,0.25)] transition-all duration-300"
             >
               <div className="h-48 bg-gray-800 relative overflow-hidden">
                 {/* Image Placeholder */}
@@ -120,11 +121,11 @@ export default function EventsCalendar() {
               </div>
               
               <div className="p-6">
-                <h4 className="font-heading text-xl text-white mb-2 line-clamp-2 group-hover:text-zru-orange transition-colors">
+                <h4 className="font-heading text-xl text-white mb-2 line-clamp-2 group-hover:text-zru-green transition-colors">
                   {event.title}
                 </h4>
                 <div className="flex items-center gap-2 text-gray-400 text-sm mb-6">
-                  <MapPin className="w-4 h-4 text-zru-orange" />
+                  <MapPin className="w-4 h-4 text-zru-green" />
                   <span>{event.location}</span>
                 </div>
                 

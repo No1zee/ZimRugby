@@ -1,6 +1,6 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Team } from "@/types";
-import directus from "@/lib/directus/client";
-import { readItems } from "@directus/sdk";
+import { directusFetch } from "@/lib/directus/fetch";
 
 export async function getTeamData(slug: string): Promise<Team | null> {
   const teams: Record<string, Team> = {
@@ -152,18 +152,15 @@ export async function getTeamData(slug: string): Promise<Team | null> {
 
   try {
     if (process.env.NEXT_PUBLIC_DIRECTUS_URL) {
-      const response = await directus.request(
-        readItems('teams', {
-          filter: {
-            slug: { _eq: slug }
-          },
-          fields: ['*', 'coaching_staff.*', 'squad.*', 'matches.*', 'gallery.*'],
-          limit: 1
-        })
-      );
+      const response = await directusFetch<any>('teams', {
+        filter: {
+          slug: { _eq: slug }
+        },
+        fields: ['*', 'coaching_staff.*', 'squad.*', 'matches.*', 'gallery.*'],
+        limit: 1
+      });
       if (response?.[0]) {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const team = response[0] as any;
+        const team = response[0];
         
         return {
           id: team.slug || team.id,
@@ -199,3 +196,49 @@ export async function getTeamData(slug: string): Promise<Team | null> {
 
   return teams[slug] || null;
 }
+
+export async function getAllTeamFixtures(): Promise<any[]> {
+  const slugs = ["sables", "lady-sables", "junior-sables", "cheetahs", "u20"];
+  const allFixtures: any[] = [];
+  
+  for (const slug of slugs) {
+    const team = await getTeamData(slug);
+    if (team) {
+      const teamName = team.name;
+      team.matches.forEach((m: any, idx: number) => {
+        let matchDate = new Date();
+        try {
+          matchDate = new Date(m.date);
+          if (isNaN(matchDate.getTime())) {
+            matchDate = new Date();
+          }
+        } catch (e) {}
+
+        const scores = m.score ? m.score.split("-").map((s: string) => parseInt(s.trim())) : [];
+
+        allFixtures.push({
+          id: `team-match-${slug}-${idx}`,
+          competition: teamName,
+          round: m.status === "completed" ? "Result" : "Fixture",
+          date: matchDate,
+          time: "15:00",
+          venue: m.venue || "TBA",
+          homeTeam: {
+            name: teamName,
+            score: m.status === "completed" ? (scores[0] ?? 0) : undefined,
+            logo: "/logo.png"
+          },
+          awayTeam: {
+            name: m.opponent,
+            score: m.status === "completed" ? (scores[1] ?? 0) : undefined,
+            logo: m.opponentLogo
+          },
+          status: m.status || "upcoming",
+          teamCategory: slug === "u20" ? "U20" : slug === "junior-sables" ? "Junior Sables" : slug === "cheetahs" ? "Cheetahs" : slug === "lady-sables" ? "Lady Sables" : "Sables"
+        });
+      });
+    }
+  }
+  return allFixtures;
+}
+

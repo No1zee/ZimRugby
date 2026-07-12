@@ -4,6 +4,8 @@ import MatchCentreStrip from "@/components/home/MatchCentreStrip";
 import NewsMediaBlock from "@/components/home/NewsMediaBlock";
 import { CountdownPromo } from "@/components/ui/CountdownPromo";
 import dynamic from "next/dynamic";
+import AnnouncementsRail from "@/components/home/AnnouncementsRail";
+import AnnouncementsTicker from "@/components/ui/AnnouncementsTicker";
 
 const StorePreviewStrip = dynamic(() => import("@/components/home/StorePreviewStrip"));
 
@@ -38,6 +40,10 @@ export default async function Home() {
         
         {/* 2. Match Centre Strip (Horizontal List) */}
         <MatchCentreStrip initialMatches={matches} twinData={twinData} rankingsData={rankingsData} />
+
+        {/* Announcements Spotlight & Ticker */}
+        <AnnouncementsRail />
+        <AnnouncementsTicker />
 
         {/* 3. Featured Match Countdown (HK Rugby style) */}
         <CountdownPromo

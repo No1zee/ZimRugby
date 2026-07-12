@@ -24,6 +24,7 @@ import Button from "@/components/common/Button";
 import { FixtureCard, type Fixture } from "@/components/tickets/FixtureCard";
 import { StripedBackground } from "@/components/ui/StripedBackground";
 import { saveSubmission } from "@/lib/mockStorage";
+import PageAnnouncements from "@/components/ui/PageAnnouncements";
 
 // --- Mock Data ---
 
@@ -219,7 +220,7 @@ export default function TicketsPage() {
                 Welcome to the official home of Sables and ZRU tickets. Every link on this page takes you to an authorised partner, with transparent pricing and secure checkout.
               </p>
               
-              <div className="bg-white/5 border-l-2 border-zru-green p-4 mb-12 max-w-lg">
+              <div className="card-green border border-l-2 border-zru-green p-4 mb-12 max-w-lg">
                 <p className="text-xs font-bold text-white/60 uppercase tracking-widest leading-loose">
                   <Shield className="inline-block w-3 h-3 mr-2 mb-0.5 text-zru-green" />
                   If you didn’t start from <span className="text-white">zimrugby.co.zw</span> or this page, double‑check before you buy.
@@ -244,11 +245,11 @@ export default function TicketsPage() {
 
             {/* Stadium Visual / Decoration */}
             <div className="hidden lg:flex justify-end pr-20">
-               <motion.div 
-                 animate={{ y: [0, -20, 0] }}
-                 transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-                 className="relative w-64 h-64 border border-white/5 rounded-2xl bg-white/2 p-8 flex flex-center items-center justify-center rotate-3"
-               >
+                <motion.div 
+                  animate={{ y: [0, -20, 0] }}
+                  transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+                  className="relative w-64 h-64 border rounded-2xl card-green p-8 flex flex-center items-center justify-center rotate-3"
+                >
                   <Ticket className="w-32 h-32 text-zru-green/10" />
                   <div className="absolute inset-0 bg-linear-to-tr from-zru-green/5 to-transparent rounded-2xl" />
                   <div className="absolute -top-4 -right-4 w-12 h-12 bg-rich-black border border-white/10 rounded-full flex items-center justify-center shadow-2xl">
@@ -263,6 +264,8 @@ export default function TicketsPage() {
       {/* SECTION B: FIXTURES GRID */}
       <section id="fixtures" className="py-24 bg-rich-black border-y border-white/5 scroll-mt-20">
         <div className="max-w-[1440px] mx-auto px-6 md:px-12">
+          {/* Page Announcements */}
+          <PageAnnouncements scope="tickets" className="mb-12" />
           
           {/* Header & Filter */}
           <div className="flex flex-col lg:flex-row justify-between items-start lg:items-end gap-10 mb-16">
@@ -281,7 +284,7 @@ export default function TicketsPage() {
                     className={`px-6 py-2.5 rounded-full text-[10px] font-black uppercase tracking-widest transition-all
                       ${filter === cat 
                         ? 'bg-zru-green text-rich-black shadow-[0_0_20px_rgba(0,107,63,0.3)]' 
-                        : 'bg-white/5 text-white/60 hover:text-white hover:bg-white/10'}
+                        : "card-green border text-white/60 hover:text-white hover:border-white/20"}
                     `}
                   >
                     {cat}
@@ -310,7 +313,7 @@ export default function TicketsPage() {
               <motion.div 
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                className="py-32 text-center border border-dashed border-white/10 rounded-2xl bg-white/1"
+                className="py-32 text-center border border-dashed border-white/10 rounded-2xl card-green"
               >
                 <div className="mb-6 opacity-20">
                    <Ticket className="w-16 h-16 mx-auto text-white" />
@@ -325,7 +328,7 @@ export default function TicketsPage() {
           </AnimatePresence>
 
           {/* Helper Text */}
-          <div className="mt-16 flex items-start gap-4 p-6 bg-white/2 border border-white/5 rounded-xl max-w-4xl">
+          <div className="mt-16 flex items-start gap-4 p-6 card-green border rounded-xl max-w-4xl">
             <Info className="w-5 h-5 text-zru-green shrink-0 mt-0.5" />
             <p className="text-xs text-gray-400 font-medium leading-relaxed">
               All ticket purchases for Sables and ZRU fixtures are handled by our authorised ticketing partners. You’ll complete your booking on their secure platforms.
@@ -371,7 +374,7 @@ export default function TicketsPage() {
             ].map((step, i) => (
               <div key={i} className="relative group">
                 <div className="text-[60px] font-black text-white/5 absolute -top-10 -left-4 pointer-events-none group-hover:text-zru-green/5 transition-colors">{step.step}</div>
-                <div className="p-8 rounded-xl bg-white/2 border border-white/5 hover:border-zru-green/20 transition-all duration-500 h-full">
+                <div className="p-8 rounded-xl card-green border transition-all duration-500 h-full">
                   <div className="w-12 h-12 bg-zru-green/10 rounded flex items-center justify-center mb-8">
                     <step.icon className="w-6 h-6 text-zru-green" />
                   </div>
@@ -399,7 +402,7 @@ export default function TicketsPage() {
                 Different fixtures and venues use different seating maps, but most matches follow a similar structure. Use this as a guide before you buy.
               </p>
               
-              <div className="p-6 bg-white/2 border border-white/5 rounded-xl">
+              <div className="p-6 card-green border rounded-xl">
                  <div className="flex items-center gap-3 text-zru-green mb-4 font-black uppercase text-[10px] tracking-widest">
                     <Info className="w-4 h-4" />
                     Dynamic Pricing
@@ -418,7 +421,7 @@ export default function TicketsPage() {
                 { name: "Family & supporter zones", text: "Sections designed for families and organised supporter groups. Expect more singing and atmosphere." },
                 { name: "Accessible seating", text: "Reserved areas for supporters with accessibility needs, with companion seating where available." }
               ].map((c, i) => (
-                <div key={i} className="p-6 bg-white/1 border border-white/5 rounded-lg hover:border-white/10 transition-colors">
+                <div key={i} className="p-6 card-green border rounded-lg transition-colors">
                   <h3 className="text-sm font-black text-white uppercase tracking-widest mb-2">{c.name}</h3>
                   <p className="text-xs text-gray-500 font-medium leading-relaxed">{c.text}</p>
                 </div>
@@ -464,7 +467,7 @@ export default function TicketsPage() {
               </div>
             </div>
             
-            <div className="lg:col-span-2 bg-white/1 border border-white/5 rounded-2xl p-8 md:p-12">
+            <div className="lg:col-span-2 card-green border rounded-2xl p-8 md:p-12">
               <FAQItem 
                 question="How do I know this is the official ticket source?"
                 answer="This page lists every official ticket outlet for ZRU fixtures. If you’re following a link from zimrugby.co.zw or this Tickets page, you are on an approved route."
@@ -595,7 +598,6 @@ export default function TicketsPage() {
         )}
       </AnimatePresence>
 
-      <Footer />
     </main>
   );
 }

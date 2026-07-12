@@ -4,7 +4,7 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
-import { Calendar, Clock, MapPin, ChevronLeft, Award, FileText, BarChart3, Users, Ticket } from "lucide-react";
+import { Calendar, Clock, MapPin, ChevronLeft, FileText, BarChart3, Users, Ticket } from "lucide-react";
 import type { MatchDetailData } from "@/lib/api/matchDetail";
 import { getFlagUrl } from "@/lib/flags";
 

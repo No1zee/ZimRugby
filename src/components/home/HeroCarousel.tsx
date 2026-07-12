@@ -229,10 +229,12 @@ export default function HeroCarousel({ slides }: { slides: HeroSlideData[] }) {
                 {activeSlide.video ? (
                   isMobile ? (
                     /* Mobile Fallback: Animated WebP bypasses all autoplay restrictions */
-                    <img
+                    <Image
                       src={activeSlide.video.replace('.mp4', '.webp')}
                       alt=""
-                      className="absolute inset-0 w-full h-full object-cover"
+                      fill
+                      sizes="100vw"
+                      className="object-cover"
                     />
                   ) : (
                     <video
@@ -252,7 +254,6 @@ export default function HeroCarousel({ slides }: { slides: HeroSlideData[] }) {
                     alt={`${activeSlide.headline.line1} ${activeSlide.headline.line2}`}
                     fill
                     priority={currentSlide === 0}
-                    loading={currentSlide === 0 ? "eager" : "lazy"}
                     sizes="(max-width: 768px) 100vw, 100vw"
                     quality={75}
                     className="object-cover"
@@ -330,14 +331,6 @@ export default function HeroCarousel({ slides }: { slides: HeroSlideData[] }) {
       {/* Bottom Fade */}
       <div className="absolute bottom-0 left-0 w-full h-48 bg-linear-to-t from-rich-black via-rich-black/50 to-transparent pointer-events-none z-10" />
 
-      {/* ZRU Crest Overlay */}
-      <div className="absolute bottom-8 left-8 z-40 hidden md:flex items-center gap-4 pointer-events-none">
-        <img src="/zru logo main.svg" alt="ZRU Crest" className="drop-shadow-2xl opacity-90 object-contain w-auto h-16" />
-        <div className="flex flex-col">
-          <span className="text-white font-heading text-lg tracking-widest leading-tight">ZIMBABWE</span>
-          <span className="text-zru-green font-heading text-lg tracking-widest leading-tight">RUGBY UNION</span>
-        </div>
-      </div>
 
       {/* Decorative Slanted Brand Frames (Angle-Cut Overlays) */}
       <motion.div 

@@ -1,6 +1,6 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { RefereeResource, RefereeCourse, RefereeNotice } from "@/types";
-import directus from "@/lib/directus/client";
-import { readItems } from "@directus/sdk";
+import { directusFetch } from "@/lib/directus/fetch";
 
 export async function getRefereeResources(): Promise<RefereeResource[]> {
   const mockResources: RefereeResource[] = [
@@ -14,9 +14,7 @@ export async function getRefereeResources(): Promise<RefereeResource[]> {
 
   try {
     if (process.env.NEXT_PUBLIC_DIRECTUS_URL) {
-      const response = await directus.request(
-        readItems('referee_resources' as any)
-      );
+      const response = await directusFetch<any>('referee_resources');
       if (response && response.length > 0) {
         return response.map((res: any) => ({
           title: res.title,
@@ -63,11 +61,9 @@ export async function getRefereeCourses(): Promise<RefereeCourse[]> {
 
   try {
     if (process.env.NEXT_PUBLIC_DIRECTUS_URL) {
-      const response = await directus.request(
-        readItems('referee_courses' as any, {
-          sort: ['date' as any]
-        })
-      );
+      const response = await directusFetch<any>('referee_courses', {
+        sort: ['date']
+      });
       if (response && response.length > 0) {
         return response.map((course: any) => ({
           title: course.title,
@@ -106,11 +102,9 @@ export async function getRefereeNotices(): Promise<RefereeNotice[]> {
 
   try {
     if (process.env.NEXT_PUBLIC_DIRECTUS_URL) {
-      const response = await directus.request(
-        readItems('referee_notices' as any, {
-          sort: ['-date' as any]
-        })
-      );
+      const response = await directusFetch<any>('referee_notices', {
+        sort: ['-date']
+      });
       if (response && response.length > 0) {
         return response.map((notice: any) => ({
           id: String(notice.id),

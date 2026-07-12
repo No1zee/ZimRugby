@@ -130,11 +130,11 @@ export default function EdgyGradient({ className = "", opacity = 0.65 }: EdgyGra
               <stop offset="100%" stopColor="#fdba74" />
             </linearGradient>
             
-            {/* ZRU Clubhouse Gold */}
+            {/* ZRU Brand Green Glow */}
             <linearGradient id="gold-glow-opt" x1="100%" y1="100%" x2="0%" y2="0%">
-              <stop offset="0%" stopColor="#78350f" />
-              <stop offset="50%" stopColor="#d4af37" />
-              <stop offset="100%" stopColor="#f59e0b" />
+              <stop offset="0%" stopColor="#00452a" />
+              <stop offset="50%" stopColor="#006b3f" />
+              <stop offset="100%" stopColor="#059669" />
             </linearGradient>
           </defs>
         </svg>

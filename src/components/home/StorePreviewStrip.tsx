@@ -6,6 +6,7 @@ import Image from "next/image";
 import { ArrowRight, ShoppingBag, ChevronRight } from "lucide-react";
 import React, { useRef } from "react";
 import MagneticElement from "../ui/MagneticElement";
+import SlantedButton from "../ui/SlantedButton";
 
 /**
  * StorePreviewStrip
@@ -13,6 +14,7 @@ import MagneticElement from "../ui/MagneticElement";
  * Reimagined as an 'Exclusive Private Gallery'.
  * Focuses on high-end luxury constraints, restricted access cues, and premium typography.
  */
+
 
 const previewItems = [
   { 
@@ -27,7 +29,7 @@ const previewItems = [
   { 
     name: "Oxford Heritage Polo", 
     price: "$85", 
-    category: "Lifestyle / Gold", 
+    category: "Lifestyle / Heritage", 
     image: "/images/shop/polo-heritage.png", 
     badge: "Official Crest",
     color: "bg-zru-green/5",
@@ -167,8 +169,8 @@ const ProductCard = ({ item, idx }: { item: typeof previewItems[0], idx: number 
             <span className="text-[10px] font-black uppercase tracking-[0.4em] text-black/40">
                 {item.category}
             </span>
-            <span className="text-[8px] font-black uppercase text-zru-red tracking-[0.2em] flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-              <span className="w-1.5 h-1.5 rounded-full bg-zru-red animate-pulse" /> Live
+            <span className="text-[8px] font-black uppercase text-zru-green tracking-[0.2em] flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+              <span className="w-1.5 h-1.5 rounded-full bg-zru-green animate-pulse" /> Live
             </span>
           </div>
           <div>
@@ -196,7 +198,7 @@ const ProductCard = ({ item, idx }: { item: typeof previewItems[0], idx: number 
 
 export default function StorePreviewStrip() {
   return (
-    <section className="bg-white py-section relative overflow-hidden bg-pattern-dots">
+    <section className="bg-white py-12 md:py-16 relative overflow-hidden bg-pattern-dots">
       {/* Background Aesthetic Watermark */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[25vw] md:text-[20vw] font-black text-neutral-50 uppercase leading-none pointer-events-none select-none tracking-tighter mix-blend-multiply opacity-50 whitespace-nowrap">
         EST 1895
@@ -205,26 +207,24 @@ export default function StorePreviewStrip() {
       <div className="max-w-[1440px] mx-auto px-6 relative z-10">
         
         {/* Section Header: Minimalist Institutional Style */}
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-20 gap-8">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-10 gap-8">
           <div className="space-y-4">
             <motion.div 
               initial={{ opacity: 0, x: -10 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
-              className="flex items-center gap-3"
+              className="flex items-center gap-2"
             >
-              <div className="flex items-center justify-center w-4 h-4 rounded-full bg-zru-red/10 border border-zru-red/30">
-                <div className="w-1.5 h-1.5 rounded-full bg-zru-red animate-pulse" />
-              </div>
-              <span className="text-[10px] font-black uppercase tracking-[0.6em] text-zru-red/80">Official Merchandise</span>
+              <div className="w-8 h-px bg-zru-green" />
+              <span className="text-zru-green text-[10px] font-black uppercase tracking-[0.4em] font-subheading">Official Merchandise</span>
             </motion.div>
             <motion.h2 
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              className="heading-2 text-clubhouse-charcoal"
+              className="text-5xl md:text-7xl font-heading text-rich-black font-black uppercase tracking-tighter leading-none"
             >
-              THE <br /><span className="text-stroke-charcoal text-transparent drop-shadow-sm">CLUBHOUSE</span>
+              THE <span className="text-stroke-charcoal text-transparent">CLUBHOUSE</span>
             </motion.h2>
           </div>
 
@@ -233,13 +233,9 @@ export default function StorePreviewStrip() {
                 Official Zimbabwe Rugby Collection. <br />Wear the pride. Every purchase fuels the pathway.
             </p>
             <MagneticElement intensity={0.2}>
-                <Link 
-                href="/clubhouse"
-                className="flex items-center gap-3 text-[10px] font-black uppercase tracking-[0.3em] text-white bg-rich-black px-8 py-4 rounded-full group transition-all hover:scale-105 hover:bg-zru-green hover:text-black hover:shadow-lg hover:shadow-zru-green/20 relative overflow-hidden"
-                >
-                <span className="relative z-10 flex items-center gap-3">Shop Collection <ArrowRight className="w-3.5 h-3.5 transition-transform" /></span>
-                <div className="absolute inset-0 bg-linear-to-r from-transparent via-white/20 to-transparent -translate-x-[150%] group-hover:translate-x-[150%] transition-transform duration-700 ease-in-out z-0" />
-                </Link>
+              <SlantedButton href="/clubhouse" variant="primary" size="md">
+                Shop Collection <ArrowRight className="w-5 h-5 ml-2 inline-block" />
+              </SlantedButton>
             </MagneticElement>
           </div>
         </div>

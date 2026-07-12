@@ -4,8 +4,16 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
-import { ChevronRight, Calendar, MapPin, Users, Award, ShieldAlert, Image as ImageIcon } from "lucide-react";
+import { ChevronRight, ChevronDown, Calendar, MapPin, Users, Award, ShieldAlert, Image as ImageIcon } from "lucide-react";
 import { Team } from "@/types";
+
+const ALL_TEAMS = [
+  { id: "sables", name: "Zimbabwe Sables", href: "/teams/sables" },
+  { id: "lady-sables", name: "Lady Sables", href: "/teams/lady-sables" },
+  { id: "junior-sables", name: "Junior Sables (U20)", href: "/teams/junior-sables" },
+  { id: "cheetahs", name: "Zimbabwe Cheetahs", href: "/teams/cheetahs" },
+  { id: "u20", name: "Zimbabwe U20 Development", href: "/teams/u20" }
+];
 
 interface TeamPageClientProps {
   team: Team;
@@ -13,6 +21,11 @@ interface TeamPageClientProps {
 
 export default function TeamPageClient({ team }: TeamPageClientProps) {
   const [activeTab, setActiveTab] = useState<"squad" | "matches" | "coaching" | "history" | "gallery">("squad");
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+
+  const currentIndex = ALL_TEAMS.findIndex(t => t.id === team.id);
+  const prevTeam = ALL_TEAMS[(currentIndex - 1 + ALL_TEAMS.length) % ALL_TEAMS.length];
+  const nextTeam = ALL_TEAMS[(currentIndex + 1) % ALL_TEAMS.length];
 
   const tabItems = [
     { id: "squad", label: "SQUAD", icon: Users },
@@ -47,9 +60,47 @@ export default function TeamPageClient({ team }: TeamPageClientProps) {
               <span className="text-zru-green text-xs font-black uppercase tracking-[0.4em] mb-3 block">
                 NATIONAL REPRESENTATIVE TEAM
               </span>
-              <h1 className="text-5xl sm:text-7xl font-black uppercase italic tracking-tighter text-glow-green leading-none">
-                {team.name}
-              </h1>
+              <div className="relative inline-block text-left z-40">
+                <button
+                  onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                  className="flex items-center gap-3 text-5xl sm:text-7xl font-black uppercase italic tracking-tighter text-glow-green leading-none hover:text-zru-green transition-colors text-left"
+                >
+                  <span>{team.name}</span>
+                  <ChevronDown className={`w-8 h-8 transition-transform duration-300 ${isDropdownOpen ? "rotate-180" : ""}`} />
+                </button>
+                
+                <AnimatePresence>
+                  {isDropdownOpen && (
+                    <>
+                      <div className="fixed inset-0 z-40" onClick={() => setIsDropdownOpen(false)} />
+                      <motion.div
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: 10 }}
+                        className="absolute left-0 mt-3 w-72 rounded-xl card-green border p-2 shadow-2xl backdrop-blur-md z-50"
+                      >
+                        <div className="px-3 py-2 border-b border-white/5 mb-1.5">
+                          <span className="text-[9px] font-black uppercase tracking-widest text-white/40">Switch Squad</span>
+                        </div>
+                        {ALL_TEAMS.map((t) => (
+                          <Link
+                            key={t.id}
+                            href={t.href}
+                            onClick={() => setIsDropdownOpen(false)}
+                            className={`block px-3 py-2.5 rounded-lg text-xs font-black uppercase tracking-wider transition-colors ${
+                              t.id === team.id
+                                ? "bg-zru-green text-rich-black"
+                                : "text-white/60 hover:text-white hover:bg-zru-green/10"
+                            }`}
+                          >
+                            {t.name}
+                          </Link>
+                        ))}
+                      </motion.div>
+                    </>
+                  )}
+                </AnimatePresence>
+              </div>
               <p className="text-white/70 font-medium text-lg mt-4 max-w-2xl">
                 {team.tagline}
               </p>
@@ -284,6 +335,39 @@ export default function TeamPageClient({ team }: TeamPageClientProps) {
 
           </motion.div>
         </AnimatePresence>
+
+        {/* Next / Previous Linear Navigation Pager */}
+        <div className="mt-20 pt-12 border-t border-white/5 grid grid-cols-1 sm:grid-cols-2 gap-6 relative z-10">
+          <Link
+            href={prevTeam.href}
+            className="card-green border rounded-2xl p-6 flex items-center justify-between group hover:border-zru-green/40 transition-all text-left"
+          >
+            <div className="flex items-center gap-4">
+              <div className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-white/60 group-hover:bg-zru-green/10 group-hover:text-zru-green transition-colors border border-white/5">
+                <ChevronRight className="w-5 h-5 rotate-180" />
+              </div>
+              <div>
+                <span className="text-[9px] text-white/40 font-black uppercase tracking-wider block">PREVIOUS TEAM</span>
+                <span className="text-sm font-black text-white uppercase tracking-tight">{prevTeam.name}</span>
+              </div>
+            </div>
+          </Link>
+
+          <Link
+            href={nextTeam.href}
+            className="card-green border rounded-2xl p-6 flex items-center justify-between group hover:border-zru-green/40 transition-all text-right"
+          >
+            <div className="flex items-center gap-4 justify-end w-full">
+              <div>
+                <span className="text-[9px] text-white/40 font-black uppercase tracking-wider block">NEXT TEAM</span>
+                <span className="text-sm font-black text-white uppercase tracking-tight">{nextTeam.name}</span>
+              </div>
+              <div className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-white/60 group-hover:bg-zru-green/10 group-hover:text-zru-green transition-colors border border-white/5">
+                <ChevronRight className="w-5 h-5" />
+              </div>
+            </div>
+          </Link>
+        </div>
       </main>
 
     </div>

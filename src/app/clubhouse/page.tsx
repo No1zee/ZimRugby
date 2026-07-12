@@ -24,6 +24,7 @@ import ClubhouseBanner from "@/components/shop/ClubhouseBanner";
 import StorySection from "@/components/shop/StorySection";
 import JournalStrip from "@/components/home/JournalStrip";
 import FixtureRibbon from "@/components/shop/FixtureRibbon";
+import PageAnnouncements from "@/components/ui/PageAnnouncements";
 
 export default function ClubhousePage() {
   return (
@@ -34,6 +35,11 @@ export default function ClubhousePage() {
       {/* Narrative Section 1: Peak Performance Entry */}
       <ClubhouseHero />
       
+      {/* Contextual Announcements */}
+      <div className="max-w-[1440px] mx-auto px-6 pt-12">
+        <PageAnnouncements scope="clubhouse" />
+      </div>
+
       {/* Narrative Section 2: Collection Discovery */}
       <CollectionsStrip />
       

@@ -162,7 +162,6 @@ export default function PlayRugbyPage() {
         </div>
       </section>
 
-      <Footer />
     </main>
   );
 }

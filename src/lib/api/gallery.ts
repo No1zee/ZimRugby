@@ -1,6 +1,6 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Photo } from "@/types";
-import directus from "@/lib/directus/client";
-import { readItems } from "@directus/sdk";
+import { directusFetch } from "@/lib/directus/fetch";
 
 export async function getPhotos(): Promise<Photo[]> {
   const mockPhotos: Photo[] = [
@@ -56,11 +56,9 @@ export async function getPhotos(): Promise<Photo[]> {
 
   try {
     if (process.env.NEXT_PUBLIC_DIRECTUS_URL) {
-      const response = await directus.request(
-        readItems('photos' as any, {
-          sort: ['-date' as any]
-        })
-      );
+      const response = await directusFetch<any>('photos', {
+        sort: ['-date']
+      });
       if (response && response.length > 0) {
         return response.map((photo: any) => ({
           id: String(photo.id),

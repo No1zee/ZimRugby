@@ -5,7 +5,7 @@
 
 interface FetchParams {
   fields?: string[];
-  filter?: Record<string, any>;
+  filter?: Record<string, unknown>;
   sort?: string[];
   limit?: number;
   page?: number;

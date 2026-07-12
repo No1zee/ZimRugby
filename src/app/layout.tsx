@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
-import Script from "next/script";
-import { Outfit, Bebas_Neue, Inter } from "next/font/google";
+import { Outfit, Bebas_Neue, Inter, Playfair_Display } from "next/font/google";
 import "./globals.css";
 import Navigation from "@/components/layout/Navigation";
 import Footer from "@/components/layout/Footer";
@@ -22,7 +21,14 @@ const inter = Inter({
   variable: "--font-inter",
 });
 
+const playfairDisplay = Playfair_Display({
+  subsets: ["latin"],
+  variable: "--font-serif",
+  style: ["normal", "italic"],
+});
+
 export const metadata: Metadata = {
+  metadataBase: new URL("https://zimrugby.co.zw"),
   title: "Zimbabwe Rugby Union | The Sables",
   description: "Official website of the Zimbabwe Rugby Union. Follow the Sables, Lady Sables, and stay updated with the latest news, fixtures, and results.",
   manifest: "/manifest.json",
@@ -52,14 +58,13 @@ export default function RootLayout({
   return (
     <html lang="en" className="overflow-x-hidden">
       <body
-        className={`${outfit.variable} ${bebasNeue.variable} ${inter.variable} antialiased overflow-x-hidden`}
+        className={`${outfit.variable} ${bebasNeue.variable} ${inter.variable} ${playfairDisplay.variable} antialiased overflow-x-hidden`}
       >
         <noscript>
           <div className="bg-red-950 text-white p-4 text-center font-bold text-sm font-sans">
             JavaScript is disabled. For the best experience on the Zimbabwe Rugby Union platform, please enable JavaScript in your browser settings.
           </div>
         </noscript>
-        <Script src="https://t.contentsquare.net/uxa/97d0dc6c80d47.js" strategy="afterInteractive" />
         <ClientLayoutShell>
           <Navigation />
           <main className="relative overflow-hidden pb-24 min-h-screen bg-rich-black">

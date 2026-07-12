@@ -1,9 +1,17 @@
-"use client";
-
-import { motion } from "framer-motion";
 import EdgyGradient from "@/components/ui/EdgyGradient";
 import TeamCard from "../../components/teams/TeamCard";
 import PageHero from "@/components/ui/PageHero";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "National Teams | Zimbabwe Rugby Union",
+  description: "Meet the Sables, Lady Sables, Cheetahs, and Junior Sables—the representative rugby teams carrying the hopes of Zimbabwe.",
+  openGraph: {
+    title: "National Representative Teams - Zimbabwe Rugby Union",
+    description: "Explore the national squads representing Zimbabwe on regional and international stages.",
+    images: [{ url: "/images/media/vid1.jpg" }],
+  },
+};
 
 const teams = [
   {
@@ -66,16 +74,10 @@ export default function TeamsPage() {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 pb-6">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-           {teams.map((team, index) => (
-              <motion.div
-                 key={team.id}
-                 initial={{ opacity: 0, y: 30 }}
-                 whileInView={{ opacity: 1, y: 0 }}
-                 viewport={{ once: true }}
-                 transition={{ delay: index * 0.1 }}
-              >
+           {teams.map((team) => (
+              <div key={team.id}>
                  <TeamCard {...team} />
-              </motion.div>
+              </div>
            ))}
         </div>
       </div>

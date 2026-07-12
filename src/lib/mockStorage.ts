@@ -29,22 +29,22 @@ export interface FormSubmission {
   id: string;
   timestamp: string;
   formType: "newsletter" | "referee_course" | "ticket_interest" | "contact_message";
-  data: Record<string, any>;
+  data: Record<string, unknown>;
 }
 
 // In-memory array fallback (or localStorage if browser-side)
-let mockDatabase: FormSubmission[] = [];
+const mockDatabase: FormSubmission[] = [];
 
 // Safe save utility
 export async function saveSubmission(
   formType: FormSubmission["formType"],
-  rawData: Record<string, any>
+  rawData: Record<string, unknown>
 ): Promise<{ success: boolean; message: string; data?: FormSubmission }> {
   // 1. Simulate network latency
   await new Promise((resolve) => setTimeout(resolve, 800));
 
   // 2. Validate and sanitize keys
-  const sanitizedData: Record<string, any> = {};
+  const sanitizedData: Record<string, unknown> = {};
   
   for (const key in rawData) {
     if (Object.prototype.hasOwnProperty.call(rawData, key)) {
@@ -82,7 +82,7 @@ export async function saveSubmission(
       const list = existing ? JSON.parse(existing) : [];
       list.push(submission);
       localStorage.setItem("zru_form_submissions", JSON.stringify(list));
-    } catch (e) {
+    } catch {
       console.warn("localStorage quota exceeded or disabled, fallback to in-memory.");
     }
   }
@@ -104,7 +104,7 @@ export function getSubmissions(type?: FormSubmission["formType"]): FormSubmissio
       const existing = localStorage.getItem("zru_form_submissions");
       const list: FormSubmission[] = existing ? JSON.parse(existing) : [];
       return type ? list.filter(item => item.formType === type) : list;
-    } catch (e) {
+    } catch {
       // Fallback to in-memory
     }
   }

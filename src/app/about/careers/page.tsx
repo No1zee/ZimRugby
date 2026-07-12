@@ -31,7 +31,7 @@ export default function CareersPage() {
           {jobs.map((job, idx) => (
             <div 
               key={idx} 
-              className="bg-white/5 border border-white/5 hover:border-white/10 rounded-xl p-5 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 group transition-colors duration-300"
+              className="card-green border rounded-xl p-5 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 group transition-colors duration-300"
             >
               <div>
                 <h4 className="font-black text-sm text-white uppercase tracking-tight">{job.title}</h4>
