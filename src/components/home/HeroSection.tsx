@@ -61,8 +61,10 @@ export default function HeroSection() {
           muted
           loop
           playsInline
+          preload="metadata"
           className="object-cover w-full h-full opacity-60"
           poster="/images/hero-poster.jpg"
+          style={{ contentVisibility: "auto" }}
         >
           {/* Placeholder video - replace with actual assets */}
             <source src="https://static.videezy.com/system/resources/previews/000/043/553/original/Rugby_Game.mp4" type="video/mp4" />
@@ -81,14 +83,14 @@ export default function HeroSection() {
         >
           {/* 0.3s: ZRU Logo Scale */}
           <motion.div variants={logoVariants} className="mb-6">
-             <div className="w-20 h-20 bg-sables-green rounded-full flex items-center justify-center font-heading text-3xl border-4 border-white shadow-2xl">
+             <div className="w-20 h-20 bg-zru-green rounded-full flex items-center justify-center font-heading text-3xl border-4 border-white shadow-2xl">
                 ZRU
              </div>
           </motion.div>
 
           {/* 0.6s: AFRICA CUP CHAMPIONS */}
           <div className="overflow-hidden mb-2">
-            <motion.h2 variants={textRevealVariants} className="text-zru-orange font-heading text-2xl md:text-3xl tracking-widest uppercase">
+            <motion.h2 variants={textRevealVariants} className="text-zru-green font-heading text-2xl md:text-3xl tracking-widest uppercase">
               AFRICA CUP CHAMPIONS 2025
             </motion.h2>
           </div>
@@ -105,7 +107,7 @@ export default function HeroSection() {
           </div>
 
           {/* 1.2s: Paragraph */}
-          <motion.p variants={itemVariants} className="text-gray-200 text-lg md:text-xl font-body max-w-2xl mb-10 leading-relaxed border-l-4 border-zru-orange pl-6">
+          <motion.p variants={itemVariants} className="text-gray-200 text-lg md:text-xl font-body max-w-2xl mb-10 leading-relaxed border-l-4 border-zru-green pl-6">
             Witness the power, passion, and pride of Zimbabwe Rugby.
             Join us on our journey to the 2027 Rugby World Cup.
           </motion.p>
@@ -141,7 +143,7 @@ export default function HeroSection() {
         <span className="text-white/60 text-xs font-heading tracking-widest mb-2 uppercase">
           Scroll Down
         </span>
-        <ArrowDown className="text-zru-orange w-6 h-6" />
+        <ArrowDown className="text-zru-green w-6 h-6" />
       </motion.div>
     </div>
   );

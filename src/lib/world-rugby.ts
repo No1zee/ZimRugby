@@ -17,6 +17,7 @@ export interface Fixture {
     logo?: string;
   };
   status: 'upcoming' | 'live' | 'completed';
+  teamCategory?: string;
 }
 
 /**

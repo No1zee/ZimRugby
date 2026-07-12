@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 import { Calendar, PlayCircle, Trophy, Users, ArrowRight } from "lucide-react";
-
+import Link from "next/link";
 
 const tiles = [
   {
@@ -19,7 +19,7 @@ const tiles = [
     description: "Highlights, full match replays, and interviews.",
     icon: PlayCircle,
     href: "/media",
-    color: "bg-zru-orange",
+    color: "bg-zru-green",
   },
   {
     key: "whats_on",
@@ -46,35 +46,36 @@ export default function CoreHubTiles() {
       <div className="max-w-7xl mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           {tiles.map((tile, index) => (
-            <motion.div
-              key={tile.key}
-              initial={{ opacity: 0, y: 50 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: index * 0.1, duration: 0.5 }}
-              whileHover={{ y: -10 }}
-               className="group relative overflow-hidden rounded-xl card-green border h-64 flex flex-col justify-between p-6 cursor-pointer"
-            >
+            <Link key={tile.key} href={tile.href}>
+              <motion.div
+                initial={{ opacity: 0, y: 50 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.1, duration: 0.5 }}
+                whileHover={{ y: -10 }}
+                className="group relative overflow-hidden rounded-xl card-green border h-64 flex flex-col justify-between p-6 cursor-pointer"
+              >
                 {/* Background Gradient on Hover */}
                 <div className={`absolute inset-0 opacity-0 group-hover:opacity-10 transition-opacity duration-300 ${tile.color}`} />
 
                 <div>
-                    <div className={`w-12 h-12 rounded-full flex items-center justify-center mb-4 ${tile.color} ${tile.textColor || "text-white"}`}>
-                        <tile.icon className="w-6 h-6" />
-                    </div>
-                    <h3 className="text-2xl font-heading text-white mb-2 tracking-wide group-hover:text-zru-green transition-colors">
-                        {tile.label}
-                    </h3>
-                    <p className="text-gray-400 text-sm font-body leading-relaxed">
-                        {tile.description}
-                    </p>
+                  <div className={`w-12 h-12 rounded-full flex items-center justify-center mb-4 ${tile.color} ${tile.textColor || "text-white"}`}>
+                    <tile.icon className="w-6 h-6" />
+                  </div>
+                  <h3 className="text-2xl font-heading text-white mb-2 tracking-wide group-hover:text-zru-green transition-colors">
+                    {tile.label}
+                  </h3>
+                  <p className="text-gray-400 text-sm font-body leading-relaxed">
+                    {tile.description}
+                  </p>
                 </div>
 
                 <div className="flex items-center gap-2 text-sm font-bold tracking-widest text-white/60 group-hover:text-white transition-colors uppercase mt-4">
-                    <span>Explore</span>
-                    <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+                  <span>Explore</span>
+                  <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
                 </div>
-            </motion.div>
+              </motion.div>
+            </Link>
           ))}
         </div>
       </div>

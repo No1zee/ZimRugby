@@ -20,7 +20,7 @@ export default function BoardPage() {
       {/* Active board grid */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-6 border-t border-white/5">
         {leaders.map((person) => (
-          <div key={person.name} className="bg-white/5 border border-white/5 rounded-2xl p-6 text-center group hover:border-white/10 transition-colors">
+          <div key={person.name} className="card-green border rounded-2xl p-6 text-center group transition-colors">
             <div className="w-16 h-16 bg-zru-green/20 rounded-full flex items-center justify-center mx-auto mb-4 border border-white/5">
               <Users className="w-6 h-6 text-zru-green" />
             </div>
@@ -35,7 +35,7 @@ export default function BoardPage() {
 
       {/* Special Memorial Section for ZRU President Aaron Jani */}
       <div className="pt-10 border-t border-white/5">
-        <div className="bg-linear-to-br from-zru-green/30 to-rich-black border border-zru-green/20 rounded-3xl p-8 relative overflow-hidden">
+        <div className="card-green border rounded-3xl p-8 relative overflow-hidden">
           <div className="absolute top-4 right-4 text-zru-green/20">
             <Heart className="w-24 h-24 fill-current" />
           </div>

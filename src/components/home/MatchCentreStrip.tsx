@@ -1,7 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
-import { ArrowRight, ChevronRight, Clock, MapPin, TrendingUp, ChevronUp, ChevronDown } from "lucide-react";
+import { ArrowRight, ChevronRight, Clock, MapPin, TrendingUp, ChevronUp } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import { ScrollReveal, Tilt3DCard } from "../ui/animations";
@@ -27,6 +26,7 @@ export default function MatchCentreStrip({ initialMatches = [], twinData, rankin
   );
   
   // If we don't have secondary upcoming matches, create a realistic mock one
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const secondaryMatch: any = nextMatches[0] || {
     id: "sec-match-nam",
     competition: "Rugby Africa Cup 2026",
@@ -42,15 +42,17 @@ export default function MatchCentreStrip({ initialMatches = [], twinData, rankin
   // Helper to parse date string (e.g. "25 April, 2026") into day, month, weekday
   const parseMatchDate = (dateStr: string) => {
     try {
-      const parts = dateStr.replace(",", "").split(" ");
-      if (parts.length >= 2) {
-        return {
-          day: parts[0],
-          month: parts[1].substring(0, 3).toUpperCase(),
-          weekday: "SAT" // Default to Saturday for rugby matches
-        };
+      if (typeof dateStr === "string") {
+        const parts = dateStr.replace(",", "").split(" ");
+        if (parts.length >= 2) {
+          return {
+            day: parts[0],
+            month: parts[1].substring(0, 3).toUpperCase(),
+            weekday: "SAT" // Default to Saturday for rugby matches
+          };
+        }
       }
-    } catch (e) {
+    } catch {
       // Fallback
     }
     return { day: "06", month: "JUL", weekday: "SAT" };
@@ -91,7 +93,7 @@ export default function MatchCentreStrip({ initialMatches = [], twinData, rankin
           <div className="lg:col-span-8 flex">
             <ScrollReveal className="w-full flex" delay={0.1}>
               <Tilt3DCard className="w-full flex" tiltAmount={0.8}>
-                <div className="relative w-full rounded-2xl overflow-hidden border border-zru-green/30 shadow-[0_20px_50px_rgba(0,0,0,0.5)] bg-gradient-to-br from-zru-green/[0.36] via-zru-green/[0.12] to-zru-green/[0.02] backdrop-blur-xl p-5 md:p-12 flex flex-col justify-between group hover:border-zru-green/60 transition-all duration-500">
+                <div className="relative w-full rounded-2xl overflow-hidden card-green border p-5 md:p-12 flex flex-col justify-between group hover:border-zru-green/60 transition-all duration-500">
                   
                   {/* Dynamic Radial Spotlights inside the card */}
                   <div className="absolute -right-32 -top-32 w-96 h-96 rounded-full bg-zru-green/5 blur-3xl pointer-events-none z-0" />
@@ -127,15 +129,15 @@ export default function MatchCentreStrip({ initialMatches = [], twinData, rankin
                     {/* Left Team: Zimbabwe Sables */}
                     <div className="col-span-1 md:col-span-4 flex flex-col items-center md:items-end text-center md:text-right z-10">
                       {/* Shield Crest Holder */}
-                      <div className="w-16 h-16 md:w-24 md:h-24 rotate-[45deg] rounded-lg border border-zru-green/30 bg-neutral-900/60 flex items-center justify-center overflow-hidden shadow-xl shadow-zru-green/5 group-hover:scale-105 group-hover:border-zru-green/50 transition-all duration-500 mb-4 md:mb-6 relative">
+                      <div className="w-16 h-16 md:w-24 md:h-24 rotate-[45deg] rounded-lg border border-zru-green/40 bg-gradient-to-br from-zru-green/[0.15] to-neutral-900/80 flex items-center justify-center overflow-hidden shadow-xl shadow-zru-green/20 group-hover:scale-105 group-hover:border-zru-green/60 group-hover:shadow-zru-green/30 transition-all duration-500 mb-4 md:mb-6 relative">
                         <div className="-rotate-[45deg] p-2 md:p-4 w-full h-full flex items-center justify-center font-heading text-white font-bold flex-col gap-1 select-none">
                           {spotlightMatch.homeTeam.logo ? (
                             <Image 
                               src={spotlightMatch.homeTeam.logo} 
                               alt={spotlightMatch.homeTeam.name} 
-                              width={70} 
-                              height={70} 
-                              className="w-8 h-8 md:w-[70px] md:h-[70px] object-contain filter drop-shadow-[0_4px_8px_rgba(0,0,0,0.3)] -rotate-[45deg]"
+                              width={80} 
+                              height={80} 
+                              className="w-10 h-10 md:w-[80px] md:h-[80px] object-contain brightness-110 contrast-125 drop-shadow-[0_0_12px_rgba(0,150,70,0.3)] -rotate-[45deg]"
                             />
                           ) : (
                             <span className="text-sm md:text-xl -rotate-[45deg]">{spotlightMatch.homeTeam.name.substring(0, 3).toUpperCase()}</span>
@@ -145,7 +147,7 @@ export default function MatchCentreStrip({ initialMatches = [], twinData, rankin
                       <h3 className="text-xs sm:text-sm md:text-2xl font-heading text-white tracking-wider uppercase leading-tight md:leading-none font-black break-words w-full drop-shadow-md">
                         {spotlightMatch.homeTeam.name}
                       </h3>
-                      <span className="text-white/40 text-[8px] md:text-[9px] font-bold uppercase tracking-wider mt-1 md:mt-2 font-body hidden sm:block">Sables XV</span>
+                      <span className="text-zru-green text-[8px] md:text-[9px] font-black uppercase tracking-wider mt-1 md:mt-2 font-body hidden sm:block">Sables XV</span>
                     </div>
 
                     {/* Center: VS Gold Ring */}
@@ -214,7 +216,7 @@ export default function MatchCentreStrip({ initialMatches = [], twinData, rankin
           {/* Sidebar Rankings Card (4-Columns) */}
           <div className="lg:col-span-4 flex">
             <ScrollReveal className="w-full flex" delay={0.2}>
-              <div className="relative w-full rounded-2xl overflow-hidden border border-zru-green/20 shadow-[0_20px_50px_rgba(0,0,0,0.5)] bg-gradient-to-br from-zru-green/[0.16] via-zru-green/[0.06] to-zru-green/[0.01] backdrop-blur-xl p-6 flex flex-col justify-between group hover:border-zru-green/40 transition-all duration-500">
+              <div className="relative w-full rounded-2xl overflow-hidden card-green border p-6 flex flex-col justify-between group hover:border-zru-green/40 transition-all duration-500">
                 
                 {/* Header */}
                 <div className="space-y-1 mb-6">
@@ -259,7 +261,7 @@ export default function MatchCentreStrip({ initialMatches = [], twinData, rankin
                       <div key={index} className="flex items-center justify-between card-green border px-4 py-2.5 rounded-lg">
                         <div className="flex items-center gap-3">
                           {rival.logo && (
-                            <img loading="lazy" src={rival.logo} alt={rival.name} className="w-[18px] h-[14px] object-cover rounded-xs" />
+                            <Image src={rival.logo} alt={rival.name} width={18} height={14} className="object-cover rounded-xs" />
                           )}
                           <span className="text-[11px] font-body font-bold text-white/80">{rival.name}</span>
                         </div>
@@ -283,70 +285,91 @@ export default function MatchCentreStrip({ initialMatches = [], twinData, rankin
 
         </div>
 
-        {/* 2. Secondary Match Row (Bottom Strip) */}
+        {/* 2. Secondary Match Row (Condensed Card) */}
         <ScrollReveal delay={0.25}>
-          <div className="relative w-full rounded-xl overflow-hidden border border-zru-green/20 bg-gradient-to-r from-zru-green/[0.16] via-zru-green/[0.06] to-zru-green/[0.01] backdrop-blur-md flex flex-col md:flex-row items-stretch shadow-lg hover:border-zru-green/40 transition-colors duration-500">
+          <div className="relative w-full rounded-2xl overflow-hidden card-green border shadow-lg hover:border-zru-green/40 transition-all duration-500 group">
             
-            {/* Left Date Sidebar */}
-            <div className="w-full md:w-28 bg-zru-green/[0.24] border-b md:border-b-0 md:border-r border-zru-green/30 flex flex-row md:flex-col items-center justify-between md:justify-center p-4 md:py-6 text-center shrink-0 font-heading">
-              <div className="flex md:flex-col items-center gap-2 md:gap-0">
-                <span className="text-2xl text-white font-black leading-none">{secondaryDate.day}</span>
-                <span className="text-[10px] text-zru-green font-bold uppercase tracking-widest md:mt-1">{secondaryDate.month}</span>
-              </div>
-              <span className="text-[9px] text-white/40 font-bold uppercase tracking-wider md:mt-2 font-body">
-                {secondaryDate.weekday}
-              </span>
-            </div>
+            {/* Neon glow spots */}
+            <div className="absolute -right-16 -top-16 w-48 h-48 rounded-full bg-zru-green/5 blur-3xl pointer-events-none" />
+            <div className="absolute -left-16 -bottom-16 w-48 h-48 rounded-full bg-zru-green/5 blur-3xl pointer-events-none" />
 
-            {/* Main Content Area */}
-            <div className="flex-1 flex flex-col lg:flex-row items-center justify-between p-6 gap-6">
+            <div className="relative z-10 flex flex-col md:flex-row items-stretch">
               
-              {/* Tournament and Matchup details */}
-              <div className="flex flex-col items-center lg:items-start text-center lg:text-left gap-3">
-                <span className="bg-white/5 text-white/60 border border-white/10 text-[9px] font-bold tracking-widest px-2.5 py-0.5 rounded-sm uppercase">
-                  {secondaryMatch.competition} • {secondaryMatch.round}
-                </span>
+              {/* Left Date Sidebar */}
+              <div className="w-full md:w-24 bg-zru-green/[0.28] border-b md:border-b-0 md:border-r border-zru-green/30 flex flex-row md:flex-col items-center justify-between md:justify-center p-3 md:py-4 text-center shrink-0 font-heading">
+                <div className="flex md:flex-col items-center gap-1 md:gap-0">
+                  <span className="text-xl md:text-2xl text-white font-black leading-none">{secondaryDate.day}</span>
+                  <span className="text-[9px] text-zru-green font-bold uppercase tracking-widest md:mt-1">{secondaryDate.month}</span>
+                </div>
+                <div className="flex items-center gap-2 md:flex-col md:gap-0">
+                  <span className="text-[8px] text-white/40 font-bold uppercase tracking-wider font-body">{secondaryDate.weekday}</span>
+                  <span className="text-[8px] text-white/40 font-black uppercase tracking-widest md:mt-1 font-subheading bg-white/5 px-2 py-0.5 rounded-full">{(secondaryMatch.round || "Round 1").replace("Round ", "R")}</span>
+                </div>
+              </div>
+
+              {/* Main matchup row */}
+              <div className="flex-1 flex flex-col sm:flex-row items-center justify-between p-4 md:p-5 gap-4">
                 
-                <div className="grid grid-cols-3 sm:flex sm:items-center gap-2 sm:gap-4 w-full sm:w-auto mt-2 sm:mt-0">
-                  {/* Home Team */}
-                  <div className="flex flex-col-reverse sm:flex-row items-center sm:justify-end gap-1.5 sm:gap-3 text-center sm:text-right">
-                    <span className="text-white font-heading text-xs sm:text-base uppercase tracking-wide font-bold break-words w-full sm:w-auto leading-tight">{secondaryMatch.homeTeam.name}</span>
-                    {secondaryMatch.homeTeam.logo && (
-                      <div className="w-8 h-8 sm:w-auto sm:h-auto flex items-center justify-center bg-white/5 sm:bg-transparent rounded-full sm:rounded-none shrink-0 p-1 sm:p-0">
-                        <img loading="lazy" src={secondaryMatch.homeTeam.logo} alt={secondaryMatch.homeTeam.name} className="w-[22px] h-[18px] object-contain" />
-                      </div>
-                    )}
-                  </div>
+                {/* Competition tag + teams */}
+                <div className="flex flex-col items-center sm:items-start gap-2 w-full sm:w-auto">
+                  <span className="bg-zru-green/20 text-white border border-zru-green/30 text-[8px] font-black tracking-widest px-2 py-0.5 rounded-sm uppercase self-center sm:self-start">
+                    {secondaryMatch.competition}
+                  </span>
                   
-                  {/* VS */}
-                  <div className="flex justify-center items-center">
-                    <span className="text-zru-green font-heading text-[10px] sm:text-xs italic font-bold bg-white/5 sm:bg-transparent px-2 py-0.5 rounded-sm">VS</span>
-                  </div>
-                  
-                  {/* Away Team */}
-                  <div className="flex flex-col sm:flex-row items-center sm:justify-start gap-1.5 sm:gap-3 text-center sm:text-left">
-                    {secondaryMatch.awayTeam.logo && (
-                      <div className="w-8 h-8 sm:w-auto sm:h-auto flex items-center justify-center bg-white/5 sm:bg-transparent rounded-full sm:rounded-none shrink-0 p-1 sm:p-0">
-                        <img loading="lazy" src={secondaryMatch.awayTeam.logo} alt={secondaryMatch.awayTeam.name} className="w-[22px] h-[18px] object-contain" />
+                  <div className="flex items-center justify-center sm:justify-start gap-3 md:gap-5 w-full">
+                    {/* Home Team */}
+                    <div className="flex items-center gap-2">
+                      <div className="w-8 h-8 md:w-10 md:h-10 rotate-[45deg] rounded-md border border-zru-green/25 bg-neutral-900/60 flex items-center justify-center overflow-hidden shrink-0">
+                        <div className="-rotate-[45deg] w-full h-full flex items-center justify-center">
+                          {secondaryMatch.homeTeam.logo ? (
+                            <Image src={secondaryMatch.homeTeam.logo} alt={secondaryMatch.homeTeam.name} width={24} height={24} className="object-contain" />
+                          ) : (
+                            <span className="text-[8px] font-black text-white/60">{secondaryMatch.homeTeam.name.substring(0, 3).toUpperCase()}</span>
+                          )}
+                        </div>
                       </div>
-                    )}
-                    <span className="text-white font-heading text-xs sm:text-base uppercase tracking-wide font-bold break-words w-full sm:w-auto leading-tight">{secondaryMatch.awayTeam.name}</span>
+                      <span className="text-white font-heading text-xs sm:text-sm uppercase tracking-wide font-bold leading-tight">{secondaryMatch.homeTeam.name}</span>
+                    </div>
+                    
+                    {/* VS */}
+                    <div className="flex items-center gap-1 shrink-0">
+                      <div className="w-7 h-7 md:w-8 md:h-8 rounded-full bg-neutral-900 border border-white/10 flex items-center justify-center">
+                        <span className="font-heading text-[9px] md:text-[10px] text-zru-green italic font-black">VS</span>
+                      </div>
+                    </div>
+                    
+                    {/* Away Team */}
+                    <div className="flex items-center gap-2">
+                      <span className="text-white font-heading text-xs sm:text-sm uppercase tracking-wide font-bold leading-tight">{secondaryMatch.awayTeam.name}</span>
+                      <div className="w-8 h-8 md:w-10 md:h-10 rotate-[45deg] rounded-md border border-white/10 bg-neutral-900/60 flex items-center justify-center overflow-hidden shrink-0">
+                        <div className="-rotate-[45deg] w-full h-full flex items-center justify-center">
+                          {secondaryMatch.awayTeam.logo ? (
+                            <Image src={secondaryMatch.awayTeam.logo} alt={secondaryMatch.awayTeam.name} width={24} height={24} className="object-contain" />
+                          ) : (
+                            <span className="text-[8px] font-black text-white/60">{secondaryMatch.awayTeam.name.substring(0, 3).toUpperCase()}</span>
+                          )}
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
-              </div>
 
-              {/* Time & Location */}
-              <div className="flex flex-col sm:flex-row items-center gap-6 text-white/50 text-[11px] font-body font-medium">
-                <div className="flex items-center gap-2">
-                  <Clock className="w-3.5 h-3.5 text-zru-green/60" />
-                  <span>{secondaryMatch.time} CAT</span>
+                {/* Time & Location */}
+                <div className="flex items-center gap-4 text-white/50 text-[10px] font-body font-medium shrink-0">
+                  <div className="flex items-center gap-1.5">
+                    <Clock className="w-3 h-3 text-zru-green/60" />
+                    <span>{secondaryMatch.time} CAT</span>
+                  </div>
+                  <div className="flex items-center gap-1.5">
+                    <MapPin className="w-3 h-3 text-zru-green/60" />
+                    <span className="max-w-[140px] truncate">{secondaryMatch.venue.split(",")[0]}</span>
+                  </div>
+                  <Link href="/match-centre" className="text-zru-green hover:text-white transition-colors">
+                    <ChevronRight className="w-4 h-4" />
+                  </Link>
                 </div>
-                <div className="flex items-center gap-2">
-                  <MapPin className="w-3.5 h-3.5 text-zru-green/60" />
-                  <span className="max-w-[200px] truncate">{secondaryMatch.venue.split(",")[0]}</span>
-                </div>
-              </div>
 
+              </div>
             </div>
 
           </div>
@@ -354,10 +377,11 @@ export default function MatchCentreStrip({ initialMatches = [], twinData, rankin
 
         {/* 3. Bottom Button: View Match Centre */}
         <ScrollReveal delay={0.3}>
-          <div className="text-center mt-12">
+          <div className="text-center mt-8">
             <Link href="/match-centre">
-              <button className="inline-flex items-center gap-2 font-subheading tracking-widest text-[10px] uppercase border border-white/10 hover:border-zru-green/50 text-white hover:text-zru-green px-8 py-3.5 clip-slanted transition-all duration-300 bg-transparent cursor-pointer">
+              <button className="relative group/btn font-subheading tracking-widest text-[10px] uppercase bg-zru-green text-white font-black px-8 py-3.5 clip-slanted shadow-xl shadow-zru-green/30 hover:bg-white hover:text-rich-black transition-all duration-300 cursor-pointer inline-flex items-center gap-2">
                 View Full Match Centre
+                <ArrowRight className="w-4 h-4 transition-transform group-hover/btn:translate-x-1" />
               </button>
             </Link>
           </div>

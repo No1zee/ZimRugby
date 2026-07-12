@@ -87,7 +87,7 @@ export default function TeamsShowcase() {
               <div className="absolute inset-0 bg-linear-to-t from-black via-black/20 to-transparent opacity-90" />
 
               <div className="absolute top-6 right-6">
-                 <div className="w-16 h-16 rounded-full border-2 border-white/20 flex items-center justify-center bg-black/40 backdrop-blur-md group-hover:border-zru-orange transition-colors">
+                 <div className="w-16 h-16 rounded-full border-2 border-white/20 flex items-center justify-center bg-black/40 backdrop-blur-md group-hover:border-zru-green transition-colors">
                     <span className="font-heading text-2xl text-white">15</span>
                  </div>
               </div>
@@ -101,10 +101,10 @@ export default function TeamsShowcase() {
                  <h4 className="text-3xl md:text-4xl font-heading text-white mb-1 leading-none">
                     {player.name.split(" ")[0]}
                  </h4>
-                 <h4 className="text-3xl md:text-4xl font-heading text-zru-orange mb-4 leading-none">
+                 <h4 className="text-3xl md:text-4xl font-heading text-zru-green mb-4 leading-none">
                     {player.name.split(" ").slice(1).join(" ")}
                  </h4>
-                 <p className="text-gray-300 font-bold uppercase tracking-widest mb-6 border-l-2 border-zru-orange pl-3">
+                 <p className="text-gray-300 font-bold uppercase tracking-widest mb-6 border-l-2 border-zru-green pl-3">
                     {player.position}
                  </p>
 

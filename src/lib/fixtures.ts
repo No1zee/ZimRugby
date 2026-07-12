@@ -1,17 +1,20 @@
 import { Fixture, getWorldRugbyFixtures } from './world-rugby';
 import { getTicketmasterFixtures } from './ticketmaster';
 import { getFlagUrl } from './flags';
+import { getAllTeamFixtures } from './api/teams';
 
 export async function getAllFixtures(): Promise<Fixture[]> {
-  const [worldRugbyResults, tmResults] = await Promise.allSettled([
+  const [worldRugbyResults, tmResults, teamResults] = await Promise.allSettled([
     getWorldRugbyFixtures(),
     getTicketmasterFixtures(),
+    getAllTeamFixtures()
   ]);
 
   const allFixtures: Fixture[] = [
-    ...(worldRugbyResults.status === 'fulfilled' ? worldRugbyResults.value : []),
-    ...(tmResults.status === 'fulfilled' ? tmResults.value : []),
-    ...getVerifiedStaticFixtures(),
+    ...(worldRugbyResults.status === 'fulfilled' ? worldRugbyResults.value.map(f => ({ ...f, teamCategory: "Sables" })) : []),
+    ...(tmResults.status === 'fulfilled' ? tmResults.value.map(f => ({ ...f, teamCategory: "Sables" })) : []),
+    ...getVerifiedStaticFixtures().map(f => ({ ...f, teamCategory: "Sables" })),
+    ...(teamResults.status === 'fulfilled' ? teamResults.value : []),
   ];
 
   return deduplicateFixtures(allFixtures);
@@ -106,6 +109,7 @@ export function formatFixtureForUI(fixture: Fixture) {
   return {
     ...fixture,
     date: formattedDate,
+    dateIso: fixture.date.toISOString(),
     homeTeam: {
       ...fixture.homeTeam,
       logo: getLogo(fixture.homeTeam)

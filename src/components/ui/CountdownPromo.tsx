@@ -2,10 +2,8 @@
 
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowRight, MapPin } from "lucide-react";
-import Link from "next/link";
+import { MapPin } from "lucide-react";
 import Image from "next/image";
-import { StripedBackground } from "./StripedBackground";
 import SlantedButton from "./SlantedButton";
 
 interface CountdownPromoProps {
@@ -163,7 +161,7 @@ export function CountdownPromo({
             
             {/* Subtitle */}
             {subtitle && (
-              <h2 className="font-heading text-6xl md:text-8xl tracking-wider text-white mb-6 uppercase font-black drop-shadow-md">
+              <h2 className="font-heading text-[clamp(2rem,7vw,5rem)] tracking-wider text-white mb-6 uppercase font-black drop-shadow-md leading-none">
                 {subtitle}
               </h2>
             )}
@@ -191,7 +189,7 @@ export function CountdownPromo({
                     {/* Inner dividing horizontal strip (clock digit split) */}
                     <div className="absolute left-0 right-0 top-1/2 h-[1px] bg-black/30 z-20 pointer-events-none" />
                     
-                    <div className="relative h-[48px] md:h-[76px] overflow-hidden flex justify-center items-center z-10">
+                    <div className="relative h-[56px] md:h-[84px] overflow-hidden flex justify-center items-center z-10">
                       <AnimatePresence mode="popLayout">
                         <motion.span
                           key={`${unit.label}-${unit.value}`}
@@ -199,7 +197,7 @@ export function CountdownPromo({
                           animate={{ y: 0, opacity: 1, rotateX: 0 }}
                           exit={{ y: 40, opacity: 0, rotateX: 90 }}
                           transition={{ duration: 0.4, ease: "backOut" }}
-                          className="absolute block font-heading text-5xl md:text-7xl text-white font-black leading-none tracking-wider origin-center drop-shadow-[0_4px_10px_rgba(0,107,63,0.4)]"
+                          className="absolute block w-full text-center font-heading text-5xl md:text-7xl text-white font-black leading-none tracking-wider origin-center drop-shadow-[0_4px_10px_rgba(0,107,63,0.4)]"
                           style={{ perspective: 1000, transformStyle: "preserve-3d" }}
                         >
                           {isClient ? String(unit.value).padStart(2, "0") : "00"}
@@ -225,15 +223,14 @@ export function CountdownPromo({
             {/* CTAs */}
             <div className="flex flex-wrap items-center gap-4 mt-8">
               {ctas.map((cta, i) => (
-               cta.variant === "outline" ? (
-                 <SlantedButton key={i} href={cta.href} variant="outline" size="sm">
-                   {cta.label}
-                 </SlantedButton>
-               ) : (
-                 <SlantedButton key={i} href={cta.href} variant="primary" size="md">
-                   {cta.label}
-                 </SlantedButton>
-               )
+                <SlantedButton
+                  key={i}
+                  href={cta.href}
+                  variant={cta.variant === "outline" ? "secondary" : "primary"}
+                  size="md"
+                >
+                  {cta.label}
+                </SlantedButton>
               ))}
             </div>
           </motion.div>

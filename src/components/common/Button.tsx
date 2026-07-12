@@ -7,7 +7,7 @@ interface ButtonProps extends Omit<HTMLMotionProps<"button">, "variant"> {
   variant?: "primary" | "secondary" | "outline" | "ghost" | "link";
   size?: "sm" | "md" | "lg" | "xl";
   href?: string;
-  as?: any;
+  as?: React.ElementType;
   isLoading?: boolean;
   leftIcon?: React.ReactNode;
   rightIcon?: React.ReactNode;
@@ -22,7 +22,6 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       variant = "primary",
       size = "md",
       href,
-      as: Component = "button",
       isLoading,
       leftIcon,
       rightIcon,
@@ -36,7 +35,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
 
     const variants = {
       primary:
-        "bg-zru-red text-white hover:bg-red-700 focus:ring-zru-red border border-transparent shadow-lg hover:shadow-xl hover:shadow-red-500/20 hover:-translate-y-0.5",
+        "bg-zru-green text-white hover:bg-green-700 focus:ring-zru-green border border-transparent shadow-lg hover:shadow-xl hover:shadow-zru-green/20 hover:-translate-y-0.5",
       secondary:
         "bg-zru-green text-white hover:bg-green-700 focus:ring-zru-green border border-transparent shadow-md hover:shadow-lg hover:shadow-zru-green/20",
       outline:
@@ -78,7 +77,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       <motion.button
         ref={ref}
         className={combinedClassName}
-        disabled={isLoading || (props as any).disabled}
+        disabled={isLoading || props.disabled}
         whileTap={{ scale: 0.95 }}
         transition={{ type: "spring", stiffness: 400, damping: 17 }}
         {...props}

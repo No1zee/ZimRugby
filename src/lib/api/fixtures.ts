@@ -1,6 +1,5 @@
 import { Match } from "@/types";
-import directus from "@/lib/directus/client";
-import { readItems } from "@directus/sdk";
+import { directusFetch } from "@/lib/directus/fetch";
 
 export interface FixtureTwinData {
   previous: Match;
@@ -36,7 +35,7 @@ export async function getFixtureTwinData(): Promise<FixtureTwinData> {
       venue: "Kyadondo Rugby Club, Kampala",
       homeTeam: {
         name: "Zimbabwe Sables",
-        logo: "/images/zru-logo.webp",
+        logo: "/zru logo main.svg",
         score: 32
       },
       awayTeam: {
@@ -56,7 +55,7 @@ export async function getFixtureTwinData(): Promise<FixtureTwinData> {
       venue: "Mweru Stadium, Lusaka",
       homeTeam: {
         name: "Zimbabwe Sables",
-        logo: "/images/zru-logo.webp"
+        logo: "/zru logo main.svg"
       },
       awayTeam: {
         name: "Algeria",
@@ -69,25 +68,21 @@ export async function getFixtureTwinData(): Promise<FixtureTwinData> {
 
   try {
     if (process.env.NEXT_PUBLIC_DIRECTUS_URL) {
-      const prevMatches = await directus.request(
-        readItems('matches', {
-          filter: {
-            status: { _in: ['completed', 'finished'] }
-          },
-          sort: ['-date'],
-          limit: 1
-        })
-      );
+      const prevMatches = await directusFetch<DirectusMatchItem>('matches', {
+        filter: {
+          status: { _in: ['completed', 'finished'] }
+        },
+        sort: ['-date'],
+        limit: 1
+      });
       
-      const nextMatches = await directus.request(
-        readItems('matches', {
-          filter: {
-            status: { _eq: 'upcoming' }
-          },
-          sort: ['date'],
-          limit: 1
-        })
-      );
+      const nextMatches = await directusFetch<DirectusMatchItem>('matches', {
+        filter: {
+          status: { _eq: 'upcoming' }
+        },
+        sort: ['date'],
+        limit: 1
+      });
       
       if (prevMatches?.[0] && nextMatches?.[0]) {
         const mapMatch = (m: DirectusMatchItem): Match => ({

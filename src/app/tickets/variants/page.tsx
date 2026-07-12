@@ -2,8 +2,6 @@
 
 import React from "react";
 import { FixtureCard, type Fixture } from "@/components/tickets/FixtureCard";
-import Navigation from "@/components/layout/Navigation";
-import Footer from "@/components/layout/Footer";
 
 const VARIANT_MATCHES: Fixture[] = [
   {
@@ -128,7 +126,6 @@ export default function VariantsPage() {
         </div>
       </div>
 
-      <Footer />
     </main>
   );
 }

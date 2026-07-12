@@ -1,10 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import { Mail, Phone, MapPin, Clock, Send, CheckCircle2, AlertCircle } from "lucide-react";
-import Navigation from "@/components/layout/Navigation";
-import Footer from "@/components/layout/Footer";
 import { saveSubmission } from "@/lib/mockStorage";
 
 export default function ContactPage() {
@@ -14,13 +12,13 @@ export default function ContactPage() {
   const [message, setMessage] = useState("");
   
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitError, setSubmitError] = useState("");
+  const [submitError, setSubmitError] = useState<string | null>(null);
   const [submitSuccess, setSubmitSuccess] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-    setSubmitError("");
+    setSubmitError(null);
     
     try {
       const res = await saveSubmission("contact_message", { name, email, subject, message });
@@ -32,7 +30,7 @@ export default function ContactPage() {
       } else {
         setSubmitError(res.message);
       }
-    } catch (err) {
+    } catch {
       setSubmitError("An unexpected error occurred. Please try again.");
     } finally {
       setIsSubmitting(false);
@@ -73,9 +71,9 @@ export default function ContactPage() {
               return (
                 <div 
                   key={idx} 
-                  className="bg-white/5 border border-white/5 rounded-2xl p-6 flex items-start gap-4 hover:border-white/10 transition-colors"
+                  className="card-green border rounded-2xl p-6 flex items-start gap-4 transition-all"
                 >
-                  <div className="w-10 h-10 bg-zru-green/20 rounded-xl flex items-center justify-center text-zru-green border border-white/5 shrink-0">
+                  <div className="w-10 h-10 bg-zru-green/20 rounded-xl flex items-center justify-center text-zru-green border border-zru-green/20 shrink-0">
                     <Icon className="w-5 h-5" />
                   </div>
                   <div className="space-y-1">
@@ -205,7 +203,6 @@ export default function ContactPage() {
 
       </div>
 
-      <Footer />
     </main>
   );
 }

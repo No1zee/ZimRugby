@@ -54,19 +54,19 @@ export function SectionBoard({
       bg: "bg-[#091F40]",
       text: "text-white",
       accent: "text-zru-green",
-      button: "bg-zru-red hover:bg-red-700 text-white",
+      button: "bg-zru-green hover:bg-green-700 text-white",
     },
     red: {
-      bg: "bg-zru-red",
+      bg: "bg-zru-green",
       text: "text-white",
-      accent: "text-zru-green",
-      button: "bg-white hover:bg-gray-100 text-zru-red",
+      accent: "text-white",
+      button: "bg-white hover:bg-gray-100 text-zru-green",
     },
     green: {
       bg: "bg-zru-green",
       text: "text-white",
-      accent: "text-zru-green",
-      button: "bg-zru-green hover:bg-green-700 text-rich-black",
+      accent: "text-white",
+      button: "bg-rich-black hover:bg-black text-white",
     },
   };
 
@@ -85,7 +85,7 @@ export function SectionBoard({
         <StripedBackground 
           variant="accent" 
           position="right" 
-          color="red" 
+          color="green" 
         />
       )}
 

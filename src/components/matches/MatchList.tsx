@@ -23,6 +23,8 @@ export interface Match {
   };
   status?: "upcoming" | "live" | "completed";
   ticketUrl?: string;
+  teamCategory?: string;
+  dateIso?: string;
 }
 
 interface MatchListProps {

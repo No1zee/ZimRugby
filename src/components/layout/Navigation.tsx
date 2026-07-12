@@ -1,12 +1,14 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useMemo } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, Menu, X, Search } from "lucide-react";
 import { motion, AnimatePresence, useScroll, useMotionValueEvent } from "framer-motion";
-import { useEffect } from "react";
+import SlantedButton from "../ui/SlantedButton";
+import GlobalAnnouncementBar from "./GlobalAnnouncementBar";
 
 interface NavItem {
   label: string;
@@ -90,20 +92,111 @@ const navItems: NavItem[] = [
 
 export default function Navigation() {
   const [isOpen, setIsOpen] = useState(false);
-  const [hidden, setHidden] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
   const [dynamicNavItems, setDynamicNavItems] = useState<NavItem[]>(navItems);
+  const [expandedMobile, setExpandedMobile] = useState<string[]>([]);
   const pathname = usePathname();
   const { scrollY } = useScroll();
 
   const toggleMenu = () => setIsOpen(!isOpen);
+
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [allMatches, setAllMatches] = useState<any[]>([]);
+  const [allReports, setAllReports] = useState<any[]>([]);
+
+  // Load search data once when search overlay is opened
+  useEffect(() => {
+    if (!isSearchOpen) return;
+    
+    async function loadSearchData() {
+      try {
+        const [resMatches, resReports] = await Promise.all([
+          fetch("/data/matches.json"),
+          fetch("/data/reports.json"),
+        ]);
+        if (resMatches.ok) {
+          const data = await resMatches.json();
+          setAllMatches(data);
+        }
+        if (resReports.ok) {
+          const data = await resReports.json();
+          setAllReports(data);
+        }
+      } catch (err) {
+        console.error("Failed to load search data:", err);
+      }
+    }
+    loadSearchData();
+  }, [isSearchOpen]);
+
+  // Compute search results dynamically to satisfy react-hooks/set-state-in-effect linter rule
+  const searchResults = useMemo(() => {
+    if (!searchQuery.trim()) {
+      return { matches: [], reports: [], events: [] };
+    }
+    const q = searchQuery.toLowerCase();
+
+    const filteredMatches = allMatches.filter(m => 
+      m.homeTeam?.name?.toLowerCase().includes(q) || 
+      m.awayTeam?.name?.toLowerCase().includes(q) ||
+      m.venue?.toLowerCase().includes(q) ||
+      m.competition?.toLowerCase().includes(q)
+    ).slice(0, 4);
+
+    const filteredReports = allReports.filter(r => 
+      r.title?.toLowerCase().includes(q) || 
+      r.excerpt?.toLowerCase().includes(q) ||
+      r.category?.toLowerCase().includes(q)
+    ).slice(0, 4);
+
+    const mockEvents = [
+      { id: "1", title: "Super Six Rugby League", location: "Harare & Bulawayo", category: "Club Rugby", href: "/events?tab=competitions" },
+      { id: "2", title: "Sable Lager Grid Cup", location: "Harare Sports Club", category: "Franchise", href: "/events?tab=competitions" },
+      { id: "3", title: "Nedbank Challenge Cup", location: "Old Hararians", category: "Knockout", href: "/events?tab=competitions" },
+      { id: "4", title: "Harare Under-20 League", location: "Old Hararians", category: "Youth", href: "/events?tab=competitions" },
+    ];
+
+    const filteredEvents = mockEvents.filter(e => 
+      e.title.toLowerCase().includes(q) ||
+      e.location.toLowerCase().includes(q) ||
+      e.category.toLowerCase().includes(q)
+    );
+
+    return {
+      matches: filteredMatches,
+      reports: filteredReports,
+      events: filteredEvents,
+    };
+  }, [searchQuery, allMatches, allReports]);
+
+  // Escape key handler to close search
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        setIsSearchOpen(false);
+        setSearchQuery("");
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, []);
 
   useEffect(() => {
     const handleToggle = () => setIsOpen(prev => !prev);
     window.addEventListener('toggleMobileMenu', handleToggle);
     return () => window.removeEventListener('toggleMobileMenu', handleToggle);
   }, []);
+
+  useEffect(() => {
+    if (isOpen) {
+      document.documentElement.style.overflow = 'hidden';
+    } else {
+      document.documentElement.style.overflow = '';
+    }
+    return () => { document.documentElement.style.overflow = ''; };
+  }, [isOpen]);
 
   useEffect(() => {
     async function loadDynamicNav() {
@@ -140,89 +233,70 @@ export default function Navigation() {
     } else {
       setIsScrolled(false);
     }
-
-    // Determine hide/show behavior
-    if (latest > previous && latest > 150) {
-      setHidden(true);
-      setActiveDropdown(null); // Close dropdown when hiding nav
-    } else {
-      setHidden(false);
-    }
   });
 
-  const isActive = (href: string) => pathname === href || pathname.startsWith(href + "/");
-
-  if (pathname?.startsWith('/clubhouse') || pathname?.startsWith('/admin')) return null;
+  const isActive = (href: string) => {
+    if (href === "/" && pathname !== "/") return false;
+    return pathname.startsWith(href);
+  };
 
   return (
-      <header 
-        className={`
-          fixed w-full z-50 transition-all duration-300
-          ${hidden ? "-translate-y-full" : "translate-y-0"}
-          ${isScrolled 
-            ? "bg-zru-green/95 backdrop-blur-xl shadow-lg border-b border-white/10" 
-            : "bg-transparent border-b border-transparent"
-          }
-        `}
+    <header className="fixed top-0 left-0 w-full z-50">
+      <GlobalAnnouncementBar />
+      <nav 
+        className={`w-full transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+          isScrolled 
+            ? "bg-rich-black/90 backdrop-blur-md py-3 shadow-[0_4px_30px_rgba(0,0,0,0.3)] border-b border-white/5" 
+            : "bg-transparent py-5"
+        }`}
       >
-      
-      {/* Main Navigation */}
-      <nav className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
-        <div className={`flex justify-between items-center transition-all duration-300 ${isScrolled ? "h-20 lg:h-24" : "h-24 lg:h-28"}`}>
+        <div className="max-w-[1440px] mx-auto px-6 flex items-center justify-between gap-4">
           
-          {/* Logo */}
-          <Link href="/" className="flex items-center gap-3 group relative">
-            <motion.div whileHover={{ scale: 1.05 }} className="relative z-50">
-              <img
-                src="/zru logo main.svg"
-                alt="ZRU Logo"
-                className="object-contain drop-shadow-2xl w-auto h-16 lg:h-20"
+          {/* Logo Brand Block */}
+          <Link href="/" className="flex items-center gap-3 group z-50">
+            <div className="relative w-10 h-10 md:w-12 md:h-12 transition-transform duration-500 group-hover:rotate-12 flex items-center justify-center">
+              <Image 
+                src="/zru logo main.svg" 
+                alt="Zimbabwe Rugby Union Logo" 
+                width={48}
+                height={48}
+                priority
+                className="w-full h-full object-contain" 
               />
-            </motion.div>
+            </div>
+            <div className="flex flex-col">
+              <span className="font-heading text-lg md:text-xl tracking-wider text-white leading-none">ZIMBABWE</span>
+              <span className="font-subheading text-[8px] md:text-[9px] tracking-[0.4em] text-zru-green font-black leading-none mt-1">RUGBY UNION</span>
+            </div>
           </Link>
 
-          {/* Desktop Nav Links (Centered) */}
-          <div className="hidden lg:flex flex-1 items-center justify-center px-4 xl:px-8">
-            <div className="flex items-center gap-1 xl:gap-2">
+          {/* Desktop Nav Items */}
+          <div className="hidden lg:flex items-center gap-8 xl:gap-10">
+            <div className="flex items-center gap-8 xl:gap-10">
               {dynamicNavItems.map((item) => (
                 <div 
                   key={item.label}
-                  className="relative group"
-                  onMouseEnter={() => item.children && setActiveDropdown(item.label)}
+                  className="relative group/nav"
+                  onMouseEnter={() => setActiveDropdown(item.label)}
                   onMouseLeave={() => setActiveDropdown(null)}
                 >
                   <Link 
-                    href={item.href} 
+                    href={item.href}
                     className={`
-                      relative px-3 py-2 text-sm font-bold uppercase tracking-wider transition-colors z-10
-                      flex items-center gap-1
-                      ${isActive(item.href) ? "text-white" : "text-white/80 hover:text-white"}
+                      flex items-center gap-1.5 py-2 font-subheading tracking-widest text-[10px] uppercase font-black transition-colors relative
+                      ${isActive(item.href) ? "text-zru-green" : "text-white/80 hover:text-white"}
                     `}
                   >
-                    {/* Floating Pill Background */}
-                    {activeDropdown === item.label ? (
-                      <motion.div
-                        layoutId="navBackground"
-                        className="absolute inset-0 bg-white/10 rounded-full -z-10"
-                        initial={false}
-                        transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
-                      />
-                    ) : null}
-
-                    {/* Active Indicator - Bottom Border */}
-                    {/* Active Indicator - Bottom Border */}
                     {isActive(item.href) && (
-                      <motion.div
-                        layoutId="activeNavIndicator"
-                        className="absolute bottom-0 left-0 right-0 h-0.5 bg-zru-green"
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        transition={{ duration: 0.3 }}
+                      <motion.span 
+                        layoutId="activeIndicator"
+                        className="absolute bottom-0 left-0 w-full h-[2px] bg-zru-green"
+                        transition={{ type: "spring", stiffness: 380, damping: 30 }}
                       />
                     )}
 
                     {item.label}
-                    {item.children && <ChevronDown className="w-3.5 h-3.5 transition-transform group-hover:rotate-180" />}
+                    {item.children && <ChevronDown className="w-3.5 h-3.5 transition-transform group-hover/nav:rotate-180" />}
                   </Link>
 
                   {/* Dropdown Menu (Mega or Standard) */}
@@ -260,14 +334,40 @@ export default function Navigation() {
             </div>
           </div>
 
-          {/* Book Tickets CTA (Desktop) */}
-          <div className="hidden lg:flex items-center shrink-0">
-            <Link href="/tickets" className="inline-flex items-center justify-center font-subheading tracking-widest text-[10px] uppercase bg-white text-black hover:bg-zru-green hover:text-white font-black px-6 py-3 clip-slanted shadow-xl transition-all duration-300">
-              Book Tickets
-            </Link>
+          {/* Mobile Actions */}
+          <div className="lg:hidden flex items-center gap-2 shrink-0">
+            <button 
+              onClick={() => setIsSearchOpen(true)}
+              className="p-2 text-white/80 hover:text-white transition-colors cursor-pointer"
+              aria-label="Search site"
+              title="Search"
+            >
+              <Search className="w-6 h-6" />
+            </button>
+            <button
+              onClick={() => setIsOpen(!isOpen)}
+              className="p-2 text-white/80 hover:text-white transition-colors cursor-pointer"
+              aria-label={isOpen ? "Close menu" : "Open menu"}
+            >
+              {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+            </button>
           </div>
 
-          {/* Mobile hamburger menu removed in favor of MobileDock */}
+          {/* Desktop Actions */}
+          <div className="hidden lg:flex items-center gap-4 shrink-0">
+            <button 
+              onClick={() => setIsSearchOpen(true)}
+              className="p-2.5 text-white/80 hover:text-white hover:bg-white/10 rounded-full transition-all cursor-pointer"
+              aria-label="Search site"
+              title="Search"
+            >
+              <Search className="w-5 h-5" />
+            </button>
+            <SlantedButton href="/tickets" variant="primary" size="sm">
+              Book Tickets
+            </SlantedButton>
+          </div>
+
         </div>
       </nav>
 
@@ -275,50 +375,203 @@ export default function Navigation() {
       <AnimatePresence>
         {isOpen && (
           <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: "100vh" }}
-            exit={{ opacity: 0, height: 0 }}
-            transition={{ duration: 0.3, ease: "easeInOut" }}
-            className="lg:hidden absolute top-full left-0 w-full bg-zru-green/95 backdrop-blur-xl border-t border-white/10 overflow-y-auto"
-            style={{ height: 'calc(100vh - 4rem)' }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            className="lg:hidden fixed inset-x-0 top-[4rem] bottom-0 z-50 bg-zru-green/95 backdrop-blur-xl border-t border-white/10 overflow-y-auto overscroll-contain"
           >
-            <div className="px-6 py-8 space-y-6 max-w-[320px] mx-auto w-full">
-              {dynamicNavItems.map((item, index) => (
-                <motion.div 
-                  key={item.label}
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: index * 0.1 }}
-                >
-                  <Link
-                    href={item.href}
-                    className={`
-                      block py-2 text-xl font-black uppercase tracking-wider transition-colors
-                      ${isActive(item.href) ? "text-white" : "text-white/70 hover:text-white"}
-                    `}
-                    onClick={!item.children ? toggleMenu : undefined}
+             <div className="px-6 py-8 pb-32 space-y-2 max-w-[320px] mx-auto w-full">
+              {dynamicNavItems.map((item, index) => {
+                const isExpanded = expandedMobile.includes(item.label);
+                return (
+                  <motion.div 
+                    key={item.label}
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: index * 0.05 }}
                   >
-                    {item.label}
-                  </Link>
-                  {item.children && (
-                    <div className="pl-4 mt-2 space-y-2 border-l-2 border-white/10">
-                      {item.children.map((child) => (
-                        <Link
-                          key={child.label}
-                          href={child.href}
+                    {item.children ? (
+                      <>
+                        <button
+                          onClick={() => {
+                            setExpandedMobile(prev =>
+                              prev.includes(item.label)
+                                ? prev.filter(l => l !== item.label)
+                                : [...prev, item.label]
+                            );
+                          }}
                           className={`
-                            block py-2 px-4 text-base font-medium transition-colors rounded-r-lg
-                            ${isActive(child.href) ? "text-white bg-white/5 border-l-2 border-white -ml-[2px]" : "text-white/70 hover:text-white hover:bg-white/5"}
+                            flex items-center justify-between w-full py-3 text-xl font-black uppercase tracking-wider transition-colors text-left
+                            ${isActive(item.href) ? "text-white" : "text-white/70 hover:text-white"}
                           `}
-                          onClick={toggleMenu}
                         >
-                          {child.label}
-                        </Link>
-                      ))}
-                    </div>
-                  )}
-                </motion.div>
-              ))}
+                          {item.label}
+                          <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${isExpanded ? "rotate-180" : ""}`} />
+                        </button>
+                        <AnimatePresence>
+                          {isExpanded && (
+                            <motion.div
+                              initial={{ opacity: 0, height: 0 }}
+                              animate={{ opacity: 1, height: "auto" }}
+                              exit={{ opacity: 0, height: 0 }}
+                              transition={{ duration: 0.2 }}
+                              className="overflow-hidden"
+                            >
+                              <div className="pl-4 mt-1 mb-2 space-y-1 border-l-2 border-white/10">
+                                {item.children.map((child) => (
+                                  <Link
+                                    key={child.label}
+                                    href={child.href}
+                                    className={`
+                                      block py-2.5 px-4 text-sm font-medium transition-colors rounded-r-lg
+                                      ${isActive(child.href) ? "text-white bg-white/10 border-l-2 border-white -ml-[2px]" : "text-white/70 hover:text-white hover:bg-white/5"}
+                                    `}
+                                    onClick={toggleMenu}
+                                  >
+                                    {child.label}
+                                  </Link>
+                                ))}
+                              </div>
+                            </motion.div>
+                          )}
+                        </AnimatePresence>
+                      </>
+                    ) : (
+                      <Link
+                        href={item.href}
+                        className={`
+                          block py-3 text-xl font-black uppercase tracking-wider transition-colors
+                          ${isActive(item.href) ? "text-white" : "text-white/70 hover:text-white"}
+                        `}
+                        onClick={toggleMenu}
+                      >
+                        {item.label}
+                      </Link>
+                    )}
+                  </motion.div>
+                );
+              })}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Search Overlay */}
+      <AnimatePresence>
+        {isSearchOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.25 }}
+            className="fixed inset-0 bg-rich-black/98 backdrop-blur-xl z-[100] overflow-y-auto pt-16 flex flex-col items-center px-4 md:px-8"
+          >
+            {/* Top Bar inside Overlay */}
+            <div className="w-full max-w-4xl flex justify-end py-4">
+              <button 
+                onClick={() => {
+                  setIsSearchOpen(false);
+                  setSearchQuery("");
+                }}
+                className="p-3 text-white/50 hover:text-white hover:bg-white/10 rounded-full transition-all cursor-pointer"
+                aria-label="Close search"
+                title="Close search"
+              >
+                <X className="w-7 h-7" />
+              </button>
+            </div>
+
+            {/* Input Box */}
+            <div className="w-full max-w-4xl mt-4">
+              <div className="relative border-b-2 border-white/10 focus-within:border-zru-green transition-colors py-4 flex items-center gap-4">
+                <Search className="w-8 h-8 text-white/40" />
+                <input 
+                  type="text" 
+                  autoFocus
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  placeholder="SEARCH TEAMS, FIXTURES, ARTICLES..." 
+                  className="w-full bg-transparent text-2xl md:text-4xl font-heading tracking-wider uppercase text-white placeholder:text-white/20 focus:outline-hidden"
+                />
+              </div>
+            </div>
+
+            {/* Search Results Display */}
+            <div className="w-full max-w-4xl mt-12 pb-24 grid grid-cols-1 md:grid-cols-3 gap-10">
+              
+              {/* Category: Matches */}
+              <div className="space-y-4">
+                <h3 className="text-zru-green text-[10px] font-black uppercase tracking-[0.3em] border-b border-zru-green/20 pb-2">Fixtures & Results</h3>
+                {searchQuery && searchResults.matches.length === 0 && (
+                  <p className="text-white/40 text-xs font-medium">No matching fixtures found.</p>
+                )}
+                <div className="space-y-3">
+                  {searchResults.matches.map((m) => (
+                    <Link 
+                      key={m.id} 
+                      href="/match-centre" 
+                      onClick={() => { setIsSearchOpen(false); setSearchQuery(""); }}
+                      className="block p-3 rounded-lg bg-white/5 hover:bg-zru-green/10 border border-white/5 hover:border-zru-green/20 transition-all group"
+                    >
+                      <div className="text-[10px] text-white/40 font-bold uppercase tracking-wider mb-1">{m.competition}</div>
+                      <div className="text-white group-hover:text-zru-green transition-colors text-sm font-heading tracking-wide">
+                        {m.homeTeam?.name} VS {m.awayTeam?.name}
+                      </div>
+                      <div className="text-[10px] text-white/50 font-bold uppercase tracking-wider mt-1">{m.date} • {m.venue}</div>
+                    </Link>
+                  ))}
+                </div>
+              </div>
+
+              {/* Category: News / Articles */}
+              <div className="space-y-4">
+                <h3 className="text-zru-green text-[10px] font-black uppercase tracking-[0.3em] border-b border-zru-green/20 pb-2">Latest News</h3>
+                {searchQuery && searchResults.reports.length === 0 && (
+                  <p className="text-white/40 text-xs font-medium">No matching articles found.</p>
+                )}
+                <div className="space-y-3">
+                  {searchResults.reports.map((r) => (
+                    <Link 
+                      key={r.id} 
+                      href={`/media/${r.id}`}
+                      onClick={() => { setIsSearchOpen(false); setSearchQuery(""); }}
+                      className="block p-3 rounded-lg bg-white/5 hover:bg-zru-green/10 border border-white/5 hover:border-zru-green/20 transition-all group"
+                    >
+                      <div className="text-[10px] text-zru-green font-bold uppercase tracking-wider mb-1">{r.category}</div>
+                      <div className="text-white group-hover:text-zru-green transition-colors text-sm font-body font-semibold line-clamp-2 leading-snug">
+                        {r.title}
+                      </div>
+                      <div className="text-[9px] text-white/40 font-bold uppercase tracking-wider mt-1">{r.date}</div>
+                    </Link>
+                  ))}
+                </div>
+              </div>
+
+              {/* Category: Events */}
+              <div className="space-y-4">
+                <h3 className="text-zru-green text-[10px] font-black uppercase tracking-[0.3em] border-b border-zru-green/20 pb-2">Tournaments & Events</h3>
+                {searchQuery && searchResults.events.length === 0 && (
+                  <p className="text-white/40 text-xs font-medium">No matching events found.</p>
+                )}
+                <div className="space-y-3">
+                  {searchResults.events.map((e) => (
+                    <Link 
+                      key={e.id} 
+                      href={e.href}
+                      onClick={() => { setIsSearchOpen(false); setSearchQuery(""); }}
+                      className="block p-3 rounded-lg bg-white/5 hover:bg-zru-green/10 border border-white/5 hover:border-zru-green/20 transition-all group"
+                    >
+                      <div className="text-[10px] text-white/40 font-bold uppercase tracking-wider mb-1">{e.category}</div>
+                      <div className="text-white group-hover:text-zru-green transition-colors text-sm font-heading tracking-wide">
+                        {e.title}
+                      </div>
+                      <div className="text-[10px] text-white/50 font-bold uppercase tracking-wider mt-1">{e.location}</div>
+                    </Link>
+                  ))}
+                </div>
+              </div>
+
             </div>
           </motion.div>
         )}

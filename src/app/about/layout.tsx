@@ -49,7 +49,7 @@ export default function AboutLayout({
           
           {/* Responsive Left Sidebar */}
           <aside className="lg:col-span-1">
-            <div className="sticky top-28 bg-white/5 border border-white/10 rounded-2xl p-6 backdrop-blur-md">
+            <div className="sticky top-28 card-green border rounded-2xl p-6 backdrop-blur-md">
               <h2 className="text-xs font-black uppercase tracking-widest text-zru-green mb-6 border-b border-white/5 pb-3">
                 PORTAL NAVIGATION
               </h2>
@@ -66,7 +66,7 @@ export default function AboutLayout({
                       className={`flex items-center gap-3 px-4 py-3 rounded-xl text-xs font-black uppercase tracking-wider transition-all duration-300 ${
                         isActive
                           ? "bg-zru-green text-rich-black shadow-lg"
-                          : "text-white/60 hover:text-white hover:bg-white/5"
+                          : "text-white/60 hover:text-white hover:bg-zru-green/10"
                       }`}
                     >
                       <Icon className="w-4 h-4 shrink-0" />
@@ -88,7 +88,7 @@ export default function AboutLayout({
                       className={`flex items-center gap-2 px-4 py-2.5 rounded-full text-[10px] font-black uppercase tracking-widest transition-all duration-300 whitespace-nowrap ${
                         isActive
                           ? "bg-zru-green text-rich-black shadow-md"
-                          : "text-white/60 hover:text-white hover:bg-white/5"
+                          : "text-white/60 hover:text-white hover:bg-zru-green/10"
                       }`}
                     >
                       <Icon className="w-3.5 h-3.5" />
@@ -103,7 +103,7 @@ export default function AboutLayout({
 
           {/* Right Content Area */}
           <section className="lg:col-span-3">
-            <div className="bg-white/5 border border-white/5 rounded-3xl p-6 md:p-10 backdrop-blur-sm min-h-[50vh]">
+            <div className="card-green border rounded-3xl p-6 md:p-10 backdrop-blur-sm min-h-[50vh]">
               {children}
             </div>
           </section>

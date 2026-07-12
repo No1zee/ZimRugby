@@ -28,8 +28,8 @@ export interface HeroSlideData {
  * CMS_SWAP_TODO: Replace mock implementation with actual REST/GraphQL endpoints once backend is available.
  * Fully compatible with React Native / Mobile platforms for direct cross-platform consumption.
  */
-import directus from "@/lib/directus/client";
-import { readItems } from "@directus/sdk";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { directusFetch } from "@/lib/directus/fetch";
 
 export async function getHeroSlides(): Promise<HeroSlideData[]> {
   const mockSlides: HeroSlideData[] = [
@@ -52,8 +52,8 @@ export async function getHeroSlides(): Promise<HeroSlideData[]> {
         tag: "UPCOMING FIXTURE"
       },
       ctas: {
-        primary: { label: "Sign In", href: "/login", iconName: "ArrowRight" },
-        secondary: { label: "Lady Sables Match Centre", href: "/match-centre", iconName: "Play" },
+        primary: { label: "Lady Sables Match Centre", href: "/match-centre", iconName: "ArrowRight" },
+        secondary: { label: "Sign In", href: "/login", iconName: "ArrowRight" },
       },
     },
     {
@@ -67,8 +67,8 @@ export async function getHeroSlides(): Promise<HeroSlideData[]> {
       },
       subtext: "Experience the pride of Harare and Bulawayo as the Sables clash in the Victoria Falls Domestic Series.",
       ctas: {
-        primary: { label: "Sign In", href: "/login", iconName: "ArrowRight" },
-        secondary: { label: "Match Info", href: "/events", iconName: "Play" },
+        primary: { label: "Match Info", href: "/events", iconName: "ArrowRight" },
+        secondary: { label: "Sign In", href: "/login", iconName: "Play" },
       },
     },
     {
@@ -105,8 +105,8 @@ export async function getHeroSlides(): Promise<HeroSlideData[]> {
         tag: "UPCOMING FIXTURE"
       },
       ctas: {
-        primary: { label: "Sign In", href: "/login", iconName: "ArrowRight" },
-        secondary: { label: "Sables Squad", href: "/teams/sables", iconName: "ArrowRight" },
+        primary: { label: "Sables Squad", href: "/teams/sables", iconName: "ArrowRight" },
+        secondary: { label: "Sign In", href: "/login", iconName: "ArrowRight" },
       },
     },
     {
@@ -134,19 +134,17 @@ export async function getHeroSlides(): Promise<HeroSlideData[]> {
       },
       subtext: "Witness the elite athleticism of Zimbabwe's 7s finest. Precision, power, and the pursuit of excellence.",
       ctas: {
-        primary: { label: "Sign In", href: "/login", iconName: "ArrowRight" },
-        secondary: { label: "Watch Highlights", href: "/media", iconName: "Play" },
+        primary: { label: "Watch Highlights", href: "/media", iconName: "Play" },
+        secondary: { label: "Sign In", href: "/login", iconName: "ArrowRight" },
       },
     },
   ];
 
   try {
     if (process.env.NEXT_PUBLIC_DIRECTUS_URL) {
-      const response = await directus.request(
-        readItems('hero_slides' as any, {
-          sort: ['sort' as any],
-        })
-      );
+      const response = await directusFetch<any>('hero_slides', {
+        sort: ['sort'],
+      });
       if (response && response.length > 0) {
         return response.map((slide: any) => ({
           id: Number(slide.id),

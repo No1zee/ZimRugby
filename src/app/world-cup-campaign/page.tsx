@@ -14,8 +14,6 @@ import {
 import Image from "next/image";
 import Link from "next/link";
 
-import Navigation from "@/components/layout/Navigation";
-import Footer from "@/components/layout/Footer";
 import Button from "@/components/common/Button";
 import { StripedBackground } from "@/components/ui/StripedBackground";
 import { joinZRUNation } from "@/lib/crm";
@@ -323,7 +321,7 @@ export default function WorldCupCampaignPage() {
               </div>
 
               {/* Stats Grid */}
-              <div className="grid grid-cols-3 mt-16 border border-white/5 bg-white/2 rounded-lg">
+              <div className="grid grid-cols-3 mt-16 card-green border rounded-lg">
                 <ImpactStat value="15k+" label="Players" />
                 <ImpactStat value="120+" label="Youth Teams" />
                 <ImpactStat value="12" label="HP Camps" />
@@ -418,7 +416,7 @@ export default function WorldCupCampaignPage() {
             />
             
             {/* Custom Pledge Card */}
-            <div className="relative p-8 rounded-xl border border-white/5 flex flex-col justify-center text-center bg-white/1">
+            <div className="relative p-8 rounded-xl card-green border flex flex-col justify-center text-center">
               <Zap className="w-10 h-10 text-zru-green mx-auto mb-6 opacity-30" />
               <h3 className="text-xl font-bold text-white uppercase mb-4">Set Custom Amount</h3>
               <p className="text-xs text-gray-500 mb-8 font-medium">Choose the level that fits you—every pledge counts toward the shield.</p>
@@ -427,7 +425,7 @@ export default function WorldCupCampaignPage() {
           </div>
 
           <div className="mt-16 text-center">
-            <div className="inline-flex items-center gap-4 px-6 py-3 rounded-lg bg-white/2 border border-white/5 text-[10px] font-black text-white/60 uppercase tracking-widest">
+            <div className="inline-flex items-center gap-4 px-6 py-3 rounded-lg card-green border text-[10px] font-black text-white/60 uppercase tracking-widest">
               Secure payments powered by Stripe & Paynow • Cancel anytime
             </div>
           </div>
@@ -467,7 +465,7 @@ export default function WorldCupCampaignPage() {
               </ul>
             </div>
 
-            <div className="bg-white/3 backdrop-blur-xl border border-white/10 p-10 rounded-2xl">
+            <div className="card-green border backdrop-blur-xl p-10 rounded-2xl">
               <AnimatePresence mode="wait">
                 {!isSubmitted ? (
                   <motion.form 
@@ -569,7 +567,7 @@ export default function WorldCupCampaignPage() {
                 whileHover={{ y: -10 }}
                 className="group cursor-pointer"
               >
-                <div className="relative aspect-3/4 mb-6 bg-white/3 border border-white/5 rounded overflow-hidden">
+                <div className="relative aspect-3/4 mb-6 card-green border rounded overflow-hidden">
                   <div className="absolute top-4 left-4 z-20">
                     <span className="px-3 py-1 bg-zru-green text-rich-black text-[9px] font-black uppercase tracking-widest rounded-full">
                       Campaign Ed.
@@ -598,7 +596,7 @@ export default function WorldCupCampaignPage() {
       </section>
 
       {/* SECTION 6: IMPACT & SOCIAL PROOF */}
-      <section className="py-32 bg-white/5 border-y border-white/5 relative">
+      <section className="py-32 card-green border-y relative">
         <div className="max-w-[1440px] mx-auto px-6 md:px-12 relative z-10">
           
           <div className="mb-24">
@@ -606,7 +604,7 @@ export default function WorldCupCampaignPage() {
               <span className="text-[10px] font-black text-zru-green uppercase tracking-[0.4em]">CAMPAIGN MOMENTUM</span>
               <span className="text-xl font-black text-white italic">42% OF PREP GOAL REACHED</span>
             </div>
-            <div className="w-full h-4 bg-white/5 rounded-full overflow-hidden p-1 border border-white/10">
+            <div className="w-full h-4 bg-black/40 rounded-full overflow-hidden p-1 border border-white/10">
               <motion.div 
                 initial={{ width: 0 }}
                 whileInView={{ width: "42%" }}
@@ -635,7 +633,7 @@ export default function WorldCupCampaignPage() {
                 role: "ZRU Nation Member"
               }
             ].map((t, i) => (
-              <div key={i} className="relative p-8 bg-white/2 border border-white/5 rounded-lg">
+              <div key={i} className="relative p-8 card-green border rounded-lg">
                 <Quote className="w-10 h-10 text-zru-green/20 absolute -top-4 -left-4" />
                 <p className="text-gray-300 italic text-lg leading-relaxed mb-8 relative z-10">“{t.quote}”</p>
                 <div>
@@ -707,7 +705,6 @@ export default function WorldCupCampaignPage() {
         </div>
       </section>
 
-      <Footer />
     </main>
   );
 }

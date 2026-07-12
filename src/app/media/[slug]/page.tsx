@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { getReportById, getLatestReports } from "@/lib/data-fetcher";
-import Footer from "@/components/layout/Footer";
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowLeft, Share2, Calendar } from "lucide-react";
@@ -197,7 +196,6 @@ export default async function ReportPage({ params }: PageProps) {
         </div>
       </section>
 
-      <Footer />
     </main>
   );
 }

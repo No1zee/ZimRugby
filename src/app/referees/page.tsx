@@ -133,7 +133,7 @@ export default function RefereesPortalPage() {
                       {notices.map((notice) => (
                         <div 
                           key={notice.id} 
-                          className="bg-white/5 border border-white/5 hover:border-white/10 rounded-2xl p-6 transition-colors duration-300 space-y-4"
+                          className="card-green border rounded-2xl p-6 transition-colors duration-300 space-y-4"
                         >
                           <div className="flex justify-between items-center text-[10px] text-white/40 font-bold uppercase tracking-wider">
                             <span>ZRU REF COMMITTEE</span>
@@ -144,7 +144,7 @@ export default function RefereesPortalPage() {
                             {notice.excerpt}
                           </p>
                           <div className="pt-4 border-t border-white/5">
-                            <p className="text-white/80 text-xs leading-relaxed italic bg-white/5 p-4 rounded-xl">
+                            <p className="text-white/80 text-xs leading-relaxed italic card-green border p-4 rounded-xl">
                               &ldquo;{notice.content}&rdquo;
                             </p>
                           </div>
@@ -166,7 +166,7 @@ export default function RefereesPortalPage() {
                       {resources.map((doc, idx) => (
                         <div 
                           key={idx} 
-                          className="bg-white/5 border border-white/5 hover:border-white/10 rounded-xl p-5 flex items-center justify-between group transition-colors duration-300"
+                          className="card-green border rounded-xl p-5 flex items-center justify-between group transition-colors duration-300"
                         >
                           <div className="flex items-center gap-4">
                             <div className="w-10 h-10 bg-zru-green/10 rounded-lg flex items-center justify-center shrink-0 border border-zru-green/10">
@@ -178,7 +178,7 @@ export default function RefereesPortalPage() {
                             </div>
                           </div>
                           <button 
-                            className="p-2.5 rounded-full bg-white/5 hover:bg-zru-green hover:text-white transition-all group-hover:scale-105"
+                            className="p-2.5 rounded-full bg-white/10 border border-white/10 hover:bg-zru-green hover:text-white transition-all group-hover:scale-105"
                             title="Download Document"
                           >
                             <Download className="w-4 h-4" />
@@ -201,7 +201,7 @@ export default function RefereesPortalPage() {
                       {courses.map((course, idx) => (
                         <div 
                           key={idx} 
-                          className="bg-white/5 border border-white/5 hover:border-white/10 rounded-xl p-6 flex flex-col md:flex-row md:items-center md:justify-between gap-6 transition-colors duration-300"
+                          className="card-green border rounded-xl p-6 flex flex-col md:flex-row md:items-center md:justify-between gap-6 transition-colors duration-300"
                         >
                           <div className="flex items-center gap-4">
                             <div className="w-10 h-10 bg-zru-green/10 rounded-lg flex items-center justify-center shrink-0 border border-zru-green/10 text-zru-green">

@@ -26,6 +26,7 @@ interface MatchCardProps {
     logo?: string;
   };
   status?: "upcoming" | "live" | "completed";
+  teamCategory?: string;
 }
 
 export default function MatchCard({
@@ -38,6 +39,7 @@ export default function MatchCard({
   homeTeam,
   awayTeam,
   status = "upcoming",
+  teamCategory,
 }: MatchCardProps) {
   const [imgError, setImgError] = useState<{ home: boolean; away: boolean }>({
     home: false,
@@ -53,10 +55,17 @@ export default function MatchCard({
       className="card-green border rounded-xl overflow-hidden group"
     >
       {/* Header: Competition & Round */}
-      <div className="bg-white/5 px-6 py-3 flex justify-between items-center border-b border-white/5">
-        <span className="text-white text-xs font-bold tracking-widest uppercase truncate max-w-[70%]">
-          {competition}
-        </span>
+      <div className="bg-black/40 px-6 py-3 flex justify-between items-center border-b border-white/5">
+        <div className="flex items-center gap-2 truncate max-w-[70%]">
+          {teamCategory && (
+            <span className="bg-zru-green/25 text-zru-green text-[9px] font-black uppercase px-2 py-0.5 rounded-sm tracking-wider shrink-0 border border-zru-green/25">
+              {teamCategory}
+            </span>
+          )}
+          <span className="text-white text-xs font-bold tracking-widest uppercase truncate">
+            {competition}
+          </span>
+        </div>
         <span className="text-white/60 text-xs font-bold uppercase">{round}</span>
       </div>
 

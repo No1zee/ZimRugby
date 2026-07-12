@@ -32,7 +32,7 @@ export default function GovernancePage() {
           {documents.map((doc, idx) => (
             <div 
               key={idx} 
-              className="bg-white/5 border border-white/5 hover:border-white/10 rounded-xl p-5 flex items-center justify-between group transition-colors duration-300"
+              className="card-green border rounded-xl p-5 flex items-center justify-between group transition-colors duration-300"
             >
               <div className="flex items-center gap-4">
                 <div className="w-10 h-10 bg-zru-green/10 rounded-lg flex items-center justify-center shrink-0 border border-zru-green/10">
@@ -45,7 +45,7 @@ export default function GovernancePage() {
               </div>
               
               <button 
-                className="p-2.5 rounded-full bg-white/5 hover:bg-zru-green hover:text-rich-black transition-all group-hover:scale-105"
+                className="p-2.5 rounded-full bg-white/10 border border-white/10 hover:bg-zru-green hover:text-rich-black transition-all group-hover:scale-105"
                 title="Download Document"
               >
                 <Download className="w-4 h-4" />

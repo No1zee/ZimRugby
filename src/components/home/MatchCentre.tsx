@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { ChevronRight, MapPin, Loader2 } from "lucide-react";
+import { ChevronRight, MapPin } from "lucide-react";
 import Button from "../common/Button";
 import { motion } from "framer-motion";
 import Image from "next/image";
@@ -38,20 +38,21 @@ export default function MatchCentre() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Header */}
         <div className="flex flex-col md:flex-row justify-between items-end mb-12 gap-6">
-          <div>
-            <h2 className="text-zru-orange font-heading text-xl tracking-widest mb-2">
-              FIXTURES & RESULTS
+          <div className="space-y-4">
+            <div className="flex items-center gap-2">
+              <div className="w-8 h-px bg-zru-green" />
+              <span className="text-zru-green text-[10px] font-black uppercase tracking-[0.4em] font-subheading">Fixtures & Results</span>
+            </div>
+            <h2 className="text-5xl md:text-7xl font-heading text-white font-black uppercase tracking-tighter">
+              MATCH <span className="text-stroke-white text-transparent">CENTRE</span>
             </h2>
-            <h3 className="text-4xl md:text-5xl font-heading text-white">
-              MATCH CENTRE
-            </h3>
           </div>
           <div className="flex bg-white/5 rounded-lg p-1">
             <button
               onClick={() => setActiveTab("upcoming")}
               className={`px-6 py-2 rounded-md font-heading text-sm transition-all ${
                 activeTab === "upcoming"
-                  ? "bg-zru-orange text-white shadow-lg"
+                  ? "bg-zru-green text-white shadow-lg"
                   : "text-gray-400 hover:text-white"
               }`}
             >
@@ -61,7 +62,7 @@ export default function MatchCentre() {
               onClick={() => setActiveTab("recent")}
               className={`px-6 py-2 rounded-md font-heading text-sm transition-all ${
                 activeTab === "recent"
-                  ? "bg-zru-orange text-white shadow-lg"
+                  ? "bg-zru-green text-white shadow-lg"
                   : "text-gray-400 hover:text-white"
               }`}
             >
@@ -96,7 +97,7 @@ export default function MatchCentre() {
             <div className="text-center py-20 border border-dashed rounded-2xl card-green">
                 <p className="text-gray-500 font-heading">NO {activeTab.toUpperCase()} MATCHES FOUND</p>
                 <Link href="/match-centre">
-                    <Button variant="ghost" className="mt-4 text-zru-orange">VIEW FULL CALENDAR</Button>
+                    <Button variant="ghost" className="mt-4 text-zru-green">VIEW FULL CALENDAR</Button>
                 </Link>
             </div>
         ) : (
@@ -117,7 +118,7 @@ export default function MatchCentre() {
 
                     <div className="relative z-10 p-8 md:p-12 flex flex-col md:flex-row justify-between items-center gap-8">
                         <div className="flex-1 text-center md:text-left">
-                            <span className="bg-zru-orange text-white px-3 py-1 rounded text-xs font-bold tracking-widest uppercase mb-4 inline-block">
+                            <span className="bg-zru-green text-white px-3 py-1 rounded text-xs font-bold tracking-widest uppercase mb-4 inline-block">
                             NEXT MATCH
                             </span>
                             <h4 className="text-gray-300 font-heading text-2xl mb-1">{nextMatch.competition}</h4>
@@ -126,7 +127,7 @@ export default function MatchCentre() {
                         
                         <div className="flex items-center gap-8 md:gap-16">
                             <div className="text-center">
-                                <div className="w-24 h-24 bg-white/10 rounded-full flex items-center justify-center border-2 border-white/20 mb-4 mx-auto group-hover:border-zru-orange transition-colors">
+                                <div className="w-24 h-24 bg-white/10 rounded-full flex items-center justify-center border-2 border-white/20 mb-4 mx-auto group-hover:border-zru-green transition-colors">
                                     {nextMatch.homeTeam.logo ? (
                                         <Image src={nextMatch.homeTeam.logo} alt={nextMatch.homeTeam.name} width={64} height={64} className="object-contain" />
                                     ) : (
@@ -140,12 +141,12 @@ export default function MatchCentre() {
                                 <span className="text-5xl font-heading text-white/50 mb-2">VS</span>
                                 <div className="bg-white/10 backdrop-blur px-6 py-2 rounded border border-white/5">
                                     <span className="text-2xl font-bold text-white block">{nextMatch.time}</span>
-                                    <span className="text-xs text-zru-orange font-bold tracking-widest uppercase">{nextMatch.date}</span>
+                                    <span className="text-xs text-zru-green font-bold tracking-widest uppercase">{nextMatch.date}</span>
                                 </div>
                             </div>
 
                             <div className="text-center">
-                                <div className="w-24 h-24 bg-white/10 rounded-full flex items-center justify-center border-2 border-white/20 mb-4 mx-auto group-hover:border-zru-orange transition-colors">
+                                <div className="w-24 h-24 bg-white/10 rounded-full flex items-center justify-center border-2 border-white/20 mb-4 mx-auto group-hover:border-zru-green transition-colors">
                                     {nextMatch.awayTeam.logo ? (
                                         <Image src={nextMatch.awayTeam.logo} alt={nextMatch.awayTeam.name} width={64} height={64} className="object-contain" />
                                     ) : (
@@ -158,7 +159,7 @@ export default function MatchCentre() {
 
                         <div className="flex-1 flex justify-end">
                             <Link href={nextMatch.ticketUrl || "/match-centre"} target={nextMatch.ticketUrl ? "_blank" : "_self"} className="w-full md:w-auto">
-                                <Button size="lg" className="w-full md:w-auto hover:shadow-[0_0_15px_rgba(255,140,0,0.5)]">
+                                <Button size="lg" className="w-full md:w-auto hover:shadow-[0_0_15px_rgba(0,107,63,0.5)]">
                                     {nextMatch.ticketUrl ? "GET TICKETS" : "MATCH INFO"}
                                 </Button>
                             </Link>
@@ -184,7 +185,7 @@ export default function MatchCentre() {
                         {/* Card Header */}
                         <div className="card-green px-6 py-4 border-b flex justify-between items-center">
                         <div className="flex flex-col">
-                            <span className="text-zru-orange text-[10px] font-bold tracking-wider uppercase">
+                            <span className="text-zru-green text-[10px] font-bold tracking-wider uppercase">
                             {match.competition}
                             </span>
                             <span className="text-gray-400 text-[10px] mt-1 uppercase font-bold">
@@ -201,7 +202,7 @@ export default function MatchCentre() {
                         <div className="flex justify-between items-center mb-6">
                             {/* Home Team */}
                             <div className="flex flex-col items-center gap-2 flex-1">
-                            <div className="w-12 h-12 bg-white/10 rounded-full flex items-center justify-center text-xs text-gray-400 border border-white/5 group-hover:border-zru-orange/50 transition-colors overflow-hidden">
+                            <div className="w-12 h-12 bg-white/10 rounded-full flex items-center justify-center text-xs text-gray-400 border border-white/5 group-hover:border-zru-green/50 transition-colors overflow-hidden">
                                 {match.homeTeam.logo ? (
                                     <Image src={match.homeTeam.logo} alt={match.homeTeam.name} width={32} height={32} className="object-contain" />
                                 ) : (
@@ -215,7 +216,7 @@ export default function MatchCentre() {
 
                             <div className="flex flex-col items-center px-2">
                                 {match.status === "completed" ? (
-                                    <span className="text-lg font-heading text-zru-orange">{match.homeTeam.score} - {match.awayTeam.score}</span>
+                                    <span className="text-lg font-heading text-zru-green">{match.homeTeam.score} - {match.awayTeam.score}</span>
                                 ) : (
                                     <span className="text-xl font-heading text-gray-600">VS</span>
                                 )}
@@ -223,7 +224,7 @@ export default function MatchCentre() {
 
                             {/* Away Team */}
                             <div className="flex flex-col items-center gap-2 flex-1">
-                            <div className="w-12 h-12 bg-white/10 rounded-full flex items-center justify-center text-xs text-gray-400 border border-white/5 group-hover:border-zru-orange/50 transition-colors overflow-hidden">
+                            <div className="w-12 h-12 bg-white/10 rounded-full flex items-center justify-center text-xs text-gray-400 border border-white/5 group-hover:border-zru-green/50 transition-colors overflow-hidden">
                                 {match.awayTeam.logo ? (
                                     <Image src={match.awayTeam.logo} alt={match.awayTeam.name} width={32} height={32} className="object-contain" />
                                 ) : (
@@ -237,7 +238,7 @@ export default function MatchCentre() {
                         </div>
 
                         <div className="flex items-center gap-2 text-gray-400 text-[10px] mb-6 justify-center uppercase font-bold">
-                            <MapPin className="w-3 h-3 text-zru-orange" />
+                            <MapPin className="w-3 h-3 text-zru-green" />
                             <span className="truncate max-w-[200px]">{match.venue}</span>
                         </div>
                         

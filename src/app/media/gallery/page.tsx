@@ -60,25 +60,27 @@ export default function GalleryPage() {
           ))}
         </div>
 
-        {/* Dynamic Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
+        {/* Dynamic Grid - Masonry Waterfall */}
+        <div className="columns-1 sm:columns-2 lg:columns-3 gap-8 space-y-0 w-full [column-fill:_balance]">
           {filteredPhotos.map((photo, index) => (
             <motion.div
               key={photo.id}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: index * 0.05 }}
+              transition={{ delay: index * 0.03 }}
               whileHover={{ y: -5 }}
-              className="card-green border rounded-2xl overflow-hidden group cursor-pointer shadow-xl glow-green-card"
+              className="break-inside-avoid mb-8 card-green border rounded-2xl overflow-hidden group cursor-pointer shadow-xl glow-green-card flex flex-col"
               onClick={() => setActivePhoto(photo)}
             >
-              {/* Photo container */}
-              <div className="relative h-64 sm:h-72 w-full overflow-hidden bg-neutral-900">
+              {/* Photo container with dynamic heights for true masonry look */}
+              <div className={`relative w-full overflow-hidden bg-neutral-900 ${
+                index % 3 === 0 ? "h-64" : index % 3 === 1 ? "h-80" : "h-56"
+              }`}>
                 <Image
                   src={photo.image}
                   alt={photo.title}
                   fill
-                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                   className="object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700"
                 />
                 {/* Eye Icon Hover Overlay */}
