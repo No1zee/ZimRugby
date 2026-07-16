@@ -31,115 +31,115 @@ export interface HeroSlideData {
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { directusFetch } from "@/lib/directus/fetch";
 
-export async function getHeroSlides(): Promise<HeroSlideData[]> {
-  const mockSlides: HeroSlideData[] = [
+const MOCK_SLIDES: HeroSlideData[] = [
     {
       id: 1,
       tag: "LADY SABLES",
-      contextPill: "RUGBY AFRICA CUP 2026 – HOME LEG",
-      image: "/images/teams/sables.jpg",
+      contextPill: "RUGBY AFRICA CUP 2026",
+      image: "/images/hero/lady-sables.webp",
       headline: {
         line1: "LADY SABLES",
-        line2: "ARE HOME",
+        line2: "RISING",
       },
-      subtext: "National Sports Stadium - Harare",
-      matchCard: {
-        opponent: "UGANDA",
-        opponentSub: "LADY CRANES",
-        date: "14 MAY",
-        time: "15:00",
-        venue: "National Sports Stadium",
-        tag: "UPCOMING FIXTURE"
-      },
+      subtext: "Zimbabwe's women lead the charge on the continent. The Lady Sables are ready to conquer.",
       ctas: {
         primary: { label: "Lady Sables Match Centre", href: "/match-centre", iconName: "ArrowRight" },
-        secondary: { label: "Sign In", href: "/login", iconName: "ArrowRight" },
+        secondary: { label: "View Squad", href: "/teams/lady-sables", iconName: "ArrowRight" },
       },
     },
     {
       id: 2,
-      tag: "SABLES",
-      contextPill: "VICTORIA FALLS DOMESTIC SERIES",
-      image: "/images/hero/campaign-victoria-falls.png",
+      tag: "UPCOMING MATCH",
+      contextPill: "INTERNATIONAL FIXTURE",
+      image: "/images/hero/upcoming-match.webp",
       headline: {
-        line1: "BATTLE OF",
-        line2: "THE ZAMBEZI",
+        line1: "NEXT STOP",
+        line2: "GLORY",
       },
-      subtext: "Experience the pride of Harare and Bulawayo as the Sables clash in the Victoria Falls Domestic Series.",
+      subtext: "Don't miss the next big international clash. Secure your place in history.",
       ctas: {
-        primary: { label: "Match Info", href: "/events", iconName: "ArrowRight" },
-        secondary: { label: "Sign In", href: "/login", iconName: "Play" },
+        primary: { label: "View Fixtures", href: "/match-centre", iconName: "ArrowRight" },
+        secondary: { label: "Get Tickets", href: "/tickets", iconName: "Ticket" },
       },
     },
     {
       id: 3,
-      tag: "DOMESTIC RUGBY",
-      contextPill: "PREMIER DIVISION",
-      image: "/images/hero/campaign-denver-tour.png",
+      tag: "SABLES",
+      contextPill: "INTERNATIONAL RUGBY",
+      image: "/images/hero/tonga-vs-zim.webp",
       headline: {
-        line1: "SUPER SIX",
-        line2: "RUGBY LEAGUE",
+        line1: "TONGA VS",
+        line2: "ZIMBABWE",
       },
-      subtext: "The 2026 season kicks off this weekend. Witness the fiercest domestic rivalries unfold.",
+      subtext: "Relive the drama. Watch the highlights from Zimbabwe's epic clash against Tonga.",
       ctas: {
-        primary: { label: "League Table", href: "/teams/sables", iconName: "ArrowRight" },
-        secondary: { label: "Watch Live", href: "/media", iconName: "Play" },
+        primary: { label: "Watch Highlights", href: "/media", iconName: "Play" },
+        secondary: { label: "Match Centre", href: "/match-centre", iconName: "ArrowRight" },
       },
     },
     {
       id: 4,
-      tag: "SABLES",
-      contextPill: "SUMMER TEST SERIES",
-      image: "/images/hero/campaign-springboks-match.png",
-      headline: {
-        line1: "LEGENDS",
-        line2: "COLLIDE",
-      },
-      subtext: "A historic battle in Port Elizabeth as the Sables face the Springboks 'A' on June 20, 2026.",
-      matchCard: {
-        opponent: "SPRINGBOKS 'A'",
-        opponentSub: "HOSTS",
-        date: "20 JUN",
-        time: "17:00",
-        venue: "Nelson Mandela Bay Stadium",
-        tag: "UPCOMING FIXTURE"
-      },
-      ctas: {
-        primary: { label: "Sables Squad", href: "/teams/sables", iconName: "ArrowRight" },
-        secondary: { label: "Sign In", href: "/login", iconName: "ArrowRight" },
-      },
-    },
-    {
-      id: 5,
       tag: "U20 JUNIOR SABLES",
-      image: "/images/teams/african-champions-2025.jpg", 
+      contextPill: "YOUTH DEVELOPMENT",
+      image: "/images/hero/zim-u20s.webp",
       headline: {
-        line1: "AFRICAN",
-        line2: "CHAMPIONS",
+        line1: "NEXT GEN",
+        line2: "RISING",
       },
-      subtext: "Celebrating the victorious journey of the Junior Sables as they conquer the continent.",
+      subtext: "The future of Zimbabwean rugby is here. The Junior Sables are forging tomorrow's champions today.",
       ctas: {
-        primary: { label: "Celebrate With Us", href: "/teams/junior-sables", iconName: "Ticket" },
+        primary: { label: "Junior Sables", href: "/teams/junior-sables", iconName: "ArrowRight" },
         secondary: { label: "View Gallery", href: "/media/gallery", iconName: "ArrowRight" },
       },
     },
     {
-      id: 6,
-      tag: "CHEETAHS",
-      image: "/images/media/vid1.jpg", 
-      video: "/images/zim-rugby-slow-mo-2.mp4",
+      id: 5,
+      tag: "FAN ZONE",
+      contextPill: "JOIN THE PRIDE",
+      image: "/images/hero/fan-zone.webp",
       headline: {
-        line1: "A CUT ABOVE",
-        line2: "THE COMPETITION",
+        line1: "THE PRIDE",
+        line2: "IS ALIVE",
       },
-      subtext: "Witness the elite athleticism of Zimbabwe's 7s finest. Precision, power, and the pursuit of excellence.",
+      subtext: "Feel the electric atmosphere. Join thousands of passionate fans as we cheer our Sables to victory.",
       ctas: {
-        primary: { label: "Watch Highlights", href: "/media", iconName: "Play" },
+        primary: { label: "Get Tickets", href: "/tickets", iconName: "Ticket" },
+        secondary: { label: "Fan Membership", href: "/membership", iconName: "ArrowRight" },
+      },
+    },
+    {
+      id: 6,
+      tag: "ZIM RUGBY",
+      contextPill: "OUR JOURNEY",
+      image: "/images/hero/zru-6.webp",
+      headline: {
+        line1: "BUILT ON",
+        line2: "PASSION",
+      },
+      subtext: "From the grassroots to the global stage — Zimbabwe Rugby's story of resilience and pride.",
+      ctas: {
+        primary: { label: "Our Story", href: "/about", iconName: "ArrowRight" },
+        secondary: { label: "View Gallery", href: "/media/gallery", iconName: "ArrowRight" },
+      },
+    },
+    {
+      id: 7,
+      tag: "ZIM RUGBY",
+      contextPill: "EXCELLENCE",
+      image: "/images/hero/zru-7.webp",
+      headline: {
+        line1: "STRENGTH",
+        line2: "UNITED",
+      },
+      subtext: "Zimbabwe Rugby — one nation, one pride, one unstoppable force.",
+      ctas: {
+        primary: { label: "Meet the Teams", href: "/teams", iconName: "ArrowRight" },
         secondary: { label: "Sign In", href: "/login", iconName: "ArrowRight" },
       },
     },
   ];
 
+export async function getHeroSlides(): Promise<HeroSlideData[]> {
   try {
     if (process.env.NEXT_PUBLIC_DIRECTUS_URL) {
       const response = await directusFetch<any>('hero_slides', {
@@ -185,5 +185,5 @@ export async function getHeroSlides(): Promise<HeroSlideData[]> {
     console.warn("Directus fetch failed for hero slides, falling back to mock data:", error);
   }
 
-  return mockSlides;
+  return MOCK_SLIDES;
 }
