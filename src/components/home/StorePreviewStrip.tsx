@@ -41,7 +41,7 @@ const previewItems = [
     category: "Technical Carry", 
     image: "/images/shop/bag-duffel.png", 
     badge: "Pathway Support",
-    color: "bg-neutral-100",
+    color: "bg-zru-green/5",
     description: "Water-resistant institutional travel companion."
   },
   { 
@@ -111,85 +111,86 @@ const ProductCard = ({ item, idx }: { item: typeof previewItems[0], idx: number 
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-100px" }}
       transition={{ duration: 1.2, delay: idx * 0.1, ease: [0.16, 1, 0.3, 1] }}
-      className="flex-none w-[280px] md:w-[360px] snap-start group perspective-2000"
+      className="flex-none w-[280px] md:w-[340px] snap-start group perspective-2000"
     >
-      <Link href="/about/clubhouse" className="block relative">
-        <motion.div 
-          ref={ref}
-          onMouseEnter={handleMouseEnter}
-          onMouseMove={handleMouseMove}
-          onMouseLeave={handleMouseLeave}
-          style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
-          className={`relative aspect-3/4 ${item.color} overflow-hidden mb-8 shadow-sm group-hover:shadow-3xl transition-all duration-700 ease-out border border-black/5 group-hover:border-zru-green/30`}
-        >
-          {/* Badge: Minimalist Designer Label */}
-          {item.badge && (
-            <div className="absolute top-6 left-6 z-30 border border-black/10 bg-white/80 backdrop-blur-md text-rich-black text-[8px] font-black uppercase tracking-[0.3em] px-3 py-1 shadow-[0_4px_10px_rgba(0,0,0,0.05)] text-shadow-hero-glow">
-              {item.badge}
-            </div>
-          )}
-
-          {/* Icon Portal */}
-          <div className="absolute top-6 right-6 z-30 opacity-0 group-hover:opacity-100 transition-all duration-500 transform translate-y-[-10px] group-hover:translate-y-0">
-             <div className="bg-white/80 backdrop-blur-md p-2 rounded-full shadow-[0_4px_15px_rgba(0,0,0,0.1)]">
-               <ShoppingBag className="w-3.5 h-3.5 text-rich-black" />
-             </div>
-          </div>
-
-          {/* Content Layer with 'Float' */}
+      <Link href="/clubhouse" className="block relative h-full">
+        <div className="card-dark p-4 md:p-5 flex flex-col justify-between h-[450px] md:h-[500px] select-none hover:border-zru-green/30 transition-all duration-300">
+          
+          {/* 3D Product Image Slot */}
           <motion.div 
-            className="absolute inset-0 z-10 p-12 flex items-center justify-center"
-            style={{ transform: "translateZ(40px)" }}
+            ref={ref}
+            onMouseEnter={handleMouseEnter}
+            onMouseMove={handleMouseMove}
+            onMouseLeave={handleMouseLeave}
+            style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
+            className={`relative h-48 md:h-64 bg-[#14201c] rounded-xl overflow-hidden shadow-xs transition-all duration-700 ease-out border border-white/5 flex items-center justify-center`}
           >
-            <div className="relative w-full h-full flex items-center justify-center">
-                <Image 
-                src={item.image} 
-                alt={item.name} 
-                width={300}
-                height={400}
-                sizes="(max-width: 768px) 50vw, 300px"
-                quality={60}
-                className="object-contain drop-shadow-[0_20px_50px_rgba(0,0,0,0.15)] group-hover:scale-110 transition-transform duration-1000 ease-out"
-                priority={idx === 0}
-                />
-            </div>
-          </motion.div>
+            {/* Badge: Minimalist Designer Label */}
+            {item.badge && (
+              <div className="absolute top-4 left-4 z-30 border border-white/10 bg-neutral-900/90 text-white text-[8px] font-black uppercase tracking-[0.3em] px-2.5 py-1">
+                {item.badge}
+              </div>
+            )}
 
-          {/* Specular Highlight */}
-          <motion.div 
-            className="absolute inset-0 z-20 pointer-events-none bg-linear-to-tr from-transparent via-white/30 to-transparent opacity-0 group-hover:opacity-100 mix-blend-overlay"
-            style={{ opacity: shineOpacity, x: shineX, scale: 2 }}
-          />
+            {/* Icon Portal */}
+            <div className="absolute top-4 right-4 z-30 opacity-0 group-hover:opacity-100 transition-all duration-500 transform translate-y-[-10px] group-hover:translate-y-0">
+               <div className="bg-neutral-900/90 p-2 rounded-full border border-white/10 shadow-lg">
+                 <ShoppingBag className="w-3.5 h-3.5 text-white" />
+               </div>
+            </div>
+
+            {/* Content Layer with 'Float' */}
+            <motion.div 
+              className="absolute inset-0 z-10 p-6 flex items-center justify-center"
+              style={{ transform: "translateZ(40px)" }}
+            >
+              <div className="relative w-full h-full flex items-center justify-center">
+                  <Image 
+                    src={item.image} 
+                    alt={item.name} 
+                    width={220}
+                    height={220}
+                    sizes="(max-width: 768px) 50vw, 220px"
+                    className="object-contain drop-shadow-[0_15px_30px_rgba(0,0,0,0.4)] group-hover:scale-105 transition-transform duration-1000 ease-out"
+                    priority={idx === 0}
+                  />
+              </div>
+            </motion.div>
+
+            {/* Specular Highlight */}
+            <motion.div 
+              className="absolute inset-0 z-20 pointer-events-none bg-linear-to-tr from-transparent via-white/10 to-transparent opacity-0 group-hover:opacity-100 mix-blend-overlay"
+              style={{ opacity: shineOpacity, x: shineX, scale: 2 }}
+            />
+          </motion.div>
           
-        </motion.div>
-        
-        {/* Designer Credits Typography */}
-        <div className="space-y-3 px-1 border-l-2 border-black/5 pl-4 group-hover:border-zru-green transition-colors duration-500">
-          <div className="flex justify-between items-baseline">
-            <span className="text-[10px] font-black uppercase tracking-[0.4em] text-black/40">
+          {/* Card Meta Content */}
+          <div className="flex-grow flex flex-col justify-between mt-4 space-y-3">
+            <div className="space-y-1">
+              <span className="text-[10px] font-black uppercase tracking-[0.14em] text-white/48 block">
                 {item.category}
-            </span>
-            <span className="text-[8px] font-black uppercase text-zru-green tracking-[0.2em] flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-              <span className="w-1.5 h-1.5 rounded-full bg-zru-green animate-pulse" /> Live
-            </span>
+              </span>
+              <h3 className="text-base md:text-lg font-semibold tracking-[-0.01em] text-white line-clamp-1">
+                {item.name}
+              </h3>
+              <p className="text-xs md:text-sm leading-relaxed text-white/72 line-clamp-2">
+                {item.description}
+              </p>
+            </div>
+            
+            <div className="space-y-2">
+              <div className="text-base font-black text-zru-green">
+                <span className="text-[10px] mr-1 align-top opacity-60">USD</span>{item.price.replace('$', '')}
+              </div>
+              <div className="flex items-center justify-between border-t border-white/8 pt-3 mt-1">
+                <span className="text-[10px] font-black uppercase text-white/95 tracking-[0.14em] flex items-center gap-1">
+                  Shop Now
+                </span>
+                <ChevronRight className="w-3.5 h-3.5 text-white/60 group-hover:translate-x-1 transition-transform" />
+              </div>
+            </div>
           </div>
-          <div>
-            <h3 className="heading-4 text-clubhouse-charcoal mb-2">
-              {item.name}
-            </h3>
-            <p className="body-small text-black/60 font-medium mb-4 min-h-[30px]">
-              {item.description}
-            </p>
-          </div>
-          
-          <div className="flex items-center justify-between pt-3 border-t border-black/5">
-            <span className="text-[10px] font-black uppercase text-zru-green tracking-[0.3em] flex items-center gap-2">
-              Shop Now <ChevronRight className="w-3 h-3 group-hover:translate-x-1 transition-transform" />
-            </span>
-            <span className="text-sm font-black text-black/70 bg-black/5 px-2 py-0.5 rounded shadow-xs">
-                <span className="text-[9px] mr-1 align-top opacity-60">USD</span>{item.price.replace('$', '')}
-            </span>
-          </div>
+
         </div>
       </Link>
     </motion.div>
@@ -200,7 +201,7 @@ export default function StorePreviewStrip() {
   return (
     <section className="bg-white py-12 md:py-16 relative overflow-hidden bg-pattern-dots">
       {/* Background Aesthetic Watermark */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[25vw] md:text-[20vw] font-black text-neutral-50 uppercase leading-none pointer-events-none select-none tracking-tighter mix-blend-multiply opacity-50 whitespace-nowrap">
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[25vw] md:text-[20vw] font-black text-rich-black/5 uppercase leading-none pointer-events-none select-none tracking-tighter mix-blend-multiply opacity-50 whitespace-nowrap">
         EST 1895
       </div>
 
@@ -233,7 +234,7 @@ export default function StorePreviewStrip() {
                 Official Zimbabwe Rugby Collection. <br />Wear the pride. Every purchase fuels the pathway.
             </p>
             <MagneticElement intensity={0.2}>
-              <SlantedButton href="/about/clubhouse" variant="primary" size="md">
+              <SlantedButton href="/clubhouse" variant="primary" size="md">
                 Shop Collection <ArrowRight className="w-5 h-5 ml-2 inline-block" />
               </SlantedButton>
             </MagneticElement>
