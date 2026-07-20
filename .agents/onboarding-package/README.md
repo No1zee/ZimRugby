@@ -22,7 +22,7 @@ Welcome to the ZRU Developer Onboarding Package. This kit is designed to set up 
 
 ---
 
-## Bootstrap Command
+## Bootstrap & Diagnostic Commands
 
 Run this command in your terminal to initialize:
 ```bash
@@ -30,6 +30,12 @@ python .agents/onboarding-package/setup.py
 ```
 
 Once executed, verify that the dashboard outputs `SETUP COMPLETE` and proceed to run `headroom proxy` in your background tasks.
+
+### Environment Diagnostics
+To run a diagnosis on your local symbiosis environment (folders, proxy state, and CLI dependencies):
+```bash
+python .agents/onboarding-package/setup.py --doctor
+```
 
 ---
 
