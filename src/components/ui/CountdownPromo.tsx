@@ -190,7 +190,7 @@ export function CountdownPromo({
                     {/* Inner dividing horizontal strip (clock digit split) */}
                     <div className="absolute left-0 right-0 top-1/2 h-[1px] bg-black/30 z-20 pointer-events-none" />
                     
-                    <div className="relative h-[56px] md:h-[84px] overflow-hidden flex justify-center items-center z-10">
+                    <div className="w-full relative h-[56px] md:h-[84px] overflow-hidden flex justify-center items-center z-10">
                       <AnimatePresence mode="popLayout">
                         <motion.span
                           key={`${unit.label}-${unit.value}`}
