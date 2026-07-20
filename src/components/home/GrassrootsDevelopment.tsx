@@ -67,28 +67,30 @@ export default function GrassrootsDevelopment() {
               <motion.div
                 key={path.title}
                 variants={staggerItemVariants}
-                className="group flex flex-col justify-between p-8 card-dark rounded-2xl border border-white/8 hover:border-zru-green/35 transition-all duration-300 shadow-[0_8px_24px_rgba(0,0,0,0.22)]"
+                className="group flex flex-col justify-between rounded-2xl border border-white/8 hover:border-zru-green/35 transition-all duration-300 shadow-[0_8px_24px_rgba(0,0,0,0.22)] overflow-hidden"
               >
-                <div className="space-y-6">
-                  <div className="w-12 h-12 rounded-2xl bg-zru-green/10 flex items-center justify-center border border-zru-green/20 text-zru-green group-hover:rotate-6 transition-transform duration-300">
-                    <Icon className="w-6 h-6" />
+                <Link
+                  href={path.href}
+                  className="flex-1 flex flex-col justify-between p-8 card-dark h-full w-full"
+                >
+                  <div className="space-y-6">
+                    <div className="w-12 h-12 rounded-2xl bg-zru-green/10 flex items-center justify-center border border-zru-green/20 text-zru-green group-hover:rotate-6 transition-transform duration-300">
+                      <Icon className="w-6 h-6" />
+                    </div>
+                    <h3 className="font-heading text-2xl text-white tracking-wide uppercase">
+                      {path.title}
+                    </h3>
+                    <p className="text-white/60 text-sm font-body leading-relaxed">
+                      {path.description}
+                    </p>
                   </div>
-                  <h3 className="font-heading text-2xl text-white tracking-wide uppercase">
-                    {path.title}
-                  </h3>
-                  <p className="text-white/60 text-sm font-body leading-relaxed">
-                    {path.description}
-                  </p>
-                </div>
 
-                <div className="pt-8">
-                  <Link
-                    href={path.href}
-                    className="inline-flex items-center gap-2 text-xs font-heading tracking-widest uppercase text-white group-hover:text-zru-green transition-colors"
-                  >
-                    Learn More <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                  </Link>
-                </div>
+                  <div className="pt-8">
+                    <span className="inline-flex items-center gap-2 text-xs font-heading tracking-widest uppercase text-white group-hover:text-zru-green transition-colors">
+                      Learn More <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                    </span>
+                  </div>
+                </Link>
               </motion.div>
             );
           })}
