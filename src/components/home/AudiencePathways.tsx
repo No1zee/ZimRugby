@@ -64,42 +64,73 @@ export default function AudiencePathways() {
           </p>
         </ScrollReveal>
 
-        {/* Pathways Grid */}
-        <StaggerContainer className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6" staggerDelay={0.05}>
-          {PATHWAYS.map((path) => {
-            const Icon = path.icon;
-            return (
-              <motion.div
-                key={path.title}
-                variants={staggerItemVariants}
-                className="group flex flex-col justify-between rounded-2xl border border-white/8 hover:border-zru-green/35 transition-all duration-300 shadow-[0_8px_24px_rgba(0,0,0,0.22)] overflow-hidden"
-              >
-                <Link
-                  href={path.href}
-                  className="flex-1 flex flex-col justify-between p-6 card-dark h-full w-full"
+        {/* Pathways Grid - Desktop (Detailed Cards) */}
+        <div className="hidden md:block">
+          <StaggerContainer className="grid grid-cols-5 gap-6" staggerDelay={0.05}>
+            {PATHWAYS.map((path) => {
+              const Icon = path.icon;
+              return (
+                <motion.div
+                  key={path.title}
+                  variants={staggerItemVariants}
+                  className="group flex flex-col justify-between rounded-2xl border border-white/8 hover:border-zru-green/35 transition-all duration-300 shadow-[0_8px_24px_rgba(0,0,0,0.22)] overflow-hidden"
                 >
-                  <div className="space-y-4">
-                    <div className="w-10 h-10 rounded-xl bg-zru-green/10 flex items-center justify-center border border-zru-green/20 text-zru-green group-hover:scale-105 transition-transform duration-300">
-                      <Icon className="w-5 h-5" />
+                  <Link
+                    href={path.href}
+                    className="flex-1 flex flex-col justify-between p-6 card-dark h-full w-full"
+                  >
+                    <div className="space-y-4">
+                      <div className="w-10 h-10 rounded-xl bg-zru-green/10 flex items-center justify-center border border-zru-green/20 text-zru-green group-hover:scale-105 transition-transform duration-300">
+                        <Icon className="w-5 h-5" />
+                      </div>
+                      <h3 className="font-heading text-xl text-white tracking-wide uppercase">
+                        {path.title}
+                      </h3>
+                      <p className="text-white/60 text-xs font-body leading-relaxed">
+                        {path.description}
+                      </p>
                     </div>
-                    <h3 className="font-heading text-xl text-white tracking-wide uppercase">
-                      {path.title}
-                    </h3>
-                    <p className="text-white/60 text-xs font-body leading-relaxed">
-                      {path.description}
-                    </p>
-                  </div>
 
-                  <div className="pt-6">
-                    <span className="inline-flex items-center gap-2 text-[10px] font-heading tracking-widest uppercase text-white group-hover:text-zru-green transition-colors">
-                      {path.cta} <ArrowRight className="w-3 h-3 group-hover:translate-x-1 transition-transform" />
+                    <div className="pt-6">
+                      <span className="inline-flex items-center gap-2 text-[10px] font-heading tracking-widest uppercase text-white group-hover:text-zru-green transition-colors">
+                        {path.cta} <ArrowRight className="w-3 h-3 group-hover:translate-x-1 transition-transform" />
+                      </span>
+                    </div>
+                  </Link>
+                </motion.div>
+              );
+            })}
+          </StaggerContainer>
+        </div>
+
+        {/* Pathways Grid - Mobile (Compact Icon Buttons) */}
+        <div className="block md:hidden">
+          <div className="grid grid-cols-2 gap-3">
+            {PATHWAYS.map((path, idx) => {
+              const Icon = path.icon;
+              const isLast = idx === PATHWAYS.length - 1;
+              return (
+                <Link
+                  key={path.title}
+                  href={path.href}
+                  className={`flex items-center gap-3 p-4 card-dark rounded-xl border border-white/8 active:border-zru-green/50 shadow-md ${
+                    isLast ? "col-span-2 justify-center" : ""
+                  }`}
+                >
+                  <div className="w-8 h-8 rounded-lg bg-zru-green/15 flex items-center justify-center text-zru-green shrink-0">
+                    <Icon className="w-4 h-4" />
+                  </div>
+                  <div className="flex items-center gap-1.5">
+                    <span className="font-heading text-xs text-white uppercase tracking-wider">
+                      {path.title}
                     </span>
+                    <ArrowRight className="w-3 h-3 text-white/40" />
                   </div>
                 </Link>
-              </motion.div>
-            );
-          })}
-        </StaggerContainer>
+              );
+            })}
+          </div>
+        </div>
 
       </div>
     </section>
