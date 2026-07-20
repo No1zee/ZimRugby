@@ -143,7 +143,26 @@ opencode run "Hello Morty, please read the pending tasks in ~/.gemini/ag-comm/pe
 param (
     [string]$TaskMessage = "Hello Morty, please read the pending tasks in ~/.gemini/ag-comm/pending/ and execute them."
 )
-opencode run $TaskMessage
+
+$PendingPath = Join-Path $HOME ".gemini/ag-comm/pending"
+if (Test-Path $PendingPath) {
+    $Files = Get-ChildItem -Path $PendingPath -Filter "*.md"
+    if ($Files.Count -eq 0) {
+        Write-Host "[~] No pending tasks found in $PendingPath. Skipping dispatch."
+        Exit 0
+    }
+    Write-Host "[*] Found $($Files.Count) pending tasks in queue. Dispatching Morty..."
+} else {
+    Write-Host "[-] Pending queue path not found: $PendingPath"
+    Exit 1
+}
+
+if (Get-Command opencode -ErrorAction SilentlyContinue) {
+    opencode run $TaskMessage
+} else {
+    Write-Host "[-] 'opencode' command not found. Please ensure OpenCode is installed and on your PATH."
+    Exit 1
+}
 """
     dispatch_path = os.path.join(skills_dir, "morty-dispatch", "morty_dispatch.ps1")
     with open(dispatch_path, "w", encoding="utf-8") as f:
