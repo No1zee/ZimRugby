@@ -39,6 +39,21 @@ def main():
         else:
             print(f"    [~] Already exists: {d}")
 
+    # 2.5 Check and Install Headroom-AI
+    print("[*] Checking Headroom-AI installation...")
+    try:
+        import subprocess
+        # Check if headroom is available
+        result = subprocess.run([sys.executable, "-m", "pip", "show", "headroom-ai"], capture_output=True, text=True)
+        if result.returncode != 0:
+            print("    [!] 'headroom-ai' not found. Installing via pip...")
+            subprocess.run([sys.executable, "-m", "pip", "install", "headroom-ai"], check=True)
+            print("    [+] Successfully installed headroom-ai.")
+        else:
+            print("    [~] 'headroom-ai' is already installed.")
+    except Exception as e:
+        print(f"    [!] Error checking/installing headroom-ai: {e}")
+
     # 3. Create using-superpowers SKILL.md
     print("[*] Writing using-superpowers skill...")
     superpowers_content = """---
