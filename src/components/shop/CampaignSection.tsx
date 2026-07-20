@@ -36,7 +36,7 @@ export default function CampaignSection() {
               A celebration of legacy and a commitment to the future. Our 2026 Heritage collection merges historic motifs with peak performance engineering.
             </p>
             <Link 
-              href="/clubhouse/campaign"
+              href="/about/clubhouse/campaign"
               className="inline-flex items-center space-x-6 group"
             >
               <span className="text-xs font-black uppercase tracking-[0.3em] text-white group-hover:text-zru-green transition-colors">

@@ -9,6 +9,7 @@ import { ChevronDown, Menu, X, Search } from "lucide-react";
 import { motion, AnimatePresence, useScroll, useMotionValueEvent } from "framer-motion";
 import SlantedButton from "../ui/SlantedButton";
 import GlobalAnnouncementBar from "./GlobalAnnouncementBar";
+import type { SearchEventResult } from "@/types";
 
 interface NavItem {
   label: string;
@@ -39,18 +40,12 @@ const navItems: NavItem[] = [
     ]
   },
   { 
-    label: "COMPETITIONS", 
-    href: "/events?tab=competitions",
+    label: "COMPETITIONS & EVENTS", 
+    href: "/events",
     children: [
       { label: "Sevens Series", href: "/events?tab=competitions" },
       { label: "Club Championship", href: "/events?tab=competitions" },
       { label: "Schools Rugby", href: "/events?tab=competitions" },
-    ]
-  },
-  { 
-    label: "EVENTS", 
-    href: "/events?tab=events",
-    children: [
       { label: "Coaching Courses", href: "/events?tab=events" },
       { label: "AGM & Admin", href: "/events?tab=events" },
       { label: "Gala Dinners", href: "/events?tab=events" },
@@ -67,7 +62,7 @@ const navItems: NavItem[] = [
   },
   { 
     label: "CLUBHOUSE", 
-    href: "/clubhouse",
+    href: "/about/clubhouse",
     children: [
       { label: "Shop Merchandise", href: "/clubhouse" },
       { label: "Fan Zone", href: "/fan-zone" },
@@ -151,23 +146,10 @@ export default function Navigation() {
       r.category?.toLowerCase().includes(q)
     ).slice(0, 4);
 
-    const mockEvents = [
-      { id: "1", title: "Super Six Rugby League", location: "Harare & Bulawayo", category: "Club Rugby", href: "/events?tab=competitions" },
-      { id: "2", title: "Sable Lager Grid Cup", location: "Harare Sports Club", category: "Franchise", href: "/events?tab=competitions" },
-      { id: "3", title: "Nedbank Challenge Cup", location: "Old Hararians", category: "Knockout", href: "/events?tab=competitions" },
-      { id: "4", title: "Harare Under-20 League", location: "Old Hararians", category: "Youth", href: "/events?tab=competitions" },
-    ];
-
-    const filteredEvents = mockEvents.filter(e => 
-      e.title.toLowerCase().includes(q) ||
-      e.location.toLowerCase().includes(q) ||
-      e.category.toLowerCase().includes(q)
-    );
-
     return {
       matches: filteredMatches,
       reports: filteredReports,
-      events: filteredEvents,
+      events: [] as SearchEventResult[],
     };
   }, [searchQuery, allMatches, allReports]);
 
@@ -208,11 +190,14 @@ export default function Navigation() {
             if (item.label === "TEAMS" && data.teams) {
               return { ...item, children: data.teams };
             }
-            if (item.label === "COMPETITIONS" && data.competitions) {
-              return { ...item, children: data.competitions };
-            }
-            if (item.label === "EVENTS" && data.events) {
-              return { ...item, children: data.events };
+            if (item.label === "COMPETITIONS & EVENTS" && (data.competitions || data.events)) {
+              return { 
+                ...item, 
+                children: [
+                  ...(data.competitions || []),
+                  ...(data.events || [])
+                ] 
+              };
             }
             return item;
           }));
@@ -225,8 +210,6 @@ export default function Navigation() {
   }, []);
 
   useMotionValueEvent(scrollY, "change", (latest) => {
-    const previous = scrollY.getPrevious() || 0;
-    
     // Determine if scrolled styling should apply
     if (latest > 20) {
       setIsScrolled(true);
@@ -237,7 +220,20 @@ export default function Navigation() {
 
   const isActive = (href: string) => {
     if (href === "/" && pathname !== "/") return false;
-    return pathname.startsWith(href);
+    
+    const [hrefPath, hrefQuery] = href.split("?");
+    const pathMatches = pathname === hrefPath;
+    
+    if (hrefQuery) {
+      if (typeof window !== "undefined") {
+        const currentParams = new URLSearchParams(window.location.search);
+        const targetParams = new URLSearchParams(hrefQuery);
+        return pathMatches && Array.from(targetParams.entries()).every(([key, val]) => currentParams.get(key) === val);
+      }
+      return false;
+    }
+    
+    return pathname.startsWith(hrefPath);
   };
 
   return (
@@ -549,28 +545,27 @@ export default function Navigation() {
               </div>
 
               {/* Category: Events */}
-              <div className="space-y-4">
-                <h3 className="text-zru-green text-[10px] font-black uppercase tracking-[0.3em] border-b border-zru-green/20 pb-2">Tournaments & Events</h3>
-                {searchQuery && searchResults.events.length === 0 && (
-                  <p className="text-white/40 text-xs font-medium">No matching events found.</p>
-                )}
-                <div className="space-y-3">
-                  {searchResults.events.map((e) => (
-                    <Link 
-                      key={e.id} 
-                      href={e.href}
-                      onClick={() => { setIsSearchOpen(false); setSearchQuery(""); }}
-                      className="block p-3 rounded-lg bg-white/5 hover:bg-zru-green/10 border border-white/5 hover:border-zru-green/20 transition-all group"
-                    >
-                      <div className="text-[10px] text-white/40 font-bold uppercase tracking-wider mb-1">{e.category}</div>
-                      <div className="text-white group-hover:text-zru-green transition-colors text-sm font-heading tracking-wide">
-                        {e.title}
-                      </div>
-                      <div className="text-[10px] text-white/50 font-bold uppercase tracking-wider mt-1">{e.location}</div>
-                    </Link>
-                  ))}
+              {searchResults.events.length > 0 && (
+                <div className="space-y-4">
+                  <h3 className="text-zru-green text-[10px] font-black uppercase tracking-[0.3em] border-b border-zru-green/20 pb-2">Tournaments & Events</h3>
+                  <div className="space-y-3">
+                    {searchResults.events.map((e) => (
+                      <Link 
+                        key={e.id} 
+                        href={e.href}
+                        onClick={() => { setIsSearchOpen(false); setSearchQuery(""); }}
+                        className="block p-3 rounded-lg bg-white/5 hover:bg-zru-green/10 border border-white/5 hover:border-zru-green/20 transition-all group"
+                      >
+                        <div className="text-[10px] text-white/40 font-bold uppercase tracking-wider mb-1">{e.category}</div>
+                        <div className="text-white group-hover:text-zru-green transition-colors text-sm font-heading tracking-wide">
+                          {e.title}
+                        </div>
+                        <div className="text-[10px] text-white/50 font-bold uppercase tracking-wider mt-1">{e.location}</div>
+                      </Link>
+                    ))}
+                  </div>
                 </div>
-              </div>
+              )}
 
             </div>
           </motion.div>

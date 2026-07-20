@@ -11,7 +11,7 @@ const dockItems = [
   { label: "Home", icon: Home, href: "/" },
   { label: "Matches", icon: Trophy, href: "/match-centre" },
   { label: "Media", icon: Newspaper, href: "/media" },
-  { label: "Clubhouse", icon: Users, href: "/clubhouse" },
+  { label: "Clubhouse", icon: Users, href: "/about/clubhouse" },
   { label: "Menu", icon: Menu, href: "#menu", isMenu: true },
 ];
 
@@ -48,15 +48,15 @@ export default function MobileDock() {
       initial={{ y: 100 }}
       animate={{ y: isHidden ? 150 : 0 }}
       transition={{ type: "spring", bounce: 0, duration: 0.4 }}
-      className="fixed bottom-0 left-0 right-0 z-50 md:hidden pb-[max(env(safe-area-inset-bottom),16px)] pointer-events-none"
+      className="fixed bottom-0 left-0 right-0 z-50 lg:hidden pb-[max(env(safe-area-inset-bottom),16px)] pointer-events-none"
     >
       {/* Glassmorphism Background */}
-      <div className="mx-4 mt-4 rounded-2xl bg-rich-black/90 backdrop-blur-xl border border-white/10 shadow-[0_-10px_40px_-15px_rgba(0,0,0,0.5)] flex items-center justify-around p-2 pointer-events-auto">
+      <div className="mx-4 mt-4 sm:mx-auto sm:max-w-xl rounded-2xl bg-rich-black/90 backdrop-blur-xl border border-white/10 shadow-[0_-10px_40px_-15px_rgba(0,0,0,0.5)] flex items-center justify-around p-2 sm:p-3 pointer-events-auto">
         {dockItems.map((item) => {
           const isActive = !item.isMenu && (pathname === item.href || (item.href !== "/" && pathname.startsWith(item.href)));
           const Icon = item.icon;
 
-          const LinkWrapper = item.isMenu ? motion.button : motion(Link);
+          const LinkWrapper = item.isMenu ? motion.button : motion.create(Link);
           const linkProps = item.isMenu ? { type: "button" } : { href: item.href };
 
           return (
@@ -65,7 +65,7 @@ export default function MobileDock() {
               {...(linkProps as Record<string, unknown>)}
               onClick={(e: React.MouseEvent) => handleInteraction(item, e)}
               whileTap={{ scale: 0.85 }}
-              className="relative flex flex-col items-center justify-center p-2 min-w-[64px] outline-none"
+              className="relative flex flex-col items-center justify-center p-2 sm:p-2.5 min-w-[64px] sm:min-w-[80px] outline-none"
             >
               {isActive && (
                 <motion.div

@@ -50,7 +50,7 @@ const previewItems = [
     category: "High Intensity", 
     image: "/images/shop/vest-performance.png",
     badge: "Sables XV",
-    color: "bg-zru-red/5",
+    color: "bg-zru-green/5",
     description: "Engineered for elite conditioning and dynamic drills."
   },
 ];
@@ -113,7 +113,7 @@ const ProductCard = ({ item, idx }: { item: typeof previewItems[0], idx: number 
       transition={{ duration: 1.2, delay: idx * 0.1, ease: [0.16, 1, 0.3, 1] }}
       className="flex-none w-[280px] md:w-[360px] snap-start group perspective-2000"
     >
-      <Link href="/clubhouse" className="block relative">
+      <Link href="/about/clubhouse" className="block relative">
         <motion.div 
           ref={ref}
           onMouseEnter={handleMouseEnter}
@@ -233,7 +233,7 @@ export default function StorePreviewStrip() {
                 Official Zimbabwe Rugby Collection. <br />Wear the pride. Every purchase fuels the pathway.
             </p>
             <MagneticElement intensity={0.2}>
-              <SlantedButton href="/clubhouse" variant="primary" size="md">
+              <SlantedButton href="/about/clubhouse" variant="primary" size="md">
                 Shop Collection <ArrowRight className="w-5 h-5 ml-2 inline-block" />
               </SlantedButton>
             </MagneticElement>

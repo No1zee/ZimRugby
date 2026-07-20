@@ -72,7 +72,7 @@ export default function ClubhouseHero() {
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
             <Link 
-              href="/clubhouse/kits"
+              href="/about/clubhouse/kits"
               className="group relative px-10 py-5 bg-white text-clubhouse-charcoal text-xs font-black uppercase tracking-[0.2em] overflow-hidden transition-all hover:scale-105"
             >
               <div className="absolute inset-0 bg-zru-green -translate-x-full group-hover:translate-x-0 transition-transform duration-500" />
@@ -81,7 +81,7 @@ export default function ClubhouseHero() {
               </span>
             </Link>
             <Link 
-              href="/clubhouse/lifestyle"
+              href="/about/clubhouse/lifestyle"
               className="px-10 py-5 border border-white/20 text-white text-xs font-black uppercase tracking-[0.2em] hover:bg-white/5 transition-all hover:scale-105"
             >
               Apply For Membership

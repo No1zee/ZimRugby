@@ -550,7 +550,7 @@ export default function WorldCupCampaignPage() {
                 Carry the campaign with you. Every piece from the World Cup Collection contributes a portion of proceeds directly to the Sables&apos; preparation fund.
               </p>
             </div>
-            <Link href="/clubhouse" className="flex items-center gap-4 group">
+            <Link href="/about/clubhouse" className="flex items-center gap-4 group">
               <span className="text-[10px] font-black uppercase tracking-[0.4em] text-white">Full Collection</span>
               <div className="w-12 h-[2px] bg-zru-green group-hover:w-20 transition-all duration-500" />
             </Link>
@@ -700,7 +700,7 @@ export default function WorldCupCampaignPage() {
             <div className="w-1.5 h-1.5 rounded-full bg-white/20 hidden sm:block" />
             <Link href="#zru-nation" className="text-[10px] font-black text-white uppercase tracking-[0.4em] hover:text-zru-green transition-colors">Join the Nation</Link>
             <div className="w-1.5 h-1.5 rounded-full bg-white/20 hidden sm:block" />
-            <Link href="/clubhouse" className="text-[10px] font-black text-white uppercase tracking-[0.4em] hover:text-zru-green transition-colors">Shop Collection</Link>
+            <Link href="/about/clubhouse" className="text-[10px] font-black text-white uppercase tracking-[0.4em] hover:text-zru-green transition-colors">Shop Collection</Link>
           </div>
         </div>
       </section>

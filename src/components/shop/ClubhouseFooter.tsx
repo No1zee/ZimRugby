@@ -7,11 +7,11 @@ const footerLinks = [
   {
     title: "Shop",
     links: [
-      { label: "New Arrivals", href: "/clubhouse/new" },
-      { label: "Matchday Kits", href: "/clubhouse/kits" },
-      { label: "Training Wear", href: "/clubhouse/training" },
-      { label: "Clubhouse Lifestyle", href: "/clubhouse/lifestyle" },
-      { label: "Accessories", href: "/clubhouse/accessories" },
+      { label: "New Arrivals", href: "/about/clubhouse/new" },
+      { label: "Matchday Kits", href: "/about/clubhouse/kits" },
+      { label: "Training Wear", href: "/about/clubhouse/training" },
+      { label: "Clubhouse Lifestyle", href: "/about/clubhouse/lifestyle" },
+      { label: "Accessories", href: "/about/clubhouse/accessories" },
     ],
   },
   {
@@ -109,7 +109,7 @@ export default function ClubhouseFooter() {
           </div>
 
           <div className="text-[10px] tracking-[0.3em] text-white/60 uppercase">
-            The Clubhouse © 2026. All rights reserved.
+            Zimbabwe Rugby Union &middot; The Clubhouse &copy; 2026. All rights reserved.
           </div>
 
           <div className="flex space-x-6 text-[10px] tracking-widest text-white/30 uppercase">
