@@ -79,14 +79,15 @@ export function CountdownPromo({
   const dateObj = new Date(targetDate);
   const formattedDate = dateObj.toLocaleDateString("en-GB", {
     day: "numeric",
-    month: "long",
+    month: "short",
     year: "numeric",
-  }).toUpperCase().replace(/ /g, "–");
+    timeZone: 'UTC'
+  });
   
   const isClient = mounted;
 
   return (
-    <section className={`relative py-section bg-transparent overflow-hidden ${className}`}>
+    <section className={`relative py-10 md:py-16 bg-transparent overflow-hidden ${className}`}>
       
       {/* Visual Background Accent */}
       <div className="absolute inset-0 z-0">
@@ -95,7 +96,7 @@ export function CountdownPromo({
         <div className="absolute top-0 right-0 w-1/2 h-full bg-[radial-gradient(circle_at_top_right,rgba(0,96,57,0.1),transparent_70%)]" />
       </div>
 
-      <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 relative z-20">
+      <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 relative z-20">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           
           {/* Left: Clipped Image */}
@@ -149,7 +150,7 @@ export function CountdownPromo({
             transition={{ duration: 0.8, delay: 0.2 }}
           >
             {/* Date */}
-            <p className="font-heading tracking-widest text-xl text-white/50 mb-4">
+            <p className="font-heading tracking-widest text-xl text-rich-black/50 mb-4">
               {isClient ? formattedDate : "\u00A0"}
             </p>
             
@@ -161,21 +162,21 @@ export function CountdownPromo({
             
             {/* Subtitle */}
             {subtitle && (
-              <h2 className="font-heading text-[clamp(2rem,7vw,5rem)] tracking-wider text-white mb-6 uppercase font-black drop-shadow-md leading-none">
+              <h2 className="font-heading text-[clamp(2rem,7vw,5rem)] tracking-wider text-rich-black mb-6 uppercase font-black drop-shadow-md leading-none">
                 {subtitle}
               </h2>
             )}
             
             {/* Description */}
             {description && (
-              <p className="font-body text-white/70 mb-10 max-w-md">
+              <p className="font-body text-rich-black/70 mb-10 max-w-md">
                 {description}
               </p>
             )}
 
             {/* Countdown */}
             <div className="mb-8">
-              <p className="text-[10px] font-black text-white/40 uppercase tracking-[0.2em] mb-4">
+              <p className="text-[10px] font-black text-rich-black/40 uppercase tracking-[0.2em] mb-4">
                 {countdownLabel}
               </p>
               <div className="flex flex-wrap justify-start gap-4 md:gap-6 min-w-0">
@@ -197,14 +198,14 @@ export function CountdownPromo({
                           animate={{ y: 0, opacity: 1, rotateX: 0 }}
                           exit={{ y: 40, opacity: 0, rotateX: 90 }}
                           transition={{ duration: 0.4, ease: "backOut" }}
-                          className="absolute block w-full text-center font-heading text-5xl md:text-7xl text-white font-black leading-none tracking-wider origin-center drop-shadow-[0_4px_10px_rgba(0,107,63,0.4)]"
+                          className="absolute block w-full text-center font-heading text-5xl md:text-7xl text-rich-black font-black leading-none tracking-wider origin-center drop-shadow-[0_4px_10px_rgba(0,107,63,0.4)]"
                           style={{ perspective: 1000, transformStyle: "preserve-3d" }}
                         >
                           {isClient ? String(unit.value).padStart(2, "0") : "00"}
                         </motion.span>
                       </AnimatePresence>
                     </div>
-                    <span className="text-[9px] font-black text-white/50 uppercase tracking-[0.2em] block mt-3 font-subheading">
+                    <span className="text-[9px] font-black text-rich-black/50 uppercase tracking-[0.2em] block mt-3 font-subheading">
                       {unit.label}
                     </span>
                   </div>
@@ -214,7 +215,7 @@ export function CountdownPromo({
 
             {/* Location */}
             {location && (
-              <div className="flex items-center gap-2 text-white/40 text-sm mb-6">
+              <div className="flex items-center gap-2 text-rich-black/40 text-sm mb-6">
                 <MapPin className="w-4 h-4" />
                 {location}
               </div>

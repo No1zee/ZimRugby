@@ -6,7 +6,7 @@ export default function CmsBadge() {
   const isDev = process.env.NODE_ENV === "development";
   const hasCms = !!process.env.NEXT_PUBLIC_DIRECTUS_URL;
 
-  if (!isDev) return null;
+  return null;
 
   return (
     <div className="fixed bottom-24 right-6 z-50 flex items-center gap-2 px-3 py-1.5 rounded-full bg-black/80 border border-white/10 text-[10px] font-black uppercase tracking-widest text-white backdrop-blur-md shadow-2xl">

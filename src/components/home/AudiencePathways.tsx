@@ -23,7 +23,7 @@ const PATHWAYS = [
   {
     title: "Clubs & Schools",
     description: "Access school leagues, coaching development resources, and administrative toolkits.",
-    href: "/about/safeguarding",
+    href: "/clubs",
     cta: "Development Hub",
     icon: GraduationCap,
   },

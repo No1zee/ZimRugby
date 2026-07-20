@@ -73,8 +73,8 @@ const MOCK_SLIDES: HeroSlideData[] = [
       image: "/images/hero/zim-u20s.webp",
       imagePosition: "center center",
       headline: {
-        line1: "PASSION, PURPOSE",
-        line2: "AND POWER",
+        line1: "LADY SABLES",
+        line2: "INSPIRING THE FUTURE",
       },
       subtext: "The Lady Sables are leading the way in growing women's rugby across Zimbabwe. Be part of the legacy.",
       ctas: {
