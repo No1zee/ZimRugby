@@ -63,26 +63,14 @@ export default function MatchCentreStrip({ initialMatches = [], twinData, rankin
 
   return (
     <section 
-      className="py-8 lg:py-14 bg-transparent relative overflow-hidden border-t border-white/5"
+      className="py-8 lg:py-14 bg-transparent relative overflow-hidden border-t border-black/5"
       id="match-centre"
     >
-      {/* Background Media with subtle stadium overlay */}
-      <div className="absolute inset-0 z-0 opacity-15 pointer-events-none">
-        <Image 
-          src="/images/events/africa-cup.jpg" 
-          alt="Stadium Background" 
-          fill 
-          loading="lazy"
-          sizes="100vw"
-          quality={40}
-          className="object-cover scale-105 blur-xs"
-        />
-        <div className="absolute inset-0 bg-linear-to-b from-rich-black via-rich-black/80 to-rich-black" />
-      </div>
+
 
       <CornerAccent position="top-left" />
       
-      <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         
 
 
@@ -93,7 +81,7 @@ export default function MatchCentreStrip({ initialMatches = [], twinData, rankin
           <div className="lg:col-span-8 flex">
             <ScrollReveal className="w-full flex" delay={0.1}>
               <Tilt3DCard className="w-full flex" tiltAmount={0.8}>
-                <div className="relative w-full rounded-2xl overflow-hidden card-green border p-5 md:p-12 flex flex-col justify-between group hover:border-zru-green/60 transition-all duration-500">
+                <div className="relative w-full overflow-hidden card-dark p-6 md:p-12 flex flex-col justify-between group hover:border-zru-green/30 transition-all duration-500">
                   
                   {/* Dynamic Radial Spotlights inside the card */}
                   <div className="absolute -right-32 -top-32 w-96 h-96 rounded-full bg-zru-green/5 blur-3xl pointer-events-none z-0" />
@@ -110,26 +98,26 @@ export default function MatchCentreStrip({ initialMatches = [], twinData, rankin
                     
                     {/* Competition Tag */}
                     <div className="flex flex-col items-center sm:items-end">
-                      <span className="text-zru-green text-[9px] font-black uppercase tracking-[0.25em] mb-1">
+                      <span className="text-zru-green text-[10px] font-black uppercase tracking-[0.25em] mb-1">
                         Upcoming Match
                       </span>
-                      <span className="bg-zru-green/20 text-white border border-zru-green/30 text-[9px] font-black tracking-widest px-3 py-1 rounded-sm uppercase">
+                      <span className="text-white/48 text-xs font-semibold tracking-[0.14em] uppercase">
                         {spotlightMatch.competition}
                       </span>
                     </div>
                   </div>
 
-                  {/* Matchup row (Left Team vs Right Team) */}
-                  <div className="grid grid-cols-3 md:grid-cols-12 items-center gap-2 md:gap-4 my-6 md:my-8 z-10 relative">
+                  {/* Matchup row (Left Team vs Right Team) - Vertically aligned on mobile */}
+                  <div className="flex flex-col md:grid md:grid-cols-12 items-center gap-6 md:gap-4 my-6 md:my-8 z-10 relative">
                     
                     {/* Background Neon Clashing Line */}
                     <div className="hidden md:block absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-[1px] bg-gradient-to-r from-transparent via-white/10 to-transparent z-0" />
                     <div className="hidden md:block absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[1px] h-[150px] bg-gradient-to-b from-transparent via-zru-green/30 to-transparent z-0" />
 
                     {/* Left Team: Zimbabwe Sables */}
-                    <div className="col-span-1 md:col-span-4 flex flex-col items-center md:items-end text-center md:text-right z-10">
+                    <div className="flex flex-col items-center md:items-end text-center md:text-right z-10 md:col-span-4 w-full">
                       {/* Shield Crest Holder */}
-                      <div className="w-16 h-16 md:w-24 md:h-24 rotate-[45deg] rounded-lg border border-zru-green/40 bg-gradient-to-br from-zru-green/[0.15] to-neutral-900/80 flex items-center justify-center overflow-hidden shadow-xl shadow-zru-green/20 group-hover:scale-105 group-hover:border-zru-green/60 group-hover:shadow-zru-green/30 transition-all duration-500 mb-4 md:mb-6 relative">
+                      <div className="w-16 h-16 md:w-24 md:h-24 rotate-[45deg] rounded-lg border border-zru-green/40 bg-gradient-to-br from-zru-green/[0.15] to-neutral-900/80 flex items-center justify-center overflow-hidden shadow-xl shadow-zru-green/20 group-hover:scale-105 group-hover:border-zru-green/60 group-hover:shadow-zru-green/30 transition-all duration-500 mb-3 md:mb-6 relative">
                         <div className="-rotate-[45deg] p-2 md:p-4 w-full h-full flex items-center justify-center font-heading text-white font-bold flex-col gap-1 select-none">
                           {spotlightMatch.homeTeam.logo ? (
                             <Image 
@@ -144,26 +132,25 @@ export default function MatchCentreStrip({ initialMatches = [], twinData, rankin
                           )}
                         </div>
                       </div>
-                      <h3 className="text-xs sm:text-sm md:text-2xl font-heading text-white tracking-wider uppercase leading-tight md:leading-none font-black break-words w-full drop-shadow-md">
+                      <h3 className="text-lg md:text-2xl font-black text-white tracking-tight uppercase leading-tight md:leading-none">
                         {spotlightMatch.homeTeam.name}
                       </h3>
-                      <span className="text-zru-green text-[8px] md:text-[9px] font-black uppercase tracking-wider mt-1 md:mt-2 font-body hidden sm:block">Sables XV</span>
+                      <span className="text-zru-green text-[9px] font-black uppercase tracking-wider mt-1 md:mt-2 font-body">Sables XV</span>
                     </div>
 
                     {/* Center: VS Gold Ring */}
-                    <div className="col-span-1 md:col-span-4 flex flex-col items-center justify-center z-10">
+                    <div className="flex flex-col items-center justify-center z-10 md:col-span-4 py-2 md:py-0 w-full">
                       <div className="w-10 h-10 md:w-14 md:h-14 rounded-full bg-neutral-900 border border-white/10 flex items-center justify-center shadow-lg relative group/vs">
-                        {/* Green Aura */}
                         <div className="absolute inset-0 rounded-full bg-zru-green/5 blur-md" />
                         <span className="font-heading text-sm md:text-lg text-zru-green tracking-wide italic font-black relative z-10">VS</span>
                       </div>
-                      <span className="text-[8px] md:text-[10px] text-white/50 font-black uppercase tracking-widest mt-2 md:mt-3 font-subheading bg-white/5 px-2 md:px-3 py-0.5 rounded-full text-center">{spotlightMatch.round}</span>
+                      <span className="text-[9px] md:text-[10px] text-white/50 font-black uppercase tracking-widest mt-2 md:mt-3 font-subheading bg-white/5 px-3 py-1 rounded-full text-center">{spotlightMatch.round}</span>
                     </div>
 
                     {/* Right Team: Opponent */}
-                    <div className="col-span-1 md:col-span-4 flex flex-col items-center md:items-start text-center md:text-left z-10">
+                    <div className="flex flex-col items-center md:items-start text-center md:text-left z-10 md:col-span-4 w-full">
                       {/* Shield Crest Holder */}
-                      <div className="w-16 h-16 md:w-24 md:h-24 rotate-[45deg] rounded-lg border border-white/10 bg-neutral-900/60 flex items-center justify-center overflow-hidden shadow-xl group-hover:scale-105 group-hover:border-white/30 transition-all duration-500 mb-4 md:mb-6 relative">
+                      <div className="w-16 h-16 md:w-24 md:h-24 rotate-[45deg] rounded-lg border border-white/10 bg-neutral-900/60 flex items-center justify-center overflow-hidden shadow-xl group-hover:scale-105 group-hover:border-white/30 transition-all duration-500 mb-3 md:mb-6 relative">
                         <div className="-rotate-[45deg] p-2 md:p-4 w-full h-full flex items-center justify-center font-heading text-white font-bold flex-col gap-1 select-none">
                           {spotlightMatch.awayTeam.logo ? (
                             <Image 
@@ -178,18 +165,18 @@ export default function MatchCentreStrip({ initialMatches = [], twinData, rankin
                           )}
                         </div>
                       </div>
-                      <h3 className="text-xs sm:text-sm md:text-2xl font-heading text-white tracking-wider uppercase leading-tight md:leading-none font-black break-words w-full drop-shadow-md">
+                      <h3 className="text-lg md:text-2xl font-black text-white tracking-tight uppercase leading-tight md:leading-none">
                         {spotlightMatch.awayTeam.name}
                       </h3>
-                      <span className="text-white/40 text-[8px] md:text-[9px] font-bold uppercase tracking-wider mt-1 md:mt-2 font-body hidden sm:block">Opponent</span>
+                      <span className="text-white/40 text-[9px] font-bold uppercase tracking-wider mt-1 md:mt-2 font-body">Opponent</span>
                     </div>
 
                   </div>
 
                   {/* Bottom details & CTA */}
-                  <div className="flex flex-col sm:flex-row items-center justify-between gap-6 pt-6 border-t border-white/5 mt-8 z-10">
+                  <div className="flex flex-col sm:flex-row items-center justify-between gap-6 pt-6 border-t border-white/8 mt-8 z-10">
                     {/* Details info */}
-                    <div className="flex flex-wrap justify-center sm:justify-start gap-x-6 gap-y-2 text-white/60 text-[11px] font-body font-medium">
+                    <div className="flex flex-wrap justify-center sm:justify-start gap-x-6 gap-y-2 text-white/72 text-sm font-medium">
                       <div className="flex items-center gap-2">
                         <Clock className="w-3.5 h-3.5 text-zru-green" />
                         <span>{spotlightMatch.time} CAT</span>
@@ -216,7 +203,7 @@ export default function MatchCentreStrip({ initialMatches = [], twinData, rankin
           {/* Sidebar Rankings Card (4-Columns) */}
           <div className="lg:col-span-4 flex">
             <ScrollReveal className="w-full flex" delay={0.2}>
-              <div className="relative w-full rounded-2xl overflow-hidden card-green border p-6 flex flex-col justify-between group hover:border-zru-green/40 transition-all duration-500">
+              <div className="relative w-full overflow-hidden card-dark p-6 flex flex-col justify-between group hover:border-zru-green/30 transition-all duration-500">
                 
                 {/* Header */}
                 <div className="space-y-1 mb-6">
@@ -228,7 +215,7 @@ export default function MatchCentreStrip({ initialMatches = [], twinData, rankin
 
                 {/* Big Stat Row */}
                 <div className="grid grid-cols-2 gap-4 my-4">
-                  <div className="card-green border p-4 rounded-xl relative overflow-hidden flex flex-col justify-between group/card">
+                  <div className="border border-white/5 bg-[#14201c] p-4 rounded-xl relative overflow-hidden flex flex-col justify-between group/card">
                     <span className="text-white/40 text-[9px] font-bold uppercase tracking-widest block mb-2 font-subheading">World</span>
                     <div className="flex items-baseline gap-2">
                       <span className="text-3xl font-heading font-black text-white">#{rankingsData.world.position}</span>
@@ -240,7 +227,7 @@ export default function MatchCentreStrip({ initialMatches = [], twinData, rankin
                     </div>
                   </div>
 
-                  <div className="card-green border p-4 rounded-xl relative overflow-hidden flex flex-col justify-between group/card">
+                  <div className="border border-white/5 bg-[#14201c] p-4 rounded-xl relative overflow-hidden flex flex-col justify-between group/card">
                     <span className="text-white/40 text-[9px] font-bold uppercase tracking-widest block mb-2 font-subheading">Africa</span>
                     <div className="flex items-baseline gap-2">
                       <span className="text-3xl font-heading font-black text-white">#{rankingsData.africa.position}</span>
@@ -258,7 +245,7 @@ export default function MatchCentreStrip({ initialMatches = [], twinData, rankin
                   <span className="text-white/30 text-[9px] font-black uppercase tracking-widest block font-subheading">African Rivals</span>
                   <div className="space-y-2.5">
                     {rankingsData.rivals.map((rival, index) => (
-                      <div key={index} className="flex items-center justify-between card-green border px-4 py-2.5 rounded-lg">
+                      <div key={index} className="flex items-center justify-between border border-white/5 bg-[#14201c] px-4 py-2.5 rounded-lg">
                         <div className="flex items-center gap-3">
                           {rival.logo && (
                             <Image src={rival.logo} alt={rival.name} width={18} height={14} className="object-cover rounded-xs" />
@@ -272,7 +259,7 @@ export default function MatchCentreStrip({ initialMatches = [], twinData, rankin
                 </div>
 
                 {/* Footer Tag */}
-                <div className="pt-4 border-t border-white/5 mt-6 flex justify-between items-center text-[9px] text-white/40 font-body">
+                <div className="pt-4 border-t border-white/8 mt-6 flex justify-between items-center text-[9px] text-white/40 font-body">
                   <span>Last Updated: {rankingsData.world.lastUpdated}</span>
                   <span className="flex items-center gap-1 text-emerald-500 font-bold uppercase">
                     <TrendingUp className="w-3 h-3" /> Upward Trend
@@ -287,7 +274,7 @@ export default function MatchCentreStrip({ initialMatches = [], twinData, rankin
 
         {/* 2. Secondary Match Row (Condensed Card) */}
         <ScrollReveal delay={0.25}>
-          <div className="relative w-full rounded-2xl overflow-hidden card-green border shadow-lg hover:border-zru-green/40 transition-all duration-500 group">
+          <div className="relative w-full overflow-hidden card-dark shadow-lg hover:border-zru-green/30 transition-all duration-500 group">
             
             {/* Neon glow spots */}
             <div className="absolute -right-16 -top-16 w-48 h-48 rounded-full bg-zru-green/5 blur-3xl pointer-events-none" />

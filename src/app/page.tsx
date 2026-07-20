@@ -1,15 +1,10 @@
-import EdgyGradient from "@/components/ui/EdgyGradient";
 import HeroCarousel from "@/components/home/HeroCarousel";
 import MatchCentreStrip from "@/components/home/MatchCentreStrip";
+import StorePreviewStrip from "@/components/home/StorePreviewStrip";
 import NewsMediaBlock from "@/components/home/NewsMediaBlock";
+import EventsBlock from "@/components/home/EventsBlock";
 import { CountdownPromo } from "@/components/ui/CountdownPromo";
-import dynamic from "next/dynamic";
-import AnnouncementsRail from "@/components/home/AnnouncementsRail";
-import AnnouncementsTicker from "@/components/ui/AnnouncementsTicker";
 
-const StorePreviewStrip = dynamic(() => import("@/components/home/StorePreviewStrip"));
-
-const EventsBlock = dynamic(() => import("@/components/home/EventsBlock"));
 import { getLiveMatches, getLatestReports } from "@/lib/data-fetcher";
 import { getHeroSlides } from "@/lib/api/hero";
 import { getFixtureTwinData } from "@/lib/api/fixtures";
@@ -26,24 +21,18 @@ export default async function Home() {
   ]);
 
   return (
-    <main className="bg-rich-black min-h-screen relative">
+    <main className="min-h-screen relative">
       
-      {/* Ambient Background Gradient */}
-      <div className="absolute inset-0 pointer-events-none select-none z-0">
-        <EdgyGradient opacity={0.65} />
-      </div>
-
       {/* 1. Hero Carousel */}
       <HeroCarousel slides={heroSlides} />
 
-      <div className="relative z-10 bg-rich-black overflow-hidden">
-        
+      <div className="relative z-10 overflow-hidden">
+
         {/* 2. Match Centre Strip (Horizontal List) */}
         <MatchCentreStrip initialMatches={matches} twinData={twinData} rankingsData={rankingsData} />
 
-        {/* Announcements Spotlight & Ticker */}
-        <AnnouncementsRail />
-        <AnnouncementsTicker />
+        {/* 2.5 Store Preview Strip (Interaction Portal) */}
+        <StorePreviewStrip />
 
         {/* 3. Featured Match Countdown (HK Rugby style) */}
         <CountdownPromo
@@ -65,9 +54,6 @@ export default async function Home() {
 
         {/* 5. Latest News */}
         <NewsMediaBlock initialReports={reports} />
-
-        {/* 6. Store Preview Strip (Interaction Portal / Clubhouse) */}
-        <StorePreviewStrip />
 
       </div>
     </main>

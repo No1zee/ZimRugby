@@ -86,23 +86,19 @@ export default function EventsBlock() {
                   <div className="w-8 h-px bg-zru-green" />
                   <span className="text-zru-green text-[10px] font-black uppercase tracking-[0.4em]">The Calendar</span>
                 </div>
-                <div className="pr-4">
-                  <PretextHeadline 
-                    text="WHAT'S ON?" 
-                    maxFontSize={140} 
-                    minFontSize={50}
-                  />
-                </div>
+                <h2 className="font-heading text-5xl md:text-7xl tracking-wider text-rich-black">
+                  WHAT'S <span className="text-stroke-black text-transparent">ON?</span>
+                </h2>
               </div>
               
-              <p className="body-small text-white/60 font-medium">
+              <p className="body-small text-rich-black/60 font-medium">
                 From Super Six matches to community development festivals, explore the heart of Zimbabwean rugby across the nation.
               </p>
               
               <SlantedButton 
                 href="/events" 
                 variant="secondary"
-                className="inline-flex items-center justify-center gap-3 shadow-[0_0_20px_rgba(255,255,255,0.1)] hover:shadow-[0_0_25px_rgba(0,107,63,0.35)] w-fit group"
+                className="inline-flex items-center justify-center gap-3 shadow-[0_0_20px_rgba(0,0,0,0.05)] hover:shadow-[0_0_25px_rgba(0,107,63,0.35)] w-fit group"
               >
                 <span>Explore All</span>
                 <Plus className="w-5 h-5 transition-transform group-hover:rotate-90" />
@@ -113,67 +109,57 @@ export default function EventsBlock() {
           {/* Events Grid - Asymmetric Layout */}
           <div className="lg:w-3/4">
             <StaggerContainer 
-              className="flex flex-col gap-12 lg:gap-20" 
+              className="flex flex-col gap-6" 
               staggerDelay={0.05}
             >
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-start">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-stretch">
                 {events.map((event, idx) => (
                   <motion.div 
                     key={event.id} 
                     variants={staggerItemVariants}
-                    className={`${idx === 0 ? "lg:col-span-2" : ""} ${idx % 2 === 0 && idx !== 0 ? "lg:mt-32" : ""}`}
+                    className="w-full flex"
                   >
-                    <Link href={`/events/${event.id}`} className="block group">
-                      <div className={`relative ${idx === 0 ? "aspect-21/9" : "aspect-4/5"} overflow-hidden rounded-2xl bg-neutral-900 shadow-2xl transition-all duration-700 group-hover:-translate-y-2 glow-green-card`}>
-                        <Image 
-                          src={event.image || "/images/events/africa-cup.jpg"} 
-                          alt={`${event.title} - ${event.subtitle}`}
-                          fill
-                          sizes="(max-width: 1200px) 100vw, 50vw"
-                          className="object-cover transition-transform duration-1000 group-hover:scale-110 opacity-70 group-hover:opacity-100"
-                        />
-                      
-                      {/* Gradient Overlay */}
-                      <div className="absolute inset-0 bg-linear-to-b from-transparent via-transparent to-black/80" />
-                      
-                      {/* Content Overlay */}
-                      <div className="absolute inset-0 p-8 flex flex-col justify-end gap-6 translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
-                        <div className="space-y-2">
-                          <div className="flex flex-wrap gap-2 mb-2">
-                            {event.tags.map((tag, i) => (
-                              <span 
-                                key={tag} 
-                                className={`text-[9px] font-black uppercase tracking-widest px-2.5 py-1 rounded backdrop-blur-sm ${
-                                  i === 0 
-                                    ? "bg-zru-green text-black shadow-sm" 
-                                    : "text-white border border-white/20 bg-black/20"
-                                }`}
-                              >
-                                {tag}
-                              </span>
-                            ))}
-                          </div>
-                          <h3 className="font-heading text-4xl tracking-widest text-white group-hover:text-zru-green transition-colors">
-                            {event.title}
-                          </h3>
+                    <Link href={`/events/${event.id}`} className="block w-full">
+                      <div className="card-dark p-4 md:p-5 flex flex-col justify-between h-[420px] md:h-[450px] w-full select-none hover:border-zru-green/30 transition-all duration-300">
+                        {/* Top Image Section */}
+                        <div className="relative h-40 md:h-48 w-full overflow-hidden rounded-xl bg-neutral-900 shrink-0">
+                          <Image 
+                            src={event.image || "/images/events/africa-cup.jpg"} 
+                            alt={`${event.title}`}
+                            fill
+                            sizes="(max-width: 768px) 100vw, 33vw"
+                            className="object-cover transition-transform duration-1000 group-hover:scale-105 opacity-80"
+                          />
                         </div>
-                        
-                        <div className="flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-100">
-                          <p className="body-small text-white/60 font-medium line-clamp-2">
-                            {event.description}
-                          </p>
-                          <div className="flex items-center gap-4 text-[9px] font-bold text-white/60 uppercase tracking-widest pt-4">
-                            <span className="flex items-center gap-2"><Calendar className="w-3 h-3" /> {event.date}</span>
-                            <span className="flex items-center gap-2"><MapPin className="w-3 h-3" /> {event.location}</span>
+
+                        {/* Card Body */}
+                        <div className="flex-grow flex flex-col justify-between mt-4">
+                          <div className="space-y-2">
+                            <span className="text-[10px] font-black uppercase tracking-[0.14em] text-white/48 block">
+                              {event.subtitle}
+                            </span>
+                            <h3 className="text-base md:text-lg font-semibold tracking-[-0.01em] text-white line-clamp-1">
+                              {event.title}
+                            </h3>
+                            <p className="text-xs md:text-sm leading-relaxed text-white/72 line-clamp-2">
+                              {event.description}
+                            </p>
+                          </div>
+
+                          {/* Footer with Divider */}
+                          <div className="border-t border-white/8 pt-3 mt-3">
+                            <div className="flex items-center justify-between text-[10px] font-medium text-white/48 uppercase tracking-[0.14em]">
+                              <span className="flex items-center gap-1.5"><Calendar className="w-3.5 h-3.5 text-zru-green" /> {event.date}</span>
+                              <span className="flex items-center gap-1.5 truncate max-w-[150px]"><MapPin className="w-3.5 h-3.5 text-zru-green" /> {event.location}</span>
+                            </div>
                           </div>
                         </div>
                       </div>
-                    </div>
-                  </Link>
-                </motion.div>
-              ))}
-            </div>
-          </StaggerContainer>
+                    </Link>
+                  </motion.div>
+                ))}
+              </div>
+            </StaggerContainer>
           </div>
         </div>
       </div>

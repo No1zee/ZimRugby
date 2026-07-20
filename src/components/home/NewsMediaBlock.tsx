@@ -26,10 +26,7 @@ export default function NewsMediaBlock({ initialReports = [] }: NewsMediaBlockPr
 
   if (!featuredStory) return null;
   return (
-    <section className="py-24 relative overflow-hidden bg-rich-black/40 border-y border-white/5 skew-y-1 origin-top-left">
-      
-      {/* Background Polish */}
-      <div className="absolute top-0 right-0 w-1/2 h-full bg-[radial-gradient(circle_at_top_right,rgba(0,107,63,0.12),transparent_70%)]" />
+    <section className="py-24 relative overflow-hidden bg-transparent border-y border-black/5 skew-y-1 origin-top-left">
 
       <div className="max-w-[1440px] mx-auto px-6 relative z-10 -skew-y-1">
         
@@ -38,10 +35,10 @@ export default function NewsMediaBlock({ initialReports = [] }: NewsMediaBlockPr
           <div className="space-y-4">
             <div className="flex items-center gap-2">
               <div className="w-8 h-px bg-white/40" />
-              <span className="text-white/60 text-[10px] font-black uppercase tracking-[0.5em]">The Wire</span>
+              <span className="text-rich-black/60 text-[10px] font-black uppercase tracking-[0.5em]">The Wire</span>
             </div>
-            <h2 className="font-heading text-5xl md:text-7xl tracking-wider text-white">
-              NEWS & <span className="text-stroke-white text-transparent">MEDIA</span>
+            <h2 className="font-heading text-5xl md:text-7xl tracking-wider text-rich-black">
+              NEWS & <span className="text-stroke-black text-transparent">MEDIA</span>
             </h2>
           </div>
           
@@ -55,7 +52,7 @@ export default function NewsMediaBlock({ initialReports = [] }: NewsMediaBlockPr
                 className={`text-[9px] font-black uppercase tracking-widest px-6 py-2 border transition-colors clip-slanted-sm cursor-pointer ${
                   isActive 
                     ? "bg-zru-green text-white border-zru-green" 
-                    : "bg-transparent text-white/50 border-white/20 hover:text-zru-green hover:border-zru-green hover:bg-white/5"
+                    : "bg-transparent text-rich-black/50 border-black/20 hover:text-zru-green hover:border-zru-green hover:bg-black/5"
                 }`}
               >
                 {cat}
@@ -70,7 +67,7 @@ export default function NewsMediaBlock({ initialReports = [] }: NewsMediaBlockPr
           {/* Left Column: Featured Hero Card (1/3 width, tall height) */}
           <motion.div variants={staggerItemVariants} className="lg:col-span-1">
              <Link href={`/media/${featuredStory.id}`} className="block h-full group">
-               <BentoCard className="h-[524px] relative overflow-hidden rounded-2xl p-0 border-0">
+                <div className="h-[524px] relative overflow-hidden card-dark border border-white/8 hover:border-zru-green/30 transition-all duration-300 p-0 rounded-2xl">
                   <Image
                     src={featuredStory.image}
                     alt={featuredStory.title}
@@ -100,7 +97,7 @@ export default function NewsMediaBlock({ initialReports = [] }: NewsMediaBlockPr
                       </span>
                     </div>
                   </div>
-               </BentoCard>
+                </div>
              </Link>
           </motion.div>
 
@@ -108,7 +105,7 @@ export default function NewsMediaBlock({ initialReports = [] }: NewsMediaBlockPr
           <motion.div variants={staggerItemVariants} className="lg:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-6">
              {item1 && (
                <Link href={`/media/${item1.id}`} className="col-span-1 block group">
-                 <BentoCard className="h-[250px] relative overflow-hidden rounded-2xl p-0 border-0">
+                 <div className="h-[250px] relative overflow-hidden card-dark border border-white/8 hover:border-zru-green/30 transition-all duration-300 p-0 rounded-2xl">
                     <Image 
                        src={item1.image} 
                        alt={item1.title} 
@@ -127,13 +124,13 @@ export default function NewsMediaBlock({ initialReports = [] }: NewsMediaBlockPr
                          {item1.title}
                        </h4>
                      </div>
-                 </BentoCard>
+                 </div>
                </Link>
              )}
              
              {item2 && (
                <Link href={`/media/${item2.id}`} className="col-span-1 block group">
-                 <BentoCard className="h-[250px] relative overflow-hidden rounded-2xl p-0 border-0">
+                 <div className="h-[250px] relative overflow-hidden card-dark border border-white/8 hover:border-zru-green/30 transition-all duration-300 p-0 rounded-2xl">
                     <Image 
                        src={item2.image} 
                        alt={item2.title} 
@@ -152,13 +149,13 @@ export default function NewsMediaBlock({ initialReports = [] }: NewsMediaBlockPr
                          {item2.title}
                        </h4>
                      </div>
-                 </BentoCard>
+                 </div>
                </Link>
              )}
 
              {item3 && (
                <Link href={`/media/${item3.id}`} className="col-span-1 md:col-span-2 block group">
-                 <BentoCard className="h-[250px] relative overflow-hidden rounded-2xl p-0 border-0">
+                 <div className="h-[250px] relative overflow-hidden card-dark border border-white/8 hover:border-zru-green/30 transition-all duration-300 p-0 rounded-2xl">
                     <Image 
                        src={item3.image} 
                        alt={item3.title} 
@@ -177,7 +174,7 @@ export default function NewsMediaBlock({ initialReports = [] }: NewsMediaBlockPr
                          {item3.title}
                        </h4>
                      </div>
-                 </BentoCard>
+                 </div>
                </Link>
              )}
           </motion.div>
