@@ -1,3 +1,5 @@
+import { directusFetch } from "@/lib/directus/fetch";
+
 export interface EventItem {
   id: string;
   title: string;
@@ -40,19 +42,19 @@ const mockEvents: EventItem[] = [
     id: "3",
     title: "NEDBANK CHALLENGE CUP",
     subtitle: "KNOCKOUT TOURNAMENT",
-    date: "Mar 2026",
+    date: "Mar 2027",
     location: "Old Hararians Sports Club",
-    description: "The 4th edition of the prominent knockout tournament highlighting provincial and club talent.",
+    description: "The 5th edition of the prominent knockout tournament highlighting provincial and club talent.",
     tags: ["Knockout", "Nedbank"],
     image: "/images/events/schools-fest.jpg",
-    content: "The Nedbank Challenge Cup returns for its highly anticipated 4th edition, presenting an all-or-nothing knockout tournament. Featuring a mix of club giants, provincial selections, and rising development teams, it's the ultimate cup of upsets and breakthrough stories.\n\nThrough Nedbank's generous sponsorship, prize pools have been doubled, and live broadcast options are available for fans worldwide.",
+    content: "The Nedbank Challenge Cup returns for its highly anticipated 5th edition, presenting an all-or-nothing knockout tournament. Featuring a mix of club giants, provincial selections, and rising development teams, it's the ultimate cup of upsets and breakthrough stories.\n\nThrough Nedbank's generous sponsorship, prize pools have been doubled, and live broadcast options are available for fans worldwide.",
     ticketUrl: "/tickets"
   },
   {
     id: "4",
     title: "HARARE UNDER-20 LEAGUE",
     subtitle: "YOUTH DEVELOPMENT",
-    date: "Jan 2026",
+    date: "Jan 2027",
     location: "Old Hararians Sports Club",
     description: "Future stars in action at the Harare Under-20 League, rescheduled for January.",
     tags: ["Youth", "U20 League"],
@@ -63,7 +65,49 @@ const mockEvents: EventItem[] = [
 ];
 
 export async function getEvents(): Promise<EventItem[]> {
-  // Simulating CMS check with local fallback
+  try {
+    if (process.env.NEXT_PUBLIC_DIRECTUS_URL) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const response = await directusFetch<any[]>('events', {
+        sort: ['date']
+      });
+      if (response && response.length > 0) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        return response.map((item: any) => {
+          let parsedTags: string[] = [];
+          if (Array.isArray(item.tags)) {
+            parsedTags = item.tags;
+          } else if (typeof item.tags === "string") {
+            try {
+              if (item.tags.startsWith("[")) {
+                parsedTags = JSON.parse(item.tags);
+              } else {
+                parsedTags = item.tags.split(",").map((s: string) => s.trim());
+              }
+            } catch {
+              parsedTags = [item.tags];
+            }
+          }
+
+          return {
+            id: String(item.id),
+            title: item.title || "",
+            subtitle: item.subtitle || "",
+            date: item.date_label || (item.date ? new Date(item.date).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric', timeZone: 'UTC' }) : ""),
+            location: item.location || "",
+            description: item.description || "",
+            tags: parsedTags,
+            image: item.image ? `${process.env.NEXT_PUBLIC_DIRECTUS_URL}/assets/${item.image}` : (item.image_url || "/images/events/super-league.jpg"),
+            content: item.content || "",
+            ticketUrl: item.ticket_url || "/tickets"
+          };
+        });
+      }
+    }
+  } catch (error) {
+    console.warn("Directus fetch failed for events list, falling back to mock data:", error);
+  }
+
   return mockEvents;
 }
 

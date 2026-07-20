@@ -9,6 +9,8 @@ export interface HeroSlideData {
   subtext: string;
   tag?: string; // Team tag, e.g., "SABLES", "CHEETAHS", "LADY SABLES"
   contextPill?: string;
+  imagePosition?: string; // CSS object-position, e.g. "center top"
+  graphicSlide?: boolean; // If true, hides text overlay — image has its own design/text
   matchCard?: {
     opponent: string;
     opponentSub?: string;
@@ -34,107 +36,50 @@ import { directusFetch } from "@/lib/directus/fetch";
 const MOCK_SLIDES: HeroSlideData[] = [
     {
       id: 1,
-      tag: "LADY SABLES",
-      contextPill: "RUGBY AFRICA CUP 2026",
-      image: "/images/hero/lady-sables.webp",
+      tag: "ZIMBABWE RUGBY UNION",
+      contextPill: "OFFICIAL GOVERNING BODY",
+      image: "/images/hero/tonga-vs-zim.webp",
+      imagePosition: "center 40%",
       headline: {
-        line1: "LADY SABLES",
-        line2: "RISING",
+        line1: "GOVERNING & GROWING",
+        line2: "ZIMBABWE RUGBY",
       },
-      subtext: "Zimbabwe's women lead the charge on the continent. The Lady Sables are ready to conquer.",
+      subtext: "From grassroots school leagues to the elite national Sables squads, ZRU is dedicated to developing character, discipline, and success.",
       ctas: {
-        primary: { label: "Lady Sables Match Centre", href: "/match-centre", iconName: "ArrowRight" },
-        secondary: { label: "View Squad", href: "/teams/lady-sables", iconName: "ArrowRight" },
+        primary: { label: "Match Centre", href: "/match-centre", iconName: "ArrowRight" },
+        secondary: { label: "Play Rugby", href: "/play-rugby", iconName: "ArrowRight" },
       },
     },
     {
       id: 2,
-      tag: "UPCOMING MATCH",
-      contextPill: "INTERNATIONAL FIXTURE",
-      image: "/images/hero/upcoming-match.webp",
+      tag: "SABLES",
+      contextPill: "AFRICA CUP CHAMPIONS",
+      image: "/images/hero/lady-sables.webp", // Standard fallback
+      imagePosition: "center top",
       headline: {
-        line1: "NEXT STOP",
-        line2: "GLORY",
+        line1: "THE PRIDE OF",
+        line2: "THE NATION",
       },
-      subtext: "Don't miss the next big international clash. Secure your place in history.",
+      subtext: "Witness the African Champions in their campaign to qualify for the Rugby World Cup. Bold, proud, and unstoppable.",
       ctas: {
-        primary: { label: "View Fixtures", href: "/match-centre", iconName: "ArrowRight" },
-        secondary: { label: "Get Tickets", href: "/tickets", iconName: "Ticket" },
+        primary: { label: "Meet The Squad", href: "/teams/sables", iconName: "ArrowRight" },
+        secondary: { label: "Latest News", href: "/media", iconName: "ArrowRight" },
       },
     },
     {
       id: 3,
-      tag: "SABLES",
-      contextPill: "INTERNATIONAL RUGBY",
-      image: "/images/hero/tonga-vs-zim.webp",
-      headline: {
-        line1: "TONGA VS",
-        line2: "ZIMBABWE",
-      },
-      subtext: "Relive the drama. Watch the highlights from Zimbabwe's epic clash against Tonga.",
-      ctas: {
-        primary: { label: "Watch Highlights", href: "/media", iconName: "Play" },
-        secondary: { label: "Match Centre", href: "/match-centre", iconName: "ArrowRight" },
-      },
-    },
-    {
-      id: 4,
-      tag: "U20 JUNIOR SABLES",
-      contextPill: "YOUTH DEVELOPMENT",
+      tag: "LADY SABLES",
+      contextPill: "WOMEN'S RUGBY DEVELOPMENT",
       image: "/images/hero/zim-u20s.webp",
+      imagePosition: "center center",
       headline: {
-        line1: "NEXT GEN",
-        line2: "RISING",
+        line1: "PASSION, PURPOSE",
+        line2: "AND POWER",
       },
-      subtext: "The future of Zimbabwean rugby is here. The Junior Sables are forging tomorrow's champions today.",
+      subtext: "The Lady Sables are leading the way in growing women's rugby across Zimbabwe. Be part of the legacy.",
       ctas: {
-        primary: { label: "Junior Sables", href: "/teams/junior-sables", iconName: "ArrowRight" },
-        secondary: { label: "View Gallery", href: "/media/gallery", iconName: "ArrowRight" },
-      },
-    },
-    {
-      id: 5,
-      tag: "FAN ZONE",
-      contextPill: "JOIN THE PRIDE",
-      image: "/images/hero/fan-zone.webp",
-      headline: {
-        line1: "THE PRIDE",
-        line2: "IS ALIVE",
-      },
-      subtext: "Feel the electric atmosphere. Join thousands of passionate fans as we cheer our Sables to victory.",
-      ctas: {
-        primary: { label: "Get Tickets", href: "/tickets", iconName: "Ticket" },
-        secondary: { label: "Fan Membership", href: "/membership", iconName: "ArrowRight" },
-      },
-    },
-    {
-      id: 6,
-      tag: "ZIM RUGBY",
-      contextPill: "OUR JOURNEY",
-      image: "/images/hero/zru-6.webp",
-      headline: {
-        line1: "BUILT ON",
-        line2: "PASSION",
-      },
-      subtext: "From the grassroots to the global stage — Zimbabwe Rugby's story of resilience and pride.",
-      ctas: {
-        primary: { label: "Our Story", href: "/about", iconName: "ArrowRight" },
-        secondary: { label: "View Gallery", href: "/media/gallery", iconName: "ArrowRight" },
-      },
-    },
-    {
-      id: 7,
-      tag: "ZIM RUGBY",
-      contextPill: "EXCELLENCE",
-      image: "/images/hero/zru-7.webp",
-      headline: {
-        line1: "STRENGTH",
-        line2: "UNITED",
-      },
-      subtext: "Zimbabwe Rugby — one nation, one pride, one unstoppable force.",
-      ctas: {
-        primary: { label: "Meet the Teams", href: "/teams", iconName: "ArrowRight" },
-        secondary: { label: "Sign In", href: "/login", iconName: "ArrowRight" },
+        primary: { label: "Lady Sables Squad", href: "/teams/lady-sables", iconName: "ArrowRight" },
+        secondary: { label: "Match Centre", href: "/match-centre", iconName: "ArrowRight" },
       },
     },
   ];
