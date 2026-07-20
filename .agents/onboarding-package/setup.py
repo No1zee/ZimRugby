@@ -183,5 +183,54 @@ I talk like Morty Smith — nervous, stuttering, deferential. "Uh, jeez...", "I-
     print("    SETUP COMPLETE! AGENT IS SYMBIOSED.      ")
     print("=============================================")
 
+def run_doctor():
+    print("=============================================")
+    print("    ANTIGRAVITY SYMBIOSIS ENVIRONMENT DOCTOR  ")
+    print("=============================================")
+    
+    # 1. Check directories
+    home_dir = os.path.expanduser("~")
+    gemini_dir = os.path.join(home_dir, ".gemini")
+    config_dir = os.path.join(gemini_dir, "config")
+    skills_dir = os.path.join(config_dir, "skills")
+    comm_pending_dir = os.path.join(gemini_dir, "ag-comm", "pending")
+    
+    print("[*] Verifying Mailbox Directories:")
+    for name, path in [("Config", config_dir), ("Skills", skills_dir), ("Mailbox Queue", comm_pending_dir)]:
+        if os.path.exists(path):
+            print(f"    [+] {name}: EXISTS ({path})")
+        else:
+            print(f"    [-] {name}: MISSING (Run setup script to fix)")
+
+    # 2. Check Headroom Proxy status
+    print("[*] Verifying Headroom Proxy Connection:")
+    import socket
+    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    s.settimeout(1.0)
+    try:
+        s.connect(("127.0.0.1", 8787))
+        print("    [+] Port 8787: CONNECTED (Headroom proxy is active)")
+    except Exception:
+        print("    [-] Port 8787: CONNECTION REFUSED (Run 'headroom proxy')")
+    finally:
+        s.close()
+        
+    # 3. Check CLI tools
+    import subprocess
+    print("[*] Verifying Developer CLI Dependencies:")
+    for cmd in ["git", "node", "npm"]:
+        try:
+            res = subprocess.run([cmd, "--version" if cmd != "git" else "version"], capture_output=True, text=True)
+            print(f"    [+] {cmd.upper()}: AVAILABLE ({res.stdout.strip()})")
+        except Exception:
+            print(f"    [-] {cmd.upper()}: NOT FOUND in system PATH")
+            
+    print("=============================================")
+    print("           DIAGNOSTICS COMPLETE              ")
+    print("=============================================")
+
 if __name__ == "__main__":
-    main()
+    if "--doctor" in sys.argv:
+        run_doctor()
+    else:
+        main()
