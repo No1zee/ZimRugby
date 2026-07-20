@@ -7,13 +7,13 @@ import { motion, AnimatePresence } from "framer-motion";
 import CartDrawer from "./CartDrawer";
 
 const shopNavItems = [
-  { label: "Shop", href: "/clubhouse" },
-  { label: "Men", href: "/clubhouse/men" },
-  { label: "Women", href: "/clubhouse/women" },
-  { label: "Kits", href: "/clubhouse/kits" },
-  { label: "Collections", href: "/clubhouse/collections" },
-  { label: "Loyalty", href: "/clubhouse/loyalty" },
-  { label: "Journal", href: "/clubhouse/journal" },
+  { label: "Shop", href: "/about/clubhouse" },
+  { label: "Men", href: "/about/clubhouse/men" },
+  { label: "Women", href: "/about/clubhouse/women" },
+  { label: "Kits", href: "/about/clubhouse/kits" },
+  { label: "Collections", href: "/about/clubhouse/collections" },
+  { label: "Loyalty", href: "/about/clubhouse/loyalty" },
+  { label: "Journal", href: "/about/clubhouse/journal" },
 ];
 
 export default function ClubhouseHeader() {
@@ -35,6 +35,21 @@ export default function ClubhouseHeader() {
         isScrolled ? "bg-clubhouse-charcoal/90 backdrop-blur-md border-b border-white/5 py-4" : "bg-transparent py-8"
       }`}
     >
+      {/* ZRU Back-to-Site Bar */}
+      <div className="w-full bg-zru-green/90 backdrop-blur-sm border-b border-zru-green/20">
+        <div className="max-w-[1440px] mx-auto px-6 md:px-12 flex items-center justify-between h-8">
+          <Link 
+            href="/"
+            className="flex items-center space-x-2 text-[9px] font-black uppercase tracking-[0.25em] text-clubhouse-charcoal hover:text-white transition-colors"
+          >
+            <span>&larr;</span>
+            <span>Back to Zimbabwe Rugby Union</span>
+          </Link>
+          <Link href="/" className="hidden md:block text-[9px] font-bold uppercase tracking-[0.2em] text-clubhouse-charcoal/70 hover:text-white transition-colors">
+            zimrugby.co.zw
+          </Link>
+        </div>
+      </div>
       <div className="max-w-[1440px] mx-auto px-6 md:px-12 flex justify-between items-center">
         
         {/* Mobile Menu Button */}
@@ -60,7 +75,7 @@ export default function ClubhouseHeader() {
         </nav>
 
         {/* Logo - Center */}
-        <Link href="/clubhouse" className="absolute left-1/2 -translate-x-1/2 text-center group">
+        <Link href="/about/clubhouse" className="absolute left-1/2 -translate-x-1/2 text-center group">
           <span className="block text-xl md:text-2xl font-black uppercase tracking-[0.3em] text-white group-hover:text-zru-green transition-colors">
             THE
           </span>
@@ -135,12 +150,20 @@ export default function ClubhouseHeader() {
               ))}
             </div>
 
-            <div className="mt-auto pt-10 border-t border-white/10 flex justify-between items-center">
-              <div className="flex space-x-6">
-                <User className="w-6 h-6 text-white/60" />
-                <Heart className="w-6 h-6 text-white/60" />
+            <div className="mt-auto pt-10 border-t border-white/10 flex flex-col space-y-4">
+              <Link 
+                href="/"
+                className="text-sm font-bold uppercase tracking-widest text-zru-green hover:text-white transition-colors"
+              >
+                &larr; Back to Zimbabwe Rugby Union
+              </Link>
+              <div className="flex justify-between items-center">
+                <div className="flex space-x-6">
+                  <User className="w-6 h-6 text-white/60" />
+                  <Heart className="w-6 h-6 text-white/60" />
+                </div>
+                <span className="text-[10px] uppercase tracking-widest text-white/60">Zimbabwe Rugby Union &middot; The Clubhouse &copy; 2026</span>
               </div>
-              <span className="text-[10px] uppercase tracking-widest text-white/60">The Clubhouse © 2026</span>
             </div>
           </motion.div>
         )}

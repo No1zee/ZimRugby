@@ -92,6 +92,9 @@ export interface Photo {
   image: string;
   date: string;
   description: string;
+  folder?: string;
+  photographer?: string;
+  license?: string;
 }
 
 // 6. Referees & Match Officials Entities
@@ -117,6 +120,26 @@ export interface RefereeNotice {
   date: string;
   excerpt: string;
   content: string;
+}
+
+// 8. League Table Entities
+export interface LeagueTableRow {
+  position: number;
+  team: string;
+  played: number;
+  won: number;
+  drawn: number;
+  lost: number;
+  points: number;
+  form: string[];
+}
+
+export interface SearchEventResult {
+  id: string;
+  title: string;
+  location: string;
+  category: string;
+  href: string;
 }
 
 // 7. Announcement Entities

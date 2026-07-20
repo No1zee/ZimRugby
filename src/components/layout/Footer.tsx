@@ -36,7 +36,7 @@ const footerLinks = {
   "Resources": [
     { label: "Downloads", href: "/resources" },
     { label: "Laws of the Game", href: "/resources/laws" },
-    { label: "Shop", href: "/clubhouse" },
+    { label: "Shop", href: "/about/clubhouse" },
     { label: "FAQs", href: "/faqs" },
   ],
 };
@@ -47,7 +47,7 @@ export default function Footer() {
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  if (pathname?.startsWith('/clubhouse') || pathname?.startsWith('/admin')) return null;
+  if (pathname?.startsWith('/about/clubhouse') || pathname?.startsWith('/admin')) return null;
 
   async function handleSubscribe(e: React.FormEvent) {
     e.preventDefault();

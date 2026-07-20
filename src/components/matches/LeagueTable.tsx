@@ -1,27 +1,15 @@
 "use client";
 
 import { motion } from "framer-motion";
+import type { LeagueTableRow } from "@/types";
 
-interface TableRow {
-  position: number;
-  team: string;
-  played: number;
-  won: number;
-  drawn: number;
-  lost: number;
-  points: number;
-  form: string[]; // e.g. ["W", "L", "W", "D", "W"]
+interface LeagueTableProps {
+  data: LeagueTableRow[];
 }
 
-const mockTableData: TableRow[] = [
-  { position: 1, team: "Old Georgians", played: 14, won: 12, drawn: 1, lost: 1, points: 58, form: ["W", "W", "W", "W", "W"] },
-  { position: 2, team: "Harare Sports Club", played: 14, won: 10, drawn: 0, lost: 4, points: 48, form: ["W", "L", "W", "L", "W"] },
-  { position: 3, team: "Old Hararians", played: 14, won: 9, drawn: 2, lost: 3, points: 45, form: ["L", "W", "W", "D", "W"] },
-  { position: 4, team: "Pitbulls", played: 14, won: 7, drawn: 1, lost: 6, points: 35, form: ["W", "L", "L", "W", "L"] },
-  { position: 5, team: "Mutare Sports Club", played: 14, won: 5, drawn: 0, lost: 9, points: 25, form: ["L", "L", "W", "L", "L"] },
-];
+export default function LeagueTable({ data }: LeagueTableProps) {
+  if (!data.length) return null;
 
-export default function LeagueTable() {
   return (
     <div className="overflow-x-auto">
       <table className="w-full text-left border-collapse">
@@ -38,7 +26,7 @@ export default function LeagueTable() {
           </tr>
         </thead>
         <tbody>
-          {mockTableData.map((row, index) => (
+          {data.map((row, index) => (
             <motion.tr 
                 key={row.team}
                 initial={{ opacity: 0, x: -20 }}

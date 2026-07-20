@@ -35,7 +35,7 @@ export default function JournalPreview() {
           <h2 className="text-4xl md:text-5xl font-black uppercase tracking-tighter text-clubhouse-charcoal mb-4">
             The Journal
           </h2>
-          <Link href="/clubhouse/journal" className="text-[10px] font-black uppercase tracking-widest text-clubhouse-charcoal/40 border-b border-clubhouse-charcoal/20 pb-1 hover:text-zru-green transition-colors">
+          <Link href="/about/clubhouse/journal" className="text-[10px] font-black uppercase tracking-widest text-clubhouse-charcoal/40 border-b border-clubhouse-charcoal/20 pb-1 hover:text-zru-green transition-colors">
             View All Stories
           </Link>
         </div>
