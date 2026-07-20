@@ -21,94 +21,95 @@ interface DirectusAnnouncementItem {
   related_article?: string | number;
 }
 
+const MOCK_ANNOUNCEMENTS: Announcement[] = [
+  {
+    id: "ann-tickets-zambezi",
+    title: "Battle of the Zambezi Tickets Now on Sale!",
+    slug: "battle-of-zambezi-tickets-live",
+    body: "Secure your tickets for the biggest match of the year at Harare Sports Club. Early bird pricing ends soon!",
+    priority: "critical",
+    scope: ["global", "homepage", "tickets"],
+    ctaLabel: "BOOK TICKETS",
+    ctaUrl: "/tickets",
+    startsAt: "2026-07-01T00:00:00Z",
+    endsAt: "2026-08-30T23:59:59Z",
+    segment: "general",
+    designVariant: "banner",
+    isSticky: true,
+    badge: "TICKET ALERT"
+  },
+  {
+    id: "ann-squad-sables-camp",
+    title: "Sables Victoria Cup Squad Selection Named",
+    slug: "sables-victoria-cup-squad-selection",
+    body: "Head Coach Piet Benade has named a 32-man training squad for the upcoming camp in Bulawayo.",
+    priority: "high",
+    scope: ["homepage", "media"],
+    ctaLabel: "READ SQUAD LIST",
+    ctaUrl: "/media/heritage-1991",
+    startsAt: "2026-07-01T00:00:00Z",
+    endsAt: "2026-08-30T23:59:59Z",
+    segment: "sables",
+    designVariant: "spotlight-card",
+    isSticky: false,
+    badge: "SABLES XV"
+  },
+  {
+    id: "ann-shuttle-matchday",
+    title: "Matchday Fan Bus & Shuttle Service Confirmed",
+    slug: "matchday-fan-bus-shuttle",
+    body: "Shuttles will run from Avondale and Town straight to Harare Sports Club starting 11:30 AM.",
+    priority: "normal",
+    scope: ["match-centre", "events"],
+    ctaLabel: "VIEW SHUTTLE TIMES",
+    ctaUrl: "/match-centre",
+    startsAt: "2026-07-01T00:00:00Z",
+    endsAt: "2026-08-30T23:59:59Z",
+    segment: "general",
+    designVariant: "spotlight-card",
+    isSticky: false,
+    badge: "FAN INFO"
+  },
+  {
+    id: "ann-merch-jersey",
+    title: "Official Zimbabwe Sables 2026 Jersey Released",
+    slug: "official-jersey-released-2026",
+    body: "Pre-order the new home and away kits online today. Limited initial stock available.",
+    priority: "normal",
+    scope: ["clubhouse"],
+    ctaLabel: "SHOP COLLECTION",
+    ctaUrl: "/about/clubhouse",
+    startsAt: "2026-07-01T00:00:00Z",
+    endsAt: "2026-08-30T23:59:59Z",
+    segment: "general",
+    designVariant: "spotlight-card",
+    isSticky: false,
+    badge: "MERCH DROP"
+  },
+  {
+    id: "ann-ticker-gates-open",
+    title: "Gates open at 11:00 AM CAT | Local schools curtain raisers start at 12:00 PM CAT | Live DJ set in the fan zone from 18:00 CAT",
+    slug: "ticker-gates-open",
+    body: "",
+    priority: "normal",
+    scope: ["homepage", "match-centre"],
+    ctaLabel: "",
+    ctaUrl: "",
+    startsAt: "2026-07-01T00:00:00Z",
+    endsAt: "2026-08-30T23:59:59Z",
+    segment: "general",
+    designVariant: "ticker",
+    isSticky: false,
+    badge: "LIVE UPDATES"
+  }
+];
+
 /**
  * Fetches active announcements from Directus, falling back to mock data if offline or not configured.
  * Automatically filters by active date range (starts_at <= now <= ends_at) when matching from Directus.
  */
 export async function getAnnouncements(): Promise<Announcement[]> {
   const nowStr = new Date().toISOString();
-  
-  const mockAnnouncements: Announcement[] = [
-    {
-      id: "ann-tickets-zambezi",
-      title: "Battle of the Zambezi Tickets Now on Sale!",
-      slug: "battle-of-zambezi-tickets-live",
-      body: "Secure your tickets for the biggest match of the year at Harare Sports Club. Early bird pricing ends soon!",
-      priority: "critical",
-      scope: ["global", "homepage", "tickets"],
-      ctaLabel: "BOOK TICKETS",
-      ctaUrl: "/tickets",
-      startsAt: "2026-07-01T00:00:00Z",
-      endsAt: "2026-08-30T23:59:59Z",
-      segment: "general",
-      designVariant: "banner",
-      isSticky: true,
-      badge: "TICKET ALERT"
-    },
-    {
-      id: "ann-squad-sables-camp",
-      title: "Sables Victoria Cup Squad Selection Named",
-      slug: "sables-victoria-cup-squad-selection",
-      body: "Head Coach Piet Benade has named a 32-man training squad for the upcoming camp in Bulawayo.",
-      priority: "high",
-      scope: ["homepage", "media"],
-      ctaLabel: "READ SQUAD LIST",
-      ctaUrl: "/media/heritage-1991",
-      startsAt: "2026-07-01T00:00:00Z",
-      endsAt: "2026-08-30T23:59:59Z",
-      segment: "sables",
-      designVariant: "spotlight-card",
-      isSticky: false,
-      badge: "SABLES XV"
-    },
-    {
-      id: "ann-shuttle-matchday",
-      title: "Matchday Fan Bus & Shuttle Service Confirmed",
-      slug: "matchday-fan-bus-shuttle",
-      body: "Shuttles will run from Avondale and Town straight to Harare Sports Club starting 11:30 AM.",
-      priority: "normal",
-      scope: ["match-centre", "events"],
-      ctaLabel: "VIEW SHUTTLE TIMES",
-      ctaUrl: "/match-centre",
-      startsAt: "2026-07-01T00:00:00Z",
-      endsAt: "2026-08-30T23:59:59Z",
-      segment: "general",
-      designVariant: "spotlight-card",
-      isSticky: false,
-      badge: "FAN INFO"
-    },
-    {
-      id: "ann-merch-jersey",
-      title: "Official Zimbabwe Sables 2026 Jersey Released",
-      slug: "official-jersey-released-2026",
-      body: "Pre-order the new home and away kits online today. Limited initial stock available.",
-      priority: "normal",
-      scope: ["clubhouse"],
-      ctaLabel: "SHOP COLLECTION",
-      ctaUrl: "/clubhouse",
-      startsAt: "2026-07-01T00:00:00Z",
-      endsAt: "2026-08-30T23:59:59Z",
-      segment: "general",
-      designVariant: "spotlight-card",
-      isSticky: false,
-      badge: "MERCH DROP"
-    },
-    {
-      id: "ann-ticker-gates-open",
-      title: "Gates open at 11:00 AM CAT | Local schools curtain raisers start at 12:00 PM CAT | Live DJ set in the fan zone from 18:00 CAT",
-      slug: "ticker-gates-open",
-      body: "",
-      priority: "normal",
-      scope: ["homepage", "match-centre"],
-      startsAt: "2026-07-01T00:00:00Z",
-      endsAt: "2026-08-30T23:59:59Z",
-      segment: "general",
-      designVariant: "ticker",
-      isSticky: false,
-      ctaUrl: "/match-centre",
-      ctaLabel: "Match Info"
-    }
-  ];
 
   try {
     if (process.env.NEXT_PUBLIC_DIRECTUS_URL) {
@@ -170,7 +171,7 @@ export async function getAnnouncements(): Promise<Announcement[]> {
   }
 
   // Fallback: Filter mock data to only active items (though all mock items above are active in 2026)
-  return mockAnnouncements.filter(
+  return MOCK_ANNOUNCEMENTS.filter(
     (ann) => new Date(ann.startsAt) <= new Date() && new Date(ann.endsAt) >= new Date()
   );
 }

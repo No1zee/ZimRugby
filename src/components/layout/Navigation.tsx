@@ -64,7 +64,7 @@ const navItems: NavItem[] = [
     label: "CLUBHOUSE", 
     href: "/about/clubhouse",
     children: [
-      { label: "Shop Merchandise", href: "/clubhouse" },
+      { label: "Shop Merchandise", href: "/about/clubhouse" },
       { label: "Fan Zone", href: "/fan-zone" },
       { label: "Referees", href: "/referees" },
       { label: "Volunteer", href: "/volunteer" },
