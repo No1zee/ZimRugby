@@ -4,6 +4,8 @@ import StorePreviewStrip from "@/components/home/StorePreviewStrip";
 import NewsMediaBlock from "@/components/home/NewsMediaBlock";
 import EventsBlock from "@/components/home/EventsBlock";
 import { CountdownPromo } from "@/components/ui/CountdownPromo";
+import AudiencePathways from "@/components/home/AudiencePathways";
+import GrassrootsDevelopment from "@/components/home/GrassrootsDevelopment";
 
 import { getLiveMatches, getLatestReports } from "@/lib/data-fetcher";
 import { getHeroSlides } from "@/lib/api/hero";
@@ -28,32 +30,38 @@ export default async function Home() {
 
       <div className="relative z-10 overflow-hidden">
 
-        {/* 2. Match Centre Strip (Horizontal List) */}
+        {/* 2. Audience Pathways */}
+        <AudiencePathways />
+
+        {/* 3. Match Centre Strip (Horizontal List) */}
         <MatchCentreStrip initialMatches={matches} twinData={twinData} rankingsData={rankingsData} />
 
-        {/* 2.5 Store Preview Strip (Interaction Portal) */}
-        <StorePreviewStrip />
-
-        {/* 3. Featured Match Countdown (HK Rugby style) */}
+        {/* 4. Featured Match Countdown */}
         <CountdownPromo
           title="BATTLE OF THE ZAMBEZI"
           subtitle="ZIMBABWE vs ZAMBIA"
-          description="The Sables return to action to defend their pride in the historic Battle of the Zambezi. Witness the African Champions in their first major test of 2026."
+          description="The Sables return to action to defend their pride in the historic Battle of the Zambezi. Witness the African Champions contest the historic trophy in this crucial home test match."
           targetDate="2026-11-21T15:00:00"
           countdownLabel="COUNTDOWN TO KICK OFF:"
           location="Harare Sports Club"
           image="/images/events/africa-cup.jpg"
           ctas={[
             { label: "Book Tickets", href: "/tickets", variant: "primary" },
-            { label: "Fixture News", href: "/news/sables-vs-zambia", variant: "outline" },
+            { label: "Match Preview", href: "/news/sables-vs-zambia", variant: "outline" },
           ]}
         />
 
-        {/* 4. What's On / Events */}
-        <EventsBlock />
-
         {/* 5. Latest News */}
         <NewsMediaBlock initialReports={reports} />
+
+        {/* 6. What's On / Events */}
+        <EventsBlock />
+
+        {/* 7. Grassroots & Pathways */}
+        <GrassrootsDevelopment />
+
+        {/* 8. Store Preview Strip */}
+        <StorePreviewStrip />
 
       </div>
     </main>
