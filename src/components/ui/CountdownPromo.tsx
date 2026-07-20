@@ -198,7 +198,7 @@ export function CountdownPromo({
                           animate={{ y: 0, opacity: 1, rotateX: 0 }}
                           exit={{ y: 40, opacity: 0, rotateX: 90 }}
                           transition={{ duration: 0.4, ease: "backOut" }}
-                          className="absolute block w-full text-center font-heading text-5xl md:text-7xl text-rich-black font-black leading-none tracking-wider origin-center drop-shadow-[0_4px_10px_rgba(0,107,63,0.4)]"
+                          className="absolute block w-full text-center font-heading text-5xl md:text-7xl text-rich-black font-black leading-none tracking-normal origin-center drop-shadow-[0_4px_10px_rgba(0,107,63,0.4)]"
                           style={{ perspective: 1000, transformStyle: "preserve-3d" }}
                         >
                           {isClient ? String(unit.value).padStart(2, "0") : "00"}
