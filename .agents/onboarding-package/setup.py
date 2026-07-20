@@ -47,10 +47,21 @@ def main():
         result = subprocess.run([sys.executable, "-m", "pip", "show", "headroom-ai"], capture_output=True, text=True)
         if result.returncode != 0:
             print("    [!] 'headroom-ai' not found. Installing via pip...")
-            subprocess.run([sys.executable, "-m", "pip", "install", "headroom-ai"], check=True)
+            try:
+                subprocess.run([sys.executable, "-m", "pip", "install", "headroom-ai"], check=True)
+            except subprocess.CalledProcessError:
+                print("    [!] Global installation failed. Retrying with --user flag...")
+                subprocess.run([sys.executable, "-m", "pip", "install", "--user", "headroom-ai"], check=True)
             print("    [+] Successfully installed headroom-ai.")
         else:
             print("    [~] 'headroom-ai' is already installed.")
+            
+        # Verify if Python Scripts / bin directory is in PATH
+        scripts_dir = os.path.join(sys.exec_prefix, 'Scripts' if os.name == 'nt' else 'bin')
+        path_env = os.environ.get('PATH', '')
+        if scripts_dir not in path_env:
+            print(f"    [WARNING] The scripts directory '{scripts_dir}' is NOT in your system PATH variable.")
+            print("              Please add this directory to your PATH, or headroom commands may fail to run.")
     except Exception as e:
         print(f"    [!] Error checking/installing headroom-ai: {e}")
 

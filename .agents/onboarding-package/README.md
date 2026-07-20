@@ -30,3 +30,12 @@ python .agents/onboarding-package/setup.py
 ```
 
 Once executed, verify that the dashboard outputs `SETUP COMPLETE` and proceed to run `headroom proxy` in your background tasks.
+
+---
+
+## Running the Morty Dispatch Script on Windows
+
+If Windows blocks execution of the `morty_dispatch.ps1` script due to the default PowerShell Execution Policy, run the script bypassing the policy:
+```powershell
+powershell -ExecutionPolicy Bypass -File ~/.gemini/config/skills/morty-dispatch/morty_dispatch.ps1
+```
