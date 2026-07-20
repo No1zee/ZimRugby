@@ -42,7 +42,7 @@ const previewItems = [
     image: "/images/shop/bag-duffel.png", 
     badge: "Pathway Support",
     color: "bg-zru-green/5",
-    description: "Water-resistant institutional travel companion."
+    description: "Premium water-resistant duffel bag designed for official ZRU travel."
   },
   { 
     name: "Performance Vest", 

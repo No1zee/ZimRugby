@@ -16,19 +16,19 @@ const PATHWAYS = [
   {
     title: "Find a Club",
     description: "Search local clubs and school leagues to start training and playing competitively.",
-    href: "/play-rugby",
+    href: "/clubs",
     icon: MapPin,
   },
   {
     title: "Volunteer",
     description: "Support local teams by becoming a certified referee, youth coach, or admin helper.",
-    href: "/referees",
+    href: "/volunteer",
     icon: HeartHandshake,
   },
   {
     title: "Youth & Pathways",
     description: "Under-18 programs designed to scout talent and grow the game safely at the school level.",
-    href: "/about/safeguarding",
+    href: "/schools",
     icon: ShieldCheck,
   },
 ];
