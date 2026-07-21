@@ -200,9 +200,9 @@ export default function UnifiedHubGrid() {
 
           {/* ═══════════ CARD 2: UPCOMING FIXTURE ═══════════ */}
           <div className="flex flex-col h-full bg-white rounded-xl overflow-hidden shadow-sm border border-gray-200">
-            {/* Slanted Header */}
+            {/* Slanted Header with Tournament Badge */}
             <div
-              className="text-white"
+              className="flex justify-between items-center text-white"
               style={{
                 ...labelCaps,
                 backgroundColor: STITCH.primary,
@@ -211,63 +211,108 @@ export default function UnifiedHubGrid() {
               }}
             >
               <span>UPCOMING FIXTURE</span>
+              <span className="px-2 py-0.5 bg-white/20 backdrop-blur-sm rounded text-[9px] font-bold tracking-widest uppercase text-emerald-200">
+                AFRICA CUP
+              </span>
             </div>
 
-            {/* Green Body */}
+            {/* Stadium Floodlights Backdrop */}
             <div
-              className="flex flex-col flex-grow text-white"
-              style={{ backgroundColor: STITCH.primary, padding: "24px" }}
+              className="flex flex-col flex-grow text-white relative overflow-hidden"
+              style={{
+                background: "radial-gradient(circle at 50% 25%, #007A50 0%, #004D2C 60%, #002D1A 100%)",
+                padding: "20px",
+              }}
             >
-              {/* Teams VS */}
-              <div className="flex items-center justify-between mb-8 mt-4">
-                <div className="flex flex-col items-center">
-                  <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center mb-3">
-                    <span className="material-symbols-outlined text-3xl" style={{ color: STITCH.primary }}>sports_rugby</span>
+              {/* Subtle Stadium Grid Overlay */}
+              <div
+                className="absolute inset-0 opacity-10 pointer-events-none"
+                style={{
+                  backgroundImage: "radial-gradient(circle, #ffffff 1px, transparent 1px)",
+                  backgroundSize: "20px 20px",
+                }}
+              />
+
+              {/* Teams VS Section with Real Crests */}
+              <div className="relative z-10 flex items-center justify-between mb-5 mt-1">
+                {/* Zimbabwe Sables */}
+                <div className="flex flex-col items-center group/team cursor-pointer">
+                  <div className="relative w-16 h-16 bg-white rounded-full flex items-center justify-center p-2 mb-2 shadow-lg ring-2 ring-emerald-400/40 group-hover/team:scale-105 transition-transform">
+                    <Image
+                      src="/images/teams/zimbabwe.png"
+                      alt="Zimbabwe Rugby Union"
+                      width={44}
+                      height={44}
+                      className="object-contain"
+                    />
                   </div>
-                  <span style={{ ...unison, fontSize: "14px" }} className="text-center text-white">
+                  <span style={{ ...unison, fontSize: "12px", lineHeight: "1.1" }} className="text-center text-white">
                     ZIMBABWE<br />SABLES
                   </span>
                 </div>
-                <div style={{ ...unison, fontSize: "24px" }} className="text-white/50">VS</div>
+
+                {/* VS & Live Kickoff Pill */}
                 <div className="flex flex-col items-center">
-                  <div className="w-16 h-16 bg-white/10 rounded-full flex items-center justify-center mb-3 border border-white/20">
-                    <span className="material-symbols-outlined text-white text-3xl">shield</span>
+                  <div
+                    style={{ ...unison, fontSize: "18px" }}
+                    className="w-10 h-10 rounded-full bg-black/30 backdrop-blur-md border border-white/20 flex items-center justify-center text-emerald-300 shadow-inner mb-1"
+                  >
+                    VS
                   </div>
-                  <span style={{ ...unison, fontSize: "14px" }} className="text-center text-white">
-                    NAMIBIA
+                  <span className="text-[9px] font-extrabold tracking-widest text-emerald-400/90 uppercase">
+                    MATCHDAY 1
+                  </span>
+                </div>
+
+                {/* Namibia */}
+                <div className="flex flex-col items-center group/team cursor-pointer">
+                  <div className="relative w-16 h-16 bg-gradient-to-br from-blue-900 to-emerald-950 rounded-full flex items-center justify-center mb-2 shadow-lg ring-2 ring-white/20 group-hover/team:scale-105 transition-transform border border-white/30">
+                    <span className="text-2xl drop-shadow-md">🇳🇦</span>
+                  </div>
+                  <span style={{ ...unison, fontSize: "12px", lineHeight: "1.1" }} className="text-center text-white">
+                    NAMIBIA<br />WELWITSCHIAS
                   </span>
                 </div>
               </div>
 
-              {/* Match Info */}
-              <div className="space-y-4 mb-8 flex-grow">
-                <div className="flex items-center gap-3 text-white/90">
-                  <span className="material-symbols-outlined" style={{ fontSize: "20px" }}>calendar_today</span>
-                  <span style={{ ...bodyBase, fontSize: "14px", textTransform: "uppercase" }}>SAT, 24 MAY 2026</span>
+              {/* Glassmorphic Match Info Box */}
+              <div className="relative z-10 bg-black/25 backdrop-blur-md rounded-xl p-3.5 border border-white/15 space-y-2.5 mb-5 flex-grow">
+                <div className="flex items-center gap-2.5 text-white/90">
+                  <span className="material-symbols-outlined text-emerald-400" style={{ fontSize: "18px" }}>
+                    calendar_today
+                  </span>
+                  <span style={{ ...bodyBase, fontSize: "12px", fontWeight: 700 }} className="uppercase tracking-wide">
+                    SAT, 24 MAY 2026
+                  </span>
                 </div>
-                <div className="flex items-center gap-3 text-white/90">
-                  <span className="material-symbols-outlined" style={{ fontSize: "20px" }}>location_on</span>
-                  <span style={{ ...bodyBase, fontSize: "14px", textTransform: "uppercase" }}>HARARE SPORTS CLUB</span>
+                <div className="flex items-center gap-2.5 text-white/90">
+                  <span className="material-symbols-outlined text-emerald-400" style={{ fontSize: "18px" }}>
+                    location_on
+                  </span>
+                  <span style={{ ...bodyBase, fontSize: "12px", fontWeight: 700 }} className="uppercase tracking-wide truncate">
+                    HARARE SPORTS CLUB
+                  </span>
                 </div>
-                <div className="flex items-center gap-3 text-white/90">
-                  <span className="material-symbols-outlined" style={{ fontSize: "20px" }}>schedule</span>
-                  <span style={{ ...bodyBase, fontSize: "14px", textTransform: "uppercase" }}>15:30 CAT</span>
+                <div className="flex items-center gap-2.5 text-white/90">
+                  <span className="material-symbols-outlined text-emerald-400" style={{ fontSize: "18px" }}>
+                    schedule
+                  </span>
+                  <span style={{ ...bodyBase, fontSize: "12px", fontWeight: 700 }} className="uppercase tracking-wide">
+                    15:30 CAT KICKOFF
+                  </span>
                 </div>
               </div>
 
               {/* View Fixture CTA */}
               <Link
                 href="/match-centre"
-                className="w-full bg-transparent border border-white text-white flex items-center justify-center gap-2 rounded-sm hover:bg-white transition-colors duration-300"
+                className="relative z-10 w-full bg-white/10 hover:bg-white text-white hover:text-[#006747] border border-white/30 flex items-center justify-center gap-2 rounded-lg transition-all duration-300 shadow-md backdrop-blur-sm"
                 style={{
                   ...labelCaps,
                   padding: "12px",
-                  color: "white",
                 }}
-                onMouseEnter={(e) => { e.currentTarget.style.color = STITCH.primary; }}
-                onMouseLeave={(e) => { e.currentTarget.style.color = "white"; }}
               >
-                VIEW FIXTURE
+                VIEW MATCH CENTRE
                 <span className="material-symbols-outlined">arrow_forward</span>
               </Link>
             </div>
