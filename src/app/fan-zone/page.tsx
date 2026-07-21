@@ -1,10 +1,12 @@
 "use client";
 
 import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import EdgyGradient from "@/components/ui/EdgyGradient";
 import { Mail, CheckCircle2, Ticket, Percent, Newspaper, Trophy, ShieldCheck, ArrowRight, AlertCircle } from "lucide-react";
 import { saveSubmission } from "@/lib/mockStorage";
+
+import PageHero from "@/components/ui/PageHero";
 
 export default function FanZonePage() {
   const [name, setName] = useState("");
@@ -58,7 +60,7 @@ export default function FanZonePage() {
       } else {
         setSubmitError(res.message);
       }
-    } catch (err) {
+    } catch {
       setSubmitError("An error occurred during registration.");
     } finally {
       setIsSubmitting(false);
@@ -66,35 +68,23 @@ export default function FanZonePage() {
   };
 
   return (
-    <main className="bg-rich-black min-h-screen pt-24 pb-24 text-white relative overflow-hidden">
+    <main className="bg-rich-black min-h-screen pb-24 text-white relative overflow-hidden">
       <div className="absolute inset-0 pointer-events-none select-none z-0">
         <EdgyGradient opacity={0.4} />
       </div>
-      <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
-        
-        {/* Widescreen Hero Banner */}
-        <section className="relative w-full h-[40vh] min-h-[300px] rounded-3xl overflow-hidden flex items-end mb-16 shadow-2xl">
-          {/* Background image */}
-          <div className="absolute inset-0 z-0">
-            <div className="absolute inset-0 bg-[#006039] opacity-30 mix-blend-multiply" />
-            <div className="absolute inset-0 bg-linear-to-t from-rich-black via-rich-black/40 to-transparent" />
-            
-            {/* Ambient gold splash */}
-            <div className="absolute -top-12 -right-12 w-64 h-64 bg-zru-green/10 rounded-full blur-3xl" />
-          </div>
 
-          <div className="relative z-10 p-8 sm:p-12 max-w-3xl">
-            <span className="text-zru-green text-xs font-black uppercase tracking-[0.4em] mb-2 block">
-              OFFICIAL SUPPORTERS CLUB
-            </span>
-            <h1 className="text-4xl sm:text-6xl font-black uppercase italic tracking-tighter text-glow-green leading-none">
-              SABLES FAN ZONE
-            </h1>
-            <p className="text-white/80 text-sm md:text-base mt-4 font-medium leading-relaxed">
-              The heartbeat of Zimbabwe Rugby. Join our global supporters network, get the latest inside scoops, and unlock members-only benefits.
-            </p>
-          </div>
-        </section>
+      {/* PageHero header */}
+      <div className="pt-24 relative z-10">
+        <PageHero
+          title="Sables Fan Zone"
+          subtitle="The heartbeat of Zimbabwe Rugby. Join our global supporters network, get the latest inside scoops, and unlock members-only benefits."
+          tag="Official Supporters Club"
+          backgroundImage="/images/gallery/zimbabwe-sables-0351.webp"
+          breadcrumb={[{ label: "Fan Zone", href: "/fan-zone" }]}
+        />
+      </div>
+
+      <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 pt-16 relative z-10">
 
         {/* Two-Column Grid: Benefits + Registration */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
