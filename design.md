@@ -27,3 +27,8 @@ The typography system relies on two main typefaces to establish hierarchy and br
 ## 5. Spacing & Layout
 - Generous padding and "obsessive whitespace" are required to maintain the premium feel.
 - Standard border radii for inputs and smaller buttons: `0.5rem`.
+
+## 6. Asset & Crest Sourcing Blueprint
+- **Official Team Crest Sourcing Required**: All national team logos (Zimbabwe Sables, Lady Sables, Junior Sables, Cheetahs) and opposition team crests (Namibia, Kenya, Uganda, World Rugby participants) must be sourced as high-resolution vector SVGs or transparent high-DPI PNG master assets to eliminate pixelation and ensure crisp 4K display.
+- **Commercial Partner Logos**: Sponsor logos (Nedbank, CFAO Mobility, Gilbert, Seed Co, BLK) must strictly use official mono-chrome vector SVGs aligned with the ZRU Green visual system.
+

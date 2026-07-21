@@ -95,13 +95,25 @@ export default function UnifiedHubGrid() {
               </Link>
             </div>
 
-            {/* Green Body */}
+            {/* Stadium Floodlights Backdrop */}
             <div
-              className="flex flex-col flex-grow text-white"
-              style={{ backgroundColor: STITCH.primary, padding: "20px" }}
+              className="flex flex-col flex-grow text-white relative overflow-hidden"
+              style={{
+                background: "radial-gradient(circle at 50% 25%, #007A50 0%, #004D2C 60%, #002D1A 100%)",
+                padding: "20px",
+              }}
             >
+              {/* Subtle Pitch Grid Overlay */}
+              <div
+                className="absolute inset-0 opacity-10 pointer-events-none"
+                style={{
+                  backgroundImage: "radial-gradient(circle, #ffffff 1px, transparent 1px)",
+                  backgroundSize: "20px 20px",
+                }}
+              />
+
               {/* News Items Stack with Photography Thumbnails */}
-              <div className="space-y-4 flex-grow">
+              <div className="relative z-10 space-y-4 flex-grow">
                 
                 {/* ── 1. Featured Lead Article ── */}
                 <Link href="/media" className="group block border-b border-white/20 pb-4">
@@ -189,7 +201,7 @@ export default function UnifiedHubGrid() {
               {/* Read More CTA */}
               <Link
                 href="/media"
-                className="flex items-center gap-2 text-white hover:opacity-80 transition-opacity mt-5 pt-3 border-t border-white/10"
+                className="relative z-10 flex items-center gap-2 text-white hover:opacity-80 transition-opacity mt-5 pt-3 border-t border-white/10"
                 style={labelCaps}
               >
                 READ MORE
@@ -266,8 +278,14 @@ export default function UnifiedHubGrid() {
 
                 {/* Namibia */}
                 <div className="flex flex-col items-center group/team cursor-pointer">
-                  <div className="relative w-16 h-16 bg-gradient-to-br from-blue-900 to-emerald-950 rounded-full flex items-center justify-center mb-2 shadow-lg ring-2 ring-white/20 group-hover/team:scale-105 transition-transform border border-white/30">
-                    <span className="text-2xl drop-shadow-md">🇳🇦</span>
+                  <div className="relative w-16 h-16 bg-white rounded-full flex items-center justify-center p-2 mb-2 shadow-lg ring-2 ring-white/30 group-hover/team:scale-105 transition-transform border border-white/20">
+                    <Image
+                      src="/images/teams/namibia.png"
+                      alt="Namibia Welwitschias"
+                      width={44}
+                      height={44}
+                      className="object-contain"
+                    />
                   </div>
                   <span style={{ ...unison, fontSize: "12px", lineHeight: "1.1" }} className="text-center text-white">
                     NAMIBIA<br />WELWITSCHIAS
@@ -320,7 +338,7 @@ export default function UnifiedHubGrid() {
 
           {/* ═══════════ CARD 3: TICKETS ═══════════ */}
           <div className="flex flex-col h-full bg-white rounded-xl overflow-hidden shadow-sm border border-gray-200">
-            {/* Green Badge Header (inline, self-start) */}
+            {/* Green Badge Header */}
             <div
               className="inline-block self-start rounded-br-lg text-white"
               style={{
@@ -333,33 +351,54 @@ export default function UnifiedHubGrid() {
               <span>TICKETS</span>
             </div>
 
-            {/* White Body */}
-            <div className="p-6 flex flex-col flex-grow bg-white text-black">
-              {/* Large Rotated Ticket Icon */}
-              <div className="mb-12 mt-8 flex justify-center">
-                <span
-                  className="material-symbols-outlined text-gray-800"
-                  style={{ fontSize: "80px", transform: "rotate(-15deg)" }}
-                >
-                  confirmation_number
-                </span>
+            {/* White Body with Ticket Pass Design */}
+            <div className="p-6 flex flex-col flex-grow bg-white text-black justify-between">
+              
+              {/* Ticket Pass Graphic */}
+              <div className="relative my-3 p-4 bg-gradient-to-br from-emerald-50 via-white to-emerald-50/40 rounded-xl border border-emerald-600/20 shadow-sm overflow-hidden">
+                {/* Perforated Divider */}
+                <div className="absolute top-0 bottom-0 right-14 border-r-2 border-dashed border-emerald-600/30" />
+                
+                <div className="flex justify-between items-center pr-16">
+                  <div>
+                    <span className="inline-block px-2 py-0.5 bg-[#006747] text-white rounded text-[9px] font-bold tracking-widest uppercase mb-1">
+                      MATCH PASS
+                    </span>
+                    <p style={{ ...unison, fontSize: "14px" }} className="text-gray-900 leading-tight">
+                      SABLES VS NAMIBIA
+                    </p>
+                    <p className="text-[10px] font-bold text-gray-500 uppercase tracking-wider mt-0.5">
+                      HARARE SPORTS CLUB
+                    </p>
+                  </div>
+                </div>
+
+                {/* Right Stub Section */}
+                <div className="absolute top-0 bottom-0 right-0 w-14 bg-[#006747] flex flex-col items-center justify-center text-white p-1">
+                  <span className="material-symbols-outlined text-emerald-300 mb-1" style={{ fontSize: "20px" }}>
+                    confirmation_number
+                  </span>
+                  <span className="text-[9px] font-extrabold tracking-widest uppercase text-white font-heading">
+                    FROM $5
+                  </span>
+                </div>
               </div>
 
-              {/* Text + CTA */}
-              <div className="flex-grow flex flex-col justify-end">
-                <h3 style={h2Style} className="mb-4 text-black">
+              {/* Text & CTA */}
+              <div className="flex-grow flex flex-col justify-end mt-4">
+                <h3 style={h2Style} className="mb-2 text-black">
                   BE PART OF<br />THE ACTION
                 </h3>
-                <p style={{ ...bodyBase, fontSize: "14px" }} className="text-gray-600 mb-8">
-                  Secure your seat and support the Sables.
+                <p style={{ ...bodyBase, fontSize: "14px" }} className="text-gray-600 mb-6">
+                  Secure your seat and support the Sables live at the stadium.
                 </p>
                 <Link
                   href="/tickets"
-                  className="w-full text-white flex items-center justify-center gap-2 rounded-sm hover:opacity-90 transition-opacity duration-300"
+                  className="w-full text-white flex items-center justify-center gap-2 rounded-lg hover:bg-[#004D2C] transition-colors duration-300 shadow-md"
                   style={{
                     ...labelCaps,
                     backgroundColor: STITCH.primary,
-                    padding: "12px",
+                    padding: "14px",
                   }}
                 >
                   BUY TICKETS
