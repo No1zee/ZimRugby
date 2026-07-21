@@ -11,7 +11,7 @@ const dockItems = [
   { label: "Home", icon: Home, href: "/" },
   { label: "Matches", icon: Trophy, href: "/match-centre" },
   { label: "Media", icon: Newspaper, href: "/media" },
-  { label: "Clubhouse", icon: Users, href: "/about/clubhouse" },
+  { label: "Fan Zone", icon: Users, href: "/fan-zone" },
   { label: "Menu", icon: Menu, href: "#menu", isMenu: true },
 ];
 
