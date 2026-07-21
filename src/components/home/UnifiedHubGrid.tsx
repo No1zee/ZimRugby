@@ -2,6 +2,7 @@
 
 import React from "react";
 import Link from "next/link";
+import Image from "next/image";
 
 /* ═══════════════════════════════════════════════════════════════════
    UnifiedHubGrid — Exact Stitch Design Token Implementation
@@ -97,45 +98,98 @@ export default function UnifiedHubGrid() {
             {/* Green Body */}
             <div
               className="flex flex-col flex-grow text-white"
-              style={{ backgroundColor: STITCH.primary, padding: "24px" }}
+              style={{ backgroundColor: STITCH.primary, padding: "20px" }}
             >
-              {/* Article Icon */}
-              <div className="mb-6 opacity-50 border-b border-white/20 pb-4">
-                <span className="material-symbols-outlined" style={{ fontSize: "36px" }}>article</span>
-              </div>
+              {/* News Items Stack with Photography Thumbnails */}
+              <div className="space-y-4 flex-grow">
+                
+                {/* ── 1. Featured Lead Article ── */}
+                <Link href="/media" className="group block border-b border-white/20 pb-4">
+                  <div className="flex gap-3 items-start">
+                    <div className="relative w-20 h-20 rounded-lg overflow-hidden shrink-0 border border-white/20 shadow-sm">
+                      <Image
+                        src="/images/teams/sables.jpg"
+                        alt="Sables preparing for Nations Cup"
+                        fill
+                        className="object-cover transition-transform duration-300 group-hover:scale-110"
+                        sizes="80px"
+                      />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <span className="inline-block px-2 py-0.5 bg-white/15 backdrop-blur-sm rounded text-[9px] font-bold tracking-widest text-emerald-300 uppercase mb-1">
+                        SABLES
+                      </span>
+                      <h3
+                        style={{ ...h3Style, fontSize: "14px", lineHeight: "1.25" }}
+                        className="text-white group-hover:text-emerald-300 transition-colors line-clamp-2"
+                      >
+                        SABLES PREPARE FOR NATIONS CUP CLASH
+                      </h3>
+                      <p style={{ ...labelCaps, fontSize: "9px" }} className="text-white/60 mt-1">
+                        15 MAY 2026
+                      </p>
+                    </div>
+                  </div>
+                </Link>
 
-              {/* News Items */}
-              <div className="space-y-6 flex-grow">
-                <div className="border-b border-white/20 pb-4">
-                  <h3 style={{ ...h3Style, fontSize: "16px" }} className="mb-1 text-white">
-                    SABLES PREPARE FOR NATIONS CUP CLASH
-                  </h3>
-                  <p style={{ ...labelCaps, fontSize: "10px" }} className="text-white/70">
-                    15 MAY 2026
-                  </p>
-                </div>
-                <div className="border-b border-white/20 pb-4">
-                  <h3 style={{ ...h3Style, fontSize: "16px" }} className="mb-1 text-white">
-                    JUNIOR SABLES SQUAD ANNOUNCED
-                  </h3>
-                  <p style={{ ...labelCaps, fontSize: "10px" }} className="text-white/70">
-                    14 MAY 2026
-                  </p>
-                </div>
-                <div>
-                  <h3 style={{ ...h3Style, fontSize: "16px" }} className="mb-1 text-white">
-                    ZIMBABWE 7S TEAM GEARING UP FOR AFRICA CUP
-                  </h3>
-                  <p style={{ ...labelCaps, fontSize: "10px" }} className="text-white/70">
-                    12 MAY 2026
-                  </p>
-                </div>
+                {/* ── 2. Secondary Article ── */}
+                <Link href="/media" className="group block border-b border-white/20 pb-4">
+                  <div className="flex gap-3 items-center">
+                    <div className="relative w-13 h-13 rounded-md overflow-hidden shrink-0 border border-white/20 shadow-sm">
+                      <Image
+                        src="/images/teams/junior-sables.jpg"
+                        alt="Junior Sables Squad"
+                        fill
+                        className="object-cover transition-transform duration-300 group-hover:scale-110"
+                        sizes="52px"
+                      />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <h3
+                        style={{ ...h3Style, fontSize: "13px", lineHeight: "1.25" }}
+                        className="text-white group-hover:text-emerald-300 transition-colors line-clamp-2"
+                      >
+                        JUNIOR SABLES SQUAD ANNOUNCED
+                      </h3>
+                      <p style={{ ...labelCaps, fontSize: "9px" }} className="text-white/60 mt-0.5">
+                        14 MAY 2026
+                      </p>
+                    </div>
+                  </div>
+                </Link>
+
+                {/* ── 3. Tertiary Article ── */}
+                <Link href="/media" className="group block">
+                  <div className="flex gap-3 items-center">
+                    <div className="relative w-13 h-13 rounded-md overflow-hidden shrink-0 border border-white/20 shadow-sm">
+                      <Image
+                        src="/images/teams/cheetahs.jpg"
+                        alt="Zimbabwe 7s Cheetahs"
+                        fill
+                        className="object-cover transition-transform duration-300 group-hover:scale-110"
+                        sizes="52px"
+                      />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <h3
+                        style={{ ...h3Style, fontSize: "13px", lineHeight: "1.25" }}
+                        className="text-white group-hover:text-emerald-300 transition-colors line-clamp-2"
+                      >
+                        ZIMBABWE 7S GEARING UP FOR AFRICA CUP
+                      </h3>
+                      <p style={{ ...labelCaps, fontSize: "9px" }} className="text-white/60 mt-0.5">
+                        12 MAY 2026
+                      </p>
+                    </div>
+                  </div>
+                </Link>
+
               </div>
 
               {/* Read More CTA */}
               <Link
                 href="/media"
-                className="flex items-center gap-2 text-white hover:opacity-80 transition-opacity mt-8"
+                className="flex items-center gap-2 text-white hover:opacity-80 transition-opacity mt-5 pt-3 border-t border-white/10"
                 style={labelCaps}
               >
                 READ MORE
