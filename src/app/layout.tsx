@@ -67,7 +67,7 @@ export default function RootLayout({
         </noscript>
         <ClientLayoutShell>
           <Navigation />
-          <main className="relative overflow-hidden pb-24 min-h-screen bg-rich-black">
+            <main className="relative overflow-hidden pb-24 min-h-screen bg-white">
             {children}
           </main>
           <Footer />

@@ -123,19 +123,19 @@ const ProductCard = ({ item, idx }: { item: typeof previewItems[0], idx: number 
             onMouseMove={handleMouseMove}
             onMouseLeave={handleMouseLeave}
             style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
-            className={`relative h-48 md:h-64 bg-[#14201c] rounded-xl overflow-hidden shadow-xs transition-all duration-700 ease-out border border-white/5 flex items-center justify-center`}
+            className={`relative h-48 md:h-64 bg-milk-white rounded-xl overflow-hidden shadow-xs transition-all duration-700 ease-out border border-black/5 flex items-center justify-center`}
           >
             {/* Badge: Minimalist Designer Label */}
             {item.badge && (
-              <div className="absolute top-4 left-4 z-30 border border-white/10 bg-neutral-900/90 text-white text-[8px] font-black uppercase tracking-[0.3em] px-2.5 py-1">
+              <div className="absolute top-4 left-4 z-30 border border-black/10 bg-white text-rich-black text-[8px] font-black uppercase tracking-[0.3em] px-2.5 py-1">
                 {item.badge}
               </div>
             )}
 
             {/* Icon Portal */}
             <div className="absolute top-4 right-4 z-30 opacity-0 group-hover:opacity-100 transition-all duration-500 transform translate-y-[-10px] group-hover:translate-y-0">
-               <div className="bg-neutral-900/90 p-2 rounded-full border border-white/10 shadow-lg">
-                 <ShoppingBag className="w-3.5 h-3.5 text-white" />
+               <div className="bg-white p-2 rounded-full border border-black/10 shadow-lg">
+                 <ShoppingBag className="w-3.5 h-3.5 text-rich-black" />
                </div>
             </div>
 
@@ -151,7 +151,7 @@ const ProductCard = ({ item, idx }: { item: typeof previewItems[0], idx: number 
                     width={220}
                     height={220}
                     sizes="(max-width: 768px) 50vw, 220px"
-                    className="object-contain drop-shadow-[0_15px_30px_rgba(0,0,0,0.4)] group-hover:scale-105 transition-transform duration-1000 ease-out"
+                    className="object-contain drop-shadow-[0_15px_30px_rgba(0,0,0,0.15)] group-hover:scale-105 transition-transform duration-1000 ease-out"
                     priority={idx === 0}
                   />
               </div>
@@ -159,7 +159,7 @@ const ProductCard = ({ item, idx }: { item: typeof previewItems[0], idx: number 
 
             {/* Specular Highlight */}
             <motion.div 
-              className="absolute inset-0 z-20 pointer-events-none bg-linear-to-tr from-transparent via-white/10 to-transparent opacity-0 group-hover:opacity-100 mix-blend-overlay"
+              className="absolute inset-0 z-20 pointer-events-none bg-linear-to-tr from-transparent via-white/30 to-transparent opacity-0 group-hover:opacity-100 mix-blend-overlay"
               style={{ opacity: shineOpacity, x: shineX, scale: 2 }}
             />
           </motion.div>
@@ -167,13 +167,13 @@ const ProductCard = ({ item, idx }: { item: typeof previewItems[0], idx: number 
           {/* Card Meta Content */}
           <div className="flex-grow flex flex-col justify-between mt-4 space-y-3">
             <div className="space-y-1">
-              <span className="text-[10px] font-black uppercase tracking-[0.14em] text-white/48 block">
+              <span className="text-[10px] font-black uppercase tracking-[0.14em] text-rich-black/48 block">
                 {item.category}
               </span>
-              <h3 className="text-base md:text-lg font-semibold tracking-[-0.01em] text-white line-clamp-1">
+              <h3 className="text-base md:text-lg font-semibold tracking-[-0.01em] text-rich-black line-clamp-1">
                 {item.name}
               </h3>
-              <p className="text-xs md:text-sm leading-relaxed text-white/72 line-clamp-2">
+              <p className="text-xs md:text-sm leading-relaxed text-rich-black/72 line-clamp-2">
                 {item.description}
               </p>
             </div>
@@ -182,11 +182,11 @@ const ProductCard = ({ item, idx }: { item: typeof previewItems[0], idx: number 
               <div className="text-base font-black text-zru-green">
                 <span className="text-[10px] mr-1 align-top opacity-60">USD</span>{item.price.replace('$', '')}
               </div>
-              <div className="flex items-center justify-between border-t border-white/8 pt-3 mt-1">
-                <span className="text-[10px] font-black uppercase text-white/95 tracking-[0.14em] flex items-center gap-1">
+              <div className="flex items-center justify-between border-t border-black/8 pt-3 mt-1">
+                <span className="text-[10px] font-black uppercase text-rich-black/95 tracking-[0.14em] flex items-center gap-1">
                   Shop Now
                 </span>
-                <ChevronRight className="w-3.5 h-3.5 text-white/60 group-hover:translate-x-1 transition-transform" />
+                <ChevronRight className="w-3.5 h-3.5 text-rich-black/60 group-hover:translate-x-1 transition-transform" />
               </div>
             </div>
           </div>

@@ -28,38 +28,38 @@ export async function getFixtureTwinData(): Promise<FixtureTwinData> {
   const fallback = {
     previous: {
       id: "prev-1",
-      competition: "Africa Cup",
-      round: "Semi-Final",
-      date: "22 June 2026",
+      competition: "World Rugby Nations Cup",
+      round: "Round 4",
+      date: "18 July 2026",
       time: "15:00",
-      venue: "Kyadondo Rugby Club, Kampala",
+      venue: "Princess Auto Stadium, Winnipeg",
       homeTeam: {
-        name: "Zimbabwe Sables",
-        logo: "/zru logo main.svg",
-        score: 32
+        name: "Canada",
+        logo: "/images/match-logos/CANADA.png",
+        score: 23
       },
       awayTeam: {
-        name: "Namibia Welwitschias",
-        logo: "https://flagcdn.com/w160/na.png",
-        score: 10
+        name: "Zimbabwe",
+        logo: "/images/match-logos/ZIM.png",
+        score: 19
       },
-      status: "completed" as const,
+      status: "finished" as const,
       category: "Sables"
     },
     upcoming: {
       id: "next-1",
       competition: "Africa Cup",
       round: "Cup Final",
-      date: "06 July 2026",
+      date: "06 September 2026",
       time: "16:00",
-      venue: "Mweru Stadium, Lusaka",
+      venue: "Harare Sports Club",
       homeTeam: {
         name: "Zimbabwe Sables",
-        logo: "/zru logo main.svg"
+        logo: "/images/match-logos/ZIM.png"
       },
       awayTeam: {
-        name: "Algeria",
-        logo: "https://flagcdn.com/w160/dz.png"
+        name: "Namibia",
+        logo: "https://flagcdn.com/w160/na.png"
       },
       status: "upcoming" as const,
       category: "Sables"

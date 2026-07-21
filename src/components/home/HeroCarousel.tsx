@@ -329,7 +329,7 @@ export default function HeroCarousel({ slides }: { slides: HeroSlideData[] }) {
       </div>
 
       {/* Bottom Fade */}
-      <div className="absolute bottom-0 left-0 w-full h-48 bg-linear-to-t from-rich-black via-rich-black/50 to-transparent pointer-events-none z-10" />
+      <div className="absolute bottom-0 left-0 w-full h-48 bg-linear-to-t from-white via-white/50 to-transparent pointer-events-none z-10" />
 
 
       {/* Decorative Slanted Brand Frames (Angle-Cut Overlays) */}

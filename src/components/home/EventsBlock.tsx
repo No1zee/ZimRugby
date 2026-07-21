@@ -87,7 +87,7 @@ export default function EventsBlock() {
                   <span className="text-zru-green text-[10px] font-black uppercase tracking-[0.4em]">The Calendar</span>
                 </div>
                 <h2 className="font-heading text-5xl md:text-7xl tracking-wider text-rich-black">
-                  WHAT'S <span className="text-stroke-black text-transparent">ON?</span>
+                  WHAT&apos;S <span className="text-stroke-black text-transparent">ON?</span>
                 </h2>
               </div>
               
@@ -122,7 +122,7 @@ export default function EventsBlock() {
                     <Link href={`/events/${event.id}`} className="block w-full">
                       <div className="card-dark p-4 md:p-5 flex flex-col justify-between h-[420px] md:h-[450px] w-full select-none hover:border-zru-green/30 transition-all duration-300">
                         {/* Top Image Section */}
-                        <div className="relative h-40 md:h-48 w-full overflow-hidden rounded-xl bg-neutral-900 shrink-0">
+                        <div className="relative h-40 md:h-48 w-full overflow-hidden rounded-xl bg-milk-white shrink-0">
                           <Image 
                             src={event.image || "/images/events/africa-cup.jpg"} 
                             alt={`${event.title}`}
@@ -135,20 +135,20 @@ export default function EventsBlock() {
                         {/* Card Body */}
                         <div className="flex-grow flex flex-col justify-between mt-4">
                           <div className="space-y-2">
-                            <span className="text-[10px] font-black uppercase tracking-[0.14em] text-white/48 block">
+                            <span className="text-[10px] font-black uppercase tracking-[0.14em] text-rich-black/48 block">
                               {event.subtitle}
                             </span>
-                            <h3 className="text-base md:text-lg font-semibold tracking-[-0.01em] text-white line-clamp-1">
+                            <h3 className="text-base md:text-lg font-semibold tracking-[-0.01em] text-rich-black line-clamp-1">
                               {event.title}
                             </h3>
-                            <p className="text-xs md:text-sm leading-relaxed text-white/72 line-clamp-2">
+                            <p className="text-xs md:text-sm leading-relaxed text-rich-black/72 line-clamp-2">
                               {event.description}
                             </p>
                           </div>
 
                           {/* Footer with Divider */}
-                          <div className="border-t border-white/8 pt-3 mt-3">
-                            <div className="flex items-center justify-between text-[10px] font-medium text-white/48 uppercase tracking-[0.14em]">
+                          <div className="border-t border-black/8 pt-3 mt-3">
+                            <div className="flex items-center justify-between text-[10px] font-medium text-rich-black/48 uppercase tracking-[0.14em]">
                               <span className="flex items-center gap-1.5"><Calendar className="w-3.5 h-3.5 text-zru-green" /> {event.date}</span>
                               <span className="flex items-center gap-1.5 truncate max-w-[150px]"><MapPin className="w-3.5 h-3.5 text-zru-green" /> {event.location}</span>
                             </div>

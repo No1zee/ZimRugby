@@ -34,7 +34,7 @@ export default function NewsMediaBlock({ initialReports = [] }: NewsMediaBlockPr
         <ScrollReveal className="flex flex-col md:flex-row justify-between items-end gap-10 mb-12">
           <div className="space-y-4">
             <div className="flex items-center gap-2">
-              <div className="w-8 h-px bg-white/40" />
+              <div className="w-8 h-px bg-black/20" />
               <span className="text-rich-black/60 text-[10px] font-black uppercase tracking-[0.5em]">The Wire</span>
             </div>
             <h2 className="font-heading text-5xl md:text-7xl tracking-wider text-rich-black">
@@ -67,13 +67,13 @@ export default function NewsMediaBlock({ initialReports = [] }: NewsMediaBlockPr
           {/* Left Column: Featured Hero Card (1/3 width, tall height) */}
           <motion.div variants={staggerItemVariants} className="lg:col-span-1">
              <Link href={`/media/${featuredStory.id}`} className="block h-full group">
-                <div className="h-[524px] relative overflow-hidden card-dark border border-white/8 hover:border-zru-green/30 transition-all duration-300 p-0 rounded-2xl">
+                <div className="h-[524px] relative overflow-hidden card-dark border border-black/8 hover:border-zru-green/30 transition-all duration-300 p-0 rounded-2xl">
                   <Image
                     src={featuredStory.image}
                     alt={featuredStory.title}
                     fill
                     sizes="(max-width: 768px) 100vw, 33vw"
-                    className="object-cover transition-transform duration-1000 group-hover:scale-105 opacity-60 group-hover:opacity-100"
+                    className="object-cover transition-transform duration-1000 group-hover:scale-105 opacity-80 group-hover:opacity-100"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent" />
                   <div className="absolute inset-0 p-8 flex flex-col justify-end space-y-4">
@@ -105,13 +105,13 @@ export default function NewsMediaBlock({ initialReports = [] }: NewsMediaBlockPr
           <motion.div variants={staggerItemVariants} className="lg:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-6">
              {item1 && (
                <Link href={`/media/${item1.id}`} className="col-span-1 block group">
-                 <div className="h-[250px] relative overflow-hidden card-dark border border-white/8 hover:border-zru-green/30 transition-all duration-300 p-0 rounded-2xl">
+                 <div className="h-[250px] relative overflow-hidden card-dark border border-black/8 hover:border-zru-green/30 transition-all duration-300 p-0 rounded-2xl">
                     <Image 
                        src={item1.image} 
                        alt={item1.title} 
                        fill
                        sizes="(max-width: 768px) 100vw, 30vw"
-                       className="object-cover opacity-40 group-hover:opacity-85 transition-all duration-700 group-hover:scale-105" 
+                       className="object-cover opacity-60 group-hover:opacity-85 transition-all duration-700 group-hover:scale-105" 
                      />
                      <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent" />
                      <div className="absolute inset-0 p-6 flex flex-col justify-end space-y-3">
@@ -130,13 +130,13 @@ export default function NewsMediaBlock({ initialReports = [] }: NewsMediaBlockPr
              
              {item2 && (
                <Link href={`/media/${item2.id}`} className="col-span-1 block group">
-                 <div className="h-[250px] relative overflow-hidden card-dark border border-white/8 hover:border-zru-green/30 transition-all duration-300 p-0 rounded-2xl">
+                 <div className="h-[250px] relative overflow-hidden card-dark border border-black/8 hover:border-zru-green/30 transition-all duration-300 p-0 rounded-2xl">
                     <Image 
                        src={item2.image} 
                        alt={item2.title} 
                        fill
                        sizes="(max-width: 768px) 100vw, 30vw"
-                       className="object-cover opacity-40 group-hover:opacity-85 transition-all duration-700 group-hover:scale-105" 
+                       className="object-cover opacity-60 group-hover:opacity-85 transition-all duration-700 group-hover:scale-105" 
                      />
                      <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent" />
                      <div className="absolute inset-0 p-6 flex flex-col justify-end space-y-3">
@@ -155,13 +155,13 @@ export default function NewsMediaBlock({ initialReports = [] }: NewsMediaBlockPr
 
              {item3 && (
                <Link href={`/media/${item3.id}`} className="col-span-1 md:col-span-2 block group">
-                 <div className="h-[250px] relative overflow-hidden card-dark border border-white/8 hover:border-zru-green/30 transition-all duration-300 p-0 rounded-2xl">
+                 <div className="h-[250px] relative overflow-hidden card-dark border border-black/8 hover:border-zru-green/30 transition-all duration-300 p-0 rounded-2xl">
                     <Image 
                        src={item3.image} 
                        alt={item3.title} 
                        fill
                        sizes="(max-width: 768px) 100vw, 60vw"
-                       className="object-cover opacity-40 group-hover:opacity-85 transition-all duration-700 group-hover:scale-105" 
+                       className="object-cover opacity-60 group-hover:opacity-85 transition-all duration-700 group-hover:scale-105" 
                      />
                      <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent" />
                      <div className="absolute inset-0 p-6 flex flex-col justify-end space-y-3">

@@ -60,10 +60,10 @@ export default function Footer() {
   }
 
   return (
-    <footer className="bg-clubhouse-charcoal text-white relative overflow-hidden pt-16 pb-8">
+    <footer className="bg-green-dark text-white relative overflow-hidden pt-16 pb-8">
       
       {/* Dynamic Background */}
-      <div className="absolute top-0 right-0 w-1/3 h-full bg-linear-to-l from-zru-green/5 to-transparent pointer-events-none" />
+      <div className="absolute top-0 right-0 w-1/3 h-full bg-linear-to-l from-zru-green/15 to-transparent pointer-events-none" />
 
       <div className="max-w-[1440px] mx-auto px-6 relative z-10">
         

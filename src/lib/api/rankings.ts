@@ -23,24 +23,30 @@ export interface RankingsData {
 export async function getRankingsData(): Promise<RankingsData> {
   const mockRankings: RankingsData = {
     world: {
-      position: 28,
-      previousPosition: 31,
-      points: 54.12,
-      trend: "up",
-      lastUpdated: "June 2026"
+      position: 25,
+      previousPosition: 24,
+      points: 58.59,
+      trend: "down",
+      lastUpdated: "13 July 2026"
     },
     africa: {
-      position: 2,
-      previousPosition: 3,
-      points: 54.12,
-      trend: "up",
-      lastUpdated: "June 2026"
+      position: 3,
+      previousPosition: 2,
+      points: 58.59,
+      trend: "down",
+      lastUpdated: "13 July 2026"
     },
     rivals: [
       {
+        name: "South Africa",
+        position: 1,
+        points: 93.96,
+        logo: "https://flagcdn.com/w160/za.png"
+      },
+      {
         name: "Namibia",
-        position: 22,
-        points: 60.56,
+        position: 26,
+        points: 56.96,
         logo: "https://flagcdn.com/w160/na.png"
       },
       {
@@ -48,12 +54,6 @@ export async function getRankingsData(): Promise<RankingsData> {
         position: 34,
         points: 49.80,
         logo: "https://flagcdn.com/w160/ke.png"
-      },
-      {
-        name: "Uganda",
-        position: 38,
-        points: 47.10,
-        logo: "https://flagcdn.com/w160/ug.png"
       }
     ]
   };
@@ -75,14 +75,14 @@ export async function getRankingsData(): Promise<RankingsData> {
             previousPosition: mainRank.world_previous_position ? Number(mainRank.world_previous_position) : undefined,
             points: Number(mainRank.world_points),
             trend: mainRank.world_trend || "stable",
-            lastUpdated: mainRank.last_updated || "June 2026"
+            lastUpdated: mainRank.last_updated || "13 July 2026"
           },
           africa: {
             position: Number(mainRank.africa_position),
             previousPosition: mainRank.africa_previous_position ? Number(mainRank.africa_previous_position) : undefined,
             points: Number(mainRank.africa_points),
             trend: mainRank.africa_trend || "stable",
-            lastUpdated: mainRank.last_updated || "June 2026"
+            lastUpdated: mainRank.last_updated || "13 July 2026"
           },
           rivals: (rivalsResponse || []).map((rival: any) => ({
             name: rival.name,

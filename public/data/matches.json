@@ -3,11 +3,11 @@
     "id": "2026-fixture-01",
     "homeTeam": {
       "name": "Zimbabwe",
-      "logo": "https://r2.thesportsdb.com/images/media/team/badge/6iaf541773658274.png"
+      "logo": "/images/match-logos/ZIM.png"
     },
     "awayTeam": {
       "name": "Zambia",
-      "logo": "https://r2.thesportsdb.com/images/media/team/badge/k4axcx1773657710.png"
+      "logo": "https://flagcdn.com/w160/zm.png"
     },
     "date": "25 April, 2026",
     "time": "15:00",
@@ -24,11 +24,11 @@
     "id": "2026-fixture-02",
     "homeTeam": {
       "name": "Uganda",
-      "logo": "https://r2.thesportsdb.com/images/media/team/badge/7vehya1738931872.png"
+      "logo": "https://flagcdn.com/w160/ug.png"
     },
     "awayTeam": {
       "name": "Zimbabwe",
-      "logo": "https://r2.thesportsdb.com/images/media/team/badge/6iaf541773658274.png"
+      "logo": "/images/match-logos/ZIM.png"
     },
     "date": "30 May, 2026",
     "time": "15:30",
@@ -45,76 +45,84 @@
     "id": "2026-fixture-03",
     "homeTeam": {
       "name": "South Africa 'A'",
-      "logo": "https://r2.thesportsdb.com/images/media/team/badge/k5174f1721829684.png"
+      "logo": "/images/match-logos/SOUTH AFRICA A.png"
     },
     "awayTeam": {
       "name": "Zimbabwe",
-      "logo": "https://r2.thesportsdb.com/images/media/team/badge/6iaf541773658274.png"
+      "logo": "/images/match-logos/ZIM.png"
     },
     "date": "20 June, 2026",
     "time": "16:00",
-    "venue": "Nelson Mandela Bay Stadium",
-    "competition": "International Challenge",
+    "venue": "Nelson Mandela Bay Stadium, Gqeberha",
+    "competition": "Men's Internationals 2026",
     "category": "Sables",
     "status": "finished",
     "score": {
-      "home": 34,
-      "away": 28
+      "home": 40,
+      "away": 0
     }
   },
   {
     "id": "2026-fixture-04",
     "homeTeam": {
       "name": "Tonga",
-      "logo": "https://r2.thesportsdb.com/images/media/team/badge/c17bu51566382452.png"
+      "logo": "/images/match-logos/TONGA.png"
     },
     "awayTeam": {
       "name": "Zimbabwe",
-      "logo": "https://r2.thesportsdb.com/images/media/team/badge/6iaf541773658274.png"
+      "logo": "/images/match-logos/ZIM.png"
     },
     "date": "4 July, 2026",
     "time": "15:00",
-    "venue": "Infinity Park, Denver",
-    "competition": "Nations Cup",
+    "venue": "DICK'S Sporting Goods Park, Denver",
+    "competition": "World Rugby Nations Cup",
     "category": "Sables",
     "status": "finished",
     "score": {
-      "home": 15,
-      "away": 22
+      "home": 36,
+      "away": 26
     }
   },
   {
     "id": "2026-fixture-05",
     "homeTeam": {
       "name": "USA",
-      "logo": "https://r2.thesportsdb.com/images/media/team/badge/umtlrj1566382360.png"
+      "logo": "/images/match-logos/USA.png"
     },
     "awayTeam": {
       "name": "Zimbabwe",
-      "logo": "https://r2.thesportsdb.com/images/media/team/badge/6iaf541773658274.png"
+      "logo": "/images/match-logos/ZIM.png"
     },
     "date": "11 July, 2026",
     "time": "14:00",
-    "venue": "American Legion Memorial",
-    "competition": "Nations Cup",
+    "venue": "American Legion Memorial Stadium, Charlotte",
+    "competition": "World Rugby Nations Cup",
     "category": "Sables",
-    "status": "upcoming"
+    "status": "finished",
+    "score": {
+      "home": 31,
+      "away": 15
+    }
   },
   {
     "id": "2026-fixture-06",
     "homeTeam": {
       "name": "Canada",
-      "logo": "https://r2.thesportsdb.com/images/media/team/badge/euxlik1566381764.png"
+      "logo": "/images/match-logos/CANADA.png"
     },
     "awayTeam": {
       "name": "Zimbabwe",
-      "logo": "https://r2.thesportsdb.com/images/media/team/badge/6iaf541773658274.png"
+      "logo": "/images/match-logos/ZIM.png"
     },
     "date": "18 July, 2026",
     "time": "15:00",
     "venue": "Princess Auto Stadium, Winnipeg",
-    "competition": "Nations Cup",
+    "competition": "World Rugby Nations Cup",
     "category": "Sables",
-    "status": "upcoming"
+    "status": "finished",
+    "score": {
+      "home": 23,
+      "away": 19
+    }
   }
 ]

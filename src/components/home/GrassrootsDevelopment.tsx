@@ -68,7 +68,7 @@ export default function GrassrootsDevelopment() {
                 <motion.div
                   key={path.title}
                   variants={staggerItemVariants}
-                  className="group flex flex-col justify-between rounded-2xl border border-white/8 hover:border-zru-green/35 transition-all duration-300 shadow-[0_8px_24px_rgba(0,0,0,0.22)] overflow-hidden"
+                  className="group flex flex-col justify-between rounded-2xl border border-black/8 hover:border-zru-green/35 transition-all duration-300 shadow-[0_8px_24px_rgba(0,0,0,0.06)] overflow-hidden"
                 >
                   <Link
                     href={path.href}
@@ -78,16 +78,16 @@ export default function GrassrootsDevelopment() {
                       <div className="w-12 h-12 rounded-2xl bg-zru-green/10 flex items-center justify-center border border-zru-green/20 text-zru-green group-hover:rotate-6 transition-transform duration-300">
                         <Icon className="w-6 h-6" />
                       </div>
-                      <h3 className="font-heading text-2xl text-white tracking-wide uppercase">
+                      <h3 className="font-heading text-2xl text-rich-black tracking-wide uppercase">
                         {path.title}
                       </h3>
-                      <p className="text-white/60 text-sm font-body leading-relaxed">
+                      <p className="text-rich-black/60 text-sm font-body leading-relaxed">
                         {path.description}
                       </p>
                     </div>
 
                     <div className="pt-8">
-                      <span className="inline-flex items-center gap-2 text-xs font-heading tracking-widest uppercase text-white group-hover:text-zru-green transition-colors">
+                      <span className="inline-flex items-center gap-2 text-xs font-heading tracking-widest uppercase text-rich-black group-hover:text-zru-green transition-colors">
                         Learn More <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                       </span>
                     </div>
@@ -107,16 +107,16 @@ export default function GrassrootsDevelopment() {
                 <Link
                   key={path.title}
                   href={path.href}
-                  className="flex items-center gap-3 p-4 card-dark rounded-xl border border-white/8 active:border-zru-green/50 shadow-md"
+                  className="flex items-center gap-3 p-4 card-dark rounded-xl border border-black/8 active:border-zru-green/50 shadow-md"
                 >
                   <div className="w-8 h-8 rounded-lg bg-zru-green/15 flex items-center justify-center text-zru-green shrink-0">
                     <Icon className="w-4 h-4" />
                   </div>
                   <div className="flex items-center gap-1.5">
-                    <span className="font-heading text-xs text-white uppercase tracking-wider">
+                    <span className="font-heading text-xs text-rich-black uppercase tracking-wider">
                       {path.title}
                     </span>
-                    <ArrowRight className="w-3 h-3 text-white/40" />
+                    <ArrowRight className="w-3 h-3 text-rich-black/40" />
                   </div>
                 </Link>
               );
