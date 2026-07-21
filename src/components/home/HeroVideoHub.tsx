@@ -233,7 +233,7 @@ export default function HeroVideoHub() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 1.5 }}
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
+        className="absolute bottom-24 sm:bottom-28 lg:bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 z-40"
       >
         <span className="text-white/60 text-xs font-bold uppercase tracking-widest">Scroll</span>
         <div className="w-5 h-8 border-2 border-white/30 rounded-full flex justify-center pt-2">

@@ -3,6 +3,7 @@ import "./globals.css";
 import Navigation from "@/components/layout/Navigation";
 import Footer from "@/components/layout/Footer";
 import ClientLayoutShell from "@/components/layout/ClientLayoutShell";
+import PageTransitionLoader from "@/components/common/PageTransitionLoader";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://zimrugby.co.zw"),
@@ -46,6 +47,8 @@ export default function RootLayout({
             JavaScript is disabled. For the best experience on the Zimbabwe Rugby Union platform, please enable JavaScript in your browser settings.
           </div>
         </noscript>
+        {/* Page transition particle burst loader — fires on mount and on every route change */}
+        <PageTransitionLoader />
         <ClientLayoutShell>
           <Navigation />
           <main id="main-content" className="relative overflow-hidden pb-24 min-h-screen bg-milk-white">

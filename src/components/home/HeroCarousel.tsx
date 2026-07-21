@@ -284,7 +284,7 @@ export default function HeroCarousel({ slides }: { slides: HeroSlideData[] }) {
       </motion.div>
 
       {/* Slide Navigation Hints */}
-      <div className="absolute bottom-12 left-0 w-full z-30 pointer-events-none">
+      <div className="absolute bottom-24 sm:bottom-28 lg:bottom-12 left-0 w-full z-40 pointer-events-none">
         <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-end">
           <div className="flex items-center gap-8 pointer-events-auto">
             <button 
