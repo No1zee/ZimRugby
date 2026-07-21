@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 350 90" width="100%" height="100%">
+  <g fill="none" fill-rule="evenodd">
+    <!-- Gilbert Rugby Oval Arch Graphic -->
+    <g transform="translate(15, 10)">
+      <path d="M 0 35 C 0 10, 60 0, 130 0 C 200 0, 260 10, 260 35 C 260 60, 200 70, 130 70 C 60 70, 0 60, 0 35 Z" fill="none" stroke="#006747" stroke-width="6"/>
+      <path d="M 15 35 C 15 18, 65 8, 130 8 C 195 8, 245 18, 245 35 C 245 52, 195 62, 130 62 C 65 62, 15 52, 15 35 Z" fill="#006747"/>
+      <text x="130" y="44" font-family="'Impact', 'Arial Black', sans-serif" font-size="28" font-weight="900" fill="#FFFFFF" text-anchor="middle" letter-spacing="3">GILBERT</text>
+    </g>
+  </g>
+</svg>

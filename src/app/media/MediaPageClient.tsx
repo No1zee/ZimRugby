@@ -10,6 +10,7 @@ import { useState } from "react";
 import JournalStrip from "@/components/home/JournalStrip";
 import PageHero from "@/components/ui/PageHero";
 import PageAnnouncements from "@/components/ui/PageAnnouncements";
+import { NewsCards } from "@/components/ui/news-cards";
 
 interface MediaPageClientProps {
   initialSocialPosts: any[];
@@ -231,18 +232,9 @@ export default function MediaPageClient({ initialSocialPosts }: MediaPageClientP
                     )}
                 </div>
                 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-6">
-                    {filteredNews.map((news, index) => (
-                        <motion.div 
-                            key={news.id}
-                            initial={{ opacity: 0, x: -10 }}
-                            whileInView={{ opacity: 1, x: 0 }}
-                            viewport={{ once: true }}
-                            transition={{ delay: index * 0.05 }}
-                        >
-                            <NewsCard {...news} />
-                        </motion.div>
-                    ))}
+                {/* Animated Interactive News Grid */}
+                <div className="mb-12">
+                  <NewsCards enableAnimations={true} />
                 </div>
 
                 <div className="mt-12 flex justify-center">

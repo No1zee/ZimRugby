@@ -1,12 +1,14 @@
 "use client";
 
 import { useState } from "react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import EdgyGradient from "@/components/ui/EdgyGradient";
-import { Mail, CheckCircle2, Ticket, Percent, Newspaper, Trophy, ShieldCheck, ArrowRight, AlertCircle } from "lucide-react";
+import { Mail, CheckCircle2, ShieldCheck, ArrowRight, AlertCircle, RotateCcw } from "lucide-react";
 import { saveSubmission } from "@/lib/mockStorage";
+import Image from "next/image";
 
 import PageHero from "@/components/ui/PageHero";
+import FanzoneFlipShowcase from "@/components/fanzone/FanzoneFlipShowcase";
 
 export default function FanZonePage() {
   const [name, setName] = useState("");
@@ -15,6 +17,7 @@ export default function FanZonePage() {
   const [favTeam, setFavTeam] = useState("Zimbabwe Sables");
   const [agreed, setAgreed] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [isCenterStage, setIsCenterStage] = useState(false);
   
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState("");
@@ -39,29 +42,26 @@ export default function FanZonePage() {
     "Zimbabwe Cheetahs (7s)"
   ];
 
-  const benefits = [
-    { title: "Priority Tickets Presale", desc: "Get access to major test match tickets 48 hours before general release.", icon: Ticket },
-    { title: "Exclusive Merch Discounts", desc: "Enjoy 10% off all official merchandise at the ZRU Clubhouse store.", icon: Percent },
-    { title: "Weekly Sables Newsletter & FanZone", desc: "Receive team announcements, matchday lineups, and injury updates first.", icon: Newspaper },
-    { title: "VIP Fan Competitions", desc: "Enter monthly draws to win signed memorabilia and VIP matchday passes.", icon: Trophy }
-  ];
-
   const handleSubscribe = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!name || !email || !agreed) return;
-    
+
     setIsSubmitting(true);
     setSubmitError("");
-    
+
     try {
-      const res = await saveSubmission("newsletter", { name, email, country, favoriteTeam: favTeam });
-      if (res.success) {
-        setSubmitted(true);
-      } else {
-        setSubmitError(res.message);
-      }
+      await saveSubmission("newsletter", {
+        name,
+        email,
+        country,
+        favoriteTeam: favTeam,
+        source: "Fan Zone Supporters Registration",
+        submittedAt: new Date().toISOString(),
+      });
+
+      setSubmitted(true);
     } catch {
-      setSubmitError("An error occurred during registration.");
+      setSubmitError("Failed to complete registration. Please try again.");
     } finally {
       setIsSubmitting(false);
     }
@@ -76,7 +76,7 @@ export default function FanZonePage() {
       {/* PageHero header */}
       <div className="pt-24 relative z-10">
         <PageHero
-          title="Sables Fan Zone"
+          title="Fan Zone"
           subtitle="The heartbeat of Zimbabwe Rugby. Join our global supporters network, get the latest inside scoops, and unlock members-only benefits."
           tag="Official Supporters Club"
           backgroundImage="/images/gallery/zimbabwe-sables-0351.webp"
@@ -84,39 +84,62 @@ export default function FanZonePage() {
         />
       </div>
 
-      <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 pt-16 relative z-10">
+      <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 pt-12 sm:pt-16 relative z-10">
 
-        {/* Two-Column Grid: Benefits + Registration */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
-          
-          {/* Column 1: Benefits Preview */}
-          <div className="space-y-8">
-            <div className="border-l-4 border-zru-green pl-4">
-              <h2 className="text-2xl font-black uppercase tracking-wider">MEMBERSHIP BENEFITS</h2>
-              <p className="text-sm text-black/60 mt-1">What you unlock when you join the Sables Fan Club today.</p>
-            </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-              {benefits.map((b, idx) => {
-                const Icon = b.icon;
-                return (
-                  <div 
-                    key={idx} 
-                    className="bg-white border border-black/5 rounded-2xl p-6 space-y-4 hover:-translate-y-1 shadow-md group"
-                  >
-                    <div className="w-10 h-10 bg-zru-green/10 rounded-xl flex items-center justify-center text-zru-green border border-zru-green/20 group-hover:scale-105 transition-transform duration-300">
-                      <Icon className="w-5 h-5" />
-                    </div>
-                    <h3 className="font-black text-sm text-rich-black uppercase tracking-tight">{b.title}</h3>
-                    <p className="text-black/60 text-xs leading-relaxed font-medium">{b.desc}</p>
-                  </div>
-                );
-              })}
-            </div>
+        {/* Replay Benefits Preview Option */}
+        {isCenterStage && !submitted && (
+          <div className="flex justify-center pb-6">
+            <button
+              onClick={() => setIsCenterStage(false)}
+              className="inline-flex items-center gap-2 px-4 py-2 bg-black/5 hover:bg-black/10 text-rich-black/70 hover:text-rich-black rounded-full text-[11px] font-black tracking-widest uppercase transition-all shadow-sm border border-black/5"
+            >
+              <RotateCcw className="w-3.5 h-3.5 text-zru-green" />
+              <span>Replay Benefits Showcase</span>
+            </button>
           </div>
+        )}
 
-          {/* Column 2: Newsletter Registration Form (SA Rugby Pattern) */}
-          <div className="bg-white border border-black/5 rounded-3xl p-6 md:p-10 shadow-xl relative overflow-hidden">
+        {/* Dynamic Transition Grid: 3D Flip Showcase -> Form Center Stage */}
+        <div className={`transition-all duration-700 ease-in-out ${
+          isCenterStage
+            ? "max-w-2xl mx-auto"
+            : "grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center"
+        }`}>
+          
+          {/* Column 1: 3D Continuous Flip Card Showcase */}
+          <AnimatePresence mode="popLayout">
+            {!isCenterStage && (
+              <motion.div
+                key="flip-showcase"
+                initial={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.85, y: -20 }}
+                transition={{ duration: 0.5, ease: "easeOut" }}
+                className="space-y-6 flex flex-col items-center"
+              >
+                <div className="text-center space-y-2 max-w-md">
+                  <h2 className="text-2xl font-heading font-black text-rich-black uppercase tracking-tight">
+                    WHY JOIN THE FANZONE?
+                  </h2>
+                  <p className="text-xs text-black/60 font-medium">
+                    Hover or tap to flip through membership perks before signing up.
+                  </p>
+                </div>
+
+                <FanzoneFlipShowcase onTriggerJoin={() => setIsCenterStage(true)} />
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+          {/* Column 2: Registration Form (Moves to Center Stage) */}
+          <motion.div
+            layout
+            transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+            className={`bg-white border rounded-3xl p-6 md:p-10 transition-all duration-500 relative overflow-hidden ${
+              isCenterStage
+                ? "border-zru-green shadow-2xl ring-4 ring-zru-green/10"
+                : "border-black/5 shadow-xl"
+            }`}
+          >
             
             <div className="border-b border-black/5 pb-6 mb-6">
               <h3 className="text-lg font-black uppercase tracking-widest text-zru-green flex items-center gap-2">
@@ -161,7 +184,7 @@ export default function FanZonePage() {
                   />
                 </div>
 
-                {/* Country of Residence - SA Rugby global fan base pattern */}
+                {/* Country of Residence */}
                 <div className="space-y-1.5">
                   <label className="text-[10px] text-black/60 font-black uppercase tracking-wider block">Country of Residence</label>
                   <select
@@ -212,7 +235,7 @@ export default function FanZonePage() {
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="w-full bg-zru-green hover:bg-white hover:text-rich-black text-rich-black font-black text-xs uppercase tracking-[0.2em] py-3.5 rounded-xl flex items-center justify-center gap-2 transition-all shadow-lg mt-6 disabled:opacity-50"
+                  className="w-full bg-zru-green hover:bg-[#005238] text-white font-black text-xs uppercase tracking-[0.2em] py-3.5 rounded-xl flex items-center justify-center gap-2 transition-all shadow-lg mt-6 disabled:opacity-50"
                 >
                   <span>{isSubmitting ? "Registering…" : "Register supporters card"}</span>
                   <ArrowRight className="w-4 h-4" />
@@ -223,36 +246,74 @@ export default function FanZonePage() {
               <motion.div 
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
-                className="text-center py-10 space-y-6"
+                className="text-center py-6 space-y-6"
               >
-                <div className="inline-flex p-4 bg-zru-green/20 rounded-full border border-zru-green/30 text-zru-green mb-2">
-                  <CheckCircle2 className="w-10 h-10" />
+                {/* Official Digital Sables Supporter Pass */}
+                <div className="w-full max-w-sm mx-auto p-6 rounded-2xl bg-gradient-to-br from-[#003B24] via-[#002617] to-[#00170E] border border-[#00FF87]/40 shadow-2xl text-left relative overflow-hidden">
+                  <div className="flex items-center justify-between border-b border-white/10 pb-4 mb-4">
+                    <div className="flex items-center gap-2">
+                      <Image
+                        src="/images/logos/zru-logo.svg"
+                        alt="ZRU Crest"
+                        width={28}
+                        height={28}
+                        className="object-contain"
+                      />
+                      <div>
+                        <h5 className="font-heading font-black text-xs text-[#00FF87] uppercase tracking-wider leading-none">ZIMBABWE RUGBY</h5>
+                        <span className="text-[8px] font-bold text-white/50 uppercase tracking-widest">OFFICIAL FANZONE PASS</span>
+                      </div>
+                    </div>
+                    <CheckCircle2 className="w-6 h-6 text-[#00FF87]" />
+                  </div>
+
+                  <div className="space-y-3">
+                    <div>
+                      <span className="text-[8px] text-white/40 uppercase tracking-widest font-bold block">MEMBER NAME</span>
+                      <span className="text-base font-heading font-black text-white uppercase tracking-wide">{name}</span>
+                    </div>
+                    
+                    <div className="grid grid-cols-2 gap-2 pt-1 border-t border-white/10 text-[10px]">
+                      <div>
+                        <span className="text-[8px] text-white/40 uppercase tracking-widest font-bold block">SQUAD</span>
+                        <span className="font-bold text-[#00FF87] uppercase">{favTeam}</span>
+                      </div>
+                      <div>
+                        <span className="text-[8px] text-white/40 uppercase tracking-widest font-bold block">COUNTRY</span>
+                        <span className="font-bold text-white uppercase">{country}</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="mt-4 pt-3 border-t border-white/10 flex items-center justify-between text-[9px] font-mono text-white/40">
+                    <span>MEMBER ID: ZRU-{Math.floor(100000 + Math.random() * 900000)}</span>
+                    <span className="text-[#00FF87] font-bold uppercase">STATUS: ACTIVE</span>
+                  </div>
                 </div>
-                <h4 className="font-black text-lg text-rich-black uppercase tracking-wider leading-none">WELCOME TO THE TEAM!</h4>
-                <p className="text-black/70 text-xs leading-relaxed max-w-sm mx-auto font-medium">
-                  Congratulations, <strong>{name}</strong>! Your ZRU Supporter Membership has been successfully activated. A confirmation email and details regarding your <strong>10% Clubhouse discount</strong> have been sent to <strong>{email}</strong>.
-                </p>
-                
-                <div className="border-t border-black/10 pt-6 mt-6 flex items-center gap-3 justify-center text-[10px] font-black uppercase tracking-widest text-zru-green">
-                  <ShieldCheck className="w-5 h-5 text-zru-green" />
-                  <span>MEMBER COUNTRY: {country.toUpperCase()}</span>
+
+                <div className="space-y-2 max-w-sm mx-auto">
+                  <h4 className="font-black text-lg text-rich-black uppercase tracking-wider leading-none">WELCOME TO THE FANZONE!</h4>
+                  <p className="text-black/70 text-xs leading-relaxed font-medium">
+                    Your ZRU Supporter Membership has been successfully activated. A confirmation email and details regarding your <strong>10% Clubhouse discount</strong> have been sent to <strong>{email}</strong>.
+                  </p>
                 </div>
-                
+
                 <button 
                   onClick={() => {
                     setSubmitted(false);
                     setName("");
                     setEmail("");
                     setAgreed(false);
+                    setIsCenterStage(false);
                   }}
-                  className="text-[10px] font-black uppercase text-black/50 hover:text-black transition-colors tracking-widest block pt-4 mx-auto"
+                  className="text-[10px] font-black uppercase text-black/50 hover:text-black transition-colors tracking-widest block pt-2 mx-auto"
                 >
                   Create Another Supporter Account
                 </button>
               </motion.div>
             )}
 
-          </div>
+          </motion.div>
 
         </div>
 

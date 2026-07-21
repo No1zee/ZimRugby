@@ -179,21 +179,37 @@ export default function Navigation() {
       >
         <div className="max-w-[1440px] mx-auto px-6 flex items-center justify-between gap-4">
           
-          {/* Logo Brand Block */}
-          <Link href="/" className="flex items-center gap-3 group z-50">
-            <div className="relative w-10 h-10 md:w-12 md:h-12 transition-transform duration-500 group-hover:rotate-12 flex items-center justify-center">
+          {/* Logo Brand Block (Expands on homepage top load, shrinks smoothly on scroll) */}
+          <Link href="/" className="flex items-center gap-3 md:gap-4 group z-50 transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]">
+            <div className={`relative transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:rotate-6 flex items-center justify-center shrink-0 ${
+              pathname === "/" && !isScrolled 
+                ? "w-16 h-16 md:w-20 md:h-20 drop-shadow-[0_10px_25px_rgba(0,0,0,0.5)]" 
+                : "w-10 h-10 md:w-12 md:h-12"
+            }`}>
               <Image 
                 src="/zru logo main.svg" 
                 alt="Zimbabwe Rugby Union Logo" 
-                width={48}
-                height={48}
+                width={80}
+                height={80}
                 priority
                 className="w-full h-full object-contain" 
               />
             </div>
-            <div className="flex flex-col">
-              <span className={`font-heading text-lg md:text-xl tracking-wider leading-none ${showOpaqueHeader ? "text-black" : "text-white"}`}>ZIMBABWE</span>
-              <span className="font-subheading text-[8px] md:text-[9px] tracking-[0.4em] text-zru-green font-black leading-none mt-1">RUGBY UNION</span>
+            <div className="flex flex-col justify-center">
+              <span className={`font-heading tracking-wider leading-none transition-all duration-500 ${
+                pathname === "/" && !isScrolled 
+                  ? "text-2xl md:text-3xl text-white font-black drop-shadow-md" 
+                  : `text-lg md:text-xl ${showOpaqueHeader ? "text-black" : "text-white"}`
+              }`}>
+                ZIMBABWE
+              </span>
+              <span className={`font-subheading text-[#006747] font-black leading-none mt-1 transition-all duration-500 ${
+                pathname === "/" && !isScrolled 
+                  ? "text-[10px] md:text-[12px] tracking-[0.5em]" 
+                  : "text-[8px] md:text-[9px] tracking-[0.4em]"
+              }`}>
+                RUGBY UNION
+              </span>
             </div>
           </Link>
  

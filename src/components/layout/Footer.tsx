@@ -1,9 +1,11 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { Facebook, Twitter, Instagram, Youtube, Linkedin, ArrowRight, CheckCircle } from "lucide-react";
+import FooterMeteorField from "./FooterMeteorField";
 
 const socialLinks = [
   { Icon: Facebook, href: "https://facebook.com/zimbabwerugby", label: "FB" },
@@ -58,14 +60,27 @@ export default function Footer() {
   }
 
   return (
-    <footer className="bg-rich-black text-white relative pt-20 pb-8 border-t-[12px] border-zru-green">
+    <footer className="bg-rich-black text-white relative pt-20 pb-8 border-t-[12px] border-zru-green overflow-hidden">
+      {/* Zero-Overhead Hardware-Accelerated 3D ZRU Crest Meteor Field */}
+      <FooterMeteorField />
+
       <div className="max-w-[1440px] mx-auto px-6 relative z-10">
         
-        {/* Massive Typography Banner */}
-        <div className="mb-20 overflow-hidden">
-           <h2 className="text-[12vw] md:text-[8vw] font-heading font-black leading-[0.8] tracking-tighter text-white/5 uppercase">
+        {/* Massive Typography & Embossed Logo Banner */}
+        <div className="mb-16 relative min-h-[240px] md:min-h-[320px] flex items-center justify-between overflow-hidden rounded-2xl p-4 md:p-8">
+           <h2 className="text-[12vw] md:text-[8vw] font-heading font-black leading-[0.85] tracking-tighter text-white/5 uppercase select-none relative z-10">
              Zimbabwe<br />Rugby
            </h2>
+
+           {/* Unclipped Stylish Tilted ZRU Crest Watermark (Full Color Red Star & Gold Bird) */}
+           <div className="absolute -right-4 sm:-right-8 md:-right-12 top-1/2 -translate-y-1/2 w-[320px] h-[320px] sm:w-[440px] sm:h-[440px] md:w-[540px] md:h-[540px] lg:w-[640px] lg:h-[640px] opacity-35 hover:opacity-55 -rotate-20 transition-all duration-700 pointer-events-none select-none">
+             <Image
+               src="/images/logos/zru-logo.svg"
+               alt="Zimbabwe Rugby Union Crest Watermark"
+               fill
+               className="object-contain filter drop-shadow-[0_20px_40px_rgba(0,0,0,0.95)]"
+             />
+           </div>
         </div>
 
         {/* Main Content Grid */}
@@ -75,7 +90,7 @@ export default function Footer() {
           <div className="lg:col-span-5 space-y-8">
             <div className="space-y-4">
                <h3 className="text-3xl md:text-4xl font-heading font-black tracking-tight uppercase">
-                 Join the Front Row
+                 Join the Fan Zone
                </h3>
                <p className="text-white/60 font-body text-sm md:text-base max-w-md">
                  Exclusive squad announcements, early ticket access, and inner-sanctum content delivered straight to you.

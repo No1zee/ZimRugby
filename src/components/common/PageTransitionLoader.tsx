@@ -1,52 +1,65 @@
-﻿"use client";
+"use client";
 
 import { useEffect, useState } from "react";
-import { usePathname } from "next/navigation";
 import ParticleBurstLoader from "@/components/common/ParticleBurstLoader";
 
 export default function PageTransitionLoader() {
-  const pathname = usePathname();
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [fading, setFading] = useState(false);
 
-  const triggerLoad = (duration: number) => {
+  useEffect(() => {
+    // Check if initial session loading screen has already run
+    const hasLoaded = typeof window !== "undefined" && sessionStorage.getItem("zru_initial_loader_shown");
+    if (hasLoaded) {
+      setLoading(false);
+      return;
+    }
+
+    // First visit: trigger 3-second initial loading screen
     setLoading(true);
     setFading(false);
-    const fadeTimer = setTimeout(() => setFading(true), duration - 400);
+    sessionStorage.setItem("zru_initial_loader_shown", "true");
+
+    const duration = 3000;
+    const fadeTimer = setTimeout(() => setFading(true), duration - 600);
     const hideTimer = setTimeout(() => {
       setLoading(false);
       setFading(false);
     }, duration);
+
     return () => {
       clearTimeout(fadeTimer);
       clearTimeout(hideTimer);
     };
-  };
-
-  // Show loader on initial mount (3s so it is clearly visible)
-  useEffect(() => {
-    const cleanup = triggerLoad(3000);
-    return cleanup;
   }, []);
 
-  // Show loader on route change (1.5s)
+  // Lock body scrollbar during loading
   useEffect(() => {
-    const cleanup = triggerLoad(1500);
-    return cleanup;
-  }, [pathname]);
+    if (loading) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [loading]);
 
   if (!loading) return null;
 
   return (
     <div
-      className="fixed inset-0 z-[9999]"
+      className="fixed top-0 left-0 w-full h-full z-[9999] overflow-hidden bg-[#010904]"
       style={{
         opacity: fading ? 0 : 1,
-        transition: "opacity 400ms ease-out",
+        transform: fading ? "scale(1.05)" : "scale(1)",
+        clipPath: fading ? "polygon(0 0, 100% 0, 100% 0, 0 0)" : "polygon(0 0, 100% 0, 100% 100%, 0 100%)",
+        transition: "clip-path 600ms cubic-bezier(0.76, 0, 0.24, 1), opacity 600ms cubic-bezier(0.76, 0, 0.24, 1), transform 600ms cubic-bezier(0.76, 0, 0.24, 1)",
         pointerEvents: fading ? "none" : "all",
+        willChange: "transform, opacity, clip-path",
       }}
     >
-      <ParticleBurstLoader />
+      <ParticleBurstLoader isExiting={fading} />
     </div>
   );
 }

@@ -1,10 +1,13 @@
 "use client";
 
 import React, { useState } from "react";
+import Image from "next/image";
 import Link from "next/link";
+import { CheckCircle, ArrowRight, ShieldCheck } from "lucide-react";
 
 /* ═══════════════════════════════════════════════════════════════════
-   HomeNewsletterBanner — Exact Stitch Specification Match
+   HomeNewsletterBanner — Supercharged Option 2 Uiverse Interactive Container
+   Refined Premium Colors, Soft Ambient Glow Frame & No Dot Slop
    ═══════════════════════════════════════════════════════════════════ */
 
 export default function HomeNewsletterBanner() {
@@ -20,85 +23,105 @@ export default function HomeNewsletterBanner() {
   };
 
   return (
-    <section className="w-full bg-[#FDFBF0] py-12 relative z-20">
-      <div className="max-w-[1440px] mx-auto px-8 sm:px-8">
+    <section className="w-full bg-[#FDFBF0] py-8 sm:py-12 lg:py-16 relative z-20">
+      <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
         
-        {/* Banner Card */}
+        {/* Supercharged Option 2 Card Container */}
         <div
-          className="rounded-xl p-8 md:p-12 flex flex-col lg:flex-row items-center justify-between gap-8 relative overflow-hidden shadow-sm"
+          className="group/uiverseCard rounded-3xl p-6 sm:p-10 md:p-14 flex flex-col lg:flex-row items-center justify-between gap-8 lg:gap-12 relative overflow-hidden shadow-2xl transition-all duration-500 ease-in-out hover:scale-[1.01] active:scale-[0.99] touch-manipulation cursor-pointer border border-white/10"
           style={{
-            background: "radial-gradient(circle at 50% 25%, #007A50 0%, #004D2C 60%, #002D1A 100%)",
+            background: "radial-gradient(circle at 50% 25%, #0A1C15 0%, #00331F 60%, #001A10 100%)",
           }}
         >
-          
-          {/* Dot Pattern Overlay */}
-          <div
-            className="absolute right-0 top-0 bottom-0 w-1/2 opacity-10 pointer-events-none"
-            style={{
-              backgroundImage: "radial-gradient(circle, white 2px, transparent 2px)",
-              backgroundSize: "24px 24px",
-            }}
-          />
+          {/* Soft, Subtle Premium Ambient Inner Glow Frame (Replaced harsh neon rectangle) */}
+          <div className="absolute inset-0 border border-white/10 group-hover/uiverseCard:border-[#006747]/60 group-focus-within/uiverseCard:border-[#006747]/60 group-hover/uiverseCard:shadow-[inset_0_0_50px_rgba(0,103,71,0.35)] transition-all duration-700 pointer-events-none rounded-3xl" />
 
-          {/* Left Side: Mail Icon + Headlines */}
-          <div className="flex items-center gap-6 relative z-10 w-full lg:w-1/2">
-            <div className="w-16 h-16 rounded-full border border-white/30 flex items-center justify-center shrink-0">
-              <span className="material-symbols-outlined text-white" style={{ fontSize: "32px" }}>
-                mail
-              </span>
+          {/* Uiverse Subtle Animated Light Trail Gradient Sweep */}
+          <div className="absolute inset-0 opacity-0 group-hover/uiverseCard:opacity-15 group-focus-within/uiverseCard:opacity-15 pointer-events-none bg-gradient-to-r from-transparent via-[#34D399] to-transparent transition-opacity duration-700" />
+
+          {/* Left Group: Uiverse Sliding Logo & Expanding Headlines */}
+          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-6 relative z-10 w-full lg:w-3/5">
+            
+            {/* Uiverse Sliding Logo Box Integration */}
+            <div className="relative flex items-center shrink-0">
+              <div className="h-[64px] rounded-2xl bg-black/50 border border-white/15 p-2 flex items-center overflow-hidden transition-all duration-700 ease-in-out w-[64px] group-hover/uiverseCard:w-[220px] group-hover/uiverseCard:border-[#006747] group-hover/uiverseCard:shadow-[0_8px_25px_rgba(0,103,71,0.4)] group-focus-within/uiverseCard:w-[220px] group-focus-within/uiverseCard:border-[#006747]">
+                
+                {/* Compact Crest Logo (Logo 1) */}
+                <div className="h-[44px] w-[44px] shrink-0 flex items-center justify-center">
+                  <Image
+                    src="/images/logos/zru-logo.svg"
+                    alt="ZRU Crest"
+                    width={40}
+                    height={40}
+                    className="object-contain filter drop-shadow-md transition-transform duration-500 group-hover/uiverseCard:scale-110"
+                  />
+                </div>
+
+                {/* Sliding Expanded Text Logo (Logo 2) */}
+                <div className="pl-3 opacity-0 group-hover/uiverseCard:opacity-100 group-focus-within/uiverseCard:opacity-100 transition-all duration-500 delay-100 whitespace-nowrap">
+                  <span className="font-heading font-black text-sm sm:text-base text-white tracking-widest uppercase block leading-none">
+                    ZIMBABWE
+                  </span>
+                  <span className="font-heading font-black text-xs text-[#34D399] tracking-widest uppercase block leading-tight mt-0.5">
+                    RUGBY UNION
+                  </span>
+                </div>
+
+                {/* Logo Uiverse Trail Sweep */}
+                <div className="absolute right-0 h-full w-full opacity-0 group-hover/uiverseCard:animate-[uiverseTrail_1s_ease-in-out] pointer-events-none" />
+              </div>
             </div>
-            <div>
+
+            {/* Headline & Paragraph with Dynamic Letter-Spacing Transition */}
+            <div className="space-y-2">
               <h2
-                className="text-2xl text-white text-unison mb-2"
-                style={{
-                  fontFamily: "'Montserrat', sans-serif",
-                  fontWeight: 900,
-                  textTransform: "uppercase",
-                  letterSpacing: "-0.02em",
-                }}
+                className="text-2xl sm:text-3xl lg:text-4xl text-white font-heading font-black uppercase tracking-tight transition-all duration-500 group-hover/uiverseCard:tracking-widest"
               >
-                SUBSCRIBE TO OUR NEWSLETTER
+                JOIN THE FAN ZONE
               </h2>
-              <p className="text-sm text-white/80 max-w-md font-medium leading-relaxed">
-                Subscribe to our newsletter and be the first to receive insights, updates, and expert tips on all things Zimbabwe Rugby.
+              <p className="text-xs sm:text-sm text-white/80 max-w-lg font-medium leading-relaxed transition-all duration-500 group-hover/uiverseCard:text-white">
+                Subscribe to our official newsletter and be the first to receive match ticket drops, Sable squad announcements, and inner-sanctum updates.
               </p>
+
             </div>
+
           </div>
 
-          {/* Right Side: Form */}
-          <div className="relative z-10 w-full lg:w-1/2 flex flex-col lg:items-end">
-            <div className="w-full max-w-md">
-              <p className="text-white/80 text-sm mb-2 font-medium">Stay up to date</p>
+          {/* Right Group: Subscription Form Pill Container */}
+          <div className="relative z-10 w-full lg:w-2/5 flex flex-col lg:items-end">
+            <div className="w-full max-w-md bg-black/40 backdrop-blur-md p-5 sm:p-7 rounded-2xl border border-white/10 group-hover/uiverseCard:border-[#006747]/60 group-focus-within/uiverseCard:border-[#006747]/60 transition-all duration-500">
+              
+              <p className="text-white/80 text-xs font-bold uppercase tracking-wider mb-3">
+                ENTER YOUR EMAIL BELOW
+              </p>
               
               {subscribed ? (
-                <div className="bg-white/10 text-white p-4 rounded-sm border border-white/20 text-sm font-semibold">
-                  ✓ Thank you for subscribing to Zimbabwe Rugby updates!
+                <div className="bg-[#006747]/30 text-white p-4 rounded-xl border border-[#006747]/50 text-sm font-semibold flex items-center gap-3">
+                  <CheckCircle className="w-5 h-5 text-[#34D399] shrink-0" />
+                  <span>Welcome to the Zimbabwe Rugby Fan Zone!</span>
                 </div>
               ) : (
-                <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-0">
+                <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-2.5">
                   <input
                     id="email"
                     type="email"
                     required
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    placeholder="Enter your email"
-                    className="w-full bg-white text-black px-4 py-3 rounded-l-sm rounded-r-none focus:outline-none focus:ring-2 focus:ring-[#006747] border-none text-sm placeholder:text-gray-500"
+                    placeholder="name@domain.com"
+                    className="w-full bg-white/5 text-white px-4 py-3.5 rounded-xl border border-white/15 focus:outline-none focus:border-[#006747] text-sm placeholder:text-white/40 transition-all min-h-[46px]"
                   />
                   <button
                     type="submit"
-                    className="bg-[#b2f0ca] text-black px-8 py-3 rounded-r-sm rounded-l-none hover:bg-white transition-colors duration-300 whitespace-nowrap font-bold text-xs tracking-wider uppercase font-heading shrink-0"
-                    style={{
-                      fontFamily: "'Montserrat', sans-serif",
-                      letterSpacing: "0.1em",
-                    }}
+                    className="group/btn bg-gradient-to-b from-[#00704D] to-[#005238] hover:from-[#00855B] hover:to-[#006747] text-white px-6 py-3.5 rounded-xl transition-all duration-300 flex items-center justify-center gap-2 font-black text-xs tracking-widest uppercase font-heading shrink-0 shadow-lg shadow-[#006747]/30 min-h-[46px]"
                   >
-                    SUBSCRIBE
+                    <span>SUBSCRIBE</span>
+                    <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover/btn:translate-x-1" />
                   </button>
                 </form>
               )}
 
-              <p className="text-[10px] text-white/60 mt-3 font-medium">
+              <p className="text-[10px] text-white/40 mt-3.5 font-medium">
                 By subscribing you agree to our{" "}
                 <Link className="underline hover:text-white" href="/privacy-policy">
                   Privacy Policy
