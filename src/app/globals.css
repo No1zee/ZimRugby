@@ -319,3 +319,15 @@ body::after {
 .card-dark:active {
   transform: scale(0.99);
 }
+
+/* Stitch Design System Utilities */
+.header-slanted {
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 16px 100%, 0 calc(100% - 16px));
+}
+
+.text-unison {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+

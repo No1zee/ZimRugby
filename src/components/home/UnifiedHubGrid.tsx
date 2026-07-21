@@ -2,146 +2,325 @@
 
 import React from "react";
 import Link from "next/link";
-import Image from "next/image";
-import { ArrowRight, Ticket, ShoppingBag, Newspaper } from "lucide-react";
+
+/* ═══════════════════════════════════════════════════════════════════
+   UnifiedHubGrid — Exact Stitch Design Token Implementation
+   
+   Stitch tokens applied:
+   - header-slanted clip-path: polygon(0 0, 100% 0, 100% 100%, 16px 100%, 0 calc(100% - 16px))
+   - text-unison: Montserrat 900 uppercase
+   - label-caps: 12px / 700 / 0.1em tracking
+   - h2: 32px / 900 / -0.01em
+   - h3: 24px / 900 / -0.02em
+   - body-base: 16px / 500
+   - grid-gap: 24px
+   - section-padding-desktop: 80px
+   - margin-safe: 32px
+   - primary: #006747
+   - background: #FDFBF0
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* Stitch token constants */
+const STITCH = {
+  primary: "#006747",
+  bg: "#FDFBF0",
+  slantedClip: "polygon(0 0, 100% 0, 100% 100%, 16px 100%, 0 calc(100% - 16px))",
+  badgeClip: "polygon(0 0, 100% 0, calc(100% - 0px) 100%, 16px 100%, 0 calc(100% - 16px))",
+} as const;
+
+const unison: React.CSSProperties = {
+  fontFamily: "'Montserrat', sans-serif",
+  fontWeight: 900,
+  textTransform: "uppercase" as const,
+};
+
+const labelCaps: React.CSSProperties = {
+  fontFamily: "'Montserrat', sans-serif",
+  fontSize: "12px",
+  lineHeight: "1.0",
+  letterSpacing: "0.1em",
+  fontWeight: 700,
+};
+
+const h2Style: React.CSSProperties = {
+  ...unison,
+  fontSize: "32px",
+  lineHeight: "1.1",
+  letterSpacing: "-0.01em",
+};
+
+const h3Style: React.CSSProperties = {
+  ...unison,
+  fontSize: "24px",
+  lineHeight: "1.2",
+  letterSpacing: "-0.02em",
+};
+
+const bodyBase: React.CSSProperties = {
+  fontFamily: "'Montserrat', sans-serif",
+  fontSize: "16px",
+  lineHeight: "1.5",
+  fontWeight: 500,
+};
 
 export default function UnifiedHubGrid() {
-  const newsItems = [
-    {
-      id: "1",
-      title: "SABLES PREPARE FOR NATIONS CUP CLASH",
-      date: "15 MAY 2026",
-      category: "SABLES",
-      link: "/media",
-    },
-    {
-      id: "2",
-      title: "JUNIOR SABLES SQUAD ANNOUNCED FOR U20 TROPPHY",
-      date: "14 MAY 2026",
-      category: "JUNIOR SABLES",
-      link: "/media",
-    },
-    {
-      id: "3",
-      title: "ZIMBABWE 7S CHEETAHS GEARING UP FOR AFRICA CUP",
-      date: "12 MAY 2026",
-      category: "7S CHEETAHS",
-      link: "/media",
-    },
-  ];
-
   return (
-    <section className="w-full bg-[#FDFBF0] py-12 lg:py-16 border-b border-gray-200/60">
-      <div className="max-w-[1360px] mx-auto px-4 sm:px-6 lg:px-8">
-        
-        {/* 4-Column Responsive Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          
-          {/* Card 1 & 2: Dark Green News Hub (2 Columns Wide on Desktop) */}
-          <div className="lg:col-span-2 bg-[#006747] text-white rounded-xl p-6 sm:p-8 flex flex-col justify-between shadow-md relative overflow-hidden group">
-            {/* Subtle Top Accent */}
-            <div className="absolute top-0 left-0 right-0 h-1 bg-emerald-400" />
+    <section
+      className="w-full relative z-20"
+      style={{ backgroundColor: STITCH.bg, paddingTop: "80px", paddingBottom: "80px" }}
+    >
+      <div style={{ maxWidth: "1440px", margin: "0 auto", paddingLeft: "32px", paddingRight: "32px" }}>
+        <div
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4"
+          style={{ gap: "24px" }}
+        >
 
-            <div>
-              {/* Header Badge */}
-              <div className="flex items-center justify-between border-b border-white/15 pb-4 mb-6">
-                <div className="flex items-center space-x-2">
-                  <Newspaper className="w-5 h-5 text-emerald-400" />
-                  <h3 className="text-xs sm:text-sm font-bold tracking-[0.2em] uppercase font-heading">
-                    LATEST NEWS
+          {/* ═══════════ CARD 1: LATEST NEWS ═══════════ */}
+          <div className="flex flex-col h-full bg-white rounded-xl overflow-hidden shadow-sm border border-gray-200">
+            {/* Slanted Header */}
+            <div
+              className="flex justify-between items-center text-white"
+              style={{
+                ...labelCaps,
+                backgroundColor: STITCH.primary,
+                clipPath: STITCH.slantedClip,
+                padding: "16px 24px",
+              }}
+            >
+              <span>LATEST NEWS</span>
+              <Link href="/media" className="hover:underline flex items-center gap-1">
+                VIEW ALL
+                <span className="material-symbols-outlined" style={{ fontSize: "16px" }}>arrow_forward</span>
+              </Link>
+            </div>
+
+            {/* Green Body */}
+            <div
+              className="flex flex-col flex-grow text-white"
+              style={{ backgroundColor: STITCH.primary, padding: "24px" }}
+            >
+              {/* Article Icon */}
+              <div className="mb-6 opacity-50 border-b border-white/20 pb-4">
+                <span className="material-symbols-outlined" style={{ fontSize: "36px" }}>article</span>
+              </div>
+
+              {/* News Items */}
+              <div className="space-y-6 flex-grow">
+                <div className="border-b border-white/20 pb-4">
+                  <h3 style={{ ...h3Style, fontSize: "16px" }} className="mb-1 text-white">
+                    SABLES PREPARE FOR NATIONS CUP CLASH
                   </h3>
+                  <p style={{ ...labelCaps, fontSize: "10px" }} className="text-white/70">
+                    15 MAY 2026
+                  </p>
                 </div>
-                <Link
-                  href="/media"
-                  className="text-xs font-semibold tracking-wider text-emerald-300 hover:text-white flex items-center space-x-1 transition-colors"
+                <div className="border-b border-white/20 pb-4">
+                  <h3 style={{ ...h3Style, fontSize: "16px" }} className="mb-1 text-white">
+                    JUNIOR SABLES SQUAD ANNOUNCED
+                  </h3>
+                  <p style={{ ...labelCaps, fontSize: "10px" }} className="text-white/70">
+                    14 MAY 2026
+                  </p>
+                </div>
+                <div>
+                  <h3 style={{ ...h3Style, fontSize: "16px" }} className="mb-1 text-white">
+                    ZIMBABWE 7S TEAM GEARING UP FOR AFRICA CUP
+                  </h3>
+                  <p style={{ ...labelCaps, fontSize: "10px" }} className="text-white/70">
+                    12 MAY 2026
+                  </p>
+                </div>
+              </div>
+
+              {/* Read More CTA */}
+              <Link
+                href="/media"
+                className="flex items-center gap-2 text-white hover:opacity-80 transition-opacity mt-8"
+                style={labelCaps}
+              >
+                READ MORE
+                <span className="material-symbols-outlined">arrow_forward</span>
+              </Link>
+            </div>
+          </div>
+
+          {/* ═══════════ CARD 2: UPCOMING FIXTURE ═══════════ */}
+          <div className="flex flex-col h-full bg-white rounded-xl overflow-hidden shadow-sm border border-gray-200">
+            {/* Slanted Header */}
+            <div
+              className="text-white"
+              style={{
+                ...labelCaps,
+                backgroundColor: STITCH.primary,
+                clipPath: STITCH.slantedClip,
+                padding: "16px 24px",
+              }}
+            >
+              <span>UPCOMING FIXTURE</span>
+            </div>
+
+            {/* Green Body */}
+            <div
+              className="flex flex-col flex-grow text-white"
+              style={{ backgroundColor: STITCH.primary, padding: "24px" }}
+            >
+              {/* Teams VS */}
+              <div className="flex items-center justify-between mb-8 mt-4">
+                <div className="flex flex-col items-center">
+                  <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center mb-3">
+                    <span className="material-symbols-outlined text-3xl" style={{ color: STITCH.primary }}>sports_rugby</span>
+                  </div>
+                  <span style={{ ...unison, fontSize: "14px" }} className="text-center text-white">
+                    ZIMBABWE<br />SABLES
+                  </span>
+                </div>
+                <div style={{ ...unison, fontSize: "24px" }} className="text-white/50">VS</div>
+                <div className="flex flex-col items-center">
+                  <div className="w-16 h-16 bg-white/10 rounded-full flex items-center justify-center mb-3 border border-white/20">
+                    <span className="material-symbols-outlined text-white text-3xl">shield</span>
+                  </div>
+                  <span style={{ ...unison, fontSize: "14px" }} className="text-center text-white">
+                    NAMIBIA
+                  </span>
+                </div>
+              </div>
+
+              {/* Match Info */}
+              <div className="space-y-4 mb-8 flex-grow">
+                <div className="flex items-center gap-3 text-white/90">
+                  <span className="material-symbols-outlined" style={{ fontSize: "20px" }}>calendar_today</span>
+                  <span style={{ ...bodyBase, fontSize: "14px", textTransform: "uppercase" }}>SAT, 24 MAY 2026</span>
+                </div>
+                <div className="flex items-center gap-3 text-white/90">
+                  <span className="material-symbols-outlined" style={{ fontSize: "20px" }}>location_on</span>
+                  <span style={{ ...bodyBase, fontSize: "14px", textTransform: "uppercase" }}>HARARE SPORTS CLUB</span>
+                </div>
+                <div className="flex items-center gap-3 text-white/90">
+                  <span className="material-symbols-outlined" style={{ fontSize: "20px" }}>schedule</span>
+                  <span style={{ ...bodyBase, fontSize: "14px", textTransform: "uppercase" }}>15:30 CAT</span>
+                </div>
+              </div>
+
+              {/* View Fixture CTA */}
+              <Link
+                href="/match-centre"
+                className="w-full bg-transparent border border-white text-white flex items-center justify-center gap-2 rounded-sm hover:bg-white transition-colors duration-300"
+                style={{
+                  ...labelCaps,
+                  padding: "12px",
+                  color: "white",
+                }}
+                onMouseEnter={(e) => { e.currentTarget.style.color = STITCH.primary; }}
+                onMouseLeave={(e) => { e.currentTarget.style.color = "white"; }}
+              >
+                VIEW FIXTURE
+                <span className="material-symbols-outlined">arrow_forward</span>
+              </Link>
+            </div>
+          </div>
+
+          {/* ═══════════ CARD 3: TICKETS ═══════════ */}
+          <div className="flex flex-col h-full bg-white rounded-xl overflow-hidden shadow-sm border border-gray-200">
+            {/* Green Badge Header (inline, self-start) */}
+            <div
+              className="inline-block self-start rounded-br-lg text-white"
+              style={{
+                ...labelCaps,
+                backgroundColor: STITCH.primary,
+                clipPath: STITCH.slantedClip,
+                padding: "16px 24px",
+              }}
+            >
+              <span>TICKETS</span>
+            </div>
+
+            {/* White Body */}
+            <div className="p-6 flex flex-col flex-grow bg-white text-black">
+              {/* Large Rotated Ticket Icon */}
+              <div className="mb-12 mt-8 flex justify-center">
+                <span
+                  className="material-symbols-outlined text-gray-800"
+                  style={{ fontSize: "80px", transform: "rotate(-15deg)" }}
                 >
-                  <span>VIEW ALL</span>
-                  <ArrowRight className="w-3.5 h-3.5" />
+                  confirmation_number
+                </span>
+              </div>
+
+              {/* Text + CTA */}
+              <div className="flex-grow flex flex-col justify-end">
+                <h3 style={h2Style} className="mb-4 text-black">
+                  BE PART OF<br />THE ACTION
+                </h3>
+                <p style={{ ...bodyBase, fontSize: "14px" }} className="text-gray-600 mb-8">
+                  Secure your seat and support the Sables.
+                </p>
+                <Link
+                  href="/tickets"
+                  className="w-full text-white flex items-center justify-center gap-2 rounded-sm hover:opacity-90 transition-opacity duration-300"
+                  style={{
+                    ...labelCaps,
+                    backgroundColor: STITCH.primary,
+                    padding: "12px",
+                  }}
+                >
+                  BUY TICKETS
+                  <span className="material-symbols-outlined">arrow_forward</span>
                 </Link>
               </div>
-
-              {/* News Articles Stack */}
-              <div className="space-y-5">
-                {newsItems.map((item, idx) => (
-                  <Link
-                    key={item.id}
-                    href={item.link}
-                    className={`block group/item ${
-                      idx < newsItems.length - 1 ? "border-b border-white/10 pb-4" : ""
-                    }`}
-                  >
-                    <span className="text-[10px] font-bold tracking-widest text-emerald-300 uppercase">
-                      {item.category} • {item.date}
-                    </span>
-                    <h4 className="text-base sm:text-lg font-bold font-heading group-hover/item:text-emerald-200 transition-colors leading-snug mt-1">
-                      {item.title}
-                    </h4>
-                  </Link>
-                ))}
-              </div>
-            </div>
-
-            {/* Bottom Footer */}
-            <div className="mt-8 pt-4 border-t border-white/10 flex justify-between items-center text-xs text-white/70">
-              <span>Official Union Bulletins</span>
-              <span className="font-mono text-[11px] text-emerald-400">UPDATED DAILY</span>
             </div>
           </div>
 
-          {/* Card 3: Tickets Feature Card */}
-          <div className="bg-white rounded-xl p-6 sm:p-8 border border-gray-200/80 shadow-sm flex flex-col justify-between hover:shadow-md transition-shadow">
-            <div>
-              {/* Badge */}
-              <div className="inline-flex items-center space-x-2 px-3 py-1 bg-[#006747]/10 text-[#006747] rounded-full text-[11px] font-bold tracking-wider uppercase mb-6">
-                <Ticket className="w-3.5 h-3.5" />
-                <span>MATCH TICKETS</span>
-              </div>
-
-              <h3 className="text-2xl font-extrabold text-gray-900 font-heading leading-tight mb-3">
-                BE PART OF THE ACTION.
-              </h3>
-              <p className="text-sm text-gray-600 leading-relaxed mb-6">
-                Secure your seat to witness the Sables live in action at National Sports Stadium.
-              </p>
+          {/* ═══════════ CARD 4: OFFICIAL SHOP ═══════════ */}
+          <div className="flex flex-col h-full bg-white rounded-xl overflow-hidden shadow-sm border border-gray-200">
+            {/* Green Badge Header (inline, self-start) */}
+            <div
+              className="inline-block self-start rounded-br-lg text-white"
+              style={{
+                ...labelCaps,
+                backgroundColor: STITCH.primary,
+                clipPath: STITCH.slantedClip,
+                padding: "16px 24px",
+              }}
+            >
+              <span>OFFICIAL SHOP</span>
             </div>
 
-            <Link
-              href="/tickets"
-              className="inline-flex items-center justify-center space-x-2 w-full py-3.5 px-5 bg-[#006747] hover:bg-[#005238] text-white font-bold text-xs tracking-widest uppercase rounded-lg transition-colors shadow-sm"
-            >
-              <span>BUY TICKETS</span>
-              <ArrowRight className="w-4 h-4" />
-            </Link>
-          </div>
-
-          {/* Card 4: Official Merchandise Card */}
-          <div className="bg-white rounded-xl p-6 sm:p-8 border border-gray-200/80 shadow-sm flex flex-col justify-between hover:shadow-md transition-shadow">
-            <div>
-              {/* Badge */}
-              <div className="inline-flex items-center space-x-2 px-3 py-1 bg-amber-500/10 text-amber-800 rounded-full text-[11px] font-bold tracking-wider uppercase mb-6">
-                <ShoppingBag className="w-3.5 h-3.5 text-amber-600" />
-                <span>OFFICIAL STORE</span>
+            {/* White Body */}
+            <div className="p-6 flex flex-col flex-grow bg-white text-black">
+              {/* Product Mockup */}
+              <div className="flex justify-center items-center h-48 mb-8 relative mt-4">
+                <div
+                  className="w-32 h-40 rounded-lg shadow-md flex items-center justify-center relative"
+                  style={{ backgroundColor: STITCH.primary }}
+                >
+                  <span className="material-symbols-outlined text-white text-4xl">apparel</span>
+                </div>
+                <div className="w-20 h-20 bg-black rounded-full shadow-lg absolute bottom-0 right-8 flex items-center justify-center">
+                  <span className="material-symbols-outlined text-white text-2xl">laundry</span>
+                </div>
               </div>
 
-              <h3 className="text-2xl font-extrabold text-gray-900 font-heading leading-tight mb-3">
-                GEAR UP. REPRESENT.
-              </h3>
-              <p className="text-sm text-gray-600 leading-relaxed mb-6">
-                Wear the green and yellow with pride. Official 2026 match replica kits now available.
-              </p>
+              {/* Text + CTA */}
+              <div className="flex-grow flex flex-col justify-end">
+                <h3 style={{ ...h3Style, fontSize: "20px" }} className="mb-6 leading-tight text-black">
+                  GEAR UP.<br />REPRESENT.<br />WEAR IT WITH PRIDE.
+                </h3>
+                <Link
+                  href="/clubhouse"
+                  className="w-full bg-black text-white flex items-center justify-center gap-2 rounded-sm hover:bg-gray-800 transition-colors duration-300"
+                  style={{
+                    ...labelCaps,
+                    padding: "12px",
+                  }}
+                >
+                  SHOP NOW
+                  <span className="material-symbols-outlined">arrow_forward</span>
+                </Link>
+              </div>
             </div>
-
-            <Link
-              href="/clubhouse"
-              className="inline-flex items-center justify-center space-x-2 w-full py-3.5 px-5 bg-gray-900 hover:bg-black text-white font-bold text-xs tracking-widest uppercase rounded-lg transition-colors shadow-sm"
-            >
-              <span>SHOP NOW</span>
-              <ArrowRight className="w-4 h-4" />
-            </Link>
           </div>
 
         </div>
-
       </div>
     </section>
   );
