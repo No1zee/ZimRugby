@@ -28,7 +28,7 @@ export default function LatestNewsBlock() {
           {/* Main Feature Article (2/3 width) */}
           <div className="lg:col-span-8 group relative rounded-2xl overflow-hidden shadow-sm bg-black border border-black/5 min-h-[380px] sm:min-h-[440px] flex flex-col justify-end">
             <Image
-              src="/images/hero/sables-action.webp"
+              src="/images/teams/african-chamions.png"
               alt="Sables Squad Announcement"
               fill
               className="object-cover object-top group-hover:scale-105 transition-transform duration-700 opacity-90"
@@ -61,7 +61,7 @@ export default function LatestNewsBlock() {
             >
               <div className="relative w-full h-36 sm:h-40 rounded-xl overflow-hidden mb-3">
                 <Image
-                  src="/images/hero/zim-u20s.webp"
+                  src="/images/teams/junior-sables.jpg"
                   alt="Junior Sables"
                   fill
                   className="object-cover group-hover:scale-105 transition-transform duration-500"
@@ -84,7 +84,7 @@ export default function LatestNewsBlock() {
             >
               <div className="relative w-full h-36 sm:h-40 rounded-xl overflow-hidden mb-3">
                 <Image
-                  src="/images/hero/cheetahs-7s.webp"
+                  src="/images/teams/cheetahs.jpg"
                   alt="7s Cheetahs"
                   fill
                   className="object-cover group-hover:scale-105 transition-transform duration-500"
