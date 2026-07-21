@@ -64,7 +64,7 @@ export default function EventsCalendar() {
 
   return (
     <section className="py-20 bg-rich-black relative border-t border-white/10" id="events-calendar">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-end mb-12">
           <div className="space-y-4">
             <div className="flex items-center gap-2">
@@ -72,7 +72,7 @@ export default function EventsCalendar() {
               <span className="text-zru-green text-[10px] font-black uppercase tracking-[0.4em] font-subheading">Upcoming Events</span>
             </div>
             <h2 className="text-5xl md:text-7xl font-heading text-white font-black uppercase tracking-tighter">
-              WHAT'S <span className="text-stroke-white text-transparent">HAPPENING</span>
+              WHAT&apos;S <span className="text-stroke-white text-transparent">HAPPENING</span>
             </h2>
           </div>
           <div className="flex gap-4">

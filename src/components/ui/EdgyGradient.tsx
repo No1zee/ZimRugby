@@ -34,7 +34,7 @@ export default function EdgyGradient({ className = "", opacity = 0.65 }: EdgyGra
           preserveAspectRatio="xMidYMid slice"
         >
           {/* Solid dark jade base layer */}
-          <rect width="1000" height="1000" fill="#000e08" />
+          <rect width="1000" height="1000" fill="#00150c" />
           
           {/* 1. Neon Violet & Indigo crescent at bottom-left */}
           <motion.path 
@@ -144,7 +144,7 @@ export default function EdgyGradient({ className = "", opacity = 0.65 }: EdgyGra
       <div 
         className="absolute inset-0"
         style={{
-          background: "radial-gradient(circle at 60% 40%, transparent 20%, rgba(10, 10, 10, 0.35) 55%, rgba(10, 10, 10, 0.75) 80%, #0a0a0a 96%)"
+          background: "radial-gradient(circle at 60% 40%, transparent 25%, rgba(20, 20, 20, 0.25) 55%, rgba(20, 20, 20, 0.55) 80%, #141414 98%)"
         }}
       />
     </div>

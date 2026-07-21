@@ -30,7 +30,7 @@ export default function EventCard({
         className="card-green border rounded-xl overflow-hidden group flex flex-col h-full glow-green-card"
     >
         {/* Date Banner */}
-        <div className="card-green p-4 flex items-center justify-between border-b">
+        <div className="card-green p-4 flex items-center justify-between border-b border-white/10">
         <div className="flex items-center gap-2 text-white font-bold tracking-wider">
             <CalendarIcon className="w-4 h-4 text-white" />
             <span>{date}</span>
@@ -46,21 +46,21 @@ export default function EventCard({
         </h3>
         
         <div className="space-y-3 mb-6">
-            <div className="flex items-center gap-3 text-gray-400 text-sm">
+            <div className="flex items-center gap-3 text-zinc-300 text-sm">
                 <Clock className="w-4 h-4" />
                 <span>{time}</span>
             </div>
-            <div className="flex items-center gap-3 text-gray-400 text-sm">
+            <div className="flex items-center gap-3 text-zinc-300 text-sm">
                 <MapPin className="w-4 h-4" />
                 <span>{location}</span>
             </div>
         </div>
 
-        <p className="text-gray-400 text-sm leading-relaxed mb-6 flex-1 line-clamp-3">
+        <p className="text-zinc-300 text-sm leading-relaxed mb-6 flex-1 line-clamp-3">
             {description}
         </p>
 
-        <Button variant="outline" className="w-full justify-center border-white/10 hover:bg-white hover:text-rich-black text-sm py-2">
+        <Button variant="outline" className="w-full justify-center border-white/20 hover:bg-white hover:text-rich-black text-sm py-2">
             EVENT DETAILS
         </Button>
         </div>

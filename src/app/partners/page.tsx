@@ -3,8 +3,6 @@ import { Metadata } from 'next';
 import PartnersHero from '../../components/partners/PartnersHero';
 import PartnerTierSection from '../../components/partners/PartnerTierSection';
 import { partnerData } from '../../data/partners';
-import Navigation from '../../components/layout/Navigation';
-
 export const metadata: Metadata = {
   title: 'Partners | Zimbabwe Rugby Union',
   description: 'Meet the principal partners, official partners, sponsors and supporters of the Zimbabwe Rugby Union.',

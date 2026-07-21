@@ -18,8 +18,7 @@ import {
 import Image from "next/image";
 import Link from "next/link";
 
-import Navigation from "@/components/layout/Navigation";
-import Footer from "@/components/layout/Footer";
+
 import Button from "@/components/common/Button";
 import { FixtureCard, type Fixture } from "@/components/tickets/FixtureCard";
 import { StripedBackground } from "@/components/ui/StripedBackground";
@@ -108,15 +107,15 @@ const OfficialChannelBadge = () => (
 const FAQItem = ({ question, answer }: { question: string, answer: string }) => {
   const [isOpen, setIsOpen] = useState(false);
   return (
-    <div className="border-b border-white/10 last:border-none">
+    <div className="border-b border-black/5 last:border-none">
       <button 
         onClick={() => setIsOpen(!isOpen)}
         className="w-full py-6 flex items-center justify-between text-left group"
       >
-        <span className="text-lg font-bold text-white uppercase tracking-tight group-hover:text-zru-green transition-colors pr-8 leading-tight">
+        <span className="text-lg font-bold text-rich-black uppercase tracking-tight group-hover:text-zru-green transition-colors pr-8 leading-tight">
           {question}
         </span>
-        <HelpCircle className={`w-6 h-6 shrink-0 transition-transform duration-500 ${isOpen ? "rotate-180 text-zru-green" : "text-white/50"}`} />
+        <HelpCircle className={`w-6 h-6 shrink-0 transition-transform duration-500 ${isOpen ? "rotate-180 text-zru-green" : "text-black/40"}`} />
       </button>
       <AnimatePresence>
         {isOpen && (
@@ -127,7 +126,7 @@ const FAQItem = ({ question, answer }: { question: string, answer: string }) => 
             transition={{ duration: 0.4, ease: "easeInOut" }}
             className="overflow-hidden"
           >
-            <p className="pb-6 text-gray-400 text-sm leading-relaxed max-w-3xl">
+            <p className="pb-6 text-black/60 text-sm leading-relaxed max-w-3xl">
               {answer}
             </p>
           </motion.div>
@@ -166,7 +165,7 @@ export default function TicketsPage() {
       } else {
         setSubmitError(res.message);
       }
-    } catch (err) {
+    } catch {
       setSubmitError("An error occurred during submission.");
     } finally {
       setIsSubmitting(false);
@@ -182,7 +181,7 @@ export default function TicketsPage() {
   const CATEGORIES = ["All", "Sables", "Lady Sables", "Sevens", "Domestic", "World Cup Pathway"];
 
   return (
-    <main className="bg-rich-black min-h-screen selection:bg-zru-green selection:text-rich-black">
+    <main className="bg-milk-white min-h-screen selection:bg-zru-green selection:text-white text-rich-black">
       {/* SECTION A: HERO */}
       <section className="relative min-h-[60vh] flex items-center pt-32 pb-16 overflow-hidden">
         {/* Stadium Background */}
@@ -191,14 +190,14 @@ export default function TicketsPage() {
             src="/images/campaign/hero.png" 
             alt="Zimbabwe Rugby Stadium"
             fill
-            className="object-cover opacity-20 blur-[2px] grayscale"
+            className="object-cover opacity-10 blur-[2px] grayscale"
             priority
           />
-          <div className="absolute inset-0 bg-linear-to-b from-rich-black via-rich-black/40 to-rich-black" />
-          <div className="absolute inset-0 bg-[url('/noise.png')] opacity-20 pointer-events-none" />
+          <div className="absolute inset-0 bg-linear-to-b from-milk-white via-milk-white/40 to-milk-white" />
+          <div className="absolute inset-0 bg-[url('/noise.png')] opacity-5 pointer-events-none" />
           {/* Splash of Green */}
-          <div className="absolute top-1/4 -left-10 w-96 h-96 bg-green-900/10 blur-[120px] rounded-full pointer-events-none" />
-          <div className="absolute bottom-1/4 -right-10 w-96 h-96 bg-green-900/10 blur-[120px] rounded-full pointer-events-none" />
+          <div className="absolute top-1/4 -left-10 w-96 h-96 bg-green-900/5 blur-[120px] rounded-full pointer-events-none" />
+          <div className="absolute bottom-1/4 -right-10 w-96 h-96 bg-green-900/5 blur-[120px] rounded-full pointer-events-none" />
           <StripedBackground color="green" variant="subtle" position="left" className="opacity-10" />
         </div>
 
@@ -212,30 +211,30 @@ export default function TicketsPage() {
               transition={{ duration: 0.8 }}
             >
               <OfficialChannelBadge />
-              <h1 className="text-6xl md:text-8xl lg:text-9xl font-black text-white leading-[0.9] uppercase tracking-tighter mt-8 mb-8">
+              <h1 className="text-6xl md:text-8xl lg:text-9xl font-black text-rich-black leading-[0.9] uppercase tracking-tighter mt-8 mb-8">
                 OFFICIAL <br />
                 <span className="text-zru-green text-glow-green">TICKETS</span>
               </h1>
-              <p className="text-lg md:text-xl text-gray-400 max-w-xl mb-12 font-medium leading-relaxed">
+              <p className="text-lg md:text-xl text-black/60 max-w-xl mb-12 font-medium leading-relaxed">
                 Welcome to the official home of Sables and ZRU tickets. Every link on this page takes you to an authorised partner, with transparent pricing and secure checkout.
               </p>
               
-              <div className="card-green border border-l-2 border-zru-green p-4 mb-12 max-w-lg">
-                <p className="text-xs font-bold text-white/60 uppercase tracking-widest leading-loose">
+              <div className="bg-white border border-black/5 border-l-2 border-l-zru-green p-4 mb-12 max-w-lg shadow-sm">
+                <p className="text-xs font-bold text-black/60 uppercase tracking-widest leading-loose">
                   <Shield className="inline-block w-3 h-3 mr-2 mb-0.5 text-zru-green" />
-                  If you didn’t start from <span className="text-white">zimrugby.co.zw</span> or this page, double‑check before you buy.
+                  If you didn’t start from <span className="text-rich-black font-black">zimrugby.co.zw</span> or this page, double‑check before you buy.
                 </p>
               </div>
 
               <div className="flex flex-wrap gap-6 items-center">
                 <Link href="#fixtures">
-                  <button className="text-[10px] font-black text-white uppercase tracking-[0.4em] flex items-center gap-2 group hover:text-zru-green transition-colors">
+                  <button className="text-[10px] font-black text-rich-black uppercase tracking-[0.4em] flex items-center gap-2 group hover:text-zru-green transition-colors">
                     View upcoming fixtures
                     <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                   </button>
                 </Link>
                 <Link href="#faqs">
-                  <button className="text-[10px] font-black text-white uppercase tracking-[0.4em] flex items-center gap-2 group hover:text-zru-green transition-colors opacity-40 hover:opacity-100">
+                  <button className="text-[10px] font-black text-rich-black uppercase tracking-[0.4em] flex items-center gap-2 group hover:text-zru-green transition-colors opacity-40 hover:opacity-100">
                     Ticket FAQs & safety
                     <ChevronRight className="w-4 h-4" />
                   </button>
@@ -248,11 +247,11 @@ export default function TicketsPage() {
                 <motion.div 
                   animate={{ y: [0, -20, 0] }}
                   transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-                  className="relative w-64 h-64 border rounded-2xl card-green p-8 flex flex-center items-center justify-center rotate-3"
+                  className="relative w-64 h-64 border border-black/5 bg-white rounded-2xl p-8 flex flex-center items-center justify-center rotate-3 shadow-sm"
                 >
                   <Ticket className="w-32 h-32 text-zru-green/10" />
                   <div className="absolute inset-0 bg-linear-to-tr from-zru-green/5 to-transparent rounded-2xl" />
-                  <div className="absolute -top-4 -right-4 w-12 h-12 bg-rich-black border border-white/10 rounded-full flex items-center justify-center shadow-2xl">
+                  <div className="absolute -top-4 -right-4 w-12 h-12 bg-white border border-black/10 rounded-full flex items-center justify-center shadow-2xl">
                     <CheckCircle2 className="w-6 h-6 text-zru-green" />
                   </div>
                </motion.div>
@@ -262,7 +261,7 @@ export default function TicketsPage() {
       </section>
 
       {/* SECTION B: FIXTURES GRID */}
-      <section id="fixtures" className="py-24 bg-rich-black border-y border-white/5 scroll-mt-20">
+      <section id="fixtures" className="py-24 bg-milk-white border-y border-black/5 scroll-mt-20">
         <div className="max-w-[1440px] mx-auto px-6 md:px-12">
           {/* Page Announcements */}
           <PageAnnouncements scope="tickets" className="mb-12" />
@@ -271,7 +270,7 @@ export default function TicketsPage() {
           <div className="flex flex-col lg:flex-row justify-between items-start lg:items-end gap-10 mb-16">
             <div className="max-w-xl">
                <span className="block text-[10px] font-black uppercase tracking-[0.4em] text-zru-green mb-6">Upcoming Matches</span>
-               <h2 className="text-4xl md:text-5xl font-black text-white uppercase tracking-tighter">FIXTURES & TICKETS</h2>
+               <h2 className="text-4xl md:text-5xl font-black text-rich-black uppercase tracking-tighter">FIXTURES & TICKETS</h2>
             </div>
             
             {/* Filter Bar */}
@@ -283,8 +282,8 @@ export default function TicketsPage() {
                     onClick={() => setFilter(cat)}
                     className={`px-6 py-2.5 rounded-full text-[10px] font-black uppercase tracking-widest transition-all
                       ${filter === cat 
-                        ? 'bg-zru-green text-rich-black shadow-[0_0_20px_rgba(0,107,63,0.3)]' 
-                        : "card-green border text-white/60 hover:text-white hover:border-white/20"}
+                        ? 'bg-zru-green text-white shadow-lg' 
+                        : "bg-white border border-black/5 text-black/60 hover:text-black hover:border-black/20 shadow-sm hover:shadow-md"}
                     `}
                   >
                     {cat}
@@ -313,13 +312,13 @@ export default function TicketsPage() {
               <motion.div 
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                className="py-32 text-center border border-dashed border-white/10 rounded-2xl card-green"
+                className="py-32 text-center border border-dashed border-black/10 rounded-2xl bg-black/5"
               >
                 <div className="mb-6 opacity-20">
-                   <Ticket className="w-16 h-16 mx-auto text-white" />
+                   <Ticket className="w-16 h-16 mx-auto text-rich-black" />
                 </div>
-                <h3 className="text-2xl font-black text-white uppercase tracking-tight mb-4">No fixtures currently on sale</h3>
-                <p className="text-gray-500 font-medium mb-10 max-w-sm mx-auto">We’re finalising the next block of fixtures. Check back soon or join ZRU Nation for early ticket alerts.</p>
+                <h3 className="text-2xl font-black text-rich-black uppercase tracking-tight mb-4">No fixtures currently on sale</h3>
+                <p className="text-black/60 font-medium mb-10 max-w-sm mx-auto">We’re finalising the next block of fixtures. Check back soon or join ZRU Nation for early ticket alerts.</p>
                 <Button variant="secondary" size="xl" href="/world-cup-campaign">
                   Join ZRU Nation
                 </Button>
@@ -328,9 +327,9 @@ export default function TicketsPage() {
           </AnimatePresence>
 
           {/* Helper Text */}
-          <div className="mt-16 flex items-start gap-4 p-6 card-green border rounded-xl max-w-4xl">
+          <div className="mt-16 flex items-start gap-4 p-6 bg-white border border-black/5 rounded-xl max-w-4xl shadow-sm">
             <Info className="w-5 h-5 text-zru-green shrink-0 mt-0.5" />
-            <p className="text-xs text-gray-400 font-medium leading-relaxed">
+            <p className="text-xs text-black/60 font-medium leading-relaxed">
               All ticket purchases for Sables and ZRU fixtures are handled by our authorised ticketing partners. You’ll complete your booking on their secure platforms.
             </p>
           </div>
@@ -338,11 +337,11 @@ export default function TicketsPage() {
       </section>
 
       {/* SECTION C: HOW IT WORKS */}
-      <section className="py-24 bg-linear-to-b from-rich-black to-[#0a0a0a]">
+      <section className="py-24 bg-milk-white border-b border-black/5">
         <div className="max-w-[1440px] mx-auto px-6 md:px-12">
           <div className="max-w-2xl mb-20">
              <span className="block text-[10px] font-black uppercase tracking-[0.4em] text-zru-green mb-6">Simple Entry</span>
-             <h2 className="text-4xl md:text-5xl font-black text-white uppercase tracking-tighter">HOW TO GET YOUR TICKETS</h2>
+             <h2 className="text-4xl md:text-5xl font-black text-rich-black uppercase tracking-tighter">HOW TO GET YOUR TICKETS</h2>
           </div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
@@ -373,41 +372,41 @@ export default function TicketsPage() {
               }
             ].map((step, i) => (
               <div key={i} className="relative group">
-                <div className="text-[60px] font-black text-white/5 absolute -top-10 -left-4 pointer-events-none group-hover:text-zru-green/5 transition-colors">{step.step}</div>
-                <div className="p-8 rounded-xl card-green border transition-all duration-500 h-full">
+                <div className="text-[60px] font-black text-black/5 absolute -top-10 -left-4 pointer-events-none group-hover:text-zru-green/5 transition-colors">{step.step}</div>
+                <div className="p-8 rounded-xl bg-white border border-black/5 shadow-sm transition-all duration-500 h-full">
                   <div className="w-12 h-12 bg-zru-green/10 rounded flex items-center justify-center mb-8">
                     <step.icon className="w-6 h-6 text-zru-green" />
                   </div>
-                  <h3 className="text-xl font-bold text-white uppercase tracking-tight mb-4">{step.title}</h3>
-                  <p className="text-sm text-gray-500 font-medium leading-relaxed">{step.desc}</p>
+                  <h3 className="text-xl font-bold text-rich-black uppercase tracking-tight mb-4">{step.title}</h3>
+                  <p className="text-sm text-black/50 font-medium leading-relaxed">{step.desc}</p>
                 </div>
               </div>
             ))}
           </div>
           
-          <p className="mt-12 text-center text-xs font-bold text-white/50 uppercase tracking-[0.2em] italic">
+          <p className="mt-12 text-center text-xs font-bold text-black/50 uppercase tracking-[0.2em] italic">
             You’ll always see our name or crest on official partner pages. If something feels off, return here and follow the links.
           </p>
         </div>
       </section>
 
       {/* SECTION D: CATEGORIES */}
-      <section className="py-24 bg-rich-black border-y border-white/5">
+      <section className="py-24 bg-milk-white border-b border-black/5">
         <div className="max-w-[1440px] mx-auto px-6 md:px-12">
           <div className="grid lg:grid-cols-2 gap-24 items-start">
             <div>
               <span className="block text-[10px] font-black uppercase tracking-[0.4em] text-zru-green mb-8">Seating Overview</span>
-              <h2 className="text-4xl md:text-5xl font-black text-white uppercase tracking-tighter leading-none mb-8">TICKET TYPES <br />& AREAS</h2>
-              <p className="text-lg text-gray-400 font-medium mb-12 max-w-lg leading-relaxed">
+              <h2 className="text-4xl md:text-5xl font-black text-rich-black uppercase tracking-tighter leading-none mb-8">TICKET TYPES <br />& AREAS</h2>
+              <p className="text-lg text-black/60 font-medium mb-12 max-w-lg leading-relaxed">
                 Different fixtures and venues use different seating maps, but most matches follow a similar structure. Use this as a guide before you buy.
               </p>
               
-              <div className="p-6 card-green border rounded-xl">
+              <div className="p-6 bg-white border border-black/5 rounded-xl shadow-sm">
                  <div className="flex items-center gap-3 text-zru-green mb-4 font-black uppercase text-[10px] tracking-widest">
                     <Info className="w-4 h-4" />
                     Dynamic Pricing
                  </div>
-                 <p className="text-xs text-gray-500 font-medium leading-relaxed">
+                 <p className="text-xs text-black/50 font-medium leading-relaxed">
                    Prices may vary by opponent, competition and demand. Some fixtures may use dynamic pricing—booking early is often your best value.
                  </p>
               </div>
@@ -421,9 +420,9 @@ export default function TicketsPage() {
                 { name: "Family & supporter zones", text: "Sections designed for families and organised supporter groups. Expect more singing and atmosphere." },
                 { name: "Accessible seating", text: "Reserved areas for supporters with accessibility needs, with companion seating where available." }
               ].map((c, i) => (
-                <div key={i} className="p-6 card-green border rounded-lg transition-colors">
-                  <h3 className="text-sm font-black text-white uppercase tracking-widest mb-2">{c.name}</h3>
-                  <p className="text-xs text-gray-500 font-medium leading-relaxed">{c.text}</p>
+                <div key={i} className="p-6 bg-white border border-black/5 rounded-lg shadow-sm">
+                  <h3 className="text-sm font-black text-rich-black uppercase tracking-widest mb-2">{c.name}</h3>
+                  <p className="text-xs text-black/50 font-medium leading-relaxed">{c.text}</p>
                 </div>
               ))}
             </div>
@@ -434,17 +433,17 @@ export default function TicketsPage() {
       {/* SECTION E: CAMPAIGN HOOK */}
       <section className="py-16 bg-zru-green relative overflow-hidden group">
         <Link href="/world-cup-campaign" className="absolute inset-0 z-10" />
-        <div className="absolute inset-0 bg-black/off-5 opacity-0 group-hover:opacity-100 transition-opacity" />
+        <div className="absolute inset-0 bg-black/5 opacity-0 group-hover:opacity-100 transition-opacity" />
         <div className="max-w-[1440px] mx-auto px-6 md:px-12 relative z-20 flex flex-col md:flex-row items-center justify-between gap-8">
            <div className="max-w-2xl">
-              <h2 className="text-2xl md:text-3xl font-black text-rich-black uppercase tracking-tighter leading-none mb-3">MATCHDAY AND THE WORLD CUP JOURNEY</h2>
-              <p className="text-sm text-rich-black/70 font-bold leading-relaxed pr-8">
+              <h2 className="text-2xl md:text-3xl font-black text-white uppercase tracking-tighter leading-none mb-3">MATCHDAY AND THE WORLD CUP JOURNEY</h2>
+              <p className="text-sm text-white/80 font-bold leading-relaxed pr-8">
                  Every test is part of a bigger story. When you secure your seat, you’re already backing the Sables. To go further, consider becoming a monthly backer.
               </p>
            </div>
            <div className="flex items-center gap-4 shrink-0">
-              <span className="text-sm font-black text-rich-black uppercase tracking-widest">Explore Campaign</span>
-              <div className="w-12 h-12 bg-rich-black rounded-full flex items-center justify-center text-white group-hover:scale-110 transition-transform">
+              <span className="text-sm font-black text-white uppercase tracking-widest">Explore Campaign</span>
+              <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center text-zru-green group-hover:scale-110 transition-transform">
                  <ArrowRight className="w-5 h-5" />
               </div>
            </div>
@@ -452,22 +451,22 @@ export default function TicketsPage() {
       </section>
 
       {/* SECTION F: FAQ */}
-      <section id="faqs" className="py-32 bg-rich-black scroll-mt-20">
+      <section id="faqs" className="py-32 bg-milk-white scroll-mt-20">
         <div className="max-w-[1440px] mx-auto px-6 md:px-12">
           <div className="grid lg:grid-cols-3 gap-24">
             <div>
               <span className="block text-[10px] font-black uppercase tracking-[0.4em] text-zru-green mb-8">Security First</span>
-              <h2 className="text-4xl font-black text-white uppercase tracking-tighter leading-tight mb-8">TICKET FAQs <br />& SAFETY</h2>
-              <p className="text-gray-500 font-medium leading-relaxed mb-8">Direct answers for your peace of mind.</p>
-              <div className="pt-8 border-t border-white/5">
-                 <p className="text-xs font-bold text-white/30 uppercase tracking-widest mb-4">Still unsure?</p>
+              <h2 className="text-4xl font-black text-rich-black uppercase tracking-tighter leading-tight mb-8">TICKET FAQs <br />& SAFETY</h2>
+              <p className="text-black/50 font-medium leading-relaxed mb-8">Direct answers for your peace of mind.</p>
+              <div className="pt-8 border-t border-black/5">
+                 <p className="text-xs font-bold text-black/45 uppercase tracking-widest mb-4">Still unsure?</p>
                  <Link href="/contact" className="inline-flex items-center gap-2 text-xs font-black text-zru-green uppercase tracking-widest hover:underline">
                     Contact support team <ChevronRight className="w-3 h-3" />
                  </Link>
               </div>
             </div>
             
-            <div className="lg:col-span-2 card-green border rounded-2xl p-8 md:p-12">
+            <div className="lg:col-span-2 bg-white border border-black/5 rounded-2xl p-8 md:p-12 shadow-sm">
               <FAQItem 
                 question="How do I know this is the official ticket source?"
                 answer="This page lists every official ticket outlet for ZRU fixtures. If you’re following a link from zimrugby.co.zw or this Tickets page, you are on an approved route."
@@ -505,18 +504,18 @@ export default function TicketsPage() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="absolute inset-0 bg-rich-black/90 backdrop-blur-md"
+              className="absolute inset-0 bg-black/85 backdrop-blur-md"
               onClick={() => setIsRegistering(null)}
             />
             <motion.div 
               initial={{ opacity: 0, scale: 0.9, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.9, y: 20 }}
-              className="relative w-full max-w-lg bg-[#111] border border-white/10 rounded-2xl overflow-hidden shadow-2xl"
+              className="relative w-full max-w-lg bg-white border border-black/10 rounded-2xl overflow-hidden shadow-2xl"
             >
               <button
                 onClick={() => setIsRegistering(null)}
-                className="absolute top-6 right-6 text-white/60 hover:text-white p-2"
+                className="absolute top-6 right-6 text-black/60 hover:text-black p-2"
                 aria-label="Close"
               >
                 <X className="w-5 h-5" />
@@ -524,7 +523,7 @@ export default function TicketsPage() {
 
               <div className="p-8 pb-0">
                 <span className="inline-block text-[10px] font-black uppercase text-zru-green mb-2 tracking-widest">Priority Alert List</span>
-                <h3 className="text-3xl font-black text-white uppercase tracking-tighter mb-4">
+                <h3 className="text-3xl font-black text-rich-black uppercase tracking-tighter mb-4">
                   {isRegistering.teams}
                 </h3>
                 {isSuccess ? (
@@ -536,7 +535,7 @@ export default function TicketsPage() {
                     <p className="text-sm text-green-500 font-bold">Priority registration recorded! We&apos;ll alert you via email as soon as tickets go on sale.</p>
                   </motion.div>
                 ) : (
-                  <p className="text-sm text-gray-400 font-medium mb-8 pr-12">
+                  <p className="text-sm text-black/60 font-medium mb-8 pr-12">
                     Registration for this fixture hasn&apos;t opened yet. Be the first to know when tickets go live.
                   </p>
                 )}
@@ -552,24 +551,24 @@ export default function TicketsPage() {
                   )}
                   <div className="space-y-4">
                     <div>
-                      <label htmlFor="reg-name" className="block text-[10px] font-black text-white/60 uppercase tracking-widest mb-2">FULL NAME</label>
+                      <label htmlFor="reg-name" className="block text-[10px] font-black text-black/60 uppercase tracking-widest mb-2">FULL NAME</label>
                       <input 
                         id="reg-name"
                         type="text" 
                         required
-                        className="w-full bg-white/5 border border-white/10 rounded p-4 text-white font-medium focus:outline-none focus:border-zru-green transition-colors" 
+                        className="w-full bg-black/5 border border-black/10 rounded p-4 text-rich-black font-medium focus:outline-none focus:border-zru-green transition-colors" 
                         placeholder="Enter your name" 
                         value={formData.name}
                         onChange={(e) => setFormData({...formData, name: e.target.value})}
                       />
                     </div>
                     <div>
-                      <label htmlFor="reg-email" className="block text-[10px] font-black text-white/60 uppercase tracking-widest mb-2">EMAIL ADDRESS</label>
+                      <label htmlFor="reg-email" className="block text-[10px] font-black text-black/60 uppercase tracking-widest mb-2">EMAIL ADDRESS</label>
                       <input 
                         id="reg-email"
                         type="email" 
                         required
-                        className="w-full bg-white/5 border border-white/10 rounded p-4 text-white font-medium focus:outline-none focus:border-zru-green transition-colors" 
+                        className="w-full bg-black/5 border border-black/10 rounded p-4 text-rich-black font-medium focus:outline-none focus:border-zru-green transition-colors" 
                         placeholder="your@email.com" 
                         value={formData.email}
                         onChange={(e) => setFormData({...formData, email: e.target.value})}
@@ -587,7 +586,7 @@ export default function TicketsPage() {
                     >
                       {isSubmitting ? "Processing…" : "Register Interest"}
                     </Button>
-                    <p className="text-center text-[10px] font-bold text-white/50 uppercase tracking-widest">
+                    <p className="text-center text-[10px] font-bold text-black/60 uppercase tracking-widest">
                       Already a ZRU Nation member? <Link href="/auth" className="text-zru-green underline">Sign in for one-click interest</Link>
                     </p>
                   </div>

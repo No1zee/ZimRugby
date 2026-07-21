@@ -2,7 +2,70 @@
 import { Photo } from "@/types";
 import { directusFetch } from "@/lib/directus/fetch";
 
+import manifestData from "../../../public/data/media-manifest.json";
+
 export async function getPhotos(): Promise<Photo[]> {
+  try {
+    const galleryAssets = manifestData.assets.filter((a: any) => a.category === 'gallery');
+    
+    if (galleryAssets.length > 0) {
+      return galleryAssets.map((asset: any) => {
+        // Map tags/event to album categories
+        let album: "Match Day" | "Historical Collections" | "Community Rugby" | "Training Camps" = "Match Day";
+        const fullPathLower = (asset.src_original || "").toLowerCase();
+        
+        if (fullPathLower.includes("women")) {
+          album = "Match Day";
+        } else if (fullPathLower.includes("training") || fullPathLower.includes("gym")) {
+          album = "Training Camps";
+        }
+        
+        // Format date or default
+        let dateStr = "2026";
+        if (fullPathLower.includes("battle of zambezi 2026") || fullPathLower.includes("zambezi")) {
+          dateStr = "12 JUL 2026";
+        } else if (fullPathLower.includes("nations cup")) {
+          dateStr = "JUN 2026";
+        }
+        
+        // Clean up titles
+        let title = asset.label
+          .replace(/-/g, ' ')
+          .replace(/\b\w/g, (c: string) => c.toUpperCase())
+          .replace(/\d+$/, '')
+          .trim();
+          
+        if (!title) {
+          title = album === "Training Camps" ? "Sables Training Camp" : "Sables Match Action";
+        }
+
+        // Resolve clean folders based on original asset layout
+        let folder = "General Sables Archive";
+        if (fullPathLower.includes("battle of zambezi 2026") || fullPathLower.includes("zambezi")) {
+          folder = "Battle of the Zambezi (2026)";
+        } else if (fullPathLower.includes("nations cup")) {
+          folder = "Nations Cup (2026)";
+        } else if (fullPathLower.includes("sables women")) {
+          folder = "Sables Women";
+        }
+
+        return {
+          id: asset.id,
+          title: title,
+          album: album,
+          image: asset.src_web,
+          date: dateStr,
+          folder: folder,
+          photographer: asset.photographer || "ZRU Media Staff",
+          license: asset.license || "All Rights Reserved (C) Zim Rugby Union",
+          description: `Official ZRU high-performance media coverage: ${title} from the national squad campaign.`
+        };
+      });
+    }
+  } catch (err) {
+    console.warn("Local manifest read failed, using Directus/Mock fallback:", err);
+  }
+
   const mockPhotos: Photo[] = [
     {
       id: "photo-africa-cup-2025",
@@ -65,7 +128,7 @@ export async function getPhotos(): Promise<Photo[]> {
           title: photo.title || "",
           album: photo.album || "General",
           image: photo.image ? `${process.env.NEXT_PUBLIC_DIRECTUS_URL}/assets/${photo.image}` : photo.image_url,
-          date: photo.date_label || new Date(photo.date).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }).toUpperCase(),
+          date: photo.date_label || new Date(photo.date).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric', timeZone: 'UTC' }).toUpperCase(),
           description: photo.description || ""
         }));
       }

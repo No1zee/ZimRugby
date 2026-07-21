@@ -51,7 +51,7 @@ export default function TeamsShowcase() {
         <div className="absolute inset-0 bg-linear-to-b from-rich-black via-rich-black/90 to-rich-black" />
       </div>
 
-      <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="flex justify-between items-end mb-12">
           <div>
             <div className="flex items-center gap-2 mb-4">
@@ -67,7 +67,7 @@ export default function TeamsShowcase() {
           </Button>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-4 sm:gap-8">
           {players.map((player, index) => (
             <motion.div
               key={player.id}
@@ -76,7 +76,7 @@ export default function TeamsShowcase() {
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: index * 0.15 }}
               whileHover={{ y: -10 }}
-              className="group relative h-[500px] rounded-2xl overflow-hidden cursor-pointer"
+              className="group relative h-[300px] sm:h-[420px] md:h-[500px] rounded-2xl overflow-hidden cursor-pointer"
             >
               {/* Background Image Placeholder */}
               <div className="absolute inset-0 bg-gray-800 transition-transform duration-700 group-hover:scale-105">
@@ -86,37 +86,37 @@ export default function TeamsShowcase() {
               
               <div className="absolute inset-0 bg-linear-to-t from-black via-black/20 to-transparent opacity-90" />
 
-              <div className="absolute top-6 right-6">
-                 <div className="w-16 h-16 rounded-full border-2 border-white/20 flex items-center justify-center bg-black/40 backdrop-blur-md group-hover:border-zru-green transition-colors">
-                    <span className="font-heading text-2xl text-white">15</span>
+              <div className="absolute top-4 right-4 sm:top-6 sm:right-6">
+                 <div className="w-10 h-10 sm:w-16 sm:h-16 rounded-full border-2 border-white/20 flex items-center justify-center bg-black/40 backdrop-blur-md group-hover:border-zru-green transition-colors">
+                    <span className="font-heading text-base sm:text-2xl text-white">15</span>
                  </div>
               </div>
 
-              <div className="absolute bottom-0 left-0 w-full p-8">
+              <div className="absolute bottom-0 left-0 w-full p-4 sm:p-8">
                  {player.role && (
-                    <span className="bg-zru-green text-rich-black text-xs font-bold px-3 py-1 rounded uppercase tracking-wider mb-3 inline-block">
+                    <span className="bg-zru-green text-rich-black text-[9px] sm:text-xs font-bold px-2 py-0.5 sm:px-3 sm:py-1 rounded uppercase tracking-wider mb-2 sm:mb-3 inline-block">
                         {player.role}
                     </span>
                  )}
-                 <h4 className="text-3xl md:text-4xl font-heading text-white mb-1 leading-none">
+                 <h4 className="text-xl sm:text-3xl md:text-4xl font-heading text-white mb-0.5 sm:mb-1 leading-none">
                     {player.name.split(" ")[0]}
                  </h4>
-                 <h4 className="text-3xl md:text-4xl font-heading text-zru-green mb-4 leading-none">
+                 <h4 className="text-xl sm:text-3xl md:text-4xl font-heading text-zru-green mb-2 sm:mb-4 leading-none">
                     {player.name.split(" ").slice(1).join(" ")}
                  </h4>
-                 <p className="text-gray-300 font-bold uppercase tracking-widest mb-6 border-l-2 border-zru-green pl-3">
+                 <p className="text-gray-300 font-bold uppercase tracking-widest text-[9px] sm:text-sm mb-3 sm:mb-6 border-l-2 border-zru-green pl-2 sm:pl-3">
                     {player.position}
                  </p>
 
                  {/* Stats Reveal on Hover */}
-                 <div className="grid grid-cols-2 gap-4 border-t border-white/10 pt-4 translate-y-4 opacity-80 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300">
+                 <div className="grid grid-cols-2 gap-2 sm:gap-4 border-t border-white/10 pt-3 sm:pt-4 translate-y-4 opacity-80 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300">
                     <div>
-                        <span className="block text-2xl font-heading text-white">{player.caps}</span>
-                        <span className="text-xs text-gray-500 uppercase font-bold">Caps</span>
+                        <span className="block text-lg sm:text-2xl font-heading text-white">{player.caps}</span>
+                        <span className="text-[9px] sm:text-xs text-gray-500 uppercase font-bold">Caps</span>
                     </div>
                     <div>
-                        <span className="block text-2xl font-heading text-white">{player.tries}</span>
-                        <span className="text-xs text-gray-500 uppercase font-bold">Tries</span>
+                        <span className="block text-lg sm:text-2xl font-heading text-white">{player.tries}</span>
+                        <span className="text-[9px] sm:text-xs text-gray-500 uppercase font-bold">Tries</span>
                     </div>
                  </div>
               </div>

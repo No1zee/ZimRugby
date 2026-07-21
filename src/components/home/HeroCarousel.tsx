@@ -72,59 +72,64 @@ function SlideContent({ slide }: { slide: HeroSlideData }) {
       {/* Left Column / Main Stack */}
       <div className="space-y-6 z-20">
         
-        {/* ZRU Bible Team Tags / Context pills */}
-        {(slide.tag || slide.contextPill) && (
-          <motion.div variants={itemVariants} className="flex items-center gap-3 flex-wrap">
-            {slide.tag && (
-              <span className="bg-zru-green/20 text-zru-green border border-zru-green/30 px-3 py-1 text-[10px] font-black tracking-[0.2em] uppercase rounded-sm backdrop-blur-xs">
-                {slide.tag}
-              </span>
+        {/* Text content — hidden for graphic slides that have their own designed text */}
+        {!slide.graphicSlide && (
+          <>
+            {/* ZRU Bible Team Tags / Context pills */}
+            {(slide.tag || slide.contextPill) && (
+              <motion.div variants={itemVariants} className="flex items-center gap-3 flex-wrap">
+                {slide.tag && (
+                  <span className="bg-zru-green/20 text-zru-green border border-zru-green/30 px-3 py-1 text-[10px] font-black tracking-[0.2em] uppercase rounded-sm backdrop-blur-xs">
+                    {slide.tag}
+                  </span>
+                )}
+                {slide.contextPill && (
+                  <span className="text-white/40 text-[10px] font-bold tracking-[0.15em] uppercase">
+                    {slide.contextPill}
+                  </span>
+                )}
+              </motion.div>
             )}
-            {slide.contextPill && (
-              <span className="text-white/40 text-[10px] font-bold tracking-[0.15em] uppercase">
-                {slide.contextPill}
-              </span>
-            )}
-          </motion.div>
+
+            {/* Headline */}
+            <motion.h1 variants={itemVariants} className="font-heading uppercase tracking-wider leading-[1.1] relative">
+              {/* Spotlights */}
+              <motion.div 
+                initial={{ opacity: 0.2 }}
+                animate={{ opacity: 0.6 }}
+                transition={{ duration: 4, repeat: Infinity, repeatType: "reverse", ease: "easeInOut" }}
+                className="absolute -inset-x-32 -top-64 bottom-0 pointer-events-none z-0"
+              >
+                <div className={`absolute top-0 left-0 w-0 h-0 border-l-[120px] border-l-transparent border-r-[120px] border-r-transparent border-t-[400px] ${spotlightColor} -rotate-12 blur-3xl origin-top`} />
+                <div className={`absolute top-0 right-0 w-0 h-0 border-l-[120px] border-l-transparent border-r-[120px] border-r-transparent border-t-[400px] ${spotlightColor} rotate-12 blur-3xl origin-top`} />
+              </motion.div>
+              
+              <div className="overflow-hidden block py-0.5">
+                <motion.span 
+                  variants={lineVariants}
+                  className="block relative z-20 text-3xl sm:text-4xl md:text-[44px] tracking-wide leading-[1.1] text-glow-heavy text-white drop-shadow-2xl font-heading font-black"
+                >
+                  {slide.headline.line1}
+                </motion.span>
+              </div>
+              <div className="overflow-hidden block py-0.5">
+                <motion.span 
+                  variants={lineVariants}
+                  className="block relative z-20 text-3xl sm:text-4xl md:text-[44px] tracking-wide leading-[1.1] text-glow-green text-white drop-shadow-2xl font-heading font-black"
+                >
+                  {slide.headline.line2}
+                </motion.span>
+              </div>
+            </motion.h1>
+
+            {/* Subtext */}
+            <motion.p variants={itemVariants} className="text-white/60 text-sm sm:text-base font-normal max-w-md leading-relaxed drop-shadow-2xl font-body">
+              {slide.subtext}
+            </motion.p>
+          </>
         )}
 
-        {/* Headline */}
-        <motion.h1 variants={itemVariants} className="font-heading uppercase tracking-wider leading-[1.1] relative">
-          {/* Spotlights */}
-          <motion.div 
-            initial={{ opacity: 0.2 }}
-            animate={{ opacity: 0.6 }}
-            transition={{ duration: 4, repeat: Infinity, repeatType: "reverse", ease: "easeInOut" }}
-            className="absolute -inset-x-32 -top-64 bottom-0 pointer-events-none z-0"
-          >
-            <div className={`absolute top-0 left-0 w-0 h-0 border-l-[120px] border-l-transparent border-r-[120px] border-r-transparent border-t-[400px] ${spotlightColor} -rotate-12 blur-3xl origin-top`} />
-            <div className={`absolute top-0 right-0 w-0 h-0 border-l-[120px] border-l-transparent border-r-[120px] border-r-transparent border-t-[400px] ${spotlightColor} rotate-12 blur-3xl origin-top`} />
-          </motion.div>
-          
-          <div className="overflow-hidden block py-0.5">
-            <motion.span 
-              variants={lineVariants}
-              className="block relative z-20 text-3xl sm:text-4xl md:text-[44px] tracking-wide leading-[1.1] text-glow-heavy text-white drop-shadow-2xl font-heading font-black"
-            >
-              {slide.headline.line1}
-            </motion.span>
-          </div>
-          <div className="overflow-hidden block py-0.5">
-            <motion.span 
-              variants={lineVariants}
-              className="block relative z-20 text-3xl sm:text-4xl md:text-[44px] tracking-wide leading-[1.1] text-glow-green text-white drop-shadow-2xl font-heading font-black"
-            >
-              {slide.headline.line2}
-            </motion.span>
-          </div>
-        </motion.h1>
-
-        {/* Subtext */}
-        <motion.p variants={itemVariants} className="text-white/60 text-sm sm:text-base font-normal max-w-md leading-relaxed drop-shadow-2xl font-body">
-          {slide.subtext}
-        </motion.p>
-
-        {/* CTAs */}
+        {/* CTAs — always shown */}
         <div className="flex flex-col sm:flex-row gap-4 justify-start items-center pt-2">
           {/* Primary CTA: Sign In (delayed animation so it loads last) */}
           <motion.div
@@ -221,7 +226,7 @@ export default function HeroCarousel({ slides }: { slides: HeroSlideData[] }) {
             {/* Performance Hint: Removed heavy black overlay that delayed LCP */}
             <motion.div 
               initial={{ scale: 1 }}
-              animate={{ scale: 1.08 }} // Upgraded from 1.06 to 1.08 for more dramatic Ken Burns
+              animate={{ scale: 1.04 }} // Subtle Ken Burns — enough to feel alive without zooming in too hard
               transition={{ duration: 12, ease: "linear" }}
               style={{ y: yBg, opacity: opacityBg }} // Apply scroll parallax
               className="relative w-full h-full hero-bg-media will-change-transform filter-[brightness(var(--hero-brightness,1))]"
@@ -255,13 +260,14 @@ export default function HeroCarousel({ slides }: { slides: HeroSlideData[] }) {
                     fill
                     priority={currentSlide === 0}
                     sizes="(max-width: 768px) 100vw, 100vw"
-                    quality={75}
+                    quality={60}
                     className="object-cover"
+                    style={{ objectPosition: activeSlide.imagePosition ?? 'center center' }}
                   />
                 )}
             </motion.div>
             {/* Overlay */}
-            <div className="absolute inset-0 bg-linear-to-b from-black/40 via-black/20 to-rich-black z-10" />
+            <div className="absolute inset-0 bg-gradient-to-t from-rich-black/90 via-rich-black/30 to-black/30 z-10" />
         </motion.div>
       </AnimatePresence>
 
@@ -271,7 +277,7 @@ export default function HeroCarousel({ slides }: { slides: HeroSlideData[] }) {
       </div>
 
       {/* Content Layer */}
-      <motion.div style={{ y: yText, opacity: opacityText }} className="relative z-20 w-full max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 h-full flex items-center justify-start pt-24 lg:pt-32 pb-24">
+      <motion.div style={{ y: yText, opacity: opacityText }} className="relative z-20 w-full max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 h-full flex items-center justify-start pt-24 lg:pt-32 pb-24">
         <div className="text-left w-full mr-auto">
           <SlideContent slide={activeSlide} />
         </div>
@@ -279,7 +285,7 @@ export default function HeroCarousel({ slides }: { slides: HeroSlideData[] }) {
 
       {/* Slide Navigation Hints */}
       <div className="absolute bottom-12 left-0 w-full z-30 pointer-events-none">
-        <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-end">
+        <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-end">
           <div className="flex items-center gap-8 pointer-events-auto">
             <button 
               onClick={prevSlide} 

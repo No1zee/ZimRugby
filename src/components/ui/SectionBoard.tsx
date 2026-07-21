@@ -89,7 +89,7 @@ export function SectionBoard({
         />
       )}
 
-      <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className={`grid grid-cols-1 lg:grid-cols-12 gap-8 ${layout === "right" ? "lg:flex-row-reverse" : ""}`}>
           
           {/* Title Block */}

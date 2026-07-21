@@ -35,7 +35,7 @@ export default function MatchCentre() {
   return (
     <section className="py-20 bg-rich-black relative border-t border-white/10 overflow-hidden" id="match-centre">
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Header */}
         <div className="flex flex-col md:flex-row justify-between items-end mb-12 gap-6">
           <div className="space-y-4">

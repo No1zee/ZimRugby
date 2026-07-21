@@ -5,11 +5,10 @@ import type { LeagueTableRow } from "@/types";
 export const revalidate = 60;
 
 const STANDINGS: LeagueTableRow[] = [
-  { position: 1, team: "Old Georgians", played: 14, won: 12, drawn: 1, lost: 1, points: 58, form: ["W", "W", "W", "W", "W"] },
-  { position: 2, team: "Harare Sports Club", played: 14, won: 10, drawn: 0, lost: 4, points: 48, form: ["W", "L", "W", "L", "W"] },
-  { position: 3, team: "Old Hararians", played: 14, won: 9, drawn: 2, lost: 3, points: 45, form: ["L", "W", "W", "D", "W"] },
-  { position: 4, team: "Pitbulls", played: 14, won: 7, drawn: 1, lost: 6, points: 35, form: ["W", "L", "L", "W", "L"] },
-  { position: 5, team: "Mutare Sports Club", played: 14, won: 5, drawn: 0, lost: 9, points: 25, form: ["L", "L", "W", "L", "L"] },
+  { position: 1, team: "Zimbabwe Sables", played: 3, won: 3, drawn: 0, lost: 0, points: 15, form: ["W", "W", "W", "-", "-"] },
+  { position: 2, team: "Algeria", played: 3, won: 2, drawn: 0, lost: 1, points: 9, form: ["L", "W", "W", "-", "-"] },
+  { position: 3, team: "Namibia", played: 3, won: 1, drawn: 0, lost: 2, points: 5, form: ["L", "L", "W", "-", "-"] },
+  { position: 4, team: "Kenya", played: 3, won: 0, drawn: 0, lost: 3, points: 1, form: ["L", "L", "L", "-", "-"] },
 ];
 
 export default async function MatchCentre() {

@@ -45,23 +45,23 @@ export default function NewsCard({
                         alt={title} 
                         fill 
                         sizes="(max-width: 768px) 100vw, 20vw"
-                        className="object-cover transition-transform duration-500 group-hover:scale-110" 
+                        className="object-cover opacity-90 group-hover:opacity-100 transition-all duration-500 group-hover:scale-110" 
                     />
                 </div>
             )}
             <div className="flex-1">
                 <div className="flex items-center gap-3 mb-2">
-                    <span className="text-zru-green text-xs font-bold tracking-widest uppercase">{category}</span>
+                    <span className="text-emerald-400 text-xs font-bold tracking-widest uppercase">{category}</span>
                     <span className="w-1 h-1 bg-gray-600 rounded-full"></span>
-                    <span className="text-gray-500 text-xs font-bold uppercase">{date}</span>
+                    <span className="text-zinc-300 text-xs font-bold uppercase">{date}</span>
                 </div>
-                <h3 className="text-xl font-heading text-white mb-3 group-hover:text-zru-green transition-colors leading-tight line-clamp-2">
+                <h3 className="text-xl font-heading text-white mb-3 group-hover:text-emerald-400 transition-colors leading-tight line-clamp-2">
                     {title}
                 </h3>
-                <p className="text-gray-400 text-sm leading-relaxed mb-4 line-clamp-2">
+                <p className="text-zinc-300 text-sm leading-relaxed mb-4 line-clamp-2">
                     {excerpt}
                 </p>
-                <span className="text-white text-xs font-bold uppercase tracking-widest group-hover:text-zru-green transition-colors flex items-center gap-2">
+                <span className="text-white text-xs font-bold uppercase tracking-widest group-hover:text-emerald-400 transition-colors flex items-center gap-2">
                     {source === 'facebook' ? "View on Facebook" : "Read More"} <ArrowRight className="w-3 h-3 transition-transform group-hover:translate-x-1" />
                 </span>
             </div>

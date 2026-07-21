@@ -218,7 +218,7 @@ export default function Navigation() {
     }
   });
 
-  const isTransparentAllowed = pathname === "/" || pathname === "/live" || pathname === "/world-cup-campaign";
+  const isTransparentAllowed = pathname === "/" || pathname === "/live" || pathname === "/world-cup-campaign" || pathname === "/fan-zone" || pathname === "/teams";
   const showOpaqueHeader = isScrolled || !isTransparentAllowed;
 
   const isActive = (href: string) => {
@@ -241,7 +241,7 @@ export default function Navigation() {
 
   return (
     <header className="fixed top-0 left-0 w-full z-50">
-      <GlobalAnnouncementBar />
+      {pathname !== '/fan-zone' && <GlobalAnnouncementBar />}
       <nav 
         className={`w-full transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${
           showOpaqueHeader 
@@ -366,9 +366,11 @@ export default function Navigation() {
               href="/login" 
               variant="primary" 
               size="sm"
-              leftIcon={<User className="w-4 h-4" />}
             >
-              Sign In
+              <div className="flex items-center gap-2">
+                <User className="w-4 h-4" />
+                <span>Sign In</span>
+              </div>
             </SlantedButton>
           </div>
 

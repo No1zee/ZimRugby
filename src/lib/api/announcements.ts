@@ -23,7 +23,7 @@ interface DirectusAnnouncementItem {
 
 const MOCK_ANNOUNCEMENTS: Announcement[] = [
   {
-    id: "ann-tickets-zambezi",
+    id: "ann-tickets-zambezi-v2",
     title: "Battle of the Zambezi Tickets Now on Sale!",
     slug: "battle-of-zambezi-tickets-live",
     body: "Secure your tickets for the biggest match of the year at Harare Sports Club. Early bird pricing ends soon!",
@@ -78,7 +78,7 @@ const MOCK_ANNOUNCEMENTS: Announcement[] = [
     priority: "normal",
     scope: ["clubhouse"],
     ctaLabel: "SHOP COLLECTION",
-    ctaUrl: "/about/clubhouse",
+    ctaUrl: "/clubhouse",
     startsAt: "2026-07-01T00:00:00Z",
     endsAt: "2026-08-30T23:59:59Z",
     segment: "general",

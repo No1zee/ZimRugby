@@ -10,7 +10,7 @@ interface PartnerTierSectionProps {
 export default function PartnerTierSection({ tier, isAlternate }: PartnerTierSectionProps) {
   return (
     <section className={`py-20 md:py-32 ${isAlternate ? 'bg-zru-green/5' : 'bg-transparent'}`}>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center">
+      <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center">
         
         {/* Category Badge */}
         <div className="mb-16 md:mb-24 flex flex-col items-center">

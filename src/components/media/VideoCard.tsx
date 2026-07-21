@@ -32,12 +32,12 @@ export default function VideoCard({
                     alt={title} 
                     fill
                     sizes="(max-width: 768px) 100vw, 25vw"
-                    className="object-cover opacity-80 group-hover:scale-105 transition-transform duration-700" 
+                    className="object-cover opacity-90 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700" 
                 />
             </div>
 
             {/* Overlay */}
-            <div className="absolute inset-0 bg-black/20 group-hover:bg-black/40 transition-colors" />
+            <div className="absolute inset-0 bg-black/20 group-hover:bg-black/45 transition-colors" />
             
             {/* Play Button */}
             <div className="absolute inset-0 flex items-center justify-center">
@@ -47,7 +47,7 @@ export default function VideoCard({
             </div>
 
             {/* Badges */}
-            <div className="absolute top-3 left-3 bg-white text-zru-green px-2 py-1 rounded text-[10px] font-bold uppercase tracking-widest">
+            <div className="absolute top-3 left-3 bg-zru-green text-white px-2 py-1 rounded text-[10px] font-bold uppercase tracking-widest">
                 {category}
             </div>
             <div className="absolute bottom-3 right-3 bg-black/80 px-2 py-1 rounded text-xs font-bold text-white flex items-center gap-1">
@@ -56,10 +56,10 @@ export default function VideoCard({
         </div>
 
         <div className="flex flex-col gap-1">
-            <h3 className="text-lg font-heading text-white leading-tight group-hover:text-zru-green transition-colors line-clamp-2">
+            <h3 className="text-lg font-heading text-white leading-tight group-hover:text-emerald-400 transition-colors line-clamp-2">
                 {title}
             </h3>
-            <span className="text-gray-500 text-xs font-bold uppercase">{date}</span>
+            <span className="text-zinc-300 text-xs font-bold uppercase">{date}</span>
         </div>
     </motion.div>
   );

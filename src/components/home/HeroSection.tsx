@@ -74,7 +74,7 @@ export default function HeroSection() {
       </motion.div>
 
       {/* Content */}
-      <div className="relative z-10 h-full flex flex-col justify-center px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+      <div className="relative z-10 h-full flex flex-col justify-center px-4 sm:px-6 lg:px-8 max-w-[1440px] mx-auto">
         <motion.div
           variants={containerVariants}
           initial="hidden"
@@ -97,7 +97,7 @@ export default function HeroSection() {
 
           {/* 0.9s: THE ZIMBABWE SABLES */}
           <div className="overflow-hidden mb-8">
-            <motion.h1 variants={textRevealVariants} className="text-6xl md:text-8xl lg:text-9xl font-heading text-white leading-[0.9] drop-shadow-2xl uppercase">
+            <motion.h1 variants={textRevealVariants} className="text-4xl sm:text-7xl md:text-8xl lg:text-9xl font-heading text-white leading-[0.9] drop-shadow-2xl uppercase">
               THE ZIMBABWE
               <br />
               <span className="text-transparent bg-clip-text bg-linear-to-r from-white to-gray-400">

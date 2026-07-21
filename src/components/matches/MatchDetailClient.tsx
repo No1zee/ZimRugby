@@ -32,7 +32,7 @@ export default function MatchDetailClient({ data }: MatchDetailClientProps) {
     <div className="min-h-screen bg-rich-black text-white pt-24 pb-20">
       
       {/* Back to match centre */}
-      <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 mb-8">
+      <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 mb-8">
         <Link href="/match-centre" className="group flex items-center gap-2 text-white/50 hover:text-white transition-colors text-xs font-black uppercase tracking-widest">
           <ChevronLeft className="w-4 h-4 transition-transform group-hover:-translate-x-1" />
           <span>Back to Match Centre</span>
@@ -40,7 +40,7 @@ export default function MatchDetailClient({ data }: MatchDetailClientProps) {
       </div>
 
       {/* Scoreboard / Cinematic Header */}
-      <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 mb-12">
+      <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 mb-12">
         <div className="relative card-green border rounded-2xl p-6 md:p-12 overflow-hidden shadow-2xl glow-green-card">
           {/* Subtle background glow */}
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[60%] h-[60%] rounded-full bg-zru-green/10 opacity-30 blur-[100px] pointer-events-none" />
@@ -148,7 +148,7 @@ export default function MatchDetailClient({ data }: MatchDetailClientProps) {
 
       {/* Tabs */}
       {tabs.length > 1 && (
-        <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 mb-12">
+        <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 mb-12">
           <div className="flex border-b border-white/10 py-1 overflow-x-auto gap-4">
             {tabs.map((tab) => {
               const Icon = tab.icon;
@@ -177,7 +177,7 @@ export default function MatchDetailClient({ data }: MatchDetailClientProps) {
       )}
 
       {/* Tab Panels */}
-      <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
         <AnimatePresence mode="wait">
           <motion.div
             key={activeTab}

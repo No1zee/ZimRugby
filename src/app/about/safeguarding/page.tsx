@@ -44,7 +44,7 @@ export default function SafeguardingPage() {
       <div className="pt-8 border-t border-white/5">
         <div className="card-green border rounded-2xl p-6 md:p-8 space-y-6">
           <div className="flex items-start gap-4">
-            <div className="w-10 h-10 bg-zru-red/20 rounded-xl flex items-center justify-center text-zru-red border border-zru-red/10 shrink-0">
+            <div className="w-10 h-10 bg-zru-green/20 rounded-xl flex items-center justify-center text-zru-green border border-zru-green/10 shrink-0">
               <AlertTriangle className="w-5 h-5" />
             </div>
             <div>

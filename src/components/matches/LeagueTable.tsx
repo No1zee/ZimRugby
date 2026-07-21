@@ -26,13 +26,9 @@ export default function LeagueTable({ data }: LeagueTableProps) {
           </tr>
         </thead>
         <tbody>
-          {data.map((row, index) => (
-            <motion.tr 
+          {data.map((row) => (
+            <tr 
                 key={row.team}
-                initial={{ opacity: 0, x: -20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: index * 0.05 }}
                 className="border-b border-white/5 hover:bg-white/5 transition-colors group cursor-pointer"
             >
               <td className="p-4 text-center font-heading text-xl text-white/60 group-hover:text-zru-green">{row.position}</td>
@@ -56,7 +52,7 @@ export default function LeagueTable({ data }: LeagueTableProps) {
                     </span>
                 ))}
               </td>
-            </motion.tr>
+            </tr>
           ))}
         </tbody>
       </table>

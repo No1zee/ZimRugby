@@ -51,7 +51,7 @@ export default function RefereesPortalPage() {
       } else {
         setSubmitError(res.message);
       }
-    } catch (err) {
+    } catch {
       setSubmitError("An error occurred during submission.");
     } finally {
       setIsSubmitting(false);
@@ -65,7 +65,7 @@ export default function RefereesPortalPage() {
   ];
 
   return (
-    <main className="bg-rich-black min-h-screen pb-24 text-white">
+    <main className="bg-milk-white min-h-screen pb-24 text-rich-black">
 
       {/* PageHero header */}
       <div className="pt-24">
@@ -78,11 +78,11 @@ export default function RefereesPortalPage() {
         />
       </div>
 
-      <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 pt-16">
+      <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 pt-16">
 
 
         {/* Tab Selection */}
-        <div className="flex border-b border-white/10 py-1 overflow-x-auto gap-4 mb-12">
+        <div className="flex border-b border-black/10 py-1 overflow-x-auto gap-4 mb-12">
           {tabs.map((tab) => {
             const Icon = tab.icon;
             const isActive = activeTab === tab.id;
@@ -91,7 +91,7 @@ export default function RefereesPortalPage() {
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
                 className={`flex items-center gap-2 pb-4 px-4 text-xs font-black uppercase tracking-wider relative transition-all duration-300 ${
-                  isActive ? "text-zru-green" : "text-white/60 hover:text-white"
+                  isActive ? "text-zru-green" : "text-black/60 hover:text-black"
                 }`}
               >
                 <Icon className="w-4 h-4" />
@@ -126,25 +126,25 @@ export default function RefereesPortalPage() {
                   <div className="space-y-6">
                     <div className="border-l-4 border-zru-green pl-4 mb-8">
                       <h2 className="text-xl font-black uppercase tracking-wider">OFFICIAL ANNOUNCEMENTS</h2>
-                      <p className="text-sm text-white/50 mt-1">Law amendments and pre-season directives for active panels.</p>
+                      <p className="text-sm text-black/50 mt-1">Law amendments and pre-season directives for active panels.</p>
                     </div>
 
                     <div className="space-y-6">
                       {notices.map((notice) => (
                         <div 
                           key={notice.id} 
-                          className="card-green border rounded-2xl p-6 transition-colors duration-300 space-y-4"
+                          className="bg-white border border-black/5 rounded-2xl p-6 shadow-sm space-y-4"
                         >
-                          <div className="flex justify-between items-center text-[10px] text-white/40 font-bold uppercase tracking-wider">
+                          <div className="flex justify-between items-center text-[10px] text-black/40 font-bold uppercase tracking-wider">
                             <span>ZRU REF COMMITTEE</span>
                             <span>{notice.date}</span>
                           </div>
-                          <h3 className="text-lg font-black uppercase tracking-tight text-white">{notice.title}</h3>
-                          <p className="text-white/60 text-sm leading-relaxed font-medium">
+                          <h3 className="text-lg font-black uppercase tracking-tight text-rich-black">{notice.title}</h3>
+                          <p className="text-black/60 text-sm leading-relaxed font-medium">
                             {notice.excerpt}
                           </p>
-                          <div className="pt-4 border-t border-white/5">
-                            <p className="text-white/80 text-xs leading-relaxed italic card-green border p-4 rounded-xl">
+                          <div className="pt-4 border-t border-black/5">
+                            <p className="text-black/80 text-xs leading-relaxed italic bg-black/5 border border-black/5 p-4 rounded-xl">
                               &ldquo;{notice.content}&rdquo;
                             </p>
                           </div>
@@ -159,26 +159,26 @@ export default function RefereesPortalPage() {
                   <div className="space-y-6">
                     <div className="border-l-4 border-zru-green pl-4 mb-8">
                       <h2 className="text-xl font-black uppercase tracking-wider">RULEBOOKS & TEMPLATES</h2>
-                      <p className="text-sm text-white/50 mt-1">Download official World Rugby and ZRU variation PDFs.</p>
+                      <p className="text-sm text-black/50 mt-1">Download official World Rugby and ZRU variation PDFs.</p>
                     </div>
 
                     <div className="grid grid-cols-1 gap-4">
                       {resources.map((doc, idx) => (
                         <div 
                           key={idx} 
-                          className="card-green border rounded-xl p-5 flex items-center justify-between group transition-colors duration-300"
+                          className="bg-white border border-black/5 rounded-xl p-5 flex items-center justify-between group shadow-sm"
                         >
                           <div className="flex items-center gap-4">
                             <div className="w-10 h-10 bg-zru-green/10 rounded-lg flex items-center justify-center shrink-0 border border-zru-green/10">
                               <FileText className="w-5 h-5 text-zru-green" />
                             </div>
                             <div>
-                              <h4 className="font-black text-sm text-white uppercase tracking-tight">{doc.title}</h4>
-                              <span className="text-[10px] text-white/40 font-bold uppercase block mt-0.5">{doc.category.toUpperCase()} • {doc.size}</span>
+                              <h4 className="font-black text-sm text-rich-black uppercase tracking-tight">{doc.title}</h4>
+                              <span className="text-[10px] text-black/40 font-bold uppercase block mt-0.5">{doc.category.toUpperCase()} • {doc.size}</span>
                             </div>
                           </div>
                           <button 
-                            className="p-2.5 rounded-full bg-white/10 border border-white/10 hover:bg-zru-green hover:text-white transition-all group-hover:scale-105"
+                            className="p-2.5 rounded-full bg-black/5 border border-black/10 hover:bg-zru-green hover:text-white hover:border-zru-green transition-all group-hover:scale-105"
                             title="Download Document"
                           >
                             <Download className="w-4 h-4" />
@@ -194,14 +194,14 @@ export default function RefereesPortalPage() {
                   <div className="space-y-6">
                     <div className="border-l-4 border-zru-green pl-4 mb-8">
                       <h2 className="text-xl font-black uppercase tracking-wider">EDUCATION CALENDAR</h2>
-                      <p className="text-sm text-white/50 mt-1">World Rugby accredited levels and domestic specialist clinics.</p>
+                      <p className="text-sm text-black/50 mt-1">World Rugby accredited levels and domestic specialist clinics.</p>
                     </div>
 
                     <div className="space-y-4">
                       {courses.map((course, idx) => (
                         <div 
                           key={idx} 
-                          className="card-green border rounded-xl p-6 flex flex-col md:flex-row md:items-center md:justify-between gap-6 transition-colors duration-300"
+                          className="bg-white border border-black/5 rounded-xl p-6 flex flex-col md:flex-row md:items-center md:justify-between gap-6 shadow-sm"
                         >
                           <div className="flex items-center gap-4">
                             <div className="w-10 h-10 bg-zru-green/10 rounded-lg flex items-center justify-center shrink-0 border border-zru-green/10 text-zru-green">
@@ -209,23 +209,23 @@ export default function RefereesPortalPage() {
                             </div>
                             <div>
                               <span className="text-[9px] text-zru-green font-black uppercase tracking-widest">{course.level}</span>
-                              <h4 className="font-black text-base text-white uppercase tracking-tight mt-0.5">{course.title}</h4>
+                              <h4 className="font-black text-base text-rich-black uppercase tracking-tight mt-0.5">{course.title}</h4>
                             </div>
                           </div>
                           
                           <div className="flex items-center gap-8 justify-between md:justify-end">
                             <div className="text-left md:text-right">
-                              <div className="flex items-center gap-1.5 justify-end text-[11px] text-white/60 font-bold uppercase tracking-tight">
+                              <div className="flex items-center gap-1.5 justify-end text-[11px] text-black/60 font-bold uppercase tracking-tight">
                                 <Calendar className="w-3.5 h-3.5 text-zru-green" />
                                 <span>{course.date}</span>
                               </div>
-                              <span className="text-[10px] text-white/40 block mt-1 uppercase tracking-tight">{course.venue}</span>
+                              <span className="text-[10px] text-black/40 block mt-1 uppercase tracking-tight">{course.venue}</span>
                             </div>
                             
                             <span className={`text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-full ${
                               course.status === 'open' 
                                 ? 'bg-zru-green/20 text-zru-green border border-zru-green/30' 
-                                : 'bg-white/5 text-white/30 border border-white/5'
+                                : 'bg-black/5 text-black/45 border border-black/5'
                             }`}>
                               {course.status}
                             </span>
@@ -242,55 +242,55 @@ export default function RefereesPortalPage() {
 
           {/* Sidebar Area: Interactive Registration Form */}
           <div className="lg:col-span-1">
-            <div className="card-green border rounded-2xl p-6 backdrop-blur-md sticky top-28 space-y-6 glow-green-card">
+            <div className="bg-white border border-black/5 rounded-2xl p-6 shadow-sm sticky top-28 space-y-6">
               
-              <div className="border-b border-white/5 pb-4">
+              <div className="border-b border-black/5 pb-4">
                 <h3 className="text-sm font-black uppercase tracking-widest text-zru-green">COURSE REGISTRATION</h3>
-                <p className="text-white/40 text-[10px] font-bold uppercase tracking-wider mt-1">Submit details to register for ZRU referee courses.</p>
+                <p className="text-black/40 text-[10px] font-bold uppercase tracking-wider mt-1">Submit details to register for ZRU referee courses.</p>
               </div>
 
               {!formSubmitted ? (
                 <form onSubmit={handleRegister} className="space-y-4">
                   {submitError && (
-                    <div className="bg-zru-red/10 border border-zru-red/20 rounded-xl p-3 flex items-center gap-2 text-zru-red text-[11px] font-semibold">
+                    <div className="bg-zru-green/10 border border-zru-green/20 rounded-xl p-3 flex items-center gap-2 text-zru-green text-[11px] font-semibold">
                       <AlertCircle className="w-3.5 h-3.5 shrink-0" />
                       <span>{submitError}</span>
                     </div>
                   )}
 
                   <div className="space-y-1.5">
-                    <label className="text-[10px] text-white/50 font-black uppercase tracking-wider block">Full Name</label>
+                    <label className="text-[10px] text-black/50 font-black uppercase tracking-wider block">Full Name</label>
                     <input 
                       type="text" 
                       required
                       value={formName}
                       onChange={(e) => setFormName(e.target.value)}
                       placeholder="e.g. Tendai Mtawarira"
-                      className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-2.5 text-white placeholder-white/20 focus:outline-none focus:border-zru-green text-xs transition-colors"
+                      className="w-full bg-black/5 border border-black/10 rounded-xl px-4 py-2.5 text-rich-black placeholder-black/45 focus:outline-none focus:border-zru-green text-xs transition-colors"
                     />
                   </div>
 
                   <div className="space-y-1.5">
-                    <label className="text-[10px] text-white/50 font-black uppercase tracking-wider block">Email Address</label>
+                    <label className="text-[10px] text-black/50 font-black uppercase tracking-wider block">Email Address</label>
                     <input 
                       type="email" 
                       required
                       value={formEmail}
                       onChange={(e) => setFormEmail(e.target.value)}
                       placeholder="e.g. tendai@zru.co.zw"
-                      className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-2.5 text-white placeholder-white/20 focus:outline-none focus:border-zru-green text-xs transition-colors"
+                      className="w-full bg-black/5 border border-black/10 rounded-xl px-4 py-2.5 text-rich-black placeholder-black/45 focus:outline-none focus:border-zru-green text-xs transition-colors"
                     />
                   </div>
 
                   <div className="space-y-1.5">
-                    <label className="text-[10px] text-white/50 font-black uppercase tracking-wider block">Select Course</label>
+                    <label className="text-[10px] text-black/50 font-black uppercase tracking-wider block">Select Course</label>
                     <select
                       value={formCourse}
                       onChange={(e) => setFormCourse(e.target.value)}
-                      className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:border-zru-green text-xs transition-colors"
+                      className="w-full bg-black/5 border border-black/10 rounded-xl px-4 py-2.5 text-rich-black focus:outline-none focus:border-zru-green text-xs transition-colors"
                     >
                       {courses.map((course, idx) => (
-                        <option key={idx} value={course.title} className="bg-rich-black text-white">
+                        <option key={idx} value={course.title} className="bg-white text-rich-black">
                           {course.title} ({course.level})
                         </option>
                       ))}
@@ -300,7 +300,7 @@ export default function RefereesPortalPage() {
                   <button
                     type="submit"
                     disabled={isSubmitting}
-                    className="w-full bg-zru-green hover:bg-white hover:text-rich-black text-white font-black text-xs uppercase tracking-[0.15em] py-3 rounded-xl flex items-center justify-center gap-2 transition-all shadow-md mt-6 disabled:opacity-50"
+                    className="w-full bg-zru-green hover:bg-zru-green/90 text-white font-black text-xs uppercase tracking-[0.15em] py-3 rounded-xl flex items-center justify-center gap-2 transition-all shadow-md mt-6 disabled:opacity-50"
                   >
                     <span>{isSubmitting ? "Submitting…" : "Submit Registration"}</span>
                     <ArrowRight className="w-4 h-4" />
@@ -315,8 +315,8 @@ export default function RefereesPortalPage() {
                   <div className="inline-flex p-3 bg-zru-green/20 rounded-full border border-zru-green/30 text-zru-green mb-2">
                     <CheckCircle2 className="w-8 h-8" />
                   </div>
-                  <h4 className="font-black text-sm text-white uppercase tracking-wider">APPLICATION RECEIVED</h4>
-                  <p className="text-white/60 text-xs leading-relaxed max-w-[220px] mx-auto font-medium">
+                  <h4 className="font-black text-sm text-rich-black uppercase tracking-wider">APPLICATION RECEIVED</h4>
+                  <p className="text-black/60 text-xs leading-relaxed max-w-[220px] mx-auto font-medium">
                     Thank you, <strong>{formName}</strong>. Your registration for <strong>{formCourse}</strong> has been filed. The Referees Committee will contact you at <strong>{formEmail}</strong>.
                   </p>
                   <button 
@@ -325,7 +325,7 @@ export default function RefereesPortalPage() {
                       setFormName("");
                       setFormEmail("");
                     }}
-                    className="text-[9px] font-black uppercase text-zru-green hover:text-white transition-colors tracking-widest pt-4"
+                    className="text-[9px] font-black uppercase text-zru-green hover:text-black transition-colors tracking-widest pt-4"
                   >
                     Register Another Person
                   </button>

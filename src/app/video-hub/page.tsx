@@ -49,7 +49,7 @@ export default function VideoHubPage() {
             <div className="absolute inset-0 bg-linear-to-t from-rich-black via-rich-black/50 to-transparent" />
           </div>
 
-          <div className="relative z-10 w-full max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 pb-12">
+          <div className="relative z-10 w-full max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 pb-12">
             <div className="max-w-3xl space-y-6">
               <span className="bg-zru-green text-rich-black px-3 py-1 rounded text-[10px] font-black uppercase tracking-wider w-fit block">
                 FEATURED VIDEO
@@ -88,7 +88,7 @@ export default function VideoHubPage() {
 
       {/* 2. Navigation Filters & Search */}
       <div className="border-y border-white/10 bg-rich-black/80 sticky top-16 z-30 backdrop-blur-md py-6">
-        <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col lg:flex-row justify-between items-center gap-6">
             
             {/* Category tabs */}
@@ -128,7 +128,7 @@ export default function VideoHubPage() {
       </div>
 
       {/* 3. Video Grid Section */}
-      <section className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 py-16">
+      <section className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <div className="flex items-center gap-4 mb-8">
           <h2 className="text-2xl font-black uppercase tracking-wider flex items-center gap-2">
             <Film className="w-5 h-5 text-zru-green" />

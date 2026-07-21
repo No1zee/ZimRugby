@@ -2,13 +2,13 @@
 
 import EdgyGradient from "@/components/ui/EdgyGradient";
 import { motion, AnimatePresence } from "framer-motion";
-import { ChevronRight, Calendar as CalendarIcon, MapPin, Clock, Award, Users, Layers, Shield, Trophy, Activity, CheckCircle } from "lucide-react";
-import Navigation from "@/components/layout/Navigation";
-import Footer from "@/components/layout/Footer";
+import { Calendar as CalendarIcon, MapPin, Clock, Award, Users, Layers, Shield, Trophy, Activity, CheckCircle } from "lucide-react";
 import SlantedButton from "@/components/ui/SlantedButton";
 import { useState, useEffect, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import PageAnnouncements from "@/components/ui/PageAnnouncements";
+
+import PageHero from "@/components/ui/PageHero";
 
 // Mock Data split into Competitions and Events
 const competitions = [
@@ -150,38 +150,27 @@ function EventsInner() {
     : generalEvents;
 
   return (
-    <main className="bg-rich-black min-h-screen pt-24 pb-24 relative overflow-hidden">
+    <main className="bg-milk-white min-h-screen pb-24 relative overflow-hidden text-rich-black">
       
-      {/* Ambient Background Gradient */}
-      <div className="absolute inset-0 pointer-events-none select-none z-0">
-        <EdgyGradient opacity={0.5} />
+      {/* PageHero header */}
+      <div className="pt-24">
+        <PageHero
+          title="Competitions & Events"
+          subtitle="Explore the full heartbeat of Zimbabwean rugby. Drill down into active leagues, regional championships, and official union events."
+          tag="Tournaments & Hub"
+          backgroundImage="/images/gallery/zimbabwe-sables-0350.webp"
+          breadcrumb={[{ label: "Events", href: "/events" }]}
+        />
       </div>
 
-      {/* Ambient Visual Layers */}
-      <div className="absolute top-0 right-0 w-1/2 h-[600px] bg-[radial-gradient(circle_at_top_right,rgba(0,107,63,0.15),transparent_70%)] pointer-events-none" />
-
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        
-        {/* Header Section */}
-        <motion.div 
-           initial={{ opacity: 0, y: 20 }}
-           animate={{ opacity: 1, y: 0 }}
-           className="mb-16 mt-8"
-        >
-           <h1 className="text-5xl md:text-7xl font-heading text-white mb-4 uppercase tracking-wider">
-             COMPETITIONS & <span className="text-stroke-white text-transparent">EVENTS</span>
-           </h1>
-           <p className="text-lg text-gray-400 max-w-2xl font-body">
-             Explore the full heartbeat of Zimbabwean rugby. Drill down into active leagues, regional championships, and official union events.
-           </p>
-        </motion.div>
+      <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 pt-16 relative z-10">
 
         {/* Page Announcements */}
         <PageAnnouncements scope="events" className="mb-12" />
 
         {/* 1. Browse by Rugby Level Block (First-Class Shortcuts) */}
         <div className="mb-16">
-          <span className="text-white/30 text-[9px] font-black uppercase tracking-[0.4em] block mb-6 font-subheading">Browse by Rugby Level</span>
+          <span className="text-black/45 text-[9px] font-black uppercase tracking-[0.4em] block mb-6 font-subheading">Browse by Rugby Level</span>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
             {levels.map((level) => {
               const Icon = level.icon;
@@ -192,11 +181,11 @@ function EventsInner() {
                   onClick={() => setSelectedLevel(isSelected ? null : level.tag)}
                   className={`flex flex-col items-center justify-center p-6 border rounded-xl transition-all duration-400 group relative overflow-hidden ${
                     isSelected 
-                      ? "bg-zru-green/20 border-zru-green text-white shadow-[0_0_20px_rgba(0,107,63,0.25)]" 
-                      : "card-green border text-white/60 hover:text-white hover:border-white/20"
+                      ? "bg-zru-green/20 border-zru-green text-rich-black shadow-[0_0_20px_rgba(0,107,63,0.15)]" 
+                      : "bg-white border border-black/5 text-black/60 hover:text-black hover:border-black/20 shadow-sm hover:shadow-md"
                   }`}
                 >
-                  <Icon className={`w-6 h-6 mb-3 transition-transform duration-300 group-hover:scale-110 ${isSelected ? "text-zru-green" : "text-white/40 group-hover:text-white"}`} />
+                  <Icon className={`w-6 h-6 mb-3 transition-transform duration-300 group-hover:scale-110 ${isSelected ? "text-zru-green" : "text-black/40 group-hover:text-black"}`} />
                   <span className="text-[11px] font-subheading font-bold uppercase tracking-wider text-center">{level.name}</span>
                   {isSelected && (
                     <div className="absolute top-2 right-2 w-2 h-2 rounded-full bg-zru-green animate-ping" />
@@ -208,10 +197,10 @@ function EventsInner() {
         </div>
 
         {/* 2. Dual-View Tab Selector */}
-        <div className="flex flex-col md:flex-row justify-between items-center gap-6 mb-12 bg-white/3 p-2 rounded-2xl border border-white/5 backdrop-blur-md">
+        <div className="flex flex-col md:flex-row justify-between items-center gap-6 mb-12 bg-white p-2 rounded-2xl border border-black/5 shadow-sm">
            
            {/* Tab Switcher */}
-           <div className="flex p-1 bg-black/40 rounded-xl border border-white/5 relative z-0">
+           <div className="flex p-1 bg-black/5 rounded-xl border border-black/10 relative z-0">
              {(["competitions", "events"] as const).map((tab) => {
                const isActive = activeTab === tab;
                return (
@@ -219,7 +208,7 @@ function EventsInner() {
                    key={tab}
                    onClick={() => handleTabChange(tab)}
                    className={`relative px-8 py-3 rounded-lg text-xs font-bold tracking-widest uppercase transition-colors duration-300 select-none z-10 ${
-                     isActive ? "text-white" : "text-gray-400 hover:text-white"
+                     isActive ? "text-white" : "text-black/60 hover:text-black"
                    }`}
                  >
                    {isActive && (
@@ -237,7 +226,7 @@ function EventsInner() {
 
            {/* Filter Indicator / Status */}
            <div className="text-right">
-             <span className="text-xs text-white/40 font-bold uppercase tracking-widest">
+             <span className="text-xs text-black/45 font-bold uppercase tracking-widest">
                {selectedLevel ? `Filtering by Level: ${selectedLevel}` : "Showing all divisions"}
              </span>
            </div>
@@ -257,34 +246,34 @@ function EventsInner() {
                 filteredCompetitions.map((comp) => (
                   <div 
                     key={comp.id}
-                    className="card-green border group flex flex-col justify-between p-8 rounded-2xl transition-all duration-300"
+                    className="bg-white border border-black/5 group flex flex-col justify-between p-8 rounded-2xl shadow-sm hover:shadow-lg transition-all duration-300"
                   >
                     <div>
                       {/* Top Row Status and Level */}
                       <div className="flex justify-between items-center mb-6">
-                        <span className="text-[10px] font-black tracking-widest text-zru-green uppercase bg-zru-green/10 border border-zru-green/20 px-3 py-1 rounded-sm clip-slanted-sm">
+                        <span className="text-[10px] font-black tracking-widest text-zru-green uppercase bg-zru-green/10 border border-zru-green/20 px-3 py-1 rounded-sm">
                           {comp.level}
                         </span>
-                        <span className="flex items-center gap-1.5 text-[9px] font-black tracking-wider uppercase text-white/50">
-                          <span className={`w-1.5 h-1.5 rounded-full ${comp.status === "ONGOING" ? "bg-zru-green animate-pulse" : "bg-neutral-600"}`} />
+                        <span className="flex items-center gap-1.5 text-[9px] font-black tracking-wider uppercase text-black/50">
+                          <span className={`w-1.5 h-1.5 rounded-full ${comp.status === "ONGOING" ? "bg-zru-green animate-pulse" : "bg-neutral-300"}`} />
                           {comp.status}
                         </span>
                       </div>
 
                       {/* Main Title & Details */}
-                      <h3 className="text-2xl font-heading text-white mb-4 group-hover:text-zru-green transition-colors">
+                      <h3 className="text-2xl font-heading text-rich-black mb-4 group-hover:text-zru-green transition-colors">
                         {comp.title}
                       </h3>
-                      <p className="text-white/60 text-sm leading-relaxed mb-6 font-body">
+                      <p className="text-black/60 text-sm leading-relaxed mb-6 font-body">
                         {comp.description}
                       </p>
                     </div>
 
                     {/* Meta info & Action */}
-                    <div className="border-t border-white/5 pt-6 mt-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                    <div className="border-t border-black/5 pt-6 mt-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                       <div className="space-y-1">
-                        <span className="text-[10px] text-white/30 uppercase tracking-widest block font-bold">Timeline / Teams</span>
-                        <div className="flex gap-4 text-xs font-bold text-white/80">
+                        <span className="text-[10px] text-black/45 uppercase tracking-widest block font-bold">Timeline / Teams</span>
+                        <div className="flex gap-4 text-xs font-bold text-black/80">
                           <span className="flex items-center gap-1.5"><CalendarIcon className="w-3.5 h-3.5 text-zru-green" /> {comp.dateRange}</span>
                           <span className="flex items-center gap-1.5"><Users className="w-3.5 h-3.5 text-zru-green" /> {comp.teamCount}</span>
                         </div>
@@ -296,8 +285,8 @@ function EventsInner() {
                   </div>
                 ))
               ) : (
-                <div className="col-span-2 text-center py-20 border border-dashed border-white/10 rounded-2xl bg-white/3">
-                  <p className="text-white/40 font-bold uppercase tracking-widest">No Competitions matching this level filter.</p>
+                <div className="col-span-2 text-center py-20 border border-dashed border-black/10 rounded-2xl bg-black/5">
+                  <p className="text-black/45 font-bold uppercase tracking-widest">No Competitions matching this level filter.</p>
                 </div>
               )}
             </motion.div>
@@ -313,36 +302,36 @@ function EventsInner() {
                 filteredEvents.map((event) => (
                   <div 
                     key={event.id}
-                    className="card-green border group flex flex-col justify-between p-6 rounded-2xl"
+                    className="bg-white border border-black/5 group flex flex-col justify-between p-6 rounded-2xl shadow-sm hover:shadow-lg transition-all duration-300"
                   >
                     <div>
                       {/* Event Banner */}
-                      <div className="bg-white/3 p-4 flex items-center justify-between border border-white/5 rounded-xl mb-6">
-                        <div className="flex items-center gap-2 text-white font-bold tracking-wider text-xs">
+                      <div className="bg-black/5 p-4 flex items-center justify-between border border-black/5 rounded-xl mb-6">
+                        <div className="flex items-center gap-2 text-rich-black font-bold tracking-wider text-xs">
                           <CalendarIcon className="w-4 h-4 text-zru-green" />
                           <span>{event.date}</span>
                         </div>
-                        <span className={`text-[9px] font-black px-2 py-1 rounded text-white bg-neutral-900 border border-white/10 tracking-widest`}>
+                        <span className={`text-[9px] font-black px-2 py-1 rounded text-rich-black bg-white border border-black/10 tracking-widest`}>
                           {event.category}
                         </span>
                       </div>
 
-                      <h3 className="text-xl font-heading text-white mb-4 group-hover:text-zru-green transition-colors leading-tight">
+                      <h3 className="text-xl font-heading text-rich-black mb-4 group-hover:text-zru-green transition-colors leading-tight">
                         {event.title}
                       </h3>
                       
                       <div className="space-y-2 mb-6">
-                        <div className="flex items-center gap-2.5 text-white/50 text-xs font-medium font-body">
+                        <div className="flex items-center gap-2.5 text-black/50 text-xs font-medium font-body">
                           <Clock className="w-4 h-4 text-zru-green shrink-0" />
                           <span>{event.time}</span>
                         </div>
-                        <div className="flex items-center gap-2.5 text-white/50 text-xs font-medium font-body">
+                        <div className="flex items-center gap-2.5 text-black/50 text-xs font-medium font-body">
                           <MapPin className="w-4 h-4 text-zru-green shrink-0" />
                           <span className="truncate">{event.location}</span>
                         </div>
                       </div>
 
-                      <p className="text-white/60 text-xs leading-relaxed mb-6 font-body line-clamp-3">
+                      <p className="text-black/60 text-xs leading-relaxed mb-6 font-body line-clamp-3">
                         {event.description}
                       </p>
                     </div>
@@ -353,8 +342,8 @@ function EventsInner() {
                   </div>
                 ))
               ) : (
-                <div className="col-span-3 text-center py-20 border border-dashed border-white/10 rounded-2xl bg-white/3">
-                  <p className="text-white/40 font-bold uppercase tracking-widest">No Events matching this level filter.</p>
+                <div className="col-span-3 text-center py-20 border border-dashed border-black/10 rounded-2xl bg-black/5">
+                  <p className="text-black/45 font-bold uppercase tracking-widest">No Events matching this level filter.</p>
                 </div>
               )}
             </motion.div>
@@ -362,7 +351,7 @@ function EventsInner() {
         </AnimatePresence>
 
         {/* 4. Data Provenance Timestamp */}
-        <div className="mt-20 border-t border-white/5 pt-8 flex flex-col sm:flex-row justify-between items-center gap-4 text-white/30 text-[10px] font-bold uppercase tracking-widest">
+        <div className="mt-20 border-t border-black/5 pt-8 flex flex-col sm:flex-row justify-between items-center gap-4 text-black/45 text-[10px] font-bold uppercase tracking-widest">
           <div className="flex items-center gap-2">
             <CheckCircle className="w-4 h-4 text-zru-green" />
             <span>Official ZRU Competition Feed</span>
@@ -380,7 +369,7 @@ function EventsInner() {
 export default function EventsPage() {
   return (
     <>
-      <Suspense fallback={<div className="min-h-screen bg-rich-black flex items-center justify-center text-white">Loading Competitions Hub...</div>}>
+      <Suspense fallback={<div className="min-h-screen bg-milk-white flex items-center justify-center text-rich-black">Loading Competitions Hub...</div>}>
         <EventsInner />
       </Suspense>
     </>

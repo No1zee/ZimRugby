@@ -1,6 +1,4 @@
 import { Metadata } from "next";
-import Navigation from "@/components/layout/Navigation";
-import Footer from "@/components/layout/Footer";
 import { MapPin, Users, Search, ArrowRight, Heart, GraduationCap } from "lucide-react";
 import Link from "next/link";
 import PlayRugbyDevelopment from "@/components/home/PlayRugbyDevelopment";
@@ -59,7 +57,7 @@ export default function PlayRugbyPage() {
         <div 
           className="absolute inset-0 opacity-10 bg-pattern-dots"
         />
-        <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-black text-white uppercase mb-4">
             Play Rugby
           </h1>
@@ -74,7 +72,7 @@ export default function PlayRugbyPage() {
 
       {/* Programmes Grid */}
       <section className="py-16 bg-white">
-        <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-3xl font-black text-zru-green uppercase mb-8">Find Your Path</h2>
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
             {programmes.map((prog) => (
@@ -101,7 +99,7 @@ export default function PlayRugbyPage() {
 
       {/* Club Finder */}
       <section className="py-16 bg-gray-50">
-        <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-8">
             <div>
               <h2 className="text-3xl font-black text-zru-green uppercase mb-2">Find a Club</h2>
@@ -146,7 +144,7 @@ export default function PlayRugbyPage() {
 
       {/* CTA Banner */}
       <section className="py-16 bg-zru-green">
-        <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl md:text-4xl font-black text-white uppercase mb-4">
             Ready to Start?
           </h2>

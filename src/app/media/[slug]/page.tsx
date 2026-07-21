@@ -58,7 +58,7 @@ export default async function ReportPage({ params }: PageProps) {
         />
         <div className="absolute inset-0 bg-linear-to-t from-rich-black via-rich-black/40 to-transparent" />
         
-        <div className="absolute inset-0 flex flex-col justify-end px-6 pb-12 md:pb-24 max-w-7xl mx-auto w-full">
+        <div className="absolute inset-0 flex flex-col justify-end px-6 pb-12 md:pb-24 max-w-[1440px] mx-auto w-full">
           <Link 
             href="/media" 
             className="group inline-flex items-center gap-3 text-[10px] font-black uppercase tracking-[0.4em] text-zru-green mb-10 transition-all hover:gap-5"
@@ -157,7 +157,7 @@ export default async function ReportPage({ params }: PageProps) {
 
       {/* More from The Wire */}
       <section className="py-32 px-6 bg-[#050505] border-t border-white/5">
-        <div className="max-w-7xl mx-auto">
+        <div className="max-w-[1440px] mx-auto">
           <div className="flex justify-between items-end mb-16">
             <h2 className="text-4xl md:text-6xl font-black uppercase tracking-tighter leading-none">
               KEEP <br /><span className="text-stroke-white text-transparent">READING</span>
@@ -170,7 +170,7 @@ export default async function ReportPage({ params }: PageProps) {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
             {relatedReports.map(item => (
               <Link key={item.id} href={`/media/${item.id}`} className="group block space-y-6">
-                <div className="relative aspect-video overflow-hidden rounded-3xl bg-neutral-900 border border-white/5 transition-all group-hover:border-zru-green/30 group-hover:-translate-y-2">
+                <div className="relative aspect-video overflow-hidden rounded-3xl bg-neutral-900 border border-white/5 transition-all group-hover:border-zru-green/30 group-hover:-translate-y-1">
                   <Image
                     src={item.image}
                     alt={item.title}

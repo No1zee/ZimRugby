@@ -1,31 +1,8 @@
 import type { Metadata } from "next";
-import { Outfit, Bebas_Neue, Inter, Playfair_Display } from "next/font/google";
 import "./globals.css";
 import Navigation from "@/components/layout/Navigation";
 import Footer from "@/components/layout/Footer";
 import ClientLayoutShell from "@/components/layout/ClientLayoutShell";
-
-const outfit = Outfit({
-  subsets: ["latin"],
-  variable: "--font-outfit",
-});
-
-const bebasNeue = Bebas_Neue({
-  weight: "400",
-  subsets: ["latin"],
-  variable: "--font-bebas-neue",
-});
-
-const inter = Inter({
-  subsets: ["latin"],
-  variable: "--font-inter",
-});
-
-const playfairDisplay = Playfair_Display({
-  subsets: ["latin"],
-  variable: "--font-serif",
-  style: ["normal", "italic"],
-});
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://zimrugby.co.zw"),
@@ -57,9 +34,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="overflow-x-hidden">
-      <body
-        className={`${outfit.variable} ${bebasNeue.variable} ${inter.variable} ${playfairDisplay.variable} antialiased overflow-x-hidden`}
-      >
+      <body className="antialiased overflow-x-hidden">
+        <a
+          href="#main-content"
+          className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-[100] focus:px-4 focus:py-2 focus:bg-zru-green focus:text-white focus:rounded-md focus:outline-none"
+        >
+          Skip to main content
+        </a>
         <noscript>
           <div className="bg-red-950 text-white p-4 text-center font-bold text-sm font-sans">
             JavaScript is disabled. For the best experience on the Zimbabwe Rugby Union platform, please enable JavaScript in your browser settings.
@@ -67,7 +48,7 @@ export default function RootLayout({
         </noscript>
         <ClientLayoutShell>
           <Navigation />
-          <main className="relative overflow-hidden pb-24 min-h-screen bg-rich-black">
+          <main id="main-content" className="relative overflow-hidden pb-24 min-h-screen bg-milk-white">
             {children}
           </main>
           <Footer />

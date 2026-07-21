@@ -1,11 +1,9 @@
 import HeroCarousel from "@/components/home/HeroCarousel";
 import MatchCentreStrip from "@/components/home/MatchCentreStrip";
-import StorePreviewStrip from "@/components/home/StorePreviewStrip";
-import NewsMediaBlock from "@/components/home/NewsMediaBlock";
-import EventsBlock from "@/components/home/EventsBlock";
+import SpecBentoGrid from "@/components/home/SpecBentoGrid";
 import { CountdownPromo } from "@/components/ui/CountdownPromo";
-import AudiencePathways from "@/components/home/AudiencePathways";
 import GrassrootsDevelopment from "@/components/home/GrassrootsDevelopment";
+import SponsorGrid from "@/components/home/SponsorGrid";
 
 import { getLiveMatches, getLatestReports } from "@/lib/data-fetcher";
 import { getHeroSlides } from "@/lib/api/hero";
@@ -23,45 +21,39 @@ export default async function Home() {
   ]);
 
   return (
-    <main className="min-h-screen relative">
+    <main className="min-h-screen relative bg-milk-white">
       
-      {/* 1. Hero Carousel */}
+      {/* 1. Hero Carousel (Preserved 100% full-screen presence) */}
       <HeroCarousel slides={heroSlides} />
 
       <div className="relative z-10 overflow-hidden">
 
-        {/* 2. Audience Pathways */}
-        <AudiencePathways />
+        {/* 2. New Bento Grid (Latest News, Upcoming Fixture, Tickets, Official Shop) */}
+        <SpecBentoGrid />
 
-        {/* 3. Match Centre Strip (Horizontal List) */}
+        {/* 3. Match Centre Strip */}
         <MatchCentreStrip initialMatches={matches} twinData={twinData} rankingsData={rankingsData} />
 
-        {/* 4. Featured Match Countdown */}
+        {/* 4. Rugby World Cup Countdown */}
         <CountdownPromo
-          title="BATTLE OF THE ZAMBEZI"
-          subtitle="ZIMBABWE vs ZAMBIA"
-          description="The Sables return to action to defend their pride in the historic Battle of the Zambezi. Witness the African Champions contest the historic trophy in this crucial home test match."
-          targetDate="2026-11-21T15:00:00"
-          countdownLabel="COUNTDOWN TO KICK OFF:"
-          location="Harare Sports Club"
-          image="/images/events/africa-cup.jpg"
+          title="RUGBY WORLD CUP 2027"
+          subtitle="ROAD TO AUSTRALIA"
+          description="The Zimbabwe Sables are on a historic quest to qualify and compete on rugby's grandest stage. Follow the matches, support the squad, and join the national campaign to power our Sables to Australia."
+          targetDate="2027-10-01T20:00:00"
+          countdownLabel="COUNTDOWN TO KICK OFF IN AUSTRALIA:"
+          location="Australia"
+          image="/images/hero/zim-u20s.webp"
           ctas={[
-            { label: "Book Tickets", href: "/tickets", variant: "primary" },
-            { label: "Match Preview", href: "/news/sables-vs-zambia", variant: "outline" },
+            { label: "Support Campaign", href: "/world-cup-campaign", variant: "primary" },
+            { label: "Qualification Path", href: "/match-centre", variant: "outline" },
           ]}
         />
 
-        {/* 5. Latest News */}
-        <NewsMediaBlock initialReports={reports} />
-
-        {/* 6. What's On / Events */}
-        <EventsBlock />
-
-        {/* 7. Grassroots & Pathways */}
+        {/* 5. Grassroots & Pathways */}
         <GrassrootsDevelopment />
 
-        {/* 8. Store Preview Strip */}
-        <StorePreviewStrip />
+        {/* 6. Commercial Partners & Sponsors */}
+        <SponsorGrid />
 
       </div>
     </main>

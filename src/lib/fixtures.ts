@@ -75,11 +75,14 @@ function getVerifiedStaticFixtures(): Fixture[] {
 function deduplicateFixtures(fixtures: Fixture[]): Fixture[] {
   const seen = new Map<string, Fixture>();
 
-  fixtures.sort((a, b) => a.date.getTime() - b.date.getTime());
+  // Clone array before sorting to prevent mutating parameter array
+  const sorted = [...fixtures].sort((a, b) => a.date.getTime() - b.date.getTime());
 
-  for (const fixture of fixtures) {
-    // Generate a unique key based on date (day only) and participants
-    const dateKey = fixture.date.toISOString().split('T')[0];
+  for (const fixture of sorted) {
+    // Ensure date object is valid before running ISO methods
+    const isValidDate = fixture.date instanceof Date && !isNaN(fixture.date.getTime());
+    const dateKey = isValidDate ? fixture.date.toISOString().split('T')[0] : 'invalid-date';
+    
     const teams = [fixture.homeTeam.name.toLowerCase(), fixture.awayTeam.name.toLowerCase()].sort();
     const key = `${dateKey}-${teams.join('-')}`;
 
@@ -98,7 +101,12 @@ function deduplicateFixtures(fixtures: Fixture[]): Fixture[] {
 }
 
 export function formatFixtureForUI(fixture: Fixture) {
-  const dateOptions: Intl.DateTimeFormatOptions = { day: '2-digit', month: 'short', year: 'numeric' };
+  const dateOptions: Intl.DateTimeFormatOptions = { 
+    day: '2-digit', 
+    month: 'short', 
+    year: 'numeric',
+    timeZone: 'UTC' // Force UTC to avoid local mismatch hydration errors
+  };
   const formattedDate = fixture.date.toLocaleDateString('en-GB', dateOptions).toUpperCase();
   
   const getLogo = (team: { name: string, logo?: string }) => {

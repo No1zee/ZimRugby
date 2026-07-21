@@ -36,10 +36,10 @@ export default function PageHero({
               src={backgroundImage}
               alt={title}
               fill
-              className="object-cover opacity-20 blur-[1px] grayscale"
+              className="object-cover opacity-80"
               priority
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-rich-black via-rich-black/70 to-rich-black" />
+            <div className="absolute inset-0 bg-gradient-to-t from-rich-black/90 via-rich-black/40 to-transparent" />
           </>
         ) : (
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(0,107,63,0.12),transparent_60%)]" />
@@ -86,7 +86,7 @@ export default function PageHero({
           </div>
 
           {/* Heading */}
-          <h1 className="text-5xl md:text-7xl font-black text-white uppercase tracking-tighter leading-none">
+          <h1 className="text-3xl sm:text-5xl md:text-7xl font-serif font-black italic text-white tracking-tight normal-case">
             {title}
           </h1>
 

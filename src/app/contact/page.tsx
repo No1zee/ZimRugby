@@ -46,7 +46,7 @@ export default function ContactPage() {
 
   return (
     <main className="bg-rich-black min-h-screen text-white flex flex-col justify-between selection:bg-zru-green selection:text-white">
-      <div className="flex-1 max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 pt-32 pb-24 w-full">
+      <div className="flex-1 max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 pt-32 pb-24 w-full">
         
         {/* Header Section */}
         <section className="mb-16 border-l-4 border-zru-green pl-6">
@@ -122,7 +122,7 @@ export default function ContactPage() {
               <form onSubmit={handleSubmit} className="space-y-6">
                 
                 {submitError && (
-                  <div className="bg-zru-red/10 border border-zru-red/20 rounded-xl p-4 flex items-center gap-3 text-zru-red text-xs font-semibold">
+                  <div className="bg-zru-green/10 border border-zru-green/20 rounded-xl p-4 flex items-center gap-3 text-zru-green text-xs font-semibold">
                     <AlertCircle className="w-4 h-4 shrink-0" />
                     <span>{submitError}</span>
                   </div>

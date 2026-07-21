@@ -43,7 +43,7 @@ const tiles = [
 export default function CoreHubTiles() {
   return (
     <section className="bg-rich-black relative z-20 -mt-20 px-4 sm:px-6 lg:px-8 pb-16">
-      <div className="max-w-7xl mx-auto">
+      <div className="max-w-[1440px] mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           {tiles.map((tile, index) => (
             <Link key={tile.key} href={tile.href}>

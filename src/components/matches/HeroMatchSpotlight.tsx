@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { Calendar, MapPin, Ticket, Trophy, Clock } from "lucide-react";
 import Image from "next/image";
@@ -11,44 +11,45 @@ interface HeroMatchSpotlightProps {
   match: Match;
 }
 
+interface TimeLeft {
+  days: number;
+  hours: number;
+  minutes: number;
+  seconds: number;
+  isOver: boolean;
+}
+
+function calculateTimeLeft(dateIso: string | undefined, date: string): TimeLeft {
+  const targetDate = new Date(dateIso || date);
+  if (isNaN(targetDate.getTime())) {
+    return { days: 0, hours: 0, minutes: 0, seconds: 0, isOver: true };
+  }
+  const difference = targetDate.getTime() - Date.now();
+  if (difference <= 0) {
+    return { days: 0, hours: 0, minutes: 0, seconds: 0, isOver: true };
+  }
+  return {
+    days: Math.floor(difference / (1000 * 60 * 60 * 24)),
+    hours: Math.floor((difference / (1000 * 60 * 60)) % 24),
+    minutes: Math.floor((difference / 1000 / 60) % 60),
+    seconds: Math.floor((difference / 1000) % 60),
+    isOver: false,
+  };
+}
+
 export default function HeroMatchSpotlight({ match }: HeroMatchSpotlightProps) {
-  const [timeLeft, setTimeLeft] = useState<{
-    days: number;
-    hours: number;
-    minutes: number;
-    seconds: number;
-    isOver: boolean;
-  }>({ days: 0, hours: 0, minutes: 0, seconds: 0, isOver: false });
+  const [timeLeft, setTimeLeft] = useState<TimeLeft>(() =>
+    calculateTimeLeft(match.dateIso, match.date)
+  );
+  const targetDateRef = useRef<Date | null>(null);
 
   useEffect(() => {
-    const matchDateStr = match.dateIso || match.date;
-    const targetDate = new Date(matchDateStr);
-
-    if (isNaN(targetDate.getTime())) {
-      setTimeLeft(prev => ({ ...prev, isOver: true }));
-      return;
-    }
-
-    const calculateTime = () => {
-      const difference = targetDate.getTime() - new Date().getTime();
-      
-      if (difference <= 0) {
-        return { days: 0, hours: 0, minutes: 0, seconds: 0, isOver: true };
-      }
-
-      return {
-        days: Math.floor(difference / (1000 * 60 * 60 * 24)),
-        hours: Math.floor((difference / (1000 * 60 * 60)) % 24),
-        minutes: Math.floor((difference / 1000 / 60) % 60),
-        seconds: Math.floor((difference / 1000) % 60),
-        isOver: false
-      };
-    };
-
-    setTimeLeft(calculateTime());
+    const targetDate = new Date(match.dateIso || match.date);
+    if (isNaN(targetDate.getTime())) return;
+    targetDateRef.current = targetDate;
 
     const timer = setInterval(() => {
-      setTimeLeft(calculateTime());
+      setTimeLeft(calculateTimeLeft(match.dateIso, match.date));
     }, 1000);
 
     return () => clearInterval(timer);

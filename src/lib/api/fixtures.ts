@@ -89,8 +89,8 @@ export async function getFixtureTwinData(): Promise<FixtureTwinData> {
           id: String(m.id),
           competition: m.competition || "International Match",
           round: m.round || "Standard",
-          date: m.date_label || new Date(m.date).toLocaleDateString('en-US', { day: 'numeric', month: 'long', year: 'numeric' }),
-          time: m.time || new Date(m.date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false }),
+          date: m.date_label || new Date(m.date).toLocaleDateString('en-US', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' }),
+          time: m.time || new Date(m.date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false, timeZone: 'UTC' }),
           venue: m.venue || "TBA",
           homeTeam: {
             name: m.home_team_name || "Zimbabwe Sables",

@@ -68,7 +68,7 @@ export async function getRefereeCourses(): Promise<RefereeCourse[]> {
         return response.map((course: any) => ({
           title: course.title,
           level: course.level || "Standard",
-          date: course.date_label || new Date(course.date).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }).toUpperCase(),
+          date: course.date_label || new Date(course.date).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric', timeZone: 'UTC' }).toUpperCase(),
           venue: course.venue || "TBA",
           instructor: course.instructor || "TBA",
           status: course.status || "open"
@@ -109,7 +109,7 @@ export async function getRefereeNotices(): Promise<RefereeNotice[]> {
         return response.map((notice: any) => ({
           id: String(notice.id),
           title: notice.title,
-          date: notice.date_label || new Date(notice.date).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }).toUpperCase(),
+          date: notice.date_label || new Date(notice.date).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric', timeZone: 'UTC' }).toUpperCase(),
           excerpt: notice.excerpt || "",
           content: notice.content || ""
         }));

@@ -1,0 +1,16 @@
+# Vercel Ignore Rules
+node_modules/
+.next/
+out/
+build/
+.vercel/
+.headroom/
+Gallery/
+scratch/
+.git/
+*.zip
+*.tar.gz
+*.pdf
+*.docx
+*.mp4
+*.mov

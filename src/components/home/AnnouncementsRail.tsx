@@ -120,7 +120,7 @@ export default async function AnnouncementsRail() {
                   {ann.ctaUrl && (
                     <div className="pt-6 mt-6 border-t border-white/5 flex items-center justify-between">
                       <span className="text-[9px] text-white/40 font-bold uppercase tracking-widest font-body">
-                        {new Date(ann.startsAt).toLocaleDateString('en-ZW', { day: '2-digit', month: 'short' })}
+                        {new Date(ann.startsAt).toLocaleDateString('en-ZW', { day: '2-digit', month: 'short', timeZone: 'UTC' })}
                       </span>
                       <SlantedButton 
                         href={ann.ctaUrl} 

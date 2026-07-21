@@ -2,8 +2,7 @@
 import { Team } from "@/types";
 import { directusFetch } from "@/lib/directus/fetch";
 
-export async function getTeamData(slug: string): Promise<Team | null> {
-  const teams: Record<string, Team> = {
+const MOCK_TEAMS: Record<string, Team> = {
     "sables": {
       id: "sables",
       name: "Zimbabwe Sables",
@@ -150,6 +149,7 @@ export async function getTeamData(slug: string): Promise<Team | null> {
     }
   };
 
+export async function getTeamData(slug: string): Promise<Team | null> {
   try {
     if (process.env.NEXT_PUBLIC_DIRECTUS_URL) {
       const response = await directusFetch<any>('teams', {
@@ -179,7 +179,7 @@ export async function getTeamData(slug: string): Promise<Team | null> {
           matches: (team.matches || []).map((m: any) => ({
             opponent: m.opponent,
             opponentLogo: m.opponent_logo ? `${process.env.NEXT_PUBLIC_DIRECTUS_URL}/assets/${m.opponent_logo}` : m.opponent_logo_url,
-            date: m.date_label || new Date(m.date).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }),
+            date: m.date_label || new Date(m.date).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric', timeZone: 'UTC' }),
             venue: m.venue || "TBA",
             score: m.score,
             status: m.status || "upcoming"
@@ -194,51 +194,71 @@ export async function getTeamData(slug: string): Promise<Team | null> {
     console.warn(`Directus fetch failed for team ${slug}, falling back to mock data:`, error);
   }
 
-  return teams[slug] || null;
+  return MOCK_TEAMS[slug] || null;
 }
 
 export async function getAllTeamFixtures(): Promise<any[]> {
   const slugs = ["sables", "lady-sables", "junior-sables", "cheetahs", "u20"];
+  const teamDataList = await Promise.all(slugs.map(slug => getTeamData(slug)));
   const allFixtures: any[] = [];
   
-  for (const slug of slugs) {
-    const team = await getTeamData(slug);
-    if (team) {
-      const teamName = team.name;
-      team.matches.forEach((m: any, idx: number) => {
-        let matchDate = new Date();
-        try {
-          matchDate = new Date(m.date);
-          if (isNaN(matchDate.getTime())) {
-            matchDate = new Date();
-          }
-        } catch (e) {}
+  const CATEGORY_MAP: Record<string, string> = {
+    "u20": "U20",
+    "junior-sables": "Junior Sables",
+    "cheetahs": "Cheetahs",
+    "lady-sables": "Lady Sables",
+    "sables": "Sables"
+  };
 
-        const scores = m.score ? m.score.split("-").map((s: string) => parseInt(s.trim())) : [];
+  teamDataList.forEach((team, teamIdx) => {
+    if (!team) return;
+    const slug = slugs[teamIdx];
+    const teamName = team.name;
 
-        allFixtures.push({
-          id: `team-match-${slug}-${idx}`,
-          competition: teamName,
-          round: m.status === "completed" ? "Result" : "Fixture",
-          date: matchDate,
-          time: "15:00",
-          venue: m.venue || "TBA",
-          homeTeam: {
-            name: teamName,
-            score: m.status === "completed" ? (scores[0] ?? 0) : undefined,
-            logo: "/logo.png"
-          },
-          awayTeam: {
-            name: m.opponent,
-            score: m.status === "completed" ? (scores[1] ?? 0) : undefined,
-            logo: m.opponentLogo
-          },
-          status: m.status || "upcoming",
-          teamCategory: slug === "u20" ? "U20" : slug === "junior-sables" ? "Junior Sables" : slug === "cheetahs" ? "Cheetahs" : slug === "lady-sables" ? "Lady Sables" : "Sables"
-        });
+    team.matches.forEach((m: any, idx: number) => {
+      let matchDate = new Date();
+      let isInvalidDate = false;
+      try {
+        matchDate = new Date(m.date);
+        if (isNaN(matchDate.getTime())) {
+          isInvalidDate = true;
+        }
+      } catch {
+        isInvalidDate = true;
+      }
+
+      if (isInvalidDate) {
+        console.warn(`Skipping invalid match date formatting for team ${slug}: "${m.date}"`);
+        return; // skip match with parsing failure rather than defaulting to today
+      }
+
+      const rawScores = m.score ? m.score.split("-").map((s: string) => parseInt(s.trim())) : [];
+      const homeScore = (rawScores[0] !== undefined && !isNaN(rawScores[0])) ? rawScores[0] : undefined;
+      const awayScore = (rawScores[1] !== undefined && !isNaN(rawScores[1])) ? rawScores[1] : undefined;
+
+      allFixtures.push({
+        id: `team-match-${slug}-${idx}`,
+        competition: teamName,
+        round: m.status === "completed" ? "Result" : "Fixture",
+        date: matchDate,
+        time: "15:00",
+        venue: m.venue || "TBA",
+        homeTeam: {
+          name: teamName,
+          score: m.status === "completed" ? homeScore : undefined,
+          logo: "/logo.png"
+        },
+        awayTeam: {
+          name: m.opponent,
+          score: m.status === "completed" ? awayScore : undefined,
+          logo: m.opponentLogo
+        },
+        status: m.status || "upcoming",
+        teamCategory: CATEGORY_MAP[slug] || "Sables"
       });
-    }
-  }
+    });
+  });
+
   return allFixtures;
 }
 

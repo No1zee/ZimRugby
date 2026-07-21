@@ -20,8 +20,7 @@ export interface RankingsData {
   }[];
 }
 
-export async function getRankingsData(): Promise<RankingsData> {
-  const mockRankings: RankingsData = {
+const MOCK_RANKINGS: RankingsData = {
     world: {
       position: 28,
       previousPosition: 31,
@@ -58,14 +57,13 @@ export async function getRankingsData(): Promise<RankingsData> {
     ]
   };
 
+export async function getRankingsData(): Promise<RankingsData> {
   try {
     if (process.env.NEXT_PUBLIC_DIRECTUS_URL) {
-      const response = await directusFetch<any>('rankings', {
-        limit: 1
-      });
-      const rivalsResponse = await directusFetch<any>('ranking_rivals', {
-        sort: ['position']
-      });
+      const [response, rivalsResponse] = await Promise.all([
+        directusFetch<any>('rankings', { limit: 1 }),
+        directusFetch<any>('ranking_rivals', { sort: ['position'] })
+      ]);
       
       if (response?.[0]) {
         const mainRank = response[0];
@@ -97,5 +95,5 @@ export async function getRankingsData(): Promise<RankingsData> {
     console.warn("Directus fetch failed for rankings data, falling back to mock data:", error);
   }
 
-  return mockRankings;
+  return MOCK_RANKINGS;
 }

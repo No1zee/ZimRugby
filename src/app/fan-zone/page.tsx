@@ -68,9 +68,9 @@ export default function FanZonePage() {
   };
 
   return (
-    <main className="bg-rich-black min-h-screen pb-24 text-white relative overflow-hidden">
+    <main className="bg-milk-white min-h-screen pb-24 text-rich-black relative overflow-hidden">
       <div className="absolute inset-0 pointer-events-none select-none z-0">
-        <EdgyGradient opacity={0.4} />
+        <EdgyGradient opacity={0.15} />
       </div>
 
       {/* PageHero header */}
@@ -93,7 +93,7 @@ export default function FanZonePage() {
           <div className="space-y-8">
             <div className="border-l-4 border-zru-green pl-4">
               <h2 className="text-2xl font-black uppercase tracking-wider">MEMBERSHIP BENEFITS</h2>
-              <p className="text-sm text-white/50 mt-1">What you unlock when you join the Sables Fan Club today.</p>
+              <p className="text-sm text-black/60 mt-1">What you unlock when you join the Sables Fan Club today.</p>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
@@ -102,13 +102,13 @@ export default function FanZonePage() {
                 return (
                   <div 
                     key={idx} 
-                    className="card-green border rounded-2xl p-6 space-y-4 hover:-translate-y-1 shadow-md group glow-green-card"
+                    className="bg-white border border-black/5 rounded-2xl p-6 space-y-4 hover:-translate-y-1 shadow-md group"
                   >
-                    <div className="w-10 h-10 bg-zru-green/20 rounded-xl flex items-center justify-center text-zru-green border border-white/5 group-hover:scale-105 transition-transform duration-300">
+                    <div className="w-10 h-10 bg-zru-green/10 rounded-xl flex items-center justify-center text-zru-green border border-zru-green/20 group-hover:scale-105 transition-transform duration-300">
                       <Icon className="w-5 h-5" />
                     </div>
-                    <h3 className="font-black text-sm text-white uppercase tracking-tight">{b.title}</h3>
-                    <p className="text-white/50 text-xs leading-relaxed font-medium">{b.desc}</p>
+                    <h3 className="font-black text-sm text-rich-black uppercase tracking-tight">{b.title}</h3>
+                    <p className="text-black/60 text-xs leading-relaxed font-medium">{b.desc}</p>
                   </div>
                 );
               })}
@@ -116,14 +116,14 @@ export default function FanZonePage() {
           </div>
 
           {/* Column 2: Newsletter Registration Form (SA Rugby Pattern) */}
-          <div className="card-green border rounded-3xl p-6 md:p-10 backdrop-blur-md shadow-2xl relative overflow-hidden glow-green-card">
+          <div className="bg-white border border-black/5 rounded-3xl p-6 md:p-10 shadow-xl relative overflow-hidden">
             
-            <div className="border-b border-white/5 pb-6 mb-6">
+            <div className="border-b border-black/5 pb-6 mb-6">
               <h3 className="text-lg font-black uppercase tracking-widest text-zru-green flex items-center gap-2">
                 <Mail className="w-5 h-5" />
                 <span>JOIN THE WIRE</span>
               </h3>
-              <p className="text-white/40 text-xs font-bold uppercase tracking-wider mt-1">No cost. Premium experience. Globally connected.</p>
+              <p className="text-black/50 text-xs font-bold uppercase tracking-wider mt-1">No cost. Premium experience. Globally connected.</p>
             </div>
 
             {!submitted ? (
@@ -137,40 +137,40 @@ export default function FanZonePage() {
                 
                 {/* Full Name */}
                 <div className="space-y-1.5">
-                  <label className="text-[10px] text-white/50 font-black uppercase tracking-wider block">Full Name</label>
+                  <label className="text-[10px] text-black/60 font-black uppercase tracking-wider block">Full Name</label>
                   <input 
                     type="text" 
                     required
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                     placeholder="e.g. Adrian Garvey"
-                    className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-2.5 text-white placeholder-white/20 focus:outline-none focus:border-zru-green text-xs transition-colors"
+                    className="w-full bg-black/5 border border-black/10 rounded-xl px-4 py-2.5 text-rich-black placeholder-black/30 focus:outline-none focus:border-zru-green text-xs transition-colors"
                   />
                 </div>
 
                 {/* Email Address */}
                 <div className="space-y-1.5">
-                  <label className="text-[10px] text-white/50 font-black uppercase tracking-wider block">Email Address</label>
+                  <label className="text-[10px] text-black/60 font-black uppercase tracking-wider block">Email Address</label>
                   <input 
                     type="email" 
                     required
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="e.g. adrian@sables.co.zw"
-                    className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-2.5 text-white placeholder-white/20 focus:outline-none focus:border-zru-green text-xs transition-colors"
+                    className="w-full bg-black/5 border border-black/10 rounded-xl px-4 py-2.5 text-rich-black placeholder-black/30 focus:outline-none focus:border-zru-green text-xs transition-colors"
                   />
                 </div>
 
                 {/* Country of Residence - SA Rugby global fan base pattern */}
                 <div className="space-y-1.5">
-                  <label className="text-[10px] text-white/50 font-black uppercase tracking-wider block">Country of Residence</label>
+                  <label className="text-[10px] text-black/60 font-black uppercase tracking-wider block">Country of Residence</label>
                   <select
                     value={country}
                     onChange={(e) => setCountry(e.target.value)}
-                    className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:border-zru-green text-xs transition-colors"
+                    className="w-full bg-black/5 border border-black/10 rounded-xl px-4 py-2.5 text-rich-black focus:outline-none focus:border-zru-green text-xs transition-colors"
                   >
                     {countries.map((c) => (
-                      <option key={c} value={c} className="bg-rich-black text-white">
+                      <option key={c} value={c} className="bg-white text-rich-black">
                         {c}
                       </option>
                     ))}
@@ -179,14 +179,14 @@ export default function FanZonePage() {
 
                 {/* Favorite Squad */}
                 <div className="space-y-1.5">
-                  <label className="text-[10px] text-white/50 font-black uppercase tracking-wider block">Favorite National Squad</label>
+                  <label className="text-[10px] text-black/60 font-black uppercase tracking-wider block">Favorite National Squad</label>
                   <select
                     value={favTeam}
                     onChange={(e) => setFavTeam(e.target.value)}
-                    className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:border-zru-green text-xs transition-colors"
+                    className="w-full bg-black/5 border border-black/10 rounded-xl px-4 py-2.5 text-rich-black focus:outline-none focus:border-zru-green text-xs transition-colors"
                   >
                     {teams.map((t) => (
-                      <option key={t} value={t} className="bg-rich-black text-white">
+                      <option key={t} value={t} className="bg-white text-rich-black">
                         {t}
                       </option>
                     ))}
@@ -201,9 +201,9 @@ export default function FanZonePage() {
                     required
                     checked={agreed}
                     onChange={(e) => setAgreed(e.target.checked)}
-                    className="mt-0.5 rounded border-white/10 bg-black/40 focus:ring-0 text-zru-green"
+                    className="mt-0.5 rounded border-black/20 bg-black/5 focus:ring-0 text-zru-green"
                   />
-                  <label htmlFor="agreed" className="text-[10px] text-white/40 font-bold uppercase tracking-wider leading-relaxed cursor-pointer select-none">
+                  <label htmlFor="agreed" className="text-[10px] text-black/60 font-bold uppercase tracking-wider leading-relaxed cursor-pointer select-none">
                     I agree to join the Sables Supporters Club and receive weekly news, updates, and commercial offerings from ZRU.
                   </label>
                 </div>
@@ -228,12 +228,12 @@ export default function FanZonePage() {
                 <div className="inline-flex p-4 bg-zru-green/20 rounded-full border border-zru-green/30 text-zru-green mb-2">
                   <CheckCircle2 className="w-10 h-10" />
                 </div>
-                <h4 className="font-black text-lg text-white uppercase tracking-wider leading-none">WELCOME TO THE TEAM!</h4>
-                <p className="text-white/70 text-xs leading-relaxed max-w-sm mx-auto font-medium">
+                <h4 className="font-black text-lg text-rich-black uppercase tracking-wider leading-none">WELCOME TO THE TEAM!</h4>
+                <p className="text-black/70 text-xs leading-relaxed max-w-sm mx-auto font-medium">
                   Congratulations, <strong>{name}</strong>! Your ZRU Supporter Membership has been successfully activated. A confirmation email and details regarding your <strong>10% Clubhouse discount</strong> have been sent to <strong>{email}</strong>.
                 </p>
                 
-                <div className="border-t border-white/5 pt-6 mt-6 flex items-center gap-3 justify-center text-[10px] font-black uppercase tracking-widest text-zru-green">
+                <div className="border-t border-black/10 pt-6 mt-6 flex items-center gap-3 justify-center text-[10px] font-black uppercase tracking-widest text-zru-green">
                   <ShieldCheck className="w-5 h-5 text-zru-green" />
                   <span>MEMBER COUNTRY: {country.toUpperCase()}</span>
                 </div>
@@ -245,7 +245,7 @@ export default function FanZonePage() {
                     setEmail("");
                     setAgreed(false);
                   }}
-                  className="text-[10px] font-black uppercase text-white/40 hover:text-white transition-colors tracking-widest block pt-4 mx-auto"
+                  className="text-[10px] font-black uppercase text-black/50 hover:text-black transition-colors tracking-widest block pt-4 mx-auto"
                 >
                   Create Another Supporter Account
                 </button>

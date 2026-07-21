@@ -25,7 +25,9 @@ export interface Fixture {
  */
 function parseICS(text: string) {
   const events: Record<string, string>[] = [];
-  const lines = text.split(/\r?\n/);
+  // Unfold folded lines per RFC 5545
+  const unfoldedText = text.replace(/\r?\n[ \t]/g, '');
+  const lines = unfoldedText.split(/\r?\n/);
   let currentEvent: Record<string, string> | null = null;
 
   for (const line of lines) {
@@ -48,14 +50,12 @@ function parseICS(text: string) {
 }
 
 function parseDate(icsStr: string): Date {
-  const y = parseInt(icsStr.substring(0, 4));
-  const m = parseInt(icsStr.substring(4, 6)) - 1;
-  const d = parseInt(icsStr.substring(6, 8));
-  const h = parseInt(icsStr.substring(9, 11));
-  const min = parseInt(icsStr.substring(11, 13));
-  const s = parseInt(icsStr.substring(13, 15));
+  const cleanStr = icsStr.includes(':') ? icsStr.split(':')[1] : icsStr;
+  const match = cleanStr.match(/^(\d{4})(\d{2})(\d{2})T(\d{2})(\d{2})(\d{2})Z?$/);
+  if (!match) return new Date();
   
-  return new Date(Date.UTC(y, m, d, h, min, s));
+  const [, y, m, d, h, min, s] = match.map(Number);
+  return new Date(Date.UTC(y, m - 1, d, h, min, s));
 }
 
 export async function getWorldRugbyFixtures(): Promise<Fixture[]> {
@@ -71,7 +71,8 @@ export async function getWorldRugbyFixtures(): Promise<Fixture[]> {
     clearTimeout(timeoutId);
 
     if (!res.ok) {
-      throw new Error(`Failed to fetch World Rugby ICAL: ${res.statusText}`);
+      console.warn(`Failed to fetch World Rugby ICAL (status ${res.status}): ${res.statusText}`);
+      return [];
     }
     
     const text = await res.text();
@@ -88,22 +89,19 @@ export async function getWorldRugbyFixtures(): Promise<Fixture[]> {
         const startStr = e.DTSTART;
         const startDate = startStr ? parseDate(startStr) : new Date();
         
-        const participants = summary.split(/\s+vs?\s+/i).map((p: string) => p.trim());
-        let homeName = participants[0] || 'Zimbabwe';
-        let awayName = participants[1] || 'TBA';
-        
-        if (summary.includes(' v ')) {
-            const parts = summary.split(' v ').map((p: string) => p.trim());
-            homeName = parts[0];
-            awayName = parts[1];
-        }
+        const participants = summary.split(/\s+(?:vs?|v)\s+/i).map((p: string) => p.trim());
+        const homeName = participants[0] || 'Zimbabwe';
+        const awayName = participants[1] || 'TBA';
+
+        const pad = (n: number) => n.toString().padStart(2, '0');
+        const timeStr = `${pad(startDate.getUTCHours())}:${pad(startDate.getUTCMinutes())}`;
 
         return {
-          id: `wr-${e.UID || Math.random().toString(36).substr(2, 9)}`,
+          id: `wr-${e.UID || Math.random().toString(36).substring(2, 11)}`,
           competition: 'International Test',
           round: 'International',
           date: startDate,
-          time: startDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false }),
+          time: timeStr,
           venue: location,
           homeTeam: { name: homeName },
           awayTeam: { name: awayName },
