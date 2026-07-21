@@ -24,7 +24,12 @@ export default function HomeNewsletterBanner() {
       <div className="max-w-[1440px] mx-auto px-8 sm:px-8">
         
         {/* Banner Card */}
-        <div className="bg-[#006747] rounded-xl p-8 md:p-12 flex flex-col lg:flex-row items-center justify-between gap-8 relative overflow-hidden shadow-sm">
+        <div
+          className="rounded-xl p-8 md:p-12 flex flex-col lg:flex-row items-center justify-between gap-8 relative overflow-hidden shadow-sm"
+          style={{
+            background: "radial-gradient(circle at 50% 25%, #007A50 0%, #004D2C 60%, #002D1A 100%)",
+          }}
+        >
           
           {/* Dot Pattern Overlay */}
           <div

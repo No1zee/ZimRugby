@@ -32,8 +32,22 @@ export default function CleanCountdownBanner() {
   }, []);
 
   return (
-    <section className="bg-[#004D2C] py-10 sm:py-12 text-white border-y border-white/10">
-      <div className="max-w-[1360px] mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center text-center">
+    <section
+      className="py-10 sm:py-12 text-white border-y border-white/10 relative overflow-hidden"
+      style={{
+        background: "radial-gradient(circle at 50% 25%, #007A50 0%, #004D2C 60%, #002D1A 100%)",
+      }}
+    >
+      {/* Pitch Grid Overlay */}
+      <div
+        className="absolute inset-0 opacity-10 pointer-events-none"
+        style={{
+          backgroundImage: "radial-gradient(circle, #ffffff 1px, transparent 1px)",
+          backgroundSize: "20px 20px",
+        }}
+      />
+
+      <div className="relative z-10 max-w-[1360px] mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center text-center">
         
         {/* Title */}
         <h3 className="text-xs sm:text-sm font-bold tracking-[0.3em] uppercase text-white/90 mb-8 font-heading">
