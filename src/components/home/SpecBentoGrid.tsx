@@ -10,15 +10,16 @@ export default function SpecBentoGrid() {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 px-6 lg:px-12 max-w-[1600px] mx-auto">
         
         {/* Column 1: LATEST NEWS */}
-        <div className="bg-gradient-to-b from-white/10 via-[#003B28] to-[#00281B] border border-dashed border-white/20 rounded-2xl p-8 flex flex-col text-white shadow-xl shadow-black/20 relative overflow-hidden">
-          <div className="flex items-center justify-between mb-8">
+        <div className="bg-gradient-to-b from-white/10 via-[#003B28] to-[#00281B] border border-dashed border-white/20 rounded-2xl p-8 flex flex-col text-white shadow-xl shadow-black/20 relative overflow-hidden group/news">
+          <div className="absolute inset-0 bg-gradient-to-b from-white/5 to-transparent pointer-events-none" />
+          <div className="flex items-center justify-between mb-8 relative z-10">
             <h3 className="text-xs font-bold uppercase tracking-widest text-white/80">LATEST NEWS</h3>
             <Link href="/media" className="text-[10px] font-bold uppercase tracking-widest text-zru-green hover:text-white transition-colors">
               VIEW ALL &rarr;
             </Link>
           </div>
           
-          <div className="space-y-6 flex-1">
+          <div className="space-y-6 flex-1 relative z-10">
             <article className="group cursor-pointer border-b border-white/10 pb-4">
               <h4 className="text-sm font-bold uppercase mb-1 group-hover:text-zru-green transition-colors">Sables Prepare For Africa Cup Defense</h4>
               <p className="text-[10px] text-white/60">OCTOBER 12, 2026</p>
@@ -35,17 +36,18 @@ export default function SpecBentoGrid() {
 
           <Link
             href="/media"
-            className="mt-8 bg-zru-green hover:bg-zru-green/90 text-white w-full py-3.5 flex items-center justify-center uppercase text-xs font-bold tracking-widest transition-all rounded-md shadow-md [clip-path:polygon(0_0,100%_0,96%_100%,0_100%)]"
+            className="mt-8 bg-zru-green hover:bg-zru-green/90 text-white w-full py-3.5 flex items-center justify-center uppercase text-xs font-bold tracking-widest transition-all rounded-md shadow-sm relative z-10 [clip-path:polygon(0_0,100%_0,96%_100%,0_100%)]"
           >
             READ ALL NEWS &rarr;
           </Link>
         </div>
 
         {/* Column 2: UPCOMING FIXTURE */}
-        <div className="bg-gradient-to-b from-white/10 via-[#00452A] to-[#002D1B] border border-dashed border-white/20 rounded-2xl p-8 flex flex-col text-white shadow-xl shadow-black/20 relative overflow-hidden">
-          <h3 className="text-xs font-bold uppercase tracking-widest text-white/80 mb-8">UPCOMING FIXTURE</h3>
+        <div className="bg-gradient-to-b from-white/10 via-[#00452A] to-[#002D1B] border border-dashed border-white/20 rounded-2xl p-8 flex flex-col text-white shadow-xl shadow-black/20 relative overflow-hidden group/fixture">
+          <div className="absolute inset-0 bg-gradient-to-b from-white/5 to-transparent pointer-events-none" />
+          <h3 className="text-xs font-bold uppercase tracking-widest text-white/80 mb-8 relative z-10">UPCOMING FIXTURE</h3>
           
-          <div className="flex-1 flex flex-col items-center justify-center">
+          <div className="flex-1 flex flex-col items-center justify-center relative z-10">
             <div className="flex items-center gap-4 mb-6">
               <div className="w-12 h-12 relative bg-white/10 rounded-full p-2 flex items-center justify-center border border-white/20">
                 <Image src="/images/logos/zru-logo.svg" alt="ZIM" width={36} height={36} className="object-contain" />
@@ -63,7 +65,7 @@ export default function SpecBentoGrid() {
 
           <Link 
             href="/match-centre"
-            className="bg-zru-green hover:bg-zru-green/90 text-white w-full py-3.5 flex items-center justify-center uppercase text-xs font-bold tracking-widest transition-all mt-auto rounded-md shadow-md [clip-path:polygon(0_0,100%_0,96%_100%,0_100%)]"
+            className="bg-zru-green hover:bg-zru-green/90 text-white w-full py-3.5 flex items-center justify-center uppercase text-xs font-bold tracking-widest transition-all mt-auto rounded-md shadow-sm relative z-10 [clip-path:polygon(0_0,100%_0,96%_100%,0_100%)]"
           >
             VIEW FIXTURE DETAILS &rarr;
           </Link>
@@ -83,7 +85,7 @@ export default function SpecBentoGrid() {
 
           <Link 
             href="/tickets"
-            className="bg-zru-green hover:bg-zru-green/90 text-white w-full py-3.5 flex items-center justify-center uppercase text-xs font-bold tracking-widest transition-all mt-8 rounded-md shadow-md [clip-path:polygon(0_0,100%_0,96%_100%,0_100%)]"
+            className="bg-zru-green hover:bg-zru-green/90 text-white w-full py-3.5 flex items-center justify-center uppercase text-xs font-bold tracking-widest transition-all mt-8 rounded-md shadow-sm [clip-path:polygon(0_0,100%_0,96%_100%,0_100%)]"
           >
             BUY MATCH TICKETS &rarr;
           </Link>
@@ -107,7 +109,7 @@ export default function SpecBentoGrid() {
 
           <Link 
             href="/clubhouse"
-            className="bg-zru-green hover:bg-zru-green/90 text-white w-full py-3.5 flex items-center justify-center uppercase text-xs font-bold tracking-widest transition-all mt-8 rounded-md shadow-md [clip-path:polygon(0_0,100%_0,96%_100%,0_100%)]"
+            className="bg-zru-green hover:bg-zru-green/90 text-white w-full py-3.5 flex items-center justify-center uppercase text-xs font-bold tracking-widest transition-all mt-8 rounded-md shadow-sm [clip-path:polygon(0_0,100%_0,96%_100%,0_100%)]"
           >
             VISIT OFFICIAL STORE &rarr;
           </Link>

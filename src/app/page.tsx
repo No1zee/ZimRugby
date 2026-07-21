@@ -1,8 +1,7 @@
 import HeroCarousel from "@/components/home/HeroCarousel";
-import LatestNewsBlock from "@/components/home/LatestNewsBlock";
+import UnifiedHubGrid from "@/components/home/UnifiedHubGrid";
 import CleanCountdownBanner from "@/components/home/CleanCountdownBanner";
-import FixtureAndTicketsBlock from "@/components/home/FixtureAndTicketsBlock";
-import GearUpStoreSection from "@/components/home/GearUpStoreSection";
+import HomeNewsletterBanner from "@/components/home/HomeNewsletterBanner";
 import SponsorGrid from "@/components/home/SponsorGrid";
 
 import { getHeroSlides } from "@/lib/api/hero";
@@ -12,26 +11,23 @@ export default async function Home() {
   const heroSlides = await getHeroSlides();
 
   return (
-    <main className="min-h-screen relative bg-[#F6F5EF]">
+    <main className="min-h-screen relative bg-[#FDFBF0]">
       
       {/* 1. Hero Carousel (Preserved 100% full-screen presence) */}
       <HeroCarousel slides={heroSlides} />
 
       <div className="relative z-10">
 
-        {/* 2. Bento Latest News Section */}
-        <LatestNewsBlock />
+        {/* 2. Unified 4-Column Hub Grid (News Stack + Match Tickets + Official Shop) */}
+        <UnifiedHubGrid />
 
-        {/* 3. Road to Australia 2027 Countdown Banner */}
+        {/* 3. Road to Australia 2027 Minimal Countdown Banner */}
         <CleanCountdownBanner />
 
-        {/* 4. Upcoming Fixtures & Match Tickets Split Section */}
-        <FixtureAndTicketsBlock />
+        {/* 4. Full-Width ZRU Green Newsletter Banner */}
+        <HomeNewsletterBanner />
 
-        {/* 5. Gear Up Store Teaser */}
-        <GearUpStoreSection />
-
-        {/* 6. Commercial Partners & Sponsors Logo Grid */}
+        {/* 5. Commercial Partners & Sponsors Logo Grid */}
         <SponsorGrid />
 
       </div>

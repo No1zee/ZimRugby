@@ -35,7 +35,7 @@ export default function NewsMediaBlock({ initialReports = [] }: NewsMediaBlockPr
           <div className="space-y-4">
             <div className="flex items-center gap-2">
               <div className="w-8 h-px bg-white/40" />
-              <span className="text-rich-black/60 text-[10px] font-black uppercase tracking-[0.5em]">The Wire</span>
+              <span className="text-rich-black/60 text-[10px] font-black uppercase tracking-[0.5em]">The FanZone</span>
             </div>
             <h2 className="font-heading text-5xl md:text-7xl tracking-wider text-rich-black">
               NEWS & <span className="text-stroke-black text-transparent">MEDIA</span>

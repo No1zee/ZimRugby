@@ -63,7 +63,7 @@ export default async function ReportPage({ params }: PageProps) {
             href="/media" 
             className="group inline-flex items-center gap-3 text-[10px] font-black uppercase tracking-[0.4em] text-zru-green mb-10 transition-all hover:gap-5"
           >
-            <ArrowLeft className="w-4 h-4" /> Back to The Wire
+            <ArrowLeft className="w-4 h-4" /> Back to The FanZone
           </Link>
           
           <div className="flex flex-wrap items-center gap-6 mb-8">
@@ -155,7 +155,7 @@ export default async function ReportPage({ params }: PageProps) {
         </div>
       </section>
 
-      {/* More from The Wire */}
+      {/* More from The FanZone */}
       <section className="py-32 px-6 bg-[#050505] border-t border-white/5">
         <div className="max-w-[1440px] mx-auto">
           <div className="flex justify-between items-end mb-16">

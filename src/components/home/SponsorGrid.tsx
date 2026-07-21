@@ -24,7 +24,7 @@ export default function SponsorGrid() {
   ];
 
   return (
-    <section className="bg-milk-white border-t border-black/5 py-16 px-6 lg:px-12">
+    <section className="bg-milk-white border-y border-black/5 py-12 px-6 lg:px-12">
       <div className="max-w-[1440px] mx-auto space-y-12">
         
         {/* Header */}

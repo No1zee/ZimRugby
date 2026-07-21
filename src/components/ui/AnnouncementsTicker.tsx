@@ -54,7 +54,7 @@ export default function AnnouncementsTicker() {
         {/* Fixed Title Label */}
         <div className="flex items-center gap-2 bg-neutral-900 border border-white/10 px-3 py-1 rounded-sm shrink-0 z-10 font-subheading text-[9px] font-black uppercase tracking-widest text-zru-green select-none">
           <Volume2 className="w-3.5 h-3.5 text-zru-green animate-pulse" />
-          <span>UNION WIRE</span>
+          <span>THE FAN ZONE</span>
         </div>
 
         {/* Scrolling Content Wrapper */}

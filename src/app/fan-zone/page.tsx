@@ -42,7 +42,7 @@ export default function FanZonePage() {
   const benefits = [
     { title: "Priority Tickets Presale", desc: "Get access to major test match tickets 48 hours before general release.", icon: Ticket },
     { title: "Exclusive Merch Discounts", desc: "Enjoy 10% off all official merchandise at the ZRU Clubhouse store.", icon: Percent },
-    { title: "Weekly Sables Wire", desc: "Receive team announcements, matchday lineups, and injury updates first.", icon: Newspaper },
+    { title: "Weekly Sables Newsletter & FanZone", desc: "Receive team announcements, matchday lineups, and injury updates first.", icon: Newspaper },
     { title: "VIP Fan Competitions", desc: "Enter monthly draws to win signed memorabilia and VIP matchday passes.", icon: Trophy }
   ];
 
@@ -121,7 +121,7 @@ export default function FanZonePage() {
             <div className="border-b border-black/5 pb-6 mb-6">
               <h3 className="text-lg font-black uppercase tracking-widest text-zru-green flex items-center gap-2">
                 <Mail className="w-5 h-5" />
-                <span>JOIN THE WIRE</span>
+                <span>JOIN THE FANZONE</span>
               </h3>
               <p className="text-black/50 text-xs font-bold uppercase tracking-wider mt-1">No cost. Premium experience. Globally connected.</p>
             </div>
