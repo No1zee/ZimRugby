@@ -1,7 +1,11 @@
 "use client";
 
 import React, { useState } from "react";
-import { Mail, CheckCircle2, ArrowRight } from "lucide-react";
+import Link from "next/link";
+
+/* ═══════════════════════════════════════════════════════════════════
+   HomeNewsletterBanner — Exact Stitch Specification Match
+   ═══════════════════════════════════════════════════════════════════ */
 
 export default function HomeNewsletterBanner() {
   const [email, setEmail] = useState("");
@@ -16,59 +20,86 @@ export default function HomeNewsletterBanner() {
   };
 
   return (
-    <section className="w-full bg-[#FDFBF0] py-12 lg:py-16">
-      <div className="max-w-[1360px] mx-auto px-4 sm:px-6 lg:px-8">
+    <section className="w-full bg-[#FDFBF0] py-12 relative z-20">
+      <div className="max-w-[1440px] mx-auto px-8 sm:px-8">
         
-        {/* Container Card */}
-        <div className="bg-[#006747] rounded-xl p-8 md:p-12 text-white shadow-lg relative overflow-hidden flex flex-col lg:flex-row items-center justify-between gap-8">
+        {/* Banner Card */}
+        <div className="bg-[#006747] rounded-xl p-8 md:p-12 flex flex-col lg:flex-row items-center justify-between gap-8 relative overflow-hidden shadow-sm">
           
-          {/* Left Side: Headline & Text */}
-          <div className="flex items-start space-x-5 max-w-2xl">
-            <div className="p-3 bg-emerald-500/20 rounded-xl hidden sm:flex items-center justify-center shrink-0">
-              <Mail className="w-8 h-8 text-emerald-300" />
-            </div>
+          {/* Dot Pattern Overlay */}
+          <div
+            className="absolute right-0 top-0 bottom-0 w-1/2 opacity-10 pointer-events-none"
+            style={{
+              backgroundImage: "radial-gradient(circle, white 2px, transparent 2px)",
+              backgroundSize: "24px 24px",
+            }}
+          />
 
-            <div>
-              <span className="text-[11px] font-extrabold tracking-[0.2em] uppercase text-emerald-300 font-heading">
-                OFFICIAL BULLETIN
+          {/* Left Side: Mail Icon + Headlines */}
+          <div className="flex items-center gap-6 relative z-10 w-full lg:w-1/2">
+            <div className="w-16 h-16 rounded-full border border-white/30 flex items-center justify-center shrink-0">
+              <span className="material-symbols-outlined text-white" style={{ fontSize: "32px" }}>
+                mail
               </span>
-              <h3 className="text-2xl sm:text-3xl font-extrabold font-heading tracking-tight mt-1 text-white">
+            </div>
+            <div>
+              <h2
+                className="text-2xl text-white text-unison mb-2"
+                style={{
+                  fontFamily: "'Montserrat', sans-serif",
+                  fontWeight: 900,
+                  textTransform: "uppercase",
+                  letterSpacing: "-0.02em",
+                }}
+              >
                 SUBSCRIBE TO OUR NEWSLETTER
-              </h3>
-              <p className="text-sm text-white/80 leading-relaxed mt-2">
-                Subscribe to our newsletter and be the first to receive match updates, squad announcements, and exclusive insights from Zimbabwe Rugby.
+              </h2>
+              <p className="text-sm text-white/80 max-w-md font-medium leading-relaxed">
+                Subscribe to our newsletter and be the first to receive insights, updates, and expert tips on all things Zimbabwe Rugby.
               </p>
             </div>
           </div>
 
           {/* Right Side: Form */}
-          <div className="w-full lg:w-auto shrink-0 min-w-[320px] sm:min-w-[400px]">
-            {subscribed ? (
-              <div className="flex items-center space-x-3 bg-emerald-800/60 text-emerald-200 px-6 py-4 rounded-xl border border-emerald-500/30">
-                <CheckCircle2 className="w-6 h-6 text-emerald-400 shrink-0" />
-                <span className="text-sm font-semibold">
-                  Thank you for subscribing! Check your inbox for updates.
-                </span>
-              </div>
-            ) : (
-              <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-3">
-                <input
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="Enter your email address"
-                  required
-                  className="w-full px-5 py-3.5 bg-white text-gray-900 placeholder-gray-500 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-400 shadow-inner"
-                />
-                <button
-                  type="submit"
-                  className="px-6 py-3.5 bg-emerald-400 hover:bg-emerald-300 text-[#003825] font-extrabold text-xs tracking-widest uppercase rounded-lg transition-colors flex items-center justify-center space-x-2 shrink-0 shadow-md"
-                >
-                  <span>SUBSCRIBE</span>
-                  <ArrowRight className="w-4 h-4" />
-                </button>
-              </form>
-            )}
+          <div className="relative z-10 w-full lg:w-1/2 flex flex-col lg:items-end">
+            <div className="w-full max-w-md">
+              <p className="text-white/80 text-sm mb-2 font-medium">Stay up to date</p>
+              
+              {subscribed ? (
+                <div className="bg-white/10 text-white p-4 rounded-sm border border-white/20 text-sm font-semibold">
+                  ✓ Thank you for subscribing to Zimbabwe Rugby updates!
+                </div>
+              ) : (
+                <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-0">
+                  <input
+                    id="email"
+                    type="email"
+                    required
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="Enter your email"
+                    className="w-full bg-white text-black px-4 py-3 rounded-l-sm rounded-r-none focus:outline-none focus:ring-2 focus:ring-[#006747] border-none text-sm placeholder:text-gray-500"
+                  />
+                  <button
+                    type="submit"
+                    className="bg-[#b2f0ca] text-black px-8 py-3 rounded-r-sm rounded-l-none hover:bg-white transition-colors duration-300 whitespace-nowrap font-bold text-xs tracking-wider uppercase font-heading shrink-0"
+                    style={{
+                      fontFamily: "'Montserrat', sans-serif",
+                      letterSpacing: "0.1em",
+                    }}
+                  >
+                    SUBSCRIBE
+                  </button>
+                </form>
+              )}
+
+              <p className="text-[10px] text-white/60 mt-3 font-medium">
+                By subscribing you agree to our{" "}
+                <Link className="underline hover:text-white" href="/privacy-policy">
+                  Privacy Policy
+                </Link>
+              </p>
+            </div>
           </div>
 
         </div>
