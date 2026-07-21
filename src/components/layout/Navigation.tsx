@@ -9,87 +9,15 @@ import { ChevronDown, Menu, X, Search, User } from "lucide-react";
 import { motion, AnimatePresence, useScroll, useMotionValueEvent } from "framer-motion";
 import SlantedButton from "../ui/SlantedButton";
 import GlobalAnnouncementBar from "./GlobalAnnouncementBar";
+import type { NavItem } from "@/lib/navConfig";
+import { navConfig } from "@/lib/navConfig";
 import type { SearchEventResult } from "@/types";
-
-interface NavItem {
-  label: string;
-  href: string;
-  isMega?: boolean;
-  children?: { label: string; href: string }[];
-}
-
-const navItems: NavItem[] = [
-  { 
-    label: "TEAMS", 
-    href: "/teams",
-    isMega: true,
-    children: [
-      { label: "Sables (Men's XV)", href: "/teams/sables" },
-      { label: "Lady Sables (Women's XV)", href: "/teams/lady-sables" },
-      { label: "Junior Sables (U20)", href: "/teams/junior-sables" },
-      { label: "National Sevens", href: "/teams" },
-    ]
-  },
-  { 
-    label: "FIXTURES & RESULTS", 
-    href: "/match-centre",
-    children: [
-      { label: "Match Centre", href: "/match-centre" },
-      { label: "Book Tickets", href: "/tickets" },
-      { label: "Live Matches", href: "/live" },
-    ]
-  },
-  { 
-    label: "COMPETITIONS & EVENTS", 
-    href: "/events",
-    children: [
-      { label: "Sevens Series", href: "/events?tab=competitions" },
-      { label: "Club Championship", href: "/events?tab=competitions" },
-      { label: "Schools Rugby", href: "/events?tab=competitions" },
-      { label: "Coaching Courses", href: "/events?tab=events" },
-      { label: "AGM & Admin", href: "/events?tab=events" },
-      { label: "Gala Dinners", href: "/events?tab=events" },
-    ]
-  },
-  { 
-    label: "NEWS", 
-    href: "/media",
-    children: [
-      { label: "Latest News", href: "/media" },
-      { label: "Video Hub", href: "/video-hub" },
-      { label: "Gallery", href: "/gallery" },
-    ]
-  },
-  { 
-    label: "FAN ZONE", 
-    href: "/fan-zone",
-    children: [
-      { label: "Fan Zone Hub", href: "/fan-zone" },
-      { label: "Shop Merchandise", href: "/clubhouse" },
-      { label: "Referees", href: "/referees" },
-      { label: "Volunteer", href: "/volunteer" },
-    ]
-  },
-  { 
-    label: "ABOUT", 
-    href: "/about",
-    isMega: true,
-    children: [
-      { label: "ZRU History", href: "/about/history" },
-      { label: "Board & Governance", href: "/about/governance" },
-      { label: "Safeguarding", href: "/about/safeguarding" },
-      { label: "Partners", href: "/partners" },
-      { label: "Careers", href: "/about/careers" },
-      { label: "Contact Us", href: "/contact" },
-    ]
-  },
-];
 
 export default function Navigation() {
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
-  const [dynamicNavItems, setDynamicNavItems] = useState<NavItem[]>(navItems);
+  const [dynamicNavItems, setDynamicNavItems] = useState<NavItem[]>(navConfig);
   const [expandedMobile, setExpandedMobile] = useState<string[]>([]);
   const pathname = usePathname();
   const { scrollY } = useScroll();
@@ -187,10 +115,10 @@ export default function Navigation() {
         if (response.ok) {
           const data = await response.json();
           setDynamicNavItems(prev => prev.map(item => {
-            if (item.label === "TEAMS" && data.teams) {
+            if (item.label === "NATIONAL TEAMS" && data.teams) {
               return { ...item, children: data.teams };
             }
-            if (item.label === "COMPETITIONS & EVENTS" && (data.competitions || data.events)) {
+            if (item.label === "DOMESTIC RUGBY" && (data.competitions || data.events)) {
               return { 
                 ...item, 
                 children: [
