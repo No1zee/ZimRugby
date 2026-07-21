@@ -5,7 +5,7 @@ import { useState, useEffect, useMemo } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { ChevronDown, Menu, X, Search } from "lucide-react";
+import { ChevronDown, Menu, X, Search, User } from "lucide-react";
 import { motion, AnimatePresence, useScroll, useMotionValueEvent } from "framer-motion";
 import SlantedButton from "../ui/SlantedButton";
 import GlobalAnnouncementBar from "./GlobalAnnouncementBar";
@@ -61,11 +61,11 @@ const navItems: NavItem[] = [
     ]
   },
   { 
-    label: "CLUBHOUSE", 
-    href: "/about/clubhouse",
+    label: "FAN ZONE", 
+    href: "/fan-zone",
     children: [
-      { label: "Shop Merchandise", href: "/about/clubhouse" },
-      { label: "Fan Zone", href: "/fan-zone" },
+      { label: "Fan Zone Hub", href: "/fan-zone" },
+      { label: "Shop Merchandise", href: "/clubhouse" },
       { label: "Referees", href: "/referees" },
       { label: "Volunteer", href: "/volunteer" },
     ]
@@ -218,6 +218,9 @@ export default function Navigation() {
     }
   });
 
+  const isTransparentAllowed = pathname === "/" || pathname === "/live" || pathname === "/world-cup-campaign";
+  const showOpaqueHeader = isScrolled || !isTransparentAllowed;
+
   const isActive = (href: string) => {
     if (href === "/" && pathname !== "/") return false;
     
@@ -241,8 +244,8 @@ export default function Navigation() {
       <GlobalAnnouncementBar />
       <nav 
         className={`w-full transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${
-          isScrolled 
-            ? "bg-rich-black/90 backdrop-blur-md py-3 shadow-[0_4px_30px_rgba(0,0,0,0.3)] border-b border-white/5" 
+          showOpaqueHeader 
+            ? "bg-milk-white/95 backdrop-blur-md py-3 shadow-md border-b border-black/5" 
             : "bg-transparent py-5"
         }`}
       >
@@ -261,11 +264,11 @@ export default function Navigation() {
               />
             </div>
             <div className="flex flex-col">
-              <span className="font-heading text-lg md:text-xl tracking-wider text-white leading-none">ZIMBABWE</span>
+              <span className={`font-heading text-lg md:text-xl tracking-wider leading-none ${showOpaqueHeader ? "text-black" : "text-white"}`}>ZIMBABWE</span>
               <span className="font-subheading text-[8px] md:text-[9px] tracking-[0.4em] text-zru-green font-black leading-none mt-1">RUGBY UNION</span>
             </div>
           </Link>
-
+ 
           {/* Desktop Nav Items */}
           <div className="hidden lg:flex items-center gap-8 xl:gap-10">
             <div className="flex items-center gap-8 xl:gap-10">
@@ -280,7 +283,7 @@ export default function Navigation() {
                     href={item.href}
                     className={`
                       flex items-center gap-1.5 py-2 font-subheading tracking-widest text-[10px] uppercase font-black transition-colors relative
-                      ${isActive(item.href) ? "text-zru-green" : "text-white/80 hover:text-white"}
+                      ${isActive(item.href) ? "text-zru-green" : showOpaqueHeader ? "text-black/70 hover:text-black" : "text-white/70 hover:text-white"}
                     `}
                   >
                     {isActive(item.href) && (
@@ -290,11 +293,11 @@ export default function Navigation() {
                         transition={{ type: "spring", stiffness: 380, damping: 30 }}
                       />
                     )}
-
+ 
                     {item.label}
                     {item.children && <ChevronDown className="w-3.5 h-3.5 transition-transform group-hover/nav:rotate-180" />}
                   </Link>
-
+ 
                   {/* Dropdown Menu (Mega or Standard) */}
                   {item.children && (
                     <AnimatePresence>
@@ -329,12 +332,12 @@ export default function Navigation() {
               ))}
             </div>
           </div>
-
+ 
           {/* Mobile Actions */}
           <div className="lg:hidden flex items-center gap-2 shrink-0">
             <button 
               onClick={() => setIsSearchOpen(true)}
-              className="p-2 text-white/80 hover:text-white transition-colors cursor-pointer"
+              className={`p-2 transition-colors cursor-pointer ${showOpaqueHeader ? "text-black/70 hover:text-black" : "text-white/70 hover:text-white"}`}
               aria-label="Search site"
               title="Search"
             >
@@ -342,7 +345,7 @@ export default function Navigation() {
             </button>
             <button
               onClick={() => setIsOpen(!isOpen)}
-              className="p-2 text-white/80 hover:text-white transition-colors cursor-pointer"
+              className={`p-2 transition-colors cursor-pointer ${showOpaqueHeader ? "text-black/70 hover:text-black" : "text-white/70 hover:text-white"}`}
               aria-label={isOpen ? "Close menu" : "Open menu"}
             >
               {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
@@ -353,14 +356,19 @@ export default function Navigation() {
           <div className="hidden lg:flex items-center gap-4 shrink-0">
             <button 
               onClick={() => setIsSearchOpen(true)}
-              className="p-2.5 text-white/80 hover:text-white hover:bg-white/10 rounded-full transition-all cursor-pointer"
+              className={`p-2.5 rounded-full transition-all cursor-pointer ${showOpaqueHeader ? "text-black/70 hover:text-black hover:bg-black/5" : "text-white/70 hover:text-white hover:bg-white/10"}`}
               aria-label="Search site"
               title="Search"
             >
               <Search className="w-5 h-5" />
             </button>
-            <SlantedButton href="/tickets" variant="primary" size="sm">
-              Book Tickets
+            <SlantedButton 
+              href="/login" 
+              variant="primary" 
+              size="sm"
+              leftIcon={<User className="w-4 h-4" />}
+            >
+              Sign In
             </SlantedButton>
           </div>
 
