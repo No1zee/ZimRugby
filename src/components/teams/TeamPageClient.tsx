@@ -54,7 +54,7 @@ export default function TeamPageClient({ team }: TeamPageClientProps) {
         </div>
 
         {/* Content container */}
-        <div className="relative z-10 w-full max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 pb-10">
+        <div className="relative z-10 w-full max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 pb-10">
           <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6">
             <div>
               <span className="text-zru-green text-xs font-black uppercase tracking-[0.4em] mb-3 block">
@@ -121,7 +121,7 @@ export default function TeamPageClient({ team }: TeamPageClientProps) {
 
       {/* 2. Interactive Navigation Tabs */}
       <div className="border-b border-white/10 bg-rich-black/80 sticky top-16 z-30 backdrop-blur-md">
-        <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex overflow-x-auto py-4 gap-2 no-scrollbar">
             {tabItems.map((tab) => {
               const Icon = tab.icon;
@@ -146,7 +146,7 @@ export default function TeamPageClient({ team }: TeamPageClientProps) {
       </div>
 
       {/* 3. Dynamic Content Panels */}
-      <main className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 py-16">
+      <main className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <AnimatePresence mode="wait">
           <motion.div
             key={activeTab}

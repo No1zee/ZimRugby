@@ -21,44 +21,47 @@ export default function TeamCard({
   href,
 }: TeamCardProps) {
   return (
-    <Link href={href}>
-        <motion.div
-        whileHover={{ y: -10 }}
-        className="group relative h-[400px] rounded-2xl overflow-hidden cursor-pointer"
-        >
-        {/* Background Image Placeholder if no real image */}
-        <div className={`absolute inset-0 bg-gray-800 transition-transform duration-700 group-hover:scale-110`}>
-             <Image 
-                src={image} 
-                alt={name}
-                fill
-                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                className="object-cover"
-             />
-             <div className="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-colors duration-500 z-10" />
-             {/* Gradient Overlay */}
-             <div className={`absolute inset-0 bg-linear-to-t from-black/90 via-black/50 to-transparent z-20`} />
+    <Link href={href} className="block h-full">
+      <motion.div
+        whileHover={{ y: -6, boxShadow: "0 10px 30px -10px rgba(0, 0, 0, 0.08)" }}
+        transition={{ duration: 0.3 }}
+        className="group h-full flex flex-col bg-white border border-black/5 rounded-2xl overflow-hidden shadow-xs hover:border-black/10 transition-all duration-300"
+      >
+        {/* Top Image Section */}
+        <div className="relative h-48 sm:h-56 w-full overflow-hidden bg-gray-100 shrink-0">
+          <Image 
+            src={image} 
+            alt={name}
+            fill
+            sizes="(max-width: 768px) 100vw, 33vw"
+            className="object-cover group-hover:scale-105 transition-transform duration-500"
+          />
+          <div className="absolute inset-0 bg-black/10 group-hover:bg-transparent transition-colors duration-500" />
         </div>
 
-        <div className="absolute inset-0 z-30 p-8 flex flex-col justify-end">
-            <div className={`w-12 h-1 ${color} mb-6 transform origin-left group-hover:scale-x-150 transition-transform duration-500`} />
-            
-            <h3 className="text-4xl font-heading text-white mb-3 uppercase leading-none">
-            {name}
+        {/* Card Body */}
+        <div className="p-6 flex flex-col justify-between flex-grow relative">
+          {/* Brand/Accent Left Bar */}
+          <div className={`absolute left-0 top-6 bottom-6 w-1 ${color} rounded-r`} />
+          
+          <div className="pl-3">
+            <h3 className="text-xl sm:text-2xl font-black text-rich-black uppercase tracking-tight mb-3 group-hover:text-zru-green transition-colors duration-300">
+              {name}
             </h3>
             
-            <p className="text-gray-300 text-sm leading-relaxed mb-6 opacity-0 translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-500 delay-100">
-            {description}
+            <p className="text-black/60 text-xs sm:text-sm leading-relaxed mb-6 font-medium line-clamp-3">
+              {description}
             </p>
+          </div>
 
-            <div className="flex items-center gap-2 text-white font-bold tracking-widest text-xs uppercase">
-                <span>View Team</span>
-                <div className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center group-hover:bg-white group-hover:text-black transition-colors duration-300">
-                    <ArrowRight className="w-4 h-4" />
-                </div>
-            </div>
+          <div className="pl-3 mt-auto">
+            <span className="inline-flex items-center gap-2 text-zru-green font-black tracking-widest text-[10px] sm:text-xs uppercase group-hover:text-rich-black transition-colors duration-300">
+              <span>View Team</span>
+              <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+            </span>
+          </div>
         </div>
-        </motion.div>
+      </motion.div>
     </Link>
   );
 }
