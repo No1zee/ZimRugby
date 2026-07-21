@@ -1,86 +1,62 @@
-import EdgyGradient from "@/components/ui/EdgyGradient";
-import TeamCard from "../../components/teams/TeamCard";
-import PageHero from "@/components/ui/PageHero";
 import { Metadata } from "next";
+import FlagshipTeamHero from "@/components/teams/FlagshipTeamHero";
+import TeamCardBento from "@/components/teams/TeamCardBento";
+import PlayerSpotlightStrip from "@/components/teams/PlayerSpotlightStrip";
+import Link from "next/link";
+import { ArrowRight, Trophy, GraduationCap, MapPin } from "lucide-react";
 
 export const metadata: Metadata = {
   title: "National Teams | Zimbabwe Rugby Union",
-  description: "Meet the Sables, Lady Sables, Cheetahs, and Junior Sables—the representative rugby teams carrying the hopes of Zimbabwe.",
-  openGraph: {
-    title: "National Representative Teams - Zimbabwe Rugby Union",
-    description: "Explore the national squads representing Zimbabwe on regional and international stages.",
-    images: [{ url: "/images/media/vid1.jpg" }],
-  },
+  description: "Official representative teams of the Zimbabwe Rugby Union. Sables, Lady Sables, Cheetahs 7s, and Junior Sables.",
 };
-
-const teams = [
-  {
-    id: "sables",
-    name: "Sables",
-    description: "The pride of the nation. Zimbabwe&apos;s senior men&apos;s XV team, reigning Africa Cup champions.",
-    image: "/images/media/vid1.jpg", // Replace with real image
-    color: "bg-zru-green",
-    href: "/teams/sables",
-  },
-  {
-    id: "lady-sables",
-    name: "Lady Sables",
-    description: "Breaking barriers and making history. Our senior women&apos;s XV team competing on the continental stage.",
-    image: "/images/teams/lady-sables.jpg",
-    color: "bg-zru-green",
-    href: "/teams/lady-sables",
-  },
-  {
-    id: "cheetahs",
-    name: "Cheetahs",
-    description: "Fast, furious, and fearless. The national men&apos;s sevens team competing on the World Series circuit.",
-    image: "/images/teams/cheetahs.jpg",
-    color: "bg-zru-green",
-    href: "/teams/cheetahs",
-  },
-  {
-    id: "lady-cheetahs",
-    name: "Lady Cheetahs",
-    description: "Speed and skill combined. The national women&apos;s sevens team inspiring the next generation.",
-    image: "/images/teams/lady-cheetahs.jpg",
-    color: "bg-zru-green",
-    href: "/teams/lady-cheetahs",
-  },
-  {
-    id: "junior-sables",
-    name: "Junior Sables (U20)",
-    description: "The future is bright. Our U20 team, consistently one of the top performing sides in Africa.",
-    image: "/images/teams/junior-sables.jpg",
-    color: "bg-zru-green",
-    href: "/teams/junior-sables",
-  },
-];
 
 export default function TeamsPage() {
   return (
-    <main className="bg-rich-black min-h-screen pb-24">
-      <div className="absolute inset-0 pointer-events-none select-none z-0">
-        <EdgyGradient opacity={0.4} />
-      </div>
-      <div className="pt-24">
-        <PageHero
-          title="Our Teams"
-          subtitle="From the flagship Sables to the rising stars of the Junior Sables, discover the teams that carry our nation's hopes and dreams."
-          tag="National Representatives"
-          backgroundImage="/images/media/vid1.jpg"
-          breadcrumb={[{ label: "Teams", href: "/teams" }]}
-        />
-      </div>
+    <main className="bg-milk-white min-h-screen">
+      {/* 1. Flagship Sables Spotlight Hero */}
+      <FlagshipTeamHero />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 pb-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-           {teams.map((team) => (
-              <div key={team.id}>
-                 <TeamCard {...team} />
+      {/* 2. Differentiated National Teams Bento Grid */}
+      <TeamCardBento />
+
+      {/* 3. Player to Watch Editorial Interstitial */}
+      <PlayerSpotlightStrip />
+
+      {/* 4. Development & Pathways Banner */}
+      <section className="py-20 bg-milk-white">
+        <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="p-8 sm:p-12 bg-rich-black text-white rounded-3xl border border-white/10 relative overflow-hidden shadow-2xl">
+            <div className="absolute top-0 right-0 w-1/3 h-full bg-[radial-gradient(circle_at_top_right,rgba(0,107,63,0.25),transparent_70%)]" />
+            
+            <div className="relative z-10 max-w-3xl space-y-6">
+              <span className="text-[10px] font-black text-zru-green uppercase tracking-[0.3em]">
+                National Pathway Pipeline
+              </span>
+              <h2 className="font-heading text-3xl sm:text-5xl font-black uppercase tracking-tight italic">
+                From Schoolboy Leagues to National Caps
+              </h2>
+              <p className="text-white/70 text-base font-body leading-relaxed">
+                Our structured pathways connect provincial school competitions, club championships, and high-performance academies directly to national squad selection.
+              </p>
+
+              <div className="flex flex-wrap gap-4 pt-4">
+                <Link
+                  href="/schools"
+                  className="inline-flex items-center gap-2 px-6 py-3.5 bg-zru-green hover:bg-green-700 text-white rounded-xl text-xs font-bold uppercase tracking-widest transition-all shadow-lg"
+                >
+                  School Rugby Leagues <GraduationCap className="w-4 h-4" />
+                </Link>
+                <Link
+                  href="/clubs"
+                  className="inline-flex items-center gap-2 px-6 py-3.5 bg-white/10 hover:bg-white/20 text-white border border-white/15 rounded-xl text-xs font-bold uppercase tracking-widest transition-all"
+                >
+                  Find a Club <MapPin className="w-4 h-4" />
+                </Link>
               </div>
-           ))}
+            </div>
+          </div>
         </div>
-      </div>
+      </section>
     </main>
   );
 }
