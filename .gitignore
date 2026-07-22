@@ -1,7 +1,8 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
-# Large source asset directories (served via public/images/cutouts/ instead)
+# Large source asset directories (served via Vercel direct upload, not git)
 Gallery/cutouts/
+public/images/cutouts/
 
 # dependencies
 /node_modules
