@@ -1,4 +1,5 @@
 import HeroCarousel from "@/components/home/HeroCarousel";
+import MediaNews from "@/components/home/MediaNews";
 import MatchCentreStrip from "@/components/home/MatchCentreStrip";
 import StorePreviewStrip from "@/components/home/StorePreviewStrip";
 import NewsMediaBlock from "@/components/home/NewsMediaBlock";
@@ -28,12 +29,15 @@ export default async function Home() {
       {/* 1. Hero Carousel */}
       <HeroCarousel slides={heroSlides} />
 
+      {/* 2. Media & News */}
+      <MediaNews />
+
       <div className="relative z-10 overflow-hidden">
 
-        {/* 2. Audience Pathways */}
+        {/* 3. Audience Pathways */}
         <AudiencePathways />
 
-        {/* 3. Match Centre Strip (Horizontal List) */}
+        {/* 4. Match Centre Strip (Horizontal List) */}
         <MatchCentreStrip initialMatches={matches} twinData={twinData} rankingsData={rankingsData} />
 
         {/* 4. Featured Match Countdown */}

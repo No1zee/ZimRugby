@@ -24,7 +24,7 @@ const pageSpecificHeaders = [
       "default-src 'self'",
       "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://vercel.live https://vercel.com https://*.vercel.live",
       "style-src 'self' 'unsafe-inline' https://vercel.live https://*.vercel.live",
-      "img-src 'self' data: blob: https://assets.directus.io https://vercel.com https://vercel.live https://*.vercel.live https://images.unsplash.com https://plus.unsplash.com https://r2.thesportsdb.com https://flagcdn.com",
+      "img-src 'self' data: blob: https://assets.directus.io https://vercel.com https://vercel.live https://*.vercel.live https://images.unsplash.com https://plus.unsplash.com https://r2.thesportsdb.com https://flagcdn.com https://i.ytimg.com",
       "font-src 'self' data: https://fonts.gstatic.com https://frontend-cdn.perplexity.ai",
       "frame-src 'self' https://www.youtube.com https://player.vimeo.com https://vercel.live https://*.vercel.live",
       "connect-src 'self' ws: wss: https://vercel.live https://*.vercel.live wss://*.vercel.live wss://*.vercel.com https://*.supabase.co https://*.directus.app"
@@ -92,6 +92,11 @@ const nextConfig: NextConfig = {
       {
         protocol: 'https',
         hostname: 'flagcdn.com',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'i.ytimg.com',
         pathname: '/**',
       },
     ],
