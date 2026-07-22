@@ -9,7 +9,8 @@ const globalSecurityHeaders = [
   { key: "X-Frame-Options", value: "SAMEORIGIN" },
   { key: "X-Content-Type-Options", value: "nosniff" },
   { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
-  { key: "Vary", value: "Accept-Encoding" }
+  { key: "Vary", value: "Accept-Encoding" },
+  { key: "Cross-Origin-Opener-Policy", value: "same-origin" }
 ];
 
 const pageSpecificHeaders = [
@@ -22,12 +23,15 @@ const pageSpecificHeaders = [
     value: [
       "base-uri 'self'",
       "default-src 'self'",
-      "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://vercel.live https://vercel.com https://*.vercel.live",
-      "style-src 'self' 'unsafe-inline' https://vercel.live https://*.vercel.live",
-      "img-src 'self' data: blob: https://assets.directus.io https://vercel.com https://vercel.live https://*.vercel.live https://images.unsplash.com https://plus.unsplash.com https://r2.thesportsdb.com https://flagcdn.com https://i.ytimg.com",
+      "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://vercel.live https://va.vercel-scripts.com https://vercel.com https://*.vercel.live",
+      "style-src 'self' 'unsafe-inline' https://vercel.live https://*.vercel.live https://fonts.googleapis.com",
+      "img-src 'self' data: blob: https://assets.directus.io https://vercel.com https://vercel.live https://*.vercel.live https://images.unsplash.com https://plus.unsplash.com https://zru.co.zw https://r2.thesportsdb.com https://flagcdn.com https://i.ytimg.com",
       "font-src 'self' data: https://fonts.gstatic.com https://frontend-cdn.perplexity.ai",
       "frame-src 'self' https://www.youtube.com https://player.vimeo.com https://vercel.live https://*.vercel.live",
-      "connect-src 'self' ws: wss: https://vercel.live https://*.vercel.live wss://*.vercel.live wss://*.vercel.com https://*.supabase.co https://*.directus.app"
+      "connect-src 'self' ws: wss: https://vercel.live https://*.vercel.live wss://*.vercel.live wss://*.vercel.com https://*.supabase.co https://*.directus.app",
+      "frame-ancestors 'self' https://vercel.com https://*.vercel.sh https://*.vercel.com https://*.perplexity.ai",
+      "object-src 'none'",
+      "upgrade-insecure-requests"
     ].join("; ")
   },
   {
