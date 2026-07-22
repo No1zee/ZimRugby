@@ -366,8 +366,8 @@ export default function Navigation() {
               href="/login" 
               variant="primary" 
               size="sm"
-              leftIcon={<User className="w-4 h-4" />}
             >
+              <User className="w-4 h-4" />
               Sign In
             </SlantedButton>
           </div>
