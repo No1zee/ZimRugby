@@ -42,33 +42,18 @@ export default function HomeNewsletterBanner() {
           {/* Left Group: Uiverse Sliding Logo & Expanding Headlines */}
           <div className="flex flex-col sm:flex-row items-start sm:items-center gap-6 relative z-10 w-full lg:w-3/5">
             
-            {/* Uiverse Sliding Logo Box Integration */}
+            {/* ZRU Emblem Box (Scales Emblem Larger on Hover) */}
             <div className="relative flex items-center shrink-0">
-              <div className="h-[64px] rounded-2xl bg-black/50 border border-white/15 p-2 flex items-center overflow-hidden transition-all duration-700 ease-in-out w-[64px] group-hover/uiverseCard:w-[220px] group-hover/uiverseCard:border-[#006747] group-hover/uiverseCard:shadow-[0_8px_25px_rgba(0,103,71,0.4)] group-focus-within/uiverseCard:w-[220px] group-focus-within/uiverseCard:border-[#006747]">
+              <div className="h-[64px] w-[64px] rounded-2xl bg-black/50 border border-white/15 p-2 flex items-center justify-center overflow-hidden transition-all duration-500 ease-in-out group-hover/uiverseCard:border-[#006747] group-hover/uiverseCard:shadow-[0_8px_25px_rgba(0,103,71,0.5)] group-focus-within/uiverseCard:border-[#006747]">
                 
-                {/* Compact Crest Logo (Logo 1) */}
-                <div className="h-[44px] w-[44px] shrink-0 flex items-center justify-center">
-                  <Image
-                    src="/images/logos/zru-logo.svg"
-                    alt="ZRU Crest"
-                    width={40}
-                    height={40}
-                    className="object-contain filter drop-shadow-md transition-transform duration-500 group-hover/uiverseCard:scale-110"
-                  />
-                </div>
-
-                {/* Sliding Expanded Text Logo (Logo 2) */}
-                <div className="pl-3 opacity-0 group-hover/uiverseCard:opacity-100 group-focus-within/uiverseCard:opacity-100 transition-all duration-500 delay-100 whitespace-nowrap">
-                  <span className="font-heading font-black text-sm sm:text-base text-white tracking-widest uppercase block leading-none">
-                    ZIMBABWE
-                  </span>
-                  <span className="font-heading font-black text-xs text-[#34D399] tracking-widest uppercase block leading-tight mt-0.5">
-                    RUGBY UNION
-                  </span>
-                </div>
-
-                {/* Logo Uiverse Trail Sweep */}
-                <div className="absolute right-0 h-full w-full opacity-0 group-hover/uiverseCard:animate-[uiverseTrail_1s_ease-in-out] pointer-events-none" />
+                {/* ZRU Crest Logo (Scales up larger on hover) */}
+                <Image
+                  src="/images/logos/zru-logo.svg"
+                  alt="ZRU Crest"
+                  width={44}
+                  height={44}
+                  className="object-contain filter drop-shadow-md transition-transform duration-500 group-hover/uiverseCard:scale-130"
+                />
               </div>
             </div>
 

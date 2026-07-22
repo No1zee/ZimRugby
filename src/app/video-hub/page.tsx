@@ -7,6 +7,7 @@ import { Play, Search, X, Clock, Calendar, Film } from "lucide-react";
 import { getVideos } from "@/lib/api/videos";
 import { Video } from "@/types";
 import { GlowButton } from "@/components/ui/animations";
+import MatchdayVideoHighlights from "@/components/media/MatchdayVideoHighlights";
 
 export default function VideoHubPage() {
   const [videos, setVideos] = useState<Video[]>([]);
@@ -86,7 +87,10 @@ export default function VideoHubPage() {
         </div>
       )}
 
-      {/* 2. Navigation Filters & Search */}
+      {/* 2. Matchday Media & Nations Cup Video Highlights */}
+      <MatchdayVideoHighlights title="NATIONS CUP" subtitle="MATCH HIGHLIGHTS" />
+
+      {/* 3. Navigation Filters & Search */}
       <div className="border-y border-white/10 bg-rich-black/80 sticky top-16 z-30 backdrop-blur-md py-6">
         <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col lg:flex-row justify-between items-center gap-6">

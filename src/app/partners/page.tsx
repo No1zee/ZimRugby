@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 
 export default function PartnersPage() {
   return (
-    <main className="min-h-screen bg-rich-black overflow-hidden selection:bg-zru-green selection:text-white">
+    <main className="min-h-screen bg-milk-white overflow-hidden selection:bg-zru-green selection:text-rich-black">
       
       <PartnersHero />
 

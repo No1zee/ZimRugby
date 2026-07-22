@@ -3,6 +3,7 @@
 import React from "react";
 import Link from "next/link";
 import Image from "next/image";
+import MatchdayVideoHighlights from "@/components/media/MatchdayVideoHighlights";
 
 /* ═══════════════════════════════════════════════════════════════════
    UnifiedHubGrid — Exact Stitch Design Token Implementation
@@ -83,11 +84,11 @@ export default function UnifiedHubGrid() {
           <div className="w-12 h-1 bg-[#006747] mx-auto rounded-full mt-3" />
         </div>
 
-        {/* 4-Column Quad-Pillar Hub Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-5 lg:gap-6 items-stretch">
+        {/* 4-Column Quad-Pillar Hub Grid (Horizontal Swipe Carousel on Mobile) */}
+        <div className="flex flex-nowrap lg:grid lg:grid-cols-4 overflow-x-auto lg:overflow-visible snap-x snap-mandatory scroll-smooth no-scrollbar -mx-4 px-4 sm:mx-0 sm:px-0 gap-4 lg:gap-6 items-stretch py-2">
 
           {/* ═══════════ CARD 1: LATEST NEWS (PRESSROOM) ═══════════ */}
-          <div className="flex flex-col h-[460px] lg:h-[480px] xl:h-[500px] rounded-2xl overflow-hidden border border-black/10 hover:border-[#006747]/60 shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-1 group/news bg-gradient-to-b from-[#003822] via-[#002B19] to-[#001D11]">
+          <div className="w-[82vw] xs:w-[320px] lg:w-auto shrink-0 snap-start box-border flex flex-col h-[460px] lg:h-[480px] xl:h-[500px] rounded-2xl overflow-hidden border border-black/10 hover:border-[#006747]/60 shadow-lg hover:shadow-2xl transition-all duration-300 group/news bg-gradient-to-b from-[#003822] via-[#002B19] to-[#001D11]">
             
             {/* Seamless Top Header */}
             <div className="flex items-center bg-gradient-to-b from-[#00704D] to-[#005238] text-white px-5 py-4 shrink-0 border-b border-emerald-500/20">
@@ -97,7 +98,7 @@ export default function UnifiedHubGrid() {
             </div>
 
             {/* Content Body */}
-            <div className="p-5 flex flex-col justify-between flex-grow min-h-0 text-white relative overflow-hidden">
+            <div className="p-3 sm:p-5 flex flex-col justify-between flex-grow min-h-0 text-white relative overflow-hidden">
               {/* 100% Reliable Scrollable News Articles Stack */}
               <div className="relative z-10 space-y-3 flex-1 min-h-0 overflow-y-auto pr-2 news-scroll overscroll-contain">
                 
@@ -239,7 +240,7 @@ export default function UnifiedHubGrid() {
           </div>
 
           {/* ═══════════ CARD 2: UPCOMING FIXTURE (MATCH NIGHT) ═══════════ */}
-          <div className="flex flex-col min-h-[460px] lg:min-h-[480px] xl:min-h-[520px] h-full rounded-2xl overflow-hidden border border-black/10 hover:border-[#006747]/60 shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-1 group/fixture bg-gradient-to-b from-[#00331F] via-[#002415] to-[#00160D]">
+          <div className="w-[82vw] xs:w-[320px] lg:w-auto shrink-0 snap-start box-border flex flex-col h-[460px] lg:h-[480px] xl:h-[500px] rounded-2xl overflow-hidden border border-black/10 hover:border-[#006747]/60 shadow-lg hover:shadow-2xl transition-all duration-300 group/fixture bg-gradient-to-b from-[#00331F] via-[#002415] to-[#00160D]">
             
             {/* Seamless Top Header */}
             <div className="flex items-center bg-gradient-to-b from-[#00704D] to-[#005238] text-white px-5 py-4 shrink-0 border-b border-emerald-500/20">
@@ -344,7 +345,7 @@ export default function UnifiedHubGrid() {
           </div>
 
           {/* ═══════════ CARD 3: MATCH TICKETS (TACTILE PASS) ═══════════ */}
-          <div className="flex flex-col min-h-[460px] lg:min-h-[480px] xl:min-h-[520px] h-full rounded-2xl overflow-hidden border border-black/10 hover:border-[#006747]/60 shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-1 bg-white text-black">
+          <div className="w-[82vw] xs:w-[320px] lg:w-auto shrink-0 snap-start box-border flex flex-col h-[460px] lg:h-[480px] xl:h-[500px] rounded-2xl overflow-hidden border border-black/10 hover:border-[#006747]/60 shadow-lg hover:shadow-2xl transition-all duration-300 bg-white text-black">
             
             {/* Seamless Top Header */}
             <div className="flex items-center bg-gradient-to-b from-[#00704D] to-[#005238] text-white px-5 py-4 shrink-0">
@@ -414,6 +415,16 @@ export default function UnifiedHubGrid() {
           <ShopCardShowcase unison={unison} labelCaps={labelCaps} h3Style={h3Style} bodyBase={bodyBase} />
 
         </div>
+
+        {/* ── 5. Integrated Matchday Video Highlights Section ── */}
+        <div className="mt-12 pt-10 border-t border-black/10">
+          <MatchdayVideoHighlights
+            title="NATIONS CUP"
+            subtitle="MATCH HIGHLIGHTS"
+            showChannelLink={true}
+          />
+        </div>
+
       </div>
     </section>
   );
@@ -476,7 +487,7 @@ function ShopCardShowcase({ unison, labelCaps, h3Style }: ShopCardShowcaseProps)
 
   return (
     <div
-      className="flex flex-col h-full rounded-xl overflow-hidden border border-black/10 hover:border-[#006747]/60 shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-1 group/card relative"
+      className="w-[82vw] xs:w-[320px] lg:w-auto shrink-0 snap-start box-border flex flex-col h-[460px] lg:h-[480px] xl:h-[500px] rounded-xl overflow-hidden border border-black/10 hover:border-[#006747]/60 shadow-lg hover:shadow-2xl transition-all duration-300 group/card relative"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       style={{

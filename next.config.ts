@@ -21,9 +21,9 @@ const pageSpecificHeaders = [
       "default-src 'self'",
       "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://vercel.live https://vercel.com https://*.vercel.live https://va.vercel-scripts.com",
       "style-src 'self' 'unsafe-inline' https://vercel.live https://*.vercel.live https://fonts.googleapis.com",
-      "img-src 'self' data: blob: https://assets.directus.io https://vercel.com https://vercel.live https://*.vercel.live https://images.unsplash.com https://plus.unsplash.com https://r2.thesportsdb.com https://flagcdn.com https://zru.co.zw",
+      "img-src 'self' data: blob: https://assets.directus.io https://vercel.com https://vercel.live https://*.vercel.live https://images.unsplash.com https://plus.unsplash.com https://r2.thesportsdb.com https://flagcdn.com https://zru.co.zw https://img.youtube.com https://i.ytimg.com",
       "font-src 'self' data: https://fonts.gstatic.com https://frontend-cdn.perplexity.ai",
-      "frame-src 'self' https://www.youtube.com https://player.vimeo.com https://vercel.live https://*.vercel.live",
+      "frame-src 'self' https://www.youtube.com https://www.youtube-nocookie.com https://player.vimeo.com https://vercel.live https://*.vercel.live",
       "connect-src 'self' ws: wss: https://vercel.live https://*.vercel.live wss://*.vercel.live wss://*.vercel.com https://*.supabase.co https://*.directus.app"
     ].join("; ")
   },
@@ -45,6 +45,8 @@ const nextConfig: NextConfig = {
       { protocol: 'https', hostname: 'r2.thesportsdb.com' },
       { protocol: 'https', hostname: 'flagcdn.com' },
       { protocol: 'https', hostname: 'zru.co.zw' },
+      { protocol: 'https', hostname: 'img.youtube.com' },
+      { protocol: 'https', hostname: 'i.ytimg.com' },
     ],
   },
   async headers() {

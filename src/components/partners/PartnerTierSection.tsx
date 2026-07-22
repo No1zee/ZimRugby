@@ -9,7 +9,7 @@ interface PartnerTierSectionProps {
 
 export default function PartnerTierSection({ tier, isAlternate }: PartnerTierSectionProps) {
   return (
-    <section className={`py-20 md:py-32 ${isAlternate ? 'bg-zru-green/5' : 'bg-transparent'}`}>
+    <section className={`py-20 md:py-32 ${isAlternate ? 'bg-black/5' : 'bg-transparent'}`}>
       <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center">
         
         {/* Category Badge */}
@@ -17,7 +17,7 @@ export default function PartnerTierSection({ tier, isAlternate }: PartnerTierSec
           <span className="text-zru-green font-bold tracking-[0.2em] text-sm md:text-base uppercase mb-4">
             Tier
           </span>
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-black text-white uppercase tracking-tight text-glow-heavy text-center">
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-black text-rich-black uppercase tracking-tight text-center">
             {tier.title}
           </h2>
           <div className="w-24 h-1 bg-zru-green mt-6 rounded-full" />

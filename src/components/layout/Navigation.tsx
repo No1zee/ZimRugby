@@ -9,6 +9,7 @@ import { ChevronDown, Menu, X, Search, User } from "lucide-react";
 import { motion, AnimatePresence, useScroll, useMotionValueEvent } from "framer-motion";
 import SlantedButton from "../ui/SlantedButton";
 import GlobalAnnouncementBar from "./GlobalAnnouncementBar";
+import { HamburgerMenuOverlay } from "@/components/lightswind/HamburgerMenuOverlay";
 import type { NavItem } from "@/lib/navConfig";
 import { navConfig } from "@/lib/navConfig";
 import type { SearchEventResult } from "@/types";
@@ -285,15 +286,18 @@ export default function Navigation() {
               aria-label="Search site"
               title="Search"
             >
-              <Search className="w-6 h-6" />
+              <Search className="w-5 h-5" />
             </button>
-            <button
-              onClick={() => setIsOpen(!isOpen)}
-              className={`p-2 transition-colors cursor-pointer ${showOpaqueHeader ? "text-black/70 hover:text-black" : "text-white/70 hover:text-white"}`}
-              aria-label={isOpen ? "Close menu" : "Open menu"}
+            <SlantedButton 
+              href="/login" 
+              variant="primary" 
+              size="sm"
             >
-              {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-            </button>
+              <div className="flex items-center gap-1.5">
+                <User className="w-3.5 h-3.5" />
+                <span className="text-xs font-black uppercase tracking-wider">Sign In</span>
+              </div>
+            </SlantedButton>
           </div>
 
           {/* Desktop Actions */}
@@ -321,91 +325,13 @@ export default function Navigation() {
         </div>
       </nav>
 
-      {/* Mobile Menu Overlay */}
-      <AnimatePresence>
-        {isOpen && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.2 }}
-            className="lg:hidden fixed inset-x-0 top-[4rem] bottom-0 z-50 bg-zru-green/95 backdrop-blur-xl border-t border-white/10 overflow-y-auto overscroll-contain"
-          >
-             <div className="px-6 py-8 pb-32 space-y-2 max-w-[320px] mx-auto w-full">
-              {dynamicNavItems.map((item, index) => {
-                const isExpanded = expandedMobile.includes(item.label);
-                return (
-                  <motion.div 
-                    key={item.label}
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: index * 0.05 }}
-                  >
-                    {item.children ? (
-                      <>
-                        <button
-                          onClick={() => {
-                            setExpandedMobile(prev =>
-                              prev.includes(item.label)
-                                ? prev.filter(l => l !== item.label)
-                                : [...prev, item.label]
-                            );
-                          }}
-                          className={`
-                            flex items-center justify-between w-full py-3 text-xl font-black uppercase tracking-wider transition-colors text-left
-                            ${isActive(item.href) ? "text-white" : "text-white/70 hover:text-white"}
-                          `}
-                        >
-                          {item.label}
-                          <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${isExpanded ? "rotate-180" : ""}`} />
-                        </button>
-                        <AnimatePresence>
-                          {isExpanded && (
-                            <motion.div
-                              initial={{ opacity: 0, height: 0 }}
-                              animate={{ opacity: 1, height: "auto" }}
-                              exit={{ opacity: 0, height: 0 }}
-                              transition={{ duration: 0.2 }}
-                              className="overflow-hidden"
-                            >
-                              <div className="pl-4 mt-1 mb-2 space-y-1 border-l-2 border-white/10">
-                                {item.children.map((child) => (
-                                  <Link
-                                    key={child.label}
-                                    href={child.href}
-                                    className={`
-                                      block py-2.5 px-4 text-sm font-medium transition-colors rounded-r-lg
-                                      ${isActive(child.href) ? "text-white bg-white/10 border-l-2 border-white -ml-[2px]" : "text-white/70 hover:text-white hover:bg-white/5"}
-                                    `}
-                                    onClick={toggleMenu}
-                                  >
-                                    {child.label}
-                                  </Link>
-                                ))}
-                              </div>
-                            </motion.div>
-                          )}
-                        </AnimatePresence>
-                      </>
-                    ) : (
-                      <Link
-                        href={item.href}
-                        className={`
-                          block py-3 text-xl font-black uppercase tracking-wider transition-colors
-                          ${isActive(item.href) ? "text-white" : "text-white/70 hover:text-white"}
-                        `}
-                        onClick={toggleMenu}
-                      >
-                        {item.label}
-                      </Link>
-                    )}
-                  </motion.div>
-                );
-              })}
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      {/* Lightswind Hamburger Menu Overlay */}
+      <HamburgerMenuOverlay
+        isOpen={isOpen}
+        onClose={toggleMenu}
+        navItems={dynamicNavItems}
+        pathname={pathname}
+      />
 
       {/* Search Overlay */}
       <AnimatePresence>

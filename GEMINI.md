@@ -51,6 +51,27 @@ You are the engineering copilot for the ZimRugby platform.
 - Any feature touching under-18 player/student data requires a parental consent flow.
 - All infrastructure must be on EU regions (Vercel Frankfurt, Railway EU West, Supabase Frankfurt).
 
+## 📱 Phase 2 Roadmap Blueprint — Mobile Adaptive Performance & Low-Bandwidth Optimizations
+At the conclusion of Phase 1, we establish the formal blueprint for Phase 2 mobile responsiveness and low-tier hardware optimization:
+
+### 1. Network & Hardware-Adaptive Rendering Engine (`AdaptivePerformanceProvider`)
+- Detect mobile hardware capability via `navigator.hardwareConcurrency`, device memory API, and connection speed (`navigator.connection.effectiveType`).
+- **Low-Tier Mobile / 2G/3G Network Fallbacks**:
+  - Automatically disable heavy 3D perspective math (`ThreeDImageRing`, 3D cylindrical stages, 3D shop cards) and fall back to lightweight CSS-only static grid cards or native scroll carousels.
+  - Disable non-essential Framer Motion ambient background particles and continuous auto-rotation intervals on low-tier mobile devices.
+
+### 2. Selective & Deferred Component Mounting
+- Use `IntersectionObserver` to defer mounting below-the-fold dynamic widgets (e.g. video iframe embeds, interactive 3D rings, heavy logo grids) until they enter the viewport.
+- Utilize `requestIdleCallback` to defer non-critical JS hydration.
+
+### 3. Adaptive Image & Video Data Weight Reduction
+- Serve smaller mobile-specific WebP images (`sizes="(max-width: 640px) 100vw, 33vw"`) on mobile screens.
+- Replace heavy video thumbnail image loads with lightweight inline WebP low-res placeholders on 2G/3G connections (`Save-Data: on`).
+
+### 4. User Preference & OS Respect Guardrails
+- Respect `prefers-reduced-motion: reduce` by disabling smooth spring physics and continuous rotations automatically.
+- Respect `Save-Data: on` header by turning off auto-fetching RSS feeds on mobile data.
+
 ## Output format
 When asked to implement something, always return:
 1. **Assumptions** — what you're taking as given

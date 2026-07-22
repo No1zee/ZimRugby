@@ -187,9 +187,6 @@ function EventsInner() {
                 >
                   <Icon className={`w-6 h-6 mb-3 transition-transform duration-300 group-hover:scale-110 ${isSelected ? "text-zru-green" : "text-black/40 group-hover:text-black"}`} />
                   <span className="text-[11px] font-subheading font-bold uppercase tracking-wider text-center">{level.name}</span>
-                  {isSelected && (
-                    <div className="absolute top-2 right-2 w-2 h-2 rounded-full bg-zru-green animate-ping" />
-                  )}
                 </button>
               );
             })}
@@ -255,7 +252,7 @@ function EventsInner() {
                           {comp.level}
                         </span>
                         <span className="flex items-center gap-1.5 text-[9px] font-black tracking-wider uppercase text-black/50">
-                          <span className={`w-1.5 h-1.5 rounded-full ${comp.status === "ONGOING" ? "bg-zru-green animate-pulse" : "bg-neutral-300"}`} />
+                          <span className={`w-1.5 h-1.5 rounded-full ${comp.status === "ONGOING" ? "bg-zru-green" : "bg-neutral-300"}`} />
                           {comp.status}
                         </span>
                       </div>

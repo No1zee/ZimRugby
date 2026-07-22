@@ -11,6 +11,7 @@ import JournalStrip from "@/components/home/JournalStrip";
 import PageHero from "@/components/ui/PageHero";
 import PageAnnouncements from "@/components/ui/PageAnnouncements";
 import { NewsCards } from "@/components/ui/news-cards";
+import MatchdayVideoHighlights from "@/components/media/MatchdayVideoHighlights";
 
 interface MediaPageClientProps {
   initialSocialPosts: any[];
@@ -123,6 +124,11 @@ export default function MediaPageClient({ initialSocialPosts }: MediaPageClientP
 
         {/* Page Announcements */}
         <PageAnnouncements scope="media" className="mb-12" />
+
+        {/* Nations Cup Matchday Media & Video Highlights */}
+        <div className="mb-16">
+          <MatchdayVideoHighlights title="NATIONS CUP" subtitle="MATCH HIGHLIGHTS" />
+        </div>
 
         {/* Filters */}
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-12">

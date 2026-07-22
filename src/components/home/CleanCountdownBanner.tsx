@@ -1,6 +1,9 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import Image from "next/image";
+
+import { motion } from "framer-motion";
 
 export default function CleanCountdownBanner() {
   const [timeLeft, setTimeLeft] = useState({
@@ -33,7 +36,7 @@ export default function CleanCountdownBanner() {
 
   return (
     <section
-      className="py-10 sm:py-12 text-white border-y border-white/10 relative overflow-hidden"
+      className="py-12 sm:py-16 text-white border-y border-white/10 relative overflow-hidden select-none"
       style={{
         background: "radial-gradient(circle at 50% 25%, #007A50 0%, #004D2C 60%, #002D1A 100%)",
       }}
@@ -47,7 +50,45 @@ export default function CleanCountdownBanner() {
         }}
       />
 
-      <div className="relative z-10 max-w-[1360px] mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center text-center">
+      {/* Left Player SVG Cutout (Slide-in from Left on Scroll) */}
+      <motion.div
+        initial={{ opacity: 0, x: -120 }}
+        whileInView={{ opacity: 1, x: 0 }}
+        viewport={{ once: true, amount: 0.2 }}
+        transition={{ duration: 0.8, ease: "easeOut", delay: 0.1 }}
+        className="absolute -bottom-2 -left-4 sm:left-0 lg:left-8 w-32 xs:w-40 sm:w-56 md:w-72 lg:w-80 h-auto pointer-events-none z-10"
+      >
+        <Image
+          src="/images/cutouts/3.svg"
+          alt="Zimbabwe Rugby Cutout Left"
+          width={360}
+          height={480}
+          className="object-contain drop-shadow-[0_15px_30px_rgba(0,0,0,0.7)]"
+          unoptimized
+          priority
+        />
+      </motion.div>
+
+      {/* Right Player SVG Cutout (Slide-in from Right on Scroll) */}
+      <motion.div
+        initial={{ opacity: 0, x: 120 }}
+        whileInView={{ opacity: 1, x: 0 }}
+        viewport={{ once: true, amount: 0.2 }}
+        transition={{ duration: 0.8, ease: "easeOut", delay: 0.1 }}
+        className="absolute -bottom-2 -right-4 sm:right-0 lg:right-8 w-32 xs:w-40 sm:w-56 md:w-72 lg:w-80 h-auto pointer-events-none z-10"
+      >
+        <Image
+          src="/images/cutouts/1.svg"
+          alt="Zimbabwe Rugby Cutout Right"
+          width={360}
+          height={480}
+          className="object-contain drop-shadow-[0_15px_30px_rgba(0,0,0,0.7)]"
+          unoptimized
+          priority
+        />
+      </motion.div>
+
+      <div className="relative z-20 max-w-[1360px] mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center text-center">
         
         {/* Title */}
         <h3 className="text-xs sm:text-sm font-bold tracking-[0.3em] uppercase text-white/90 mb-8 font-heading">

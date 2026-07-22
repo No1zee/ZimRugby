@@ -43,14 +43,22 @@ export default function TeamPageClient({ team }: TeamPageClientProps) {
         {/* Banner image */}
         <div className="absolute inset-0 z-0">
           <Image
-            src={team.gallery[0] || "/images/events/africa-cup.jpg"}
+            src={
+              team.id === "lady-sables"
+                ? "/images/gallery/sables-women-3264661562422556533.webp"
+                : team.id === "junior-sables"
+                ? "/images/teams/junior-sables.jpg"
+                : team.id === "cheetahs"
+                ? "/images/gallery/zimbabwe-sables-0351.webp"
+                : team.gallery[0] || "/images/gallery/zimbabwe-sables-battle-of-zambezi-gameday1-505.webp"
+            }
             alt={team.name}
             fill
             priority
             sizes="100vw"
-            className="object-cover opacity-40 filter-[brightness(0.7)]"
+            className="object-cover opacity-60 filter brightness-90 contrast-105"
           />
-          <div className="absolute inset-0 bg-linear-to-t from-rich-black via-rich-black/40 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#010905] via-[#010905]/50 to-transparent" />
         </div>
 
         {/* Content container */}

@@ -8,6 +8,20 @@ import SlantedButton from "@/components/ui/SlantedButton";
 export default function FlagshipTeamHero() {
   return (
     <section className="relative w-full bg-[#050D08] text-white pt-28 pb-16 overflow-hidden border-b border-white/10">
+      {/* Background Hero Photography */}
+      <div className="absolute inset-0 z-0 opacity-25">
+        <Image
+          src="/images/gallery/zimbabwe-sables-battle-of-zambezi-gameday1-505.webp"
+          alt="Zimbabwe Sables Hero"
+          fill
+          priority
+          sizes="100vw"
+          className="object-cover object-center filter brightness-90 contrast-110"
+        />
+        <div className="absolute inset-0 bg-gradient-to-r from-[#010905] via-[#010905]/80 to-[#010905]/40" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#050D08] via-transparent to-[#050D08]/60" />
+      </div>
+
       {/* Background ambient gradient */}
       <div className="absolute top-0 right-0 w-2/3 h-full bg-[radial-gradient(ellipse_at_top_right,rgba(0,107,63,0.35),transparent_70%)] pointer-events-none" />
       <div className="absolute bottom-0 left-0 w-1/3 h-1/2 bg-[radial-gradient(ellipse_at_bottom_left,rgba(0,107,63,0.15),transparent_70%)] pointer-events-none" />

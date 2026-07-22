@@ -96,7 +96,7 @@ const OfficialChannelBadge = () => (
     animate={{ opacity: 1, x: 0 }}
     className="inline-flex items-center gap-3 px-4 py-2 bg-zru-green/10 border border-zru-green/20 rounded-full"
   >
-    <div className="w-5 h-5 bg-zru-green rounded-full flex items-center justify-center shadow-[0_0_15px_rgba(0,107,63,0.4)]">
+    <div className="w-5 h-5 bg-zru-green rounded-full flex items-center justify-center">
       <Shield className="w-3 h-3 text-rich-black" fill="currentColor" />
     </div>
     <span className="text-[10px] font-black text-zru-green uppercase tracking-[0.2em]">Official ZRU Ticketing Channel</span>
@@ -213,7 +213,7 @@ export default function TicketsPage() {
               <OfficialChannelBadge />
               <h1 className="text-6xl md:text-8xl lg:text-9xl font-black text-rich-black leading-[0.9] uppercase tracking-tighter mt-8 mb-8">
                 OFFICIAL <br />
-                <span className="text-zru-green text-glow-green">TICKETS</span>
+                <span className="text-zru-green">TICKETS</span>
               </h1>
               <p className="text-lg md:text-xl text-black/60 max-w-xl mb-12 font-medium leading-relaxed">
                 Welcome to the official home of Sables and ZRU tickets. Every link on this page takes you to an authorised partner, with transparent pricing and secure checkout.
