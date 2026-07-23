@@ -42,9 +42,11 @@ export function ThreeDImageRing({ items, onSelectItem }: ThreeDImageRingProps) {
   const radius = typeof window !== "undefined" && window.innerWidth < 640 ? 170 : 420;
   const angleStep = 360 / totalItems;
 
-  // Auto-rotate slowly when not dragging
+  // Auto-rotate slowly when not dragging (bypassed on mobile to prevent scroll jank)
   useEffect(() => {
     if (isDragging) return;
+    const isMobileDevice = typeof window !== "undefined" && window.innerWidth < 768;
+    if (isMobileDevice) return; // Disable continuous 3D rotation loop on mobile
 
     const interval = setInterval(() => {
       setRotationY((prev) => prev - 0.3);

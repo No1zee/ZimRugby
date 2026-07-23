@@ -233,9 +233,9 @@ export default function HeroCarousel({ slides }: { slides: HeroSlideData[] }) {
             {/* Performance Hint: Removed heavy black overlay that delayed LCP */}
             <motion.div 
               initial={{ scale: 1 }}
-              animate={{ scale: 1.04 }} // Subtle Ken Burns — enough to feel alive without zooming in too hard
+              animate={{ scale: isMobile ? 1 : 1.04 }} // Static scale on mobile to save GPU cycles
               transition={{ duration: 12, ease: "linear" }}
-              style={{ y: yBg, opacity: opacityBg }} // Apply scroll parallax
+              style={isMobile ? undefined : { y: yBg, opacity: opacityBg }} // Disable scroll listener parallax on mobile
               className="relative w-full h-full hero-bg-media will-change-transform filter-[brightness(var(--hero-brightness,1))]"
             >
                 {activeSlide.video ? (
