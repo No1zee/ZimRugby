@@ -38,7 +38,7 @@ export default function SchoolsPage() {
           title="School Rugby"
           subtitle="The historic breeding ground of Zimbabwe Sables champions. Discover school leagues and development structures."
           tag="Youth Development"
-          backgroundImage="/images/hero/zim-u20s.webp"
+          backgroundImage="/images/schools/schoolboy-action-1.jpg"
           breadcrumb={[{ label: "Schools", href: "/schools" }]}
         />
       </div>
@@ -82,6 +82,67 @@ export default function SchoolsPage() {
                 Under-20: Junior Sables Selection
               </li>
             </ul>
+          </div>
+        </div>
+
+        {/* Authentic Schoolboy Rugby Action Gallery */}
+        <div className="mb-20">
+          <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-8 gap-4">
+            <div>
+              <span className="text-xs font-bold uppercase tracking-widest text-zru-green font-heading block mb-1">
+                NATIONAL SCHOOLS CHAMPIONSHIPS
+              </span>
+              <h2 className="font-heading text-2xl md:text-3xl text-rich-black font-black uppercase tracking-wide">
+                Live Schoolboy Rugby Action
+              </h2>
+            </div>
+            <p className="text-sm text-rich-black/60 font-body max-w-md">
+              High-intensity action and sportsmanship from the national schoolboy rugby tournaments across Zimbabwe.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="group relative h-80 rounded-2xl overflow-hidden shadow-md border border-black/5">
+              <img
+                src="/images/schools/schoolboy-action-1.jpg"
+                alt="Schoolboy Rugby Action - Breakaway Play"
+                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent flex items-end p-6">
+                <div>
+                  <span className="text-[10px] font-extrabold uppercase tracking-widest text-[#84d7af] block">MATCH ACTION</span>
+                  <h4 className="font-heading text-lg text-white font-black uppercase italic">National Super 8 Fixtures</h4>
+                </div>
+              </div>
+            </div>
+
+            <div className="group relative h-80 rounded-2xl overflow-hidden shadow-md border border-black/5">
+              <img
+                src="/images/schools/schoolboy-team-group.jpg"
+                alt="Schoolboy Rugby Squad - Post Match Group Photo"
+                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent flex items-end p-6">
+                <div>
+                  <span className="text-[10px] font-extrabold uppercase tracking-widest text-[#84d7af] block">UNITY & CAMARADERIE</span>
+                  <h4 className="font-heading text-lg text-white font-black uppercase italic">Combined Schools Squad</h4>
+                </div>
+              </div>
+            </div>
+
+            <div className="group relative h-80 rounded-2xl overflow-hidden shadow-md border border-black/5">
+              <img
+                src="/images/schools/schoolboy-lineout.jpg"
+                alt="Schoolboy Rugby Lineout Jump Action"
+                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent flex items-end p-6">
+                <div>
+                  <span className="text-[10px] font-extrabold uppercase tracking-widest text-[#84d7af] block">AIRBORNE INTENSITY</span>
+                  <h4 className="font-heading text-lg text-white font-black uppercase italic">Set Piece Lineout Mastery</h4>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
 

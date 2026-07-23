@@ -11,7 +11,7 @@ const INITIATIVES = [
     subtitle: "PRIMARY & SECONDARY SCHOOLS",
     description: "Connecting provincial primary and high school rugby leagues directly to national age-grade squad selection.",
     stats: "120+ Participating Schools",
-    image: "/images/events/schools-fest.jpg",
+    image: "/images/schools/schoolboy-team-group.jpg",
     link: "/schools",
     btnText: "EXPLORE SCHOOL LEAGUES",
     gradient: "from-[#003822] via-[#002B19] to-[#001D11]",
