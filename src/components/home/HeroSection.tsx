@@ -63,14 +63,13 @@ export default function HeroSection() {
           playsInline
           preload="metadata"
           className="object-cover w-full h-full opacity-60"
-          poster="/images/hero-poster.jpg"
+          poster="/images/zim-rugby-slow-mo-2.webp"
           style={{ contentVisibility: "auto" }}
         >
-          {/* Placeholder video - replace with actual assets */}
-            <source src="https://static.videezy.com/system/resources/previews/000/043/553/original/Rugby_Game.mp4" type="video/mp4" />
+          <source src="https://static.videezy.com/system/resources/previews/000/043/553/original/Rugby_Game.mp4" type="video/mp4" />
         </video>
-        <div className="absolute inset-0 bg-linear-to-t from-rich-black via-rich-black/50 to-transparent" />
-        <div className="absolute inset-0 bg-linear-to-r from-rich-black/80 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-rich-black via-rich-black/50 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-r from-rich-black/80 to-transparent" />
       </motion.div>
 
       {/* Content */}
@@ -81,11 +80,11 @@ export default function HeroSection() {
           animate="visible"
           className="max-w-5xl"
         >
-          {/* 0.3s: ZRU Logo Scale */}
+          {/* ZRU Logo */}
           <motion.div variants={logoVariants} className="mb-6">
-             <div className="w-20 h-20 bg-zru-green rounded-full flex items-center justify-center font-heading text-3xl border-4 border-white shadow-2xl">
-                ZRU
-             </div>
+            <div className="w-16 h-16 rounded-full bg-zru-green/20 border border-zru-green/40 backdrop-blur-md flex items-center justify-center p-2">
+              <img src="/images/logos/zru-logo.svg" alt="Zimbabwe Rugby Union" className="w-full h-full object-contain" />
+            </div>
           </motion.div>
 
           {/* 0.6s: AFRICA CUP CHAMPIONS */}

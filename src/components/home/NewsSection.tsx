@@ -45,28 +45,12 @@ const newsItems = [
 
 export default function NewsSection() {
   return (
-    <section className="py-20 bg-rich-black relative border-t border-white/10">
-      {/* Background Image */}
-      <div className="absolute inset-0 z-0">
-        <Image 
-          src="/images/events/africa-cup.jpg" 
-          alt="Background" 
-          fill 
-          sizes="100vw"
-          className="object-cover opacity-20"
-        />
-        <div className="absolute inset-0 bg-linear-to-b from-rich-black via-rich-black/90 to-rich-black" />
-      </div>
-
+    <section className="py-20 bg-milk-white relative border-t border-black/10">
       <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="flex justify-between items-end mb-12">
           <div>
-            <h2 className="text-white font-heading text-xl tracking-widest mb-2">
-              LATEST UPDATES
-            </h2>
-            <h3 className="text-4xl md:text-5xl font-heading text-white">
-              NEWS & MEDIA
-            </h3>
+            <span className="label block mb-2">LATEST UPDATES</span>
+            <h2 className="heading-1 text-black">NEWS &amp; MEDIA</h2>
           </div>
           <SlantedButton variant="outline" size="sm" className="hidden md:flex gap-2">
             VIEW ALL NEWS

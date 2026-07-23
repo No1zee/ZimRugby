@@ -51,7 +51,7 @@ export default function MobileDock() {
       className="fixed bottom-0 left-0 right-0 z-50 lg:hidden pb-[max(env(safe-area-inset-bottom),16px)] pointer-events-none"
     >
       {/* Glassmorphism Background */}
-      <div className="mx-4 mt-4 sm:mx-auto sm:max-w-xl rounded-2xl bg-rich-black/90 backdrop-blur-xl border border-white/10 shadow-[0_-10px_40px_-15px_rgba(0,0,0,0.5)] flex items-center justify-around p-2 sm:p-3 pointer-events-auto">
+      <div className="mx-4 mt-4 sm:mx-auto sm:max-w-xl rounded-2xl bg-milk-white/95 backdrop-blur-xl border border-black/10 shadow-[0_-10px_40px_-15px_rgba(0,0,0,0.15)] flex items-center justify-around p-2 sm:p-3 pointer-events-auto">
         {dockItems.map((item) => {
           const isActive = !item.isMenu && (pathname === item.href || (item.href !== "/" && pathname.startsWith(item.href)));
           const Icon = item.icon;
@@ -77,20 +77,20 @@ export default function MobileDock() {
               
               <Icon 
                 className={cn(
-                  "w-6 h-6 transition-colors",
-                  isActive ? "text-zru-green drop-shadow-[0_0_8px_rgba(0,107,63,0.5)]" : "text-gray-400"
+                  "w-5 h-5 transition-colors",
+                  isActive ? "text-zru-green" : "text-black/50"
                 )} 
               />
               <span className={cn(
-                "text-[10px] mt-1 font-medium tracking-tight uppercase transition-colors",
-                isActive ? "text-zru-green" : "text-gray-500"
+                "text-[10px] mt-1 font-extrabold tracking-wider uppercase transition-colors font-heading",
+                isActive ? "text-zru-green" : "text-black/60"
               )}>
                 {item.label}
               </span>
 
               {isActive && (
                 <motion.div 
-                  className="absolute -bottom-1 w-1.5 h-1.5 bg-zru-green rounded-full shadow-[0_0_8px_rgba(0,107,63,0.9)]"
+                  className="absolute -bottom-1 w-1.5 h-1.5 bg-zru-green rounded-full"
                   layoutId="activeDot"
                 />
               )}
