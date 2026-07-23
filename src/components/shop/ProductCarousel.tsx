@@ -10,7 +10,7 @@ const products = [
     category: "Matchday",
     price: "$145",
     badge: "Heritage",
-    image: "/images/shop/jersey-home.png",
+    image: "/images/shop/1.png",
     colorClasses: ["bg-[#004d2e]", "bg-[#D4AF37]", "bg-[#FFFFFF]"],
   },
   {
@@ -19,7 +19,7 @@ const products = [
     category: "Lifestyle",
     price: "$95",
     badge: "Limited",
-    image: "/images/shop/polo-heritage.png",
+    image: "/images/shop/2.png",
     colorClasses: ["bg-[#F5F5DC]", "bg-[#004d2e]"],
   },
   {
@@ -27,7 +27,7 @@ const products = [
     name: "Performance Training Vest",
     category: "Training",
     price: "$75",
-    image: "/images/shop/vest-performance.png",
+    image: "/images/shop/3.png",
     colorClasses: ["bg-[#1A1A1A]", "bg-[#D4AF37]"],
   },
   {
@@ -36,7 +36,7 @@ const products = [
     category: "Accessories",
     price: "$210",
     badge: "Premium",
-    image: "/images/shop/bag-duffel.png",
+    image: "/images/shop/1.png",
     colorClasses: ["bg-[#004d2e]", "bg-[#3D2B1F]"],
   },
 ];

@@ -21,7 +21,7 @@ const previewItems = [
     name: "Elite Sables Home", 
     price: "$110", 
     category: "Matchday Elite", 
-    image: "/images/shop/jersey-home.png", 
+    image: "/images/shop/1.png", 
     badge: "Official Matchday",
     color: "bg-zru-green/5",
     description: "Matchday jersey worn for Africa Cup 2026 campaign."
@@ -30,7 +30,7 @@ const previewItems = [
     name: "Oxford Heritage Polo", 
     price: "$85", 
     category: "Lifestyle / Heritage", 
-    image: "/images/shop/polo-heritage.png", 
+    image: "/images/shop/2.png", 
     badge: "Official Crest",
     color: "bg-zru-green/5",
     description: "Post-match premium cotton blend. Classic fit."
@@ -39,7 +39,7 @@ const previewItems = [
     name: "V-Series Duffel", 
     price: "$180", 
     category: "Technical Carry", 
-    image: "/images/shop/bag-duffel.png", 
+    image: "/images/shop/3.png", 
     badge: "Pathway Support",
     color: "bg-zru-green/5",
     description: "Premium water-resistant duffel bag designed for official ZRU travel."
@@ -48,7 +48,7 @@ const previewItems = [
     name: "Performance Vest", 
     price: "$95", 
     category: "High Intensity", 
-    image: "/images/shop/vest-performance.png",
+    image: "/images/shop/1.png",
     badge: "Sables XV",
     color: "bg-zru-green/5",
     description: "Engineered for elite conditioning and dynamic drills."
