@@ -42,21 +42,14 @@ const collections = [
 
 export default function CollectionsStrip() {
   return (
-    <section id="collections-section" className="py-24 px-6 max-w-[1440px] mx-auto">
+    <section id="collections-section" className="py-20 px-6 max-w-[1440px] mx-auto bg-milk-white">
       {/* Section Header */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-12 gap-4">
         <div>
-          <span className="text-[11px] font-extrabold uppercase tracking-[0.25em] text-[#84d7af] block mb-2">
-            CURATED COLLECTIONS
-          </span>
-          <h2
-            className="text-3xl sm:text-4xl md:text-5xl font-black uppercase italic tracking-tight text-white"
-            style={{ fontFamily: "var(--font-montserrat, 'Montserrat'), sans-serif" }}
-          >
-            FLAGSHIP CATEGORIES
-          </h2>
+          <span className="label block mb-2">CURATED COLLECTIONS</span>
+          <h2 className="heading-1 text-black">FLAGSHIP CATEGORIES</h2>
         </div>
-        <p className="text-sm text-[#bec9c1] max-w-md">
+        <p className="body-base text-black/70 max-w-md">
           Explore official union gear, engineered for world-class performance on the pitch and timeless elegance off it.
         </p>
       </div>
@@ -69,8 +62,8 @@ export default function CollectionsStrip() {
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.7, delay: idx * 0.1, ease: [0.16, 1, 0.3, 1] }}
-            className={`relative group overflow-hidden rounded-xl border border-white/10 hover:border-[#006747]/80 transition-all duration-500 ${col.aspect}`}
+            transition={{ duration: 0.6, delay: idx * 0.1, ease: [0.16, 1, 0.3, 1] }}
+            className={`relative group overflow-hidden rounded-xl border border-black/10 hover:border-zru-green/60 shadow-md hover:shadow-xl transition-all duration-500 bg-white ${col.aspect}`}
           >
             {/* Background Image */}
             <div className="absolute inset-0 z-0 overflow-hidden">
@@ -79,9 +72,9 @@ export default function CollectionsStrip() {
                 alt={col.title}
                 fill
                 sizes="(max-width: 768px) 100vw, 50vw"
-                className="object-cover object-center grayscale-[0.3] group-hover:grayscale-0 group-hover:scale-110 transition-all duration-700 ease-out"
+                className="object-cover object-center group-hover:scale-105 transition-all duration-700 ease-out"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#0E0E0E] via-[#0E0E0E]/40 to-transparent z-10" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent z-10" />
             </div>
 
             {/* Tile Label & Arrow */}
@@ -90,16 +83,11 @@ export default function CollectionsStrip() {
                 <span className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-[#84d7af] block mb-1">
                   {col.subtitle}
                 </span>
-                <h3
-                  className="text-2xl sm:text-3xl font-black uppercase italic text-white tracking-tight"
-                  style={{ fontFamily: "var(--font-montserrat, 'Montserrat'), sans-serif" }}
-                >
-                  {col.title}
-                </h3>
+                <h3 className="heading-2 text-white">{col.title}</h3>
               </div>
               <Link
                 href={col.href}
-                className="w-12 h-12 rounded-full bg-[#006747] text-white flex items-center justify-center group-hover:bg-[#84d7af] group-hover:text-[#003825] transition-all duration-300 transform group-hover:scale-110 shadow-lg"
+                className="w-12 h-12 rounded-full bg-zru-green text-white flex items-center justify-center group-hover:bg-white group-hover:text-zru-green transition-all duration-300 transform group-hover:scale-110 shadow-lg"
               >
                 <ArrowUpRight className="w-5 h-5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
               </Link>
