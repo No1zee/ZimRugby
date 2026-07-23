@@ -11,7 +11,7 @@ const products = [
     category: "Matchday Elite",
     price: "$145",
     badge: "Official Match Spec",
-    image: "/images/shop/1.png",
+    image: "/images/shop/1.webp",
     colorClasses: ["bg-zru-green", "bg-[#FFFFFF]"],
   },
   {
@@ -20,7 +20,7 @@ const products = [
     category: "Lifestyle / Heritage",
     price: "$95",
     badge: "Limited Drop",
-    image: "/images/shop/2.png",
+    image: "/images/shop/2.webp",
     colorClasses: ["bg-[#FDFBF0]", "bg-zru-green"],
   },
   {
@@ -29,7 +29,7 @@ const products = [
     category: "High Intensity",
     price: "$75",
     badge: "Pro Tech Mesh",
-    image: "/images/shop/3.png",
+    image: "/images/shop/3.webp",
     colorClasses: ["bg-black/80", "bg-zru-green"],
   },
   {
@@ -38,7 +38,7 @@ const products = [
     category: "Travel & Gear",
     price: "$210",
     badge: "Cordura Spec",
-    image: "/images/shop/1.png",
+    image: "/images/shop/1.webp",
     colorClasses: ["bg-zru-green", "bg-black/80"],
   },
 ];
