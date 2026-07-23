@@ -1,5 +1,3 @@
-"use client";
-
 import { Wifi, WifiOff } from "lucide-react";
 
 export default function CmsBadge() {

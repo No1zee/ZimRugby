@@ -14,11 +14,18 @@ export default function ClientLayoutShell({ children }: { children: React.ReactN
       const consent = localStorage.getItem("zru-cookie-consent");
       if (consent === "accepted") {
         if (!document.getElementById("contentsquare-tracker")) {
-          const script = document.createElement("script");
-          script.id = "contentsquare-tracker";
-          script.src = "https://t.contentsquare.net/uxa/97d0dc6c80d47.js";
-          script.async = true;
-          document.head.appendChild(script);
+          const injectScript = () => {
+            const script = document.createElement("script");
+            script.id = "contentsquare-tracker";
+            script.src = "https://t.contentsquare.net/uxa/97d0dc6c80d47.js";
+            script.async = true;
+            document.head.appendChild(script);
+          };
+          if ("requestIdleCallback" in window) {
+            window.requestIdleCallback(injectScript);
+          } else {
+            setTimeout(injectScript, 2000);
+          }
         }
       }
     };
