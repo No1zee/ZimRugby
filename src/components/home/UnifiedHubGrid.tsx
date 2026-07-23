@@ -31,13 +31,13 @@ const STITCH = {
 } as const;
 
 const unison: React.CSSProperties = {
-  fontFamily: "'Montserrat', sans-serif",
+  fontFamily: "var(--font-montserrat, 'Montserrat'), sans-serif",
   fontWeight: 900,
   textTransform: "uppercase" as const,
 };
 
 const labelCaps: React.CSSProperties = {
-  fontFamily: "'Montserrat', sans-serif",
+  fontFamily: "var(--font-montserrat, 'Montserrat'), sans-serif",
   fontSize: "12px",
   lineHeight: "1.0",
   letterSpacing: "0.1em",
@@ -59,7 +59,7 @@ const h3Style: React.CSSProperties = {
 };
 
 const bodyBase: React.CSSProperties = {
-  fontFamily: "'Montserrat', sans-serif",
+  fontFamily: "var(--font-montserrat, 'Montserrat'), sans-serif",
   fontSize: "16px",
   lineHeight: "1.5",
   fontWeight: 500,
