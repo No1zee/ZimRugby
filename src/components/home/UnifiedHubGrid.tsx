@@ -487,43 +487,38 @@ function ShopCardShowcase({ unison, labelCaps, h3Style }: ShopCardShowcaseProps)
 
   return (
     <div
-      className="w-[82vw] xs:w-[320px] lg:w-auto shrink-0 snap-start box-border flex flex-col h-[460px] lg:h-[480px] xl:h-[500px] rounded-xl overflow-hidden border border-black/10 hover:border-[#006747]/60 shadow-lg hover:shadow-2xl transition-all duration-300 group/card relative"
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-      style={{
-        background: "linear-gradient(145deg, #002D1A 0%, #001F12 50%, #00120B 100%)",
-      }}
+      className="w-[82vw] xs:w-[320px] lg:w-auto shrink-0 snap-start box-border flex flex-col h-[460px] lg:h-[480px] xl:h-[500px] rounded-xl overflow-hidden border border-black/10 hover:border-[#006747]/60 shadow-lg hover:shadow-2xl transition-all duration-300 group/card relative bg-white"
     >
       {/* ── 1. Slanted Header Badge ── */}
       <div className="flex justify-between items-center bg-gradient-to-b from-[#00704D] to-[#005238] text-white shrink-0 relative z-20" style={{ padding: "14px 20px" }}>
         <div style={labelCaps}>
           <span className="tracking-widest uppercase text-white font-extrabold text-[11px]">OFFICIAL SHOP</span>
         </div>
-        <span className="text-[9px] font-extrabold tracking-widest uppercase bg-black/30 text-emerald-300 px-2 py-0.5 rounded border border-emerald-500/20">
+        <span className="text-[9px] font-extrabold tracking-widest uppercase bg-black/20 text-white px-2 py-0.5 rounded border border-white/20">
           {currentProduct.badge}
         </span>
       </div>
 
       {/* ── 2. Atmospheric Background Grid & Lighting ── */}
-      <div className="relative flex-grow flex flex-col justify-between p-5 text-white overflow-hidden z-10">
+      <div className="relative flex-grow flex flex-col justify-between p-5 text-rich-black overflow-hidden z-10 bg-[#FDFBF7]">
         
-        {/* Stadium Floodlight Radial Glow behind jersey */}
+        {/* Stadium Floodlight Radial Glow behind product */}
         <div
-          className="absolute top-12 left-1/2 -translate-x-1/2 w-64 h-64 rounded-full pointer-events-none transition-all duration-700 blur-3xl opacity-35"
+          className="absolute top-12 left-1/2 -translate-x-1/2 w-64 h-64 rounded-full pointer-events-none transition-all duration-700 blur-3xl opacity-20"
           style={{
             background: activeIndex === 0 
-              ? "radial-gradient(circle, #00C853 0%, rgba(0,200,83,0) 70%)" 
+              ? "radial-gradient(circle, #00704D 0%, rgba(0,112,77,0) 70%)" 
               : activeIndex === 1 
               ? "radial-gradient(circle, #10B981 0%, rgba(16,185,129,0) 70%)" 
               : "radial-gradient(circle, #059669 0%, rgba(5,150,105,0) 70%)",
           }}
         />
 
-        {/* Subtle Diagonal Mesh Graphic */}
+        {/* Subtle Dots Pattern Graphic */}
         <div
-          className="absolute inset-0 opacity-10 pointer-events-none"
+          className="absolute inset-0 opacity-15 pointer-events-none"
           style={{
-            backgroundImage: "radial-gradient(circle at 2px 2px, rgba(255,255,255,0.4) 1px, transparent 0)",
+            backgroundImage: "radial-gradient(circle at 2px 2px, rgba(0,103,71,0.25) 1px, transparent 0)",
             backgroundSize: "16px 16px",
           }}
         />
@@ -536,10 +531,10 @@ function ShopCardShowcase({ unison, labelCaps, h3Style }: ShopCardShowcaseProps)
               <button
                 key={prod.id}
                 onClick={() => setActiveIndex(idx)}
-                className={`text-[9px] font-extrabold tracking-wider uppercase px-2.5 py-1 rounded-full transition-all duration-300 cursor-pointer ${
+                className={`text-[9px] font-extrabold tracking-wider uppercase px-3 py-1 rounded-full transition-all duration-300 cursor-pointer ${
                   isActive
-                    ? "bg-emerald-500 text-black shadow-md shadow-emerald-500/20 scale-105"
-                    : "bg-white/10 text-white/70 hover:bg-white/20 hover:text-white"
+                    ? "bg-[#00704D] text-white shadow-md shadow-[#00704D]/30 scale-105"
+                    : "bg-black/5 text-rich-black/70 hover:bg-black/10 hover:text-rich-black border border-black/5"
                 }`}
               >
                 {prod.id === "jersey" ? "KIT" : prod.id === "polo" ? "POLO" : "BAG"}
@@ -548,35 +543,35 @@ function ShopCardShowcase({ unison, labelCaps, h3Style }: ShopCardShowcaseProps)
           })}
         </div>
 
-        {/* ── 4. Immersive 3D Floating Product Showcase ── */}
+        {/* ── 4. Product Showcase ── */}
         <div className="relative z-10 flex-grow flex flex-col justify-center items-center my-2 min-h-[210px] group/item">
           
           {/* Floating Product Image Container */}
           <div className="relative w-full h-48 flex items-center justify-center">
             
             {/* Soft Ambient Shadow below product */}
-            <div className="absolute bottom-1 w-32 h-4 bg-black/60 rounded-[100%] blur-md group-hover/card:scale-110 transition-transform duration-500" />
+            <div className="absolute bottom-1 w-32 h-4 bg-black/15 rounded-[100%] blur-md group-hover/card:scale-110 transition-transform duration-500" />
 
-            {/* Product PNG with Floating Motion */}
+            {/* Product PNG */}
             <div className="relative w-44 h-44 transition-all duration-500 ease-out transform group-hover/card:-translate-y-2 group-hover/card:scale-105">
               <Image
                 key={currentProduct.id}
                 src={currentProduct.image}
                 alt={currentProduct.name}
                 fill
-                className="object-contain drop-shadow-[0_12px_24px_rgba(0,0,0,0.65)] transition-opacity duration-300"
+                className="object-contain filter drop-shadow-[0_10px_20px_rgba(0,0,0,0.15)] transition-opacity duration-300"
                 sizes="176px"
                 priority
               />
             </div>
 
             {/* Floating Price Pill */}
-            <div className="absolute top-1 right-2 bg-emerald-500/90 text-black backdrop-blur-md px-2.5 py-1 rounded-full shadow-lg border border-emerald-300/40 flex items-center gap-1 font-black text-xs tracking-tight">
+            <div className="absolute top-1 right-2 bg-[#00704D] text-white px-3 py-1 rounded-full shadow-md border border-[#005238] flex items-center gap-1 font-black text-xs tracking-tight">
               <span>{currentProduct.price}</span>
             </div>
 
             {/* Floating Material Tag */}
-            <div className="absolute bottom-2 left-2 bg-black/70 backdrop-blur-md text-emerald-300 text-[9px] font-bold tracking-wider px-2 py-0.5 rounded border border-emerald-500/30 uppercase">
+            <div className="absolute bottom-2 left-2 bg-white/90 backdrop-blur-md text-[#00704D] text-[9px] font-bold tracking-wider px-2 py-0.5 rounded border border-black/10 uppercase shadow-xs">
               {currentProduct.tagline}
             </div>
 
@@ -584,17 +579,17 @@ function ShopCardShowcase({ unison, labelCaps, h3Style }: ShopCardShowcaseProps)
 
         </div>
 
-        {/* ── 5. Product Title, Info & Call To Action ── */}
-        <div className="relative z-20 flex flex-col mt-2 pt-3 border-t border-emerald-800/50">
+        {/* ── 5. Product Title & Call To Action ── */}
+        <div className="relative z-20 flex flex-col mt-2 pt-3 border-t border-black/10">
           
           <div className="flex justify-between items-end mb-3">
             <div>
-              <span className="text-[9px] font-bold text-emerald-400 uppercase tracking-widest block mb-0.5">
+              <span className="text-[9px] font-bold text-[#00704D] uppercase tracking-widest block mb-0.5">
                 {currentProduct.category}
               </span>
               <h3
                 style={{ ...h3Style, fontSize: "16px", lineHeight: "1.2" }}
-                className="text-white font-black tracking-tight line-clamp-1"
+                className="text-rich-black font-black tracking-tight line-clamp-1"
               >
                 {currentProduct.name}
               </h3>
@@ -603,7 +598,7 @@ function ShopCardShowcase({ unison, labelCaps, h3Style }: ShopCardShowcaseProps)
 
           <Link
             href="/clubhouse"
-            className="w-full bg-emerald-500 hover:bg-emerald-400 text-black font-extrabold flex items-center justify-center gap-2 rounded-lg transition-all duration-300 shadow-lg shadow-emerald-950/50 group/btn py-3 text-xs tracking-widest uppercase"
+            className="w-full bg-gradient-to-b from-[#00704D] to-[#005238] hover:from-[#006747] hover:to-[#00402B] text-white font-extrabold flex items-center justify-center gap-2 rounded-lg transition-all duration-300 shadow-md shadow-[#00704D]/20 group/btn py-3 text-xs tracking-widest uppercase border-t border-white/20"
             style={unison}
           >
             <span>SHOP COLLECTION</span>
