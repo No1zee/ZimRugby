@@ -208,16 +208,23 @@ export default function HeroCarousel({ slides }: { slides: HeroSlideData[] }) {
   }, [currentSlide, nextSlide]);
 
   const activeSlide = slides[currentSlide];
+  const nextSlideData = slides[(currentSlide + 1) % slides.length];
 
   return (
     <section ref={containerRef} className="relative w-full h-[100dvh] bg-rich-black overflow-hidden flex items-center justify-center">
+      {/* Hidden preloader for next slide image */}
+      {nextSlideData && !nextSlideData.video && (
+        <div className="hidden">
+          <Image src={nextSlideData.image} alt="preload" fill priority sizes="100vw" quality={60} />
+        </div>
+      )}
       
       {/* Background & Transitions - Mode changed to crossfade for performance and LCP */}
       <AnimatePresence>
         <motion.div
           key={currentSlide}
           className="absolute inset-0 z-0 w-full h-full"
-          initial={{ opacity: 0 }}
+          initial={{ opacity: currentSlide === 0 ? 1 : 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 1.5 }}

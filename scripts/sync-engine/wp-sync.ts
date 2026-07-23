@@ -1,4 +1,4 @@
-import axios from 'axios';
+
 import * as cheerio from 'cheerio';
 import * as fs from 'fs';
 import * as path from 'path';
@@ -84,13 +84,12 @@ function parseFixturesFromContent(content: string, postId: string): Match[] {
 
 async function fetchLatestPosts(): Promise<Post[]> {
   try {
-    const response = await axios.get(WP_API_URL, {
-      params: {
-        per_page: 10,
-        _embed: true,
-      },
-    });
-    return response.data;
+    const url = new URL(WP_API_URL);
+    url.searchParams.append('per_page', '10');
+    url.searchParams.append('_embed', 'true');
+    const response = await fetch(url.toString());
+    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+    return await response.json();
   } catch (error) {
     console.error('Error fetching WP posts:', error);
     return [];

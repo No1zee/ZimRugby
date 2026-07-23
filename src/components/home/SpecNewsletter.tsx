@@ -1,6 +1,5 @@
-"use client";
-
 import { Mail } from "lucide-react";
+import NewsletterForm from "./NewsletterForm";
 
 export default function SpecNewsletter() {
   return (
@@ -20,21 +19,8 @@ export default function SpecNewsletter() {
           </div>
         </div>
 
-        {/* Right Group (Form) */}
-        <form className="flex w-full lg:w-auto mt-4 lg:mt-0" onSubmit={(e) => e.preventDefault()}>
-          <input 
-            type="email" 
-            placeholder="Enter your email address" 
-            className="bg-white text-black px-6 py-4 w-full lg:w-80 rounded-l-md outline-none placeholder:text-gray-400 font-medium text-sm"
-            required
-          />
-          <button 
-            type="submit"
-            className="bg-[#E5F2C9] text-[#00452A] font-black tracking-widest uppercase px-8 py-4 rounded-r-md hover:bg-white transition-colors text-xs shrink-0"
-          >
-            SUBSCRIBE
-          </button>
-        </form>
+        {/* Right Group (Standalone Client Form Component) */}
+        <NewsletterForm />
 
       </div>
     </section>

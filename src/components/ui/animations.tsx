@@ -365,6 +365,19 @@ export function FloatingParticles({ count = 20, className = "" }: FloatingPartic
 
   // Generate particles only on client-side to avoid hydration mismatch
   useEffect(() => {
+    // Adaptive Mobile & Performance Check
+    const isLowPower =
+      typeof window !== "undefined" &&
+      (window.matchMedia("(prefers-reduced-motion: reduce)").matches ||
+        (navigator as unknown as { connection?: { effectiveType?: string } }).connection?.effectiveType === "2g" ||
+        (navigator as unknown as { connection?: { effectiveType?: string } }).connection?.effectiveType === "3g" ||
+        navigator.hardwareConcurrency <= 4);
+
+    if (isLowPower) {
+      setMounted(false);
+      return;
+    }
+
     const generatedParticles = Array.from({ length: count }, (_, i) => ({
       id: i,
       x: Math.random() * 100,
@@ -382,7 +395,7 @@ export function FloatingParticles({ count = 20, className = "" }: FloatingPartic
     return () => cancelAnimationFrame(frameId);
   }, [count]);
 
-  // Don't render anything on server or before client hydration
+  // Don't render anything on server, low-power mobile, or before hydration
   if (!mounted) return null;
 
   return (

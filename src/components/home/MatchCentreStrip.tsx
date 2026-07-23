@@ -1,5 +1,3 @@
-"use client";
-
 import { ArrowRight, ChevronRight, Clock, MapPin, TrendingUp, ChevronUp } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";

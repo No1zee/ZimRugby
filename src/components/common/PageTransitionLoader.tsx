@@ -20,16 +20,33 @@ export default function PageTransitionLoader() {
     setFading(false);
     sessionStorage.setItem("zru_initial_loader_shown", "true");
 
-    const duration = 3000;
-    const fadeTimer = setTimeout(() => setFading(true), duration - 600);
-    const hideTimer = setTimeout(() => {
-      setLoading(false);
-      setFading(false);
-    }, duration);
+    // Calibrated graceful splash duration for initial load (1800ms)
+    const duration = 1800;
+    
+    const triggerExit = () => {
+      setFading(true);
+      setTimeout(() => {
+        setLoading(false);
+        setFading(false);
+      }, 600); // 600ms matches the CSS clip-path exit transition duration
+    };
+
+    let timer: NodeJS.Timeout;
+    if (document.readyState === "complete") {
+      timer = setTimeout(triggerExit, duration - 600);
+    } else {
+      const handleLoad = () => {
+        timer = setTimeout(triggerExit, duration - 600);
+      };
+      window.addEventListener("load", handleLoad);
+      return () => {
+        window.removeEventListener("load", handleLoad);
+        clearTimeout(timer);
+      };
+    }
 
     return () => {
-      clearTimeout(fadeTimer);
-      clearTimeout(hideTimer);
+      clearTimeout(timer);
     };
   }, []);
 

@@ -58,7 +58,7 @@ export default function SlantedButton({
   }
 
   function renderPrimary() {
-    const primaryClasses = `${baseClasses} bg-gradient-to-b from-[#00704D] to-[#005238] text-white hover:from-[#005238] hover:to-[#004522] border-0 shadow-md hover:shadow-xl shadow-[#006747]/25 clip-slanted ${sizeClasses[size]} ${className}`;
+    const primaryClasses = `${baseClasses} bg-gradient-to-b from-[#00704D] to-[#005238] hover:from-[#006747] hover:to-[#00402B] text-white shadow-md hover:shadow-xl shadow-[#006747]/25 border-t border-white/20 clip-slanted ${sizeClasses[size]} ${className}`;
     if (href) {
       return <Link href={href} className={primaryClasses} onClick={isDisabled ? (e) => e.preventDefault() : undefined}>{content}</Link>;
     }

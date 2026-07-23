@@ -4,6 +4,9 @@ import React from "react";
 import Image from "next/image";
 import Link from "next/link";
 
+/** Latest news bento grid for the homepage. */
+
+
 export default function LatestNewsBlock() {
   return (
     <section className="py-12 md:py-16 bg-[#F6F5EF] text-rich-black">

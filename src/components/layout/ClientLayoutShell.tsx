@@ -3,7 +3,7 @@
 import React, { useEffect } from "react";
 import dynamic from "next/dynamic";
 
-const SmoothScrollProvider = dynamic(() => import("./SmoothScrollProvider"), { ssr: false });
+const SmoothScrollProvider = dynamic(() => import("./SmoothScrollProvider"));
 const MobileDock = dynamic(() => import("./MobileDock"), { ssr: false });
 const CmsBadge = dynamic(() => import("../ui/CmsBadge"), { ssr: false });
 const CookieConsent = dynamic(() => import("../common/CookieConsent"), { ssr: false });
