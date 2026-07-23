@@ -1,11 +1,25 @@
 import React from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { ArrowRight } from "lucide-react";
 
 export default function FixtureAndTicketsBlock() {
   return (
-    <section className="py-12 md:py-16 bg-[#F6F5EF] text-rich-black">
-      <div className="max-w-[1360px] mx-auto px-4 sm:px-6 lg:px-8">
+    <section className="py-20 bg-milk-white relative border-t border-b border-black/10">
+      <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-12 gap-4">
+          <div>
+            <span className="label block mb-2 font-heading">MATCHDAY TICKETING</span>
+            <h2 className="heading-1 text-black font-heading">UPCOMING FIXTURES</h2>
+          </div>
+          <Link 
+            href="/tickets" 
+            className="inline-flex items-center gap-2 text-xs font-extrabold uppercase tracking-widest text-zru-green hover:text-black transition-colors"
+          >
+            VIEW ALL MATCHES & TICKETS <ArrowRight className="w-4 h-4" />
+          </Link>
+        </div>
+
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-stretch">
           
           {/* Left Card: Upcoming Fixture */}

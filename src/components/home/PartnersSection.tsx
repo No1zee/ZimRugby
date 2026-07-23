@@ -19,31 +19,28 @@ const partners = [
 
 export default function PartnersSection() {
   return (
-    <section className="bg-rich-black py-32 relative overflow-hidden">
+    <section className="bg-milk-white py-24 relative overflow-hidden border-t border-b border-black/10">
       
       {/* Abstract Background Element */}
-      <div className="absolute top-0 right-0 w-1/3 h-full bg-linear-to-l from-zru-green/5 to-transparent pointer-events-none" />
+      <div className="absolute top-0 right-0 w-1/3 h-full bg-gradient-to-l from-zru-green/5 to-transparent pointer-events-none" />
 
       <div className="max-w-[1440px] mx-auto px-6 relative z-10">
         
         {/* Section Header */}
-        <div className="flex flex-col md:flex-row justify-between items-end gap-10 mb-24">
-          <div className="max-w-xl space-y-4">
-            <div className="flex items-center gap-2">
-              <div className="w-8 h-px bg-zru-green" />
-              <span className="text-zru-green text-[10px] font-black uppercase tracking-[0.4em]">Institutional</span>
-            </div>
-            <h2 className="text-4xl md:text-6xl font-black text-white uppercase tracking-tighter leading-[0.9]">
-              STRATEGIC <br /><span className="text-stroke-white text-transparent">PARTNERS</span>
+        <div className="flex flex-col md:flex-row justify-between items-end gap-10 mb-20">
+          <div className="max-w-xl space-y-3">
+            <span className="label block mb-1">INSTITUTIONAL PARTNERSHIPS</span>
+            <h2 className="heading-1 text-black">
+              STRATEGIC <span className="text-zru-green">PARTNERS</span>
             </h2>
           </div>
-          <div className="md:text-right space-y-6">
-            <p className="text-white/60 text-sm font-medium leading-relaxed max-w-sm ml-auto">
-              Fueling the engine of Zimbabwean rugby. We thank our partners for their tireless commitment to the game.
+          <div className="md:text-right space-y-4">
+            <p className="body-base text-black/70 max-w-sm ml-auto">
+              Fueling the engine of Zimbabwean rugby. We thank our corporate sponsors for their commitment to the game.
             </p>
             <Link href="/partners" className="inline-block group">
-              <div className="flex items-center gap-4 text-[10px] font-black uppercase tracking-[0.3em] text-white">
-                <span className="pb-1 border-b border-white/20 group-hover:border-zru-green transition-colors">Join the Network</span>
+              <div className="flex items-center gap-3 text-xs font-extrabold uppercase tracking-widest text-zru-green">
+                <span className="pb-0.5 border-b border-zru-green/30 group-hover:border-zru-green transition-colors">Join the Partner Network</span>
                 <Plus className="w-4 h-4 text-zru-green" />
               </div>
             </Link>
@@ -67,14 +64,14 @@ export default function PartnersSection() {
               transition={{ delay: i * 0.1, duration: 1, ease: [0.16, 1, 0.3, 1] }}
               className="group relative"
             >
-              <div className="relative h-48 card-green backdrop-blur-xl border rounded-2xl p-8 flex items-center justify-center">
+              <div className="relative h-44 bg-white border border-black/10 hover:border-zru-green/60 shadow-md hover:shadow-xl rounded-2xl p-6 flex items-center justify-center transition-all duration-300">
                 <div className="relative w-full h-full">
                   <Image 
                     src={sponsor.logo} 
                     alt={sponsor.name} 
                     fill 
                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 33vw, 400px"
-                    className="object-contain filter grayscale brightness-200 group-hover:grayscale-0 group-hover:brightness-100 transition-all duration-700" 
+                    className="object-contain transition-all duration-500" 
                   />
                 </div>
                 {/* Accent line */}

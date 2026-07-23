@@ -60,7 +60,7 @@ export default function Footer() {
   }
 
   return (
-    <footer className="bg-rich-black text-white relative pt-20 pb-8 border-t-[12px] border-zru-green overflow-hidden">
+    <footer className="bg-milk-white text-black relative pt-20 pb-8 border-t-8 border-zru-green overflow-hidden">
       {/* Zero-Overhead Hardware-Accelerated 3D ZRU Crest Meteor Field */}
       <FooterMeteorField />
 
@@ -68,7 +68,7 @@ export default function Footer() {
         
         {/* Massive Typography & Embossed Logo Banner */}
         <div className="mb-16 relative min-h-[240px] md:min-h-[320px] flex items-center justify-between overflow-hidden rounded-2xl p-4 md:p-8">
-           <h2 className="text-[12vw] md:text-[8vw] font-heading font-black leading-[0.85] tracking-tighter text-white/5 uppercase select-none relative z-10">
+           <h2 className="text-[12vw] md:text-[8vw] font-heading font-black leading-[0.85] tracking-tighter text-black/10 uppercase select-none relative z-10">
              Zimbabwe<br />Rugby
            </h2>
 
