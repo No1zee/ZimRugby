@@ -1,111 +1,114 @@
 "use client";
 
 import { motion } from "framer-motion";
-import Link from "next/link";
-import { ArrowRight } from "lucide-react";
+import Image from "next/image";
+import { ArrowRight, Sparkles, ShieldCheck } from "lucide-react";
 
 export default function ClubhouseHero() {
   return (
-    <section className="relative h-screen min-h-[700px] w-full overflow-hidden flex flex-col">
-      
-      {/* Background Layer */}
+    <section className="relative min-h-[85vh] lg:min-h-[90vh] w-full flex items-center justify-center overflow-hidden bg-[#0E0E0E]">
+      {/* Background Image & Lighting Overlay */}
       <div className="absolute inset-0 z-0">
-        <div className="absolute inset-0 bg-linear-to-b from-black/60 via-black/20 to-clubhouse-charcoal z-10" />
-        <div className="absolute inset-0 bg-[url('/images/clubhouse/hero-texture.png')] bg-cover bg-center grayscale scale-110 opacity-40 animate-slow-zoom" />
-        
-        {/* Abstract Rugby Graphics (Simulated with CSS/Motion) */}
-        <motion.div 
-          animate={{ 
-            opacity: [0.1, 0.2, 0.1],
-            scale: [1, 1.1, 1],
-          }}
-          transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
-          className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(0,77,46,0.15)_0%,transparent_70%)]"
+        <Image
+          src="/images/hero/lady-sables.webp"
+          alt="Sables Rugby Clubhouse Flagship"
+          fill
+          priority
+          quality={75}
+          className="object-cover object-center grayscale-[0.35] contrast-125 scale-105"
         />
+        {/* Stadium Ambient Gradient & Radial Lighting */}
+        <div className="absolute inset-0 bg-gradient-to-t from-[#0E0E0E] via-[#0E0E0E]/70 to-[#0E0E0E]/40 z-10" />
+        <div className="absolute inset-0 bg-gradient-to-r from-[#0E0E0E]/90 via-transparent to-[#0E0E0E]/90 z-10" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[70vw] h-[70vw] rounded-full bg-[#006747]/20 blur-[140px] pointer-events-none mix-blend-screen z-10" />
       </div>
 
-      {/* Content Layer */}
-      <div className="relative z-20 flex-1 flex flex-col justify-center items-center text-center px-6">
+      {/* Hero Content Container */}
+      <div className="relative z-20 text-center px-6 max-w-5xl mx-auto flex flex-col items-center gap-6 pt-24 pb-16">
+        
+        {/* Institutional Badge */}
         <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+          className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-[#006747]/30 border border-[#006747]/50 backdrop-blur-md"
+        >
+          <ShieldCheck className="w-4 h-4 text-[#84d7af]" />
+          <span className="text-xs uppercase tracking-[0.25em] font-extrabold text-[#84d7af]">
+            OFFICIAL ZIMBABWE RUGBY UNION FLAGSHIP STORE
+          </span>
+        </motion.div>
+
+        {/* Display Headline */}
+        <motion.h1
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
-          className="max-w-4xl"
+          transition={{ duration: 0.9, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
+          className="text-4xl xs:text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-black uppercase italic tracking-tighter text-white leading-[0.95] drop-shadow-2xl"
+          style={{ fontFamily: "var(--font-montserrat, 'Montserrat'), sans-serif" }}
         >
-          <motion.div 
-            initial={{ opacity: 0, letterSpacing: "1.5em" }}
-            animate={{ opacity: 1, letterSpacing: "0.5em" }}
-            transition={{ duration: 1.5, ease: "easeOut" }}
-            className="flex items-center justify-center gap-3 mb-6"
-          >
-            <div className="w-1.5 h-1.5 rounded-full bg-zru-green animate-pulse" />
-            <span className="block text-xs md:text-sm font-bold uppercase text-zru-green whitespace-nowrap">
-              Members Only Access
-            </span>
-          </motion.div>
-          <h1 className="text-5xl md:text-8xl lg:text-9xl font-black uppercase tracking-tighter text-white leading-[1.1] mb-10 overflow-hidden">
-            <motion.span
-              initial={{ y: "100%" }}
-              animate={{ y: 0 }}
-              transition={{ duration: 1, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
-              className="block"
-            >
-              THE ELITE
-            </motion.span>
-            <motion.span 
-              initial={{ y: "100%" }}
-              animate={{ y: 0 }}
-              transition={{ duration: 1, delay: 0.4, ease: [0.16, 1, 0.3, 1] }}
-              className="text-transparent bg-clip-text bg-linear-to-r from-zru-green via-white/80 to-white/20 block"
-            >
-              RESERVE
-            </motion.span>
-          </h1>
-          <motion.p 
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 1.5, delay: 0.8 }}
-            className="text-sm md:text-lg text-white/60 max-w-xl mx-auto mb-12 font-medium leading-[1.6] tracking-wide"
-          >
-            Strictly limited allocations. The 2026 archival collection is restricted to verified members and players. Engineered for the peak. Reserved for the legacy.
-          </motion.p>
+          THE OFFICIAL <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#84d7af] via-[#006747] to-[#84d7af]">SABLES CLUBHOUSE</span>
+        </motion.h1>
 
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
-            <Link 
-              href="/clubhouse/kits"
-              className="group relative px-10 py-5 bg-white text-clubhouse-charcoal text-xs font-black uppercase tracking-[0.2em] overflow-hidden transition-all hover:scale-105"
-            >
-              <div className="absolute inset-0 bg-zru-green -translate-x-full group-hover:translate-x-0 transition-transform duration-500" />
-              <span className="relative z-10 flex items-center">
-                Secure Allocation <ArrowRight className="ml-2 w-4 h-4" />
-              </span>
-            </Link>
-            <Link 
-              href="/clubhouse/lifestyle"
-              className="px-10 py-5 border border-white/20 text-white text-xs font-black uppercase tracking-[0.2em] hover:bg-white/5 transition-all hover:scale-105"
-            >
-              Apply For Membership
-            </Link>
+        {/* Subtitle */}
+        <motion.p
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
+          className="text-base sm:text-lg md:text-xl font-medium text-[#bec9c1] max-w-2xl tracking-wide"
+        >
+          Match-Grade Performance Apparel &amp; Heritage Athletics. Engineered for international battle. Built for Sable pride.
+        </motion.p>
+
+        {/* Action Buttons */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
+          className="flex flex-wrap justify-center gap-4 mt-6"
+        >
+          <a
+            href="#drop-section"
+            className="clip-slanted bg-[#006747] hover:bg-[#84d7af] text-white hover:text-[#003825] font-extrabold text-xs sm:text-sm uppercase tracking-[0.2em] px-8 py-4 transition-all duration-300 transform hover:scale-105 flex items-center gap-3 shadow-2xl shadow-[#006747]/40"
+          >
+            <span>EXPLORE KITS</span>
+            <ArrowRight className="w-4 h-4" />
+          </a>
+
+          <a
+            href="#collections-section"
+            className="clip-slanted-sm bg-black/40 hover:bg-white/10 text-[#84d7af] border border-[#006747]/60 backdrop-blur-md font-extrabold text-xs sm:text-sm uppercase tracking-[0.2em] px-8 py-4 transition-all duration-300 flex items-center gap-2"
+          >
+            <Sparkles className="w-4 h-4 text-[#84d7af]" />
+            <span>LIMITED HERITAGE DROP</span>
+          </a>
+        </motion.div>
+
+        {/* Quick Highlights Bar */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 1, delay: 0.5 }}
+          className="grid grid-cols-2 md:grid-cols-4 gap-6 sm:gap-12 mt-12 pt-8 border-t border-white/10 w-full max-w-3xl text-left"
+        >
+          <div>
+            <span className="block text-2xl sm:text-3xl font-black text-white italic">100%</span>
+            <span className="text-[11px] uppercase tracking-widest text-[#88938c] font-bold">Official Match Spec</span>
+          </div>
+          <div>
+            <span className="block text-2xl sm:text-3xl font-black text-[#84d7af] italic">PRO-VENT</span>
+            <span className="text-[11px] uppercase tracking-widest text-[#88938c] font-bold">Technical Mesh Tech</span>
+          </div>
+          <div>
+            <span className="block text-2xl sm:text-3xl font-black text-white italic">GLOBAL</span>
+            <span className="text-[11px] uppercase tracking-widest text-[#88938c] font-bold">Express Shipping</span>
+          </div>
+          <div>
+            <span className="block text-2xl sm:text-3xl font-black text-[#84d7af] italic">ZRU 1895</span>
+            <span className="text-[11px] uppercase tracking-widest text-[#88938c] font-bold">Legacy Craftsmanship</span>
           </div>
         </motion.div>
-      </div>
 
-      {/* Benefit Strip */}
-      <div className="relative z-20 bg-white/5 backdrop-blur-sm border-t border-white/10">
-        <div className="max-w-[1440px] mx-auto grid grid-cols-2 md:grid-cols-4 divide-x divide-white/10 py-5">
-          {[
-            "White Glove Delivery",
-            "Concierge Support",
-            "Tier-1 Early Access",
-            "Bespoke Zim Craftsmanship"
-          ].map((benefit) => (
-            <div key={benefit} className="flex justify-center items-center px-4">
-              <span className="text-[9px] md:text-[10px] font-bold uppercase tracking-[0.2em] text-white/50 text-center">
-                {benefit}
-              </span>
-            </div>
-          ))}
-        </div>
       </div>
     </section>
   );
