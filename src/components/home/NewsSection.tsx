@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { ArrowRight, Calendar, ChevronRight, Share2 } from "lucide-react";
+import { ArrowRight, ChevronRight } from "lucide-react";
 import SlantedButton from "../ui/SlantedButton";
 import Link from "next/link";
 import Image from "next/image";
@@ -76,80 +76,82 @@ export default function NewsSection() {
           {/* Featured Article */}
           <motion.div 
             variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }}
-            className="lg:col-span-2 relative group overflow-hidden rounded-2xl h-[500px]"
+            className="lg:col-span-2 relative group overflow-hidden rounded-2xl h-[420px] border border-black/10 hover:border-zru-green/50 shadow-md hover:shadow-xl transition-all duration-300 bg-white"
           >
-             {/* Background Image Placeholder */}
-             <div className="absolute inset-0 bg-gray-800 overflow-hidden">
-                <motion.div 
-                   className="w-full h-full bg-linear-to-br from-green-900 to-black opacity-80" 
-                   whileHover={{ scale: 1.05 }}
-                   transition={{ duration: 0.7 }}
+             {/* Background Image Container */}
+             <div className="absolute inset-0 overflow-hidden">
+                <Image
+                  src={newsItems[0].image}
+                  alt={newsItems[0].title}
+                  fill
+                  sizes="(max-width: 1024px) 100vw, 66vw"
+                  className="object-cover group-hover:scale-105 transition-transform duration-700"
                 />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent z-10" />
              </div>
-             <div className="absolute inset-0 bg-linear-to-t from-black via-black/50 to-transparent" />
 
-             <div className="absolute bottom-0 left-0 p-8 w-full z-10">
-                <div className="flex gap-3 mb-4">
-                  <span className="bg-zru-green text-white text-xs font-bold px-3 py-1 rounded uppercase tracking-wider">
+             <div className="absolute bottom-0 left-0 p-8 w-full z-20">
+                <div className="flex items-center gap-3 mb-3">
+                  <span className="bg-zru-green text-white text-[10px] font-extrabold px-3 py-1 rounded-full uppercase tracking-wider">
                     {newsItems[0].category}
                   </span>
-                  <span className="text-gray-300 text-xs font-bold flex items-center gap-1">
-                    <Calendar className="w-3 h-3" /> {newsItems[0].date}
+                  <span className="text-white/70 text-xs font-bold uppercase tracking-wider">
+                    {newsItems[0].date}
                   </span>
                 </div>
-                <Link href={`/news/${newsItems[0].id}`}>
-                  <h3 className="text-3xl md:text-4xl font-heading text-white mb-4 hover:text-zru-green transition-colors duration-300 leading-tight">
-                    {newsItems[0].title}
-                  </h3>
-                </Link>
-                <p className="text-gray-300 font-body text-base md:text-lg mb-6 max-w-2xl line-clamp-2">
+                <h3 className="heading-2 text-white uppercase italic tracking-tight mb-2 line-clamp-2">
+                  {newsItems[0].title}
+                </h3>
+                <p className="text-white/80 text-sm font-sans line-clamp-2 max-w-2xl mb-4">
                   {newsItems[0].excerpt}
                 </p>
-                <div className="flex items-center gap-4">
-                   <SlantedButton variant="primary" size="sm" className="gap-2">
-                     READ FULL STORY
-                     <ChevronRight className="w-4 h-4" />
-                   </SlantedButton>
-                   <button className="p-3 bg-white/10 rounded-full hover:bg-white/20 text-white transition-colors">
-                     <Share2 className="w-5 h-5" />
-                   </button>
-                </div>
+                <Link
+                  href={`/media`}
+                  className="inline-flex items-center gap-2 text-xs font-extrabold text-[#84d7af] uppercase tracking-widest hover:text-white transition-colors"
+                >
+                  <span>READ FULL DISPATCH</span>
+                  <ArrowRight className="w-4 h-4" />
+                </Link>
              </div>
           </motion.div>
 
           {/* Side Articles */}
-          <div className="flex flex-col gap-8 h-full">
+          <div className="flex flex-col gap-6 h-full">
             {newsItems.slice(1).map((item) => (
               <motion.div 
                 key={item.id} 
                 variants={{ hidden: { opacity: 0, x: 20 }, visible: { opacity: 1, x: 0 } }}
-                className="flex gap-4 group cursor-pointer h-full"
+                className="flex gap-4 group cursor-pointer bg-white p-4 rounded-2xl border border-black/10 hover:border-zru-green/50 shadow-sm hover:shadow-md transition-all duration-300"
               >
-                <div className="w-1/3 h-full min-h-[120px] bg-gray-800 rounded-xl overflow-hidden relative">
-                    <motion.div 
-                       className="absolute inset-0 bg-linear-to-br from-gray-700 to-gray-900" 
-                       whileHover={{ scale: 1.1 }}
-                       transition={{ duration: 0.5 }}
-                    />
+                <div className="w-1/3 aspect-video bg-black/5 rounded-xl overflow-hidden relative shrink-0">
+                  <Image
+                    src={item.image}
+                    alt={item.title}
+                    fill
+                    sizes="160px"
+                    className="object-cover group-hover:scale-105 transition-transform duration-500"
+                  />
                 </div>
-                <div className="flex-1 flex flex-col justify-center">
-                   <div className="flex gap-2 mb-2">
-                      <span className="text-zru-green text-[10px] font-bold uppercase tracking-wider">
-                        {item.category}
-                      </span>
-                      <span className="text-gray-500 text-[10px]">&bull;</span>
-                      <span className="text-gray-500 text-[10px] font-bold">
-                        {item.date}
-                      </span>
+                <div className="flex-1 flex flex-col justify-between">
+                   <div>
+                     <div className="flex items-center gap-2 mb-1">
+                        <span className="text-zru-green text-[10px] font-extrabold uppercase tracking-wider">
+                          {item.category}
+                        </span>
+                        <span className="text-black/30 text-[10px]">&bull;</span>
+                        <span className="text-black/50 text-[10px] font-bold uppercase">
+                          {item.date}
+                        </span>
+                     </div>
+                     <Link href={`/media`}>
+                       <h4 className="heading-3 text-black text-sm hover:text-zru-green transition-colors leading-snug line-clamp-2">
+                         {item.title}
+                       </h4>
+                     </Link>
                    </div>
-                   <Link href={`/news/${item.id}`}>
-                     <h4 className="font-heading text-xl text-white hover:text-zru-green transition-colors leading-tight mb-2 line-clamp-2">
-                       {item.title}
-                     </h4>
-                   </Link>
-                   <div className="mt-auto">
-                     <span className="text-xs font-bold text-gray-400 group-hover:text-white flex items-center gap-1 transition-colors">
-                       Read More <ChevronRight className="w-3 h-3" />
+                   <div className="mt-2">
+                     <span className="text-[11px] font-extrabold text-zru-green group-hover:text-black flex items-center gap-1 transition-colors uppercase tracking-wider">
+                       Read Story <ChevronRight className="w-3 h-3" />
                      </span>
                    </div>
                 </div>
@@ -157,13 +159,6 @@ export default function NewsSection() {
             ))}
           </div>
         </motion.div>
-
-        <div className="mt-12 md:hidden flex justify-center">
-            <SlantedButton variant="outline" className="gap-2">
-                VIEW ALL NEWS
-                <ArrowRight className="w-5 h-5" />
-            </SlantedButton>
-        </div>
       </div>
     </section>
   );

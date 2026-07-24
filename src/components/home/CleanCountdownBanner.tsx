@@ -3,8 +3,6 @@
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
 
-import { motion } from "framer-motion";
-
 export default function CleanCountdownBanner() {
   const [timeLeft, setTimeLeft] = useState({
     days: 354,
@@ -35,101 +33,68 @@ export default function CleanCountdownBanner() {
   }, []);
 
   return (
-    <section
-      className="py-12 sm:py-16 text-white border-y border-white/10 relative overflow-hidden select-none"
-      style={{
-        background: "radial-gradient(circle at 50% 25%, #007A50 0%, #004D2C 60%, #002D1A 100%)",
-      }}
-    >
-      {/* Pitch Grid Overlay */}
-      <div
+    <section className="py-16 sm:py-20 bg-zru-green text-white border-y border-white/10 relative overflow-hidden select-none">
+      
+      {/* Stadium Pitch Line Markings & Diagonal Stripe Brand Motif */}
+      <div 
         className="absolute inset-0 opacity-10 pointer-events-none"
         style={{
-          backgroundImage: "radial-gradient(circle, #ffffff 1px, transparent 1px)",
-          backgroundSize: "20px 20px",
+          backgroundImage: "linear-gradient(135deg, rgba(255,255,255,0.2) 25%, transparent 25%, transparent 50%, rgba(255,255,255,0.2) 50%, rgba(255,255,255,0.2) 75%, transparent 75%, transparent)",
+          backgroundSize: "40px 40px"
         }}
       />
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_0%,rgba(0,0,0,0.35)_100%)] pointer-events-none" />
 
-      {/* Left Player SVG Cutout (Slide-in from Left on Scroll) */}
-      <motion.div
-        initial={{ opacity: 0, x: -120 }}
-        whileInView={{ opacity: 1, x: 0 }}
-        viewport={{ once: true, amount: 0.2 }}
-        transition={{ duration: 0.8, ease: "easeOut", delay: 0.1 }}
-        className="absolute -bottom-2 -left-4 sm:left-0 lg:left-8 w-32 xs:w-40 sm:w-56 md:w-72 lg:w-80 h-auto pointer-events-none z-10"
-      >
-        <Image
-          src="/images/cutouts/3.svg"
-          alt="Zimbabwe Rugby Cutout Left"
-          width={360}
-          height={480}
-          className="object-contain drop-shadow-[0_15px_30px_rgba(0,0,0,0.7)]"
-          unoptimized
-          priority
-        />
-      </motion.div>
-
-      {/* Right Player SVG Cutout (Slide-in from Right on Scroll) */}
-      <motion.div
-        initial={{ opacity: 0, x: 120 }}
-        whileInView={{ opacity: 1, x: 0 }}
-        viewport={{ once: true, amount: 0.2 }}
-        transition={{ duration: 0.8, ease: "easeOut", delay: 0.1 }}
-        className="absolute -bottom-2 -right-4 sm:right-0 lg:right-8 w-32 xs:w-40 sm:w-56 md:w-72 lg:w-80 h-auto pointer-events-none z-10"
-      >
-        <Image
-          src="/images/cutouts/1.svg"
-          alt="Zimbabwe Rugby Cutout Right"
-          width={360}
-          height={480}
-          className="object-contain drop-shadow-[0_15px_30px_rgba(0,0,0,0.7)]"
-          unoptimized
-          priority
-        />
-      </motion.div>
-
-      <div className="relative z-20 max-w-[1360px] mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center text-center">
+      {/* Hero Content Container */}
+      <div className="relative z-20 max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center text-center space-y-8">
         
-        {/* Title */}
-        <h3 className="text-xs sm:text-sm font-bold tracking-[0.3em] uppercase text-white/90 mb-8 font-heading">
-          ROAD TO AUSTRALIA 2027
-        </h3>
+        {/* Section Tag */}
+        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 border border-white/20 backdrop-blur-md">
+          <span className="text-[10px] sm:text-xs font-black tracking-[0.25em] uppercase text-white font-heading">
+            OFFICIAL CAMPAIGN • ROAD TO AUSTRALIA 2027
+          </span>
+        </div>
 
-        {/* Numeric Counter Grid */}
-        <div className="grid grid-cols-4 gap-6 sm:gap-12 md:gap-16 max-w-2xl mx-auto">
+        {/* Headline */}
+        <h2 className="text-3xl sm:text-5xl md:text-6xl font-heading font-black uppercase italic tracking-tight text-white drop-shadow-md">
+          RUGBY WORLD CUP QUALIFICATION
+        </h2>
+
+        {/* Large Prominent Stat Digital Block Tiles */}
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 sm:gap-6 md:gap-8 w-full max-w-3xl mx-auto pt-2">
           
-          <div className="flex flex-col items-center">
-            <span className="text-2xl sm:text-4xl md:text-5xl font-extrabold font-heading tracking-tight">
+          <div className="flex flex-col items-center justify-center p-4 sm:p-6 rounded-2xl bg-black/25 border border-white/15 backdrop-blur-md shadow-xl">
+            <span className="text-4xl sm:text-5xl md:text-6xl font-black font-heading tracking-tight text-white">
               {String(timeLeft.days).padStart(3, "0")}
             </span>
-            <span className="text-[10px] sm:text-xs font-bold tracking-widest uppercase text-white/70 mt-1">
+            <span className="text-[10px] sm:text-xs font-extrabold tracking-[0.2em] uppercase text-[#84d7af] mt-2 font-heading">
               DAYS
             </span>
           </div>
 
-          <div className="flex flex-col items-center">
-            <span className="text-2xl sm:text-4xl md:text-5xl font-extrabold font-heading tracking-tight">
+          <div className="flex flex-col items-center justify-center p-4 sm:p-6 rounded-2xl bg-black/25 border border-white/15 backdrop-blur-md shadow-xl">
+            <span className="text-4xl sm:text-5xl md:text-6xl font-black font-heading tracking-tight text-white">
               {String(timeLeft.hours).padStart(2, "0")}
             </span>
-            <span className="text-[10px] sm:text-xs font-bold tracking-widest uppercase text-white/70 mt-1">
+            <span className="text-[10px] sm:text-xs font-extrabold tracking-[0.2em] uppercase text-[#84d7af] mt-2 font-heading">
               HOURS
             </span>
           </div>
 
-          <div className="flex flex-col items-center">
-            <span className="text-2xl sm:text-4xl md:text-5xl font-extrabold font-heading tracking-tight">
+          <div className="flex flex-col items-center justify-center p-4 sm:p-6 rounded-2xl bg-black/25 border border-white/15 backdrop-blur-md shadow-xl">
+            <span className="text-4xl sm:text-5xl md:text-6xl font-black font-heading tracking-tight text-white">
               {String(timeLeft.mins).padStart(2, "0")}
             </span>
-            <span className="text-[10px] sm:text-xs font-bold tracking-widest uppercase text-white/70 mt-1">
+            <span className="text-[10px] sm:text-xs font-extrabold tracking-[0.2em] uppercase text-[#84d7af] mt-2 font-heading">
               MINS
             </span>
           </div>
 
-          <div className="flex flex-col items-center">
-            <span className="text-2xl sm:text-4xl md:text-5xl font-extrabold font-heading tracking-tight">
+          <div className="flex flex-col items-center justify-center p-4 sm:p-6 rounded-2xl bg-black/25 border border-white/15 backdrop-blur-md shadow-xl">
+            <span className="text-4xl sm:text-5xl md:text-6xl font-black font-heading tracking-tight text-white">
               {String(timeLeft.secs).padStart(2, "0")}
             </span>
-            <span className="text-[10px] sm:text-xs font-bold tracking-widest uppercase text-white/70 mt-1">
+            <span className="text-[10px] sm:text-xs font-extrabold tracking-[0.2em] uppercase text-[#84d7af] mt-2 font-heading">
               SECS
             </span>
           </div>

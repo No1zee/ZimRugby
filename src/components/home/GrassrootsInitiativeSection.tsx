@@ -131,26 +131,38 @@ export default function GrassrootsInitiativeSection() {
           ))}
         </div>
 
-        {/* Impact Metrics Banner (Matching Hub Institutional System) */}
-        <div className="bg-gradient-to-r from-[#003822] via-[#002B19] to-[#001D11] border border-emerald-500/30 rounded-2xl p-6 sm:p-8 shadow-2xl grid grid-cols-2 md:grid-cols-4 gap-6 text-center text-white">
-          <div className="space-y-1">
-            <span className="font-heading font-black text-3xl sm:text-4xl text-emerald-400 block">15,000+</span>
-            <span className="text-[10px] sm:text-xs font-bold text-white/70 uppercase tracking-widest block font-heading">Active Youth Players</span>
+        {/* Impact Metrics Banner (Icon-Based Stat Grid) */}
+        <div className="bg-white border border-black/10 rounded-2xl p-6 sm:p-8 shadow-lg grid grid-cols-2 md:grid-cols-4 gap-6 text-center text-black">
+          <div className="flex flex-col items-center space-y-2">
+            <div className="w-12 h-12 rounded-xl bg-zru-green/10 border border-zru-green/20 flex items-center justify-center text-zru-green">
+              <Users className="w-6 h-6" />
+            </div>
+            <span className="font-heading font-black text-3xl text-zru-green block">15,000+</span>
+            <span className="text-[10px] sm:text-xs font-extrabold text-black/60 uppercase tracking-widest block font-heading">Active Youth Players</span>
           </div>
 
-          <div className="space-y-1 border-l border-emerald-800/60 pl-6">
-            <span className="font-heading font-black text-3xl sm:text-4xl text-emerald-400 block">120+</span>
-            <span className="text-[10px] sm:text-xs font-bold text-white/70 uppercase tracking-widest block font-heading">Schools & Clubs</span>
+          <div className="flex flex-col items-center space-y-2">
+            <div className="w-12 h-12 rounded-xl bg-zru-green/10 border border-zru-green/20 flex items-center justify-center text-zru-green">
+              <GraduationCap className="w-6 h-6" />
+            </div>
+            <span className="font-heading font-black text-3xl text-zru-green block">120+</span>
+            <span className="text-[10px] sm:text-xs font-extrabold text-black/60 uppercase tracking-widest block font-heading">Schools &amp; Clubs</span>
           </div>
 
-          <div className="space-y-1 border-l-0 md:border-l border-emerald-800/60 pl-0 md:pl-6">
-            <span className="font-heading font-black text-3xl sm:text-4xl text-emerald-400 block">10</span>
-            <span className="text-[10px] sm:text-xs font-bold text-white/70 uppercase tracking-widest block font-heading">Provincial Unions</span>
+          <div className="flex flex-col items-center space-y-2">
+            <div className="w-12 h-12 rounded-xl bg-zru-green/10 border border-zru-green/20 flex items-center justify-center text-zru-green">
+              <Trophy className="w-6 h-6" />
+            </div>
+            <span className="font-heading font-black text-3xl text-zru-green block">10</span>
+            <span className="text-[10px] sm:text-xs font-extrabold text-black/60 uppercase tracking-widest block font-heading">Provincial Unions</span>
           </div>
 
-          <div className="space-y-1 border-l border-emerald-800/60 pl-6">
-            <span className="font-heading font-black text-3xl sm:text-4xl text-emerald-400 block">45%</span>
-            <span className="text-[10px] sm:text-xs font-bold text-white/70 uppercase tracking-widest block font-heading">Female Participation</span>
+          <div className="flex flex-col items-center space-y-2">
+            <div className="w-12 h-12 rounded-xl bg-zru-green/10 border border-zru-green/20 flex items-center justify-center text-zru-green">
+              <CheckCircle2 className="w-6 h-6" />
+            </div>
+            <span className="font-heading font-black text-3xl text-zru-green block">45%</span>
+            <span className="text-[10px] sm:text-xs font-extrabold text-black/60 uppercase tracking-widest block font-heading">Female Participation</span>
           </div>
         </div>
 
