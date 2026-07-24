@@ -75,9 +75,6 @@ export default function UnifiedHubGrid() {
         
         {/* Section Title */}
         <div className="text-center mb-8 md:mb-12">
-          <span className="text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.3em] text-[#006747] block mb-1">
-            ZIMRUGBY CENTRAL HUB
-          </span>
           <h2 className="text-black text-2xl sm:text-3xl lg:text-4xl font-black uppercase tracking-tight font-heading">
             MATCHDAY, MEDIA & MERCHANDISE
           </h2>

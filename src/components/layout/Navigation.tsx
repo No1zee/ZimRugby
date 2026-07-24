@@ -178,14 +178,14 @@ export default function Navigation() {
             : "bg-transparent py-5"
         }`}
       >
-        <div className="max-w-[1440px] mx-auto px-6 flex items-center justify-between gap-4">
+        <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between gap-2 lg:gap-4">
           
           {/* Logo Brand Block (Expands on homepage top load, shrinks smoothly on scroll) */}
-          <Link href="/" className="flex items-center gap-3 md:gap-4 group z-50 transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]">
+          <Link href="/" className="flex items-center gap-2.5 sm:gap-4 group z-50 transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] shrink-0">
             <div className={`relative transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:rotate-6 flex items-center justify-center shrink-0 ${
               pathname === "/" && !isScrolled 
-                ? "w-16 h-16 md:w-20 md:h-20 drop-shadow-[0_10px_25px_rgba(0,0,0,0.5)]" 
-                : "w-10 h-10 md:w-12 md:h-12"
+                ? "w-12 h-12 sm:w-16 sm:h-16 md:w-20 md:h-20 drop-shadow-[0_10px_25px_rgba(0,0,0,0.5)]" 
+                : "w-9 h-9 sm:w-10 sm:h-10 md:w-12 md:h-12"
             }`}>
               <Image 
                 src="/zru logo main.svg" 
@@ -199,15 +199,15 @@ export default function Navigation() {
             <div className="flex flex-col justify-center">
               <span className={`font-heading tracking-wider leading-none transition-all duration-500 ${
                 pathname === "/" && !isScrolled 
-                  ? "text-2xl md:text-3xl text-white font-black drop-shadow-md" 
-                  : `text-lg md:text-xl ${showOpaqueHeader ? "text-black" : "text-white"}`
+                  ? "text-lg sm:text-2xl md:text-3xl text-white font-black drop-shadow-md" 
+                  : `text-sm sm:text-lg md:text-xl ${showOpaqueHeader ? "text-black" : "text-white"}`
               }`}>
                 ZIMBABWE
               </span>
               <span className={`font-subheading text-[#006747] font-black leading-none mt-1 transition-all duration-500 ${
                 pathname === "/" && !isScrolled 
-                  ? "text-[10px] md:text-[12px] tracking-[0.5em]" 
-                  : "text-[8px] md:text-[9px] tracking-[0.4em]"
+                  ? "text-[8px] sm:text-[10px] md:text-[12px] tracking-[0.4em]" 
+                  : "text-[7px] sm:text-[8px] md:text-[9px] tracking-[0.3em]"
               }`}>
                 RUGBY UNION
               </span>
@@ -215,19 +215,19 @@ export default function Navigation() {
           </Link>
  
           {/* Desktop Nav Items */}
-          <div className="hidden lg:flex items-center gap-8 xl:gap-10">
-            <div className="flex items-center gap-8 xl:gap-10">
+          <div className="hidden lg:flex items-center gap-2 xl:gap-5 2xl:gap-8 flex-1 justify-center max-w-full overflow-hidden px-2">
+            <div className="flex items-center gap-2.5 xl:gap-5 2xl:gap-8">
               {dynamicNavItems.map((item) => (
                 <div 
                   key={item.label}
-                  className="relative group/nav"
+                  className="relative group/nav shrink-0"
                   onMouseEnter={() => setActiveDropdown(item.label)}
                   onMouseLeave={() => setActiveDropdown(null)}
                 >
                   <Link 
                     href={item.href}
                     className={`
-                      flex items-center gap-1.5 py-2 font-subheading tracking-widest text-[10px] uppercase font-black transition-colors relative
+                      flex items-center gap-1 xl:gap-1.5 py-2 font-subheading tracking-wider text-[9px] xl:text-[10px] 2xl:text-xs uppercase font-black transition-colors relative whitespace-nowrap
                       ${isActive(item.href) ? "text-zru-green" : showOpaqueHeader ? "text-black/70 hover:text-black" : "text-white/70 hover:text-white"}
                     `}
                   >
@@ -240,7 +240,7 @@ export default function Navigation() {
                     )}
  
                     {item.label}
-                    {item.children && <ChevronDown className="w-3.5 h-3.5 transition-transform group-hover/nav:rotate-180" />}
+                    {item.children && <ChevronDown className="w-3 h-3 xl:w-3.5 xl:h-3.5 transition-transform group-hover/nav:rotate-180 shrink-0" />}
                   </Link>
  
                   {/* Dropdown Menu (Mega or Standard) */}
@@ -253,7 +253,7 @@ export default function Navigation() {
                           exit={{ opacity: 0, y: 10, scale: 0.95 }}
                           transition={{ duration: 0.2 }}
                           className={`absolute top-full left-1/2 -translate-x-1/2 mt-2 bg-zru-green/95 backdrop-blur-xl rounded-xl shadow-2xl py-4 border border-white/10 overflow-hidden ${
-                            item.isMega ? 'w-[400px] grid grid-cols-2 gap-x-4 px-4' : 'min-w-[220px] px-2'
+                            item.isMega ? 'w-[380px] xl:w-[400px] grid grid-cols-2 gap-x-4 px-4' : 'min-w-[220px] px-2'
                           }`}
                         >
                           {item.children.map((child) => (
@@ -300,24 +300,24 @@ export default function Navigation() {
             </SlantedButton>
           </div>
 
-          {/* Desktop Actions */}
-          <div className="hidden lg:flex items-center gap-4 shrink-0">
+          {/* Desktop Actions (Always pinned right & protected from truncation) */}
+          <div className="hidden lg:flex items-center gap-2 xl:gap-4 shrink-0 z-50">
             <button 
               onClick={() => setIsSearchOpen(true)}
-              className={`p-2.5 rounded-full transition-all cursor-pointer ${showOpaqueHeader ? "text-black/70 hover:text-black hover:bg-black/5" : "text-white/70 hover:text-white hover:bg-white/10"}`}
+              className={`p-2 xl:p-2.5 rounded-full transition-all cursor-pointer ${showOpaqueHeader ? "text-black/70 hover:text-black hover:bg-black/5" : "text-white/70 hover:text-white hover:bg-white/10"}`}
               aria-label="Search site"
               title="Search"
             >
-              <Search className="w-5 h-5" />
+              <Search className="w-4 h-4 xl:w-5 xl:h-5" />
             </button>
             <SlantedButton 
               href="/login" 
               variant="primary" 
               size="sm"
             >
-              <div className="flex items-center gap-2">
-                <User className="w-4 h-4" />
-                <span>Sign In</span>
+              <div className="flex items-center gap-1.5 xl:gap-2">
+                <User className="w-3.5 h-3.5 xl:w-4 xl:h-4" />
+                <span className="text-[10px] xl:text-xs font-black uppercase tracking-wider whitespace-nowrap">Sign In</span>
               </div>
             </SlantedButton>
           </div>

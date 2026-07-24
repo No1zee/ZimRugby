@@ -73,9 +73,6 @@ export default function SponsorGrid() {
         
         {/* ── 1. Minimal Header ── */}
         <div className="text-center space-y-1.5">
-          <span className="text-[10px] font-extrabold uppercase tracking-[0.3em] text-[#006747]">
-            COMMERCIAL PARTNERS & SPONSORS
-          </span>
           <h2 className="font-heading text-2xl lg:text-3xl font-black uppercase text-rich-black tracking-tight">
             POWERING ZIMBABWE RUGBY
           </h2>
