@@ -194,15 +194,15 @@ export default function MatchdayVideoHighlights({
               </button>
             </div>
 
-            {/* Prominent YouTube Channel CTA Button */}
+            {/* Prominent ZRU Green YouTube Channel CTA Button */}
             {showChannelLink && (
               <a
                 href="https://www.youtube.com/@ZimbabweRugbyUnion"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 px-3.5 py-2 bg-[#FF0000] hover:bg-[#CC0000] text-white rounded-xl text-xs font-heading font-black tracking-wider uppercase transition-all duration-300 shadow-sm hover:shadow-md group"
+                className="inline-flex items-center gap-2 px-3.5 py-2 bg-[#006747] hover:bg-[#004d35] text-white rounded-xl text-xs font-heading font-black tracking-wider uppercase transition-all duration-300 shadow-sm hover:shadow-md group border border-[#006747]"
               >
-                <Youtube className="w-4 h-4 fill-current" />
+                <Youtube className="w-4 h-4 fill-current text-white" />
                 <span className="hidden sm:inline">ZRU YOUTUBE</span>
                 <ExternalLink className="w-3.5 h-3.5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5 opacity-80" />
               </a>
