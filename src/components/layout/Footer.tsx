@@ -3,9 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
-import { Facebook, Twitter, Instagram, Youtube, Linkedin, ArrowRight, CheckCircle } from "lucide-react";
-import FooterMeteorField from "./FooterMeteorField";
+import { Facebook, Twitter, Instagram, Youtube, Linkedin } from "lucide-react";
 
 const socialLinks = [
   { Icon: Facebook, href: "https://facebook.com/zimbabwerugby", label: "FB" },
@@ -15,169 +13,131 @@ const socialLinks = [
   { Icon: Linkedin, href: "https://linkedin.com/zimbabwerugby", label: "IN" },
 ];
 
-const footerLinks = {
-  "The Union": [
-    { label: "Governance & Board", href: "/about/leadership" },
-    { label: "High Performance", href: "/high-performance" },
-    { label: "Sables Trust", href: "/trust" },
-    { label: "Commercial Partners", href: "/sponsors" },
-  ],
-  "National Teams": [
-    { label: "The Sables", href: "/teams/sables" },
-    { label: "Lady Sables", href: "/teams/lady-sables" },
-    { label: "Cheetahs (7s)", href: "/teams/cheetahs" },
-    { label: "Junior Sables", href: "/teams/u20" },
-  ],
-  "Competitions": [
-    { label: "Match Centre", href: "/match-centre" },
-    { label: "Nations Cup", href: "/competitions/nations-cup" },
-    { label: "Domestic League", href: "/competitions/domestic" },
-    { label: "Ticketing", href: "/tickets" },
-  ],
-  "Development": [
-    { label: "Grassroots", href: "/development/grassroots" },
-    { label: "Coaching", href: "/development/coaching" },
-    { label: "Refereeing", href: "/development/referees" },
-    { label: "Safeguarding", href: "/safeguarding" },
-  ],
-};
+const footerColumns = [
+  {
+    title: "The Union",
+    links: [
+      { label: "Governance & Board", href: "/about/leadership" },
+      { label: "High Performance", href: "/high-performance" },
+      { label: "Sables Trust", href: "/trust" },
+      { label: "Commercial Partners", href: "/partners" },
+    ],
+  },
+  {
+    title: "National Teams",
+    links: [
+      { label: "The Sables", href: "/teams/sables" },
+      { label: "Lady Sables", href: "/teams/lady-sables" },
+      { label: "Cheetahs (7s)", href: "/teams/cheetahs" },
+      { label: "Junior Sables", href: "/teams/u20" },
+    ],
+  },
+  {
+    title: "Competitions",
+    links: [
+      { label: "Match Centre", href: "/match-centre" },
+      { label: "Nations Cup", href: "/competitions/nations-cup" },
+      { label: "Domestic League", href: "/competitions/domestic" },
+      { label: "Ticketing", href: "/tickets" },
+    ],
+  },
+  {
+    title: "Development",
+    links: [
+      { label: "Grassroots Rugby", href: "/development/grassroots" },
+      { label: "Coaching Education", href: "/development/coaching" },
+      { label: "Match Officials", href: "/development/referees" },
+      { label: "Safeguarding", href: "/safeguarding" },
+    ],
+  },
+];
 
 export default function Footer() {
   const pathname = usePathname();
-  const [email, setEmail] = useState("");
-  const [submitted, setSubmitted] = useState(false);
-  const [loading, setLoading] = useState(false);
 
   if (pathname?.startsWith('/clubhouse') || pathname?.startsWith('/admin')) return null;
 
-  async function handleSubscribe(e: React.FormEvent) {
-    e.preventDefault();
-    if (!email) return;
-    setLoading(true);
-    await new Promise((r) => setTimeout(r, 800));
-    setSubmitted(true);
-    setLoading(false);
-  }
-
   return (
-    <footer className="bg-zru-green text-white relative pt-20 pb-8 border-t-8 border-[#84d7af] overflow-hidden">
-      {/* Zero-Overhead Hardware-Accelerated 3D ZRU Crest Meteor Field */}
-      <FooterMeteorField />
-
-      <div className="max-w-[1440px] mx-auto px-6 relative z-10">
+    <footer className="bg-[#FDFBF0] text-[#003822] border-t border-black/10 pt-16 pb-12 relative overflow-hidden">
+      
+      <div className="max-w-[1440px] mx-auto px-6 sm:px-8 relative z-10 space-y-16">
         
-        {/* Massive Typography & Embossed Logo Banner */}
-        <div className="mb-16 relative min-h-[240px] md:min-h-[320px] flex items-center justify-between overflow-hidden rounded-2xl p-4 md:p-8">
-           <h2 className="text-[12vw] md:text-[8vw] font-heading font-black leading-[0.85] tracking-tighter text-white/10 uppercase select-none relative z-10">
-             Zimbabwe<br />Rugby
-           </h2>
-
-           {/* Unclipped Stylish Tilted ZRU Crest Watermark (Full Color Red Star & Gold Bird) */}
-           <div className="absolute -right-4 sm:-right-8 md:-right-12 top-1/2 -translate-y-1/2 w-[320px] h-[320px] sm:w-[440px] sm:h-[440px] md:w-[540px] md:h-[540px] lg:w-[640px] lg:h-[640px] opacity-35 hover:opacity-55 -rotate-20 transition-all duration-700 pointer-events-none select-none">
-             <Image
-               src="/images/logos/zru-logo.svg"
-               alt="Zimbabwe Rugby Union Crest Watermark"
-               fill
-               className="object-contain filter drop-shadow-[0_20px_40px_rgba(0,0,0,0.95)]"
-             />
-           </div>
-        </div>
-
-        {/* Main Content Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 mb-24">
-          
-          {/* Newsletter / Primary CTA */}
-          <div className="lg:col-span-5 space-y-8">
-            <div className="space-y-4">
-               <h3 className="text-3xl md:text-4xl font-heading font-black tracking-tight uppercase">
-                 Join the Fan Zone
-               </h3>
-               <p className="text-white/60 font-body text-sm md:text-base max-w-md">
-                 Exclusive squad announcements, early ticket access, and inner-sanctum content delivered straight to you.
-               </p>
-            </div>
-
-            {submitted ? (
-              <div className="flex items-center gap-3 text-zru-green py-4 border-l-2 border-zru-green pl-4 bg-zru-green/10">
-                <CheckCircle className="w-5 h-5" />
-                <span className="font-bold text-sm uppercase tracking-widest">You are in.</span>
-              </div>
-            ) : (
-              <form className="relative flex border-b-2 border-white/20 focus-within:border-zru-green transition-colors" onSubmit={handleSubscribe}>
-                 <label htmlFor="footer-email" className="sr-only">Email Address</label>
-                 <input 
-                   id="footer-email"
-                   type="email"
-                   value={email}
-                   onChange={(e) => setEmail(e.target.value)}
-                   placeholder="ENTER YOUR EMAIL" 
-                   required
-                   disabled={loading}
-                   className="w-full bg-transparent py-4 text-white focus:outline-none placeholder:text-white/30 font-bold uppercase tracking-widest text-sm disabled:opacity-50"
-                 />
-                 <button 
-                   type="submit"
-                   disabled={loading}
-                   className="p-4 text-white hover:text-zru-green transition-colors disabled:opacity-50"
-                   aria-label="Subscribe"
-                 >
-                   <ArrowRight className="w-6 h-6" />
-                 </button>
-              </form>
-            )}
-
-            <div className="pt-8">
-              <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-white/40 block mb-4">Connect</span>
-              <div className="flex gap-4">
-                {socialLinks.map(({ Icon, href, label }) => (
-                  <a 
-                    key={label} 
-                    href={href} 
-                    className="w-10 h-10 border border-white/20 rounded-full flex items-center justify-center text-white/60 hover:bg-zru-green hover:text-white hover:border-zru-green transition-all"
-                    aria-label={`ZRU on ${label}`}
-                  >
-                    <Icon className="w-4 h-4" />
-                  </a>
-                ))}
-              </div>
-            </div>
+        {/* Massive Institutional Header (Greenboard Style) */}
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 border-b border-[#003822]/15 pb-8">
+          <div>
+            <h1 className="font-heading font-black text-6xl sm:text-7xl md:text-8xl lg:text-9xl uppercase tracking-tighter text-[#003822] leading-none italic select-none">
+              Zimbabwe Rugby
+            </h1>
+            <p className="text-[#003822]/70 text-xs sm:text-sm font-semibold uppercase tracking-widest mt-2">
+              Official Governing Body of Rugby Union in Zimbabwe • Est. 1895
+            </p>
           </div>
 
-          {/* Links Grid */}
-          <div className="lg:col-span-7 grid grid-cols-2 md:grid-cols-4 gap-8">
-            {Object.entries(footerLinks).map(([title, links]) => (
-              <div key={title} className="space-y-6">
-                <h4 className="text-xs font-black uppercase tracking-[0.1em] text-white/40 border-b border-white/10 pb-4">{title}</h4>
-                <ul className="space-y-4">
-                   {links.map((link) => (
-                      <li key={link.label}>
-                         <Link href={link.href} className="text-sm font-bold text-white/80 hover:text-zru-green transition-colors inline-block">
-                           {link.label}
-                         </Link>
-                      </li>
-                   ))}
-                </ul>
-              </div>
+          {/* Social Media Link Group */}
+          <div className="flex items-center gap-3 shrink-0">
+            {socialLinks.map(({ Icon, href, label }) => (
+              <a
+                key={label}
+                href={href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-10 h-10 rounded-full border border-[#003822]/20 flex items-center justify-center text-[#003822] hover:bg-[#006747] hover:text-white hover:border-[#006747] transition-all duration-300 shadow-sm"
+                aria-label={`ZRU on ${label}`}
+              >
+                <Icon className="w-4 h-4" />
+              </a>
             ))}
           </div>
         </div>
 
-        {/* Legal Bar */}
-        <div className="pt-8 border-t border-white/10 flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
-           <div className="flex items-center gap-3">
-             <div className="w-2 h-2 bg-zru-green rounded-full"></div>
-             <span className="text-[10px] font-black uppercase tracking-widest text-white/60">
-               © {new Date().getFullYear()} Zimbabwe Rugby Union
-             </span>
-           </div>
-           
-           <div className="flex flex-wrap gap-x-8 gap-y-4">
-              {['Privacy Policy', 'Terms of Use', 'Media Assets', 'Contact'].map((item) => (
-                <Link key={item} href={`/${item.toLowerCase().replace(/\s+/g, '-')}`} className="text-[10px] font-black uppercase tracking-widest text-white/40 hover:text-white transition-colors">
-                  {item}
-                </Link>
-              ))}
-           </div>
+        {/* Greenboard Editorial Columns Layout */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-12 pt-4">
+          {footerColumns.map((col) => (
+            <div key={col.title} className="space-y-4">
+              <h3 className="font-heading font-black text-lg sm:text-xl uppercase tracking-tight text-[#003822] border-b border-[#003822]/20 pb-3">
+                {col.title}
+              </h3>
+              <ul className="space-y-2.5">
+                {col.links.map((link) => (
+                  <li key={link.label}>
+                    <Link
+                      href={link.href}
+                      className="text-xs sm:text-sm font-bold text-[#003822]/80 hover:text-[#006747] transition-colors leading-relaxed inline-block"
+                    >
+                      {link.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
+
+        {/* Institutional Footnote Disclaimers */}
+        <div className="pt-6 border-t border-[#003822]/10 space-y-1.5 text-[11px] font-medium text-[#003822]/60 max-w-4xl leading-relaxed">
+          <p>1 • Official fixture dates and kick-off times are subject to World Rugby and Rugby Africa broadcast scheduling adjustments.</p>
+          <p>2 • All personal data collection across ticketing and fan registrations complies strictly with Zimbabwe CDPA 2021 statutory data rights.</p>
+          <p>3 • Official Zimbabwe Rugby Union merchandise is distributed exclusively through the flagship ZRU Clubhouse Store.</p>
+        </div>
+
+        {/* Bottom Legal & Copyright Bar */}
+        <div className="pt-8 border-t border-[#003822]/15 flex flex-col md:flex-row justify-between items-center gap-4 text-xs font-bold text-[#003822]/70">
+          <p>© {new Date().getFullYear()} Zimbabwe Rugby Union. All rights reserved.</p>
+
+          <div className="flex flex-wrap items-center gap-6 text-[11px] font-extrabold uppercase tracking-wider">
+            <Link href="/privacy-policy" className="hover:text-[#006747] transition-colors">
+              Privacy Policy
+            </Link>
+            <Link href="/terms-of-use" className="hover:text-[#006747] transition-colors">
+              Terms of Service
+            </Link>
+            <Link href="/accessibility" className="hover:text-[#006747] transition-colors">
+              Cookies &amp; Compliance
+            </Link>
+            <span className="px-2 py-0.5 bg-[#006747]/10 text-[#006747] border border-[#006747]/30 rounded-md font-mono text-[10px]">
+              CDPA 2021 COMPLIANT
+            </span>
+          </div>
         </div>
 
       </div>
