@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { motion, useScroll, useTransform } from "framer-motion";
 import { Play, Ticket } from "lucide-react";
@@ -9,6 +9,7 @@ import { FloatingParticles, GlowButton } from "../ui/animations";
 
 export default function HeroVideoHub() {
   const [isLoaded, setIsLoaded] = useState(false);
+  const [isMobile] = useState(typeof window !== 'undefined' && window.innerWidth < 768);
   const { scrollY } = useScroll();
   const y = useTransform(scrollY, [0, 500], [0, 150]);
   const opacity = useTransform(scrollY, [0, 300], [0, 1]);
@@ -20,7 +21,7 @@ export default function HeroVideoHub() {
       {/* Video Background with Parallax */}
       <motion.div 
         className="absolute inset-0 z-0"
-        style={{ y, scale }}
+        style={isMobile ? {} : { y, scale }}
       >
         {/* Video/Image Background */}
         {/* Video/Image Background with Loading State */}
@@ -43,7 +44,7 @@ export default function HeroVideoHub() {
       </motion.div>
 
       {/* Floating Particles */}
-      <FloatingParticles count={20} />
+      {!isMobile && <FloatingParticles count={20} />}
 
       {/* Main Content - Proper Hierarchy */}
       <motion.div 
@@ -233,7 +234,7 @@ export default function HeroVideoHub() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 1.5 }}
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
+        className="absolute bottom-24 sm:bottom-28 lg:bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 z-40"
       >
         <span className="text-white/60 text-xs font-bold uppercase tracking-widest">Scroll</span>
         <div className="w-5 h-8 border-2 border-white/30 rounded-full flex justify-center pt-2">
@@ -251,3 +252,6 @@ export default function HeroVideoHub() {
     </section>
   );
 }
+
+
+

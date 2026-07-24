@@ -9,6 +9,8 @@ export interface HeroSlideData {
   subtext: string;
   tag?: string; // Team tag, e.g., "SABLES", "CHEETAHS", "LADY SABLES"
   contextPill?: string;
+  imagePosition?: string; // CSS object-position, e.g. "center top"
+  graphicSlide?: boolean; // If true, hides text overlay — image has its own design/text
   matchCard?: {
     opponent: string;
     opponentSub?: string;
@@ -28,125 +30,66 @@ export interface HeroSlideData {
  * CMS_SWAP_TODO: Replace mock implementation with actual REST/GraphQL endpoints once backend is available.
  * Fully compatible with React Native / Mobile platforms for direct cross-platform consumption.
  */
-import directus from "@/lib/directus/client";
-import { readItems } from "@directus/sdk";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { directusFetch } from "@/lib/directus/fetch";
 
-export async function getHeroSlides(): Promise<HeroSlideData[]> {
-  const mockSlides: HeroSlideData[] = [
+const MOCK_SLIDES: HeroSlideData[] = [
     {
       id: 1,
-      tag: "LADY SABLES",
-      contextPill: "RUGBY AFRICA CUP 2026 – HOME LEG",
-      image: "/images/teams/sables.jpg",
+      tag: "ZIMBABWE RUGBY UNION",
+      contextPill: "OFFICIAL GOVERNING BODY",
+      image: "/images/hero/tonga-vs-zim.webp",
+      imagePosition: "center 40%",
       headline: {
-        line1: "LADY SABLES",
-        line2: "ARE HOME",
+        line1: "GOVERNING & GROWING",
+        line2: "ZIMBABWE RUGBY",
       },
-      subtext: "National Sports Stadium - Harare",
-      matchCard: {
-        opponent: "UGANDA",
-        opponentSub: "LADY CRANES",
-        date: "14 MAY",
-        time: "15:00",
-        venue: "National Sports Stadium",
-        tag: "UPCOMING FIXTURE"
-      },
+      subtext: "From grassroots school leagues to the elite national Sables squads, ZRU is dedicated to developing character, discipline, and success.",
       ctas: {
-        primary: { label: "Book Lady Sables Tickets", href: "/tickets", iconName: "Ticket" },
-        secondary: { label: "Lady Sables Match Centre", href: "/match-centre", iconName: "Play" },
+        primary: { label: "Match Centre", href: "/match-centre", iconName: "ArrowRight" },
+        secondary: { label: "Play Rugby", href: "/play-rugby", iconName: "ArrowRight" },
       },
     },
     {
       id: 2,
       tag: "SABLES",
-      contextPill: "VICTORIA FALLS DOMESTIC SERIES",
-      image: "/images/hero/campaign-victoria-falls.png",
+      contextPill: "AFRICA CUP CHAMPIONS",
+      image: "/images/hero/lady-sables.webp", // Standard fallback
+      imagePosition: "center top",
       headline: {
-        line1: "BATTLE OF",
-        line2: "THE ZAMBEZI",
+        line1: "THE PRIDE OF",
+        line2: "THE NATION",
       },
-      subtext: "Experience the pride of Harare and Bulawayo as the Sables clash in the Victoria Falls Domestic Series.",
+      subtext: "Witness the African Champions in their campaign to qualify for the Rugby World Cup. Bold, proud, and unstoppable.",
       ctas: {
-        primary: { label: "Book Tickets", href: "/tickets", iconName: "Ticket" },
-        secondary: { label: "Match Info", href: "/events", iconName: "Play" },
+        primary: { label: "Meet The Squad", href: "/teams/sables", iconName: "ArrowRight" },
+        secondary: { label: "Latest News", href: "/media", iconName: "ArrowRight" },
       },
     },
     {
       id: 3,
-      tag: "DOMESTIC RUGBY",
-      contextPill: "PREMIER DIVISION",
-      image: "/images/hero/campaign-denver-tour.png",
+      tag: "LADY SABLES",
+      contextPill: "WOMEN'S RUGBY DEVELOPMENT",
+      image: "/images/hero/zim-u20s.webp",
+      imagePosition: "center center",
       headline: {
-        line1: "SUPER SIX",
-        line2: "RUGBY LEAGUE",
+        line1: "LADY SABLES",
+        line2: "INSPIRING THE FUTURE",
       },
-      subtext: "The 2026 season kicks off this weekend. Witness the fiercest domestic rivalries unfold.",
+      subtext: "The Lady Sables are leading the way in growing women's rugby across Zimbabwe. Be part of the legacy.",
       ctas: {
-        primary: { label: "League Table", href: "/teams/sables", iconName: "ArrowRight" },
-        secondary: { label: "Watch Live", href: "/media", iconName: "Play" },
-      },
-    },
-    {
-      id: 4,
-      tag: "SABLES",
-      contextPill: "SUMMER TEST SERIES",
-      image: "/images/hero/campaign-springboks-match.png",
-      headline: {
-        line1: "LEGENDS",
-        line2: "COLLIDE",
-      },
-      subtext: "A historic battle in Port Elizabeth as the Sables face the Springboks 'A' on June 20, 2026.",
-      matchCard: {
-        opponent: "SPRINGBOKS 'A'",
-        opponentSub: "HOSTS",
-        date: "20 JUN",
-        time: "17:00",
-        venue: "Nelson Mandela Bay Stadium",
-        tag: "UPCOMING FIXTURE"
-      },
-      ctas: {
-        primary: { label: "Get Tickets", href: "/tickets", iconName: "Ticket" },
-        secondary: { label: "Sables Squad", href: "/teams/sables", iconName: "ArrowRight" },
-      },
-    },
-    {
-      id: 5,
-      tag: "U20 JUNIOR SABLES",
-      image: "/images/teams/african-champions-2025.jpg", 
-      headline: {
-        line1: "AFRICAN",
-        line2: "CHAMPIONS",
-      },
-      subtext: "Celebrating the victorious journey of the Junior Sables as they conquer the continent.",
-      ctas: {
-        primary: { label: "Celebrate With Us", href: "/teams/junior-sables", iconName: "Ticket" },
-        secondary: { label: "View Gallery", href: "/media/gallery", iconName: "ArrowRight" },
-      },
-    },
-    {
-      id: 6,
-      tag: "CHEETAHS",
-      image: "/images/media/vid1.jpg", 
-      video: "/images/zim-rugby-slow-mo-2.mp4",
-      headline: {
-        line1: "A CUT ABOVE",
-        line2: "THE COMPETITION",
-      },
-      subtext: "Witness the elite athleticism of Zimbabwe's 7s finest. Precision, power, and the pursuit of excellence.",
-      ctas: {
-        primary: { label: "Secure Your Seat", href: "/tickets", iconName: "Ticket" },
-        secondary: { label: "Watch Highlights", href: "/media", iconName: "Play" },
+        primary: { label: "Lady Sables Squad", href: "/teams/lady-sables", iconName: "ArrowRight" },
+        secondary: { label: "Match Centre", href: "/match-centre", iconName: "ArrowRight" },
       },
     },
   ];
 
+export async function getHeroSlides(): Promise<HeroSlideData[]> {
   try {
     if (process.env.NEXT_PUBLIC_DIRECTUS_URL) {
-      const response = await directus.request(
-        readItems('hero_slides' as any, {
-          sort: ['sort' as any],
-        })
-      );
+      const response = await directusFetch<any>('hero_slides', {
+        sort: ['sort'],
+      });
       if (response && response.length > 0) {
         return response.map((slide: any) => ({
           id: Number(slide.id),
@@ -169,9 +112,9 @@ export async function getHeroSlides(): Promise<HeroSlideData[]> {
           } : undefined,
           ctas: {
             primary: {
-              label: slide.cta_primary_label || "Get Tickets",
-              href: slide.cta_primary_href || "/tickets",
-              iconName: slide.cta_primary_icon,
+              label: slide.cta_primary_label || "Sign In",
+              href: slide.cta_primary_href || "/login",
+              iconName: slide.cta_primary_icon || "ArrowRight",
             },
             secondary: slide.cta_secondary_label ? {
               label: slide.cta_secondary_label,
@@ -187,5 +130,5 @@ export async function getHeroSlides(): Promise<HeroSlideData[]> {
     console.warn("Directus fetch failed for hero slides, falling back to mock data:", error);
   }
 
-  return mockSlides;
+  return MOCK_SLIDES;
 }

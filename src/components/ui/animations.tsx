@@ -2,6 +2,7 @@
 
 import { useRef, useEffect, useState, ReactNode } from "react";
 import { motion, useInView } from "framer-motion";
+import Image from "next/image";
 
 // =============================================================================
 // SCROLL REVEAL - Animate elements when they enter viewport
@@ -364,6 +365,19 @@ export function FloatingParticles({ count = 20, className = "" }: FloatingPartic
 
   // Generate particles only on client-side to avoid hydration mismatch
   useEffect(() => {
+    // Adaptive Mobile & Performance Check
+    const isLowPower =
+      typeof window !== "undefined" &&
+      (window.matchMedia("(prefers-reduced-motion: reduce)").matches ||
+        window.innerWidth < 768 ||
+        /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent) ||
+        navigator.hardwareConcurrency <= 4);
+
+    if (isLowPower) {
+      setMounted(false);
+      return;
+    }
+
     const generatedParticles = Array.from({ length: count }, (_, i) => ({
       id: i,
       x: Math.random() * 100,
@@ -381,7 +395,7 @@ export function FloatingParticles({ count = 20, className = "" }: FloatingPartic
     return () => cancelAnimationFrame(frameId);
   }, [count]);
 
-  // Don't render anything on server or before client hydration
+  // Don't render anything on server, low-power mobile, or before hydration
   if (!mounted) return null;
 
   return (
@@ -389,7 +403,7 @@ export function FloatingParticles({ count = 20, className = "" }: FloatingPartic
       {particles.map((particle) => (
         <motion.div
           key={particle.id}
-          className="absolute rounded-full bg-zru-gold/20"
+          className="absolute rounded-full bg-zru-green/20"
           style={{
             left: `${particle.x}%`,
             top: `${particle.y}%`,
@@ -425,7 +439,7 @@ interface GlowButtonProps {
 export function GlowButton({ 
   children, 
   className = "",
-  glowColor = "rgba(255, 210, 0, 0.5)",
+  glowColor = "rgba(0, 107, 63, 0.5)",
   onClick
 }: GlowButtonProps) {
   return (
@@ -477,19 +491,25 @@ export function ImageReveal({
   return (
     <motion.div
       ref={ref}
-      className={`overflow-hidden ${className}`}
+      className={`overflow-hidden relative ${className}`}
       initial={{ clipPath: clipPaths[direction].hidden }}
       animate={isInView ? { clipPath: clipPaths[direction].visible } : {}}
       transition={{ duration: 1, ease: [0.25, 0.1, 0.25, 1] }}
     >
-      <motion.img
-        src={src}
-        alt={alt}
-        className="w-full h-full object-cover"
+      <motion.div
+        className="w-full h-full"
         initial={{ scale: 1.2 }}
         animate={isInView ? { scale: 1 } : {}}
         transition={{ duration: 1.2, ease: [0.25, 0.1, 0.25, 1] }}
-      />
+      >
+        <Image
+          src={src}
+          alt={alt}
+          fill
+          className="object-cover"
+          sizes="100vw"
+        />
+      </motion.div>
     </motion.div>
   );
 }

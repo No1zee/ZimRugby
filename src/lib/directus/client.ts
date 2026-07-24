@@ -21,6 +21,14 @@ export interface DirectusSchema {
   teams: any[];
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   videos: any[];
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  competitions: any[];
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  events: any[];
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  articles: any[];
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  partners: any[];
 }
 
 // Initialize the Directus client
