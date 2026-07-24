@@ -84,10 +84,10 @@ export default function TeamCardBento() {
         <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 mb-16">
           <div className="space-y-3 max-w-2xl">
             <h2 className="font-heading text-4xl sm:text-5xl font-black uppercase tracking-tight text-rich-black italic">
-              Representative Teams
+              OUR NATIONAL TEAMS
             </h2>
             <p className="text-rich-black/70 text-base font-body leading-relaxed">
-              Every national team embodies the physical strength, strategic discipline, and intense national pride of Zimbabwe Rugby.
+              From the Sables on the World Cup trail to the Cheetahs on the sevens circuit, meet the national squads wearing the shirt for Zimbabwe.
             </p>
           </div>
         </div>

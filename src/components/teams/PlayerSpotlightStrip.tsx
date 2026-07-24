@@ -14,16 +14,9 @@ export default function PlayerSpotlightStrip() {
           
           {/* Left Column: Player Spotlight Details */}
           <div className="lg:col-span-7 space-y-6">
-            <div className="flex items-center gap-3">
-              <span className="w-2 h-2 rounded-full bg-zru-green animate-pulse" />
-              <span className="text-[10px] font-black text-zru-green uppercase tracking-[0.3em]">
-                Player to Watch Spotlight
-              </span>
-            </div>
-
             <h2 className="font-heading text-4xl sm:text-6xl font-black uppercase tracking-tight italic">
               TINOTENDA <br />
-              <span className="text-zru-green">MASEKERE</span>
+              <span className="text-[#006747]">MASEKERE</span>
             </h2>
 
             <div className="flex flex-wrap items-center gap-4 text-xs font-bold uppercase tracking-wider text-white/60">

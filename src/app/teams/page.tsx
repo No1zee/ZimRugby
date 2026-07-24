@@ -32,8 +32,8 @@ export default function TeamsPage() {
               <h2 className="font-heading text-3xl sm:text-5xl font-black uppercase tracking-tight italic">
                 From Schoolboy Leagues to National Caps
               </h2>
-              <p className="text-white/70 text-base font-body leading-relaxed">
-                Our structured pathways connect provincial school competitions, club championships, and high-performance academies directly to national squad selection.
+              <p className="text-white/75 text-base font-body leading-relaxed">
+                From premier high school competitions to provincial leagues, follow the talent pipeline driving Zimbabwean players onto the international stage.
               </p>
 
               <div className="flex flex-wrap gap-4 pt-4">
