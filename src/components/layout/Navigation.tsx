@@ -7,6 +7,7 @@ import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { ChevronDown, Menu, X, Search, User } from "lucide-react";
 import { motion, AnimatePresence, useScroll, useMotionValueEvent } from "framer-motion";
+import { Icon } from "@iconify/react";
 import SlantedButton from "../ui/SlantedButton";
 import GlobalAnnouncementBar from "./GlobalAnnouncementBar";
 import { HamburgerMenuOverlay } from "@/components/lightswind/HamburgerMenuOverlay";
@@ -119,7 +120,7 @@ export default function Navigation() {
             if (item.label === "NATIONAL TEAMS" && data.teams) {
               return { ...item, children: data.teams };
             }
-            if (item.label === "DOMESTIC RUGBY" && (data.competitions || data.events)) {
+            if ((item.label === "DOMESTIC & MATCH CENTRE" || item.label === "DOMESTIC RUGBY") && (data.competitions || data.events)) {
               return { 
                 ...item, 
                 children: [
@@ -215,12 +216,12 @@ export default function Navigation() {
           </Link>
  
           {/* Desktop Nav Items */}
-          <div className="hidden lg:flex items-center gap-2 xl:gap-5 2xl:gap-8 flex-1 justify-center max-w-full overflow-hidden px-2">
-            <div className="flex items-center gap-2.5 xl:gap-5 2xl:gap-8">
+          <div className="hidden lg:flex items-center gap-2 xl:gap-5 2xl:gap-8 flex-1 justify-center max-w-full overflow-visible px-2">
+            <div className="flex items-center gap-2.5 xl:gap-5 2xl:gap-8 overflow-visible">
               {dynamicNavItems.map((item) => (
                 <div 
                   key={item.label}
-                  className="relative group/nav shrink-0"
+                  className="relative group/nav shrink-0 py-1"
                   onMouseEnter={() => setActiveDropdown(item.label)}
                   onMouseLeave={() => setActiveDropdown(null)}
                 >
@@ -248,12 +249,12 @@ export default function Navigation() {
                     <AnimatePresence>
                       {activeDropdown === item.label && (
                         <motion.div
-                          initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                          initial={{ opacity: 0, y: 8, scale: 0.96 }}
                           animate={{ opacity: 1, y: 0, scale: 1 }}
-                          exit={{ opacity: 0, y: 10, scale: 0.95 }}
-                          transition={{ duration: 0.2 }}
-                          className={`absolute top-full left-1/2 -translate-x-1/2 mt-2 bg-zru-green/95 backdrop-blur-xl rounded-xl shadow-2xl py-4 border border-white/10 overflow-hidden ${
-                            item.isMega ? 'w-[380px] xl:w-[400px] grid grid-cols-2 gap-x-4 px-4' : 'min-w-[220px] px-2'
+                          exit={{ opacity: 0, y: 8, scale: 0.96 }}
+                          transition={{ duration: 0.2, ease: "easeOut" }}
+                          className={`absolute top-full left-1/2 -translate-x-1/2 mt-1 bg-[#005238] backdrop-blur-2xl rounded-2xl shadow-2xl py-3 border border-white/20 overflow-hidden z-[100] ${
+                            item.isMega ? 'w-[380px] xl:w-[420px] grid grid-cols-2 gap-x-2 px-3' : 'min-w-[220px] px-2'
                           }`}
                         >
                           {item.children.map((child) => (
@@ -261,9 +262,9 @@ export default function Navigation() {
                                key={child.label}
                                href={child.href}
                                className={`
-                                 block px-4 py-3 text-sm font-medium transition-all rounded-lg hover:bg-white/10
-                                 ${isActive(child.href) ? "text-zru-green bg-white/5 font-bold" : "text-white"}
-                                 ${item.isMega ? 'hover:pl-6' : 'hover:pl-5'}
+                                 block px-3.5 py-2.5 text-xs font-semibold tracking-wide transition-all rounded-xl hover:bg-white/15 text-white
+                                 ${isActive(child.href) ? "text-white bg-white/20 font-black" : "text-white/90"}
+                                 ${item.isMega ? 'hover:pl-5' : 'hover:pl-4'}
                                `}
                             >
                               {child.label}
@@ -286,7 +287,7 @@ export default function Navigation() {
               aria-label="Search site"
               title="Search"
             >
-              <Search className="w-5 h-5" />
+              <Icon icon="nimbus:search" className="w-5 h-5" />
             </button>
             <SlantedButton 
               href="/login" 
@@ -294,7 +295,7 @@ export default function Navigation() {
               size="sm"
             >
               <div className="flex items-center gap-1.5">
-                <User className="w-3.5 h-3.5" />
+                <Icon icon="nimbus:user" className="w-3.5 h-3.5" />
                 <span className="text-xs font-black uppercase tracking-wider">Sign In</span>
               </div>
             </SlantedButton>
@@ -308,7 +309,7 @@ export default function Navigation() {
               aria-label="Search site"
               title="Search"
             >
-              <Search className="w-4 h-4 xl:w-5 xl:h-5" />
+              <Icon icon="nimbus:search" className="w-4 h-4 xl:w-5 xl:h-5" />
             </button>
             <SlantedButton 
               href="/login" 
@@ -316,7 +317,7 @@ export default function Navigation() {
               size="sm"
             >
               <div className="flex items-center gap-1.5 xl:gap-2">
-                <User className="w-3.5 h-3.5 xl:w-4 xl:h-4" />
+                <Icon icon="nimbus:user" className="w-3.5 h-3.5 xl:w-4 xl:h-4" />
                 <span className="text-[10px] xl:text-xs font-black uppercase tracking-wider whitespace-nowrap">Sign In</span>
               </div>
             </SlantedButton>

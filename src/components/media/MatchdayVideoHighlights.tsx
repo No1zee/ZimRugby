@@ -4,6 +4,7 @@ import React, { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import { Play, ExternalLink, X, Film, Sparkles, LayoutGrid, CircleDot, MoveHorizontal, Youtube } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { Icon } from "@iconify/react";
 
 export interface YouTubeVideoItem {
   id: string;
@@ -166,31 +167,31 @@ export default function MatchdayVideoHighlights({
           </div>
 
           <div className="flex items-center gap-3">
-            {/* Icon-Only View Switcher (3D Stage Icon & Grid View Icon) */}
+            {/* Icon-Only View Switcher (Nimbus 3D Stage Icon & Grid View Icon) */}
             <div className="flex items-center bg-black/5 p-1 rounded-xl border border-black/10 shadow-xs">
               <button
                 onClick={() => setViewMode("ring")}
                 title="3D Stage View"
                 aria-label="3D Stage View"
-                className={`p-2 rounded-lg transition-all ${
+                className={`p-2 rounded-lg transition-all flex items-center justify-center ${
                   viewMode === "ring"
                     ? "bg-[#006747] text-white shadow-md scale-105"
                     : "text-black/60 hover:text-black hover:bg-black/5"
                 }`}
               >
-                <CircleDot className="w-4 h-4" />
+                <Icon icon="nimbus:cube" className="w-4 h-4" />
               </button>
               <button
                 onClick={() => setViewMode("grid")}
                 title="Grid View"
                 aria-label="Grid View"
-                className={`p-2 rounded-lg transition-all ${
+                className={`p-2 rounded-lg transition-all flex items-center justify-center ${
                   viewMode === "grid"
                     ? "bg-[#006747] text-white shadow-md scale-105"
                     : "text-black/60 hover:text-black hover:bg-black/5"
                 }`}
               >
-                <LayoutGrid className="w-4 h-4" />
+                <Icon icon="nimbus:grid" className="w-4 h-4" />
               </button>
             </div>
 
@@ -258,20 +259,29 @@ export default function MatchdayVideoHighlights({
                   // Compute net angle relative to camera view for explicit Safari z-indexing
                   const netAngle = (itemAngle + rotationY) % 360;
                   const normalizedAngle = (netAngle + 360) % 360;
-                  // Cards facing front (0deg / 360deg) get highest z-index, cards behind (180deg) get lowest
-                  const zIndexVal = Math.round(1000 + Math.cos((normalizedAngle * Math.PI) / 180) * 500);
+                  const cosVal = Math.cos((normalizedAngle * Math.PI) / 180);
+                  
+                  // Hide or dim cards facing away to prevent back-side clipping bleed
+                  const isFrontFacing = cosVal > -0.2;
+                  const cardOpacity = isFrontFacing ? Math.max(0.35, (cosVal + 0.4) / 1.4) : 0;
+                  const zIndexVal = Math.round(1000 + cosVal * 500);
 
                   return (
                     <div
                       key={video.id}
                       onClick={() => !isDragging && setActiveVideo(video)}
-                      className="absolute w-[200px] xs:w-[240px] sm:w-[350px] h-[180px] sm:h-[260px] rounded-2xl sm:rounded-3xl overflow-hidden shadow-[0_15px_30px_-5px_rgba(0,0,0,0.15)] border border-black/10 bg-white cursor-pointer group transition-all duration-300 flex flex-col justify-between"
+                      className={`absolute w-[220px] sm:w-[320px] md:w-[360px] h-[190px] sm:h-[250px] rounded-2xl sm:rounded-3xl overflow-hidden shadow-[0_15px_30px_-5px_rgba(0,0,0,0.15)] border border-black/10 bg-white cursor-pointer group transition-all duration-300 flex flex-col justify-between ${
+                        !isFrontFacing ? 'pointer-events-none' : ''
+                      }`}
                       style={{
                         transformStyle: "preserve-3d",
                         WebkitTransformStyle: "preserve-3d",
+                        backfaceVisibility: "hidden",
+                        WebkitBackfaceVisibility: "hidden",
                         transform: `rotateY(${itemAngle}deg) translateZ(${radius}px)`,
                         WebkitTransform: `rotateY(${itemAngle}deg) translateZ(${radius}px)`,
                         zIndex: zIndexVal,
+                        opacity: cardOpacity,
                       }}
                     >
                       {/* Video Thumbnail */}
@@ -289,7 +299,7 @@ export default function MatchdayVideoHighlights({
                         {/* Play Button Overlay */}
                         <div className="absolute inset-0 flex items-center justify-center">
                           <div className="w-13 h-13 sm:w-14 sm:h-14 rounded-full bg-[#006747] text-white flex items-center justify-center shadow-xl group-hover:scale-110 group-hover:bg-black transition-all duration-300 border-2 border-white/40">
-                            <Play className="w-6 h-6 fill-current translate-x-0.5" />
+                            <Icon icon="nimbus:play" className="w-6 h-6 fill-current translate-x-0.5" />
                           </div>
                         </div>
 

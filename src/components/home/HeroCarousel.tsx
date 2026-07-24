@@ -89,22 +89,6 @@ function SlideContent({
         {/* Text content — hidden for graphic slides that have their own designed text */}
         {!slide.graphicSlide && (
           <>
-            {/* ZRU Bible Team Tags / Context pills */}
-            {(slide.tag || slide.contextPill) && (
-              <motion.div variants={itemVariants} className="flex items-center gap-3 flex-wrap">
-                {slide.tag && (
-                  <span className="bg-zru-green/20 text-zru-green border border-zru-green/30 px-3 py-1 text-[10px] font-black tracking-[0.2em] uppercase rounded-sm backdrop-blur-xs">
-                    {slide.tag}
-                  </span>
-                )}
-                {slide.contextPill && (
-                  <span className="text-white/40 text-[10px] font-bold tracking-[0.15em] uppercase">
-                    {slide.contextPill}
-                  </span>
-                )}
-              </motion.div>
-            )}
-
             {/* Headline */}
             <motion.h1 variants={itemVariants} className="font-heading uppercase tracking-wider leading-[1.1] relative">
               {/* Spotlights */}
