@@ -27,21 +27,15 @@ export const navConfig: NavItem[] = [
     ],
   },
   {
-    label: "DOMESTIC RUGBY",
+    label: "DOMESTIC & MATCH CENTRE",
     href: "/match-centre",
-    children: [
-      { label: "Match Centre", href: "/match-centre" },
-      { label: "Club Championship", href: "/events?tab=competitions" },
-      { label: "Schools Rugby", href: "/events?tab=competitions" },
-      { label: "Referees", href: "/referees" },
-    ],
-  },
-  {
-    label: "MATCH CENTRE",
-    href: "/match-centre",
+    isMega: true,
     children: [
       { label: "Fixtures & Results", href: "/match-centre" },
-      { label: "Book Tickets", href: "/tickets" },
+      { label: "Club Championship", href: "/events?tab=competitions" },
+      { label: "Schools Rugby", href: "/schools" },
+      { label: "Referees & Laws", href: "/referees" },
+      { label: "Book Match Tickets", href: "/tickets" },
       { label: "Live Matches", href: "/live" },
     ],
   },
