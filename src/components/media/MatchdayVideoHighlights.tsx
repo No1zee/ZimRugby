@@ -194,7 +194,7 @@ export default function MatchdayVideoHighlights({
               </button>
             </div>
 
-            {/* Icon-Only ZRU Green YouTube Channel CTA Button */}
+            {/* ZRU Green YouTube Channel CTA Button */}
             {showChannelLink && (
               <a
                 href="https://www.youtube.com/@ZimbabweRugbyUnion"
@@ -202,9 +202,13 @@ export default function MatchdayVideoHighlights({
                 rel="noopener noreferrer"
                 title="Watch ZRU on YouTube"
                 aria-label="Watch ZRU on YouTube"
-                className="p-2 bg-[#006747] hover:bg-[#004d35] text-white rounded-xl transition-all duration-300 shadow-sm hover:shadow-md border border-[#006747] flex items-center justify-center scale-105"
+                className="inline-flex items-center gap-2 px-3.5 py-2 bg-[#006747] hover:bg-[#005238] text-white rounded-xl text-[10px] sm:text-[11px] font-black uppercase tracking-wider transition-all duration-300 shadow-xs hover:shadow-md border border-[#006747] hover:scale-105 active:scale-95 group/yt shrink-0"
               >
-                <Youtube className="w-4 h-4 fill-current text-white" />
+                <svg className="w-5 h-3.5 shrink-0 group-hover/yt:scale-110 transition-transform" viewBox="0 0 24 17" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M23.498 2.622a3.008 3.008 0 0 0-2.116-2.126C19.513 0 12 0 12 0S4.487 0 2.618.496A3.008 3.008 0 0 0 .502 2.622C0 4.504 0 8.423 0 8.423s0 3.919.502 5.801a3.008 3.008 0 0 0 2.116 2.126C4.487 16.846 12 16.846 12 16.846s7.513 0 9.882-.496a3.008 3.008 0 0 0 2.116-2.126C24 12.342 24 8.423 24 8.423s0-3.919-.502-5.801z" fill="#FF0000"/>
+                  <path d="M9.545 12.016V4.83l6.273 3.593-6.273 3.593z" fill="#FFFFFF"/>
+                </svg>
+                <span className="whitespace-nowrap font-heading tracking-widest text-white">YOUTUBE</span>
               </a>
             )}
           </div>
