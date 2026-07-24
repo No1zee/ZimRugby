@@ -1,69 +1,79 @@
-"use client";
+﻿"use client";
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion } from "framer-motion";
-import { Home, Ticket, LayoutGrid, ShoppingBag, Menu } from "lucide-react";
+import { Home, Trophy, Newspaper, Users, Menu } from "lucide-react";
 import { cn } from "../../lib/utils";
 
 const dockItems = [
   { label: "Home", icon: Home, href: "/" },
-  { label: "Tickets", icon: Ticket, href: "/tickets" },
-  { label: "Matches", icon: LayoutGrid, href: "/match-centre" },
-  { label: "Store", icon: ShoppingBag, href: "/store" },
+  { label: "Matches", icon: Trophy, href: "/match-centre" },
+  { label: "Media", icon: Newspaper, href: "/media" },
+  { label: "Fan Zone", icon: Users, href: "/fan-zone" },
   { label: "Menu", icon: Menu, href: "#menu", isMenu: true },
 ];
 
 export default function MobileDock() {
   const pathname = usePathname();
+  const [isHidden, setIsHidden] = useState(false);
+
+  useEffect(() => {
+    let prev = 0;
+    const cb = () => {
+      const cur = window.scrollY;
+      setIsHidden(cur > prev && cur > 150);
+      prev = cur;
+    };
+    addEventListener("scroll", cb, { passive: true });
+    return () => removeEventListener("scroll", cb);
+  }, []);
+
+  const handleInteraction = (item: typeof dockItems[0], e: React.MouseEvent) => {
+    if (typeof navigator !== "undefined" && navigator.vibrate) {
+      navigator.vibrate(50);
+    }
+    if (item.isMenu) {
+      e.preventDefault();
+      window.dispatchEvent(new CustomEvent("toggleMobileMenu"));
+    }
+  };
 
   return (
-    <motion.div 
+    <motion.div
       initial={{ y: 100 }}
-      animate={{ y: 0 }}
-      className="fixed bottom-0 left-0 right-0 z-50 md:hidden pb-safe"
+      animate={{ y: isHidden ? 150 : 0 }}
+      transition={{ type: "spring", bounce: 0, duration: 0.4 }}
+      className="fixed bottom-0 left-0 right-0 z-50 lg:hidden pb-[max(env(safe-area-inset-bottom),16px)] pointer-events-none"
     >
-      {/* Glassmorphism Background */}
-      <div className="mx-4 mb-4 rounded-2xl bg-rich-black/80 backdrop-blur-xl border border-white/10 shadow-2xl flex items-center justify-around p-2">
+      <div className="mx-4 mt-4 sm:mx-auto sm:max-w-xl rounded-2xl bg-milk-white/95 backdrop-blur-xl border border-black/10 shadow-[0_-10px_40px_-15px_rgba(0,0,0,0.15)] flex items-center justify-around p-2 sm:p-3 pointer-events-auto">
         {dockItems.map((item) => {
-          const isActive = pathname === item.href;
+          const isActive = !item.isMenu && (pathname === item.href || (item.href !== "/" && pathname.startsWith(item.href)));
           const Icon = item.icon;
-
+          const LinkWrapper = item.isMenu ? motion.button : motion.create(Link);
+          const linkProps = item.isMenu ? { type: "button" as const } : { href: item.href };
           return (
-            <Link
+            <LinkWrapper
               key={item.label}
-              href={item.href}
-              className="relative flex flex-col items-center justify-center p-2 min-w-[64px]"
+              {...(linkProps as Record<string, unknown>)}
+              onClick={(e: React.MouseEvent) => handleInteraction(item, e)}
+              whileTap={{ scale: 0.85 }}
+              className="relative flex flex-col items-center justify-center p-2 sm:p-2.5 min-w-[64px] sm:min-w-[80px] outline-none"
             >
               {isActive && (
                 <motion.div
                   layoutId="activeDock"
-                  className="absolute inset-0 bg-zru-gold/10 rounded-xl"
+                  className="absolute inset-0 bg-zru-green/15 rounded-xl"
                   transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
                 />
               )}
-              
-              <Icon 
-                className={cn(
-                  "w-6 h-6 transition-colors",
-                  isActive ? "text-zru-gold" : "text-gray-400"
-                )} 
-              />
-              <span className={cn(
-                "text-[10px] mt-1 font-medium tracking-tight uppercase",
-                isActive ? "text-zru-gold" : "text-gray-500"
-              )}>
-                {item.label}
-              </span>
-
+              <Icon className={cn("w-5 h-5 transition-colors", isActive ? "text-zru-green" : "text-black/50")} />
+              <span className={cn("text-[10px] mt-1 font-extrabold tracking-wider uppercase transition-colors font-heading", isActive ? "text-zru-green" : "text-black/60")}>{item.label}</span>
               {isActive && (
-                <motion.div 
-                  className="absolute -bottom-1 w-1 h-1 bg-zru-gold rounded-full"
-                  layoutId="activeDot"
-                />
+                <motion.div className="absolute -bottom-1 w-1.5 h-1.5 bg-zru-green rounded-full" layoutId="activeDot" />
               )}
-            </Link>
+            </LinkWrapper>
           );
         })}
       </div>

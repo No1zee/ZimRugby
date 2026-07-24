@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>The Sables Clubhouse</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&amp;family=Outfit:wght@100..900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "tertiary-container": "#5a5a52",
+                        "on-tertiary": "#30312a",
+                        "primary-container": "#006747",
+                        "on-primary-fixed-variant": "#005137",
+                        "surface-tint": "#84d7af",
+                        "inverse-surface": "#e5e2e1",
+                        "primary-fixed-dim": "#84d7af",
+                        "secondary-fixed-dim": "#97d4af",
+                        "outline-variant": "#3f4943",
+                        "on-tertiary-container": "#d3d1c7",
+                        "on-primary": "#003825",
+                        "surface": "#131313",
+                        "on-secondary": "#003822",
+                        "on-primary-fixed": "#002114",
+                        "on-error-container": "#ffdad6",
+                        "on-tertiary-fixed-variant": "#474740",
+                        "inverse-on-surface": "#313030",
+                        "surface-container": "#201f1f",
+                        "error-container": "#93000a",
+                        "secondary": "#97d4af",
+                        "error": "#ffb4ab",
+                        "secondary-container": "#125135",
+                        "background": "#131313",
+                        "tertiary": "#c8c7bd",
+                        "tertiary-fixed-dim": "#c8c7bd",
+                        "surface-variant": "#353534",
+                        "on-secondary-container": "#86c29e",
+                        "on-background": "#e5e2e1",
+                        "on-tertiary-fixed": "#1b1c16",
+                        "outline": "#88938c",
+                        "on-surface-variant": "#bec9c1",
+                        "on-secondary-fixed-variant": "#125135",
+                        "inverse-primary": "#0b6c4b",
+                        "on-error": "#690005",
+                        "tertiary-fixed": "#e4e3d8",
+                        "primary-fixed": "#a0f4ca",
+                        "surface-container-low": "#1c1b1b",
+                        "on-secondary-fixed": "#002112",
+                        "surface-container-highest": "#353534",
+                        "primary": "#84d7af",
+                        "surface-container-lowest": "#0e0e0e",
+                        "secondary-fixed": "#b2f0ca",
+                        "surface-dim": "#131313",
+                        "on-primary-container": "#8fe2ba",
+                        "on-surface": "#e5e2e1",
+                        "surface-container-high": "#2a2a2a",
+                        "surface-bright": "#3a3939"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "margin-safe": "32px",
+                        "section-padding-mobile": "48px",
+                        "gutter": "24px",
+                        "unit": "4px",
+                        "section-padding-desktop": "80px",
+                        "container-max": "1440px",
+                        "grid-gap": "16px"
+                    },
+                    "fontFamily": {
+                        "display-lg": ["Montserrat"],
+                        "body-lg": ["Outfit"],
+                        "body-base": ["Outfit"],
+                        "h3": ["Outfit"],
+                        "label-caps": ["Montserrat"],
+                        "headline-hero-mobile": ["Montserrat"],
+                        "headline-hero": ["Montserrat"],
+                        "h1": ["Montserrat"],
+                        "h2": ["Montserrat"]
+                    },
+                    "fontSize": {
+                        "display-lg": ["88px", { "lineHeight": "0.95", "letterSpacing": "-0.04em", "fontWeight": "900" }],
+                        "body-lg": ["20px", { "lineHeight": "1.7", "fontWeight": "400" }],
+                        "body-base": ["16px", { "lineHeight": "1.6", "fontWeight": "400" }],
+                        "h3": ["30px", { "lineHeight": "1.2", "fontWeight": "800" }],
+                        "label-caps": ["12px", { "lineHeight": "1.0", "letterSpacing": "0.2em", "fontWeight": "800" }],
+                        "headline-hero-mobile": ["48px", { "lineHeight": "1.0", "letterSpacing": "-0.02em", "fontWeight": "900" }],
+                        "headline-hero": ["72px", { "lineHeight": "0.95", "letterSpacing": "-0.02em", "fontWeight": "900" }],
+                        "h1": ["56px", { "lineHeight": "1.0", "letterSpacing": "-0.02em", "fontWeight": "900" }],
+                        "h2": ["40px", { "lineHeight": "1.1", "letterSpacing": "-0.01em", "fontWeight": "800" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .clip-slanted {
+            clip-path: polygon(12px 0, 100% 0, calc(100% - 12px) 100%, 0% 100%);
+        }
+        .rim-light {
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface font-body-base overflow-x-hidden min-h-screen">
+<!-- TopNavBar Component -->
+<nav class="fixed top-0 w-full z-50 bg-surface/40 backdrop-blur-xl dark:bg-surface/40 shadow-2xl border-b border-white/10 dark:border-white/10">
+<div class="flex justify-between items-center px-gutter py-4 max-w-container-max mx-auto">
+<a class="font-display-lg text-h2 text-primary tracking-tighter italic" href="#">The Sables Clubhouse</a>
+<div class="hidden md:flex gap-8">
+<a class="font-display-lg text-body-base uppercase tracking-widest text-primary font-bold border-b-2 border-primary pb-1 scale-95 active:scale-90 transition-transform" href="#">Shop</a>
+<a class="font-display-lg text-body-base uppercase tracking-widest text-on-surface/80 dark:text-on-surface/80 hover:text-primary transition-colors hover:bg-primary/10 hover:text-primary transition-all duration-300 scale-95 active:scale-90 transition-transform" href="#">Fixtures</a>
+<a class="font-display-lg text-body-base uppercase tracking-widest text-on-surface/80 dark:text-on-surface/80 hover:text-primary transition-colors hover:bg-primary/10 hover:text-primary transition-all duration-300 scale-95 active:scale-90 transition-transform" href="#">News</a>
+<a class="font-display-lg text-body-base uppercase tracking-widest text-on-surface/80 dark:text-on-surface/80 hover:text-primary transition-colors hover:bg-primary/10 hover:text-primary transition-all duration-300 scale-95 active:scale-90 transition-transform" href="#">History</a>
+<a class="font-display-lg text-body-base uppercase tracking-widest text-on-surface/80 dark:text-on-surface/80 hover:text-primary transition-colors hover:bg-primary/10 hover:text-primary transition-all duration-300 scale-95 active:scale-90 transition-transform" href="#">Tickets</a>
+</div>
+<div class="flex items-center gap-4">
+<button class="text-primary hover:text-primary-container transition-colors">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">search</span>
+</button>
+<div class="text-on-surface font-label-caps border border-outline-variant px-2 py-1 rounded">USD</div>
+<button class="text-primary hover:text-primary-container transition-colors">
+<span class="material-symbols-outlined">shopping_cart</span>
+</button>
+<button class="text-primary hover:text-primary-container transition-colors">
+<span class="material-symbols-outlined">person</span>
+</button>
+</div>
+</div>
+</nav>
+<!-- Main Content -->
+<main class="pt-24">
+<!-- Hero Section -->
+<section class="relative h-[819px] w-full flex items-center justify-center overflow-hidden">
+<div class="absolute inset-0 z-0" data-alt="Cinematic wide shot of a rugged rugby player in action on a dark, moody field. Heavy rain, dramatic stadium lighting highlighting the muscular physique and the green and white national jersey. Deep shadows, high contrast, cinematic atmosphere, 8k resolution." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCGPWbjcQmVUWpzOkulGCtTI8qMKEyCe_sCnHyCy3iocr1FMQxKcNYWXe9ikBSjD5lxJR9OIu9eDGT5SGDhXoCk7_XO_HhiXcpYg6Ovg6q_L3zmjFWNjR9YsZlwjmo_OIDaHOqHxLOYGILXmPo-E9kVqmKc9dGiNhwgjAHK5eK_Z_qhpQSdtvaWXTE-CKdK9aMdTWk-2y5oHq_4Ne9VCVXmqS7unNOjdIA-E438jj0M9lWwsfCInhsfo5JKoaJB-iKneOew3vd4fv7y')"></div>
+<div class="absolute inset-0 bg-gradient-to-t from-surface via-surface/80 to-transparent z-10"></div>
+<div class="relative z-20 text-center px-gutter max-w-4xl mx-auto flex flex-col items-center gap-6">
+<h1 class="font-headline-hero-mobile md:font-headline-hero text-on-surface uppercase italic">THE OFFICIAL SABLES CLUBHOUSE</h1>
+<p class="font-body-lg text-primary">Match-Grade Performance &amp; Heritage Athletics</p>
+<div class="flex flex-wrap justify-center gap-4 mt-8">
+<button class="clip-slanted bg-primary-container text-on-primary-fixed-variant font-label-caps px-8 py-4 hover:bg-inverse-surface hover:text-surface transition-all duration-300 transform hover:scale-105">EXPLORE KITS</button>
+<button class="border border-primary text-primary backdrop-blur-md font-label-caps px-8 py-4 hover:bg-primary/10 transition-all duration-300">LIMITED HERITAGE DROP</button>
+</div>
+</div>
+</section>
+<!-- Collections Bento Grid -->
+<section class="py-section-padding-desktop px-gutter max-w-container-max mx-auto">
+<div class="grid grid-cols-1 md:grid-cols-12 gap-grid-gap">
+<div class="md:col-span-8 relative h-96 group overflow-hidden rim-light rounded-lg">
+<div class="absolute inset-0 bg-surface-container-low transition-transform duration-700 group-hover:scale-105" data-alt="Close up of a premium athletic rugby jersey with intricate stitching, deep green fabric, and a subtle watermark texture. Studio lighting, highly detailed fabric texture, professional sports apparel photography." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCi2_DAqRcLvyx11PO1m2EU9cVUhQk4vkRFGoYxjIhCLxI6-LQsdn7joC01YXT4hVYY-KCGHjVgT4Q3NIsZos9oqxJ9F-yOmo6yXkdGLPprUm8rYsGRC6eK8Nd5YJJaYdG4TM78sV5nhY9r3d4SACge2lF7z3vf2Cv5wMih2WtsYHQeFmPL3O2omNDWTj9lCq1AEIIx_WesjI7Ezu1pxZR5jydnW7BmHTjJFQC-fvNdCYHoerHFRIemo5clObR9Y-87H-aUiKSd0Gl4'); background-size: cover; background-position: center;"></div>
+<div class="absolute inset-0 bg-gradient-to-t from-surface to-transparent"></div>
+<div class="absolute bottom-6 left-6 z-10">
+<h2 class="font-h2 text-on-surface uppercase italic">Authentic Match Kits</h2>
+<p class="font-label-caps text-primary mt-2">Shop Collection →</p>
+</div>
+</div>
+<div class="md:col-span-4 relative h-96 group overflow-hidden rim-light rounded-lg">
+<div class="absolute inset-0 bg-surface-container-low transition-transform duration-700 group-hover:scale-105" data-alt="Lifestyle shot of a fan wearing a premium vintage rugby polo shirt in a modern, moody urban setting. Subtle lighting, high end streetwear aesthetic, focus on the embroidered crest." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuALmX-nsuGvmjfy6ZIQRGKZK60Vl3dKhf5q-7iNXae7iPEMalRXPqw3mti04X3S9hA8tEqZU64awLM2bHU41qaNYGnsiyDJWil5VPwQLKuRCH6Vz1usDNh_GWj1y1bJLf7FCJAImzUh8gA-Qg1QWHth3e06bCpK7iNWoVN59ED90MZMCH-WUySs_kruDElrkiRJKI2edGqrVnbbqZyaR0onOrvph7jjSoJ0CkxDTI3SiqW5AUWtyzYSFhWgDV2iD1MQOfAQco8c2ths'); background-size: cover; background-position: center;"></div>
+<div class="absolute inset-0 bg-gradient-to-t from-surface to-transparent"></div>
+<div class="absolute bottom-6 left-6 z-10">
+<h2 class="font-h3 text-on-surface uppercase italic">Clubhouse Lifestyle</h2>
+<p class="font-label-caps text-primary mt-2">Shop Collection →</p>
+</div>
+</div>
+<div class="md:col-span-5 relative h-96 group overflow-hidden rim-light rounded-lg">
+<div class="absolute inset-0 bg-surface-container-low transition-transform duration-700 group-hover:scale-105" data-alt="High quality athletic duffel bag and training gear arranged on a dark, textured gym floor. Dramatic spotlighting, rich blacks, focus on durable materials and premium construction." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDOU2Inggp8iJU1XN06_MdTsnlu1zOoJD8avty1KVZBrPR5Fg7LzMdoYRgj56Gi2pdfzAUMzxojZkWTX2pOxEONxig6wPtCBGyIIAI0fAriy3fxTDwGxKbjAFUkBwhgCQMrO9M80R-LkBhP7p-p77fjhBM3oA0pYg72neMt_zI7k5dD7Jr9tOuH1r-LlD1KvZ4FBGaoW0YtbUUtvfrscGquqiN8vZMBgA6u-U68ifpskFDPdfFwLo7K7NM9VQ5-rdjdsdNklCy4hQmE'); background-size: cover; background-position: center;"></div>
+<div class="absolute inset-0 bg-gradient-to-t from-surface to-transparent"></div>
+<div class="absolute bottom-6 left-6 z-10">
+<h2 class="font-h3 text-on-surface uppercase italic">Travel &amp; Gear</h2>
+<p class="font-label-caps text-primary mt-2">Shop Collection →</p>
+</div>
+</div>
+<div class="md:col-span-7 relative h-96 group overflow-hidden rim-light rounded-lg">
+<div class="absolute inset-0 bg-surface-container-low transition-transform duration-700 group-hover:scale-105" data-alt="Macro shot of sports accessories, including a rugby ball, water bottle, and performance socks. Dark background, neon green rim lighting, intense athletic vibe, crisp details." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCzfmOEPeUzuR-HUFxwn9-CA9VE9sLVP6PakfPsGNNKb1i-kTR5Ajtgetgn9CBroH8QySxaNgPhhQ87bUKl1AGRrOiVzVVqhbirpbNKAgnjTz7rxONLxyDXGpMWItypmftPWSlK99w6znnW5bX71llQFfZy1qb_JMQ8mVXMJfzI_50-c4QLs0ez8byB5Obz7B9oj8CD8PZlfnckiokPgJwnOx5CkDRK6VwUYKFCnaN7MMFNL8bV78CfJWYs6kLsCyjogAxCKRIvRoJd'); background-size: cover; background-position: center;"></div>
+<div class="absolute inset-0 bg-gradient-to-t from-surface to-transparent"></div>
+<div class="absolute bottom-6 left-6 z-10">
+<h2 class="font-h3 text-on-surface uppercase italic">Accessories</h2>
+<p class="font-label-caps text-primary mt-2">Shop Collection →</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Current Drop Showcase -->
+<section class="py-section-padding-desktop bg-surface-container-low">
+<div class="px-gutter max-w-container-max mx-auto mb-12 flex justify-between items-end">
+<h2 class="font-h1 text-on-surface uppercase italic">Latest Arrivals</h2>
+<a class="font-label-caps text-primary hover:text-primary-container transition-colors" href="#">VIEW ALL →</a>
+</div>
+<div class="flex overflow-x-auto gap-6 px-gutter pb-8 -mx-4 md:mx-0 max-w-container-max mx-auto snap-x">
+<!-- Product Card 1 -->
+<div class="min-w-[300px] bg-inverse-surface rounded-lg p-4 snap-start relative group flex flex-col justify-between">
+<div class="absolute top-4 right-4 bg-primary-container text-on-primary-fixed-variant font-label-caps px-2 py-1 rounded">$120</div>
+<div class="h-64 mb-4 flex items-center justify-center">
+<img class="object-contain h-full transition-transform duration-500 group-hover:scale-110" data-alt="Isolated product shot of the official Zimbabwe Rugby Union home jersey. Vibrant green with white accents, crisp white background, studio lighting, highly detailed flat lay." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBALDNC5k-Gp8cg-uFW7T9_Hl1UvqY9Ad58ETiU4YAPGSTDkDsDKhSIRaKV1y3cNi2MIZ38CIqUdgoBmqpWCqUblb20q-I8MFtmXtxcN0_USaatbNrXxNacPreU4HEl6vTtYmlZf0Ugjwqv25PjRrmHVGePeVKgE1clhGGdrh3zlYpNblGxV9lq3uamSVlFAOdha_SxECaaocswYhrgc9pxTJxPgZeJSY0QeXp5zZ7eWJ6dWZrw-JMMVppCitdhjN8c4NfNS6U9mYYf"/>
+</div>
+<div>
+<h3 class="font-h3 text-surface uppercase italic mb-2">Home Match Jersey</h3>
+<div class="flex gap-2 mb-4">
+<div class="w-4 h-4 rounded-full bg-primary-container border border-outline"></div>
+<div class="w-4 h-4 rounded-full bg-surface border border-outline"></div>
+</div>
+<button class="w-full clip-slanted bg-surface text-on-surface font-label-caps py-3 hover:bg-primary-container hover:text-on-primary-fixed-variant transition-colors">ADD TO CART</button>
+</div>
+</div>
+<!-- Product Card 2 -->
+<div class="min-w-[300px] bg-inverse-surface rounded-lg p-4 snap-start relative group flex flex-col justify-between">
+<div class="absolute top-4 right-4 bg-primary-container text-on-primary-fixed-variant font-label-caps px-2 py-1 rounded">$120</div>
+<div class="h-64 mb-4 flex items-center justify-center">
+<img class="object-contain h-full transition-transform duration-500 group-hover:scale-110" data-alt="Isolated product shot of the official Zimbabwe Rugby Union away jersey. Crisp white with green accents, white background, studio lighting, highly detailed flat lay." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDvWUnyEZI69I0IMmn2TtdSxhW4BaY4jqwrcm6W2usqfxcbyDGCVAHyMrdN9LpBR8PVGEd1X3KZSb5dTDm3-ZP0XOQ2sNvzhUc4uLNdYgkjYuLbs1UIFJVl9A2raKu-iHazGIM61n3hXCsN3voESfvqzSKfOdTXgjCrMpiGezeNrrL7lt1UJgQnoXWQOoBpOFkBgxwFwhPzfCr7IseQfJhUz84kZiagxJPjCm3ovBsD3qYW0Wq-bYPBlt3g06bUzMdwmiQNV6dHbGer"/>
+</div>
+<div>
+<h3 class="font-h3 text-surface uppercase italic mb-2">Away Match Jersey</h3>
+<div class="flex gap-2 mb-4">
+<div class="w-4 h-4 rounded-full bg-surface border border-outline"></div>
+</div>
+<button class="w-full clip-slanted bg-surface text-on-surface font-label-caps py-3 hover:bg-primary-container hover:text-on-primary-fixed-variant transition-colors">ADD TO CART</button>
+</div>
+</div>
+<!-- Product Card 3 -->
+<div class="min-w-[300px] bg-inverse-surface rounded-lg p-4 snap-start relative group flex flex-col justify-between">
+<div class="absolute top-4 right-4 bg-primary-container text-on-primary-fixed-variant font-label-caps px-2 py-1 rounded">$85</div>
+<div class="h-64 mb-4 flex items-center justify-center">
+<img class="object-contain h-full transition-transform duration-500 group-hover:scale-110" data-alt="Isolated product shot of a premium Zimbabwe Rugby Union training polo shirt. Dark green fabric, high tech mesh texture, white background, studio lighting, detailed flat lay." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAH-9haXUNTlFp-6w_uNEVf5z_0CG2sSSQb9B1p1YdKp18trfHOB01umdxLR2XfXoyJPPUhf1GX6S_S1pk_NbZQM6USKFzXFp1nXhioBWVel4iVlpthakG2YtwYCoS7-f5EmkS7REXwuccl5uHSe4q8IIPqW-Z2o7mXHNPiveOUNyKYDirocOrhFCX5Bera42IBY6XyREVwJRMPSoxgKT88rB8-Ch4kgCWpLbXeavpWooVUxWt-yZ7bSgAuA0YNgK5N9giVJl2-NVRC"/>
+</div>
+<div>
+<h3 class="font-h3 text-surface uppercase italic mb-2">Elite Training Polo</h3>
+<div class="flex gap-2 mb-4">
+<div class="w-4 h-4 rounded-full bg-surface-container border border-outline"></div>
+<div class="w-4 h-4 rounded-full bg-primary-container border border-outline"></div>
+</div>
+<button class="w-full clip-slanted bg-surface text-on-surface font-label-caps py-3 hover:bg-primary-container hover:text-on-primary-fixed-variant transition-colors">ADD TO CART</button>
+</div>
+</div>
+<!-- Product Card 4 -->
+<div class="min-w-[300px] bg-inverse-surface rounded-lg p-4 snap-start relative group flex flex-col justify-between">
+<div class="absolute top-4 right-4 bg-primary-container text-on-primary-fixed-variant font-label-caps px-2 py-1 rounded">$45</div>
+<div class="h-64 mb-4 flex items-center justify-center">
+<img class="object-contain h-full transition-transform duration-500 group-hover:scale-110" data-alt="Isolated product shot of a Zimbabwe Rugby Union official snapback cap. Dark charcoal with embroidered crest, white background, studio lighting, detailed flat lay." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCAmRdUP6i6wrxEfljUXrghms1xtQ2q51BcDGqc5gIofIAt4ROx-pCi2qw2zPp-pDCA-OVb0Fkml7Eqq7Xy-boMRrxlocyRylhiS60gZ7ENHRsZpBXDSBNI1mGN14bpNYjknWUoWh0_Z4JR_zkhlPXz_R7R7n4ixXDMzHYEd_zA1d3ak_iF6OBhu1S220XiP5pYDZUXnemlyL2Mbf5L3LTS9KQorCdCrMQhRTHboOrkpvjEpjLdGQqsND6oK2zM9Ds4QUxSoxGdo9PG"/>
+</div>
+<div>
+<h3 class="font-h3 text-surface uppercase italic mb-2">Clubhouse Cap</h3>
+<div class="flex gap-2 mb-4">
+<div class="w-4 h-4 rounded-full bg-surface-container border border-outline"></div>
+</div>
+<button class="w-full clip-slanted bg-surface text-on-surface font-label-caps py-3 hover:bg-primary-container hover:text-on-primary-fixed-variant transition-colors">ADD TO CART</button>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer Component -->
+<footer class="w-full py-section-padding-desktop bg-surface-container-lowest dark:bg-surface-container-lowest border-t border-outline-variant font-body-base text-body-base text-on-surface">
+<div class="grid grid-cols-1 md:grid-cols-4 gap-grid-gap px-gutter max-w-container-max mx-auto">
+<div class="col-span-1 md:col-span-2">
+<div class="font-display-lg text-h3 text-on-surface uppercase mb-4">The Sables Clubhouse</div>
+<p class="text-on-surface-variant max-w-md">The official home of Zimbabwe Rugby Union apparel and gear. United by passion. Driven by excellence.</p>
+<div class="mt-8 text-on-surface-variant">© 2025 Zimbabwe Rugby Union. All Rights Reserved.</div>
+</div>
+<div class="flex flex-col gap-4">
+<a class="text-on-surface-variant hover:text-white transition-colors hover:text-primary underline-offset-4 hover:underline" href="#">Privacy Policy</a>
+<a class="text-on-surface-variant hover:text-white transition-colors hover:text-primary underline-offset-4 hover:underline" href="#">Terms &amp; Conditions</a>
+<a class="text-on-surface-variant hover:text-white transition-colors hover:text-primary underline-offset-4 hover:underline" href="#">Shipping</a>
+</div>
+<div class="flex flex-col gap-4">
+<a class="text-on-surface-variant hover:text-white transition-colors hover:text-primary underline-offset-4 hover:underline" href="#">Returns</a>
+<a class="text-on-surface-variant hover:text-white transition-colors hover:text-primary underline-offset-4 hover:underline" href="#">Contact Us</a>
+</div>
+</div>
+</footer>
+</body></html>
