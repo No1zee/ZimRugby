@@ -50,7 +50,21 @@ const lineVariants = {
   },
 };
 
-function SlideContent({ slide }: { slide: HeroSlideData }) {
+function SlideContent({ 
+  slide,
+  slides,
+  currentSlide,
+  prevSlide,
+  nextSlide,
+  setCurrentSlide
+}: { 
+  slide: HeroSlideData;
+  slides: HeroSlideData[];
+  currentSlide: number;
+  prevSlide: () => void;
+  nextSlide: () => void;
+  setCurrentSlide: (i: number) => void;
+}) {
   const tag = slide.tag?.toUpperCase() || "";
   let spotlightColor = "border-t-zru-green/25";
   if (tag.includes("LADY")) {
@@ -129,38 +143,87 @@ function SlideContent({ slide }: { slide: HeroSlideData }) {
           </>
         )}
 
-        {/* CTAs — always shown */}
-        <div className="flex flex-col sm:flex-row gap-4 justify-start items-center pt-2">
-          {/* Primary CTA: Sign In (delayed animation so it loads last) */}
-          <motion.div
-            initial={{ opacity: 0, y: 15 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 1.0, duration: 0.6, ease: [0.25, 1, 0.5, 1] }}
-          >
-            <MagneticElement intensity={0.25}>
-              <Link href={slide.ctas.primary.href} className="inline-flex items-center justify-center font-subheading tracking-widest uppercase transition-all duration-300 bg-white text-rich-black hover:bg-zru-green hover:text-white border border-white hover:border-zru-green px-8 py-3.5 text-xs font-black clip-slanted shadow-2xl min-w-[200px] gap-3">
-                {slide.ctas.primary.iconName && iconMap[slide.ctas.primary.iconName] && (() => {
-                  const Icon = iconMap[slide.ctas.primary.iconName];
-                  return <Icon className="w-4.5 h-4.5" />;
-                })()}
-                {slide.ctas.primary.label}
-              </Link>
-            </MagneticElement>
-          </motion.div>
-          
-          {slide.ctas.secondary && (
-            <motion.div variants={itemVariants}>
+        {/* CTAs & Directly Attached Navigation Indicators */}
+        <div className="space-y-4 pt-2">
+          <div className="flex flex-col sm:flex-row gap-4 justify-start items-center">
+            {/* Primary CTA: Sign In */}
+            <motion.div
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 1.0, duration: 0.6, ease: [0.25, 1, 0.5, 1] }}
+            >
               <MagneticElement intensity={0.25}>
-                <Link href={slide.ctas.secondary.href} className="inline-flex items-center justify-center font-subheading tracking-widest uppercase transition-all duration-300 bg-transparent border-2 border-white/20 text-white hover:bg-white hover:border-white hover:text-rich-black px-8 py-3.5 text-xs font-black clip-slanted min-w-[200px] gap-3 backdrop-blur-xs">
-                  {slide.ctas.secondary.iconName && iconMap[slide.ctas.secondary.iconName] && (() => {
-                    const Icon = iconMap[slide.ctas.secondary.iconName];
+                <Link href={slide.ctas.primary.href} className="inline-flex items-center justify-center font-subheading tracking-widest uppercase transition-all duration-300 bg-white text-rich-black hover:bg-zru-green hover:text-white border border-white hover:border-zru-green px-8 py-3.5 text-xs font-black clip-slanted shadow-2xl min-w-[200px] gap-3">
+                  {slide.ctas.primary.iconName && iconMap[slide.ctas.primary.iconName] && (() => {
+                    const Icon = iconMap[slide.ctas.primary.iconName];
                     return <Icon className="w-4.5 h-4.5" />;
                   })()}
-                  {slide.ctas.secondary.label}
+                  {slide.ctas.primary.label}
                 </Link>
               </MagneticElement>
             </motion.div>
-          )}
+            
+            {slide.ctas.secondary && (
+              <motion.div variants={itemVariants}>
+                <MagneticElement intensity={0.25}>
+                  <Link href={slide.ctas.secondary.href} className="inline-flex items-center justify-center font-subheading tracking-widest uppercase transition-all duration-300 bg-transparent border-2 border-white/20 text-white hover:bg-white hover:border-white hover:text-rich-black px-8 py-3.5 text-xs font-black clip-slanted min-w-[200px] gap-3 backdrop-blur-xs">
+                    {slide.ctas.secondary.iconName && iconMap[slide.ctas.secondary.iconName] && (() => {
+                      const Icon = iconMap[slide.ctas.secondary.iconName];
+                      return <Icon className="w-4.5 h-4.5" />;
+                    })()}
+                    {slide.ctas.secondary.label}
+                  </Link>
+                </MagneticElement>
+              </motion.div>
+            )}
+          </div>
+
+          {/* Slide Navigation Controls attached directly beneath CTA buttons */}
+          <div className="flex items-center gap-4 pt-2">
+            <button 
+              onClick={prevSlide} 
+              className="text-white/40 hover:text-white transition-colors p-1 -ml-1"
+              aria-label="Previous Slide"
+              title="Previous Slide"
+            >
+                <ChevronLeft size={24} />
+            </button>
+            <div className="flex gap-2.5">
+               {slides.map((_, i) => {
+                 const isActive = i === currentSlide;
+                 return (
+                   <button
+                     key={i}
+                     onClick={() => setCurrentSlide(i)}
+                     className={`h-2 transition-all duration-500 clip-slanted-sm relative overflow-hidden ${
+                       isActive ? 'w-14 bg-white/20' : 'w-7 bg-white/40 hover:bg-white/60'
+                     }`}
+                     aria-label={`Go to slide ${i + 1}`}
+                     title={`Go to slide ${i + 1}`}
+                   >
+                     <span className="sr-only">Go to slide {i + 1}</span>
+                     {isActive && (
+                       <motion.div
+                         key={currentSlide}
+                         initial={{ width: "0%" }}
+                         animate={{ width: "100%" }}
+                         transition={{ duration: 12, ease: "linear" }}
+                         className="absolute inset-0 bg-zru-green"
+                       />
+                     )}
+                   </button>
+                 );
+               })}
+            </div>
+            <button 
+              onClick={nextSlide} 
+              className="text-white/40 hover:text-white transition-colors p-1"
+              aria-label="Next Slide"
+              title="Next Slide"
+            >
+                <ChevronRight size={24} />
+            </button>
+          </div>
         </div>
       </div>
     </motion.div>
@@ -286,60 +349,18 @@ export default function HeroCarousel({ slides }: { slides: HeroSlideData[] }) {
       {/* Content Layer */}
       <motion.div style={{ y: yText, opacity: opacityText }} className="relative z-20 w-full max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 h-full flex items-center justify-start pt-24 lg:pt-32 pb-24">
         <div className="text-left w-full mr-auto">
-          <SlideContent slide={activeSlide} />
+          <SlideContent 
+            slide={activeSlide} 
+            slides={slides}
+            currentSlide={currentSlide}
+            prevSlide={prevSlide}
+            nextSlide={nextSlide}
+            setCurrentSlide={setCurrentSlide}
+          />
         </div>
       </motion.div>
 
-      {/* Slide Navigation Hints (Placed directly below primary text & CTA buttons) */}
-      <div className="absolute bottom-16 sm:bottom-20 lg:bottom-16 left-0 w-full z-40 pointer-events-none">
-        <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-start">
-          <div className="flex items-center gap-5 pointer-events-auto">
-            <button 
-              onClick={prevSlide} 
-              className="text-white/30 hover:text-white transition-colors -ml-2"
-              aria-label="Previous Slide"
-              title="Previous Slide"
-            >
-                <ChevronLeft size={32} />
-            </button>
-            <div className="flex gap-3">
-               {slides.map((_, i) => {
-                 const isActive = i === currentSlide;
-                 return (
-                   <button
-                     key={i}
-                     onClick={() => setCurrentSlide(i)}
-                     className={`h-2 transition-all duration-500 clip-slanted-sm relative overflow-hidden ${
-                       isActive ? 'w-16 bg-white/20' : 'w-8 bg-white/40 hover:bg-white/60'
-                     }`}
-                     aria-label={`Go to slide ${i + 1}`}
-                     title={`Go to slide ${i + 1}`}
-                   >
-                     <span className="sr-only">Go to slide {i + 1}</span>
-                     {isActive && (
-                       <motion.div
-                         key={currentSlide} // Resets the animation when slide changes
-                         initial={{ width: "0%" }}
-                         animate={{ width: "100%" }}
-                         transition={{ duration: 12, ease: "linear" }}
-                         className="absolute inset-0 bg-zru-green"
-                       />
-                     )}
-                   </button>
-                 );
-               })}
-            </div>
-            <button 
-              onClick={nextSlide} 
-              className="text-white/30 hover:text-white transition-colors"
-              aria-label="Next Slide"
-              title="Next Slide"
-            >
-                <ChevronRight size={32} />
-            </button>
-          </div>
-        </div>
-      </div>
+
 
       {/* Bottom Fade */}
       <div className="absolute bottom-0 left-0 w-full h-48 bg-linear-to-t from-rich-black via-rich-black/50 to-transparent pointer-events-none z-10" />

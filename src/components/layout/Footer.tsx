@@ -97,25 +97,26 @@ export default function Footer() {
             </p>
           </div>
 
-          {/* Compact HQ Contact Badge & Socials */}
-          <div className="flex flex-wrap items-center gap-4 shrink-0">
-            <div className="inline-flex items-center gap-3 px-4 py-2 bg-white/80 border border-[#003822]/15 rounded-xl text-xs font-bold text-[#003822]/80 shadow-xs">
+          {/* Clean Editorial HQ Contact Details & Socials (No Pills) */}
+          <div className="flex flex-wrap items-center gap-6 shrink-0 text-xs font-semibold text-[#003822]/80">
+            <div className="flex items-center gap-2">
               <MapPin className="w-3.5 h-3.5 text-[#006747] shrink-0" />
               <span>Harare Sports Club HQ</span>
-              <span className="text-[#003822]/30">•</span>
-              <a href="tel:+263242700100" className="hover:text-[#006747] transition-colors flex items-center gap-1">
-                <Phone className="w-3 h-3 text-[#006747]" /> +263 242 700 100
-              </a>
             </div>
+            <span className="text-[#003822]/20 hidden sm:inline">•</span>
+            <a href="tel:+263242700100" className="hover:text-[#006747] transition-colors flex items-center gap-1.5">
+              <Phone className="w-3.5 h-3.5 text-[#006747]" /> 
+              <span>+263 242 700 100</span>
+            </a>
 
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 ml-2">
               {socialLinks.map(({ Icon, href, label }) => (
                 <a
                   key={label}
                   href={href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-9 h-9 rounded-full border border-[#003822]/20 bg-white flex items-center justify-center text-[#003822] hover:bg-[#006747] hover:text-white hover:border-[#006747] transition-all duration-300 shadow-xs"
+                  className="w-8 h-8 rounded-full border border-[#003822]/20 bg-white flex items-center justify-center text-[#003822] hover:bg-[#006747] hover:text-white hover:border-[#006747] transition-all duration-300 shadow-xs"
                   aria-label={`Official ZRU on ${label}`}
                 >
                   <Icon className="w-3.5 h-3.5" />
@@ -165,7 +166,8 @@ export default function Footer() {
             <Link href="/accessibility" className="hover:text-[#006747] transition-colors">
               Cookie Policy
             </Link>
-            <span className="px-2 py-0.5 bg-[#006747]/10 text-[#006747] border border-[#006747]/30 rounded-md font-mono text-[9px]">
+            <span className="text-[#006747] font-semibold flex items-center gap-1">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#006747]" />
               CDPA 2021 COMPLIANT
             </span>
           </nav>

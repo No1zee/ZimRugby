@@ -37,10 +37,10 @@ export default function GlobalError({
           transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
           className="space-y-6"
         >
-          {/* Status badge */}
-          <div className="inline-flex items-center gap-2 border border-red-500/30 bg-red-500/10 rounded-full px-4 py-1.5">
-            <span className="w-1.5 h-1.5 rounded-full bg-red-400" />
-            <span className="text-[10px] font-black uppercase tracking-[0.3em] text-red-400">
+          {/* Clean Un-boxed Status Header */}
+          <div className="flex items-center justify-center gap-2 text-red-400">
+            <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
+            <span className="text-xs font-black uppercase tracking-[0.3em]">
               Something went wrong
             </span>
           </div>
@@ -69,7 +69,7 @@ export default function GlobalError({
         >
           <button
             onClick={() => reset()}
-            className="group flex items-center gap-3 bg-zru-green hover:bg-zru-green/80 text-white rounded-full px-8 py-4 font-black text-sm uppercase tracking-widest transition-all duration-300 w-full sm:w-auto justify-center"
+            className="group flex items-center gap-3 bg-zru-green hover:bg-[#004d35] text-white rounded-xl px-8 py-4 font-black text-xs uppercase tracking-widest transition-all duration-300 w-full sm:w-auto justify-center shadow-lg"
           >
             <RefreshCw className="w-4 h-4 group-hover:rotate-180 transition-transform duration-500" />
             Try Again
@@ -77,7 +77,7 @@ export default function GlobalError({
 
           <Link
             href="/"
-            className="flex items-center gap-3 border border-white/10 hover:border-zru-green/40 bg-white/5 hover:bg-white/8 text-white/70 hover:text-white rounded-full px-8 py-4 font-black text-sm uppercase tracking-widest transition-all duration-300 w-full sm:w-auto justify-center"
+            className="flex items-center gap-3 border border-white/15 hover:border-zru-green bg-white/5 hover:bg-white/10 text-white rounded-xl px-8 py-4 font-black text-xs uppercase tracking-widest transition-all duration-300 w-full sm:w-auto justify-center"
           >
             <Home className="w-4 h-4" />
             Go Home

@@ -35,7 +35,7 @@ export default function CleanCountdownBanner() {
 
   return (
     <section
-      className="py-12 sm:py-16 text-white border-y border-white/10 relative overflow-hidden select-none"
+      className="py-8 sm:py-10 text-white border-y border-white/10 relative overflow-hidden select-none"
       style={{
         background: "radial-gradient(circle at 50% 25%, #007A50 0%, #004D2C 60%, #002D1A 100%)",
       }}
@@ -49,39 +49,39 @@ export default function CleanCountdownBanner() {
         }}
       />
 
-      {/* Left Player SVG Cutout */}
+      {/* Left Player SVG Cutout (Safari/WebKit Cross-Browser Fix) */}
       <motion.div
         initial={{ opacity: 0, x: -120 }}
         whileInView={{ opacity: 1, x: 0 }}
         viewport={{ once: true, amount: 0.2 }}
         transition={{ duration: 0.8, ease: "easeOut", delay: 0.1 }}
-        className="absolute bottom-0 -left-6 sm:left-0 lg:left-12 w-44 sm:w-60 md:w-80 lg:w-96 h-auto pointer-events-none z-10"
+        className="absolute bottom-0 -left-6 sm:left-0 lg:left-12 w-44 sm:w-60 md:w-80 lg:w-96 h-56 sm:h-80 md:h-[420px] lg:h-[500px] pointer-events-none z-10 block"
       >
         <Image
           src="/images/cutouts/3.svg"
           alt="Zimbabwe Rugby Cutout Left"
           width={380}
           height={500}
-          className="object-contain object-bottom drop-shadow-[0_20px_40px_rgba(0,0,0,0.8)]"
+          className="w-full h-full object-contain object-bottom drop-shadow-[0_20px_40px_rgba(0,0,0,0.8)]"
           unoptimized
           priority
         />
       </motion.div>
 
-      {/* Right Player SVG Cutout */}
+      {/* Right Player SVG Cutout (Safari/WebKit Cross-Browser Fix) */}
       <motion.div
         initial={{ opacity: 0, x: 120 }}
         whileInView={{ opacity: 1, x: 0 }}
         viewport={{ once: true, amount: 0.2 }}
         transition={{ duration: 0.8, ease: "easeOut", delay: 0.1 }}
-        className="absolute bottom-0 -right-6 sm:right-0 lg:right-8 w-44 sm:w-60 md:w-80 lg:w-96 h-auto pointer-events-none z-10"
+        className="absolute bottom-0 -right-6 sm:right-0 lg:right-8 w-44 sm:w-60 md:w-80 lg:w-96 h-56 sm:h-80 md:h-[420px] lg:h-[500px] pointer-events-none z-10 block"
       >
         <Image
           src="/images/cutouts/1.svg"
           alt="Zimbabwe Rugby Cutout Right"
           width={380}
           height={500}
-          className="object-contain object-bottom drop-shadow-[0_20px_40px_rgba(0,0,0,0.8)]"
+          className="w-full h-full object-contain object-bottom drop-shadow-[0_20px_40px_rgba(0,0,0,0.8)]"
           unoptimized
           priority
         />

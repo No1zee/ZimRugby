@@ -194,17 +194,17 @@ export default function MatchdayVideoHighlights({
               </button>
             </div>
 
-            {/* Prominent ZRU Green YouTube Channel CTA Button */}
+            {/* Icon-Only ZRU Green YouTube Channel CTA Button */}
             {showChannelLink && (
               <a
                 href="https://www.youtube.com/@ZimbabweRugbyUnion"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 px-3.5 py-2 bg-[#006747] hover:bg-[#004d35] text-white rounded-xl text-xs font-heading font-black tracking-wider uppercase transition-all duration-300 shadow-sm hover:shadow-md group border border-[#006747]"
+                title="Watch ZRU on YouTube"
+                aria-label="Watch ZRU on YouTube"
+                className="p-2 bg-[#006747] hover:bg-[#004d35] text-white rounded-xl transition-all duration-300 shadow-sm hover:shadow-md border border-[#006747] flex items-center justify-center scale-105"
               >
                 <Youtube className="w-4 h-4 fill-current text-white" />
-                <span className="hidden sm:inline">ZRU YOUTUBE</span>
-                <ExternalLink className="w-3.5 h-3.5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5 opacity-80" />
               </a>
             )}
           </div>
@@ -239,16 +239,24 @@ export default function MatchdayVideoHighlights({
               onTouchMove={handleMouseMove}
               onTouchEnd={handleMouseUp}
             >
-              {/* 3D Stage Rotator */}
+              {/* 3D Stage Rotator (Safari/WebKit Cross-Browser Fix) */}
               <div
                 className="relative w-full h-full flex items-center justify-center transition-transform duration-75"
                 style={{
                   transformStyle: "preserve-3d",
+                  WebkitTransformStyle: "preserve-3d",
                   transform: `rotateY(${rotationY}deg)`,
+                  WebkitTransform: `rotateY(${rotationY}deg)`,
                 }}
               >
                 {videos.map((video, idx) => {
                   const itemAngle = idx * angleStep;
+                  // Compute net angle relative to camera view for explicit Safari z-indexing
+                  const netAngle = (itemAngle + rotationY) % 360;
+                  const normalizedAngle = (netAngle + 360) % 360;
+                  // Cards facing front (0deg / 360deg) get highest z-index, cards behind (180deg) get lowest
+                  const zIndexVal = Math.round(1000 + Math.cos((normalizedAngle * Math.PI) / 180) * 500);
+
                   return (
                     <div
                       key={video.id}
@@ -256,7 +264,10 @@ export default function MatchdayVideoHighlights({
                       className="absolute w-[200px] xs:w-[240px] sm:w-[350px] h-[180px] sm:h-[260px] rounded-2xl sm:rounded-3xl overflow-hidden shadow-[0_15px_30px_-5px_rgba(0,0,0,0.15)] border border-black/10 bg-white cursor-pointer group transition-all duration-300 flex flex-col justify-between"
                       style={{
                         transformStyle: "preserve-3d",
+                        WebkitTransformStyle: "preserve-3d",
                         transform: `rotateY(${itemAngle}deg) translateZ(${radius}px)`,
+                        WebkitTransform: `rotateY(${itemAngle}deg) translateZ(${radius}px)`,
+                        zIndex: zIndexVal,
                       }}
                     >
                       {/* Video Thumbnail */}
