@@ -3,7 +3,7 @@
 import { motion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, ShieldCheck } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 
 export default function ClubhouseHero() {
   return (
@@ -12,7 +12,7 @@ export default function ClubhouseHero() {
       <div className="absolute inset-0 z-0">
         <Image
           src="/images/hero/lady-sables.webp"
-          alt="Sables Rugby Clubhouse Flagship"
+          alt="Sables Rugby FanZone Flagship"
           fill
           priority
           quality={75}
@@ -26,19 +26,6 @@ export default function ClubhouseHero() {
       {/* Hero Content Container */}
       <div className="relative z-20 text-center px-6 max-w-4xl mx-auto flex flex-col items-center gap-6 pt-20 pb-16">
         
-        {/* Official Union Pill */}
-        <motion.div
-          initial={{ opacity: 0, y: 15 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-          className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-zru-green/10 border border-zru-green/30"
-        >
-          <ShieldCheck className="w-4 h-4 text-zru-green" />
-          <span className="text-[11px] font-extrabold uppercase tracking-[0.2em] text-zru-green">
-            OFFICIAL ZIMBABWE RUGBY UNION FLAGSHOP
-          </span>
-        </motion.div>
-
         {/* Display Headline — Official Unison / Heading Typography */}
         <motion.h1
           initial={{ opacity: 0, y: 20 }}
@@ -46,7 +33,7 @@ export default function ClubhouseHero() {
           transition={{ duration: 0.8, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
           className="text-4xl xs:text-5xl sm:text-6xl md:text-7xl font-heading text-black tracking-tight uppercase italic leading-[0.95]"
         >
-          THE OFFICIAL <span className="text-zru-green">SABLES CLUBHOUSE</span>
+          THE OFFICIAL <span className="text-zru-green">SABLES FANZONE</span>
         </motion.h1>
 
         {/* Subtitle */}
