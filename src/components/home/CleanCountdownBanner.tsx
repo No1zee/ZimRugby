@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
+import { motion } from "framer-motion";
 
 export default function CleanCountdownBanner() {
   const [timeLeft, setTimeLeft] = useState({
@@ -33,68 +34,101 @@ export default function CleanCountdownBanner() {
   }, []);
 
   return (
-    <section className="py-16 sm:py-20 bg-zru-green text-white border-y border-white/10 relative overflow-hidden select-none">
-      
-      {/* Stadium Pitch Line Markings & Diagonal Stripe Brand Motif */}
-      <div 
+    <section
+      className="py-12 sm:py-16 text-white border-y border-white/10 relative overflow-hidden select-none"
+      style={{
+        background: "radial-gradient(circle at 50% 25%, #007A50 0%, #004D2C 60%, #002D1A 100%)",
+      }}
+    >
+      {/* Pitch Grid Overlay */}
+      <div
         className="absolute inset-0 opacity-10 pointer-events-none"
         style={{
-          backgroundImage: "linear-gradient(135deg, rgba(255,255,255,0.2) 25%, transparent 25%, transparent 50%, rgba(255,255,255,0.2) 50%, rgba(255,255,255,0.2) 75%, transparent 75%, transparent)",
-          backgroundSize: "40px 40px"
+          backgroundImage: "radial-gradient(circle, #ffffff 1px, transparent 1px)",
+          backgroundSize: "20px 20px",
         }}
       />
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_0%,rgba(0,0,0,0.35)_100%)] pointer-events-none" />
 
-      {/* Hero Content Container */}
-      <div className="relative z-20 max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center text-center space-y-8">
+      {/* Left Player SVG Cutout */}
+      <motion.div
+        initial={{ opacity: 0, x: -120 }}
+        whileInView={{ opacity: 1, x: 0 }}
+        viewport={{ once: true, amount: 0.2 }}
+        transition={{ duration: 0.8, ease: "easeOut", delay: 0.1 }}
+        className="absolute bottom-0 -left-6 sm:left-0 lg:left-12 w-44 sm:w-60 md:w-80 lg:w-96 h-auto pointer-events-none z-10"
+      >
+        <Image
+          src="/images/cutouts/3.svg"
+          alt="Zimbabwe Rugby Cutout Left"
+          width={380}
+          height={500}
+          className="object-contain object-bottom drop-shadow-[0_20px_40px_rgba(0,0,0,0.8)]"
+          unoptimized
+          priority
+        />
+      </motion.div>
+
+      {/* Right Player SVG Cutout */}
+      <motion.div
+        initial={{ opacity: 0, x: 120 }}
+        whileInView={{ opacity: 1, x: 0 }}
+        viewport={{ once: true, amount: 0.2 }}
+        transition={{ duration: 0.8, ease: "easeOut", delay: 0.1 }}
+        className="absolute bottom-0 -right-6 sm:right-0 lg:right-12 w-44 sm:w-60 md:w-80 lg:w-96 h-auto pointer-events-none z-10"
+      >
+        <Image
+          src="/images/cutouts/1.svg"
+          alt="Zimbabwe Rugby Cutout Right"
+          width={380}
+          height={500}
+          className="object-contain object-bottom drop-shadow-[0_20px_40px_rgba(0,0,0,0.8)]"
+          unoptimized
+          priority
+        />
+      </motion.div>
+
+      <div className="relative z-20 max-w-[1360px] mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center text-center">
         
-        {/* Section Tag */}
-        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 border border-white/20 backdrop-blur-md">
-          <span className="text-[10px] sm:text-xs font-black tracking-[0.25em] uppercase text-white font-heading">
-            OFFICIAL CAMPAIGN • ROAD TO AUSTRALIA 2027
-          </span>
-        </div>
+        {/* Title */}
+        <h3 className="text-xs sm:text-sm font-bold tracking-[0.3em] uppercase text-white/90 mb-8 font-heading">
+          ROAD TO AUSTRALIA 2027
+        </h3>
 
-        {/* Headline */}
-        <h2 className="text-3xl sm:text-5xl md:text-6xl font-heading font-black uppercase italic tracking-tight text-white drop-shadow-md">
-          RUGBY WORLD CUP QUALIFICATION
-        </h2>
-
-        {/* Large Prominent Stat Digital Block Tiles */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 sm:gap-6 md:gap-8 w-full max-w-3xl mx-auto pt-2">
+        {/* Numeric Counter Grid */}
+        <div className="grid grid-cols-4 gap-6 sm:gap-12 md:gap-16 max-w-2xl mx-auto">
           
-          <div className="flex flex-col items-center justify-center p-4 sm:p-6 rounded-2xl bg-black/25 border border-white/15 backdrop-blur-md shadow-xl">
-            <span className="text-4xl sm:text-5xl md:text-6xl font-black font-heading tracking-tight text-white">
+          <div className="flex flex-col items-center">
+            <span className="text-2xl sm:text-4xl md:text-5xl font-extrabold font-heading tracking-tight">
               {String(timeLeft.days).padStart(3, "0")}
             </span>
-            <span className="text-[10px] sm:text-xs font-extrabold tracking-[0.2em] uppercase text-[#84d7af] mt-2 font-heading">
+            <span className="text-[10px] sm:text-xs font-bold tracking-widest uppercase text-white/70 mt-1">
               DAYS
             </span>
           </div>
 
-          <div className="flex flex-col items-center justify-center p-4 sm:p-6 rounded-2xl bg-black/25 border border-white/15 backdrop-blur-md shadow-xl">
-            <span className="text-4xl sm:text-5xl md:text-6xl font-black font-heading tracking-tight text-white">
+          <div className="flex flex-col items-center">
+            <span className="text-2xl sm:text-4xl md:text-5xl font-extrabold font-heading tracking-tight">
               {String(timeLeft.hours).padStart(2, "0")}
             </span>
-            <span className="text-[10px] sm:text-xs font-extrabold tracking-[0.2em] uppercase text-[#84d7af] mt-2 font-heading">
+            <span className="text-[10px] sm:text-xs font-bold tracking-widest uppercase text-white/70 mt-1">
               HOURS
             </span>
           </div>
 
-          <div className="flex flex-col items-center justify-center p-4 sm:p-6 rounded-2xl bg-black/25 border border-white/15 backdrop-blur-md shadow-xl">
-            <span className="text-4xl sm:text-5xl md:text-6xl font-black font-heading tracking-tight text-white">
+          <div className="flex flex-col items-center">
+            <span className="text-2xl sm:text-4xl md:text-5xl font-extrabold font-heading tracking-tight">
               {String(timeLeft.mins).padStart(2, "0")}
             </span>
-            <span className="text-[10px] sm:text-xs font-extrabold tracking-[0.2em] uppercase text-[#84d7af] mt-2 font-heading">
+            <span className="text-[10px] sm:text-xs font-bold tracking-widest uppercase text-white/70 mt-1">
               MINS
             </span>
           </div>
 
-          <div className="flex flex-col items-center justify-center p-4 sm:p-6 rounded-2xl bg-black/25 border border-white/15 backdrop-blur-md shadow-xl">
-            <span className="text-4xl sm:text-5xl md:text-6xl font-black font-heading tracking-tight text-white">
+          <div className="flex flex-col items-center">
+            <span className="text-2xl sm:text-4xl md:text-5xl font-extrabold font-heading tracking-tight">
               {String(timeLeft.secs).padStart(2, "0")}
             </span>
-            <span className="text-[10px] sm:text-xs font-extrabold tracking-[0.2em] uppercase text-[#84d7af] mt-2 font-heading">
+            <span className="text-[10px] sm:text-xs font-bold tracking-widest uppercase text-white/70 mt-1">
               SECS
             </span>
           </div>

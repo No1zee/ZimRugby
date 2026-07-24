@@ -148,8 +148,8 @@ export default function MatchdayVideoHighlights({
   }, [viewMode]);
 
   return (
-    <section className="py-12 bg-milk-white border-t border-black/5 select-none overflow-visible">
-      <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
+    <section className="py-4 sm:py-6 bg-milk-white border-t border-black/5 select-none overflow-visible">
+      <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 space-y-3">
         
         {/* Header Strip & View Switcher */}
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
@@ -226,7 +226,7 @@ export default function MatchdayVideoHighlights({
             </AnimatePresence>
 
             <div
-              className="relative w-full h-[340px] sm:h-[430px] flex items-center justify-center cursor-grab active:cursor-grabbing perspective-1000 overflow-visible"
+              className="relative w-full h-[280px] sm:h-[340px] flex items-center justify-center cursor-grab active:cursor-grabbing perspective-1000 overflow-visible"
               onMouseDown={handleMouseDown}
               onMouseMove={handleMouseMove}
               onMouseUp={handleMouseUp}
