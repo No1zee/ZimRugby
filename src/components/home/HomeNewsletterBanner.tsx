@@ -6,8 +6,8 @@ import Link from "next/link";
 import { CheckCircle, ArrowRight } from "lucide-react";
 
 /* ═══════════════════════════════════════════════════════════════════
-   HomeNewsletterBanner — Un-boxed Emblem & 1/3 vs 2/3 Stage Expansion
-   - Un-boxed ZRU emblem grows to 1/3 stage width on hover
+   HomeNewsletterBanner — Centered Larger Emblem & 1/3 vs 2/3 Stage Expansion
+   - Un-boxed ZRU emblem centers & scales up significantly (2x) in 1/3 section on hover
    - Text collapses cleanly
    - Subscription form box expands to fill remaining 2/3
    ═══════════════════════════════════════════════════════════════════ */
@@ -41,17 +41,17 @@ export default function HomeNewsletterBanner() {
           {/* Subtle Animated Light Trail Gradient Sweep */}
           <div className="absolute inset-0 opacity-0 group-hover/uiverseCard:opacity-20 group-focus-within/uiverseCard:opacity-20 pointer-events-none bg-gradient-to-r from-transparent via-[#34D399] to-transparent transition-opacity duration-700" />
 
-          {/* Left Group: Un-boxed Emblem (grows to 1/3 on hover) + Disappearing Text */}
-          <div className="flex items-center gap-6 relative z-10 lg:w-3/5 lg:group-hover/uiverseCard:w-1/3 lg:group-focus-within/uiverseCard:w-1/3 transition-all duration-500 shrink-0">
+          {/* Left Group: Un-boxed Emblem (Centers & Grows to 1/3 on hover) + Disappearing Text */}
+          <div className="flex items-center justify-start lg:group-hover/uiverseCard:justify-center lg:group-focus-within/uiverseCard:justify-center gap-6 relative z-10 lg:w-3/5 lg:group-hover/uiverseCard:w-1/3 lg:group-focus-within/uiverseCard:w-1/3 transition-all duration-500 shrink-0">
             
-            {/* Un-boxed ZRU Crest Emblem (No outer square box, grows on hover) */}
-            <div className="relative shrink-0 flex items-center justify-center transition-transform duration-500 group-hover/uiverseCard:scale-135 sm:group-hover/uiverseCard:scale-150">
+            {/* Un-boxed ZRU Crest Emblem (No outer square box, centers and scales up on hover) */}
+            <div className="relative shrink-0 flex items-center justify-center transition-all duration-500 group-hover/uiverseCard:scale-175 sm:group-hover/uiverseCard:scale-200">
               <Image
                 src="/images/logos/zru-logo.svg"
                 alt="ZRU Emblem"
-                width={64}
-                height={64}
-                className="w-14 sm:w-16 h-14 sm:h-16 object-contain filter drop-shadow-[0_4px_25px_rgba(0,103,71,0.7)] transition-all duration-500"
+                width={72}
+                height={72}
+                className="w-16 sm:w-20 h-16 sm:h-20 object-contain filter drop-shadow-[0_4px_30px_rgba(0,103,71,0.85)] group-hover/uiverseCard:drop-shadow-[0_8px_35px_rgba(52,211,153,0.6)] transition-all duration-500"
               />
             </div>
 
