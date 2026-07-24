@@ -61,9 +61,9 @@ export default async function ReportPage({ params }: PageProps) {
         <div className="absolute inset-0 flex flex-col justify-end px-6 pb-12 md:pb-24 max-w-[1440px] mx-auto w-full">
           <Link 
             href="/media" 
-            className="group inline-flex items-center gap-3 text-[10px] font-black uppercase tracking-[0.4em] text-zru-green mb-10 transition-all hover:gap-5"
+            className="group inline-flex items-center gap-3 text-[10px] font-heading font-black uppercase tracking-[0.15em] text-zru-green mb-10 transition-all hover:gap-4"
           >
-            <ArrowLeft className="w-4 h-4" /> Back to The FanZone
+            <ArrowLeft className="w-4 h-4" /> Back to News & Media
           </Link>
           
           <div className="flex flex-wrap items-center gap-6 mb-8">

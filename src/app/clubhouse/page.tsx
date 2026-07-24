@@ -23,10 +23,14 @@ import StorySection from "@/components/shop/StorySection";
 import JournalStrip from "@/components/home/JournalStrip";
 import FixtureRibbon from "@/components/shop/FixtureRibbon";
 import PageAnnouncements from "@/components/ui/PageAnnouncements";
+import ClubhouseNavBridge from "@/components/shop/ClubhouseNavBridge";
 
 export default function ClubhousePage() {
   return (
     <main className="bg-rich-black min-h-screen selection:bg-zru-green selection:text-white relative overflow-hidden">
+      {/* QA-001: Nav bridge back to main ZRU site */}
+      <ClubhouseNavBridge />
+
       {/* Ambient Background Splashes */}
       <div className="pointer-events-none absolute top-[5%] left-[-10%] w-[50vw] h-[50vw] rounded-full bg-[#006039] opacity-[0.15] blur-[120px] mix-blend-screen" />
       <div className="pointer-events-none absolute top-[45%] right-[-15%] w-[60vw] h-[60vw] rounded-full bg-[#006039] opacity-[0.12] blur-[140px] mix-blend-screen" />
