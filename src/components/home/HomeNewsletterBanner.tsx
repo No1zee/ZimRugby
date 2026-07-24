@@ -6,8 +6,10 @@ import Link from "next/link";
 import { CheckCircle, ArrowRight } from "lucide-react";
 
 /* ═══════════════════════════════════════════════════════════════════
-   HomeNewsletterBanner — Vacuum-Filling Interactive Hover Motion
-   Text disappears on hover; Logo & Email Input expand to cover the stage
+   HomeNewsletterBanner — Un-boxed Emblem & 1/3 vs 2/3 Stage Expansion
+   - Un-boxed ZRU emblem grows to 1/3 stage width on hover
+   - Text collapses cleanly
+   - Subscription form box expands to fill remaining 2/3
    ═══════════════════════════════════════════════════════════════════ */
 
 export default function HomeNewsletterBanner() {
@@ -39,23 +41,21 @@ export default function HomeNewsletterBanner() {
           {/* Subtle Animated Light Trail Gradient Sweep */}
           <div className="absolute inset-0 opacity-0 group-hover/uiverseCard:opacity-20 group-focus-within/uiverseCard:opacity-20 pointer-events-none bg-gradient-to-r from-transparent via-[#34D399] to-transparent transition-opacity duration-700" />
 
-          {/* Left Group: ZRU Logo + Disappearing Text Container */}
-          <div className="flex items-center gap-6 relative z-10 shrink-0">
+          {/* Left Group: Un-boxed Emblem (grows to 1/3 on hover) + Disappearing Text */}
+          <div className="flex items-center gap-6 relative z-10 lg:w-3/5 lg:group-hover/uiverseCard:w-1/3 lg:group-focus-within/uiverseCard:w-1/3 transition-all duration-500 shrink-0">
             
-            {/* ZRU Crest Logo (Scales & Glows on Hover) */}
-            <div className="relative flex items-center shrink-0">
-              <div className="h-[64px] w-[64px] sm:h-[72px] sm:w-[72px] rounded-2xl bg-black/50 border border-white/15 p-2.5 flex items-center justify-center overflow-hidden transition-all duration-500 ease-in-out group-hover/uiverseCard:border-[#006747] group-hover/uiverseCard:scale-110 group-hover/uiverseCard:shadow-[0_8px_25px_rgba(0,103,71,0.5)]">
-                <Image
-                  src="/images/logos/zru-logo.svg"
-                  alt="ZRU Crest"
-                  width={48}
-                  height={48}
-                  className="object-contain filter drop-shadow-md transition-transform duration-500 group-hover/uiverseCard:scale-125"
-                />
-              </div>
+            {/* Un-boxed ZRU Crest Emblem (No outer square box, grows on hover) */}
+            <div className="relative shrink-0 flex items-center justify-center transition-transform duration-500 group-hover/uiverseCard:scale-135 sm:group-hover/uiverseCard:scale-150">
+              <Image
+                src="/images/logos/zru-logo.svg"
+                alt="ZRU Emblem"
+                width={64}
+                height={64}
+                className="w-14 sm:w-16 h-14 sm:h-16 object-contain filter drop-shadow-[0_4px_25px_rgba(0,103,71,0.7)] transition-all duration-500"
+              />
             </div>
 
-            {/* Headline & Paragraph — Fades out and collapses on hover to create vacuum */}
+            {/* Headline & Paragraph — Fades out and collapses on hover */}
             <div className="space-y-1.5 transition-all duration-500 origin-left max-w-lg opacity-100 group-hover/uiverseCard:opacity-0 group-hover/uiverseCard:max-w-0 group-hover/uiverseCard:scale-95 group-hover/uiverseCard:overflow-hidden group-focus-within/uiverseCard:opacity-0 group-focus-within/uiverseCard:max-w-0 group-focus-within/uiverseCard:scale-95 group-focus-within/uiverseCard:overflow-hidden shrink">
               <h2 className="text-2xl sm:text-3xl text-white font-heading font-black uppercase tracking-tight whitespace-nowrap">
                 JOIN THE FAN ZONE
@@ -67,9 +67,9 @@ export default function HomeNewsletterBanner() {
 
           </div>
 
-          {/* Right Group: Subscription Form Container — Expands to fill the vacuum on hover */}
-          <div className="relative z-10 w-full flex-1 flex flex-col items-center lg:items-end transition-all duration-500">
-            <div className="w-full max-w-md lg:group-hover/uiverseCard:max-w-3xl lg:group-focus-within/uiverseCard:max-w-3xl bg-black/40 backdrop-blur-md p-5 sm:p-7 rounded-2xl border border-white/10 group-hover/uiverseCard:border-[#006747]/60 group-focus-within/uiverseCard:border-[#006747]/60 transition-all duration-500 ease-in-out shadow-lg">
+          {/* Right Group: Subscription Form Container — Takes up remaining 2/3 on hover */}
+          <div className="relative z-10 w-full lg:w-2/5 lg:group-hover/uiverseCard:w-2/3 lg:group-focus-within/uiverseCard:w-2/3 flex flex-col items-center lg:items-end transition-all duration-500">
+            <div className="w-full max-w-md lg:group-hover/uiverseCard:max-w-full lg:group-focus-within/uiverseCard:max-w-full bg-black/40 backdrop-blur-md p-5 sm:p-7 rounded-2xl border border-white/10 group-hover/uiverseCard:border-[#006747]/60 group-focus-within/uiverseCard:border-[#006747]/60 transition-all duration-500 ease-in-out shadow-lg">
               
               <p className="text-white/80 text-xs font-bold uppercase tracking-wider mb-3 font-heading transition-colors group-hover/uiverseCard:text-[#34D399]">
                 ENTER YOUR EMAIL BELOW TO JOIN THE FAN ZONE
