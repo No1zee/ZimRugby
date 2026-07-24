@@ -6,10 +6,10 @@ import Link from "next/link";
 import { CheckCircle, ArrowRight } from "lucide-react";
 
 /* ═══════════════════════════════════════════════════════════════════
-   HomeNewsletterBanner — Centered Larger Emblem & 1/3 vs 2/3 Stage Expansion
-   - Un-boxed ZRU emblem centers & scales up significantly (2x) in 1/3 section on hover
-   - Text collapses cleanly
-   - Subscription form box expands to fill remaining 2/3
+   HomeNewsletterBanner — Interactive Hover Reveal Form
+   - Default: Only the SUBSCRIBE button is visible in right side
+   - On Hover: Email input, arrow icon, input title & privacy terms reveal smoothly
+   - Un-boxed ZRU emblem grows & centers in 1/3 section
    ═══════════════════════════════════════════════════════════════════ */
 
 export default function HomeNewsletterBanner() {
@@ -67,11 +67,12 @@ export default function HomeNewsletterBanner() {
 
           </div>
 
-          {/* Right Group: Subscription Form Container — Takes up remaining 2/3 on hover */}
-          <div className="relative z-10 w-full lg:w-2/5 lg:group-hover/uiverseCard:w-2/3 lg:group-focus-within/uiverseCard:w-2/3 flex flex-col items-center lg:items-end transition-all duration-500">
-            <div className="w-full max-w-md lg:group-hover/uiverseCard:max-w-full lg:group-focus-within/uiverseCard:max-w-full bg-black/40 backdrop-blur-md p-5 sm:p-7 rounded-2xl border border-white/10 group-hover/uiverseCard:border-[#006747]/60 group-focus-within/uiverseCard:border-[#006747]/60 transition-all duration-500 ease-in-out shadow-lg">
+          {/* Right Group: Subscription Form Container — Default compact SUBSCRIBE button, expands on hover */}
+          <div className="relative z-10 w-full lg:w-auto lg:group-hover/uiverseCard:w-2/3 lg:group-focus-within/uiverseCard:w-2/3 flex flex-col items-center lg:items-end transition-all duration-500">
+            <div className="w-full lg:w-auto lg:group-hover/uiverseCard:w-full lg:group-focus-within/uiverseCard:w-full bg-black/40 backdrop-blur-md p-3 group-hover/uiverseCard:p-5 sm:group-hover/uiverseCard:p-7 group-focus-within/uiverseCard:p-5 sm:group-focus-within/uiverseCard:p-7 rounded-2xl border border-white/10 group-hover/uiverseCard:border-[#006747]/60 group-focus-within/uiverseCard:border-[#006747]/60 transition-all duration-500 ease-in-out shadow-lg">
               
-              <p className="text-white/80 text-xs font-bold uppercase tracking-wider mb-3 font-heading transition-colors group-hover/uiverseCard:text-[#34D399]">
+              {/* Header Label — Hidden before hover */}
+              <p className="text-white/80 text-xs font-bold uppercase tracking-wider font-heading transition-all duration-500 opacity-0 max-h-0 overflow-hidden mb-0 group-hover/uiverseCard:opacity-100 group-hover/uiverseCard:max-h-10 group-hover/uiverseCard:mb-3 group-hover/uiverseCard:text-[#34D399] group-focus-within/uiverseCard:opacity-100 group-focus-within/uiverseCard:max-h-10 group-focus-within/uiverseCard:mb-3 group-focus-within/uiverseCard:text-[#34D399]">
                 ENTER YOUR EMAIL BELOW TO JOIN THE FAN ZONE
               </p>
               
@@ -81,27 +82,34 @@ export default function HomeNewsletterBanner() {
                   <span>Welcome to the Zimbabwe Rugby Fan Zone!</span>
                 </div>
               ) : (
-                <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-2.5 w-full">
-                  <input
-                    id="email"
-                    type="email"
-                    required
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    placeholder="name@domain.com"
-                    className="w-full bg-white/5 text-white px-4 py-3.5 rounded-xl border border-white/15 focus:outline-none focus:border-[#006747] text-sm placeholder:text-white/40 transition-all min-h-[46px] flex-1"
-                  />
+                <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-2.5 w-full items-center justify-end">
+                  {/* Email Input Field — Hidden before hover */}
+                  <div className="w-0 opacity-0 max-w-0 overflow-hidden transition-all duration-500 ease-in-out group-hover/uiverseCard:w-full group-hover/uiverseCard:opacity-100 group-hover/uiverseCard:max-w-full group-focus-within/uiverseCard:w-full group-focus-within/uiverseCard:opacity-100 group-focus-within/uiverseCard:max-w-full flex-1">
+                    <input
+                      id="email"
+                      type="email"
+                      required
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      placeholder="name@domain.com"
+                      className="w-full bg-white/5 text-white px-4 py-3.5 rounded-xl border border-white/15 focus:outline-none focus:border-[#006747] text-sm placeholder:text-white/40 transition-all min-h-[46px]"
+                    />
+                  </div>
+
+                  {/* Subscribe Button — Always visible; Arrow reveals on hover */}
                   <button
                     type="submit"
-                    className="group/btn bg-gradient-to-b from-[#00704D] to-[#005238] hover:from-[#00855B] hover:to-[#006747] text-white px-8 py-3.5 rounded-xl transition-all duration-300 flex items-center justify-center gap-2 font-black text-xs tracking-widest uppercase font-heading shrink-0 shadow-lg shadow-[#006747]/30 min-h-[46px]"
+                    className="group/btn bg-gradient-to-b from-[#00704D] to-[#005238] hover:from-[#00855B] hover:to-[#006747] text-white px-8 py-3.5 rounded-xl transition-all duration-300 flex items-center justify-center gap-2 font-black text-xs tracking-widest uppercase font-heading shrink-0 shadow-lg shadow-[#006747]/30 min-h-[46px] w-full sm:w-auto"
                   >
                     <span>SUBSCRIBE</span>
-                    <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover/btn:translate-x-1" />
+                    {/* Arrow Icon — Hidden before hover */}
+                    <ArrowRight className="w-0 opacity-0 -translate-x-2 transition-all duration-300 ease-in-out group-hover/uiverseCard:w-4 group-hover/uiverseCard:opacity-100 group-hover/uiverseCard:translate-x-0 group-focus-within/uiverseCard:w-4 group-focus-within/uiverseCard:opacity-100 group-focus-within/uiverseCard:translate-x-0 shrink-0" />
                   </button>
                 </form>
               )}
 
-              <div className="mt-3.5 flex items-center justify-between text-[10px] text-white/40 font-medium">
+              {/* Privacy Footer — Hidden before hover */}
+              <div className="text-[10px] text-white/40 font-medium transition-all duration-500 opacity-0 max-h-0 overflow-hidden mt-0 group-hover/uiverseCard:opacity-100 group-hover/uiverseCard:max-h-10 group-hover/uiverseCard:mt-3.5 group-focus-within/uiverseCard:opacity-100 group-focus-within/uiverseCard:max-h-10 group-focus-within/uiverseCard:mt-3.5 flex items-center justify-between w-full">
                 <span>Zero spam. Unsubscribe at any time.</span>
                 <Link className="underline hover:text-white transition-colors" href="/privacy-policy">
                   CDPA 2021 Compliant
