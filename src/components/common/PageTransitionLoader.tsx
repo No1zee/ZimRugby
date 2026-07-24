@@ -4,23 +4,23 @@ import { useEffect, useState } from "react";
 import ParticleBurstLoader from "@/components/common/ParticleBurstLoader";
 
 export default function PageTransitionLoader() {
-  const [loading, setLoading] = useState(false);
+  // Initialize loading to true so SSR HTML renders the dark loader overlay instantly, preventing FOUC flash
+  const [loading, setLoading] = useState(true);
   const [fading, setFading] = useState(false);
 
   useEffect(() => {
-    // Check if initial session loading screen has already run
+    // Check if initial session loading screen has already run in this browser session
     const hasLoaded = typeof window !== "undefined" && sessionStorage.getItem("zru_initial_loader_shown");
     if (hasLoaded) {
       setLoading(false);
       return;
     }
 
-    // First visit: trigger 3-second initial loading screen
+    // First visit in session: trigger initial loading splash
     setLoading(true);
     setFading(false);
     sessionStorage.setItem("zru_initial_loader_shown", "true");
 
-    // Calibrated graceful splash duration for initial load (1800ms)
     const duration = 1800;
     
     const triggerExit = () => {
