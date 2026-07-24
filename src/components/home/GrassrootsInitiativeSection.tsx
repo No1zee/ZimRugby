@@ -47,38 +47,39 @@ const INITIATIVES = [
 
 export default function GrassrootsInitiativeSection() {
   return (
-    <section className="py-8 sm:py-10 bg-[#FDFBF0] relative overflow-hidden">
+    <section className="py-10 sm:py-14 bg-[#006747] text-white relative overflow-hidden select-none">
       
-      {/* Background ambient watermark & subtle grid pattern */}
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(0,103,71,0.04),transparent_60%)] pointer-events-none" />
+      {/* Background ambient pitch watermark & diagonal brand lines */}
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(255,255,255,0.08)_0%,transparent_70%)] pointer-events-none" />
+      <div className="absolute inset-0 opacity-10 pointer-events-none bg-[radial-gradient(circle,#ffffff_1px,transparent_1px)] [background-size:24px_24px]" />
 
       <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8 relative z-10 space-y-10">
         
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto space-y-3">
           <div className="flex items-center justify-center gap-2 mb-1">
-            <span className="w-8 h-0.5 bg-[#006747]" />
-            <span className="text-[11px] font-heading font-black uppercase tracking-[0.25em] text-[#006747]">
+            <span className="w-8 h-0.5 bg-white/40" />
+            <span className="text-[11px] font-heading font-black uppercase tracking-[0.25em] text-white/80">
               GROWING THE SPORT • COMMUNITY & DEVELOPMENT
             </span>
-            <span className="w-8 h-0.5 bg-[#006747]" />
+            <span className="w-8 h-0.5 bg-white/40" />
           </div>
 
-          <h2 className="text-3xl sm:text-5xl font-heading font-black uppercase tracking-tight text-rich-black italic font-heading">
+          <h2 className="text-3xl sm:text-5xl font-heading font-black uppercase tracking-tight text-white italic font-heading">
             GRASSROOTS & YOUTH RUGBY INITIATIVES
           </h2>
 
-          <p className="text-black/70 text-sm sm:text-base font-medium leading-relaxed">
+          <p className="text-white/80 text-sm sm:text-base font-medium leading-relaxed">
             Building Zimbabwe&apos;s rugby legacy from provincial primary school festivals to national team caps. Discover our grassroots programs, coach education, and community pathways.
           </p>
         </div>
 
-        {/* 3-Column Bento Grid (Horizontal Swipe Carousel on Mobile < 768px, 3-Col Grid on Desktop/Tablet) */}
+        {/* 3-Column Bento Grid (White High-Contrast Cards on ZRU Green Background) */}
         <div className="flex flex-nowrap md:grid md:grid-cols-3 overflow-x-auto md:overflow-visible snap-x snap-mandatory scroll-smooth no-scrollbar -mx-4 px-4 sm:mx-0 sm:px-0 gap-4 sm:gap-6 items-stretch py-2">
           {INITIATIVES.map((item) => (
             <div
               key={item.id}
-              className="w-[280px] xs:w-[310px] md:w-auto shrink-0 snap-start box-border flex flex-col h-[440px] sm:h-[470px] rounded-2xl overflow-hidden border border-black/10 hover:border-[#006747]/50 shadow-md hover:shadow-xl transition-all duration-300 group/card bg-white relative"
+              className="w-[280px] xs:w-[310px] md:w-auto shrink-0 snap-start box-border flex flex-col h-[440px] sm:h-[470px] rounded-2xl overflow-hidden border border-white/20 hover:border-white shadow-2xl transition-all duration-300 group/card bg-white relative text-black"
             >
               {/* Image Header with Floating Badges */}
               <div className="relative h-44 sm:h-48 w-full overflow-hidden shrink-0">
@@ -89,14 +90,14 @@ export default function GrassrootsInitiativeSection() {
                   className="object-cover transition-transform duration-700 group-hover/card:scale-105"
                   sizes="(max-width: 768px) 85vw, 33vw"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
                 
                 {/* Floating Top Badges */}
                 <div className="absolute top-3 left-3 right-3 flex items-center justify-between gap-2 z-10">
-                  <span className="px-2.5 py-1 bg-[#006747] text-white rounded-full text-[10px] font-black tracking-widest uppercase shadow-md">
+                  <span className="px-2.5 py-1 bg-[#004D34] border border-white/20 text-white rounded-full text-[10px] font-black tracking-widest uppercase shadow-md">
                     {item.badge}
                   </span>
-                  <span className="px-2.5 py-1 bg-black/60 backdrop-blur-md border border-white/20 text-white rounded-full text-[9px] font-bold tracking-wider uppercase">
+                  <span className="px-2.5 py-1 bg-black/65 backdrop-blur-md border border-white/20 text-white rounded-full text-[9px] font-bold tracking-wider uppercase">
                     {item.stats}
                   </span>
                 </div>
@@ -108,7 +109,7 @@ export default function GrassrootsInitiativeSection() {
                   <span className="text-[10px] font-extrabold text-[#006747] tracking-widest uppercase block">
                     {item.subtitle}
                   </span>
-                  <h3 className="font-heading font-black text-sm sm:text-lg text-rich-black uppercase leading-snug group-hover/card:text-[#006747] transition-colors line-clamp-2">
+                  <h3 className="font-heading font-black text-sm sm:text-lg text-black uppercase leading-snug group-hover/card:text-[#006747] transition-colors line-clamp-2">
                     {item.title}
                   </h3>
                   <p className="text-black/70 text-xs font-medium leading-relaxed line-clamp-3">
@@ -131,45 +132,45 @@ export default function GrassrootsInitiativeSection() {
           ))}
         </div>
 
-        {/* Editorial Premium Impact Stat Bar (Un-boxed, Single-Row on All Devices) */}
-        <div className="pt-4 border-t border-black/10 grid grid-cols-4 divide-x divide-black/10 text-center text-black">
+        {/* Editorial Impact Stat Bar (Clean White Text on ZRU Green Background) */}
+        <div className="pt-6 border-t border-white/20 grid grid-cols-4 divide-x divide-white/20 text-center text-white">
           
           <div className="flex flex-col items-center justify-center px-1 sm:px-4 space-y-1 group">
-            <div className="flex items-center gap-1.5 text-[#006747]">
-              <Users className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#006747]" />
-              <span className="font-heading font-black text-xl sm:text-3xl text-[#006747] tracking-tight italic">15,000+</span>
+            <div className="flex items-center gap-1.5 text-white">
+              <Users className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-white/80" />
+              <span className="font-heading font-black text-xl sm:text-3xl text-white tracking-tight italic">15,000+</span>
             </div>
-            <span className="text-[8px] sm:text-[11px] font-extrabold text-black/70 uppercase tracking-wider block font-heading leading-tight">
+            <span className="text-[8px] sm:text-[11px] font-extrabold text-white/80 uppercase tracking-wider block font-heading leading-tight">
               Active Youth Players
             </span>
           </div>
 
           <div className="flex flex-col items-center justify-center px-1 sm:px-4 space-y-1 group">
-            <div className="flex items-center gap-1.5 text-[#006747]">
-              <GraduationCap className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#006747]" />
-              <span className="font-heading font-black text-xl sm:text-3xl text-[#006747] tracking-tight italic">120+</span>
+            <div className="flex items-center gap-1.5 text-white">
+              <GraduationCap className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-white/80" />
+              <span className="font-heading font-black text-xl sm:text-3xl text-white tracking-tight italic">120+</span>
             </div>
-            <span className="text-[8px] sm:text-[11px] font-extrabold text-black/70 uppercase tracking-wider block font-heading leading-tight">
+            <span className="text-[8px] sm:text-[11px] font-extrabold text-white/80 uppercase tracking-wider block font-heading leading-tight">
               Schools &amp; Clubs
             </span>
           </div>
 
           <div className="flex flex-col items-center justify-center px-1 sm:px-4 space-y-1 group">
-            <div className="flex items-center gap-1.5 text-[#006747]">
-              <Trophy className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#006747]" />
-              <span className="font-heading font-black text-xl sm:text-3xl text-[#006747] tracking-tight italic">10</span>
+            <div className="flex items-center gap-1.5 text-white">
+              <Trophy className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-white/80" />
+              <span className="font-heading font-black text-xl sm:text-3xl text-white tracking-tight italic">10</span>
             </div>
-            <span className="text-[8px] sm:text-[11px] font-extrabold text-black/70 uppercase tracking-wider block font-heading leading-tight">
+            <span className="text-[8px] sm:text-[11px] font-extrabold text-white/80 uppercase tracking-wider block font-heading leading-tight">
               Provincial Unions
             </span>
           </div>
 
           <div className="flex flex-col items-center justify-center px-1 sm:px-4 space-y-1 group">
-            <div className="flex items-center gap-1.5 text-[#006747]">
-              <CheckCircle2 className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#006747]" />
-              <span className="font-heading font-black text-xl sm:text-3xl text-[#006747] tracking-tight italic">45%</span>
+            <div className="flex items-center gap-1.5 text-white">
+              <CheckCircle2 className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-white/80" />
+              <span className="font-heading font-black text-xl sm:text-3xl text-white tracking-tight italic">45%</span>
             </div>
-            <span className="text-[8px] sm:text-[11px] font-extrabold text-black/70 uppercase tracking-wider block font-heading leading-tight">
+            <span className="text-[8px] sm:text-[11px] font-extrabold text-white/80 uppercase tracking-wider block font-heading leading-tight">
               Female Participation
             </span>
           </div>

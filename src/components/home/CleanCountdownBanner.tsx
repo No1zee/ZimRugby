@@ -49,39 +49,39 @@ export default function CleanCountdownBanner() {
         }}
       />
 
-      {/* Left Player SVG Cutout (Safari/WebKit Cross-Browser Fix) */}
+      {/* Left Player SVG Cutout (Compact Framing Fit) */}
       <motion.div
-        initial={{ opacity: 0, x: -120 }}
+        initial={{ opacity: 0, x: -80 }}
         whileInView={{ opacity: 1, x: 0 }}
         viewport={{ once: true, amount: 0.2 }}
         transition={{ duration: 0.8, ease: "easeOut", delay: 0.1 }}
-        className="absolute bottom-0 -left-6 sm:left-0 lg:left-12 w-44 sm:w-60 md:w-80 lg:w-96 h-56 sm:h-80 md:h-[420px] lg:h-[500px] pointer-events-none z-10 block"
+        className="absolute bottom-0 -left-4 sm:left-2 lg:left-8 w-28 sm:w-44 md:w-56 lg:w-72 h-36 sm:h-56 md:h-[300px] lg:h-[360px] pointer-events-none z-10 block"
       >
         <Image
           src="/images/cutouts/3.svg"
           alt="Zimbabwe Rugby Cutout Left"
-          width={380}
-          height={500}
-          className="w-full h-full object-contain object-bottom drop-shadow-[0_20px_40px_rgba(0,0,0,0.8)]"
+          width={280}
+          height={360}
+          className="w-full h-full object-contain object-bottom drop-shadow-[0_15px_30px_rgba(0,0,0,0.7)]"
           unoptimized
           priority
         />
       </motion.div>
 
-      {/* Right Player SVG Cutout (Safari/WebKit Cross-Browser Fix) */}
+      {/* Right Player SVG Cutout (Compact Framing Fit) */}
       <motion.div
-        initial={{ opacity: 0, x: 120 }}
+        initial={{ opacity: 0, x: 80 }}
         whileInView={{ opacity: 1, x: 0 }}
         viewport={{ once: true, amount: 0.2 }}
         transition={{ duration: 0.8, ease: "easeOut", delay: 0.1 }}
-        className="absolute bottom-0 -right-6 sm:right-0 lg:right-8 w-44 sm:w-60 md:w-80 lg:w-96 h-56 sm:h-80 md:h-[420px] lg:h-[500px] pointer-events-none z-10 block"
+        className="absolute bottom-0 -right-4 sm:right-2 lg:right-6 w-28 sm:w-44 md:w-56 lg:w-72 h-36 sm:h-56 md:h-[300px] lg:h-[360px] pointer-events-none z-10 block"
       >
         <Image
           src="/images/cutouts/1.svg"
           alt="Zimbabwe Rugby Cutout Right"
-          width={380}
-          height={500}
-          className="w-full h-full object-contain object-bottom drop-shadow-[0_20px_40px_rgba(0,0,0,0.8)]"
+          width={280}
+          height={360}
+          className="w-full h-full object-contain object-bottom drop-shadow-[0_15px_30px_rgba(0,0,0,0.7)]"
           unoptimized
           priority
         />
