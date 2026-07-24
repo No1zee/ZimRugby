@@ -29,9 +29,6 @@ export default function TeamsPage() {
             <div className="absolute top-0 right-0 w-1/3 h-full bg-[radial-gradient(circle_at_top_right,rgba(0,107,63,0.25),transparent_70%)]" />
             
             <div className="relative z-10 max-w-3xl space-y-6">
-              <span className="text-[10px] font-black text-zru-green uppercase tracking-[0.3em]">
-                National Pathway Pipeline
-              </span>
               <h2 className="font-heading text-3xl sm:text-5xl font-black uppercase tracking-tight italic">
                 From Schoolboy Leagues to National Caps
               </h2>

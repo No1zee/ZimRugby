@@ -83,9 +83,6 @@ export default function TeamCardBento() {
         {/* Section Header */}
         <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 mb-16">
           <div className="space-y-3 max-w-2xl">
-            <span className="text-[10px] font-black text-zru-green uppercase tracking-[0.3em]">
-              National Teams Ecosystem
-            </span>
             <h2 className="font-heading text-4xl sm:text-5xl font-black uppercase tracking-tight text-rich-black italic">
               Representative Teams
             </h2>
