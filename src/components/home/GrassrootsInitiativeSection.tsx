@@ -131,39 +131,49 @@ export default function GrassrootsInitiativeSection() {
           ))}
         </div>
 
-        {/* Impact Metrics Banner (Single-Row 4-Column Grid on Mobile & Desktop) */}
-        <div className="bg-white border border-black/10 rounded-2xl p-4 sm:p-8 shadow-lg grid grid-cols-4 gap-2 sm:gap-6 text-center text-black">
-          <div className="flex flex-col items-center space-y-1.5 sm:space-y-2">
-            <div className="w-9 h-9 sm:w-12 sm:h-12 rounded-lg sm:rounded-xl bg-zru-green/10 border border-zru-green/20 flex items-center justify-center text-zru-green">
-              <Users className="w-4 h-4 sm:w-6 sm:h-6" />
+        {/* Editorial Premium Impact Stat Bar (Un-boxed, Single-Row on All Devices) */}
+        <div className="pt-4 border-t border-black/10 grid grid-cols-4 divide-x divide-black/10 text-center text-black">
+          
+          <div className="flex flex-col items-center justify-center px-1 sm:px-4 space-y-1 group">
+            <div className="flex items-center gap-1.5 text-[#006747]">
+              <Users className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#006747]" />
+              <span className="font-heading font-black text-xl sm:text-3xl text-[#006747] tracking-tight italic">15,000+</span>
             </div>
-            <span className="font-heading font-black text-lg xs:text-xl sm:text-3xl text-zru-green block tracking-tight">15,000+</span>
-            <span className="text-[8px] xs:text-[9px] sm:text-xs font-extrabold text-black/60 uppercase tracking-wider block font-heading leading-tight">Active Youth Players</span>
+            <span className="text-[8px] sm:text-[11px] font-extrabold text-black/70 uppercase tracking-wider block font-heading leading-tight">
+              Active Youth Players
+            </span>
           </div>
 
-          <div className="flex flex-col items-center space-y-1.5 sm:space-y-2">
-            <div className="w-9 h-9 sm:w-12 sm:h-12 rounded-lg sm:rounded-xl bg-zru-green/10 border border-zru-green/20 flex items-center justify-center text-zru-green">
-              <GraduationCap className="w-4 h-4 sm:w-6 sm:h-6" />
+          <div className="flex flex-col items-center justify-center px-1 sm:px-4 space-y-1 group">
+            <div className="flex items-center gap-1.5 text-[#006747]">
+              <GraduationCap className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#006747]" />
+              <span className="font-heading font-black text-xl sm:text-3xl text-[#006747] tracking-tight italic">120+</span>
             </div>
-            <span className="font-heading font-black text-lg xs:text-xl sm:text-3xl text-zru-green block tracking-tight">120+</span>
-            <span className="text-[8px] xs:text-[9px] sm:text-xs font-extrabold text-black/60 uppercase tracking-wider block font-heading leading-tight">Schools &amp; Clubs</span>
+            <span className="text-[8px] sm:text-[11px] font-extrabold text-black/70 uppercase tracking-wider block font-heading leading-tight">
+              Schools &amp; Clubs
+            </span>
           </div>
 
-          <div className="flex flex-col items-center space-y-1.5 sm:space-y-2">
-            <div className="w-9 h-9 sm:w-12 sm:h-12 rounded-lg sm:rounded-xl bg-zru-green/10 border border-zru-green/20 flex items-center justify-center text-zru-green">
-              <Trophy className="w-4 h-4 sm:w-6 sm:h-6" />
+          <div className="flex flex-col items-center justify-center px-1 sm:px-4 space-y-1 group">
+            <div className="flex items-center gap-1.5 text-[#006747]">
+              <Trophy className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#006747]" />
+              <span className="font-heading font-black text-xl sm:text-3xl text-[#006747] tracking-tight italic">10</span>
             </div>
-            <span className="font-heading font-black text-lg xs:text-xl sm:text-3xl text-zru-green block tracking-tight">10</span>
-            <span className="text-[8px] xs:text-[9px] sm:text-xs font-extrabold text-black/60 uppercase tracking-wider block font-heading leading-tight">Provincial Unions</span>
+            <span className="text-[8px] sm:text-[11px] font-extrabold text-black/70 uppercase tracking-wider block font-heading leading-tight">
+              Provincial Unions
+            </span>
           </div>
 
-          <div className="flex flex-col items-center space-y-1.5 sm:space-y-2">
-            <div className="w-9 h-9 sm:w-12 sm:h-12 rounded-lg sm:rounded-xl bg-zru-green/10 border border-zru-green/20 flex items-center justify-center text-zru-green">
-              <CheckCircle2 className="w-4 h-4 sm:w-6 sm:h-6" />
+          <div className="flex flex-col items-center justify-center px-1 sm:px-4 space-y-1 group">
+            <div className="flex items-center gap-1.5 text-[#006747]">
+              <CheckCircle2 className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#006747]" />
+              <span className="font-heading font-black text-xl sm:text-3xl text-[#006747] tracking-tight italic">45%</span>
             </div>
-            <span className="font-heading font-black text-lg xs:text-xl sm:text-3xl text-zru-green block tracking-tight">45%</span>
-            <span className="text-[8px] xs:text-[9px] sm:text-xs font-extrabold text-black/60 uppercase tracking-wider block font-heading leading-tight">Female Participation</span>
+            <span className="text-[8px] sm:text-[11px] font-extrabold text-black/70 uppercase tracking-wider block font-heading leading-tight">
+              Female Participation
+            </span>
           </div>
+
         </div>
 
       </div>
