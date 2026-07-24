@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import Image from "next/image";
-import { Play, ExternalLink, X, Film, Sparkles, LayoutGrid, CircleDot, MoveHorizontal } from "lucide-react";
+import { Play, ExternalLink, X, Film, Sparkles, LayoutGrid, CircleDot, MoveHorizontal, Youtube } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
 export interface YouTubeVideoItem {
@@ -166,41 +166,45 @@ export default function MatchdayVideoHighlights({
           </div>
 
           <div className="flex items-center gap-3">
-            {/* 3D Ring vs Grid View Switcher */}
-            <div className="flex items-center bg-black/5 p-1 rounded-xl border border-black/10">
+            {/* Icon-Only View Switcher (3D Stage Icon & Grid View Icon) */}
+            <div className="flex items-center bg-black/5 p-1 rounded-xl border border-black/10 shadow-xs">
               <button
                 onClick={() => setViewMode("ring")}
-                className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-heading font-black tracking-wider uppercase transition-all ${
+                title="3D Stage View"
+                aria-label="3D Stage View"
+                className={`p-2 rounded-lg transition-all ${
                   viewMode === "ring"
-                    ? "bg-[#006747] text-white shadow-md"
-                    : "text-black/60 hover:text-black"
+                    ? "bg-[#006747] text-white shadow-md scale-105"
+                    : "text-black/60 hover:text-black hover:bg-black/5"
                 }`}
               >
-                <CircleDot className="w-3.5 h-3.5" />
-                <span>3D Stage</span>
+                <CircleDot className="w-4 h-4" />
               </button>
               <button
                 onClick={() => setViewMode("grid")}
-                className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-heading font-black tracking-wider uppercase transition-all ${
+                title="Grid View"
+                aria-label="Grid View"
+                className={`p-2 rounded-lg transition-all ${
                   viewMode === "grid"
-                    ? "bg-[#006747] text-white shadow-md"
-                    : "text-black/60 hover:text-black"
+                    ? "bg-[#006747] text-white shadow-md scale-105"
+                    : "text-black/60 hover:text-black hover:bg-black/5"
                 }`}
               >
-                <LayoutGrid className="w-3.5 h-3.5" />
-                <span>Grid View</span>
+                <LayoutGrid className="w-4 h-4" />
               </button>
             </div>
 
+            {/* Prominent YouTube Channel CTA Button */}
             {showChannelLink && (
               <a
                 href="https://www.youtube.com/@ZimbabweRugbyUnion"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="hidden sm:inline-flex items-center gap-2 text-xs font-heading font-black text-[#006747] hover:text-black uppercase tracking-widest transition-colors group"
+                className="inline-flex items-center gap-2 px-3.5 py-2 bg-[#FF0000] hover:bg-[#CC0000] text-white rounded-xl text-xs font-heading font-black tracking-wider uppercase transition-all duration-300 shadow-sm hover:shadow-md group"
               >
-                <span>ZRU YOUTUBE CHANNEL</span>
-                <ExternalLink className="w-4 h-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                <Youtube className="w-4 h-4 fill-current" />
+                <span className="hidden sm:inline">ZRU YOUTUBE</span>
+                <ExternalLink className="w-3.5 h-3.5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5 opacity-80" />
               </a>
             )}
           </div>
