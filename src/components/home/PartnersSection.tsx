@@ -1,161 +1,179 @@
-"use client";
-
-import React, { useState } from "react";
+import React from "react";
 import Image from "next/image";
 import Link from "next/link";
 
-interface Partner {
-  id: string;
+type Partner = {
   name: string;
   logo: string;
-  role?: string;
-}
-
-const FEATURED: Partner = {
-  id: "nedbank",
-  name: "Nedbank Zimbabwe",
-  logo: "/images/sponsors/nedbank.svg",
-  role: "HEADLINE PARTNER",
+  href: string;
+  featured?: boolean;
+  note?: string;
 };
 
-const PARTNERS: Partner[] = [
-  { id: "world-rugby", name: "World Rugby", logo: "/images/sponsors/world-rugby.png" },
-  { id: "rugby-africa", name: "Rugby Africa", logo: "/images/sponsors/rugby-africa.png" },
-  { id: "cfao", name: "CFAO Mobility", logo: "/images/sponsors/cfao.svg" },
-  { id: "gilbert", name: "Gilbert Rugby", logo: "/images/sponsors/gilbert.svg" },
-  { id: "blk", name: "BLK Sport", logo: "/images/sponsors/blk.svg" },
-  { id: "seedco", name: "Seed Co", logo: "/images/sponsors/seedco.svg" },
-  { id: "zoc", name: "ZOC", logo: "/images/sponsors/zoc.png" },
-  { id: "src", name: "SRC", logo: "/images/sponsors/src.png" },
+const partners: readonly Partner[] = [
+  {
+    name: "Nedbank Zimbabwe",
+    logo: "/images/sponsors/nedbank.svg",
+    href: "https://www.nedbank.co.zw/",
+    featured: true,
+    note: "Headline sponsor",
+  },
+  {
+    name: "CFAO Mobility Zimbabwe",
+    logo: "/images/sponsors/cfao.svg",
+    href: "/partners",
+  },
+  {
+    name: "Gilbert Rugby",
+    logo: "/images/sponsors/gilbert.svg",
+    href: "/partners",
+  },
+  {
+    name: "Seed Co Zimbabwe",
+    logo: "/images/sponsors/seedco.svg",
+    href: "/partners",
+  },
+  {
+    name: "BLK Sport",
+    logo: "/images/sponsors/blk.svg",
+    href: "/partners",
+  },
 ];
 
 export default function PartnersSection() {
-  const [activeId, setActiveId] = useState<string | null>(null);
+  const featured = partners.find((partner) => partner.featured);
+  const supporting = partners.filter((partner) => !partner.featured);
 
   return (
     <section
-      id="partners"
+      aria-labelledby="partners-heading"
       className="relative overflow-hidden bg-rich-black"
     >
-      {/* Subtle grid texture */}
+      {/* Faint grid structure */}
       <div
-        className="absolute inset-0 opacity-[0.03] pointer-events-none"
+        className="absolute inset-0 pointer-events-none opacity-[0.025]"
         style={{
           backgroundImage:
-            "linear-gradient(rgba(255,255,255,0.06) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.06) 1px, transparent 1px)",
-          backgroundSize: "64px 64px",
+            "linear-gradient(rgba(255,255,255,0.4) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.4) 1px, transparent 1px)",
+          backgroundSize: "80px 80px",
         }}
       />
 
-      {/* Radial ambient glow behind featured partner */}
-      <div
-        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] pointer-events-none"
-        style={{
-          background:
-            "radial-gradient(circle, rgba(0,103,71,0.08) 0%, transparent 70%)",
-        }}
-      />
+      <div className="relative z-10 max-w-[1280px] mx-auto px-6 sm:px-8 lg:px-12 pt-20 sm:pt-28 pb-16 sm:pb-20">
 
-      <div className="relative z-10 max-w-[1280px] mx-auto px-6 sm:px-8 lg:px-12 pt-20 sm:pt-24 pb-16 sm:pb-20">
-        {/* ── Header ── */}
-        <div className="text-center mb-14 sm:mb-18 space-y-4">
-          <span className="block text-[10px] sm:text-[11px] font-black uppercase tracking-[0.35em] text-white/30 font-subheading">
-            Our Partners
+        {/* ── Intro Block ── */}
+        <div className="max-w-2xl mb-14 sm:mb-20 space-y-5">
+          <span className="block text-[10px] sm:text-[11px] font-subheading font-black uppercase tracking-[0.3em] text-[#006747]">
+            Powering Zimbabwe Rugby
           </span>
-          <h2 className="font-heading text-3xl sm:text-4xl lg:text-5xl font-black uppercase tracking-tight text-white leading-[1.05]">
-            Powering{" "}
-            <span className="text-[#006747]">Zimbabwe</span>{" "}
-            Rugby
+
+          <h2
+            id="partners-heading"
+            className="font-heading text-3xl sm:text-4xl lg:text-[2.75rem] font-black uppercase tracking-tight text-white leading-[1.05]"
+          >
+            Partners backing the game from grassroots to the Sables
           </h2>
-          <p className="text-white/35 text-sm sm:text-base max-w-lg mx-auto leading-relaxed font-body">
-            A collective of organisations committed to elevating the sport —
-            from grassroots to the world stage.
+
+          <p className="text-white/40 text-sm sm:text-base leading-relaxed max-w-lg font-body">
+            From national team competition to school pathways and provincial
+            development, our commercial partners help power every level of
+            Zimbabwe Rugby.
           </p>
+
+          <div className="flex flex-wrap items-center gap-5 pt-1">
+            <Link
+              href="/partners"
+              className="inline-flex items-center gap-2 text-[10px] sm:text-[11px] font-subheading font-extrabold uppercase tracking-[0.2em] text-white/50 hover:text-[#006747] transition-colors duration-300"
+            >
+              <span className="border-b border-white/10 hover:border-[#006747]/50 pb-px transition-colors duration-300">
+                Become an official partner
+              </span>
+              <span className="text-xs">&rarr;</span>
+            </Link>
+          </div>
         </div>
 
         {/* ── Visual Stage ── */}
-        <div className="relative max-w-4xl mx-auto">
-          {/* Desktop: radial layout. Mobile: stacked. */}
+        <div className="relative">
 
-          {/* ── Featured Partner (Center) ── */}
-          <div className="flex justify-center mb-10 sm:mb-14">
-            <div className="group relative">
-              {/* Glow ring behind card */}
-              <div className="absolute -inset-3 rounded-3xl bg-gradient-to-b from-[#006747]/15 via-[#006747]/5 to-transparent blur-xl opacity-60 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
+          {/* Subtle frame panel behind the entire stage */}
+          <div className="absolute -inset-3 sm:-inset-4 rounded-3xl border border-white/[0.04] pointer-events-none" />
 
+          <div className="relative flex flex-col lg:flex-row items-stretch gap-4 sm:gap-5">
+
+            {/* ── Featured Partner Card ── */}
+            {featured && (
               <Link
-                href="/partners"
-                className="relative flex flex-col items-center gap-4 w-48 sm:w-56 lg:w-64 py-7 sm:py-8 rounded-2xl bg-gradient-to-b from-white/[0.07] to-white/[0.03] border border-white/[0.08] backdrop-blur-sm hover:border-[#006747]/40 hover:from-white/[0.10] hover:to-white/[0.05] transition-all duration-500 cursor-pointer"
+                href={featured.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group relative flex-1 min-h-[220px] sm:min-h-[260px] flex flex-col justify-between rounded-2xl bg-white/[0.04] border border-white/[0.07] p-7 sm:p-9 hover:bg-white/[0.06] hover:border-white/[0.12] transition-all duration-500"
               >
-                <div className="relative w-24 h-10 sm:w-28 sm:h-12 lg:w-32 lg:h-14">
-                  <Image
-                    src={FEATURED.logo}
-                    alt={FEATURED.name}
-                    fill
-                    className="object-contain brightness-0 invert opacity-90 group-hover:opacity-100 transition-opacity duration-500"
-                    sizes="(max-width: 640px) 160px, 200px"
-                  />
+                {/* Top row: note + name */}
+                <div className="space-y-3">
+                  {featured.note && (
+                    <span className="inline-block text-[9px] font-subheading font-black uppercase tracking-[0.25em] text-[#006747] bg-[#006747]/10 border border-[#006747]/20 px-3 py-1 rounded">
+                      {featured.note}
+                    </span>
+                  )}
+                  <h3 className="font-heading text-xl sm:text-2xl font-black uppercase text-white tracking-tight leading-tight">
+                    {featured.name}
+                  </h3>
                 </div>
-                {FEATURED.role && (
-                  <span className="text-[8px] sm:text-[9px] font-black uppercase tracking-[0.3em] text-[#006747] font-subheading">
-                    {FEATURED.role}
-                  </span>
-                )}
-              </Link>
-            </div>
-          </div>
 
-          {/* ── Secondary Partners Ring ── */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
-            {PARTNERS.map((partner) => {
-              const isActive = activeId === partner.id;
-              return (
-                <button
-                  key={partner.id}
-                  onMouseEnter={() => setActiveId(partner.id)}
-                  onMouseLeave={() => setActiveId(null)}
-                  onFocus={() => setActiveId(partner.id)}
-                  onBlur={() => setActiveId(null)}
-                  className={`group relative flex items-center justify-center h-16 sm:h-18 lg:h-20 rounded-xl border transition-all duration-400 cursor-pointer ${
-                    isActive
-                      ? "bg-white/[0.08] border-white/[0.15] shadow-lg shadow-black/20"
-                      : "bg-white/[0.03] border-white/[0.06] hover:bg-white/[0.06] hover:border-white/[0.12]"
-                  }`}
-                  aria-label={partner.name}
+                {/* Supporting copy */}
+                <p className="text-white/35 text-xs sm:text-sm leading-relaxed max-w-sm font-body mt-4">
+                  Official headline sponsor powering the Sables, domestic
+                  competitions, and grassroots rugby nationwide.
+                </p>
+
+                {/* Bottom: logo + link label */}
+                <div className="flex items-end justify-between mt-6 sm:mt-8">
+                  <div className="relative w-28 h-8 sm:w-36 sm:h-10">
+                    <Image
+                      src={featured.logo}
+                      alt={featured.name}
+                      fill
+                      className="object-contain brightness-0 invert opacity-80 group-hover:opacity-100 transition-opacity duration-500"
+                      sizes="144px"
+                    />
+                  </div>
+                  <span className="text-[9px] font-subheading font-black uppercase tracking-[0.2em] text-white/25 group-hover:text-white/50 transition-colors duration-300">
+                    Visit partner &rarr;
+                  </span>
+                </div>
+              </Link>
+            )}
+
+            {/* ── Secondary Partners Grid ── */}
+            <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-2 lg:w-[340px] xl:w-[380px] gap-4 sm:gap-5">
+              {supporting.map((partner) => (
+                <Link
+                  key={partner.name}
+                  href={partner.href}
+                  target={partner.href.startsWith("http") ? "_blank" : undefined}
+                  rel={partner.href.startsWith("http") ? "noopener noreferrer" : undefined}
+                  className="group flex flex-col items-center justify-center gap-3 rounded-xl bg-white/[0.03] border border-white/[0.06] px-4 py-5 sm:py-6 hover:bg-white/[0.06] hover:border-white/[0.10] transition-all duration-400"
                 >
-                  <div className="relative w-16 h-8 sm:w-20 sm:h-9 lg:w-24 lg:h-10">
+                  <div className="relative w-16 h-7 sm:w-20 sm:h-8">
                     <Image
                       src={partner.logo}
                       alt={partner.name}
                       fill
-                      className={`object-contain transition-all duration-500 ${
-                        isActive
-                          ? "brightness-0 invert opacity-90"
-                          : "brightness-0 invert opacity-35 group-hover:opacity-70"
-                      }`}
-                      sizes="(max-width: 640px) 80px, (max-width: 1024px) 100px, 120px"
+                      className="object-contain brightness-0 invert opacity-30 group-hover:opacity-65 transition-opacity duration-500"
+                      sizes="80px"
                     />
                   </div>
-                </button>
-              );
-            })}
+                  <span className="text-[9px] font-subheading font-bold uppercase tracking-[0.15em] text-white/25 group-hover:text-white/50 transition-colors duration-300 text-center leading-tight">
+                    {partner.name}
+                  </span>
+                </Link>
+              ))}
+            </div>
+
           </div>
         </div>
 
-        {/* ── Footer CTA ── */}
-        <div className="text-center mt-14 sm:mt-18">
-          <Link
-            href="/partners"
-            className="inline-flex items-center gap-2 text-[10px] sm:text-[11px] font-extrabold uppercase tracking-[0.25em] text-white/30 hover:text-[#006747] transition-colors duration-400 font-subheading"
-          >
-            <span className="border-b border-white/10 hover:border-[#006747]/50 pb-0.5 transition-colors duration-400">
-              Become a Partner
-            </span>
-            <span className="text-xs transition-transform duration-300 group-hover:translate-x-0.5">
-              &rarr;
-            </span>
-          </Link>
-        </div>
       </div>
     </section>
   );
