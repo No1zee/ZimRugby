@@ -4,7 +4,6 @@ import React, { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import { Play, ExternalLink, X, Film, Sparkles, LayoutGrid, CircleDot, MoveHorizontal, Youtube } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Icon } from "@iconify/react";
 
 export interface YouTubeVideoItem {
   id: string;
@@ -179,7 +178,7 @@ export default function MatchdayVideoHighlights({
                     : "text-black/60 hover:text-black hover:bg-black/5"
                 }`}
               >
-                <Icon icon="nimbus:cube" className="w-4 h-4" />
+                <CircleDot className="w-4 h-4" />
               </button>
               <button
                 onClick={() => setViewMode("grid")}
@@ -191,7 +190,7 @@ export default function MatchdayVideoHighlights({
                     : "text-black/60 hover:text-black hover:bg-black/5"
                 }`}
               >
-                <Icon icon="nimbus:grid" className="w-4 h-4" />
+                <LayoutGrid className="w-4 h-4" />
               </button>
             </div>
 
@@ -298,8 +297,8 @@ export default function MatchdayVideoHighlights({
 
                         {/* Play Button Overlay */}
                         <div className="absolute inset-0 flex items-center justify-center">
-                          <div className="w-13 h-13 sm:w-14 sm:h-14 rounded-full bg-[#006747] text-white flex items-center justify-center shadow-xl group-hover:scale-110 group-hover:bg-black transition-all duration-300 border-2 border-white/40">
-                            <Icon icon="nimbus:play" className="w-6 h-6 fill-current translate-x-0.5" />
+                          <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-[#006747] text-white flex items-center justify-center shadow-xl group-hover:scale-110 group-hover:bg-black transition-all duration-300 border-2 border-white/40">
+                            <Play className="w-5 h-5 sm:w-6 sm:h-6 fill-current translate-x-0.5 text-white" />
                           </div>
                         </div>
 
