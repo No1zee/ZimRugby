@@ -366,6 +366,7 @@ export function FloatingParticles({ count = 20, className = "" }: FloatingPartic
   // Generate particles only on client-side to avoid hydration mismatch
   useEffect(() => {
     // Adaptive Mobile & Performance Check
+    const isMobile = typeof window !== "undefined" && (window.innerWidth < 768 || /Mobi|Android/i.test(navigator.userAgent));
     const isLowPower =
       typeof window !== "undefined" &&
       (window.matchMedia("(prefers-reduced-motion: reduce)").matches ||
@@ -373,7 +374,7 @@ export function FloatingParticles({ count = 20, className = "" }: FloatingPartic
         (navigator as unknown as { connection?: { effectiveType?: string } }).connection?.effectiveType === "3g" ||
         navigator.hardwareConcurrency <= 4);
 
-    if (isLowPower) {
+    if (isMobile || isLowPower) {
       setMounted(false);
       return;
     }

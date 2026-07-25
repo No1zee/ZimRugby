@@ -219,9 +219,16 @@ export default function HeroCarousel({ slides }: { slides: HeroSlideData[] }) {
   const containerRef = useRef<HTMLElement>(null);
   const [isMobile, setIsMobile] = useState(false);
 
-  // Scroll Parallax Hooks
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 768);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
+  // Scroll Parallax Hooks — disabled on mobile to avoid RAF scroll listener overhead
   const { scrollYProgress } = useScroll({
-    target: containerRef,
+    target: isMobile ? undefined : containerRef,
     offset: ["start start", "end start"],
   });
 
@@ -229,13 +236,6 @@ export default function HeroCarousel({ slides }: { slides: HeroSlideData[] }) {
   const opacityBg = useTransform(scrollYProgress, [0, 1], [1, 0.3]);
   const yText = useTransform(scrollYProgress, [0, 1], ["0%", "-20%"]);
   const opacityText = useTransform(scrollYProgress, [0, 0.4], [1, 0]);
-
-  useEffect(() => {
-    const checkMobile = () => setIsMobile(window.innerWidth < 768);
-    checkMobile();
-    window.addEventListener('resize', checkMobile);
-    return () => window.removeEventListener('resize', checkMobile);
-  }, []);
 
   // Auto-play functionality
   const nextSlide = useCallback(() => {

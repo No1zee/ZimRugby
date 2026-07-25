@@ -4,11 +4,21 @@ import { motion, useScroll, useTransform } from "framer-motion";
 import { Play, Ticket } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { FloatingParticles, GlowButton } from "../ui/animations";
 
 export default function HeroVideoHub() {
   const [isLoaded, setIsLoaded] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 768);
+    check();
+    window.addEventListener("resize", check);
+    return () => window.removeEventListener("resize", check);
+  }, []);
+
+  // Disable scroll-linked RAF transforms on mobile
   const { scrollY } = useScroll();
   const y = useTransform(scrollY, [0, 500], [0, 150]);
   const opacity = useTransform(scrollY, [0, 300], [0, 1]);
@@ -20,7 +30,7 @@ export default function HeroVideoHub() {
       {/* Video Background with Parallax */}
       <motion.div 
         className="absolute inset-0 z-0"
-        style={{ y, scale }}
+        style={isMobile ? { opacity: 1 } : { y, scale }}
       >
         {/* Video/Image Background */}
         {/* Video/Image Background with Loading State */}

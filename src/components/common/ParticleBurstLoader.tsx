@@ -16,6 +16,9 @@ export default function ParticleBurstLoader({ isExiting = false }: ParticleBurst
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
+    const isMobile = typeof window !== "undefined" && (window.innerWidth < 768 || /Mobi|Android/i.test(navigator.userAgent));
+    if (isMobile) return;
+
     let animationFrameId: number;
 
     // Measure exact bounding rect to prevent window vs client size mismatch

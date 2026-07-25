@@ -1,9 +1,9 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { motion, useScroll, useMotionValueEvent } from "framer-motion";
+import { motion } from "framer-motion";
 import { Home, Trophy, Newspaper, Users, Menu } from "lucide-react";
 import { cn } from "../../lib/utils";
 
@@ -17,18 +17,23 @@ const dockItems = [
 
 export default function MobileDock() {
   const pathname = usePathname();
-  const { scrollY } = useScroll();
   const [isHidden, setIsHidden] = useState(false);
+  const lastScrollY = useRef(0);
 
-  // Hide on scroll down, show on scroll up
-  useMotionValueEvent(scrollY, "change", (latest) => {
-    const previous = scrollY.getPrevious() || 0;
-    if (latest > previous && latest > 150) {
-      setIsHidden(true);
-    } else {
-      setIsHidden(false);
-    }
-  });
+  // Hide on scroll down, show on scroll up — native passive listener (no framer-motion RAF)
+  useEffect(() => {
+    const onScroll = () => {
+      const current = window.scrollY;
+      if (current > lastScrollY.current && current > 150) {
+        setIsHidden(true);
+      } else {
+        setIsHidden(false);
+      }
+      lastScrollY.current = current;
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   const handleInteraction = (item: typeof dockItems[0], e: React.MouseEvent) => {
     // Haptic feedback (supported devices only)

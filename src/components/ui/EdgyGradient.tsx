@@ -37,83 +37,115 @@ export default function EdgyGradient({ className = "", opacity = 0.65 }: EdgyGra
           <rect width="1000" height="1000" fill="#00150c" />
           
           {/* 1. Neon Violet & Indigo crescent at bottom-left */}
-          <motion.path 
-            d="M -150,550 C 50,450 150,750 350,650 C 550,550 650,850 850,750 C 1050,650 1150,1050 1150,1050 L -150,1050 Z" 
-            fill="url(#violet-glow-opt)"
-            initial={{ d: "M -150,550 C 50,450 150,750 350,650 C 550,550 650,850 850,750 C 1050,650 1150,1050 1150,1050 L -150,1050 Z" }}
-            animate={{
-              d: [
-                "M -150,550 C 50,450 150,750 350,650 C 550,550 650,850 850,750 C 1050,650 1150,1050 1150,1050 L -150,1050 Z",
-                "M -150,600 C 100,430 130,780 370,630 C 530,580 680,820 830,780 C 1030,670 1150,1050 1150,1050 L -150,1050 Z",
-                "M -150,550 C 50,450 150,750 350,650 C 550,550 650,850 850,750 C 1050,650 1150,1050 1150,1050 L -150,1050 Z"
-              ]
-            }}
-            transition={{
-              duration: 25,
-              repeat: Infinity,
-              ease: "easeInOut"
-            }}
-          />
+          {(() => {
+            const isMobile = typeof window !== "undefined" && (window.innerWidth < 768 || /Mobi|Android/i.test(navigator.userAgent));
+            return (
+              <>
+                {isMobile ? (
+                  <path d="M -150,550 C 50,450 150,750 350,650 C 550,550 650,850 850,750 C 1050,650 1150,1050 1150,1050 L -150,1050 Z" fill="url(#violet-glow-opt)" />
+                ) : (
+                  <motion.path 
+                    d="M -150,550 C 50,450 150,750 350,650 C 550,550 650,850 850,750 C 1050,650 1150,1050 1150,1050 L -150,1050 Z" 
+                    fill="url(#violet-glow-opt)"
+                    initial={{ d: "M -150,550 C 50,450 150,750 350,650 C 550,550 650,850 850,750 C 1050,650 1150,1050 1150,1050 L -150,1050 Z" }}
+                    animate={{
+                      d: [
+                        "M -150,550 C 50,450 150,750 350,650 C 550,550 650,850 850,750 C 1050,650 1150,1050 1150,1050 L -150,1050 Z",
+                        "M -150,600 C 100,430 130,780 370,630 C 530,580 680,820 830,780 C 1030,670 1150,1050 1150,1050 L -150,1050 Z",
+                        "M -150,550 C 50,450 150,750 350,650 C 550,550 650,850 850,750 C 1050,650 1150,1050 1150,1050 L -150,1050 Z"
+                      ]
+                    }}
+                    transition={{
+                      duration: 25,
+                      repeat: Infinity,
+                      ease: "easeInOut"
+                    }}
+                  />
+                )}
+              </>
+            );
+          })()}
           
           {/* 2. Soft Warm Coral wave expanding from center-right */}
-          <motion.path 
-            d="M 1150,150 C 950,100 750,350 600,400 C 450,450 350,250 250,400 C 150,550 50,500 -50,650 L -50,1050 L 1150,1050 Z" 
-            fill="url(#coral-glow-opt)"
-            opacity={0.8}
-            initial={{ d: "M 1150,150 C 950,100 750,350 600,400 C 450,450 350,250 250,400 C 150,550 50,500 -50,650 L -50,1050 L 1150,1050 Z" }}
-            animate={{
-              d: [
-                "M 1150,150 C 950,100 750,350 600,400 C 450,450 350,250 250,400 C 150,550 50,500 -50,650 L -50,1050 L 1150,1050 Z",
-                "M 1150,180 C 930,130 770,320 620,370 C 470,420 330,280 230,430 C 130,580 50,480 -50,630 L -50,1050 L 1150,1050 Z",
-                "M 1150,150 C 950,100 750,350 600,400 C 450,450 350,250 250,400 C 150,550 50,500 -50,650 L -50,1050 L 1150,1050 Z"
-              ]
-            }}
-            transition={{
-              duration: 28,
-              repeat: Infinity,
-              ease: "easeInOut"
-            }}
-          />
+          {(() => {
+            const isMobile = typeof window !== "undefined" && (window.innerWidth < 768 || /Mobi|Android/i.test(navigator.userAgent));
+            return isMobile ? (
+              <path d="M 1150,150 C 950,100 750,350 600,400 C 450,450 350,250 250,400 C 150,550 50,500 -50,650 L -50,1050 L 1150,1050 Z" fill="url(#coral-glow-opt)" opacity={0.8} />
+            ) : (
+              <motion.path 
+                d="M 1150,150 C 950,100 750,350 600,400 C 450,450 350,250 250,400 C 150,550 50,500 -50,650 L -50,1050 L 1150,1050 Z" 
+                fill="url(#coral-glow-opt)"
+                opacity={0.8}
+                initial={{ d: "M 1150,150 C 950,100 750,350 600,400 C 450,450 350,250 250,400 C 150,550 50,500 -50,650 L -50,1050 L 1150,1050 Z" }}
+                animate={{
+                  d: [
+                    "M 1150,150 C 950,100 750,350 600,400 C 450,450 350,250 250,400 C 150,550 50,500 -50,650 L -50,1050 L 1150,1050 Z",
+                    "M 1150,180 C 930,130 770,320 620,370 C 470,420 330,280 230,430 C 130,580 50,480 -50,630 L -50,1050 L 1150,1050 Z",
+                    "M 1150,150 C 950,100 750,350 600,400 C 450,450 350,250 250,400 C 150,550 50,500 -50,650 L -50,1050 L 1150,1050 Z"
+                  ]
+                }}
+                transition={{
+                  duration: 28,
+                  repeat: Infinity,
+                  ease: "easeInOut"
+                }}
+              />
+            );
+          })()}
           
           {/* 3. High-intensity Gold wave floating near top-right */}
-          <motion.path 
-            d="M 600,0 C 750,100 900,-50 1050,50 C 1200,150 1150,400 1150,400 L 700,400 Z"
-            fill="url(#gold-glow-opt)"
-            opacity={0.6}
-            initial={{ d: "M 600,0 C 750,100 900,-50 1050,50 C 1200,150 1150,400 1150,400 L 700,400 Z" }}
-            animate={{
-              d: [
-                "M 600,0 C 750,100 900,-50 1050,50 C 1200,150 1150,400 1150,400 L 700,400 Z",
-                "M 550,20 C 720,80 880,-20 1020,70 C 1170,160 1150,370 1150,370 L 650,420 Z",
-                "M 600,0 C 750,100 900,-50 1050,50 C 1200,150 1150,400 1150,400 L 700,400 Z"
-              ]
-            }}
-            transition={{
-              duration: 22,
-              repeat: Infinity,
-              ease: "easeInOut"
-            }}
-          />
+          {(() => {
+            const isMobile = typeof window !== "undefined" && (window.innerWidth < 768 || /Mobi|Android/i.test(navigator.userAgent));
+            return isMobile ? (
+              <path d="M 600,0 C 750,100 900,-50 1050,50 C 1200,150 1150,400 1150,400 L 700,400 Z" fill="url(#gold-glow-opt)" opacity={0.6} />
+            ) : (
+              <motion.path 
+                d="M 600,0 C 750,100 900,-50 1050,50 C 1200,150 1150,400 1150,400 L 700,400 Z"
+                fill="url(#gold-glow-opt)"
+                opacity={0.6}
+                initial={{ d: "M 600,0 C 750,100 900,-50 1050,50 C 1200,150 1150,400 1150,400 L 700,400 Z" }}
+                animate={{
+                  d: [
+                    "M 600,0 C 750,100 900,-50 1050,50 C 1200,150 1150,400 1150,400 L 700,400 Z",
+                    "M 550,20 C 720,80 880,-20 1020,70 C 1170,160 1150,370 1150,370 L 650,420 Z",
+                    "M 600,0 C 750,100 900,-50 1050,50 C 1200,150 1150,400 1150,400 L 700,400 Z"
+                  ]
+                }}
+                transition={{
+                  duration: 22,
+                  repeat: Infinity,
+                  ease: "easeInOut"
+                }}
+              />
+            );
+          })()}
           
           {/* 4. Small glowing apricot accent circle in center-right */}
-          <motion.circle 
-            cx={750} 
-            cy={400} 
-            r={160} 
-            fill="#ffedd5" 
-            opacity={0.35} 
-            initial={{ cx: 750, cy: 400, r: 160 }}
-            animate={{
-              cx: [750, 720, 780, 750],
-              cy: [400, 430, 370, 400],
-              r: [160, 180, 150, 160]
-            }}
-            transition={{
-              duration: 20,
-              repeat: Infinity,
-              ease: "easeInOut"
-            }}
-          />
+          {(() => {
+            const isMobile = typeof window !== "undefined" && (window.innerWidth < 768 || /Mobi|Android/i.test(navigator.userAgent));
+            return isMobile ? (
+              <circle cx={750} cy={400} r={160} fill="#ffedd5" opacity={0.35} />
+            ) : (
+              <motion.circle 
+                cx={750} 
+                cy={400} 
+                r={160} 
+                fill="#ffedd5" 
+                opacity={0.35} 
+                initial={{ cx: 750, cy: 400, r: 160 }}
+                animate={{
+                  cx: [750, 720, 780, 750],
+                  cy: [400, 430, 370, 400],
+                  r: [160, 180, 150, 160]
+                }}
+                transition={{
+                  duration: 20,
+                  repeat: Infinity,
+                  ease: "easeInOut"
+                }}
+              />
+            );
+          })()}
 
           <defs>
             {/* Premium Athletic Violet & Royal Blue */}
