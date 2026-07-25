@@ -262,7 +262,7 @@ export default function Navigation() {
                                key={child.label}
                                href={child.href}
                                className={`
-                                 block px-3.5 py-2.5 text-xs font-semibold tracking-wide transition-all rounded-xl hover:bg-white/15 text-white
+                                 block px-3.5 py-2.5 text-xs font-bold tracking-wide transition-all rounded-xl hover:bg-white/15 text-white
                                  ${isActive(child.href) ? "text-white bg-white/20 font-black" : "text-white/90"}
                                  ${item.isMega ? 'hover:pl-5' : 'hover:pl-4'}
                                `}
@@ -381,7 +381,7 @@ export default function Navigation() {
               <div className="space-y-4">
                 <h3 className="text-zru-green text-[10px] font-black uppercase tracking-[0.3em] border-b border-zru-green/20 pb-2">Fixtures & Results</h3>
                 {searchQuery && searchResults.matches.length === 0 && (
-                  <p className="text-white/40 text-xs font-medium">No matching fixtures found.</p>
+                  <p className="text-white/40 text-xs font-normal">No matching fixtures found.</p>
                 )}
                 <div className="space-y-3">
                   {searchResults.matches.map((m) => (
@@ -405,7 +405,7 @@ export default function Navigation() {
               <div className="space-y-4">
                 <h3 className="text-zru-green text-[10px] font-black uppercase tracking-[0.3em] border-b border-zru-green/20 pb-2">Latest News</h3>
                 {searchQuery && searchResults.reports.length === 0 && (
-                  <p className="text-white/40 text-xs font-medium">No matching articles found.</p>
+                  <p className="text-white/40 text-xs font-normal">No matching articles found.</p>
                 )}
                 <div className="space-y-3">
                   {searchResults.reports.map((r) => (
@@ -416,7 +416,7 @@ export default function Navigation() {
                       className="block p-3 rounded-lg bg-white/5 hover:bg-zru-green/10 border border-white/5 hover:border-zru-green/20 transition-all group"
                     >
                       <div className="text-[10px] text-zru-green font-bold uppercase tracking-wider mb-1">{r.category}</div>
-                      <div className="text-white group-hover:text-zru-green transition-colors text-sm font-body font-semibold line-clamp-2 leading-snug">
+                      <div className="text-white group-hover:text-zru-green transition-colors text-sm font-body font-bold line-clamp-2 leading-snug">
                         {r.title}
                       </div>
                       <div className="text-[9px] text-white/40 font-bold uppercase tracking-wider mt-1">{r.date}</div>

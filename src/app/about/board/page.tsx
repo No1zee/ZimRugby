@@ -58,11 +58,11 @@ export default function BoardPage() {
               <h3 className="text-3xl font-black text-white uppercase tracking-tighter italic leading-none">
                 Aaron Jani
               </h3>
-              <p className="text-white/80 text-sm font-semibold italic">
+              <p className="text-white/80 text-sm font-bold italic">
                 Former President of the Zimbabwe Rugby Union (2017 – May 2024)<br />
                 Rugby Africa Treasurer & Sables Legend
               </p>
-              <p className="text-white/60 text-xs leading-relaxed font-medium">
+              <p className="text-white/60 text-xs leading-relaxed font-normal">
                 The Zimbabwe Rugby Union honors the extraordinary life and legacy of Aaron Jani. Aaron was a true pioneer of the sport, representing the Sables in the early 1990s as one of the first Black players, and later dedicating his life to rugby administration. His leadership laid the foundations for the Sables&apos; 2024 Africa Cup victory. His spirit continues to inspire the game across the continent.
               </p>
             </div>

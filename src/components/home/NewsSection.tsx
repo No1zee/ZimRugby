@@ -102,12 +102,12 @@ export default function NewsSection() {
                 <h3 className="heading-2 text-white uppercase italic tracking-tight mb-2 line-clamp-2">
                   {newsItems[0].title}
                 </h3>
-                <p className="text-white/80 text-sm font-sans line-clamp-2 max-w-2xl mb-4">
+                <p className="text-white/80 text-sm font-body line-clamp-2 max-w-2xl mb-4">
                   {newsItems[0].excerpt}
                 </p>
                 <Link
                   href={`/media`}
-                  className="inline-flex items-center gap-2 text-xs font-extrabold text-[#84d7af] uppercase tracking-widest hover:text-white transition-colors"
+                  className="inline-flex items-center gap-2 text-xs font-extrabold text-zru-green uppercase tracking-widest hover:text-white transition-colors"
                 >
                   <span>READ FULL DISPATCH</span>
                   <ArrowRight className="w-4 h-4" />

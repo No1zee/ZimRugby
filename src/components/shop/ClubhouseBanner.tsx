@@ -86,7 +86,7 @@ export default function ClubhouseBanner() {
                 whileInView={{ opacity: 1 }}
                 viewport={{ once: true }}
                 transition={{ duration: 1.5, delay: 0.8 }}
-                className="text-sm md:text-lg text-white/50 mb-16 leading-relaxed tracking-wide font-medium"
+                className="text-sm md:text-lg text-white/50 mb-16 leading-relaxed tracking-wide font-normal"
               >
                 Unlock early access to seasonal drops, exclusive matchday kits, 
                 and private events at the Sables training grounds. This is the inner sanctum.

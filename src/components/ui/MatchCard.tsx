@@ -63,7 +63,7 @@ export default function MatchCard({
         </div>
       </div>
 
-      <div className="flex items-center gap-4 text-[11px] text-black/50 font-medium">
+      <div className="flex items-center gap-4 text-[11px] text-black/50 font-normal">
         <span className="flex items-center gap-1.5">
           <Calendar className="w-3.5 h-3.5" /> {date}
         </span>

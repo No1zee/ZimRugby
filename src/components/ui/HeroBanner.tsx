@@ -42,7 +42,7 @@ export default function HeroBanner({
             {title}
           </h1>
           {subtitle && (
-            <p className="text-white/70 text-lg md:text-xl max-w-2xl mt-6 font-medium">
+            <p className="text-white/70 text-lg md:text-xl max-w-2xl mt-6 font-normal">
               {subtitle}
             </p>
           )}

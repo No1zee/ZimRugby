@@ -215,7 +215,7 @@ export default function TicketsPage() {
                 OFFICIAL <br />
                 <span className="text-zru-green">TICKETS</span>
               </h1>
-              <p className="text-lg md:text-xl text-black/60 max-w-xl mb-12 font-medium leading-relaxed">
+              <p className="text-lg md:text-xl text-black/60 max-w-xl mb-12 font-normal leading-relaxed">
                 Welcome to the official home of Sables and ZRU tickets. Every link on this page takes you to an authorised partner, with transparent pricing and secure checkout.
               </p>
               
@@ -318,7 +318,7 @@ export default function TicketsPage() {
                    <Ticket className="w-16 h-16 mx-auto text-rich-black" />
                 </div>
                 <h3 className="text-2xl font-black text-rich-black uppercase tracking-tight mb-4">No fixtures currently on sale</h3>
-                <p className="text-black/60 font-medium mb-10 max-w-sm mx-auto">We’re finalising the next block of fixtures. Check back soon or join ZRU Nation for early ticket alerts.</p>
+                <p className="text-black/60 font-normal mb-10 max-w-sm mx-auto">We’re finalising the next block of fixtures. Check back soon or join ZRU Nation for early ticket alerts.</p>
                 <Button variant="secondary" size="xl" href="/world-cup-campaign">
                   Join ZRU Nation
                 </Button>
@@ -329,7 +329,7 @@ export default function TicketsPage() {
           {/* Helper Text */}
           <div className="mt-16 flex items-start gap-4 p-6 bg-white border border-black/5 rounded-xl max-w-4xl shadow-sm">
             <Info className="w-5 h-5 text-zru-green shrink-0 mt-0.5" />
-            <p className="text-xs text-black/60 font-medium leading-relaxed">
+            <p className="text-xs text-black/60 font-normal leading-relaxed">
               All ticket purchases for Sables and ZRU fixtures are handled by our authorised ticketing partners. You’ll complete your booking on their secure platforms.
             </p>
           </div>
@@ -378,7 +378,7 @@ export default function TicketsPage() {
                     <step.icon className="w-6 h-6 text-zru-green" />
                   </div>
                   <h3 className="text-xl font-bold text-rich-black uppercase tracking-tight mb-4">{step.title}</h3>
-                  <p className="text-sm text-black/50 font-medium leading-relaxed">{step.desc}</p>
+                  <p className="text-sm text-black/50 font-normal leading-relaxed">{step.desc}</p>
                 </div>
               </div>
             ))}
@@ -397,7 +397,7 @@ export default function TicketsPage() {
             <div>
               <span className="block text-[10px] font-black uppercase tracking-[0.4em] text-zru-green mb-8">Seating Overview</span>
               <h2 className="text-4xl md:text-5xl font-black text-rich-black uppercase tracking-tighter leading-none mb-8">TICKET TYPES <br />& AREAS</h2>
-              <p className="text-lg text-black/60 font-medium mb-12 max-w-lg leading-relaxed">
+              <p className="text-lg text-black/60 font-normal mb-12 max-w-lg leading-relaxed">
                 Different fixtures and venues use different seating maps, but most matches follow a similar structure. Use this as a guide before you buy.
               </p>
               
@@ -406,7 +406,7 @@ export default function TicketsPage() {
                     <Info className="w-4 h-4" />
                     Dynamic Pricing
                  </div>
-                 <p className="text-xs text-black/50 font-medium leading-relaxed">
+                 <p className="text-xs text-black/50 font-normal leading-relaxed">
                    Prices may vary by opponent, competition and demand. Some fixtures may use dynamic pricing—booking early is often your best value.
                  </p>
               </div>
@@ -422,7 +422,7 @@ export default function TicketsPage() {
               ].map((c, i) => (
                 <div key={i} className="p-6 bg-white border border-black/5 rounded-lg shadow-sm">
                   <h3 className="text-sm font-black text-rich-black uppercase tracking-widest mb-2">{c.name}</h3>
-                  <p className="text-xs text-black/50 font-medium leading-relaxed">{c.text}</p>
+                  <p className="text-xs text-black/50 font-normal leading-relaxed">{c.text}</p>
                 </div>
               ))}
             </div>
@@ -457,7 +457,7 @@ export default function TicketsPage() {
             <div>
               <span className="block text-[10px] font-black uppercase tracking-[0.4em] text-zru-green mb-8">Security First</span>
               <h2 className="text-4xl font-black text-rich-black uppercase tracking-tighter leading-tight mb-8">TICKET FAQs <br />& SAFETY</h2>
-              <p className="text-black/50 font-medium leading-relaxed mb-8">Direct answers for your peace of mind.</p>
+              <p className="text-black/50 font-normal leading-relaxed mb-8">Direct answers for your peace of mind.</p>
               <div className="pt-8 border-t border-black/5">
                  <p className="text-xs font-bold text-black/45 uppercase tracking-widest mb-4">Still unsure?</p>
                  <Link href="/contact" className="inline-flex items-center gap-2 text-xs font-black text-zru-green uppercase tracking-widest hover:underline">
@@ -535,7 +535,7 @@ export default function TicketsPage() {
                     <p className="text-sm text-green-500 font-bold">Priority registration recorded! We&apos;ll alert you via email as soon as tickets go on sale.</p>
                   </motion.div>
                 ) : (
-                  <p className="text-sm text-black/60 font-medium mb-8 pr-12">
+                  <p className="text-sm text-black/60 font-normal mb-8 pr-12">
                     Registration for this fixture hasn&apos;t opened yet. Be the first to know when tickets go live.
                   </p>
                 )}
@@ -544,7 +544,7 @@ export default function TicketsPage() {
               {!isSuccess && (
                 <form onSubmit={handleRegister} className="p-8 pt-0 space-y-6">
                   {submitError && (
-                    <div className="bg-red-500/10 border border-red-500/20 rounded-xl p-4 flex items-center gap-3 text-red-500 text-xs font-semibold">
+                    <div className="bg-red-500/10 border border-red-500/20 rounded-xl p-4 flex items-center gap-3 text-red-500 text-xs font-bold">
                       <AlertCircle className="w-4 h-4 shrink-0" />
                       <span>{submitError}</span>
                     </div>
@@ -556,7 +556,7 @@ export default function TicketsPage() {
                         id="reg-name"
                         type="text" 
                         required
-                        className="w-full bg-black/5 border border-black/10 rounded p-4 text-rich-black font-medium focus:outline-none focus:border-zru-green transition-colors" 
+                        className="w-full bg-black/5 border border-black/10 rounded p-4 text-rich-black font-normal focus:outline-none focus:border-zru-green transition-colors" 
                         placeholder="Enter your name" 
                         value={formData.name}
                         onChange={(e) => setFormData({...formData, name: e.target.value})}
@@ -568,7 +568,7 @@ export default function TicketsPage() {
                         id="reg-email"
                         type="email" 
                         required
-                        className="w-full bg-black/5 border border-black/10 rounded p-4 text-rich-black font-medium focus:outline-none focus:border-zru-green transition-colors" 
+                        className="w-full bg-black/5 border border-black/10 rounded p-4 text-rich-black font-normal focus:outline-none focus:border-zru-green transition-colors" 
                         placeholder="your@email.com" 
                         value={formData.email}
                         onChange={(e) => setFormData({...formData, email: e.target.value})}

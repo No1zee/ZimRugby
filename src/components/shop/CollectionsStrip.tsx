@@ -80,7 +80,7 @@ export default function CollectionsStrip() {
             {/* Tile Label & Arrow */}
             <div className="absolute bottom-6 left-6 right-6 z-20 flex justify-between items-end">
               <div>
-                <span className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-[#84d7af] block mb-1">
+                <span className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-zru-green block mb-1">
                   {col.subtitle}
                 </span>
                 <h3 className="heading-2 text-white">{col.title}</h3>

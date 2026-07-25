@@ -23,7 +23,7 @@ export default function FixtureAndTicketsBlock() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-stretch">
           
           {/* Left Card: Upcoming Fixture */}
-          <div className="bg-[#EAE8DE] border border-black/5 rounded-2xl p-6 sm:p-8 flex flex-col justify-between shadow-xs">
+          <div className="bg-milk-white border border-black/5 rounded-2xl p-6 sm:p-8 flex flex-col justify-between shadow-xs">
             <div>
               <span className="inline-block px-3 py-1 bg-[#004D2C] text-white text-[11px] font-bold tracking-widest uppercase rounded-full mb-6">
                 UPCOMING FIXTURE
@@ -79,7 +79,7 @@ export default function FixtureAndTicketsBlock() {
                 <span className="block text-xs font-extrabold uppercase tracking-widest text-rich-black">
                   HARARE SPORTS CLUB
                 </span>
-                <span className="block text-[11px] font-semibold text-rich-black/70 mt-0.5">
+                <span className="block text-[11px] font-bold text-rich-black/70 mt-0.5">
                   JUNE 18, 2026 • 15:30 CAT
                 </span>
               </div>

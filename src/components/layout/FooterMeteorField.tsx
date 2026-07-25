@@ -133,7 +133,7 @@ export default function FooterMeteorField() {
         const tailX = m.x - m.vx * (m.trailLength * scale);
         const tailY = m.y - m.vy * (m.trailLength * scale);
         const gradient = ctx.createLinearGradient(m.x, m.y, tailX, tailY);
-        gradient.addColorStop(0, "rgba(0, 255, 137, 0.85)");
+        gradient.addColorStop(0, "rgba(0, 103, 71, 0.85)");
         gradient.addColorStop(0.5, "rgba(0, 103, 71, 0.4)");
         gradient.addColorStop(1, "rgba(0, 103, 71, 0)");
 
@@ -154,9 +154,9 @@ export default function FooterMeteorField() {
           // Fallback glowing meteor head while image finishes loading
           ctx.beginPath();
           ctx.arc(0, 0, Math.max(2, 6 * scale), 0, Math.PI * 2);
-          ctx.fillStyle = "#00FF87";
+          ctx.fillStyle = "#006747";
           ctx.shadowBlur = 12;
-          ctx.shadowColor = "#00FF87";
+          ctx.shadowColor = "#006747";
           ctx.fill();
         }
 

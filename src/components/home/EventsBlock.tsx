@@ -91,7 +91,7 @@ export default function EventsBlock() {
                 </h2>
               </div>
               
-              <p className="body-small text-rich-black/60 font-medium">
+              <p className="body-small text-rich-black/60 font-normal">
                 From Super Six matches to community development festivals, explore the heart of Zimbabwean rugby across the nation.
               </p>
               
@@ -138,7 +138,7 @@ export default function EventsBlock() {
                             <span className="text-[10px] font-black uppercase tracking-[0.14em] text-white/48 block">
                               {event.subtitle}
                             </span>
-                            <h3 className="text-base md:text-lg font-semibold tracking-[-0.01em] text-white line-clamp-1">
+                            <h3 className="text-base md:text-lg font-bold tracking-[-0.01em] text-white line-clamp-1">
                               {event.title}
                             </h3>
                             <p className="text-xs md:text-sm leading-relaxed text-white/72 line-clamp-2">
@@ -148,7 +148,7 @@ export default function EventsBlock() {
 
                           {/* Footer with Divider */}
                           <div className="border-t border-white/8 pt-3 mt-3">
-                            <div className="flex items-center justify-between text-[10px] font-medium text-white/48 uppercase tracking-[0.14em]">
+                            <div className="flex items-center justify-between text-[10px] font-normal text-white/48 uppercase tracking-[0.14em]">
                               <span className="flex items-center gap-1.5"><Calendar className="w-3.5 h-3.5 text-zru-green" /> {event.date}</span>
                               <span className="flex items-center gap-1.5 truncate max-w-[150px]"><MapPin className="w-3.5 h-3.5 text-zru-green" /> {event.location}</span>
                             </div>

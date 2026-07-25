@@ -110,7 +110,7 @@ export default async function AnnouncementsRail() {
                       <h3 className="font-heading font-black text-lg md:text-xl text-white uppercase tracking-wide leading-snug group-hover:text-zru-green transition-colors duration-300">
                         {ann.title}
                       </h3>
-                      <p className="text-sm text-white/70 font-body font-medium leading-relaxed">
+                      <p className="text-sm text-white/70 font-body font-normal leading-relaxed">
                         {ann.body}
                       </p>
                     </div>

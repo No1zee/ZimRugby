@@ -122,16 +122,16 @@ export default async function EventDetailPage({ params }: { params: Promise<{ id
           <span className={`px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest ${STATUS_STYLES[event.status]}`}>
             {event.status}
           </span>
-          <span className="flex items-center gap-1.5 text-black/60 text-xs sm:text-sm font-semibold">
+          <span className="flex items-center gap-1.5 text-black/60 text-xs sm:text-sm font-bold">
             <Calendar className="w-4 h-4 text-zru-green shrink-0" /> {event.date}
           </span>
-          <span className="flex items-center gap-1.5 text-black/60 text-xs sm:text-sm font-semibold">
+          <span className="flex items-center gap-1.5 text-black/60 text-xs sm:text-sm font-bold">
             <Clock className="w-4 h-4 text-zru-green shrink-0" /> {event.time}
           </span>
-          <span className="flex items-center gap-1.5 text-black/60 text-xs sm:text-sm font-semibold">
+          <span className="flex items-center gap-1.5 text-black/60 text-xs sm:text-sm font-bold">
             <MapPin className="w-4 h-4 text-zru-green shrink-0" /> {event.venue}, {event.location}
           </span>
-          <span className="flex items-center gap-1.5 text-black/60 text-xs sm:text-sm font-semibold">
+          <span className="flex items-center gap-1.5 text-black/60 text-xs sm:text-sm font-bold">
             <Tag className="w-4 h-4 text-zru-green shrink-0" /> {event.category}
           </span>
         </div>
@@ -142,7 +142,7 @@ export default async function EventDetailPage({ params }: { params: Promise<{ id
             <h2 className="text-2xl sm:text-3xl font-heading font-black uppercase tracking-tight italic text-rich-black">
               Tournament Briefing
             </h2>
-            <p className="text-black/80 text-base sm:text-lg leading-relaxed font-medium">
+            <p className="text-black/80 text-base sm:text-lg leading-relaxed font-normal">
               {event.description}
             </p>
           </div>
@@ -152,12 +152,12 @@ export default async function EventDetailPage({ params }: { params: Promise<{ id
             <div className="bg-white border border-black/10 rounded-2xl p-6 shadow-sm">
               <h3 className="text-[10px] font-heading font-black uppercase tracking-[0.25em] text-black/40 mb-3">Official Venue</h3>
               <p className="font-heading font-black text-rich-black text-lg">{event.venue}</p>
-              <p className="text-black/60 text-xs sm:text-sm font-medium mt-1">{event.location}</p>
+              <p className="text-black/60 text-xs sm:text-sm font-normal mt-1">{event.location}</p>
             </div>
             <div className="bg-zru-green text-white rounded-2xl p-6 shadow-sm">
               <h3 className="text-[10px] font-heading font-black uppercase tracking-[0.25em] text-white/70 mb-3">Schedule Window</h3>
               <p className="font-heading font-black text-xl">{event.date}</p>
-              <p className="text-white/80 text-xs sm:text-sm font-medium mt-1">{event.time}</p>
+              <p className="text-white/80 text-xs sm:text-sm font-normal mt-1">{event.time}</p>
             </div>
           </div>
         </div>

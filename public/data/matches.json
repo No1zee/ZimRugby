@@ -98,7 +98,11 @@
     "venue": "American Legion Memorial",
     "competition": "Nations Cup",
     "category": "Sables",
-    "status": "upcoming"
+    "status": "finished",
+    "score": {
+      "home": 31,
+      "away": 15
+    }
   },
   {
     "id": "2026-fixture-06",
@@ -115,6 +119,10 @@
     "venue": "Princess Auto Stadium, Winnipeg",
     "competition": "Nations Cup",
     "category": "Sables",
-    "status": "upcoming"
+    "status": "finished",
+    "score": {
+      "home": 23,
+      "away": 19
+    }
   }
 ]

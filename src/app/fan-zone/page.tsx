@@ -120,7 +120,7 @@ export default function FanZonePage() {
                   <h2 className="text-2xl font-heading font-black text-rich-black uppercase tracking-tight">
                     WHY JOIN THE FANZONE?
                   </h2>
-                  <p className="text-xs text-black/60 font-medium">
+                  <p className="text-xs text-black/60 font-normal">
                     Hover or tap to flip through membership perks before signing up.
                   </p>
                 </div>
@@ -152,7 +152,7 @@ export default function FanZonePage() {
             {!submitted ? (
               <form onSubmit={handleSubscribe} className="space-y-4">
                 {submitError && (
-                  <div className="bg-red-900/20 border border-red-500/20 rounded-xl p-3 flex items-center gap-2 text-red-500 text-[11px] font-semibold">
+                  <div className="bg-red-900/20 border border-red-500/20 rounded-xl p-3 flex items-center gap-2 text-red-500 text-[11px] font-bold">
                     <AlertCircle className="w-3.5 h-3.5 shrink-0" />
                     <span>{submitError}</span>
                   </div>
@@ -249,7 +249,7 @@ export default function FanZonePage() {
                 className="text-center py-6 space-y-6"
               >
                 {/* Official Digital Sables Supporter Pass */}
-                <div className="w-full max-w-sm mx-auto p-6 rounded-2xl bg-gradient-to-br from-[#003B24] via-[#002617] to-[#00170E] border border-[#00FF87]/40 shadow-2xl text-left relative overflow-hidden">
+                <div className="w-full max-w-sm mx-auto p-6 rounded-2xl bg-gradient-to-br from-[#003B24] via-[#002617] to-[#00170E] border border-[#006747]/40 shadow-2xl text-left relative overflow-hidden">
                   <div className="flex items-center justify-between border-b border-white/10 pb-4 mb-4">
                     <div className="flex items-center gap-2">
                       <Image
@@ -260,11 +260,11 @@ export default function FanZonePage() {
                         className="object-contain"
                       />
                       <div>
-                        <h5 className="font-heading font-black text-xs text-[#00FF87] uppercase tracking-wider leading-none">ZIMBABWE RUGBY</h5>
+                        <h5 className="font-heading font-black text-xs text-[#006747] uppercase tracking-wider leading-none">ZIMBABWE RUGBY</h5>
                         <span className="text-[8px] font-bold text-white/50 uppercase tracking-widest">OFFICIAL FANZONE PASS</span>
                       </div>
                     </div>
-                    <CheckCircle2 className="w-6 h-6 text-[#00FF87]" />
+                    <CheckCircle2 className="w-6 h-6 text-[#006747]" />
                   </div>
 
                   <div className="space-y-3">
@@ -276,7 +276,7 @@ export default function FanZonePage() {
                     <div className="grid grid-cols-2 gap-2 pt-1 border-t border-white/10 text-[10px]">
                       <div>
                         <span className="text-[8px] text-white/40 uppercase tracking-widest font-bold block">SQUAD</span>
-                        <span className="font-bold text-[#00FF87] uppercase">{favTeam}</span>
+                        <span className="font-bold text-[#006747] uppercase">{favTeam}</span>
                       </div>
                       <div>
                         <span className="text-[8px] text-white/40 uppercase tracking-widest font-bold block">COUNTRY</span>
@@ -285,15 +285,15 @@ export default function FanZonePage() {
                     </div>
                   </div>
 
-                  <div className="mt-4 pt-3 border-t border-white/10 flex items-center justify-between text-[9px] font-mono text-white/40">
+                  <div className="mt-4 pt-3 border-t border-white/10 flex items-center justify-between text-[9px] font-body text-white/40">
                     <span>MEMBER ID: ZRU-{Math.floor(100000 + Math.random() * 900000)}</span>
-                    <span className="text-[#00FF87] font-bold uppercase">STATUS: ACTIVE</span>
+                    <span className="text-[#006747] font-bold uppercase">STATUS: ACTIVE</span>
                   </div>
                 </div>
 
                 <div className="space-y-2 max-w-sm mx-auto">
                   <h4 className="font-black text-lg text-rich-black uppercase tracking-wider leading-none">WELCOME TO THE FANZONE!</h4>
-                  <p className="text-black/70 text-xs leading-relaxed font-medium">
+                  <p className="text-black/70 text-xs leading-relaxed font-normal">
                     Your ZRU Supporter Membership has been successfully activated. A confirmation email and details regarding your <strong>10% Clubhouse discount</strong> have been sent to <strong>{email}</strong>.
                   </p>
                 </div>

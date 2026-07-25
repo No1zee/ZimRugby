@@ -196,11 +196,11 @@ export default function MatchDetailClient({ data }: MatchDetailClientProps) {
                     <h2 className="text-xl font-black uppercase tracking-wider">MATCH REPORT</h2>
                     <p className="text-sm text-white/50 mt-1">Official match summary and timeline events.</p>
                   </div>
-                  <p className="text-xl font-semibold text-white leading-relaxed italic border-b border-white/10 pb-6 mb-6">
+                  <p className="text-xl font-bold text-white leading-relaxed italic border-b border-white/10 pb-6 mb-6">
                     &ldquo;{report.summary}&rdquo;
                   </p>
                   {report.paragraphs.map((p, idx) => (
-                    <p key={idx} className="text-white/70 leading-relaxed text-base font-medium">
+                    <p key={idx} className="text-white/70 leading-relaxed text-base font-normal">
                       {p}
                     </p>
                   ))}
@@ -249,7 +249,7 @@ export default function MatchDetailClient({ data }: MatchDetailClientProps) {
                             <span className="w-6 h-6 rounded-full bg-white/10 border border-white/5 flex items-center justify-center text-xs font-black text-zru-green">
                               {player.number}
                             </span>
-                            <span className="font-semibold text-white uppercase tracking-tight">{player.name}</span>
+                            <span className="font-bold text-white uppercase tracking-tight">{player.name}</span>
                           </div>
                           <div className="text-right">
                             <span className="text-white/60 text-xs font-bold uppercase tracking-wider">{player.position}</span>
@@ -272,7 +272,7 @@ export default function MatchDetailClient({ data }: MatchDetailClientProps) {
                             <span className="w-6 h-6 rounded-full bg-white/10 border border-white/5 flex items-center justify-center text-xs font-black text-white/40">
                               {player.number}
                             </span>
-                            <span className="font-semibold text-white/80 uppercase tracking-tight">{player.name}</span>
+                            <span className="font-bold text-white/80 uppercase tracking-tight">{player.name}</span>
                           </div>
                           <div className="text-right">
                             <span className="text-white/40 text-xs font-bold uppercase tracking-wider">{player.position}</span>

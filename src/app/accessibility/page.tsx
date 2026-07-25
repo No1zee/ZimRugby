@@ -8,7 +8,7 @@ export default function ComingSoonPage() {
         <h1 className="text-5xl md:text-7xl font-black text-white uppercase tracking-tighter mb-8 italic">
           COMING <br /> <span className="text-white/40">SOON.</span>
         </h1>
-        <p className="text-lg text-gray-400 font-medium max-w-lg">
+        <p className="text-lg text-gray-400 font-normal max-w-lg">
           This digital experience is currently under construction. Please check back later as we continue to build the future of Zimbabwe Rugby.
         </p>
       </div>

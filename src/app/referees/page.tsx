@@ -140,7 +140,7 @@ export default function RefereesPortalPage() {
                             <span>{notice.date}</span>
                           </div>
                           <h3 className="text-lg font-black uppercase tracking-tight text-rich-black">{notice.title}</h3>
-                          <p className="text-black/60 text-sm leading-relaxed font-medium">
+                          <p className="text-black/60 text-sm leading-relaxed font-normal">
                             {notice.excerpt}
                           </p>
                           <div className="pt-4 border-t border-black/5">
@@ -252,7 +252,7 @@ export default function RefereesPortalPage() {
               {!formSubmitted ? (
                 <form onSubmit={handleRegister} className="space-y-4">
                   {submitError && (
-                    <div className="bg-zru-green/10 border border-zru-green/20 rounded-xl p-3 flex items-center gap-2 text-zru-green text-[11px] font-semibold">
+                    <div className="bg-zru-green/10 border border-zru-green/20 rounded-xl p-3 flex items-center gap-2 text-zru-green text-[11px] font-bold">
                       <AlertCircle className="w-3.5 h-3.5 shrink-0" />
                       <span>{submitError}</span>
                     </div>
@@ -316,7 +316,7 @@ export default function RefereesPortalPage() {
                     <CheckCircle2 className="w-8 h-8" />
                   </div>
                   <h4 className="font-black text-sm text-rich-black uppercase tracking-wider">APPLICATION RECEIVED</h4>
-                  <p className="text-black/60 text-xs leading-relaxed max-w-[220px] mx-auto font-medium">
+                  <p className="text-black/60 text-xs leading-relaxed max-w-[220px] mx-auto font-normal">
                     Thank you, <strong>{formName}</strong>. Your registration for <strong>{formCourse}</strong> has been filed. The Referees Committee will contact you at <strong>{formEmail}</strong>.
                   </p>
                   <button 

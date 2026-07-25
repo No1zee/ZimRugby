@@ -11,11 +11,11 @@ export default function SpecFooter() {
         <div className="space-y-6">
           <h4 className="text-[11px] font-black uppercase tracking-widest text-black/50 mb-6">QUICK LINKS</h4>
           <ul className="space-y-4">
-            <li><Link href="/tickets" className="text-sm font-medium text-black/70 hover:text-zru-green transition-colors">Tickets</Link></li>
-            <li><Link href="/match-centre" className="text-sm font-medium text-black/70 hover:text-zru-green transition-colors">Match Centre</Link></li>
-            <li><Link href="/teams" className="text-sm font-medium text-black/70 hover:text-zru-green transition-colors">Our Teams</Link></li>
-            <li><Link href="/clubhouse" className="text-sm font-medium text-black/70 hover:text-zru-green transition-colors">Official Shop</Link></li>
-            <li><Link href="/news" className="text-sm font-medium text-black/70 hover:text-zru-green transition-colors">News & Media</Link></li>
+            <li><Link href="/tickets" className="text-sm font-normal text-black/70 hover:text-zru-green transition-colors">Tickets</Link></li>
+            <li><Link href="/match-centre" className="text-sm font-normal text-black/70 hover:text-zru-green transition-colors">Match Centre</Link></li>
+            <li><Link href="/teams" className="text-sm font-normal text-black/70 hover:text-zru-green transition-colors">Our Teams</Link></li>
+            <li><Link href="/clubhouse" className="text-sm font-normal text-black/70 hover:text-zru-green transition-colors">Official Shop</Link></li>
+            <li><Link href="/news" className="text-sm font-normal text-black/70 hover:text-zru-green transition-colors">News & Media</Link></li>
           </ul>
         </div>
 
@@ -23,11 +23,11 @@ export default function SpecFooter() {
         <div className="space-y-6">
           <h4 className="text-[11px] font-black uppercase tracking-widest text-black/50 mb-6">ABOUT</h4>
           <ul className="space-y-4">
-            <li><Link href="/about" className="text-sm font-medium text-black/70 hover:text-zru-green transition-colors">Our Story</Link></li>
-            <li><Link href="/about/leadership" className="text-sm font-medium text-black/70 hover:text-zru-green transition-colors">Leadership</Link></li>
-            <li><Link href="/play-rugby" className="text-sm font-medium text-black/70 hover:text-zru-green transition-colors">Play Rugby</Link></li>
-            <li><Link href="/volunteer" className="text-sm font-medium text-black/70 hover:text-zru-green transition-colors">Volunteer</Link></li>
-            <li><Link href="/contact" className="text-sm font-medium text-black/70 hover:text-zru-green transition-colors">Contact Us</Link></li>
+            <li><Link href="/about" className="text-sm font-normal text-black/70 hover:text-zru-green transition-colors">Our Story</Link></li>
+            <li><Link href="/about/leadership" className="text-sm font-normal text-black/70 hover:text-zru-green transition-colors">Leadership</Link></li>
+            <li><Link href="/play-rugby" className="text-sm font-normal text-black/70 hover:text-zru-green transition-colors">Play Rugby</Link></li>
+            <li><Link href="/volunteer" className="text-sm font-normal text-black/70 hover:text-zru-green transition-colors">Volunteer</Link></li>
+            <li><Link href="/contact" className="text-sm font-normal text-black/70 hover:text-zru-green transition-colors">Contact Us</Link></li>
           </ul>
         </div>
 
@@ -49,12 +49,12 @@ export default function SpecFooter() {
         {/* Column 4: NEWSLETTER (Alternative Placement) */}
         <div className="space-y-6">
           <h4 className="text-[11px] font-black uppercase tracking-widest text-black/50 mb-6">NEWSLETTER</h4>
-          <p className="text-sm font-medium text-black/70 mb-4">Stay updated with the latest from the Sables.</p>
+          <p className="text-sm font-normal text-black/70 mb-4">Stay updated with the latest from the Sables.</p>
           <form className="flex w-full" onSubmit={(e) => e.preventDefault()}>
             <input 
               type="email" 
               placeholder="Email address" 
-              className="bg-white border border-gray-200 text-black px-4 py-3 w-full rounded-l-md outline-none placeholder:text-gray-400 font-medium text-sm"
+              className="bg-white border border-gray-200 text-black px-4 py-3 w-full rounded-l-md outline-none placeholder:text-gray-400 font-normal text-sm"
               required
             />
             <button 

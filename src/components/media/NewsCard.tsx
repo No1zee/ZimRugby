@@ -32,7 +32,7 @@ export default function NewsCard({
         >
             {source === 'facebook' && (
                 <div className="absolute top-4 right-4 z-10">
-                    <div className="w-8 h-8 bg-[#1877F2] rounded-full flex items-center justify-center shadow-lg transform group-hover:scale-110 transition-transform">
+                    <div className="w-8 h-8 bg-zru-green rounded-full flex items-center justify-center shadow-lg transform group-hover:scale-110 transition-transform">
                         <Facebook className="w-4 h-4 text-white fill-current" />
                     </div>
                 </div>

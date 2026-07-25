@@ -41,7 +41,7 @@ export default function ClubhouseHero() {
           initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
-          className="body-large text-black/70 max-w-2xl font-sans"
+          className="body-large text-black/70 max-w-2xl font-body"
         >
           Match-grade performance apparel and heritage athletics. Engineered for international battle. Built for Sable pride.
         </motion.p>

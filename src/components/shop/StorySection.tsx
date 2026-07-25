@@ -47,7 +47,7 @@ export default function StorySection() {
             <h2 className="text-4xl md:text-6xl font-black uppercase tracking-tighter text-clubhouse-charcoal mb-10 leading-[1.1]">
               ELITE RUGBY <br /> MEETS STREET STYLE
             </h2>
-            <div className="space-y-6 text-sm md:text-base text-clubhouse-charcoal/70 leading-relaxed font-medium">
+            <div className="space-y-6 text-sm md:text-base text-clubhouse-charcoal/70 leading-relaxed font-normal">
               <p>
                 Founded in Harare, The Clubhouse is an independent label bridging the gap between professional-grade rugby engineering and contemporary African street style.
               </p>

@@ -58,7 +58,7 @@ export default function VideoHubPage() {
               <h1 className="text-4xl sm:text-6xl font-black uppercase italic tracking-tighter text-glow-green leading-none">
                 {featuredVideo.title}
               </h1>
-              <p className="text-white/70 text-base md:text-lg font-medium leading-relaxed">
+              <p className="text-white/70 text-base md:text-lg font-normal leading-relaxed">
                 {featuredVideo.description}
               </p>
               

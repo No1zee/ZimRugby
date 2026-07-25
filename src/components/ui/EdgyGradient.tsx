@@ -36,7 +36,7 @@ export default function EdgyGradient({ className = "", opacity = 0.65 }: EdgyGra
           {/* Solid dark jade base layer */}
           <rect width="1000" height="1000" fill="#00150c" />
           
-          {/* 1. Neon Violet & Indigo crescent at bottom-left */}
+          {/* 1. Deep Green crescent at bottom-left */}
           {(() => {
             const isMobile = typeof window !== "undefined" && (window.innerWidth < 768 || /Mobi|Android/i.test(navigator.userAgent));
             return (
@@ -66,7 +66,7 @@ export default function EdgyGradient({ className = "", opacity = 0.65 }: EdgyGra
             );
           })()}
           
-          {/* 2. Soft Warm Coral wave expanding from center-right */}
+          {/* 2. Mid Green wave expanding from center-right */}
           {(() => {
             const isMobile = typeof window !== "undefined" && (window.innerWidth < 768 || /Mobi|Android/i.test(navigator.userAgent));
             return isMobile ? (
@@ -93,7 +93,7 @@ export default function EdgyGradient({ className = "", opacity = 0.65 }: EdgyGra
             );
           })()}
           
-          {/* 3. High-intensity Gold wave floating near top-right */}
+          {/* 3. Light Green wave floating near top-right */}
           {(() => {
             const isMobile = typeof window !== "undefined" && (window.innerWidth < 768 || /Mobi|Android/i.test(navigator.userAgent));
             return isMobile ? (
@@ -120,17 +120,17 @@ export default function EdgyGradient({ className = "", opacity = 0.65 }: EdgyGra
             );
           })()}
           
-          {/* 4. Small glowing apricot accent circle in center-right */}
+          {/* 4. Small glowing green accent circle in center-right */}
           {(() => {
             const isMobile = typeof window !== "undefined" && (window.innerWidth < 768 || /Mobi|Android/i.test(navigator.userAgent));
             return isMobile ? (
-              <circle cx={750} cy={400} r={160} fill="#ffedd5" opacity={0.35} />
+              <circle cx={750} cy={400} r={160} fill="#FDFBF0" opacity={0.35} />
             ) : (
               <motion.circle 
                 cx={750} 
                 cy={400} 
                 r={160} 
-                fill="#ffedd5" 
+                fill="#FDFBF0" 
                 opacity={0.35} 
                 initial={{ cx: 750, cy: 400, r: 160 }}
                 animate={{
@@ -148,18 +148,18 @@ export default function EdgyGradient({ className = "", opacity = 0.65 }: EdgyGra
           })()}
 
           <defs>
-            {/* Premium Athletic Violet & Royal Blue */}
+            {/* Deep Forest Green */}
             <linearGradient id="violet-glow-opt" x1="0%" y1="100%" x2="100%" y2="0%">
-              <stop offset="0%" stopColor="#1e1b4b" />
-              <stop offset="50%" stopColor="#5b21b6" />
-              <stop offset="100%" stopColor="#7c3aed" />
+              <stop offset="0%" stopColor="#001F13" />
+              <stop offset="50%" stopColor="#00452A" />
+              <stop offset="100%" stopColor="#006747" />
             </linearGradient>
             
-            {/* Luminous Warm Coral & Peach */}
+            {/* ZRU Green Tones */}
             <linearGradient id="coral-glow-opt" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stopColor="#e11d48" />
-              <stop offset="50%" stopColor="#ea580c" />
-              <stop offset="100%" stopColor="#fdba74" />
+              <stop offset="0%" stopColor="#006747" />
+              <stop offset="50%" stopColor="#006B3F" />
+              <stop offset="100%" stopColor="#00704D" />
             </linearGradient>
             
             {/* ZRU Brand Green Glow */}

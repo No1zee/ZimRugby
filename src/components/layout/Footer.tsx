@@ -98,7 +98,7 @@ export default function Footer() {
           </div>
 
           {/* Clean Editorial HQ Contact Details & Socials (No Pills) */}
-          <div className="flex flex-wrap items-center gap-6 shrink-0 text-xs font-semibold text-[#003822]/80">
+          <div className="flex flex-wrap items-center gap-6 shrink-0 text-xs font-bold text-[#003822]/80">
             <div className="flex items-center gap-2">
               <MapPin className="w-3.5 h-3.5 text-[#006747] shrink-0" />
               <span>Harare Sports Club HQ</span>
@@ -166,7 +166,7 @@ export default function Footer() {
             <Link href="/accessibility" className="hover:text-[#006747] transition-colors">
               Cookie Policy
             </Link>
-            <span className="text-[#006747] font-semibold flex items-center gap-1">
+            <span className="text-[#006747] font-bold flex items-center gap-1">
               <span className="w-1.5 h-1.5 rounded-full bg-[#006747]" />
               CDPA 2021 COMPLIANT
             </span>

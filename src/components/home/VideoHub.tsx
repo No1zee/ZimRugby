@@ -114,7 +114,7 @@ export default function VideoHub() {
 
                 {/* Bottom Tag */}
                 <div className="absolute bottom-3 left-3 z-10">
-                  <span className="text-[10px] font-extrabold uppercase tracking-widest text-[#84d7af]">
+                  <span className="text-[10px] font-extrabold uppercase tracking-widest text-zru-green">
                     {video.tag}
                   </span>
                 </div>

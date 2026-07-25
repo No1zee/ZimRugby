@@ -37,7 +37,7 @@ export default function HistoryPage() {
       </div>
 
       {/* Narrative */}
-      <p className="text-white/80 leading-relaxed text-sm font-medium">
+      <p className="text-white/80 leading-relaxed text-sm font-normal">
         Rugby has been played in Zimbabwe since the late 19th century. From the historic tours of the early 1900s to competing in the first two Rugby World Cups in 1987 and 1991, the Sables have consistently represented the highest standards of athleticism and passion. We celebrate our rugby heritage, honoring the veterans who paved the way and the rising talent writing the next chapters of our story.
       </p>
 
@@ -78,7 +78,7 @@ export default function HistoryPage() {
                   <Award className="w-4 h-4 text-zru-green/40 group-hover:text-zru-green transition-colors duration-300" />
                 </div>
                 <h4 className="text-sm font-black text-white uppercase tracking-tight group-hover:text-zru-green transition-colors duration-300">{item.title}</h4>
-                <p className="text-white/60 text-xs leading-relaxed font-medium max-w-2xl">{item.desc}</p>
+                <p className="text-white/60 text-xs leading-relaxed font-normal max-w-2xl">{item.desc}</p>
               </div>
             </motion.div>
           ))}

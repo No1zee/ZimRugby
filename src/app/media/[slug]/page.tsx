@@ -111,11 +111,11 @@ export default async function ReportPage({ params }: PageProps) {
 
           {/* Body Typography */}
           <div className="space-y-12">
-            <p className="text-2xl md:text-3xl font-medium text-white/90 leading-relaxed italic border-l-4 border-zru-green pl-10 mb-16 py-2">
+            <p className="text-2xl md:text-3xl font-normal text-white/90 leading-relaxed italic border-l-4 border-zru-green pl-10 mb-16 py-2">
               {report.excerpt}
             </p>
             
-            <div className="prose prose-invert prose-2xl max-w-none text-white/70 leading-[1.8] font-medium tracking-tight whitespace-pre-wrap">
+            <div className="prose prose-invert prose-2xl max-w-none text-white/70 leading-[1.8] font-normal tracking-tight whitespace-pre-wrap">
               {report.content}
             </div>
             

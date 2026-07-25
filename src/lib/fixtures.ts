@@ -2,12 +2,36 @@ import { Fixture, getWorldRugbyFixtures } from './world-rugby';
 import { getTicketmasterFixtures } from './ticketmaster';
 import { getFlagUrl } from './flags';
 import { getAllTeamFixtures } from './api/teams';
+import { getLiveMatches } from './data-fetcher';
+
+/**
+ * Map a data-fetcher Match to our Fixture type so it flows into the match centre.
+ */
+function matchToFixture(m: { id: string; homeTeam: { name: string; logo?: string }; awayTeam: { name: string; logo?: string }; date: string; time: string; venue: string; competition: string; category?: string; status: string; score?: { home: number; away: number } }): Fixture {
+  // Parse "25 April, 2026" style dates
+  const parsed = new Date(m.date.replace(/(\d+)(st|nd|rd|th)/, '$1'));
+  const date = isNaN(parsed.getTime()) ? new Date() : parsed;
+
+  return {
+    id: m.id,
+    competition: m.competition,
+    round: m.category || 'Sables',
+    date,
+    time: m.time,
+    venue: m.venue,
+    homeTeam: { name: m.homeTeam.name, logo: m.homeTeam.logo, score: m.score?.home },
+    awayTeam: { name: m.awayTeam.name, logo: m.awayTeam.logo, score: m.score?.away },
+    status: m.status === 'finished' ? 'completed' : (m.status as 'upcoming' | 'live' | 'completed'),
+    teamCategory: m.category || 'Sables',
+  };
+}
 
 export async function getAllFixtures(): Promise<Fixture[]> {
-  const [worldRugbyResults, tmResults, teamResults] = await Promise.allSettled([
+  const [worldRugbyResults, tmResults, teamResults, staticMatches] = await Promise.allSettled([
     getWorldRugbyFixtures(),
     getTicketmasterFixtures(),
-    getAllTeamFixtures()
+    getAllTeamFixtures(),
+    getLiveMatches()
   ]);
 
   const allFixtures: Fixture[] = [
@@ -15,6 +39,7 @@ export async function getAllFixtures(): Promise<Fixture[]> {
     ...(tmResults.status === 'fulfilled' ? tmResults.value.map(f => ({ ...f, teamCategory: "Sables" })) : []),
     ...getVerifiedStaticFixtures().map(f => ({ ...f, teamCategory: "Sables" })),
     ...(teamResults.status === 'fulfilled' ? teamResults.value : []),
+    ...(staticMatches.status === 'fulfilled' ? staticMatches.value.map(matchToFixture) : []),
   ];
 
   return deduplicateFixtures(allFixtures);
@@ -22,54 +47,11 @@ export async function getAllFixtures(): Promise<Fixture[]> {
 
 /**
  * Verified fixtures found via ZRU and World Rugby News that might not be in the ICAL feed yet.
+ * These should be kept minimal — only add fixtures here if the ICS feed doesn't include them.
+ * Remove once the ICS feed reliably provides the data.
  */
 function getVerifiedStaticFixtures(): Fixture[] {
-  return [
-    {
-      id: 'zru-zambia-2026',
-      competition: 'Battle of Mosi-oa-Tunya',
-      round: 'International',
-      date: new Date('2026-04-25T15:00:00'),
-      time: '15:00',
-      venue: 'Harare Sports Club',
-      homeTeam: { name: 'Zimbabwe' },
-      awayTeam: { name: 'Zambia' },
-      status: 'upcoming',
-    },
-    {
-      id: 'zru-tonga-2026',
-      competition: 'International Tour',
-      round: 'Nations Cup',
-      date: new Date('2026-06-12T19:00:00'),
-      time: '19:00',
-      venue: 'Teufaiva Stadium, Nukuʻalofa',
-      homeTeam: { name: 'Tonga' },
-      awayTeam: { name: 'Zimbabwe' },
-      status: 'upcoming',
-    },
-    {
-      id: 'zru-usa-2026',
-      competition: 'International Tour',
-      round: 'Nations Cup',
-      date: new Date('2026-07-04T16:00:00'),
-      time: '16:00',
-      venue: 'Infinity Park, Denver',
-      homeTeam: { name: 'USA' },
-      awayTeam: { name: 'Zimbabwe' },
-      status: 'upcoming',
-    },
-    {
-      id: 'zru-canada-2026',
-      competition: 'International Tour',
-      round: 'Nations Cup',
-      date: new Date('2026-07-18T14:00:00'),
-      time: '14:00',
-      venue: 'BMO Field, Toronto',
-      homeTeam: { name: 'Canada' },
-      awayTeam: { name: 'Zimbabwe' },
-      status: 'upcoming',
-    }
-  ];
+  return [];
 }
 
 function deduplicateFixtures(fixtures: Fixture[]): Fixture[] {

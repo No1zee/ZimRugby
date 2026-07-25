@@ -99,7 +99,7 @@ export default function MatchCentreStrip({ initialMatches = [], twinData, rankin
                       <span className="text-zru-green text-[10px] font-black uppercase tracking-[0.25em] mb-1">
                         Upcoming Match
                       </span>
-                      <span className="text-white/48 text-xs font-semibold tracking-[0.14em] uppercase">
+                      <span className="text-white/48 text-xs font-bold tracking-[0.14em] uppercase">
                         {spotlightMatch.competition}
                       </span>
                     </div>
@@ -174,7 +174,7 @@ export default function MatchCentreStrip({ initialMatches = [], twinData, rankin
                   {/* Bottom details & CTA */}
                   <div className="flex flex-col sm:flex-row items-center justify-between gap-6 pt-6 border-t border-white/8 mt-8 z-10">
                     {/* Details info */}
-                    <div className="flex flex-wrap justify-center sm:justify-start gap-x-6 gap-y-2 text-white/72 text-sm font-medium">
+                    <div className="flex flex-wrap justify-center sm:justify-start gap-x-6 gap-y-2 text-white/72 text-sm font-normal">
                       <div className="flex items-center gap-2">
                         <Clock className="w-3.5 h-3.5 text-zru-green" />
                         <span>{spotlightMatch.time} CAT</span>
@@ -340,7 +340,7 @@ export default function MatchCentreStrip({ initialMatches = [], twinData, rankin
                 </div>
 
                 {/* Time & Location */}
-                <div className="flex items-center gap-4 text-white/50 text-[10px] font-body font-medium shrink-0">
+                <div className="flex items-center gap-4 text-white/50 text-[10px] font-body font-normal shrink-0">
                   <div className="flex items-center gap-1.5">
                     <Clock className="w-3 h-3 text-zru-green/60" />
                     <span>{secondaryMatch.time} CAT</span>

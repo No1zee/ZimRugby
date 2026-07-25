@@ -62,7 +62,7 @@ export default function EmptyState({
           <h3 className="text-xl sm:text-2xl font-heading font-black uppercase tracking-wide text-white leading-tight">
             {title}
           </h3>
-          <p className="text-white/50 font-subheading text-xs sm:text-sm font-medium leading-relaxed">
+          <p className="text-white/50 font-subheading text-xs sm:text-sm font-normal leading-relaxed">
             {description}
           </p>
         </div>

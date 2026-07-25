@@ -318,11 +318,11 @@ function EventsInner() {
                       </h3>
                       
                       <div className="space-y-2 mb-6">
-                        <div className="flex items-center gap-2.5 text-black/50 text-xs font-medium font-body">
+                        <div className="flex items-center gap-2.5 text-black/50 text-xs font-normal font-body">
                           <Clock className="w-4 h-4 text-zru-green shrink-0" />
                           <span>{event.time}</span>
                         </div>
-                        <div className="flex items-center gap-2.5 text-black/50 text-xs font-medium font-body">
+                        <div className="flex items-center gap-2.5 text-black/50 text-xs font-normal font-body">
                           <MapPin className="w-4 h-4 text-zru-green shrink-0" />
                           <span className="truncate">{event.location}</span>
                         </div>

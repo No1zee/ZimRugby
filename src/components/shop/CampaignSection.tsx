@@ -32,7 +32,7 @@ export default function CampaignSection() {
             <h2 className="text-5xl md:text-7xl font-black uppercase tracking-tighter text-white leading-[1.1] mb-8">
               SABLES <br /> <span className="text-zru-green/80 italic">HERITAGE</span> & PERFORMANCE
             </h2>
-            <p className="text-sm md:text-lg text-white/50 mb-12 leading-[1.6] max-w-lg tracking-wide font-medium">
+            <p className="text-sm md:text-lg text-white/50 mb-12 leading-[1.6] max-w-lg tracking-wide font-normal">
               A celebration of legacy and a commitment to the future. Our 2026 Heritage collection merges historic motifs with peak performance engineering.
             </p>
             <Link 

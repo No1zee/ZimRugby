@@ -111,9 +111,9 @@ const PledgeCard = ({ tier, amount, name, description, benefits, highlight = fal
     <div className="mb-8">
       <div className="flex items-baseline gap-1">
         <span className="text-4xl font-black text-white">USD {amount}</span>
-        <span className="text-gray-400 text-sm font-medium">/month</span>
+        <span className="text-gray-400 text-sm font-normal">/month</span>
       </div>
-      <p className="text-sm text-gray-400 mt-4 leading-relaxed font-medium">
+      <p className="text-sm text-gray-400 mt-4 leading-relaxed font-normal">
         {description}
       </p>
     </div>
@@ -122,7 +122,7 @@ const PledgeCard = ({ tier, amount, name, description, benefits, highlight = fal
       {benefits.map((benefit: string, i: number) => (
         <li key={i} className="flex items-start gap-3">
           <CheckCircle2 className={`w-5 h-5 shrink-0 ${highlight ? "text-zru-green" : "text-gray-600"}`} />
-          <span className="text-xs text-gray-300 font-medium leading-tight">
+          <span className="text-xs text-gray-300 font-normal leading-tight">
             {benefit}
           </span>
         </li>
@@ -260,7 +260,7 @@ export default function WorldCupCampaignPage() {
                 </span>
               </h1>
 
-              <p className="text-lg md:text-xl text-white/70 max-w-xl mb-12 font-medium leading-relaxed tracking-wide">
+              <p className="text-lg md:text-xl text-white/70 max-w-xl mb-12 font-normal leading-relaxed tracking-wide">
                 Zimbabwe is rising. From the dust of grassroots development to the roar of international stadiums, the Sables are carving a path to the World Cup. This isn’t just a tournament; it’s our generational legacy.
               </p>
 
@@ -311,7 +311,7 @@ export default function WorldCupCampaignPage() {
                 BEYOND THE <br /> <span className="italic text-white/50">80 MINUTES.</span>
               </h2>
               
-              <div className="space-y-8 text-gray-400 text-lg leading-relaxed font-medium tracking-wide">
+              <div className="space-y-8 text-gray-400 text-lg leading-relaxed font-normal tracking-wide">
                 <p>
                   Rugby in Zimbabwe is more than a game—it’s a heartbeat. It’s the grit of a sunrise training session in Bulawayo and the discipline of a national camp in Harare. When the Sables step onto that pitch, they carry the weight and the pride of a nation that refuses to be sidelined.
                 </p>
@@ -374,7 +374,7 @@ export default function WorldCupCampaignPage() {
             <h2 className="text-5xl md:text-7xl font-black text-white uppercase tracking-tighter mb-8 italic">
               BECOME A BACKER.
             </h2>
-            <p className="text-lg text-gray-400 font-medium tracking-wide">
+            <p className="text-lg text-gray-400 font-normal tracking-wide">
               Our push for the World Cup is built on consistency. Monthly pledges provide the predictable fuel needed to sustain elite performance and grassroots growth.
             </p>
           </div>
@@ -419,7 +419,7 @@ export default function WorldCupCampaignPage() {
             <div className="relative p-8 rounded-xl card-green border flex flex-col justify-center text-center">
               <Zap className="w-10 h-10 text-zru-green mx-auto mb-6 opacity-30" />
               <h3 className="text-xl font-bold text-white uppercase mb-4">Set Custom Amount</h3>
-              <p className="text-xs text-gray-500 mb-8 font-medium">Choose the level that fits you—every pledge counts toward the shield.</p>
+              <p className="text-xs text-gray-500 mb-8 font-normal">Choose the level that fits you—every pledge counts toward the shield.</p>
               <Button variant="ghost" className="w-full">Choose Amount</Button>
             </div>
           </div>
@@ -446,7 +446,7 @@ export default function WorldCupCampaignPage() {
               <h2 className="text-5xl md:text-7xl font-black text-white uppercase tracking-tighter mb-8 leading-[0.9]">
                 JOIN THE <br /> <span className="text-zru-green">ZRU NATION.</span>
               </h2>
-              <p className="text-lg text-gray-400 font-medium mb-12 max-w-lg leading-relaxed">
+              <p className="text-lg text-gray-400 font-normal mb-12 max-w-lg leading-relaxed">
                 ZRU Nation is the official home for the inner circle. It’s free to join, and it’s where the real story of the World Cup campaign unfolds.
               </p>
               
@@ -482,7 +482,7 @@ export default function WorldCupCampaignPage() {
                         id="nation-name"
                         type="text" 
                         required
-                        className="w-full bg-white/5 border border-white/10 rounded p-4 text-white font-medium focus:outline-none focus:border-zru-green transition-colors" 
+                        className="w-full bg-white/5 border border-white/10 rounded p-4 text-white font-normal focus:outline-none focus:border-zru-green transition-colors" 
                         placeholder="Enter your name" 
                         value={formData.name}
                         onChange={(e) => setFormData({...formData, name: e.target.value})}
@@ -494,7 +494,7 @@ export default function WorldCupCampaignPage() {
                         id="nation-email"
                         type="email" 
                         required
-                        className="w-full bg-white/5 border border-white/10 rounded p-4 text-white font-medium focus:outline-none focus:border-zru-green transition-colors" 
+                        className="w-full bg-white/5 border border-white/10 rounded p-4 text-white font-normal focus:outline-none focus:border-zru-green transition-colors" 
                         placeholder="your@email.com" 
                         value={formData.email}
                         onChange={(e) => setFormData({...formData, email: e.target.value})}
@@ -525,7 +525,7 @@ export default function WorldCupCampaignPage() {
                       <CheckCircle2 className="w-10 h-10 text-rich-black" />
                     </div>
                     <h3 className="text-2xl font-black text-white uppercase tracking-tight mb-4">Welcome to the Nation.</h3>
-                    <p className="text-sm text-gray-400 font-medium">Your supporter ID and campaign guide are on their way to your inbox.</p>
+                    <p className="text-sm text-gray-400 font-normal">Your supporter ID and campaign guide are on their way to your inbox.</p>
                   </motion.div>
                 )}
               </AnimatePresence>
@@ -546,7 +546,7 @@ export default function WorldCupCampaignPage() {
               <h2 className="text-5xl md:text-7xl font-black text-white uppercase tracking-tighter leading-[0.9]">
                 WEAR THE <br /> <span className="text-white/60">SHIELD.</span>
               </h2>
-              <p className="mt-8 text-lg text-gray-400 font-medium max-w-lg">
+              <p className="mt-8 text-lg text-gray-400 font-normal max-w-lg">
                 Carry the campaign with you. Every piece from the World Cup Collection contributes a portion of proceeds directly to the Sables&apos; preparation fund.
               </p>
             </div>
@@ -655,7 +655,7 @@ export default function WorldCupCampaignPage() {
               <h2 className="text-4xl font-black text-white uppercase tracking-tighter leading-tight mb-8">
                 FREQUENTLY <br /> ASKED <br /> QUESTIONS.
               </h2>
-              <p className="text-gray-500 font-medium leading-relaxed">
+              <p className="text-gray-500 font-normal leading-relaxed">
                 We believe in complete transparency. Our campaign is built on the trust of our supporters.
               </p>
             </div>
@@ -692,7 +692,7 @@ export default function WorldCupCampaignPage() {
           <h2 className="text-5xl md:text-8xl font-black text-white uppercase tracking-tighter mb-10 italic">
             OUR MOMENT <br /> IS NOW.
           </h2>
-          <p className="text-xl text-white/60 font-medium leading-relaxed mb-12 tracking-wide">
+          <p className="text-xl text-white/60 font-normal leading-relaxed mb-12 tracking-wide">
             History isn&apos;t just made on the pitch; it&apos;s made by the nation that stands behind it. Be part of the team that takes Zimbabwe back to the world stage.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-8">

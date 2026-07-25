@@ -24,9 +24,9 @@
   --color-rich-black: #0E0E0E;
   --color-gray-900: var(--color-neutral-dark);
   --color-gray-100: var(--color-neutral-light);
-  --color-blue-600: #2563EB;
-  --color-blue-700: #1D4ED8;
-  --color-blue-800: #1E40AF;
+  --color-blue-600: var(--color-zru-green);
+  --color-blue-700: var(--color-green-dark);
+  --color-blue-800: var(--color-green-dark);
 
   /* Clubhouse Premium Tokens */
   --color-clubhouse-green: var(--color-green-dark);
@@ -310,7 +310,7 @@ body::after {
 
 /* Premium dark theme card layout */
 .card-dark {
-  background-color: #101916;
+  background-color: #0E0E0E;
   border: 1px solid rgba(255, 255, 255, 0.08);
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.22);
   border-radius: 1rem; /* rounded-2xl */
@@ -326,7 +326,7 @@ body::after {
 }
 
 .text-unison {
-  font-family: var(--font-montserrat, 'Montserrat'), sans-serif;
+  font-family: var(--font-heading);
   font-weight: 900;
   text-transform: uppercase;
 }
@@ -345,18 +345,18 @@ body::after {
 /* Uiverse Interactive Card Keyframes (ZRU Brand System) */
 @keyframes uiverseOpacity {
   0% { border-right: 1px solid transparent; }
-  10% { border-right: 1px solid #00FF87; }
-  80% { border-right: 1px solid #00FF87; }
+  10% { border-right: 1px solid #006747; }
+  80% { border-right: 1px solid #006747; }
   100% { border-right: 1px solid transparent; }
 }
 
 @keyframes uiverseTrail {
   0% {
-    background: linear-gradient(90deg, rgba(0, 255, 135, 0) 90%, rgb(0, 255, 135) 100%);
+    background: linear-gradient(90deg, rgba(0, 103, 71, 0) 90%, rgb(0, 103, 71) 100%);
     opacity: 0;
   }
   95% {
-    background: linear-gradient(90deg, rgba(0, 255, 135, 0) 90%, rgb(0, 255, 135) 100%);
+    background: linear-gradient(90deg, rgba(0, 103, 71, 0) 90%, rgb(0, 103, 71) 100%);
     opacity: 0;
   }
 }
@@ -374,7 +374,7 @@ body::after {
   border-radius: 4px;
 }
 .news-scroll::-webkit-scrollbar-thumb:hover {
-  background: rgba(0, 255, 135, 0.8);
+  background: rgba(0, 103, 71, 0.8);
 }
 
 /* 3D Flip Card CSS Utilities */

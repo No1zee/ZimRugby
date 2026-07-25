@@ -118,7 +118,7 @@ export default function JournalStrip() {
                     <h3 className="text-4xl md:text-5xl font-black uppercase tracking-tight text-clubhouse-charcoal group-hover:text-zru-green transition-colors leading-[0.9]">
                       {post.title}
                     </h3>
-                    <p className="text-lg md:text-xl text-clubhouse-charcoal/60 font-medium leading-relaxed">
+                    <p className="text-lg md:text-xl text-clubhouse-charcoal/60 font-normal leading-relaxed">
                       {post.excerpt}
                     </p>
                     <div className="pt-4 flex items-center gap-4 group-hover:gap-6 transition-all">
@@ -161,7 +161,7 @@ export default function JournalStrip() {
                     <h4 className="text-xl font-black uppercase tracking-tight text-clubhouse-charcoal group-hover:text-zru-green transition-colors leading-tight">
                       {post.title}
                     </h4>
-                    <p className="text-sm text-clubhouse-charcoal/60 font-medium line-clamp-2">
+                    <p className="text-sm text-clubhouse-charcoal/60 font-normal line-clamp-2">
                       {post.excerpt}
                     </p>
                   </div>

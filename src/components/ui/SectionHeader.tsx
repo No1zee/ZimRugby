@@ -34,7 +34,7 @@ export default function SectionHeader({
           {title}
         </h2>
         {description && (
-          <p className="text-white/60 font-subheading font-medium text-xs sm:text-sm md:text-base max-w-3xl leading-relaxed">
+          <p className="text-white/60 font-subheading font-normal text-xs sm:text-sm md:text-base max-w-3xl leading-relaxed">
             {description}
           </p>
         )}

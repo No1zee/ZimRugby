@@ -185,7 +185,7 @@ export function ThreeDImageRing({ items, onSelectItem }: ThreeDImageRingProps) {
               <span className="text-[9px] font-black text-[#006747] tracking-widest uppercase block">SELECTED FEATURED SHOT</span>
               <h3 className="text-sm sm:text-base font-heading font-black text-rich-black uppercase leading-tight">{activeItem.title}</h3>
               {activeItem.photographer && (
-                <span className="text-xs text-black/60 font-medium block">Credit: {activeItem.photographer}</span>
+                <span className="text-xs text-black/60 font-normal block">Credit: {activeItem.photographer}</span>
               )}
             </div>
           </div>

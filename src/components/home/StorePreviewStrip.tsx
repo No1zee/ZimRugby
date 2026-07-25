@@ -170,7 +170,7 @@ const ProductCard = ({ item, idx }: { item: typeof previewItems[0], idx: number 
               <span className="text-[10px] font-black uppercase tracking-[0.14em] text-white/48 block">
                 {item.category}
               </span>
-              <h3 className="text-base md:text-lg font-semibold tracking-[-0.01em] text-white line-clamp-1">
+              <h3 className="text-base md:text-lg font-bold tracking-[-0.01em] text-white line-clamp-1">
                 {item.name}
               </h3>
               <p className="text-xs md:text-sm leading-relaxed text-white/72 line-clamp-2">

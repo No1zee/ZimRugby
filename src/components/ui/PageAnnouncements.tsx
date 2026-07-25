@@ -94,7 +94,7 @@ export default function PageAnnouncements({ scope, className = "" }: PageAnnounc
                   <h4 className="text-base md:text-lg font-heading font-black text-rich-black uppercase tracking-wide">
                     {ann.title}
                   </h4>
-                  <p className="text-xs md:text-sm text-black/70 font-body font-medium leading-relaxed max-w-3xl">
+                  <p className="text-xs md:text-sm text-black/70 font-body font-normal leading-relaxed max-w-3xl">
                     {ann.body}
                   </p>
                 </div>

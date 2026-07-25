@@ -20,7 +20,7 @@ export default function ShopTeaserBento() {
                 <br />
                 <span className="text-zru-green">GLORY</span>
               </h2>
-              <p className="text-white/60 text-sm md:text-base max-w-md mb-8 font-medium">
+              <p className="text-white/60 text-sm md:text-base max-w-md mb-8 font-normal">
                 Represent the Sables with the official 2026 replica kit and premium clubhouse collection.
               </p>
 

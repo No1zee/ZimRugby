@@ -49,7 +49,7 @@ export default function TeamCard({
               {name}
             </h3>
             
-            <p className="text-black/60 text-xs sm:text-sm leading-relaxed mb-6 font-medium line-clamp-3">
+            <p className="text-black/60 text-xs sm:text-sm leading-relaxed mb-6 font-normal line-clamp-3">
               {description}
             </p>
           </div>

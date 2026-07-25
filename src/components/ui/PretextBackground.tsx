@@ -71,7 +71,7 @@ export function PretextBackground({
 
       // 1. Dynamic Font Calculation
       const fontSize = Math.max(80, Math.min(w * 0.15, 250));
-      const fontString = `900 ${fontSize}px Inter, "Inter Fallback", ui-sans-serif, sans-serif`;
+      const fontString = `900 ${fontSize}px "Unison Pro", "Arial Black", impact, sans-serif`;
 
       if (!prepared || lastFontSize !== fontSize) {
         prepared = prepareWithSegments(text, fontString);

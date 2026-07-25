@@ -17,7 +17,7 @@ export default function AboutOverviewPage() {
         <p className="text-sm text-rich-black/50 mt-1">Introduction and core details of the Zimbabwe Rugby Union.</p>
       </div>
 
-      <p className="text-rich-black/80 leading-relaxed text-lg font-medium">
+      <p className="text-rich-black/80 leading-relaxed text-lg font-normal">
         Established in 1895, the Zimbabwe Rugby Union (ZRU) is the official governing body for rugby union in Zimbabwe. We manage national representative squads, including the Sables, Lady Sables, Cheetahs, and youth development academies, while fostering domestic leagues and grassroots initiatives.
       </p>
 
@@ -28,7 +28,7 @@ export default function AboutOverviewPage() {
             <Target className="w-6 h-6 text-zru-green" />
             <h3 className="text-lg font-black uppercase tracking-wide text-rich-black">OUR MISSION</h3>
           </div>
-          <p className="text-rich-black/60 text-sm leading-relaxed font-medium">
+          <p className="text-rich-black/60 text-sm leading-relaxed font-normal">
             To develop, promote, and govern the game of rugby union in Zimbabwe, fostering excellence at all levels while using the sport to positively impact communities across the nation.
           </p>
         </div>
@@ -38,7 +38,7 @@ export default function AboutOverviewPage() {
             <Award className="w-6 h-6 text-zru-green" />
             <h3 className="text-lg font-black uppercase tracking-wide text-rich-black">OUR VISION</h3>
           </div>
-          <p className="text-rich-black/60 text-sm leading-relaxed font-medium">
+          <p className="text-rich-black/60 text-sm leading-relaxed font-normal">
             To be the leading rugby nation in Africa, renowned for competitive excellence, inclusive development, and the positive transformation of lives through the values of rugby.
           </p>
         </div>
@@ -58,15 +58,15 @@ export default function AboutOverviewPage() {
       <div className="pt-8 border-t border-black/5 space-y-6">
         <h3 className="text-lg font-black uppercase tracking-wide text-rich-black">Contact & Enquiries</h3>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-sm">
-          <a href="mailto:info@zimbabwerugby.co.zw" className="flex items-center gap-3 text-rich-black/60 hover:text-zru-green transition-colors font-medium">
+          <a href="mailto:info@zimbabwerugby.co.zw" className="flex items-center gap-3 text-rich-black/60 hover:text-zru-green transition-colors font-normal">
             <Mail className="w-5 h-5 text-zru-green shrink-0" />
             <span>info@zimbabwerugby.co.zw</span>
           </a>
-          <div className="flex items-center gap-3 text-rich-black/60 font-medium">
+          <div className="flex items-center gap-3 text-rich-black/60 font-normal">
             <MapPin className="w-5 h-5 text-zru-green shrink-0" />
             <span>National Sports Stadium, Harare</span>
           </div>
-          <a href="tel:+263242751234" className="flex items-center gap-3 text-rich-black/60 hover:text-zru-green transition-colors font-medium">
+          <a href="tel:+263242751234" className="flex items-center gap-3 text-rich-black/60 hover:text-zru-green transition-colors font-normal">
             <Phone className="w-5 h-5 text-zru-green shrink-0" />
             <span>+263 (24) 275 1234</span>
           </a>

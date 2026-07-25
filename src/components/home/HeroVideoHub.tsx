@@ -177,7 +177,7 @@ export default function HeroVideoHub() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.7 }}
-          className="text-white/80 text-lg md:text-xl font-medium mb-10 max-w-xl mx-auto"
+          className="text-white/80 text-lg md:text-xl font-normal mb-10 max-w-xl mx-auto"
         >
           Experience the roar of the National Sports Stadium as Zimbabwe defends the Africa Cup title.
         </motion.p>

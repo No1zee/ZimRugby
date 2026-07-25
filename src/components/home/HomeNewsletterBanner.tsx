@@ -39,7 +39,7 @@ export default function HomeNewsletterBanner() {
           <div className="absolute inset-0 border border-white/10 group-hover/uiverseCard:border-[#006747]/60 group-focus-within/uiverseCard:border-[#006747]/60 group-hover/uiverseCard:shadow-[inset_0_0_60px_rgba(0,103,71,0.4)] transition-all duration-700 pointer-events-none rounded-3xl" />
 
           {/* Subtle Animated Light Trail Gradient Sweep */}
-          <div className="absolute inset-0 opacity-0 group-hover/uiverseCard:opacity-20 group-focus-within/uiverseCard:opacity-20 pointer-events-none bg-gradient-to-r from-transparent via-[#34D399] to-transparent transition-opacity duration-700" />
+          <div className="absolute inset-0 opacity-0 group-hover/uiverseCard:opacity-20 group-focus-within/uiverseCard:opacity-20 pointer-events-none bg-gradient-to-r from-transparent via-[#006747] to-transparent transition-opacity duration-700" />
 
           {/* Left Group: Un-boxed Emblem (Centers & Grows to 1/3 on hover) + Disappearing Text */}
           <div className="flex items-center justify-start lg:group-hover/uiverseCard:justify-center lg:group-focus-within/uiverseCard:justify-center gap-6 relative z-10 lg:w-3/5 lg:group-hover/uiverseCard:w-1/3 lg:group-focus-within/uiverseCard:w-1/3 transition-all duration-500 shrink-0">
@@ -60,7 +60,7 @@ export default function HomeNewsletterBanner() {
               <h2 className="text-2xl sm:text-3xl text-white font-heading font-black uppercase tracking-tight whitespace-nowrap">
                 JOIN THE FAN ZONE
               </h2>
-              <p className="text-xs sm:text-sm text-white/80 font-medium leading-relaxed font-sans line-clamp-2">
+              <p className="text-xs sm:text-sm text-white/80 font-normal leading-relaxed font-body line-clamp-2">
                 Subscribe to our official newsletter and be the first to receive match ticket drops, Sable squad announcements, and inner-sanctum updates.
               </p>
             </div>
@@ -72,13 +72,13 @@ export default function HomeNewsletterBanner() {
             <div className="w-full lg:w-auto lg:group-hover/uiverseCard:w-full lg:group-focus-within/uiverseCard:w-full bg-black/40 backdrop-blur-md p-3 group-hover/uiverseCard:p-5 sm:group-hover/uiverseCard:p-7 group-focus-within/uiverseCard:p-5 sm:group-focus-within/uiverseCard:p-7 rounded-2xl border border-white/10 group-hover/uiverseCard:border-[#006747]/60 group-focus-within/uiverseCard:border-[#006747]/60 transition-all duration-500 ease-in-out shadow-lg">
               
               {/* Header Label — Hidden before hover */}
-              <p className="text-white/80 text-xs font-bold uppercase tracking-wider font-heading transition-all duration-500 opacity-0 max-h-0 overflow-hidden mb-0 group-hover/uiverseCard:opacity-100 group-hover/uiverseCard:max-h-10 group-hover/uiverseCard:mb-3 group-hover/uiverseCard:text-[#34D399] group-focus-within/uiverseCard:opacity-100 group-focus-within/uiverseCard:max-h-10 group-focus-within/uiverseCard:mb-3 group-focus-within/uiverseCard:text-[#34D399]">
+              <p className="text-white/80 text-xs font-bold uppercase tracking-wider font-heading transition-all duration-500 opacity-0 max-h-0 overflow-hidden mb-0 group-hover/uiverseCard:opacity-100 group-hover/uiverseCard:max-h-10 group-hover/uiverseCard:mb-3 group-hover/uiverseCard:text-[#006747] group-focus-within/uiverseCard:opacity-100 group-focus-within/uiverseCard:max-h-10 group-focus-within/uiverseCard:mb-3 group-focus-within/uiverseCard:text-[#006747]">
                 ENTER YOUR EMAIL BELOW TO JOIN THE FAN ZONE
               </p>
               
               {subscribed ? (
-                <div className="bg-[#006747]/30 text-white p-4 rounded-xl border border-[#006747]/50 text-sm font-semibold flex items-center gap-3">
-                  <CheckCircle className="w-5 h-5 text-[#34D399] shrink-0" />
+                <div className="bg-[#006747]/30 text-white p-4 rounded-xl border border-[#006747]/50 text-sm font-bold flex items-center gap-3">
+                  <CheckCircle className="w-5 h-5 text-[#006747] shrink-0" />
                   <span>Welcome to the Zimbabwe Rugby Fan Zone!</span>
                 </div>
               ) : (
@@ -109,7 +109,7 @@ export default function HomeNewsletterBanner() {
               )}
 
               {/* Privacy Footer — Hidden before hover */}
-              <div className="text-[10px] text-white/40 font-medium transition-all duration-500 opacity-0 max-h-0 overflow-hidden mt-0 group-hover/uiverseCard:opacity-100 group-hover/uiverseCard:max-h-10 group-hover/uiverseCard:mt-3.5 group-focus-within/uiverseCard:opacity-100 group-focus-within/uiverseCard:max-h-10 group-focus-within/uiverseCard:mt-3.5 flex items-center justify-between w-full">
+              <div className="text-[10px] text-white/40 font-normal transition-all duration-500 opacity-0 max-h-0 overflow-hidden mt-0 group-hover/uiverseCard:opacity-100 group-hover/uiverseCard:max-h-10 group-hover/uiverseCard:mt-3.5 group-focus-within/uiverseCard:opacity-100 group-focus-within/uiverseCard:max-h-10 group-focus-within/uiverseCard:mt-3.5 flex items-center justify-between w-full">
                 <span>Zero spam. Unsubscribe at any time.</span>
                 <Link className="underline hover:text-white transition-colors" href="/privacy-policy">
                   CDPA 2021 Compliant

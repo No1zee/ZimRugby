@@ -67,7 +67,7 @@ export default function AnnouncementsTicker() {
             {duplicatedItems.map((item, idx) => (
               <div 
                 key={`${item.id}-${idx}`}
-                className="flex items-center gap-2 text-white/80 font-body text-[11px] font-medium tracking-wide"
+                className="flex items-center gap-2 text-white/80 font-body text-[11px] font-normal tracking-wide"
               >
                 <span className="w-1.5 h-1.5 rounded-full bg-zru-green" />
                 <span>{item.title}</span>

@@ -67,7 +67,7 @@ export default function PlayRugbyDevelopment() {
           >
             RUGBY <br />FOR <span className="text-stroke-charcoal text-transparent">GOOD</span>
           </motion.h2>
-          <p className="text-lg text-clubhouse-charcoal/60 font-medium leading-relaxed">
+          <p className="text-lg text-clubhouse-charcoal/60 font-normal leading-relaxed">
             Harnessing the power of the oval ball to transform communities, empower youth, and build a lasting legacy across Zimbabwe.
           </p>
         </div>
@@ -95,7 +95,7 @@ export default function PlayRugbyDevelopment() {
                   <h3 className="text-2xl font-black text-white uppercase tracking-tight leading-none">
                     {program.title}
                   </h3>
-                  <p className="text-sm text-white/70 font-medium line-clamp-3">
+                  <p className="text-sm text-white/70 font-normal line-clamp-3">
                     {program.description}
                   </p>
                   <Link href={program.ctaLink} className="pt-4 block group/btn">
@@ -124,7 +124,7 @@ export default function PlayRugbyDevelopment() {
              <h3 className="text-3xl md:text-5xl font-black text-white uppercase tracking-tighter leading-[0.9]">
                Join The <br /><span className="text-zru-green">Ranks of Impact</span>
              </h3>
-             <p className="text-white/60 font-medium">
+             <p className="text-white/60 font-normal">
                Whether as a volunteer, donor, or strategic partner, your involvement drives the next era of Zimbabwe Rugby.
              </p>
           </div>

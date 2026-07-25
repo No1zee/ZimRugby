@@ -86,12 +86,12 @@ export default function PageHero({
           </div>
 
           {/* Heading */}
-          <h1 className="text-3xl sm:text-5xl md:text-7xl font-serif font-black italic text-white tracking-tight normal-case">
+          <h1 className="text-3xl sm:text-5xl md:text-7xl font-heading font-black italic text-white tracking-tight uppercase">
             {title}
           </h1>
 
           {/* Subtitle */}
-          <p className="text-base md:text-lg text-white/60 font-body font-medium leading-relaxed max-w-2xl">
+          <p className="text-base md:text-lg text-white/60 font-body font-normal leading-relaxed max-w-2xl">
             {subtitle}
           </p>
         </motion.div>

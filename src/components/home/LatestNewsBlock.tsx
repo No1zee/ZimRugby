@@ -58,7 +58,7 @@ export default function LatestNewsBlock() {
             {/* Card 1: Junior Sables */}
             <Link 
               href="/media" 
-              className="flex-1 group bg-[#EAE8DE] hover:bg-[#E2E0D4] border border-black/5 rounded-2xl p-4 sm:p-5 transition-all duration-300 flex flex-col justify-between"
+              className="flex-1 group bg-milk-white hover:bg-[#F5F3E8] border border-black/5 rounded-2xl p-4 sm:p-5 transition-all duration-300 flex flex-col justify-between"
             >
               <div className="relative w-full h-36 sm:h-40 rounded-xl overflow-hidden mb-3">
                 <Image
@@ -81,7 +81,7 @@ export default function LatestNewsBlock() {
             {/* Card 2: 7s Cheetahs */}
             <Link 
               href="/media" 
-              className="flex-1 group bg-[#EAE8DE] hover:bg-[#E2E0D4] border border-black/5 rounded-2xl p-4 sm:p-5 transition-all duration-300 flex flex-col justify-between"
+              className="flex-1 group bg-milk-white hover:bg-[#F5F3E8] border border-black/5 rounded-2xl p-4 sm:p-5 transition-all duration-300 flex flex-col justify-between"
             >
               <div className="relative w-full h-36 sm:h-40 rounded-xl overflow-hidden mb-3">
                 <Image

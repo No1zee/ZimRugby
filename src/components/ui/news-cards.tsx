@@ -168,15 +168,15 @@ export function NewsCards({ enableAnimations = true }: NewsCardsProps) {
               <div className="p-6 flex flex-col justify-between flex-grow space-y-4">
                 <div className="space-y-2">
                   <div className="flex items-center gap-2 text-white/50 text-[11px] font-bold">
-                    <Calendar className="w-3.5 h-3.5 text-[#34D399]" />
+                    <Calendar className="w-3.5 h-3.5 text-[#006747]" />
                     <span>{item.date}</span>
                   </div>
 
-                  <h3 className="text-lg font-heading font-black text-white group-hover:text-[#34D399] transition-colors leading-snug line-clamp-2">
+                  <h3 className="text-lg font-heading font-black text-white group-hover:text-[#006747] transition-colors leading-snug line-clamp-2">
                     {item.title}
                   </h3>
 
-                  <p className="text-xs text-white/70 font-medium leading-relaxed line-clamp-3">
+                  <p className="text-xs text-white/70 font-normal leading-relaxed line-clamp-3">
                     {item.excerpt}
                   </p>
                 </div>
@@ -185,7 +185,7 @@ export function NewsCards({ enableAnimations = true }: NewsCardsProps) {
                 <div className="pt-2 border-t border-white/10 flex items-center justify-between">
                   <Link
                     href={`/media/${item.slug}`}
-                    className="text-xs font-black tracking-widest text-[#34D399] group-hover:text-white uppercase flex items-center gap-1.5 transition-colors"
+                    className="text-xs font-black tracking-widest text-[#006747] group-hover:text-white uppercase flex items-center gap-1.5 transition-colors"
                   >
                     <span>READ STORY</span>
                     <ArrowUpRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />

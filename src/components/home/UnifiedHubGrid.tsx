@@ -31,13 +31,13 @@ const STITCH = {
 } as const;
 
 const unison: React.CSSProperties = {
-  fontFamily: "var(--font-montserrat, 'Montserrat'), sans-serif",
+  fontFamily: "var(--font-heading)",
   fontWeight: 900,
   textTransform: "uppercase" as const,
 };
 
 const labelCaps: React.CSSProperties = {
-  fontFamily: "var(--font-montserrat, 'Montserrat'), sans-serif",
+  fontFamily: "var(--font-heading)",
   fontSize: "12px",
   lineHeight: "1.0",
   letterSpacing: "0.1em",
@@ -59,10 +59,10 @@ const h3Style: React.CSSProperties = {
 };
 
 const bodyBase: React.CSSProperties = {
-  fontFamily: "var(--font-montserrat, 'Montserrat'), sans-serif",
+  fontFamily: "var(--font-body)",
   fontSize: "16px",
   lineHeight: "1.5",
-  fontWeight: 500,
+  fontWeight: 400,
 };
 
 export default function UnifiedHubGrid() {

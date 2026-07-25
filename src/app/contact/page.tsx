@@ -78,7 +78,7 @@ export default function ContactPage() {
                   </div>
                   <div className="space-y-1">
                     <h4 className="font-black text-xs text-white/40 tracking-wider uppercase">{detail.title}</h4>
-                    <p className="text-white text-sm font-semibold leading-relaxed">{detail.value}</p>
+                    <p className="text-white text-sm font-bold leading-relaxed">{detail.value}</p>
                   </div>
                 </div>
               );
@@ -108,7 +108,7 @@ export default function ContactPage() {
                   <CheckCircle2 className="w-10 h-10" />
                 </div>
                 <h4 className="font-black text-lg text-white uppercase tracking-wider">MESSAGE SENT SUCCESSFULLY</h4>
-                <p className="text-white/70 text-xs leading-relaxed max-w-sm mx-auto font-medium">
+                <p className="text-white/70 text-xs leading-relaxed max-w-sm mx-auto font-normal">
                   Thank you! Your enquiry has been safely received. A ZRU representative from the selected department will reply to your email shortly.
                 </p>
                 <button 
@@ -122,7 +122,7 @@ export default function ContactPage() {
               <form onSubmit={handleSubmit} className="space-y-6">
                 
                 {submitError && (
-                  <div className="bg-zru-green/10 border border-zru-green/20 rounded-xl p-4 flex items-center gap-3 text-zru-green text-xs font-semibold">
+                  <div className="bg-zru-green/10 border border-zru-green/20 rounded-xl p-4 flex items-center gap-3 text-zru-green text-xs font-bold">
                     <AlertCircle className="w-4 h-4 shrink-0" />
                     <span>{submitError}</span>
                   </div>

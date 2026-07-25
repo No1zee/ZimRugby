@@ -62,7 +62,7 @@ export function HamburgerMenuOverlay({
         >
           {/* Ambient Laser Background Glow */}
           <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-[#006747]/20 rounded-full blur-[140px] pointer-events-none" />
-          <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-[#00FF87]/10 rounded-full blur-[120px] pointer-events-none" />
+          <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-[#006747]/10 rounded-full blur-[120px] pointer-events-none" />
 
           {/* Unclipped ZRU Emblem Watermark Backdrop */}
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 opacity-[0.04] pointer-events-none select-none">

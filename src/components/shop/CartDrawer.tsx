@@ -91,7 +91,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                         <h3 className="text-sm font-bold text-white uppercase tracking-tight truncate pr-4">{item.name}</h3>
                         <span className="text-sm font-bold text-white">${item.price}</span>
                       </div>
-                      <p className="text-[10px] font-medium text-white/60 uppercase tracking-widest mb-4">Size: L | Qty: {item.quantity}</p>
+                      <p className="text-[10px] font-normal text-white/60 uppercase tracking-widest mb-4">Size: L | Qty: {item.quantity}</p>
                       <button className="flex items-center gap-2 text-[9px] font-black text-white/50 hover:text-red-500 uppercase tracking-[0.2em] transition-colors">
                         <Trash2 className="w-3 h-3" />
                         Remove
@@ -120,7 +120,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                       <span className="text-[10px] font-black text-zru-green uppercase tracking-[0.2em]">World Cup Campaign</span>
                     </div>
                     <h3 className="text-lg font-black text-white uppercase tracking-tighter mb-2">Back the Sables</h3>
-                    <p className="text-xs text-white/50 font-medium leading-relaxed mb-6">
+                    <p className="text-xs text-white/50 font-normal leading-relaxed mb-6">
                       Add a $10 monthly pledge to your order to fuel a high-performance youth session. Build the legacy.
                     </p>
                     
@@ -157,12 +157,12 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
             <div className="p-6 md:p-8 bg-black/40 border-t border-white/5 space-y-6">
                <div className="space-y-2">
                   <div className="flex justify-between items-center text-sm">
-                    <span className="font-medium text-white/60 uppercase tracking-widest">Subtotal</span>
+                    <span className="font-normal text-white/60 uppercase tracking-widest">Subtotal</span>
                     <span className="font-bold text-white">${subtotal.toFixed(2)}</span>
                   </div>
                   {pledgeActive && (
                     <div className="flex justify-between items-center text-sm">
-                      <span className="font-medium text-zru-green uppercase tracking-widest flex items-center gap-2">
+                      <span className="font-normal text-zru-green uppercase tracking-widest flex items-center gap-2">
                         <Heart className="w-3 h-3 fill-current" />
                         Campaign Pledge
                       </span>

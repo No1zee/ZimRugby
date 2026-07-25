@@ -172,15 +172,15 @@ export const FixtureCard = ({ fixture, onRegister }: FixtureCardProps) => {
         <div className="space-y-3">
           <div className="flex items-center gap-3 text-zinc-300">
             <Calendar className="w-4 h-4 text-green-500/60" />
-            <span className="text-sm font-medium tracking-tight">{fixture.date}</span>
+            <span className="text-sm font-normal tracking-tight">{fixture.date}</span>
           </div>
           <div className="flex items-center gap-3 text-zinc-300">
             <Clock className="w-4 h-4 text-green-500/60" />
-            <span className="text-sm font-medium tracking-tight">{fixture.time}</span>
+            <span className="text-sm font-normal tracking-tight">{fixture.time}</span>
           </div>
           <div className="flex items-center gap-3 text-zinc-300">
             <MapPin className="w-4 h-4 text-green-500/60" />
-            <span className="text-sm font-medium line-clamp-1 tracking-tight">
+            <span className="text-sm font-normal line-clamp-1 tracking-tight">
               {fixture.venue}{fixture.city ? `, ${fixture.city}` : ''}
             </span>
           </div>

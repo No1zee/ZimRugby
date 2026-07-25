@@ -69,7 +69,7 @@ export default function GrassrootsInitiativeSection() {
             GRASSROOTS & YOUTH RUGBY INITIATIVES
           </h2>
 
-          <p className="text-white/80 text-sm sm:text-base font-medium leading-relaxed">
+          <p className="text-white/80 text-sm sm:text-base font-normal leading-relaxed">
             Building Zimbabwe&apos;s rugby legacy from provincial primary school festivals to national team caps. Discover our grassroots programs, coach education, and community pathways.
           </p>
         </div>
@@ -112,7 +112,7 @@ export default function GrassrootsInitiativeSection() {
                   <h3 className="font-heading font-black text-sm sm:text-lg text-black uppercase leading-snug group-hover/card:text-[#006747] transition-colors line-clamp-2">
                     {item.title}
                   </h3>
-                  <p className="text-black/70 text-xs font-medium leading-relaxed line-clamp-3">
+                  <p className="text-black/70 text-xs font-normal leading-relaxed line-clamp-3">
                     {item.description}
                   </p>
                 </div>

@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import Link from "next/link";
 import Image from "next/image";
@@ -58,8 +58,8 @@ export default function SpecBentoGrid() {
             
             <div className="text-center space-y-1.5 mb-8">
               <h4 className="text-lg font-black uppercase tracking-tight">ZIMBABWE SABLES <br/><span className="text-zru-green">vs</span> NAMIBIA</h4>
-              <p className="text-[11px] text-white/70 font-medium tracking-wide">21 NOVEMBER 2026 • 15:00 CAT</p>
-              <p className="text-[11px] text-white/70 font-medium tracking-wide">HARARE SPORTS CLUB</p>
+              <p className="text-[11px] text-white/70 font-normal tracking-wide">21 NOVEMBER 2026 � 15:00 CAT</p>
+              <p className="text-[11px] text-white/70 font-normal tracking-wide">HARARE SPORTS CLUB</p>
             </div>
           </div>
 
@@ -80,7 +80,7 @@ export default function SpecBentoGrid() {
           <div className="flex-1">
             <Ticket className="w-8 h-8 text-zru-green mb-6" />
             <h4 className="font-heading text-3xl uppercase leading-none mb-4 font-black">BE PART OF<br/>THE ACTION</h4>
-            <p className="text-sm text-gray-600 font-medium">Secure your matchday seat and support the Sables on home soil.</p>
+            <p className="text-sm text-gray-600 font-normal">Secure your matchday seat and support the Sables on home soil.</p>
           </div>
 
           <Link 

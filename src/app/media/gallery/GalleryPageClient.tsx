@@ -342,18 +342,18 @@ export default function GalleryPageClient({ initialPhotos }: GalleryPageClientPr
 
                 <h2 className="text-xl md:text-2xl font-heading font-black uppercase tracking-tight text-rich-black">{activePhoto.title}</h2>
                 
-                <p className="text-black/70 text-xs sm:text-sm font-medium leading-relaxed">{activePhoto.description}</p>
+                <p className="text-black/70 text-xs sm:text-sm font-normal leading-relaxed">{activePhoto.description}</p>
 
                 {/* Legal compliance fields - Photographer credits & licensing details */}
                 <div className="pt-4 border-t border-black/10 grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
-                  <div className="flex items-center gap-2 text-black/60 font-semibold">
+                  <div className="flex items-center gap-2 text-black/60 font-bold">
                     <Info className="w-4 h-4 text-[#006747]" />
                     <span>
                       Photo Credit: <strong className="text-rich-black font-bold">{activePhoto.photographer || "ZRU Official Media"}</strong>
                     </span>
                   </div>
 
-                  <div className="flex items-center gap-2 text-black/60 font-semibold">
+                  <div className="flex items-center gap-2 text-black/60 font-bold">
                     <ShieldAlert className="w-4 h-4 text-[#006747]" />
                     <span>
                       Licence: <strong className="text-rich-black font-bold">{activePhoto.license || "Official Editorial Rights"}</strong>

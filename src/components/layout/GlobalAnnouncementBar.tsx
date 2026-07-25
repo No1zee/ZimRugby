@@ -90,7 +90,7 @@ export default function GlobalAnnouncementBar() {
           }}
           className={`w-full text-white relative z-50 border-b transition-all duration-500 overflow-hidden ${
             showGlow
-              ? "shadow-[0_4px_35px_rgba(0,255,135,0.45)] ring-2 ring-[#00FF87]/40"
+              ? "shadow-[0_4px_35px_rgba(0,255,135,0.45)] ring-2 ring-[#006747]/40"
               : ""
           } ${
             isCritical 
@@ -113,22 +113,22 @@ export default function GlobalAnnouncementBar() {
                 {isCritical ? (
                   <Bell className="w-4 h-4 text-red-400 relative z-10 animate-bounce" />
                 ) : (
-                  <Sparkles className="w-4 h-4 text-[#00FF87] relative z-10 animate-pulse" />
+                  <Sparkles className="w-4 h-4 text-[#006747] relative z-10 animate-pulse" />
                 )}
               </div>
 
-              <p className="text-[10px] sm:text-xs font-medium tracking-wide leading-tight text-center md:text-left flex flex-wrap items-center justify-center gap-x-2">
+              <p className="text-[10px] sm:text-xs font-normal tracking-wide leading-tight text-center md:text-left flex flex-wrap items-center justify-center gap-x-2">
                 {announcement.badge && (
                   <span className={`text-[8px] font-black uppercase tracking-widest px-1.5 py-0.5 rounded-sm shrink-0 ${
                     isCritical 
                       ? "bg-red-500 text-white animate-pulse" 
-                      : "bg-[#00FF87]/20 text-[#00FF87] border border-[#00FF87]/30"
+                      : "bg-[#006747]/20 text-[#006747] border border-[#006747]/30"
                   }`}>
                     {announcement.badge}
                   </span>
                 )}
                 <span className="font-heading font-bold text-white uppercase tracking-wide">{announcement.title}</span>
-                <span className="hidden md:inline opacity-80 font-medium">— {announcement.body}</span>
+                <span className="hidden md:inline opacity-80 font-normal">— {announcement.body}</span>
               </p>
 
               {/* Action CTA Link */}
@@ -137,8 +137,8 @@ export default function GlobalAnnouncementBar() {
                   href={announcement.ctaUrl}
                   className={`inline-flex items-center gap-1.5 text-[9px] font-black uppercase tracking-widest px-3 py-1 rounded-md shrink-0 transition-all duration-300 ${
                     isCritical
-                      ? "bg-white text-red-950 hover:bg-[#00FF87] hover:text-black"
-                      : "bg-[#00FF87] text-[#002D1A] hover:bg-white hover:text-black shadow-lg shadow-[#00FF87]/20"
+                      ? "bg-white text-red-950 hover:bg-[#006747] hover:text-black"
+                      : "bg-[#006747] text-[#002D1A] hover:bg-white hover:text-black shadow-lg shadow-[#006747]/20"
                   }`}
                 >
                   <span>{announcement.ctaLabel || "Learn More"}</span>

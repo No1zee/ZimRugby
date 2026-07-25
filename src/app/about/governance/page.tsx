@@ -17,7 +17,7 @@ export default function GovernancePage() {
         <p className="text-sm text-white/50 mt-1">Official constitution, transparency reports, and administrative files.</p>
       </div>
 
-      <p className="text-white/80 leading-relaxed text-sm font-medium">
+      <p className="text-white/80 leading-relaxed text-sm font-normal">
         The Zimbabwe Rugby Union is committed to the highest standards of transparency, integrity, and ethical governance. We operate in alignment with the guidelines established by World Rugby, Rugby Africa, and the Sports and Recreation Commission (SRC) of Zimbabwe.
       </p>
 

@@ -2,54 +2,35 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Play, Search, Facebook } from "lucide-react";
+import { Play, Search, Facebook, ArrowRight, Calendar } from "lucide-react";
 import Button from "@/components/common/Button";
 import VideoCard from "@/components/media/VideoCard";
-import NewsCard from "@/components/media/NewsCard";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import JournalStrip from "@/components/home/JournalStrip";
 import PageHero from "@/components/ui/PageHero";
 import PageAnnouncements from "@/components/ui/PageAnnouncements";
-import { NewsCards } from "@/components/ui/news-cards";
 import MatchdayVideoHighlights from "@/components/media/MatchdayVideoHighlights";
+import Image from "next/image";
+import Link from "next/link";
 
 interface MediaPageClientProps {
   initialSocialPosts: any[];
 }
 
-const latestVideos = [
-  {
-    id: 1,
-    title: "HIGHLIGHTS: Sables vs Namibia | Africa Cup Final",
-    duration: "12:45",
-    date: "22 JUL 2025",
-    thumbnail: "/images/media/vid1.jpg",
-    category: "HIGHLIGHTS",
-  },
-  {
-    id: 2,
-    title: "INTERVIEW: Piet Benade on Squad Selection",
-    duration: "05:30",
-    date: "20 JUL 2025",
-    thumbnail: "/images/media/vid2.jpg",
-    category: "INTERVIEW",
-  },
-  {
-    id: 3,
-    title: "TRAINING: Inside Camp with the Lady Sables",
-    duration: "08:15",
-    date: "18 JUL 2025",
-    thumbnail: "/images/media/vid3.jpg",
-    category: "FEATURE",
-  },
-  {
-    id: 4,
-    title: "FULL MATCH: Zimbabwe vs Uganda | Africa Cup Semi-Final",
-    duration: "1:45:00",
-    date: "15 JUL 2025",
-    thumbnail: "/images/media/vid4.jpg",
-    category: "FULL MATCH",
-  },
+interface YouTubeVideo {
+  id: string;
+  videoId: string;
+  title: string;
+  thumbnail: string;
+  category: string;
+  publishedAt: string;
+}
+
+const FALLBACK_VIDEOS: YouTubeVideo[] = [
+  { id: "yt-canada-v-zim-2026", videoId: "kf33dibu7f0", title: "Canada v Zimbabwe | Nations Cup 2026 Extended Highlights", thumbnail: "https://img.youtube.com/vi/kf33dibu7f0/hqdefault.jpg", category: "NATIONS CUP", publishedAt: "JULY 2026" },
+  { id: "yt-usa-v-zim-2026", videoId: "2koQbsHjg14", title: "USA v Zimbabwe | Nations Cup 2026 Extended Highlights", thumbnail: "https://img.youtube.com/vi/2koQbsHjg14/hqdefault.jpg", category: "NATIONS CUP", publishedAt: "JULY 2026" },
+  { id: "yt-tonga-v-zim-2026", videoId: "h3iy3mTIhs4", title: "Tonga v Zimbabwe | Nations Cup 2026 Extended Highlights", thumbnail: "https://img.youtube.com/vi/h3iy3mTIhs4/hqdefault.jpg", category: "NATIONS CUP", publishedAt: "JULY 2026" },
+  { id: "yt-canada-replay", videoId: "kf33dibu7f0", title: "Sables Nations Cup Opener | Canada v Zimbabwe Full Match Replay", thumbnail: "https://img.youtube.com/vi/kf33dibu7f0/hqdefault.jpg", category: "MATCHDAY REPLAY", publishedAt: "JULY 2026" },
 ];
 
 const newsArchive = [
@@ -86,6 +67,16 @@ const newsArchive = [
 export default function MediaPageClient({ initialSocialPosts }: MediaPageClientProps) {
   const [activeTab, setActiveTab] = useState<"all" | "videos" | "news" | "social">("all");
   const [searchQuery, setSearchQuery] = useState("");
+  const [videos, setVideos] = useState<YouTubeVideo[]>(FALLBACK_VIDEOS);
+
+  useEffect(() => {
+    fetch("/api/videos/youtube")
+      .then((r) => r.json())
+      .then((data) => {
+        if (Array.isArray(data) && data.length > 0) setVideos(data);
+      })
+      .catch(() => {});
+  }, []);
 
   const allNews = [...newsArchive, ...initialSocialPosts.map(p => ({
     ...p,
@@ -192,7 +183,7 @@ export default function MediaPageClient({ initialSocialPosts }: MediaPageClientP
                 </div>
                 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                    {latestVideos.map((video, index) => (
+                    {videos.map((video, index) => (
                         <motion.div
                             key={video.id}
                             initial={{ opacity: 0, y: 20 }}
@@ -200,7 +191,14 @@ export default function MediaPageClient({ initialSocialPosts }: MediaPageClientP
                             viewport={{ once: true }}
                             transition={{ delay: index * 0.1 }}
                         >
-                            <VideoCard {...video} />
+                            <VideoCard
+                                title={video.title}
+                                duration=""
+                                date={video.publishedAt}
+                                thumbnail={video.thumbnail}
+                                category={video.category}
+                                videoId={video.videoId}
+                            />
                         </motion.div>
                     ))}
                 </div>
@@ -240,7 +238,72 @@ export default function MediaPageClient({ initialSocialPosts }: MediaPageClientP
                 
                 {/* Animated Interactive News Grid */}
                 <div className="mb-12">
-                  <NewsCards enableAnimations={true} />
+                  {filteredNews.length > 0 ? (
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      {filteredNews.map((item, index) => (
+                        <motion.div
+                          key={item.id || index}
+                          initial={{ opacity: 0, y: 20 }}
+                          whileInView={{ opacity: 1, y: 0 }}
+                          viewport={{ once: true }}
+                          transition={{ delay: index * 0.05 }}
+                        >
+                          <Link
+                            href={item.url || item.slug || '#'}
+                            target={item.source === 'facebook' ? '_blank' : '_self'}
+                            rel={item.source === 'facebook' ? 'noopener noreferrer' : ''}
+                            className="block bg-white border border-black/5 rounded-2xl overflow-hidden hover:shadow-lg hover:border-zru-green/30 transition-all group"
+                          >
+                            {item.image && item.image !== '/images/media/fb_placeholder.jpg' && (
+                              <div className="relative h-48 w-full overflow-hidden">
+                                <Image
+                                  src={item.image}
+                                  alt={item.title}
+                                  fill
+                                  sizes="(max-width: 768px) 100vw, 50vw"
+                                  className="object-cover group-hover:scale-105 transition-transform duration-500"
+                                />
+                                <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent" />
+                              </div>
+                            )}
+                            <div className="p-5">
+                              <div className="flex items-center gap-3 mb-3">
+                                <span className="text-[10px] font-black tracking-[0.15em] uppercase text-zru-green bg-zru-green/10 px-2.5 py-1 rounded-md">
+                                  {item.category || 'SOCIAL'}
+                                </span>
+                                {item.source === 'facebook' && (
+                                  <div className="flex items-center gap-1.5">
+                                    <div className="w-5 h-5 bg-zru-green rounded-full flex items-center justify-center">
+                                      <Facebook className="w-3 h-3 text-white fill-current" />
+                                    </div>
+                                    <span className="text-[10px] font-bold text-black/40 uppercase">Facebook</span>
+                                  </div>
+                                )}
+                                <div className="flex items-center gap-1.5 ml-auto text-black/40">
+                                  <Calendar className="w-3 h-3" />
+                                  <span className="text-[10px] font-bold uppercase">{item.date}</span>
+                                </div>
+                              </div>
+                              <h3 className="text-base font-heading font-bold text-rich-black mb-2 group-hover:text-zru-green transition-colors leading-snug line-clamp-2">
+                                {item.title}
+                              </h3>
+                              <p className="text-black/60 text-sm leading-relaxed line-clamp-2 mb-3">
+                                {item.excerpt}
+                              </p>
+                              <span className="text-zru-green text-[10px] font-black uppercase tracking-[0.15em] flex items-center gap-1.5 group-hover:gap-2.5 transition-all">
+                                {item.source === 'facebook' ? 'View on Facebook' : 'Read More'}
+                                <ArrowRight className="w-3 h-3" />
+                              </span>
+                            </div>
+                          </Link>
+                        </motion.div>
+                      ))}
+                    </div>
+                  ) : (
+                    <div className="text-center py-16 text-black/40">
+                      <p className="text-sm font-normal">No updates found matching your search.</p>
+                    </div>
+                  )}
                 </div>
 
                 <div className="mt-12 flex justify-center">

@@ -62,7 +62,7 @@ export default function JournalPreview() {
                 <h3 className="text-xl font-bold uppercase tracking-tight text-clubhouse-charcoal group-hover:text-zru-green transition-colors leading-[1.2]">
                   {post.title}
                 </h3>
-                <p className="text-sm text-clubhouse-charcoal/60 leading-relaxed font-medium">
+                <p className="text-sm text-clubhouse-charcoal/60 leading-relaxed font-normal">
                   {post.excerpt}
                 </p>
                 <div className="pt-2">

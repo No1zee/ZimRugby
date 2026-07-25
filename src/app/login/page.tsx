@@ -28,7 +28,7 @@ export default function LoginPage() {
             <h1 className="font-heading text-3xl sm:text-4xl text-white tracking-widest uppercase mb-2 italic">
               ZRU Portal
             </h1>
-            <p className="text-white/50 text-xs sm:text-sm font-medium">
+            <p className="text-white/50 text-xs sm:text-sm font-normal">
               Sign in to your Zimbabwe Rugby Union portal account
             </p>
           </div>
@@ -89,7 +89,7 @@ export default function LoginPage() {
 
       {/* Slim Footer */}
       <div className="flex-none text-center px-6 py-4 border-t border-white/10 bg-black/40">
-        <p className="text-[10px] text-white/40 font-medium">
+        <p className="text-[10px] text-white/40 font-normal">
           © {new Date().getFullYear()} Zimbabwe Rugby Union. All rights reserved.{" "}
           <Link href="/privacy-policy" className="hover:text-white transition-colors">Privacy Policy</Link>
           {" · "}

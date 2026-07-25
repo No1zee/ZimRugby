@@ -49,13 +49,13 @@ export default function GlobalError({
             KNOCK<br />ON
           </h1>
 
-          <p className="text-white/50 font-medium text-base leading-relaxed">
+          <p className="text-white/50 font-normal text-base leading-relaxed">
             We hit an unexpected error. Our team has been notified. Try refreshing — if the problem persists, come back later.
           </p>
 
           {/* Error digest for support */}
           {error.digest && (
-            <p className="text-[10px] font-mono text-white/20">
+            <p className="text-[10px] font-body text-white/20">
               Error ID: {error.digest}
             </p>
           )}

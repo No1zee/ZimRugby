@@ -17,7 +17,7 @@ export default function PartnersHero() {
         <h1 className="font-black text-rich-black uppercase tracking-tight leading-none text-5xl md:text-7xl lg:text-8xl">
           Our Partners
         </h1>
-        <p className="text-rich-black/60 text-lg md:text-xl lg:text-2xl max-w-2xl font-medium tracking-wide">
+        <p className="text-rich-black/60 text-lg md:text-xl lg:text-2xl max-w-2xl font-normal tracking-wide">
           Proudly partnered with the brands that fuel Zimbabwe Rugby.
         </p>
       </div>

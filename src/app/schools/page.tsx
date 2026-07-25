@@ -110,7 +110,7 @@ export default function SchoolsPage() {
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent flex items-end p-6">
                 <div>
-                  <span className="text-[10px] font-extrabold uppercase tracking-widest text-[#84d7af] block">MATCH ACTION</span>
+                  <span className="text-[10px] font-extrabold uppercase tracking-widest text-zru-green block">MATCH ACTION</span>
                   <h4 className="font-heading text-lg text-white font-black uppercase italic">National Super 8 Fixtures</h4>
                 </div>
               </div>
@@ -124,7 +124,7 @@ export default function SchoolsPage() {
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent flex items-end p-6">
                 <div>
-                  <span className="text-[10px] font-extrabold uppercase tracking-widest text-[#84d7af] block">UNITY & CAMARADERIE</span>
+                  <span className="text-[10px] font-extrabold uppercase tracking-widest text-zru-green block">UNITY & CAMARADERIE</span>
                   <h4 className="font-heading text-lg text-white font-black uppercase italic">Combined Schools Squad</h4>
                 </div>
               </div>
@@ -138,7 +138,7 @@ export default function SchoolsPage() {
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent flex items-end p-6">
                 <div>
-                  <span className="text-[10px] font-extrabold uppercase tracking-widest text-[#84d7af] block">AIRBORNE INTENSITY</span>
+                  <span className="text-[10px] font-extrabold uppercase tracking-widest text-zru-green block">AIRBORNE INTENSITY</span>
                   <h4 className="font-heading text-lg text-white font-black uppercase italic">Set Piece Lineout Mastery</h4>
                 </div>
               </div>

@@ -87,7 +87,7 @@ export default function HeroMatchSpotlight({ match }: HeroMatchSpotlightProps) {
           </div>
           <div className="flex items-center gap-2 text-white/60 text-sm">
             <Trophy className="w-4 h-4 text-zru-green" />
-            <span className="font-heading font-semibold uppercase tracking-wider">{match.competition}</span>
+            <span className="font-heading font-bold uppercase tracking-wider">{match.competition}</span>
           </div>
         </div>
 
@@ -174,15 +174,15 @@ export default function HeroMatchSpotlight({ match }: HeroMatchSpotlightProps) {
           <div className="flex flex-wrap items-center justify-center lg:justify-start gap-6 text-white/70 text-sm">
             <div className="flex items-center gap-2">
               <Calendar className="w-4 h-4 text-zru-green" />
-              <span className="font-semibold uppercase tracking-wider">{match.date}</span>
+              <span className="font-bold uppercase tracking-wider">{match.date}</span>
             </div>
             <div className="flex items-center gap-2">
               <Clock className="w-4 h-4 text-zru-green" />
-              <span className="font-semibold">{match.time} CAT</span>
+              <span className="font-bold">{match.time} CAT</span>
             </div>
             <div className="flex items-center gap-2">
               <MapPin className="w-4 h-4 text-zru-green" />
-              <span className="font-semibold uppercase tracking-wider">{match.venue}</span>
+              <span className="font-bold uppercase tracking-wider">{match.venue}</span>
             </div>
           </div>
 

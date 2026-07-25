@@ -16,7 +16,7 @@ export default function SafeguardingPage() {
         <p className="text-sm text-white/50 mt-1">Inspired by SA Rugby safeguarding principles to protect our youth and players.</p>
       </div>
 
-      <p className="text-white/80 leading-relaxed text-sm font-medium">
+      <p className="text-white/80 leading-relaxed text-sm font-normal">
         Zimbabwe Rugby Union believes that the safety and well-being of all children, adolescents, and adult players is of paramount importance. In alignment with global safeguarding standards, we maintain strict compliance frameworks to prevent, report, and address any forms of abuse, harassment, or unsafe practice.
       </p>
 
@@ -34,7 +34,7 @@ export default function SafeguardingPage() {
                 <CheckCircle className="w-5 h-5" />
               </div>
               <h4 className="font-black text-sm text-white uppercase tracking-tight leading-tight">{p.title}</h4>
-              <p className="text-white/60 text-xs leading-relaxed font-medium">{p.desc}</p>
+              <p className="text-white/60 text-xs leading-relaxed font-normal">{p.desc}</p>
             </div>
           ))}
         </div>
@@ -49,7 +49,7 @@ export default function SafeguardingPage() {
             </div>
             <div>
               <h3 className="font-black text-base text-white uppercase tracking-wide">CONFIDENTIAL REPORTING PORTAL</h3>
-              <p className="text-white/50 text-xs mt-1 font-medium leading-relaxed">
+              <p className="text-white/50 text-xs mt-1 font-normal leading-relaxed">
                 If you have witnessed or suspect any safeguarding violations, child abuse, or player welfare issues, please report it immediately using our confidential channels.
               </p>
             </div>

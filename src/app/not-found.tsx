@@ -63,7 +63,7 @@ export default function NotFound() {
           <h1 className="text-4xl sm:text-6xl font-black uppercase tracking-tighter text-white leading-none">
             INTO TOUCH
           </h1>
-          <p className="text-white/50 font-medium text-lg max-w-md mx-auto leading-relaxed">
+          <p className="text-white/50 font-normal text-lg max-w-md mx-auto leading-relaxed">
             That page has gone out of play. Let&apos;s get you back on the field.
           </p>
         </motion.div>

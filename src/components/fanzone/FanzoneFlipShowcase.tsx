@@ -110,7 +110,7 @@ export default function FanzoneFlipShowcase({ onTriggerJoin }: FanzoneFlipShowca
           
           {/* ════════════════ FRONT SIDE ════════════════ */}
           <div
-            className="backface-hidden absolute inset-0 rounded-3xl p-6 sm:p-8 flex flex-col justify-between overflow-hidden border border-[#00FF87]/40 shadow-2xl"
+            className="backface-hidden absolute inset-0 rounded-3xl p-6 sm:p-8 flex flex-col justify-between overflow-hidden border border-[#006747]/40 shadow-2xl"
             style={{
               background: "radial-gradient(circle at 50% 25%, #0D261C 0%, #003B24 60%, #001F13 100%)",
             }}
@@ -118,13 +118,13 @@ export default function FanzoneFlipShowcase({ onTriggerJoin }: FanzoneFlipShowca
             {/* Top Laser-Mint Progress Bar */}
             <div className="absolute top-0 left-0 right-0 h-1 bg-black/40 overflow-hidden rounded-t-3xl z-20">
               <div
-                className="h-full bg-gradient-to-r from-[#006747] via-[#00FF87] to-white transition-all duration-100 ease-linear"
+                className="h-full bg-gradient-to-r from-[#006747] via-[#006747] to-white transition-all duration-100 ease-linear"
                 style={{ width: `${progress}%` }}
               />
             </div>
 
             {/* Subtle Ambient Inner Glow Frame */}
-            <div className="absolute inset-0 border border-white/10 shadow-[inset_0_0_50px_rgba(0,255,135,0.15)] pointer-events-none rounded-3xl" />
+            <div className="absolute inset-0 border border-white/10 shadow-[inset_0_0_50px_rgba(0,103,71,0.15)] pointer-events-none rounded-3xl" />
 
             {/* Subtle ZRU Emblem Watermark Backdrop */}
             <div className="absolute -bottom-10 -right-10 opacity-10 pointer-events-none select-none">
@@ -147,32 +147,32 @@ export default function FanzoneFlipShowcase({ onTriggerJoin }: FanzoneFlipShowca
                   height={26}
                   className="object-contain"
                 />
-                <span className="font-heading font-black text-xs text-[#00FF87] uppercase tracking-wider">
+                <span className="font-heading font-black text-xs text-[#006747] uppercase tracking-wider">
                   ZIMBABWE RUGBY
                 </span>
               </div>
-              <span className="px-2.5 py-0.5 bg-[#00FF87]/15 border border-[#00FF87]/30 text-[#00FF87] rounded text-[9px] font-black tracking-widest uppercase">
+              <span className="px-2.5 py-0.5 bg-[#006747]/15 border border-[#006747]/30 text-[#006747] rounded text-[9px] font-black tracking-widest uppercase">
                 {current.badgeText}
               </span>
             </div>
 
             {/* Front Main Content */}
             <div className="relative z-10 space-y-4 my-auto">
-              <div className="w-14 h-14 rounded-2xl bg-black/50 border border-[#00FF87]/40 flex items-center justify-center text-[#00FF87] shadow-lg shadow-[#00FF87]/20">
+              <div className="w-14 h-14 rounded-2xl bg-black/50 border border-[#006747]/40 flex items-center justify-center text-[#006747] shadow-lg shadow-[#006747]/20">
                 <IconComponent className="w-7 h-7" />
               </div>
               <h3 className="text-xl sm:text-2xl font-heading font-black text-white uppercase tracking-tight leading-tight">
                 {current.title}
               </h3>
-              <p className="text-xs sm:text-sm text-white/80 font-medium leading-relaxed">
+              <p className="text-xs sm:text-sm text-white/80 font-normal leading-relaxed">
                 {current.desc}
               </p>
             </div>
 
             {/* Front Bottom Action Hint */}
-            <div className="relative z-10 pt-4 border-t border-white/10 flex items-center justify-between text-[11px] font-black tracking-widest text-[#00FF87] uppercase">
+            <div className="relative z-10 pt-4 border-t border-white/10 flex items-center justify-between text-[11px] font-black tracking-widest text-[#006747] uppercase">
               <span className="flex items-center gap-1.5">
-                <ShieldCheck className="w-4 h-4 text-[#00FF87]" />
+                <ShieldCheck className="w-4 h-4 text-[#006747]" />
                 <span>BENEFIT 0{currentIndex + 1} OF 04</span>
               </span>
               <span className="text-white/60 text-[9px] hover:text-white flex items-center gap-1 transition-colors">
@@ -183,7 +183,7 @@ export default function FanzoneFlipShowcase({ onTriggerJoin }: FanzoneFlipShowca
 
           {/* ════════════════ BACK SIDE ════════════════ */}
           <div
-            className="backface-hidden rotate-y-180 absolute inset-0 rounded-3xl p-6 sm:p-8 flex flex-col justify-between overflow-hidden border border-[#00FF87] shadow-2xl"
+            className="backface-hidden rotate-y-180 absolute inset-0 rounded-3xl p-6 sm:p-8 flex flex-col justify-between overflow-hidden border border-[#006747] shadow-2xl"
             style={{
               background: "radial-gradient(circle at 50% 25%, #071711 0%, #030C08 60%, #000503 100%)",
             }}
@@ -191,13 +191,13 @@ export default function FanzoneFlipShowcase({ onTriggerJoin }: FanzoneFlipShowca
             {/* Top Laser Progress Bar */}
             <div className="absolute top-0 left-0 right-0 h-1 bg-black/40 overflow-hidden rounded-t-3xl z-20">
               <div
-                className="h-full bg-gradient-to-r from-[#00FF87] via-white to-[#00FF87] transition-all duration-100 ease-linear"
+                className="h-full bg-gradient-to-r from-[#006747] via-white to-[#006747] transition-all duration-100 ease-linear"
                 style={{ width: `${progress}%` }}
               />
             </div>
 
             {/* Back Glow Overlay */}
-            <div className="absolute inset-0 border border-[#00FF87]/30 shadow-[inset_0_0_60px_rgba(0,255,135,0.25)] pointer-events-none rounded-3xl" />
+            <div className="absolute inset-0 border border-[#006747]/30 shadow-[inset_0_0_60px_rgba(0,103,71,0.25)] pointer-events-none rounded-3xl" />
 
             {/* Back Top Header */}
             <div className="flex items-center justify-between relative z-10 pt-1">
@@ -209,25 +209,25 @@ export default function FanzoneFlipShowcase({ onTriggerJoin }: FanzoneFlipShowca
                   height={28}
                   className="object-contain"
                 />
-                <span className="font-heading font-black text-xs text-[#00FF87] uppercase tracking-wider">
+                <span className="font-heading font-black text-xs text-[#006747] uppercase tracking-wider">
                   ZIMBABWE RUGBY
                 </span>
               </div>
-              <span className="px-2.5 py-0.5 bg-[#00FF87] text-[#002D1A] rounded font-black text-[9px] tracking-widest uppercase shadow-sm">
+              <span className="px-2.5 py-0.5 bg-[#006747] text-[#002D1A] rounded font-black text-[9px] tracking-widest uppercase shadow-sm">
                 OFFICIAL ACCESS
               </span>
             </div>
 
             {/* Back Main Content */}
             <div className="relative z-10 space-y-3 my-auto">
-              <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-[#00FF87]/15 rounded-lg text-[#00FF87] text-[10px] font-black tracking-widest uppercase border border-[#00FF87]/30">
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-[#006747]/15 rounded-lg text-[#006747] text-[10px] font-black tracking-widest uppercase border border-[#006747]/30">
                 <CheckCircle2 className="w-3.5 h-3.5" />
                 <span>MEMBERSHIP UNLOCKED</span>
               </div>
               <h4 className="text-lg font-heading font-black text-white uppercase tracking-tight">
                 CLAIM YOUR FANZONE PASS
               </h4>
-              <p className="text-xs text-white/80 font-medium leading-relaxed">
+              <p className="text-xs text-white/80 font-normal leading-relaxed">
                 Join thousands of global Sables supporters. Get instant priority tickets, exclusive merchandise discounts, and inner-sanctum match access.
               </p>
             </div>
@@ -239,7 +239,7 @@ export default function FanzoneFlipShowcase({ onTriggerJoin }: FanzoneFlipShowca
                   e.stopPropagation();
                   onTriggerJoin();
                 }}
-                className="w-full bg-[#00FF87] text-[#002D1A] py-3.5 px-6 rounded-xl hover:bg-white hover:text-black transition-all duration-300 flex items-center justify-center gap-2 font-black text-xs tracking-widest uppercase font-heading shadow-xl shadow-[#00FF87]/30"
+                className="w-full bg-[#006747] text-[#002D1A] py-3.5 px-6 rounded-xl hover:bg-white hover:text-black transition-all duration-300 flex items-center justify-center gap-2 font-black text-xs tracking-widest uppercase font-heading shadow-xl shadow-[#006747]/30"
               >
                 <span>JOIN THE FANZONE NOW</span>
                 <ArrowRight className="w-4 h-4" />

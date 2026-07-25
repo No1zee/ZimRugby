@@ -16,7 +16,7 @@ export default function CareersPage() {
         <p className="text-sm text-white/50 mt-1">Join the team building the future of rugby in Zimbabwe.</p>
       </div>
 
-      <p className="text-white/80 leading-relaxed text-sm font-medium">
+      <p className="text-white/80 leading-relaxed text-sm font-normal">
         At the Zimbabwe Rugby Union, we believe in professionalism, innovation, and passion. We look for dedicated professionals and aspiring sports administrators who want to make a difference in African rugby. Check out our open roles below.
       </p>
 

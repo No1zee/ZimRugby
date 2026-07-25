@@ -4,8 +4,13 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
-import { ChevronRight, ChevronDown, Calendar, MapPin, Users, Award, ShieldAlert, Image as ImageIcon } from "lucide-react";
+import { ChevronRight, ChevronDown, Calendar, MapPin, Users, Award, ShieldAlert, Image as ImageIcon, Film, Expand } from "lucide-react";
 import { Team } from "@/types";
+import { Tilt3DCard } from "@/components/ui/animations";
+import PlayerCardGrid from "./PlayerCardGrid";
+import NextMatchBanner from "./NextMatchBanner";
+import RecentResultsStrip from "./RecentResultsStrip";
+import TeamMediaSection from "./TeamMediaSection";
 
 const ALL_TEAMS = [
   { id: "sables", name: "Zimbabwe Sables", href: "/teams/sables" },
@@ -20,7 +25,7 @@ interface TeamPageClientProps {
 }
 
 export default function TeamPageClient({ team }: TeamPageClientProps) {
-  const [activeTab, setActiveTab] = useState<"squad" | "matches" | "coaching" | "history" | "gallery">("squad");
+  const [activeTab, setActiveTab] = useState<"squad" | "matches" | "coaching" | "media" | "history" | "gallery">("squad");
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   const currentIndex = ALL_TEAMS.findIndex(t => t.id === team.id);
@@ -31,6 +36,7 @@ export default function TeamPageClient({ team }: TeamPageClientProps) {
     { id: "squad", label: "SQUAD", icon: Users },
     { id: "coaching", label: "COACHES", icon: Award },
     { id: "matches", label: "FIXTURES & RESULTS", icon: Calendar },
+    { id: "media", label: "MEDIA", icon: Film },
     { id: "history", label: "HISTORY", icon: ShieldAlert },
     { id: "gallery", label: "GALLERY", icon: ImageIcon }
   ] as const;
@@ -109,7 +115,7 @@ export default function TeamPageClient({ team }: TeamPageClientProps) {
                   )}
                 </AnimatePresence>
               </div>
-              <p className="text-white/70 font-medium text-lg mt-4 max-w-2xl">
+              <p className="text-white/70 font-normal text-lg mt-4 max-w-2xl">
                 {team.tagline}
               </p>
             </div>
@@ -127,7 +133,13 @@ export default function TeamPageClient({ team }: TeamPageClientProps) {
         </div>
       </div>
 
-      {/* 2. Interactive Navigation Tabs */}
+      {/* 2. Match Context Strip */}
+      <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
+        <NextMatchBanner matches={team.matches} teamName={team.name} />
+        <RecentResultsStrip matches={team.matches} teamName={team.name} />
+      </div>
+
+      {/* 3. Interactive Navigation Tabs */}
       <div className="border-b border-black/10 bg-milk-white/90 sticky top-16 z-30 backdrop-blur-md">
         <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex overflow-x-auto py-4 gap-2 no-scrollbar">
@@ -153,7 +165,7 @@ export default function TeamPageClient({ team }: TeamPageClientProps) {
         </div>
       </div>
 
-      {/* 3. Dynamic Content Panels */}
+      {/* 4. Dynamic Content Panels */}
       <main className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <AnimatePresence mode="wait">
           <motion.div
@@ -166,35 +178,7 @@ export default function TeamPageClient({ team }: TeamPageClientProps) {
             
             {/* Squad tab content */}
             {activeTab === "squad" && (
-              <div className="space-y-12">
-                <div className="border-l-4 border-zru-green pl-4">
-                  <h2 className="text-2xl font-black uppercase tracking-wider text-rich-black">ACTIVE SQUAD</h2>
-                  <p className="text-sm text-black/50 mt-1">Current player selection representing {team.name} on the international stage.</p>
-                </div>
-                
-                {/* Responsive Squad Grid: Single column mobile, 2 tablet, 3-4 desktop */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-                  {team.squad.map((player, idx) => (
-                    <div 
-                      key={idx} 
-                      className="bg-white border border-black/5 rounded-xl p-5 flex flex-col items-center text-center hover:-translate-y-1 shadow-sm hover:shadow-lg transition-all group"
-                    >
-                      {/* Player photo placeholder */}
-                      <div className="w-24 h-24 bg-black/5 rounded-full flex items-center justify-center border border-black/5 relative overflow-hidden mb-4 group-hover:border-zru-green/50 transition-colors">
-                        <Users className="w-10 h-10 text-black/20" />
-                      </div>
-                      
-                      <h3 className="font-black text-lg uppercase tracking-tight text-rich-black">{player.name}</h3>
-                      <span className="text-zru-green text-xs font-bold uppercase tracking-wider mt-1">{player.position}</span>
-                      
-                      <div className="mt-4 pt-4 border-t border-black/5 w-full flex justify-between text-[11px] text-black/40 font-bold uppercase">
-                        <span>Club: <strong className="text-black/80 font-semibold">{player.club}</strong></span>
-                        <span>Caps: <strong className="text-black/80 font-semibold">{player.caps}</strong></span>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
+              <PlayerCardGrid squad={team.squad} teamName={team.name} />
             )}
 
             {/* Coaching Staff tab content */}
@@ -212,7 +196,17 @@ export default function TeamPageClient({ team }: TeamPageClientProps) {
                       className="bg-white border border-black/5 shadow-sm rounded-xl p-6 flex items-center gap-6 group hover:shadow-md transition-shadow"
                     >
                       <div className="w-16 h-16 bg-black/5 rounded-full flex items-center justify-center border border-black/10 relative overflow-hidden shrink-0 group-hover:scale-105 transition-transform duration-300">
-                        <Award className="w-8 h-8 text-black/20" />
+                        {coach.image ? (
+                          <Image
+                            src={coach.image}
+                            alt={coach.name}
+                            fill
+                            sizes="64px"
+                            className="object-cover"
+                          />
+                        ) : (
+                          <Award className="w-8 h-8 text-black/20" />
+                        )}
                       </div>
                       <div>
                         <h3 className="font-black text-lg uppercase tracking-tight text-rich-black">{coach.name}</h3>
@@ -293,6 +287,11 @@ export default function TeamPageClient({ team }: TeamPageClientProps) {
               </div>
             )}
 
+            {/* Media tab content */}
+            {activeTab === "media" && (
+              <TeamMediaSection teamName={team.name} teamId={team.id} />
+            )}
+
             {/* History tab content */}
             {activeTab === "history" && (
               <div className="space-y-12">
@@ -302,7 +301,7 @@ export default function TeamPageClient({ team }: TeamPageClientProps) {
                 </div>
 
                 <div className="bg-white border border-black/5 shadow-sm rounded-2xl p-8 max-w-4xl">
-                  <p className="text-rich-black/80 text-lg leading-relaxed font-medium">
+                  <p className="text-rich-black/80 text-lg leading-relaxed font-normal">
                     {team.history}
                   </p>
                 </div>
@@ -319,23 +318,27 @@ export default function TeamPageClient({ team }: TeamPageClientProps) {
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                   {team.gallery.map((img, idx) => (
-                    <div 
-                      key={idx} 
-                      className="relative h-64 bg-white border border-black/5 shadow-sm rounded-xl overflow-hidden group hover:shadow-lg transition-shadow"
-                    >
-                      <Image 
-                        src={img} 
-                        alt={`${team.name} gallery image ${idx + 1}`} 
-                        fill 
-                        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                        className="object-cover transition-transform duration-700 group-hover:scale-105" 
-                      />
-                      <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                        <span className="text-white text-xs font-black uppercase tracking-widest border border-white/30 px-4 py-2 rounded">
-                          View Image
-                        </span>
+                    <Tilt3DCard key={idx} tiltAmount={12} glareEnabled>
+                      <div className="relative h-64 rounded-2xl overflow-hidden group border border-zru-green/20 hover:border-zru-green/50 transition-colors shadow-lg">
+                        <Image 
+                          src={img} 
+                          alt={`${team.name} gallery image ${idx + 1}`} 
+                          fill 
+                          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                          className="object-cover transition-transform duration-700 group-hover:scale-110" 
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-5">
+                          <div className="flex items-center justify-between w-full">
+                            <span className="text-white text-xs font-black uppercase tracking-widest">
+                              Shot {idx + 1}
+                            </span>
+                            <div className="w-8 h-8 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center border border-white/30">
+                              <Expand className="w-3.5 h-3.5 text-white" />
+                            </div>
+                          </div>
+                        </div>
                       </div>
-                    </div>
+                    </Tilt3DCard>
                   ))}
                 </div>
               </div>
