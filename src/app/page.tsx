@@ -3,7 +3,7 @@ import UnifiedHubGrid from "@/components/home/UnifiedHubGrid";
 import HomeNewsletterBanner from "@/components/home/HomeNewsletterBanner";
 import CleanCountdownBanner from "@/components/home/CleanCountdownBanner";
 import GrassrootsInitiativeSection from "@/components/home/GrassrootsInitiativeSection";
-import PartnersSection from "@/components/home/PartnersSection";
+import SponsorGrid from "@/components/home/SponsorGrid";
 
 import { getHeroSlides } from "@/lib/api/hero";
 
@@ -31,8 +31,8 @@ export default async function Home() {
         {/* 5. Grassroots & Growing the Sport Section */}
         <GrassrootsInitiativeSection />
 
-        {/* 6. Commercial Partners & Sponsors */}
-        <PartnersSection />
+        {/* 6. Commercial Partners & Sponsors Logo Grid */}
+        <SponsorGrid />
 
       </div>
     </main>
