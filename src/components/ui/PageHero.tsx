@@ -27,7 +27,7 @@ export default function PageHero({
   breadcrumb,
 }: PageHeroProps) {
   return (
-    <section className="relative min-h-[40vh] md:min-h-[45vh] flex items-end pt-32 pb-16 overflow-hidden bg-rich-black border-b border-white/5">
+    <section className="relative min-h-[40vh] md:min-h-[45vh] flex items-end pt-32 pb-16 bg-rich-black border-b border-white/5">
       {/* Background Image / Ambient Gradient */}
       <div className="absolute inset-0 z-0 select-none pointer-events-none">
         {backgroundImage ? (

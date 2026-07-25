@@ -1,5 +1,11 @@
+import { Metadata } from "next";
 import Image from "next/image";
 import { Users, Heart } from "lucide-react";
+
+export const metadata: Metadata = {
+  title: "Board & Leadership | Zimbabwe Rugby Union",
+  description: "Meet the ZRU Board of Directors and executive leadership team.",
+};
 
 export default function BoardPage() {
   const leaders = [

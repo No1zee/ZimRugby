@@ -1,3 +1,10 @@
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Live Scores | Zimbabwe Rugby Union",
+  description: "Live match scores and real-time updates from Zimbabwe rugby fixtures.",
+};
+
 export default function ComingSoonPage() {
   return (
     <main className="min-h-screen bg-rich-black flex flex-col">

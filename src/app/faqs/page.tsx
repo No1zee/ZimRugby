@@ -1,3 +1,10 @@
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Frequently Asked Questions | Zimbabwe Rugby Union",
+  description: "Answers to common questions about Zimbabwe Rugby Union, tickets, memberships, and more.",
+};
+
 export default function ComingSoonPage() {
   return (
     <main className="min-h-screen bg-rich-black flex flex-col">

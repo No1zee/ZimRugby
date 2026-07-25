@@ -1,3 +1,10 @@
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Laws of Rugby | Zimbabwe Rugby Union",
+  description: "World Rugby Laws of the Game and Zimbabwe-specific regulations.",
+};
+
 export default function ComingSoonPage() {
   return (
     <main className="min-h-screen bg-rich-black flex flex-col">

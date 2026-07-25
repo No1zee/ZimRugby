@@ -1,3 +1,10 @@
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Resources | Zimbabwe Rugby Union",
+  description: "Rugby resources, guides, and reference materials from ZRU.",
+};
+
 export default function ComingSoonPage() {
   return (
     <main className="min-h-screen bg-rich-black flex flex-col">

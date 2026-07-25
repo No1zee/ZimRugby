@@ -1,6 +1,25 @@
+import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getTeamData } from "@/lib/api/teams";
 import TeamPageClient from "@/components/teams/TeamPageClient";
+
+const SLUG_TITLES: Record<string, string> = {
+  sables: "Sables",
+  "lady-sables": "Lady Sables",
+  "junior-sables": "Junior Sables",
+  cheetahs: "Cheetahs",
+  u20: "U20",
+};
+
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+  const { slug } = await params;
+  const title = SLUG_TITLES[slug];
+  if (!title) return { title: "Team Not Found | Zimbabwe Rugby Union" };
+  return {
+    title: `${title} | Zimbabwe Rugby Union`,
+    description: `Official ${title} squad, fixtures, and results — Zimbabwe Rugby Union.`,
+  };
+}
 
 interface PageProps {
   params: Promise<{ slug: string }>;

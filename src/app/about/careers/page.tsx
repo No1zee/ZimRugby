@@ -1,4 +1,10 @@
+import { Metadata } from "next";
 import { Briefcase, ArrowRight } from "lucide-react";
+
+export const metadata: Metadata = {
+  title: "Careers & Vacancies | Zimbabwe Rugby Union",
+  description: "Join the Zimbabwe Rugby Union team. View current job openings and internship opportunities.",
+};
 
 export default function CareersPage() {
   const jobs = [

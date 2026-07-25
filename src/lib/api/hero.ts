@@ -112,8 +112,8 @@ export async function getHeroSlides(): Promise<HeroSlideData[]> {
           } : undefined,
           ctas: {
             primary: {
-              label: slide.cta_primary_label || "Sign In",
-              href: slide.cta_primary_href || "/login",
+label: slide.cta_primary_label || "Learn More",
+    href: slide.cta_primary_href || "/teams",
               iconName: slide.cta_primary_icon || "ArrowRight",
             },
             secondary: slide.cta_secondary_label ? {

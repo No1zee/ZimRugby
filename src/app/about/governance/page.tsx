@@ -1,4 +1,10 @@
+import { Metadata } from "next";
 import { Landmark, FileText, Download } from "lucide-react";
+
+export const metadata: Metadata = {
+  title: "Governance & Compliance | Zimbabwe Rugby Union",
+  description: "ZRU governance structure, constitution, annual reports, and compliance documentation.",
+};
 
 export default function GovernancePage() {
   const documents = [

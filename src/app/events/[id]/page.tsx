@@ -1,6 +1,17 @@
+import { Metadata } from "next";
 import Link from "next/link";
 import { ArrowLeft, MapPin, Calendar, Clock, Tag } from "lucide-react";
 import PageHero from "@/components/ui/PageHero";
+
+export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
+  const { id } = await params;
+  const event = EVENTS[id];
+  if (!event) return { title: "Event Not Found | Zimbabwe Rugby Union" };
+  return {
+    title: `${event.title} | Zimbabwe Rugby Union`,
+    description: event.description.slice(0, 160),
+  };
+}
 
 // Static event data matching homepage & events catalog
 const EVENTS: Record<string, {

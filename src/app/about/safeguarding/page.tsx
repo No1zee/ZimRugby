@@ -1,4 +1,10 @@
+import { Metadata } from "next";
 import { Shield, AlertTriangle, CheckCircle, HelpCircle } from "lucide-react";
+
+export const metadata: Metadata = {
+  title: "Safeguarding & Player Welfare | Zimbabwe Rugby Union",
+  description: "ZRU's safeguarding policies, child protection procedures, and player welfare commitments.",
+};
 
 export default function SafeguardingPage() {
   const policies = [

@@ -1,4 +1,10 @@
+import { Metadata } from "next";
 import HeroCarousel from "@/components/home/HeroCarousel";
+
+export const metadata: Metadata = {
+  title: "Zimbabwe Rugby Union | Official Home of the Sables",
+  description: "Official website of the Zimbabwe Rugby Union. Follow the Sables, Lady Sables, and all Zimbabwe rugby teams. Fixtures, results, news, and tickets.",
+};
 import UnifiedHubGrid from "@/components/home/UnifiedHubGrid";
 import HomeNewsletterBanner from "@/components/home/HomeNewsletterBanner";
 import CleanCountdownBanner from "@/components/home/CleanCountdownBanner";

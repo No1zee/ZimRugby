@@ -1,3 +1,10 @@
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Accessibility Statement | Zimbabwe Rugby Union",
+  description: "ZRU accessibility commitment and standards compliance information.",
+};
+
 export default function ComingSoonPage() {
   return (
     <main className="min-h-screen bg-rich-black flex flex-col">

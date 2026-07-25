@@ -1,4 +1,10 @@
+import { Metadata } from "next";
 import { Target, Award, Mail, MapPin, Phone } from "lucide-react";
+
+export const metadata: Metadata = {
+  title: "About | Zimbabwe Rugby Union",
+  description: "Learn about the Zimbabwe Rugby Union — our mission, history, and commitment to growing rugby across Zimbabwe.",
+};
 
 export default function AboutOverviewPage() {
   const stats = [

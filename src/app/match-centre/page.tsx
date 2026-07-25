@@ -1,6 +1,12 @@
+import { Metadata } from "next";
 import MatchCentreClient from "./MatchCentreClient";
 import { getAllFixtures, formatFixtureForUI } from "@/lib/fixtures";
 import type { LeagueTableRow } from "@/types";
+
+export const metadata: Metadata = {
+  title: "Match Centre | Zimbabwe Rugby Union",
+  description: "Fixtures, results, and league standings for Zimbabwe rugby teams.",
+};
 
 export const revalidate = 60;
 

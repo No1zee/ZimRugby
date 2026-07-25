@@ -1,7 +1,13 @@
+import { Metadata } from "next";
 import { login, signup } from './actions'
 import SlantedButton from '@/components/ui/SlantedButton'
 import Link from 'next/link'
 import { ArrowLeft, Lock } from 'lucide-react'
+
+export const metadata: Metadata = {
+  title: "ZRU Portal - Login | Zimbabwe Rugby Union",
+  description: "Sign in to your Zimbabwe Rugby Union portal account.",
+};
 
 export default function LoginPage() {
   return (

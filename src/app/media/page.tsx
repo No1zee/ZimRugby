@@ -1,5 +1,11 @@
+import { Metadata } from "next";
 import { getSocialPosts } from "@/lib/data-fetcher";
 import MediaPageClient from "./MediaPageClient";
+
+export const metadata: Metadata = {
+  title: "News & Media | Zimbabwe Rugby Union",
+  description: "Latest news, match reports, and media coverage from Zimbabwe Rugby Union.",
+};
 
 export const revalidate = 300; // ISR cache revalidation window: 5 minutes
 
