@@ -2,38 +2,9 @@
 import { Match } from "@/types";
 import { getLiveMatches } from "@/lib/data-fetcher";
 import { directusFetch } from "@/lib/directus/fetch";
+import type { LineupPlayer, MatchStats, MatchDetailData } from "@/types";
 
-export interface LineupPlayer {
-  number: number;
-  name: string;
-  position: string;
-  club?: string;
-}
-
-export interface MatchStats {
-  possession: { home: number; away: number };
-  territory: { home: number; away: number };
-  scrums: { home: string; away: string }; // e.g. "5/6" won
-  penalties: { home: number; away: number };
-  tries: { home: number; away: number };
-}
-
-export interface MatchDetailData {
-  match: Match;
-  homeLineup: LineupPlayer[];
-  awayLineup: LineupPlayer[];
-  stats?: MatchStats;
-  report?: {
-    summary: string;
-    paragraphs: string[];
-    scorerTimeline: {
-      minute: number;
-      team: 'home' | 'away';
-      type: 'try' | 'conversion' | 'penalty' | 'drop-goal';
-      player: string;
-    }[];
-  };
-}
+export type { LineupPlayer, MatchStats, MatchDetailData };
 
 interface DirectusMatchDetailItem {
   id: string | number;

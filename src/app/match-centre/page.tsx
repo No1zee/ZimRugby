@@ -1,6 +1,6 @@
 import { Metadata } from "next";
 import MatchCentreClient from "./MatchCentreClient";
-import { getAllFixtures, formatFixtureForUI } from "@/lib/fixtures";
+import { getAllFixtures, formatFixtureForUI, getNextUnionMatch } from "@/lib/fixtures";
 import type { LeagueTableRow } from "@/types";
 
 export const metadata: Metadata = {
@@ -22,12 +22,14 @@ export default async function MatchCentre() {
   const formattedFixtures = rawFixtures.map(formatFixtureForUI);
   const initialFixtures = formattedFixtures.filter(f => f.status === 'upcoming');
   const initialResults = formattedFixtures.filter(f => f.status === 'completed');
+  const nextUnionMatch = getNextUnionMatch(formattedFixtures);
 
   return (
     <MatchCentreClient
       initialFixtures={initialFixtures}
       initialResults={initialResults}
       initialStandings={STANDINGS}
+      nextUnionMatch={nextUnionMatch}
     />
   );
 }

@@ -1,28 +1,8 @@
 import { Match } from "@/types";
 import { directusFetch } from "@/lib/directus/fetch";
+import type { FixtureTwinData, DirectusMatchItem } from "@/types";
 
-export interface FixtureTwinData {
-  previous: Match;
-  upcoming: Match;
-}
-
-export interface DirectusMatchItem {
-  id: string | number;
-  competition?: string;
-  round?: string;
-  date: string;
-  date_label?: string;
-  time?: string;
-  venue?: string;
-  home_team_name?: string;
-  home_team_logo?: string;
-  home_team_score?: number | null;
-  away_team_name?: string;
-  away_team_logo?: string;
-  away_team_score?: number | null;
-  status: string;
-  category?: string;
-}
+export type { FixtureTwinData, DirectusMatchItem };
 
 export async function getFixtureTwinData(): Promise<FixtureTwinData> {
   const fallback = {

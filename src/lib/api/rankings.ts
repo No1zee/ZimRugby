@@ -1,24 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { directusFetch } from "@/lib/directus/fetch";
+import type { RankingDetail, RankingsData } from "@/types";
 
-export interface RankingDetail {
-  position: number;
-  previousPosition?: number;
-  points: number;
-  trend: "up" | "down" | "stable";
-  lastUpdated: string;
-}
-
-export interface RankingsData {
-  world: RankingDetail;
-  africa: RankingDetail;
-  rivals: {
-    name: string;
-    position: number;
-    points: number;
-    logo?: string;
-  }[];
-}
+export type { RankingDetail, RankingsData };
 
 const MOCK_RANKINGS: RankingsData = {
     world: {

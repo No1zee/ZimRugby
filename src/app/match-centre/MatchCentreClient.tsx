@@ -13,14 +13,26 @@ import type { LeagueTableRow } from "@/types";
 import PageHero from "@/components/ui/PageHero";
 import SlantedButton from "@/components/ui/SlantedButton";
 import { useEffect, useState as ReactState } from "react";
+import NextUnionMatchHero from "@/components/match-centre/NextUnionMatchHero";
 
 interface MatchCentreClientProps {
   initialFixtures: Match[];
   initialResults: Match[];
   initialStandings: LeagueTableRow[];
+  nextUnionMatch?: {
+    id: string | number;
+    homeTeam: { name: string };
+    awayTeam: { name: string };
+    venue: string;
+    competition: string;
+    teamCategory?: string;
+    dateIso: string;
+    time: string;
+    ticketUrl?: string;
+  } | null;
 }
 
-export default function MatchCentreClient({ initialFixtures, initialResults, initialStandings }: MatchCentreClientProps) {
+export default function MatchCentreClient({ initialFixtures, initialResults, initialStandings, nextUnionMatch }: MatchCentreClientProps) {
   const [activeTab, setActiveTab] = useState<"fixtures" | "results" | "standings">("fixtures");
   const [selectedTeam, setSelectedTeam] = useState<string>("All");
   const [searchQuery, setSearchQuery] = useState<string>("");
@@ -70,6 +82,9 @@ export default function MatchCentreClient({ initialFixtures, initialResults, ini
 
           {/* Contextual Announcements */}
           <PageAnnouncements scope="match-centre" className="mb-12" />
+
+          {/* Next Union Match Hero */}
+          <NextUnionMatchHero match={nextUnionMatch ?? null} />
 
           {/* Filters & Tabs */}
           <div className="flex flex-col lg:flex-row justify-between items-center gap-6 mb-12">

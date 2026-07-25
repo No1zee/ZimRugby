@@ -1,30 +1,6 @@
-export interface HeroSlideData {
-  id: number;
-  image: string;
-  video?: string;
-  headline: {
-    line1: string;
-    line2: string;
-  };
-  subtext: string;
-  tag?: string; // Team tag, e.g., "SABLES", "CHEETAHS", "LADY SABLES"
-  contextPill?: string;
-  imagePosition?: string; // CSS object-position, e.g. "center top"
-  graphicSlide?: boolean; // If true, hides text overlay — image has its own design/text
-  matchCard?: {
-    opponent: string;
-    opponentSub?: string;
-    date: string;
-    time: string;
-    venue: string;
-    tag: string;
-  };
-  ctas: {
-    primary: { label: string; href: string; iconName?: "Ticket" | "ArrowRight" | "Play" };
-    secondary?: { label: string; href: string; iconName?: "Ticket" | "ArrowRight" | "Play" };
-  };
-  alignment?: "center" | "left";
-}
+import type { HeroSlideData } from "@/types";
+
+export type { HeroSlideData };
 
 /**
  * CMS_SWAP_TODO: Replace mock implementation with actual REST/GraphQL endpoints once backend is available.

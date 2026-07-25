@@ -163,3 +163,124 @@ export interface Announcement {
   relatedArticleId?: string;
 }
 
+// 9. Events (CMS)
+export interface EventItem {
+  id: string;
+  title: string;
+  subtitle: string;
+  date: string;
+  location: string;
+  description: string;
+  tags: string[];
+  image: string;
+  content?: string;
+  ticketUrl?: string;
+}
+
+// 10. Hero Slides (CMS)
+export interface HeroSlideData {
+  id: number;
+  image: string;
+  video?: string;
+  headline: {
+    line1: string;
+    line2: string;
+  };
+  subtext: string;
+  tag?: string;
+  contextPill?: string;
+  imagePosition?: string;
+  graphicSlide?: boolean;
+  matchCard?: {
+    opponent: string;
+    opponentSub?: string;
+    date: string;
+    time: string;
+    venue: string;
+    tag: string;
+  };
+  ctas: {
+    primary: { label: string; href: string; iconName?: "Ticket" | "ArrowRight" | "Play" };
+    secondary?: { label: string; href: string; iconName?: "Ticket" | "ArrowRight" | "Play" };
+  };
+  alignment?: "center" | "left";
+}
+
+// 11. Fixture Twin (previous + upcoming)
+export interface FixtureTwinData {
+  previous: Match;
+  upcoming: Match;
+}
+
+// 12. Directus Match Item (CMS DTO)
+export interface DirectusMatchItem {
+  id: string | number;
+  competition?: string;
+  round?: string;
+  date: string;
+  date_label?: string;
+  time?: string;
+  venue?: string;
+  home_team_name?: string;
+  home_team_logo?: string;
+  home_team_score?: number | null;
+  away_team_name?: string;
+  away_team_logo?: string;
+  away_team_score?: number | null;
+  status: string;
+  category?: string;
+}
+
+// 13. Match Detail Entities
+export interface LineupPlayer {
+  number: number;
+  name: string;
+  position: string;
+  club?: string;
+}
+
+export interface MatchStats {
+  possession: { home: number; away: number };
+  territory: { home: number; away: number };
+  scrums: { home: string; away: string };
+  penalties: { home: number; away: number };
+  tries: { home: number; away: number };
+}
+
+export interface MatchDetailData {
+  match: Match;
+  homeLineup: LineupPlayer[];
+  awayLineup: LineupPlayer[];
+  stats?: MatchStats;
+  report?: {
+    summary: string;
+    paragraphs: string[];
+    scorerTimeline: {
+      minute: number;
+      team: 'home' | 'away';
+      type: 'try' | 'conversion' | 'penalty' | 'drop-goal';
+      player: string;
+    }[];
+  };
+}
+
+// 14. Rankings (CMS)
+export interface RankingDetail {
+  position: number;
+  previousPosition?: number;
+  points: number;
+  trend: "up" | "down" | "stable";
+  lastUpdated: string;
+}
+
+export interface RankingsData {
+  world: RankingDetail;
+  africa: RankingDetail;
+  rivals: {
+    name: string;
+    position: number;
+    points: number;
+    logo?: string;
+  }[];
+}
+

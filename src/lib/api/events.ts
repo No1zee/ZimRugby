@@ -1,17 +1,7 @@
 import { directusFetch } from "@/lib/directus/fetch";
+import type { EventItem } from "@/types";
 
-export interface EventItem {
-  id: string;
-  title: string;
-  subtitle: string;
-  date: string;
-  location: string;
-  description: string;
-  tags: string[];
-  image: string;
-  content?: string;
-  ticketUrl?: string;
-}
+export type { EventItem };
 
 const mockEvents: EventItem[] = [
   {

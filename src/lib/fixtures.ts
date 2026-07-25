@@ -110,3 +110,32 @@ export function formatFixtureForUI(fixture: Fixture) {
     }
   };
 }
+
+/**
+ * Select the union-wide next match from all formatted fixtures.
+ * Considers all team categories, filters to upcoming, sorts by date ascending.
+ * Returns the earliest upcoming fixture or null.
+ */
+export function getNextUnionMatch(
+  fixtures: { status?: string; dateIso?: string; teamCategory?: string; homeTeam: { name: string }; awayTeam: { name: string }; venue: string; competition: string; id: string | number; time: string; ticketUrl?: string }[]
+): { id: string | number; homeTeam: { name: string }; awayTeam: { name: string }; venue: string; competition: string; teamCategory?: string; dateIso: string; time: string; ticketUrl?: string } | null {
+  const now = Date.now();
+
+  const upcoming = fixtures
+    .filter(f => f.status === 'upcoming' || !f.status)
+    .filter(f => {
+      if (!f.dateIso) return false;
+      const t = new Date(f.dateIso).getTime();
+      return !isNaN(t) && t > now;
+    });
+
+  if (upcoming.length === 0) return null;
+
+  upcoming.sort((a, b) => {
+    const ta = new Date(a.dateIso!).getTime();
+    const tb = new Date(b.dateIso!).getTime();
+    return ta - tb;
+  });
+
+  return upcoming[0] as { id: string | number; homeTeam: { name: string }; awayTeam: { name: string }; venue: string; competition: string; teamCategory?: string; dateIso: string; time: string; ticketUrl?: string };
+}
