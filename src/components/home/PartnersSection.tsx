@@ -1,180 +1,328 @@
+"use client";
+
 import React from "react";
-import Image from "next/image";
 import Link from "next/link";
+import { motion, useReducedMotion } from "framer-motion";
 
-type Partner = {
-  name: string;
-  logo: string;
-  href: string;
-  featured?: boolean;
-  note?: string;
-};
+function PartnersSection() {
+  const shouldReduceMotion = useReducedMotion();
 
-const partners: readonly Partner[] = [
-  {
-    name: "Nedbank Zimbabwe",
-    logo: "/images/sponsors/nedbank.svg",
-    href: "https://www.nedbank.co.zw/",
-    featured: true,
-    note: "Headline sponsor",
-  },
-  {
-    name: "CFAO Mobility Zimbabwe",
-    logo: "/images/sponsors/cfao.svg",
-    href: "/partners",
-  },
-  {
-    name: "Gilbert Rugby",
-    logo: "/images/sponsors/gilbert.svg",
-    href: "/partners",
-  },
-  {
-    name: "Seed Co Zimbabwe",
-    logo: "/images/sponsors/seedco.svg",
-    href: "/partners",
-  },
-  {
-    name: "BLK Sport",
-    logo: "/images/sponsors/blk.svg",
-    href: "/partners",
-  },
-];
+  const supportingPartners = [
+    {
+      name: "CFAO Mobility Zimbabwe",
+      short: "CFAO",
+      href: "/partners",
+      blurb: "Mobility and commercial backing for elite competition and national operations.",
+      accent: "from-emerald-400/20 via-emerald-300/5 to-transparent",
+    },
+    {
+      name: "Gilbert Rugby",
+      short: "GILBERT",
+      href: "/partners",
+      blurb: "Trusted performance equipment partner supporting the game on and off the field.",
+      accent: "from-amber-300/20 via-amber-200/5 to-transparent",
+    },
+    {
+      name: "Seed Co Zimbabwe",
+      short: "SEED CO",
+      href: "/partners",
+      blurb: "Backing long-term development pathways from community rugby to the national stage.",
+      accent: "from-lime-300/20 via-lime-200/5 to-transparent",
+    },
+    {
+      name: "BLK Sport",
+      short: "BLK",
+      href: "/partners",
+      blurb: "Technical apparel and elite sporting identity for modern Zimbabwe Rugby.",
+      accent: "from-cyan-300/20 via-cyan-200/5 to-transparent",
+    },
+  ];
 
-export default function PartnersSection() {
-  const featured = partners.find((partner) => partner.featured);
-  const supporting = partners.filter((partner) => !partner.featured);
+  const introVariants = {
+    hidden: { opacity: 0, y: shouldReduceMotion ? 0 : 24 },
+    visible: (i: number) => ({
+      opacity: 1,
+      y: 0,
+      transition: {
+        delay: shouldReduceMotion ? 0 : i * 0.08,
+        duration: 0.65,
+        ease: [0.16, 1, 0.3, 1] as [number, number, number, number],
+      },
+    }),
+  };
+
+  const cardVariants = {
+    hidden: { opacity: 0, y: shouldReduceMotion ? 0 : 28, scale: shouldReduceMotion ? 1 : 0.985 },
+    visible: (i: number) => ({
+      opacity: 1,
+      y: 0,
+      scale: 1,
+      transition: {
+        delay: shouldReduceMotion ? 0 : 0.18 + i * 0.08,
+        duration: 0.7,
+        ease: [0.16, 1, 0.3, 1] as [number, number, number, number],
+      },
+    }),
+  };
 
   return (
     <section
       aria-labelledby="partners-heading"
-      className="relative overflow-hidden bg-rich-black"
+      className="relative isolate overflow-hidden bg-[#07111A] text-white"
     >
-      {/* Faint grid structure */}
-      <div
-        className="absolute inset-0 pointer-events-none opacity-[0.025]"
-        style={{
-          backgroundImage:
-            "linear-gradient(rgba(255,255,255,0.4) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.4) 1px, transparent 1px)",
-          backgroundSize: "80px 80px",
-        }}
-      />
+      <div className="absolute inset-0">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(204,163,74,0.18),transparent_30%),radial-gradient(circle_at_80%_20%,rgba(18,124,120,0.16),transparent_24%),radial-gradient(circle_at_bottom_right,rgba(255,255,255,0.05),transparent_28%)]" />
+        <div className="absolute inset-0 opacity-[0.08] [background-image:linear-gradient(rgba(255,255,255,0.08)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.08)_1px,transparent_1px)] [background-size:40px_40px]" />
+        <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent" />
+        <div className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-[#D6A84A]/30 to-transparent" />
+        <div
+          className={`absolute -left-24 top-24 h-72 w-72 rounded-full bg-[#D6A84A]/10 blur-3xl ${
+            shouldReduceMotion ? "" : "animate-pulse"
+          }`}
+        />
+        <div
+          className={`absolute right-0 top-1/3 h-80 w-80 rounded-full bg-[#0F766E]/10 blur-3xl ${
+            shouldReduceMotion ? "" : "animate-pulse"
+          }`}
+          style={{ animationDuration: "6s" }}
+        />
+      </div>
 
-      <div className="relative z-10 max-w-[1280px] mx-auto px-6 sm:px-8 lg:px-12 pt-20 sm:pt-28 pb-16 sm:pb-20">
-
-        {/* ── Intro Block ── */}
-        <div className="max-w-2xl mb-14 sm:mb-20 space-y-5">
-          <span className="block text-[10px] sm:text-[11px] font-subheading font-black uppercase tracking-[0.3em] text-[#006747]">
-            Powering Zimbabwe Rugby
-          </span>
-
-          <h2
-            id="partners-heading"
-            className="font-heading text-3xl sm:text-4xl lg:text-[2.75rem] font-black uppercase tracking-tight text-white leading-[1.05]"
-          >
-            Partners backing the game from grassroots to the Sables
-          </h2>
-
-          <p className="text-white/40 text-sm sm:text-base leading-relaxed max-w-lg font-body">
-            From national team competition to school pathways and provincial
-            development, our commercial partners help power every level of
-            Zimbabwe Rugby.
-          </p>
-
-          <div className="flex flex-wrap items-center gap-5 pt-1">
-            <Link
-              href="/partners"
-              className="inline-flex items-center gap-2 text-[10px] sm:text-[11px] font-subheading font-extrabold uppercase tracking-[0.2em] text-white/50 hover:text-[#006747] transition-colors duration-300"
+      <div className="relative mx-auto max-w-7xl px-4 py-16 sm:px-6 sm:py-20 lg:px-8 lg:py-24">
+        <div className="grid gap-8 lg:grid-cols-[minmax(0,1.35fr)_minmax(320px,0.75fr)] lg:items-end">
+          <div className="max-w-3xl">
+            <motion.div
+              custom={0}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, amount: 0.35 }}
+              variants={introVariants}
+              className="inline-flex items-center gap-3 rounded-full border border-white/12 bg-white/6 px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.28em] text-white/72 backdrop-blur-md"
             >
-              <span className="border-b border-white/10 hover:border-[#006747]/50 pb-px transition-colors duration-300">
-                Become an official partner
-              </span>
-              <span className="text-xs">&rarr;</span>
-            </Link>
+              <span className="inline-block h-2 w-2 rounded-full bg-[#D6A84A]" />
+              Powering Zimbabwe Rugby
+            </motion.div>
+
+            <motion.h2
+              id="partners-heading"
+              custom={1}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, amount: 0.35 }}
+              variants={introVariants}
+              className="mt-5 max-w-4xl text-4xl font-black uppercase leading-[0.95] tracking-[-0.04em] text-white sm:text-5xl lg:text-6xl"
+            >
+              Partners backing the game from grassroots to the Sables
+            </motion.h2>
+
+            <motion.p
+              custom={2}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, amount: 0.35 }}
+              variants={introVariants}
+              className="mt-5 max-w-2xl text-sm leading-7 text-white/70 sm:text-base"
+            >
+              From national team competition to school pathways and provincial development,
+              our commercial partners help power every level of Zimbabwe Rugby.
+            </motion.p>
           </div>
+
+          <motion.div
+            custom={3}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.35 }}
+            variants={introVariants}
+            className="relative overflow-hidden rounded-[28px] border border-white/10 bg-white/[0.055] p-5 shadow-[0_24px_80px_rgba(0,0,0,0.28)] backdrop-blur-xl sm:p-6"
+          >
+            <div className="absolute inset-0 bg-[linear-gradient(135deg,rgba(214,168,74,0.16),transparent_36%,rgba(15,118,110,0.12))]" />
+            <div className="relative">
+              <p className="text-[10px] font-semibold uppercase tracking-[0.28em] text-[#D6A84A]">
+                Commercial partnerships
+              </p>
+              <p className="mt-3 max-w-sm text-sm leading-6 text-white/74">
+                Align your brand with the national game, youth pathways, matchday experiences,
+                and the next era of Zimbabwe Rugby.
+              </p>
+
+              <Link
+                href="/partners"
+                className="group mt-6 inline-flex min-h-11 items-center justify-center gap-3 rounded-full border border-[#D6A84A]/35 bg-[#D6A84A] px-5 py-3 text-sm font-semibold uppercase tracking-[0.18em] text-[#07111A] transition duration-300 hover:translate-y-[-2px] hover:bg-[#e6bb65] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D6A84A] focus-visible:ring-offset-2 focus-visible:ring-offset-[#07111A]"
+              >
+                Become an official partner
+                <span className="transition-transform duration-300 group-hover:translate-x-1">
+                  →
+                </span>
+              </Link>
+            </div>
+          </motion.div>
         </div>
 
-        {/* ── Visual Stage ── */}
-        <div className="relative">
+        <div className="mt-10 grid gap-5 lg:mt-12 lg:grid-cols-[minmax(0,1.2fr)_minmax(0,0.8fr)]">
+          <motion.a
+            href="https://www.nedbank.co.zw/"
+            target="_blank"
+            rel="noopener noreferrer"
+            custom={0}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.25 }}
+            variants={cardVariants}
+            className="group relative overflow-hidden rounded-[32px] border border-white/10 bg-white/[0.06] p-6 shadow-[0_30px_100px_rgba(0,0,0,0.34)] backdrop-blur-xl transition duration-500 hover:-translate-y-1 hover:border-[#D6A84A]/35 sm:p-8 lg:min-h-[420px]"
+          >
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(214,168,74,0.24),transparent_28%),linear-gradient(135deg,rgba(255,255,255,0.06),transparent_40%,rgba(15,118,110,0.12))]" />
+            <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/35 to-transparent" />
+            <div className="absolute left-0 top-0 h-full w-px bg-gradient-to-b from-[#D6A84A]/0 via-[#D6A84A]/30 to-[#D6A84A]/0" />
+            <div className="absolute right-6 top-6 h-24 w-24 rounded-full border border-white/10 bg-white/5 blur-2xl transition duration-500 group-hover:scale-125 group-hover:bg-[#D6A84A]/10" />
 
-          {/* Subtle frame panel behind the entire stage */}
-          <div className="absolute -inset-3 sm:-inset-4 rounded-3xl border border-white/[0.04] pointer-events-none" />
+            <div className="relative flex h-full flex-col justify-between">
+              <div>
+                <div className="flex flex-wrap items-center gap-3">
+                  <span className="inline-flex rounded-full border border-[#D6A84A]/25 bg-[#D6A84A]/10 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.24em] text-[#E7C57A]">
+                    Headline sponsor
+                  </span>
+                  <span className="text-[11px] font-medium uppercase tracking-[0.22em] text-white/42">
+                    National program partner
+                  </span>
+                </div>
 
-          <div className="relative flex flex-col lg:flex-row items-stretch gap-4 sm:gap-5">
-
-            {/* ── Featured Partner Card ── */}
-            {featured && (
-              <Link
-                href={featured.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group relative flex-1 min-h-[220px] sm:min-h-[260px] flex flex-col justify-between rounded-2xl bg-white/[0.04] border border-white/[0.07] p-7 sm:p-9 hover:bg-white/[0.06] hover:border-white/[0.12] transition-all duration-500"
-              >
-                {/* Top row: note + name */}
-                <div className="space-y-3">
-                  {featured.note && (
-                    <span className="inline-block text-[9px] font-subheading font-black uppercase tracking-[0.25em] text-[#006747] bg-[#006747]/10 border border-[#006747]/20 px-3 py-1 rounded">
-                      {featured.note}
-                    </span>
-                  )}
-                  <h3 className="font-heading text-xl sm:text-2xl font-black uppercase text-white tracking-tight leading-tight">
-                    {featured.name}
+                <div className="mt-8">
+                  <p className="text-[12px] font-semibold uppercase tracking-[0.34em] text-white/34">
+                    Nedbank Zimbabwe
+                  </p>
+                  <h3 className="mt-3 max-w-2xl text-3xl font-black uppercase leading-none tracking-[-0.04em] text-white sm:text-5xl lg:text-6xl">
+                    Nedbank
+                    <span className="mt-2 block text-white/78">Zimbabwe</span>
                   </h3>
                 </div>
 
-                {/* Supporting copy */}
-                <p className="text-white/35 text-xs sm:text-sm leading-relaxed max-w-sm font-body mt-4">
-                  Official headline sponsor powering the Sables, domestic
-                  competitions, and grassroots rugby nationwide.
-                </p>
-
-                {/* Bottom: logo + link label */}
-                <div className="flex items-end justify-between mt-6 sm:mt-8">
-                  <div className="relative w-28 h-8 sm:w-36 sm:h-10">
-                    <Image
-                      src={featured.logo}
-                      alt={featured.name}
-                      fill
-                      className="object-contain brightness-0 invert opacity-80 group-hover:opacity-100 transition-opacity duration-500"
-                      sizes="144px"
-                    />
-                  </div>
-                  <span className="text-[9px] font-subheading font-black uppercase tracking-[0.2em] text-white/25 group-hover:text-white/50 transition-colors duration-300">
-                    Visit partner &rarr;
-                  </span>
+                <div className="mt-8 max-w-2xl">
+                  <p className="text-base leading-7 text-white/74 sm:text-lg">
+                    Official headline sponsor powering the Sables, domestic competitions,
+                    and grassroots rugby nationwide.
+                  </p>
                 </div>
-              </Link>
-            )}
+              </div>
 
-            {/* ── Secondary Partners Grid ── */}
-            <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-2 lg:w-[340px] xl:w-[380px] gap-4 sm:gap-5">
-              {supporting.map((partner) => (
-                <Link
-                  key={partner.name}
-                  href={partner.href}
-                  target={partner.href.startsWith("http") ? "_blank" : undefined}
-                  rel={partner.href.startsWith("http") ? "noopener noreferrer" : undefined}
-                  className="group flex flex-col items-center justify-center gap-3 rounded-xl bg-white/[0.03] border border-white/[0.06] px-4 py-5 sm:py-6 hover:bg-white/[0.06] hover:border-white/[0.10] transition-all duration-400"
-                >
-                  <div className="relative w-16 h-7 sm:w-20 sm:h-8">
-                    <Image
-                      src={partner.logo}
-                      alt={partner.name}
-                      fill
-                      className="object-contain brightness-0 invert opacity-30 group-hover:opacity-65 transition-opacity duration-500"
-                      sizes="80px"
-                    />
+              <div className="mt-10 flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
+                <div className="grid grid-cols-2 gap-3 text-left sm:flex sm:gap-8">
+                  <div>
+                    <p className="text-[10px] uppercase tracking-[0.22em] text-white/40">Reach</p>
+                    <p className="mt-2 text-lg font-bold uppercase tracking-[0.04em] text-white">
+                      National
+                    </p>
                   </div>
-                  <span className="text-[9px] font-subheading font-bold uppercase tracking-[0.15em] text-white/25 group-hover:text-white/50 transition-colors duration-300 text-center leading-tight">
-                    {partner.name}
-                  </span>
-                </Link>
-              ))}
-            </div>
+                  <div>
+                    <p className="text-[10px] uppercase tracking-[0.22em] text-white/40">Impact</p>
+                    <p className="mt-2 text-lg font-bold uppercase tracking-[0.04em] text-white">
+                      Grassroots to elite
+                    </p>
+                  </div>
+                </div>
 
+                <span className="inline-flex items-center gap-3 text-sm font-semibold uppercase tracking-[0.2em] text-white">
+                  Visit partner
+                  <span className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/12 bg-white/6 transition duration-300 group-hover:translate-x-1 group-hover:border-[#D6A84A]/30 group-hover:bg-[#D6A84A]/12">
+                    →
+                  </span>
+                </span>
+              </div>
+            </div>
+          </motion.a>
+
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-1">
+            {supportingPartners.map((partner, index) => (
+              <motion.div
+                key={partner.name}
+                custom={index + 1}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true, amount: 0.25 }}
+                variants={cardVariants}
+              >
+                <Link
+                  href={partner.href}
+                  className="group relative flex h-full min-h-[160px] overflow-hidden rounded-[24px] border border-white/10 bg-white/[0.045] p-5 shadow-[0_16px_40px_rgba(0,0,0,0.22)] backdrop-blur-xl transition duration-500 hover:-translate-y-1 hover:border-white/18 hover:bg-white/[0.075] sm:min-h-[190px] lg:min-h-[170px]"
+                >
+                  <div className={`absolute inset-0 bg-gradient-to-br ${partner.accent} opacity-80`} />
+                  <div className="absolute inset-0 opacity-0 transition duration-500 group-hover:opacity-100 bg-[linear-gradient(120deg,transparent,rgba(255,255,255,0.08),transparent)] translate-x-[-120%] group-hover:translate-x-[120%]" />
+                  <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent" />
+
+                  <div className="relative flex w-full flex-col justify-between">
+                    <div className="flex items-start justify-between gap-4">
+                      <div>
+                        <p className="text-[11px] font-semibold uppercase tracking-[0.26em] text-white/38">
+                          Supporting partner
+                        </p>
+                        <h3 className="mt-4 max-w-[15rem] text-xl font-black uppercase leading-tight tracking-[-0.03em] text-white sm:text-2xl">
+                          {partner.name}
+                        </h3>
+                      </div>
+
+                      <div className="flex h-12 min-w-12 items-center justify-center rounded-2xl border border-white/10 bg-black/10 px-3 text-sm font-black uppercase tracking-[0.14em] text-white/78">
+                        {partner.short}
+                      </div>
+                    </div>
+
+                    <div className="mt-6 flex items-end justify-between gap-4">
+                      <p className="max-w-[18rem] text-sm leading-6 text-white/66">
+                        {partner.blurb}
+                      </p>
+
+                      <span className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white/78 transition duration-300 group-hover:translate-x-1 group-hover:bg-white/10">
+                        →
+                      </span>
+                    </div>
+                  </div>
+                </Link>
+              </motion.div>
+            ))}
           </div>
         </div>
 
+        <div className="mt-8 overflow-hidden rounded-full border border-white/10 bg-white/[0.04] px-4 py-3 backdrop-blur-md sm:px-6">
+          <div
+            className={`flex min-w-max items-center gap-8 text-[11px] font-semibold uppercase tracking-[0.28em] text-white/45 ${
+              shouldReduceMotion ? "" : "animate-[marquee_22s_linear_infinite]"
+            }`}
+          >
+            <span>Nedbank Zimbabwe</span>
+            <span className="h-1.5 w-1.5 rounded-full bg-[#D6A84A]/70" />
+            <span>CFAO Mobility Zimbabwe</span>
+            <span className="h-1.5 w-1.5 rounded-full bg-white/30" />
+            <span>Gilbert Rugby</span>
+            <span className="h-1.5 w-1.5 rounded-full bg-[#0F766E]/70" />
+            <span>Seed Co Zimbabwe</span>
+            <span className="h-1.5 w-1.5 rounded-full bg-white/30" />
+            <span>BLK Sport</span>
+            <span className="h-1.5 w-1.5 rounded-full bg-[#D6A84A]/70" />
+            <span>National game. Provincial pathways. Grassroots growth.</span>
+          </div>
+        </div>
       </div>
+
+      <style jsx>{`
+        @keyframes marquee {
+          from {
+            transform: translateX(0);
+          }
+          to {
+            transform: translateX(-20%);
+          }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+          * {
+            animation-duration: 0.01ms !important;
+            animation-iteration-count: 1 !important;
+            transition-duration: 0.01ms !important;
+            scroll-behavior: auto !important;
+          }
+        }
+      `}</style>
     </section>
   );
 }
+
+export default PartnersSection;
