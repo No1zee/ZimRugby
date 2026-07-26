@@ -129,10 +129,10 @@ export default function PlayRugbyDevelopment() {
              </p>
           </div>
           <div className="flex gap-4 relative z-10">
-            <Link href="/donate" className="px-10 py-5 bg-zru-green text-white text-[10px] font-black uppercase tracking-widest rounded-full hover:bg-white hover:text-clubhouse-charcoal transition-all shadow-xl">
+            <Link href="/donate" className="px-10 py-5 bg-zru-green text-white text-[10px] font-black uppercase tracking-widest clip-slanted hover:bg-white hover:text-clubhouse-charcoal transition-all shadow-xl">
               Donate Now
             </Link>
-            <Link href="/volunteer" className="px-10 py-5 border border-white/20 text-white text-[10px] font-black uppercase tracking-widest rounded-full hover:bg-white/10 transition-all">
+            <Link href="/volunteer" className="px-10 py-5 border border-white/20 text-white text-[10px] font-black uppercase tracking-widest clip-slanted hover:bg-white/10 transition-all">
               Volunteer
             </Link>
           </div>

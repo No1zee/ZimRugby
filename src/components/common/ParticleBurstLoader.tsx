@@ -30,11 +30,13 @@ export default function ParticleBurstLoader({ isExiting = false }: ParticleBurst
     updateSize();
     window.addEventListener("resize", updateSize);
 
-    // Official ZRU Brand Colors (Green tones + White)
+    // Official ZRU & Zimbabwe Flag Brand Colors (Green, Emerald Glow, Mint, Gold, Red, White)
     const colors = [
       "#006747", // ZRU Official Green
-      "#006B3F", // ZRU Green Mid
-      "#00452A", // ZRU Green Dark
+      "#00FF87", // Dynamic Emerald Glow
+      "#34D399", // Mint Accent
+      "#FFC72C", // Zimbabwe Gold
+      "#E4002B", // Chevron Red
       "#FFFFFF", // Pure White
     ];
 
@@ -147,8 +149,8 @@ export default function ParticleBurstLoader({ isExiting = false }: ParticleBurst
             fill
             className={`object-contain transition-all duration-500 ${
               isExiting
-                ? "filter drop-shadow-[0_0_65px_rgba(0,103,71,1)] opacity-90"
-                : "filter drop-shadow-[0_0_35px_rgba(0,103,71,0.75)]"
+                ? "filter drop-shadow-[0_0_65px_rgba(0,255,137,1)] opacity-90"
+                : "filter drop-shadow-[0_0_35px_rgba(0,255,135,0.75)]"
             }`}
             priority
             unoptimized
@@ -170,11 +172,11 @@ export default function ParticleBurstLoader({ isExiting = false }: ParticleBurst
         @keyframes cinematicEmblem {
           0%, 100% {
             transform: translateY(0px) scale(1);
-            filter: drop-shadow(0 0 35px rgba(0, 103, 71, 0.6));
+            filter: drop-shadow(0 0 35px rgba(0, 255, 137, 0.6));
           }
           50% {
             transform: translateY(-6px) scale(1.04);
-            filter: drop-shadow(0 0 50px rgba(0, 103, 71, 0.9));
+            filter: drop-shadow(0 0 50px rgba(0, 255, 137, 0.9));
           }
         }
       `}</style>

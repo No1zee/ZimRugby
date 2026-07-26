@@ -74,7 +74,7 @@ export default function AboutLayout({
                     <Link
                       key={item.href}
                       href={item.href}
-                      className={`flex items-center gap-2 px-4 py-2.5 rounded-full text-[10px] font-black uppercase tracking-widest transition-all duration-300 whitespace-nowrap ${
+                      className={`flex items-center gap-2 px-4 py-2.5 clip-slanted-sm text-[10px] font-black uppercase tracking-widest transition-all duration-300 whitespace-nowrap ${
                         isActive
                           ? "bg-zru-green text-white shadow-md"
                           : "text-black/60 hover:text-black hover:bg-black/5"

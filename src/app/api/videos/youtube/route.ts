@@ -5,6 +5,11 @@ export const revalidate = 3600; // Revalidate every 1 hour
 // YouTube RSS feeds — free, no API key needed
 const RSS_FEEDS = [
   {
+    channelName: "Zimbabwe Rugby Union",
+    channelId: "UCQk9RojmZqb4ZsG2-GahMBw",
+    url: "https://www.youtube.com/feeds/videos.xml?channel_id=UCQk9RojmZqb4ZsG2-GahMBw",
+  },
+  {
     channelName: "World Rugby",
     channelId: "UCE28rwYoaV7jvU6GVzdu_GQ",
     url: "https://www.youtube.com/feeds/videos.xml?channel_id=UCE28rwYoaV7jvU6GVzdu_GQ",
@@ -16,6 +21,7 @@ const ZIM_MATCH_PATTERNS = [
   /\bzimbabwe\b/i,
   /\bsables\b/i,
   /\bzim\b/i,
+  /\bnations\s*cup\b/i,
 ];
 
 // Hardcoded fallback if RSS fails

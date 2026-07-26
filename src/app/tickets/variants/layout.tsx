@@ -1,8 +1,8 @@
-import { Metadata } from "next";
+import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Fixture Card Variants | ZRU Internal",
-  description: "Internal fixture card component variants for development and testing.",
+  title: "Ticket Variants | Zimbabwe Rugby Union",
+  description: "View available ticket options and pricing for Zimbabwe Rugby matches.",
 };
 
 export default function TicketVariantsLayout({ children }: { children: React.ReactNode }) {

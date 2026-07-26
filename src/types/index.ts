@@ -2,9 +2,22 @@
 export interface Player {
   name: string;
   position: string;
+  group?: "Forwards" | "Backs";
   club: string;
   caps: number;
+  isCaptain?: boolean;
   image?: string;
+}
+
+/** Featured player for homepage showcase cards (CometCard). */
+export interface FeaturedPlayer {
+  name: string;
+  position: string;
+  team: string;
+  caps: number;
+  age: number;
+  photo: string;
+  slug?: string;
 }
 
 export interface Coach {
@@ -53,9 +66,11 @@ export interface Match {
   venue: string;
   homeTeam: TeamDetails;
   awayTeam: TeamDetails;
-  status: 'upcoming' | 'live' | 'completed' | 'finished';
+  status?: 'upcoming' | 'live' | 'completed' | 'finished';
   ticketUrl?: string;
-  category: string;
+  category?: string;
+  teamCategory?: string;
+  dateIso?: string;
 }
 
 // 3. News, Articles & Report Entities

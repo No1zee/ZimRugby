@@ -1,8 +1,8 @@
-import { Metadata } from "next";
+import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "The Clubhouse | ZRU Official Shop",
-  description: "Official Zimbabwe Rugby Union merchandise, jerseys, and fan gear.",
+  title: "Clubhouse | Zimbabwe Rugby Union",
+  description: "Shop official ZimRugby merchandise, jerseys, and apparel. Support the Sables with authentic team gear.",
 };
 
 export default function ClubhouseLayout({ children }: { children: React.ReactNode }) {

@@ -77,7 +77,7 @@ export default function ProductCarousel() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6, delay: idx * 0.1, ease: [0.16, 1, 0.3, 1] }}
-              className="bg-white rounded-xl p-5 flex flex-col justify-between group shadow-md hover:shadow-xl border border-black/10 hover:border-zru-green/60 transition-all duration-300 relative overflow-hidden"
+              className="bg-white rounded-xl p-5 flex flex-col justify-between group shadow-[0_2px_12px_rgba(0,0,0,0.04)] hover:shadow-[0_8px_24px_rgba(0,0,0,0.08)] border border-black/[0.06] hover:border-zru-green/30 transition-all duration-300 relative overflow-hidden hover:-translate-y-1"
             >
               {/* Badge & Favorite Button */}
               <div className="flex justify-between items-start z-10 relative">

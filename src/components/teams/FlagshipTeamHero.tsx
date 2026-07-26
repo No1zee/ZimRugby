@@ -40,8 +40,8 @@ const ALL_TEAMS: TeamHeroProfile[] = [
     name: "LADY SABLES",
     category: "Women's 15s & 7s National Team",
     description: "The pride of women's rugby in Zimbabwe. Competing in test matches and continental championships, driving growth and excellence across female rugby.",
-    bgImage: "/images/hero/lady-sables-hero.webp",
-    featuredImage: "/images/hero/lady-sables-hero.webp",
+    bgImage: "/images/hero/lady-sables.webp",
+    featuredImage: "/images/hero/lady-sables.webp",
     ranking: "Africa Top 8",
     href: "/teams/lady-sables",
     stats: [
@@ -204,13 +204,15 @@ export default function FlagshipTeamHero() {
                     className="object-cover object-top filter brightness-95 contrast-105"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent" />
-                  <div className="absolute bottom-4 left-4 right-4 flex justify-between items-end">
-                    <div>
-                      <span className="text-[10px] font-black text-[#006747] uppercase tracking-widest block">Team Ranking / Status</span>
-                      <span className="font-heading text-xl font-black text-white">{activeTeam.ranking}</span>
-                    </div>
-                    <Shield className="w-7 h-7 text-[#006747]" />
+                </div>
+
+                {/* Team Ranking / Status — below the image card */}
+                <div className="flex justify-between items-end px-1">
+                  <div>
+                    <span className="text-[10px] font-black text-[#006747] uppercase tracking-widest block">Team Ranking / Status</span>
+                    <span className="font-heading text-xl font-black text-white">{activeTeam.ranking}</span>
                   </div>
+                  <Shield className="w-7 h-7 text-[#006747]" />
                 </div>
 
                 {/* Stat Grid */}

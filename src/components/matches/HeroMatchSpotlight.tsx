@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 import { Calendar, MapPin, Ticket, Trophy, Clock } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { Match } from "./MatchList";
+import type { Match } from "@/types";
 
 interface HeroMatchSpotlightProps {
   match: Match;

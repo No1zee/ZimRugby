@@ -150,7 +150,7 @@ export default function TeamPageClient({ team }: TeamPageClientProps) {
                 <button
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id)}
-                  className={`flex items-center gap-2 px-5 py-2.5 rounded-full text-xs font-black uppercase tracking-wider transition-all duration-300 ${
+                  className={`flex items-center gap-2 px-5 py-2.5 clip-slanted-sm text-xs font-black uppercase tracking-wider transition-all duration-300 ${
                     isActive 
                       ? "bg-zru-green text-white shadow-lg shadow-zru-green/20" 
                       : "text-black/60 hover:text-black hover:bg-black/5"

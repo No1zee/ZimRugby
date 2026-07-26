@@ -1,22 +1,20 @@
-"use client";
+﻿"use client";
 
 import React, { useState, useEffect, useRef } from "react";
 import Image from "next/image";
-import { Play, ExternalLink, X, Film, Sparkles, LayoutGrid, CircleDot, MoveHorizontal, Youtube, Facebook } from "lucide-react";
+import { Play, ExternalLink, X, Film, Sparkles, LayoutGrid, CircleDot, MoveHorizontal, Youtube } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
-export interface CarouselItem {
+export interface YouTubeVideoItem {
   id: string;
+  videoId: string;
   title: string;
   thumbnail: string;
   category?: string;
   publishedAt?: string;
-  source: "youtube" | "facebook";
-  videoId?: string;
-  url?: string;
 }
 
-const DEFAULT_HIGHLIGHTS: CarouselItem[] = [
+const DEFAULT_HIGHLIGHTS: YouTubeVideoItem[] = [
   {
     id: "yt-canada-v-zim-2026",
     videoId: "kf33dibu7f0",
@@ -24,7 +22,6 @@ const DEFAULT_HIGHLIGHTS: CarouselItem[] = [
     thumbnail: "https://img.youtube.com/vi/kf33dibu7f0/hqdefault.jpg",
     category: "WORLD RUGBY | NATIONS CUP",
     publishedAt: "JULY 2026",
-    source: "youtube",
   },
   {
     id: "yt-usa-v-zim-2026",
@@ -33,7 +30,6 @@ const DEFAULT_HIGHLIGHTS: CarouselItem[] = [
     thumbnail: "https://img.youtube.com/vi/2koQbsHjg14/hqdefault.jpg",
     category: "WORLD RUGBY | NATIONS CUP",
     publishedAt: "JULY 2026",
-    source: "youtube",
   },
   {
     id: "yt-tonga-v-zim-2026",
@@ -42,7 +38,6 @@ const DEFAULT_HIGHLIGHTS: CarouselItem[] = [
     thumbnail: "https://img.youtube.com/vi/h3iy3mTIhs4/hqdefault.jpg",
     category: "WORLD RUGBY | NATIONS CUP",
     publishedAt: "JULY 2026",
-    source: "youtube",
   },
   {
     id: "yt-canada-replay",
@@ -51,7 +46,6 @@ const DEFAULT_HIGHLIGHTS: CarouselItem[] = [
     thumbnail: "https://img.youtube.com/vi/kf33dibu7f0/hqdefault.jpg",
     category: "MATCHDAY REPLAY",
     publishedAt: "JULY 2026",
-    source: "youtube",
   },
   {
     id: "yt-usa-tries",
@@ -60,7 +54,6 @@ const DEFAULT_HIGHLIGHTS: CarouselItem[] = [
     thumbnail: "https://img.youtube.com/vi/2koQbsHjg14/hqdefault.jpg",
     category: "TRIES & REACTION",
     publishedAt: "JULY 2026",
-    source: "youtube",
   },
   {
     id: "yt-tonga-analysis",
@@ -69,11 +62,8 @@ const DEFAULT_HIGHLIGHTS: CarouselItem[] = [
     thumbnail: "https://img.youtube.com/vi/h3iy3mTIhs4/hqdefault.jpg",
     category: "TACTICAL BREAKDOWN",
     publishedAt: "JULY 2026",
-    source: "youtube",
   },
 ];
-
-const NATIONS_CUP_KEYWORDS = /nations\s*cup|sables.*cup|cup.*sables|zimbabwe.*cup|cup.*zimbabwe/i;
 
 interface MatchdayVideoHighlightsProps {
   title?: string;
@@ -86,8 +76,8 @@ export default function MatchdayVideoHighlights({
   subtitle = "MATCH HIGHLIGHTS",
   showChannelLink = true,
 }: MatchdayVideoHighlightsProps) {
-  const [items, setItems] = useState<CarouselItem[]>(DEFAULT_HIGHLIGHTS);
-  const [activeItem, setActiveItem] = useState<CarouselItem | null>(null);
+  const [videos, setVideos] = useState<YouTubeVideoItem[]>(DEFAULT_HIGHLIGHTS);
+  const [activeVideo, setActiveVideo] = useState<YouTubeVideoItem | null>(null);
   const [viewMode, setViewMode] = useState<"ring" | "grid">("ring");
 
   // 3D Ring Drag & Rotation State
@@ -96,54 +86,22 @@ export default function MatchdayVideoHighlights({
   const [startX, setStartX] = useState(0);
   const [startRotation, setStartRotation] = useState(0);
 
-  // Auto-fetch latest videos from YouTube API + Facebook posts about Nations Cup
+  // Auto-fetch latest videos from YouTube API route
   useEffect(() => {
-    async function loadContent() {
-      const ytPromise = fetch("/api/videos/youtube")
-        .then((r) => (r.ok ? r.json() : []))
-        .catch(() => []);
-
-      const fbPromise = fetch("/data/social.json")
-        .then((r) => (r.ok ? r.json() : []))
-        .catch(() => []);
-
-      const [ytData, fbData] = await Promise.all([ytPromise, fbPromise]);
-
-      const ytItems: CarouselItem[] = (Array.isArray(ytData) ? ytData : []).map(
-        (v: any) => ({
-          id: v.id || `yt-${v.videoId}`,
-          videoId: v.videoId,
-          title: v.title,
-          thumbnail: v.thumbnail,
-          category: v.category || "NATIONS CUP",
-          publishedAt: v.publishedAt || "RECENT",
-          source: "youtube" as const,
-          url: `https://www.youtube.com/watch?v=${v.videoId}`,
-        })
-      );
-
-      // Filter Facebook posts for Nations Cup content
-      const fbItems: CarouselItem[] = (Array.isArray(fbData) ? fbData : [])
-        .filter(
-          (p: any) =>
-            NATIONS_CUP_KEYWORDS.test(p.title || "") ||
-            NATIONS_CUP_KEYWORDS.test(p.excerpt || "") ||
-            NATIONS_CUP_KEYWORDS.test(p.category || "")
-        )
-        .map((p: any) => ({
-          id: p.id || `fb-${Date.now()}`,
-          title: p.title,
-          thumbnail: p.image || "/images/media/fb_placeholder.jpg",
-          category: p.category || "NATIONS CUP",
-          publishedAt: p.date || "RECENT",
-          source: "facebook" as const,
-          url: p.url,
-        }));
-
-      const merged = [...ytItems, ...fbItems];
-      if (merged.length > 0) setItems(merged);
+    async function loadLatestVideos() {
+      try {
+        const res = await fetch("/api/videos/youtube");
+        if (res.ok) {
+          const data = await res.json();
+          if (data && data.length > 0) {
+            setVideos(data);
+          }
+        }
+      } catch (err) {
+        console.error("Failed to load dynamic YouTube feed:", err);
+      }
     }
-    loadContent();
+    loadLatestVideos();
   }, []);
 
   // Auto-rotate 3D Ring slowly when not dragging
@@ -174,7 +132,7 @@ export default function MatchdayVideoHighlights({
   };
 
   const radius = typeof window !== "undefined" && window.innerWidth < 640 ? 130 : 340;
-  const angleStep = 360 / Math.max(items.length, 1);
+  const angleStep = 360 / Math.max(videos.length, 1);
 
   const [showDragToast, setShowDragToast] = useState(true);
 
@@ -295,7 +253,7 @@ export default function MatchdayVideoHighlights({
                   WebkitTransform: `rotateY(${rotationY}deg)`,
                 }}
               >
-                {items.map((item, idx) => {
+                {videos.map((video, idx) => {
                   const itemAngle = idx * angleStep;
                   // Compute net angle relative to camera view for explicit Safari z-indexing
                   const netAngle = (itemAngle + rotationY) % 360;
@@ -307,19 +265,10 @@ export default function MatchdayVideoHighlights({
                   const cardOpacity = isFrontFacing ? Math.max(0.35, (cosVal + 0.4) / 1.4) : 0;
                   const zIndexVal = Math.round(1000 + cosVal * 500);
 
-                  const handleClick = () => {
-                    if (isDragging) return;
-                    if (item.source === "facebook" && item.url) {
-                      window.open(item.url, "_blank", "noopener,noreferrer");
-                    } else {
-                      setActiveItem(item);
-                    }
-                  };
-
                   return (
                     <div
-                      key={item.id}
-                      onClick={handleClick}
+                      key={video.id}
+                      onClick={() => !isDragging && setActiveVideo(video)}
                       className={`absolute w-[220px] sm:w-[320px] md:w-[360px] h-[190px] sm:h-[250px] rounded-2xl sm:rounded-3xl overflow-hidden shadow-[0_15px_30px_-5px_rgba(0,0,0,0.15)] border border-black/10 bg-white cursor-pointer group transition-all duration-300 flex flex-col justify-between ${
                         !isFrontFacing ? 'pointer-events-none' : ''
                       }`}
@@ -334,11 +283,11 @@ export default function MatchdayVideoHighlights({
                         opacity: cardOpacity,
                       }}
                     >
-                      {/* Video/Image Thumbnail */}
+                      {/* Video Thumbnail */}
                       <div className="relative aspect-video w-full overflow-hidden bg-black">
                         <Image
-                          src={item.thumbnail}
-                          alt={item.title}
+                          src={video.thumbnail}
+                          alt={video.title}
                           fill
                           className="object-cover group-hover:scale-105 transition-transform duration-500 opacity-95"
                           sizes="(max-width: 640px) 280px, 350px"
@@ -346,23 +295,17 @@ export default function MatchdayVideoHighlights({
 
                         <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
 
-                        {/* Play Button or Facebook Icon */}
+                        {/* Play Button Overlay */}
                         <div className="absolute inset-0 flex items-center justify-center">
-                          {item.source === "facebook" ? (
-                            <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-zru-green text-white flex items-center justify-center shadow-xl group-hover:scale-110 transition-all duration-300 border-2 border-white/40">
-                              <Facebook className="w-5 h-5 sm:w-6 sm:h-6 fill-current text-white" />
-                            </div>
-                          ) : (
-                            <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-[#006747] text-white flex items-center justify-center shadow-xl group-hover:scale-110 group-hover:bg-black transition-all duration-300 border-2 border-white/40">
-                              <Play className="w-5 h-5 sm:w-6 sm:h-6 fill-current translate-x-0.5 text-white" />
-                            </div>
-                          )}
+                          <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-[#006747] text-white flex items-center justify-center shadow-xl group-hover:scale-110 group-hover:bg-black transition-all duration-300 border-2 border-white/40">
+                            <Play className="w-5 h-5 sm:w-6 sm:h-6 fill-current translate-x-0.5 text-white" />
+                          </div>
                         </div>
 
                         {/* Category Tag */}
                         <div className="absolute top-3 left-3">
                           <span className="px-2.5 py-1 bg-black/70 backdrop-blur-md text-white text-[9px] font-black uppercase tracking-widest rounded-lg border border-white/20">
-                            {item.category || "NATIONS CUP"}
+                            {video.category || "NATIONS CUP"}
                           </span>
                         </div>
                       </div>
@@ -370,11 +313,11 @@ export default function MatchdayVideoHighlights({
                       {/* Title & Published Date Footer */}
                       <div className="p-4 space-y-1 bg-white border-t border-black/5">
                         <span className="text-[9px] font-bold text-[#006747] uppercase tracking-widest block">
-                          {item.publishedAt || "RECENT"}
+                          {video.publishedAt || "JULY 2026"}
                         </span>
-                        <h4 className="font-heading font-black text-xs sm:text-sm text-rich-black uppercase tracking-wide line-clamp-1 group-hover:text-[#006747] transition-colors">
-                          {item.title}
-                        </h4>
+                        <p className="font-heading font-black text-xs sm:text-sm text-rich-black uppercase tracking-wide line-clamp-1 group-hover:text-[#006747] transition-colors">
+                          {video.title}
+                        </p>
                       </div>
                     </div>
                   );
@@ -385,69 +328,53 @@ export default function MatchdayVideoHighlights({
         ) : (
           /* ── MODE 2: 2-COLUMN MOBILE GRID VIEW ── */
           <div className="grid grid-cols-2 md:grid-cols-3 gap-3 sm:gap-6">
-            {items.slice(0, 6).map((item) => {
-              const handleGridClick = () => {
-                if (item.source === "facebook" && item.url) {
-                  window.open(item.url, "_blank", "noopener,noreferrer");
-                } else {
-                  setActiveItem(item);
-                }
-              };
+            {videos.slice(0, 6).map((video) => (
+              <div
+                key={video.id}
+                onClick={() => setActiveVideo(video)}
+                className="bg-white rounded-3xl border border-black/10 overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 group cursor-pointer flex flex-col justify-between"
+              >
+                {/* Thumbnail Container with Play Overlay */}
+                <div className="relative aspect-video w-full overflow-hidden bg-black">
+                  <Image
+                    src={video.thumbnail}
+                    alt={video.title}
+                    fill
+                    className="object-cover group-hover:scale-105 transition-transform duration-700 opacity-95"
+                    sizes="(max-width: 768px) 100vw, 33vw"
+                  />
 
-              return (
-                <div
-                  key={item.id}
-                  onClick={handleGridClick}
-                  className="bg-white rounded-3xl border border-black/10 overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 group cursor-pointer flex flex-col justify-between"
-                >
-                  {/* Thumbnail Container with Play/FB Overlay */}
-                  <div className="relative aspect-video w-full overflow-hidden bg-black">
-                    <Image
-                      src={item.thumbnail}
-                      alt={item.title}
-                      fill
-                      className="object-cover group-hover:scale-105 transition-transform duration-700 opacity-95"
-                      sizes="(max-width: 768px) 100vw, 33vw"
-                    />
+                  {/* Dark Gradient Shield */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
 
-                    {/* Dark Gradient Shield */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
-
-                    {/* Central Play/Facebook Button Badge */}
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      {item.source === "facebook" ? (
-                        <div className="w-14 h-14 rounded-full bg-zru-green text-white flex items-center justify-center shadow-xl group-hover:scale-110 transition-all duration-300 border-2 border-white/40">
-                          <Facebook className="w-6 h-6 fill-current text-white" />
-                        </div>
-                      ) : (
-                        <div className="w-14 h-14 rounded-full bg-[#006747] text-white flex items-center justify-center shadow-xl group-hover:scale-110 group-hover:bg-black transition-all duration-300 border-2 border-white/40">
-                          <Play className="w-6 h-6 fill-current translate-x-0.5 text-white" />
-                        </div>
-                      )}
+                  {/* Central Play Button Badge */}
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <div className="w-14 h-14 rounded-full bg-[#006747] text-white flex items-center justify-center shadow-xl group-hover:scale-110 group-hover:bg-black transition-all duration-300 border-2 border-white/40">
+                      <Play className="w-6 h-6 fill-current translate-x-0.5 text-white" />
                     </div>
-
-                    {/* Category Badge Tag */}
-                    {item.category && (
-                      <div className="absolute top-3 left-3">
-                        <span className="px-2.5 py-1 bg-black/70 backdrop-blur-md border border-white/20 text-white text-[9px] font-black uppercase tracking-widest rounded-lg">
-                          {item.category}
-                        </span>
-                      </div>
-                    )}
                   </div>
 
-                  {/* Card Footer Info */}
-                  <div className="p-5 space-y-1.5 bg-white">
-                    <span className="text-[10px] font-bold text-[#006747] uppercase tracking-widest block">
-                      {item.publishedAt || "RECENT"}
-                    </span>
-                    <h3 className="font-heading font-black text-base sm:text-lg text-rich-black uppercase leading-snug group-hover:text-[#006747] transition-colors">
-                      {item.title}
-                    </h3>
-                  </div>
+                  {/* Category Badge Tag */}
+                  {video.category && (
+                    <div className="absolute top-3 left-3">
+                      <span className="px-2.5 py-1 bg-black/70 backdrop-blur-md border border-white/20 text-white text-[9px] font-black uppercase tracking-widest rounded-lg">
+                        {video.category}
+                      </span>
+                    </div>
+                  )}
                 </div>
-              );
-            })}
+
+                {/* Card Footer Info */}
+                <div className="p-5 space-y-1.5 bg-white">
+                  <span className="text-[10px] font-bold text-[#006747] uppercase tracking-widest block">
+                    {video.publishedAt || "WORLD RUGBY MATCH HIGHLIGHTS"}
+                  </span>
+                  <p className="font-heading font-black text-base sm:text-lg text-rich-black uppercase leading-snug group-hover:text-[#006747] transition-colors">
+                    {video.title}
+                  </p>
+                </div>
+              </div>
+            ))}
           </div>
         )}
 
@@ -455,7 +382,7 @@ export default function MatchdayVideoHighlights({
 
       {/* INLINE VIDEO MODAL (Does not redirect to YouTube) */}
       <AnimatePresence>
-        {activeItem && activeItem.source === "youtube" && activeItem.videoId && (
+        {activeVideo && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -463,7 +390,7 @@ export default function MatchdayVideoHighlights({
             className="fixed inset-0 z-[1000] bg-[#010B07]/90 backdrop-blur-xl flex items-center justify-center p-4 sm:p-8"
           >
             {/* Overlay Backdrop Click */}
-            <div className="absolute inset-0" onClick={() => setActiveItem(null)} />
+            <div className="absolute inset-0" onClick={() => setActiveVideo(null)} />
 
             <motion.div
               initial={{ scale: 0.9, opacity: 0, y: 20 }}
@@ -474,7 +401,7 @@ export default function MatchdayVideoHighlights({
             >
               {/* Close Button */}
               <button
-                onClick={() => setActiveItem(null)}
+                onClick={() => setActiveVideo(null)}
                 className="absolute top-4 right-4 z-20 p-2.5 rounded-full bg-black/80 hover:bg-[#006747] text-white border border-white/20 transition-all shadow-lg"
                 aria-label="Close Video Player"
                 title="Close Video"
@@ -485,8 +412,8 @@ export default function MatchdayVideoHighlights({
               {/* Responsive 16:9 Iframe Player */}
               <div className="relative aspect-video w-full bg-black">
                 <iframe
-                  src={`https://www.youtube-nocookie.com/embed/${activeItem.videoId}?autoplay=1&rel=0&modestbranding=1`}
-                  title={activeItem.title}
+                  src={`https://www.youtube-nocookie.com/embed/${activeVideo.videoId}?autoplay=1&rel=0&modestbranding=1`}
+                  title={activeVideo.title}
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                   allowFullScreen
                   className="w-full h-full border-0"
@@ -499,13 +426,13 @@ export default function MatchdayVideoHighlights({
                   <span className="text-[10px] font-black text-[#006747] uppercase tracking-widest block">
                     ZIMBABWE RUGBY UNION • IN-SITE MATCHDAY MEDIA
                   </span>
-                  <h3 className="font-heading font-black text-lg sm:text-xl text-rich-black uppercase italic">
-                    {activeItem.title}
-                  </h3>
+                  <p className="font-heading font-black text-lg sm:text-xl text-rich-black uppercase italic">
+                    {activeVideo.title}
+                  </p>
                 </div>
 
                 <a
-                  href={`https://www.youtube.com/watch?v=${activeItem.videoId}`}
+                  href={`https://www.youtube.com/watch?v=${activeVideo.videoId}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-1.5 px-4 py-2 bg-black/5 hover:bg-black text-rich-black hover:text-white rounded-xl text-xs font-heading font-black tracking-widest uppercase transition-all"

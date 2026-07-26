@@ -24,7 +24,7 @@ interface MatchCardProps {
     score?: number;
     logo?: string;
   };
-  status?: "upcoming" | "live" | "completed";
+  status?: "upcoming" | "live" | "completed" | "finished";
   teamCategory?: string;
 }
 

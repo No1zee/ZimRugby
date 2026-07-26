@@ -429,3 +429,101 @@ html, body {
   scrollbar-width: none;
 }
 
+/* ── ZRU Social Card (adapted from Uiverse dovatgabriel) ── */
+.social-card {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 50px;
+  width: 240px;
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  cursor: pointer;
+}
+
+.social-card .card-face-top,
+.social-card .card-face-bottom {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 50%;
+  transition: 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  z-index: 1;
+  clip-path: polygon(8px 0, 100% 0, calc(100% - 8px) 100%, 0% 100%);
+}
+
+.social-card .card-face-top {
+  top: 0;
+}
+
+.social-card .card-face-bottom {
+  bottom: 0;
+}
+
+.social-card:hover .card-face-top {
+  transform: translateY(-100%);
+}
+
+.social-card:hover .card-face-bottom {
+  transform: translateY(100%);
+}
+
+.social-card .card-label {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  color: white;
+  font-family: "Unison Pro", "Unison", "Arial Black", impact, sans-serif;
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  opacity: 1;
+  transition: opacity 0.25s;
+  z-index: 2;
+}
+
+.social-card:hover .card-label {
+  opacity: 0;
+  z-index: -3;
+}
+
+.social-card .social-icon-link {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 16.67%;
+  height: 100%;
+  color: white;
+  text-decoration: none;
+  transition: 0.25s;
+}
+
+.social-card .social-icon-link svg {
+  width: 18px;
+  height: 18px;
+  color: #006747;
+  transform: scale(1);
+  transition: transform 0.25s, color 0.25s;
+}
+
+.social-card .social-icon-link:hover {
+  background-color: rgba(255, 255, 255, 0.15);
+  animation: social-bounce 0.4s linear;
+}
+
+@keyframes social-bounce {
+  40% { transform: scale(1.4); }
+  60% { transform: scale(0.8); }
+  80% { transform: scale(1.2); }
+  100% { transform: scale(1); }
+}
+
+.social-card:hover {
+  filter: drop-shadow(0 8px 24px rgba(0, 103, 71, 0.3));
+}
+

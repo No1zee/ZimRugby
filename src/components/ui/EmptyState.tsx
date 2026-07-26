@@ -71,7 +71,7 @@ export default function EmptyState({
           <div className="pt-2">
             <Link 
               href={action.href}
-              className="inline-flex items-center gap-2 px-6 py-2.5 bg-zru-green text-white hover:bg-zru-green/80 text-[10px] font-black uppercase tracking-widest rounded-full transition-all duration-300 shadow-lg shadow-zru-green/10"
+              className="inline-flex items-center gap-2 px-6 py-2.5 bg-zru-green text-white hover:bg-zru-green/80 text-[10px] font-black uppercase tracking-widest clip-slanted transition-all duration-300 shadow-lg shadow-zru-green/10"
             >
               <ArrowLeft className="w-3.5 h-3.5" />
               <span>{action.label}</span>

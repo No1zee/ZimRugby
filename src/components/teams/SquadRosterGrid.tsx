@@ -3,16 +3,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import { Shield, Award, User } from "lucide-react";
-
-export interface Player {
-  name: string;
-  position: string;
-  group: "Forwards" | "Backs";
-  club: string;
-  caps: number;
-  isCaptain?: boolean;
-  image?: string;
-}
+import type { Player } from "@/types";
 
 const SAMPLE_ROSTER: Player[] = [
   { name: "Hilton Mudariki", position: "Scrumhalf", group: "Backs", club: "Harare Sports Club", caps: 32, isCaptain: true },

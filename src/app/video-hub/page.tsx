@@ -65,7 +65,7 @@ export default function VideoHubPage() {
               <div className="flex flex-wrap items-center gap-6 pt-2">
                 <GlowButton 
                   onClick={() => setActiveVideo(featuredVideo)}
-                  className="bg-white text-rich-black px-8 py-3.5 text-xs font-black uppercase tracking-[0.2em] rounded-full flex items-center gap-2"
+                  className="bg-white text-rich-black px-8 py-3.5 text-xs font-black uppercase tracking-[0.2em] clip-slanted flex items-center gap-2"
                   glowColor="rgba(255, 255, 255, 0.3)"
                 >
                   <Play className="w-4 h-4 fill-current" />
@@ -103,7 +103,7 @@ export default function VideoHubPage() {
                   <button
                     key={cat}
                     onClick={() => setActiveCategory(cat)}
-                    className={`px-5 py-2.5 rounded-full text-xs font-black uppercase tracking-wider transition-all duration-300 whitespace-nowrap ${
+                    className={`px-5 py-2.5 clip-slanted-sm text-xs font-black uppercase tracking-wider transition-all duration-300 whitespace-nowrap ${
                       isActive 
                         ? "bg-zru-green text-rich-black shadow-lg" 
                         : "text-white/60 hover:text-white hover:bg-zru-green/10"

@@ -3,29 +3,7 @@
 import MatchCard from "./MatchCard";
 import { motion } from "framer-motion";
 import { CardSkeleton } from "../ui/Skeleton";
-
-export interface Match {
-  id: string | number;
-  competition: string;
-  round: string;
-  date: string;
-  time: string;
-  venue: string;
-  homeTeam: {
-    name: string;
-    score?: number;
-    logo?: string;
-  };
-  awayTeam: {
-    name: string;
-    score?: number;
-    logo?: string;
-  };
-  status?: "upcoming" | "live" | "completed";
-  ticketUrl?: string;
-  teamCategory?: string;
-  dateIso?: string;
-}
+import type { Match } from "@/types";
 
 interface MatchListProps {
   matches: Match[];

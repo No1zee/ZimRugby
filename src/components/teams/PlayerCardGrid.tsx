@@ -18,10 +18,6 @@ function isForward(position: string): boolean {
   return FORWARDS.some(f => position.toLowerCase().includes(f.toLowerCase()));
 }
 
-function getInitials(name: string): string {
-  return name.split(" ").map(n => n[0]).join("").substring(0, 2).toUpperCase();
-}
-
 export default function PlayerCardGrid({ squad, teamName }: PlayerCardGridProps) {
   const [filter, setFilter] = useState<PositionFilter>("ALL");
 
@@ -67,46 +63,78 @@ export default function PlayerCardGrid({ squad, teamName }: PlayerCardGridProps)
         </div>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
         {filtered.map((player, idx) => (
           <div
             key={`${player.name}-${idx}`}
-            className="bg-white border border-black/5 rounded-xl p-5 flex flex-col items-center text-center hover:-translate-y-1 shadow-sm hover:shadow-lg transition-all group"
+            className="group"
           >
-            <div className="w-24 h-24 rounded-full flex items-center justify-center border border-black/5 relative overflow-hidden mb-4 group-hover:border-zru-green/50 transition-colors bg-gradient-to-br from-zru-green/10 to-zru-green/5">
-              {player.image && player.image !== "/images/teams/player-placeholder.webp" ? (
-                <Image
-                  src={player.image}
-                  alt={player.name}
-                  fill
-                  sizes="96px"
-                  className="object-cover"
-                />
-              ) : (
-                <span className="text-2xl font-black text-zru-green/70 tracking-tight">
-                  {getInitials(player.name)}
-                </span>
-              )}
-            </div>
+            {/* Card */}
+            <div className="relative rounded-2xl bg-white border border-black/5 overflow-hidden shadow-sm group-hover:shadow-lg transition-all duration-300">
+              {/* Image area with shield clip-path */}
+              <div className="relative">
+                <div
+                  className="relative h-[320px] bg-gradient-to-b from-zru-green to-[#003822]"
+                  style={{ clipPath: "polygon(0 0, 100% 0, 100% 92%, 50% 100%, 0 92%)" }}
+                >
+                  {/* Watermark name */}
+                  <div className="pointer-events-none absolute inset-0 flex items-center justify-center overflow-hidden">
+                    <span
+                      className="font-heading text-[5rem] leading-[0.85] font-black uppercase italic text-white/[0.08] text-center select-none break-all"
+                      style={{ writingMode: "vertical-lr" }}
+                    >
+                      {player.name}
+                    </span>
+                  </div>
 
-            <h3 className="font-black text-base uppercase tracking-tight text-rich-black leading-tight">
-              {player.name}
-            </h3>
-            <span className="text-zru-green text-[10px] font-bold uppercase tracking-wider mt-1.5">
-              {player.position}
-            </span>
+                  {/* Player image */}
+                  {player.image && player.image !== "/images/teams/player-placeholder.webp" ? (
+                    <Image
+                      src={player.image}
+                      alt={player.name}
+                      fill
+                      sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
+                      className="object-cover object-top group-hover:scale-105 transition-transform duration-500"
+                    />
+                  ) : (
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <span className="text-6xl font-heading font-black text-white/20 tracking-tight">
+                        {player.name.split(" ").map(n => n[0]).join("").substring(0, 2)}
+                      </span>
+                    </div>
+                  )}
+                </div>
 
-            <div className="mt-4 pt-3 border-t border-black/5 w-full flex justify-between text-[10px] text-black/40 font-bold uppercase tracking-wide">
-              <span>
-                Club:{" "}
-                <strong className="text-black/80 font-bold normal-case tracking-normal">
-                  {player.club}
-                </strong>
-              </span>
-              <span>
-                Caps:{" "}
-                <strong className="text-black/80 font-bold">{player.caps}</strong>
-              </span>
+                {/* Position badge — overlaps the shield clip edge */}
+                <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 z-10">
+                  <div className="clip-slanted-sm bg-zru-green text-white text-[10px] font-black uppercase tracking-widest px-4 py-1.5 shadow-lg shadow-zru-green/30">
+                    {player.position}
+                  </div>
+                </div>
+              </div>
+
+              {/* Name */}
+              <div className="pt-8 pb-4 px-4 text-center">
+                <h3 className="font-heading text-lg font-black uppercase tracking-tight text-rich-black leading-tight">
+                  {player.name}
+                </h3>
+              </div>
+
+              {/* Stats row */}
+              <div className="mx-auto grid w-fit grid-cols-3 divide-x divide-black/5 py-4 border-t border-black/5">
+                <div className="px-5 text-center">
+                  <div className="text-sm font-bold text-rich-black">{player.caps}</div>
+                  <div className="text-[9px] uppercase tracking-widest text-black/40 font-bold mt-0.5">Caps</div>
+                </div>
+                <div className="px-5 text-center">
+                  <div className="text-sm font-bold text-rich-black">{player.club.split(" ")[0]}</div>
+                  <div className="text-[9px] uppercase tracking-widest text-black/40 font-bold mt-0.5">Club</div>
+                </div>
+                <div className="px-5 text-center">
+                  <div className="text-sm font-bold text-rich-black">{player.position.split(" ")[0].substring(0, 3).toUpperCase()}</div>
+                  <div className="text-[9px] uppercase tracking-widest text-black/40 font-bold mt-0.5">Role</div>
+                </div>
+              </div>
             </div>
           </div>
         ))}

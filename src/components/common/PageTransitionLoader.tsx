@@ -21,7 +21,7 @@ export default function PageTransitionLoader() {
     setFading(false);
     sessionStorage.setItem("zru_initial_loader_shown", "true");
 
-    const duration = 1800;
+    const duration = 1200;
     
     const triggerExit = () => {
       setFading(true);

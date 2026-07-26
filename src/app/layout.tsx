@@ -51,25 +51,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="overflow-x-hidden min-h-dvh">
+    <html lang="en" className="min-h-dvh">
       <head>
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
         <meta name="apple-mobile-web-app-title" content="ZimRugby" />
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        {/* Material Symbols: preloaded as non-blocking, then applied */}
-        <link
-          rel="preload"
-          as="style"
-          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
-        />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
-          rel="stylesheet"
-        />
       </head>
-      <body className="antialiased overflow-x-hidden min-h-dvh flex flex-col justify-between">
+        <body className="antialiased min-h-dvh flex flex-col justify-between">
         <a
           href="#main-content"
           className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-[100] focus:px-4 focus:py-2 focus:bg-zru-green focus:text-white focus:rounded-md focus:outline-none"
@@ -85,7 +73,7 @@ export default function RootLayout({
         <PageTransitionLoader />
         <ClientLayoutShell>
           <Navigation />
-          <main id="main-content" className="relative overflow-hidden pb-24 min-h-screen bg-milk-white">
+          <main id="main-content" className="relative pb-24 min-h-screen bg-milk-white">
             {children}
           </main>
           <Footer />

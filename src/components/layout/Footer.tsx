@@ -1,26 +1,13 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { 
-  Facebook, 
-  Twitter, 
-  Instagram, 
-  Youtube, 
-  Linkedin, 
   MapPin, 
-  Mail, 
-  Phone, 
   ShieldCheck 
 } from "lucide-react";
-
-const socialLinks = [
-  { Icon: Facebook, href: "https://facebook.com/zimbabwerugby", label: "Facebook" },
-  { Icon: Twitter, href: "https://twitter.com/zimbabwerugby", label: "Twitter/X" },
-  { Icon: Instagram, href: "https://instagram.com/zimbabwerugby", label: "Instagram" },
-  { Icon: Youtube, href: "https://youtube.com/zimbabwerugby", label: "YouTube" },
-  { Icon: Linkedin, href: "https://linkedin.com/zimbabwerugby", label: "LinkedIn" },
-];
+import SocialCard from "@/components/ui/SocialCard";
 
 const footerColumns = [
   {
@@ -37,7 +24,7 @@ const footerColumns = [
     links: [
       { label: "The Sables (Men 15s)", href: "/teams/sables" },
       { label: "Lady Sables (Women 15s)", href: "/teams/lady-sables" },
-      { label: "Cheetahs (Men 7s)", href: "/teams" },
+      { label: "Cheetahs (Men 7s)", href: "/teams/cheetahs" },
       { label: "Junior Sables (U20)", href: "/teams/junior-sables" },
     ],
   },
@@ -79,7 +66,13 @@ export default function Footer() {
             "name": "Zimbabwe Rugby Union",
             "url": "https://zimrugby.vercel.app",
             "logo": "https://zimrugby.vercel.app/images/logos/zru-logo.svg",
-            "sameAs": socialLinks.map((s) => s.href)
+            "sameAs": [
+              "https://facebook.com/zimbabwerugby",
+              "https://twitter.com/zimbabwerugby",
+              "https://instagram.com/zimbabwerugby",
+              "https://youtube.com/zimbabwerugby",
+              "https://linkedin.com/zimbabwerugby"
+            ]
           })
         }}
       />
@@ -88,41 +81,37 @@ export default function Footer() {
         
         {/* Compact Single-Row Header: Title & Contact Pill */}
         <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6 border-b border-[#003822]/15 pb-8">
-          <div>
-            <h2 className="font-heading font-black text-4xl sm:text-6xl md:text-7xl uppercase tracking-tighter text-[#003822] italic leading-none select-none">
-              Zimbabwe Rugby
-            </h2>
-            <p className="text-[#003822]/70 text-[11px] sm:text-xs font-bold uppercase tracking-widest mt-1.5">
-              Official Governing Body of Rugby Union in Zimbabwe • Est. 1895
-            </p>
+          <div className="flex items-center gap-5">
+            <div className="relative w-28 h-28 sm:w-36 sm:h-36 shrink-0 flex items-center justify-center">
+              <Image
+                src="/zru logo main.svg"
+                alt="Zimbabwe Rugby Union Logo"
+                width={80}
+                height={80}
+                className="w-full h-full object-contain"
+              />
+            </div>
+            <div className="w-full max-w-[480px]">
+              <span className="block font-heading font-black text-[2.25rem] sm:text-7xl md:text-8xl uppercase text-[#003822] italic leading-[0.85] select-none w-full text-center tracking-[0.02em] sm:tracking-[0.2em] whitespace-nowrap">
+                Zimbabwe
+              </span>
+              <span className="block font-subheading font-black text-[1.75rem] sm:text-5xl md:text-6xl uppercase text-[#006747] italic leading-[0.85] select-none w-full text-center tracking-[0.02em] sm:tracking-[0.35em] whitespace-nowrap">
+                Rugby Union
+              </span>
+              <p className="text-[#003822]/70 text-[11px] sm:text-xs font-bold uppercase tracking-widest mt-2 text-center">
+                Official Governing Body of Rugby Union in Zimbabwe • Est. 1895
+              </p>
+            </div>
           </div>
 
-          {/* Clean Editorial HQ Contact Details & Socials (No Pills) */}
+          {/* Contact Details + Socials */}
           <div className="flex flex-wrap items-center gap-6 shrink-0 text-xs font-bold text-[#003822]/80">
             <div className="flex items-center gap-2">
               <MapPin className="w-3.5 h-3.5 text-[#006747] shrink-0" />
               <span>Harare Sports Club HQ</span>
             </div>
             <span className="text-[#003822]/20 hidden sm:inline">•</span>
-            <a href="tel:+263242700100" className="hover:text-[#006747] transition-colors flex items-center gap-1.5">
-              <Phone className="w-3.5 h-3.5 text-[#006747]" /> 
-              <span>+263 242 700 100</span>
-            </a>
-
-            <div className="flex items-center gap-2 ml-2">
-              {socialLinks.map(({ Icon, href, label }) => (
-                <a
-                  key={label}
-                  href={href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="w-8 h-8 rounded-full border border-[#003822]/20 bg-white flex items-center justify-center text-[#003822] hover:bg-[#006747] hover:text-white hover:border-[#006747] transition-all duration-300 shadow-xs"
-                  aria-label={`Official ZRU on ${label}`}
-                >
-                  <Icon className="w-3.5 h-3.5" />
-                </a>
-              ))}
-            </div>
+            <SocialCard />
           </div>
         </div>
 
@@ -130,9 +119,9 @@ export default function Footer() {
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8">
           {footerColumns.map((col) => (
             <nav key={col.title} aria-label={col.title} className="space-y-3">
-              <h3 className="font-heading font-black text-xs sm:text-sm uppercase tracking-wider text-[#003822] border-b border-[#003822]/15 pb-2">
+              <span className="block font-heading font-black text-xs sm:text-sm uppercase tracking-wider text-[#003822] border-b border-[#003822]/15 pb-2">
                 {col.title}
-              </h3>
+              </span>
               <ul className="space-y-2">
                 {col.links.map((link) => (
                   <li key={link.label}>

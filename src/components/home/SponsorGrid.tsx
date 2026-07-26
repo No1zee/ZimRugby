@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { ArrowRight } from "lucide-react";
 
 const SPONSORS = [
   {
@@ -139,9 +140,7 @@ export default function SponsorGrid() {
             className="bg-gradient-to-b from-[#00704D] to-[#005238] hover:from-[#005238] hover:to-[#004522] text-white font-extrabold text-[10px] tracking-widest uppercase px-5 py-3 rounded-lg shadow-md transition-all flex items-center gap-1.5 shrink-0 group"
           >
             <span>VISIT SITE</span>
-            <span className="material-symbols-outlined text-sm transition-transform duration-300 group-hover:translate-x-1">
-              arrow_forward
-            </span>
+            <ArrowRight size={14} className="transition-transform duration-300 group-hover:translate-x-1" />
           </a>
 
         </div>

@@ -195,7 +195,7 @@ export default function GalleryPageClient({ initialPhotos }: GalleryPageClientPr
               <div className="flex justify-between items-center pb-4 border-b border-black/5">
                 <button
                   onClick={() => setActiveFolder(null)}
-                  className="flex items-center gap-2 px-4 py-2 rounded-full border border-black/10 hover:border-black/20 text-rich-black/60 hover:text-rich-black transition-all text-xs font-bold uppercase tracking-wider bg-black/5"
+                  className="flex items-center gap-2 px-4 py-2 clip-slanted-sm border border-black/10 hover:border-black/20 text-rich-black/60 hover:text-rich-black transition-all text-xs font-bold uppercase tracking-wider bg-black/5"
                 >
                   <ChevronLeft className="w-4 h-4" />
                   <span>Back to Archives</span>
@@ -212,7 +212,7 @@ export default function GalleryPageClient({ initialPhotos }: GalleryPageClientPr
                   <button
                     key={album}
                     onClick={() => setActiveAlbum(album)}
-                    className={`px-5 py-2.5 rounded-full text-xs font-black uppercase tracking-wider transition-all duration-300 whitespace-nowrap ${
+                    className={`px-5 py-2.5 clip-slanted-sm text-xs font-black uppercase tracking-wider transition-all duration-300 whitespace-nowrap ${
                       activeAlbum === album
                         ? "bg-zru-green text-white shadow-lg shadow-zru-green/20"
                         : "text-rich-black/60 hover:text-rich-black hover:bg-black/5"

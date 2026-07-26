@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronRight } from "lucide-react";
 import Link from "next/link";
-import { Match } from "../matches/MatchList";
+import type { Match } from "@/types";
 
 export default function FixtureRibbon() {
   const [nextMatch, setNextMatch] = useState<Match | null>(null);

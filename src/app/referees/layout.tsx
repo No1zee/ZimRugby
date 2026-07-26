@@ -1,8 +1,8 @@
-import { Metadata } from "next";
+import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Referees & Officials | Zimbabwe Rugby Union",
-  description: "ZRU refereeing programme, official appointments, and referee development.",
+  title: "Referees | Zimbabwe Rugby Union",
+  description: "Referee resources, courses, and notices for Zimbabwe Rugby officials.",
 };
 
 export default function RefereesLayout({ children }: { children: React.ReactNode }) {

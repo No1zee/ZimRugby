@@ -3,7 +3,8 @@
 import EdgyGradient from "@/components/ui/EdgyGradient";
 import { motion } from "framer-motion";
 import { Search, MapPin, BarChart3, History } from "lucide-react";
-import MatchList, { Match } from "@/components/matches/MatchList";
+import MatchList from "@/components/matches/MatchList";
+import type { Match } from "@/types";
 import LeagueTable from "@/components/matches/LeagueTable";
 import { useState } from "react";
 import PageAnnouncements from "@/components/ui/PageAnnouncements";
@@ -138,7 +139,7 @@ export default function MatchCentreClient({ initialFixtures, initialResults, ini
                   <button
                     key={teamName}
                     onClick={() => setSelectedTeam(teamName)}
-                    className={`px-5 py-2 rounded-full text-xs font-black uppercase tracking-wider transition-all duration-300 whitespace-nowrap ${
+                    className={`px-5 py-2 clip-slanted-sm text-xs font-black uppercase tracking-wider transition-all duration-300 whitespace-nowrap ${
                       isActive 
                         ? "bg-zru-green text-white shadow-lg" 
                         : "bg-black/5 border border-black/10 text-black/60 hover:text-black hover:border-black/20"

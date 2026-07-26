@@ -252,7 +252,7 @@ export default function HeroCarousel({ slides }: { slides: HeroSlideData[] }) {
     }, 12000); // 12 seconds per slide (marinating time)
 
     return () => clearInterval(timer);
-  }, [currentSlide, nextSlide]);
+  }, [nextSlide]);
 
   const activeSlide = slides[currentSlide];
   const nextSlideData = slides[(currentSlide + 1) % slides.length];
@@ -302,7 +302,7 @@ export default function HeroCarousel({ slides }: { slides: HeroSlideData[] }) {
                       muted
                       loop
                       playsInline
-                      preload="auto"
+                      preload="metadata"
                       poster={activeSlide.image}
                       className="absolute inset-0 w-full h-full object-cover"
                     />
@@ -331,7 +331,7 @@ export default function HeroCarousel({ slides }: { slides: HeroSlideData[] }) {
       </div>
 
       {/* Content Layer */}
-      <motion.div style={{ y: yText, opacity: opacityText }} className="relative z-20 w-full max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 h-full flex items-center justify-start pt-24 lg:pt-32 pb-24">
+      <motion.div style={{ y: yText, opacity: opacityText }} className="relative z-20 w-full max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 h-full flex items-end justify-start pb-28 lg:pb-36">
         <div className="text-left w-full mr-auto">
           <SlideContent 
             slide={activeSlide} 

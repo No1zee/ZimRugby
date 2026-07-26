@@ -35,7 +35,7 @@ export default function CookieConsent() {
         <ShieldCheck className="w-6 h-6 text-green-500 shrink-0 mt-1" />
         <div className="space-y-4">
           <div>
-            <h4 className="font-bold text-sm uppercase tracking-wider">Privacy Consent</h4>
+            <p className="font-bold text-sm uppercase tracking-wider">Privacy Consent</p>
             <p className="text-xs text-white/70 mt-1 leading-relaxed">
               We use optional tracking cookies to measure and enhance your experience on the platform. All data is processed in accordance with CDPA 2021 and GDPR regulations.
             </p>

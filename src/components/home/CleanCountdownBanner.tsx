@@ -90,9 +90,9 @@ export default function CleanCountdownBanner() {
       <div className="relative z-20 max-w-[1360px] mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center text-center">
         
         {/* Title */}
-        <h3 className="text-xs sm:text-sm font-bold tracking-[0.3em] uppercase text-white/90 mb-8 font-heading">
+        <span className="text-xs sm:text-sm font-bold tracking-[0.3em] uppercase text-white/90 mb-8 font-heading">
           ROAD TO AUSTRALIA 2027
-        </h3>
+        </span>
 
         {/* Numeric Counter Grid */}
         <div className="grid grid-cols-4 gap-6 sm:gap-12 md:gap-16 max-w-2xl mx-auto">

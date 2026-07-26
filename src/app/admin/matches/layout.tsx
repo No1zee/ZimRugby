@@ -1,8 +1,8 @@
-import { Metadata } from "next";
+import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Admin - Fixture Management | ZRU Portal",
-  description: "Internal fixture management dashboard for ZRU administrators.",
+  title: "Admin - Matches | Zimbabwe Rugby Union",
+  description: "Manage match scores, fixtures, and results.",
 };
 
 export default function AdminMatchesLayout({ children }: { children: React.ReactNode }) {

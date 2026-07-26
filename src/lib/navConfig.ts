@@ -12,10 +12,6 @@ export interface NavItem {
 
 export const navConfig: NavItem[] = [
   {
-    label: "HOME",
-    href: "/",
-  },
-  {
     label: "NATIONAL TEAMS",
     href: "/teams",
     isMega: true,

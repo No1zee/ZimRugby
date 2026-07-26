@@ -37,7 +37,7 @@ const TEAMS_DATA: TeamInfo[] = [
     name: "Lady Sables",
     category: "Women's 15s & 7s National Team",
     description: "The pride of women's rugby in Zimbabwe. Competing in regional test matches and international tournaments.",
-    image: "/images/hero/lady-sables-hero.webp",
+    image: "/images/hero/lady-sables.webp",
     badgeText: "Rugby Africa Women's Cup",
     accentStyle: "dark",
     stats: [
@@ -51,7 +51,7 @@ const TEAMS_DATA: TeamInfo[] = [
     name: "Zimbabwe Cheetahs",
     category: "Men's National Sevens Team",
     description: "High-octane, fast-paced rugby. World Rugby Sevens Series contenders and Africa 7s Cup contenders.",
-    image: "/images/cheetahs-action.webp",
+    image: "/images/teams/cheetahs.jpg",
     badgeText: "World Rugby 7s Contenders",
     accentStyle: "outline",
     stats: [
@@ -107,21 +107,22 @@ export default function TeamCardBento() {
                     : "bg-white text-rich-black"
                 }`}
               >
-                {/* Background Image / Overlay */}
-                <div className="absolute inset-0 z-0 opacity-15 group-hover:opacity-25 transition-opacity duration-500">
+                {/* Background Image / Overlay — unified opacity + consistent dark bottom gradient */}
+                <div className="absolute inset-0 z-0 group-hover:opacity-100 transition-opacity duration-500">
                   <Image
                     src={team.image}
                     alt={team.name}
                     fill
-                    className="object-cover object-center"
+                    className="object-cover object-center opacity-25"
                   />
                   <div className={`absolute inset-0 ${
                     team.accentStyle === "green" 
-                      ? "bg-linear-to-t from-zru-green via-zru-green/80 to-transparent" 
+                      ? "bg-linear-to-t from-zru-green via-zru-green/60 to-transparent" 
                       : team.accentStyle === "dark" 
-                      ? "bg-linear-to-t from-rich-black via-rich-black/80 to-transparent" 
-                      : "bg-linear-to-t from-white via-white/80 to-transparent"
+                      ? "bg-linear-to-t from-rich-black via-rich-black/60 to-transparent" 
+                      : "bg-linear-to-t from-white via-white/60 to-transparent"
                   }`} />
+                  <div className="absolute inset-0 bg-linear-to-t from-black/50 via-transparent to-transparent" />
                 </div>
 
                 <div className="relative z-10 space-y-6">

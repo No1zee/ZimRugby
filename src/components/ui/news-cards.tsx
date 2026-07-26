@@ -61,7 +61,7 @@ const newsData: NewsItem[] = [
     category: "DEVELOPMENT",
     date: "08 MAY 2026",
     excerpt: "Multi-year investment commitment to expand school rugby tournaments and referee certification programs.",
-    image: "/images/teams/grassroots.jpg",
+    image: "/images/schools/schoolboy-team-group.jpg",
     slug: "zru-nedbank-partnership-extension",
   },
   {

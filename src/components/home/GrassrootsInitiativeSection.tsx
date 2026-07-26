@@ -13,7 +13,7 @@ const INITIATIVES = [
     stats: "120+ Participating Schools",
     image: "/images/schools/schoolboy-team-group.jpg",
     link: "/schools",
-    btnText: "EXPLORE SCHOOL LEAGUES",
+    btnText: "EXPLORE",
     gradient: "from-[#003822] via-[#002B19] to-[#001D11]",
     accentGlow: "rgba(0,200,83,0.25)",
   },
@@ -121,7 +121,7 @@ export default function GrassrootsInitiativeSection() {
                 <div className="pt-3 border-t border-black/10 mt-3">
                   <Link
                     href={item.link}
-                    className="w-full bg-[#006747] hover:bg-[#004D34] text-white font-extrabold flex items-center justify-between rounded-xl px-4 py-3 transition-all duration-300 shadow-sm hover:shadow-md text-xs tracking-wider uppercase font-heading group/btn"
+                    className="w-full bg-[#006747] hover:bg-[#004D34] text-white font-extrabold flex items-center justify-between clip-slanted px-4 py-3 transition-all duration-300 shadow-sm hover:shadow-md text-xs tracking-wider uppercase font-heading group/btn"
                   >
                     <span>{item.btnText}</span>
                     <ArrowRight className="w-4 h-4 transition-transform group-hover/btn:translate-x-1 shrink-0" />

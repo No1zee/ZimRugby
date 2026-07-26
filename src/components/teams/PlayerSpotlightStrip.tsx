@@ -14,6 +14,7 @@ export default function PlayerSpotlightStrip() {
           
           {/* Left Column: Player Spotlight Details */}
           <div className="lg:col-span-7 space-y-6">
+            <span className="text-xs font-extrabold uppercase tracking-widest text-[#006747] block mb-2">Sables Player Spotlight</span>
             <h2 className="font-heading text-4xl sm:text-6xl font-black uppercase tracking-tight italic">
               TINOTENDA <br />
               <span className="text-[#006747]">MASEKERE</span>
@@ -30,8 +31,9 @@ export default function PlayerSpotlightStrip() {
             </p>
 
             <div className="pt-4">
+              {/* TODO: Link to Tinotenda Masekere's actual article slug once a CMS article is created */}
               <Link
-                href="/media"
+                href="/teams/sables"
                 className="inline-flex items-center gap-2 px-6 py-3.5 bg-zru-green hover:bg-green-700 text-white rounded-xl text-xs font-bold uppercase tracking-widest transition-all shadow-lg"
               >
                 Read Player Feature <ArrowRight className="w-4 h-4" />

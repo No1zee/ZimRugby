@@ -280,7 +280,7 @@ export default function TicketsPage() {
                   <button
                     key={cat}
                     onClick={() => setFilter(cat)}
-                    className={`px-6 py-2.5 rounded-full text-[10px] font-black uppercase tracking-widest transition-all
+                    className={`px-6 py-2.5 clip-slanted-sm text-[10px] font-black uppercase tracking-widest transition-all
                       ${filter === cat 
                         ? 'bg-zru-green text-white shadow-lg' 
                         : "bg-white border border-black/5 text-black/60 hover:text-black hover:border-black/20 shadow-sm hover:shadow-md"}

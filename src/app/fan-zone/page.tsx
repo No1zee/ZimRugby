@@ -91,7 +91,7 @@ export default function FanZonePage() {
           <div className="flex justify-center pb-6">
             <button
               onClick={() => setIsCenterStage(false)}
-              className="inline-flex items-center gap-2 px-4 py-2 bg-black/5 hover:bg-black/10 text-rich-black/70 hover:text-rich-black rounded-full text-[11px] font-black tracking-widest uppercase transition-all shadow-sm border border-black/5"
+              className="inline-flex items-center gap-2 px-4 py-2 bg-black/5 hover:bg-black/10 text-rich-black/70 hover:text-rich-black clip-slanted-sm text-[11px] font-black tracking-widest uppercase transition-all shadow-sm border border-black/5"
             >
               <RotateCcw className="w-3.5 h-3.5 text-zru-green" />
               <span>Replay Benefits Showcase</span>
