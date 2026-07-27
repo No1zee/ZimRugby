@@ -34,7 +34,7 @@ export default function ShopCardShowcase() {
           inViewRef.current = entry.isIntersecting;
         }, { threshold: 0 })
       : null;
-    if (el) observer.observe(el);
+    if (el && observer) observer.observe(el);
 
     function handleVisibility() {
       hiddenRef.current = document.hidden;
@@ -65,7 +65,7 @@ export default function ShopCardShowcase() {
       href="/clubhouse"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
-      className="relative bg-white rounded-lg overflow-hidden group h-[320px] md:h-auto flex flex-col"
+      className="relative bg-white rounded-lg overflow-hidden group h-[320px] md:h-full flex flex-col"
     >
       {/* Product Cutout — anchored to bottom (shop button) */}
       <div className="absolute inset-0 flex items-end justify-center overflow-hidden">

@@ -67,7 +67,7 @@ export default function SponsorGrid() {
           inViewRef.current = entry.isIntersecting;
         }, { threshold: 0 })
       : null;
-    if (el) observer.observe(el);
+    if (el && observer) observer.observe(el);
 
     function handleVisibility() {
       hiddenRef.current = document.hidden;

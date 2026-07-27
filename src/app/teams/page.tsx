@@ -1,9 +1,8 @@
 import { Metadata } from "next";
-import FlagshipTeamHero from "@/components/teams/FlagshipTeamHero";
-import TeamCardBento from "@/components/teams/TeamCardBento";
+import NationalSquadsControlRoom from "@/components/teams/NationalSquadsControlRoom";
 import PlayerSpotlightStrip from "@/components/teams/PlayerSpotlightStrip";
 import Link from "next/link";
-import { ArrowRight, Trophy, GraduationCap, MapPin } from "lucide-react";
+import { GraduationCap, MapPin } from "lucide-react";
 
 export const metadata: Metadata = {
   title: "National Teams | Zimbabwe Rugby Union",
@@ -13,23 +12,20 @@ export const metadata: Metadata = {
 export default function TeamsPage() {
   return (
     <main className="bg-milk-white min-h-screen">
-      {/* 1. Flagship Sables Spotlight Hero */}
-      <FlagshipTeamHero />
+      {/* 1. National Squads Control Room — cinematic team rail, hero, info grid */}
+      <NationalSquadsControlRoom />
 
-      {/* 2. Differentiated National Teams Bento Grid */}
-      <TeamCardBento />
-
-      {/* 3. Player to Watch Editorial Interstitial */}
+      {/* 2. Player to Watch Editorial Interstitial */}
       <PlayerSpotlightStrip />
 
-      {/* 4. Development & Pathways Banner */}
+      {/* 3. Development & Pathways Banner */}
       <section className="py-20 bg-milk-white">
         <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
           <div className="p-8 sm:p-12 bg-rich-black text-white rounded-3xl border border-white/10 relative overflow-hidden shadow-2xl">
             <div className="absolute top-0 right-0 w-1/3 h-full bg-[radial-gradient(circle_at_top_right,rgba(0,107,63,0.25),transparent_70%)]" />
             
             <div className="relative z-10 max-w-3xl space-y-6">
-              <h2 className="font-heading text-3xl sm:text-5xl font-black uppercase tracking-tight italic">
+              <h2 className="font-heading text-3xl sm:text-5xl font-black uppercase tracking-tight italic leading-[1.0]">
                 From Schoolboy Leagues to National Caps
               </h2>
               <p className="text-white/75 text-base font-body leading-relaxed">
