@@ -35,7 +35,7 @@ export default function TeamRailCard({
       }}
       whileHover={!isActive ? { y: -4 } : undefined}
       className={cn(
-        "group relative snap-center shrink-0 flex flex-col items-center gap-3 py-4 px-5 rounded-2xl transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-teal cursor-pointer",
+        "group relative snap-center shrink-0 flex flex-col items-center gap-3 py-4 px-5 rounded-2xl transition-colors duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-teal cursor-pointer",
         isActive
           ? "bg-white/[0.08] ring-1 ring-white/15"
           : "hover:bg-white/[0.04]"
@@ -52,7 +52,7 @@ export default function TeamRailCard({
       <div className="text-center space-y-1">
         <h3
           className={cn(
-            "font-heading italic text-sm sm:text-base font-black uppercase tracking-wide transition-colors duration-300",
+            "font-heading not-italic text-sm sm:text-base font-black uppercase tracking-wide transition-colors duration-300",
             isActive ? "text-white" : "text-white/60 group-hover:text-white/80"
           )}
         >

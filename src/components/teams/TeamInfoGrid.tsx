@@ -33,14 +33,7 @@ export default function TeamInfoGrid({
       className="bg-milk-white py-16 px-4 sm:px-8"
     >
       <div className="max-w-6xl mx-auto">
-        {/* Section header */}
-        <div className="flex items-center gap-3 mb-2">
-          <span className="w-8 h-1 bg-green-primary rounded-full" />
-          <span className="text-[11px] uppercase tracking-[0.2em] text-green-primary font-bold">
-            Team Intelligence
-          </span>
-        </div>
-        <h2 className="font-heading italic text-3xl sm:text-4xl font-black mb-8">
+        <h2 className="font-heading not-italic text-3xl sm:text-4xl font-black mb-8">
           <span className="text-rich-black">
             {team.shortName.split(" ").slice(0, -1).join(" ")}{" "}
           </span>
@@ -90,7 +83,7 @@ export default function TeamInfoGrid({
               <p className="text-[10px] uppercase tracking-wider text-white/40 mb-1">
                 Last Major Honour
               </p>
-              <p className="font-heading italic text-xl font-black text-white">
+              <p className="font-heading not-italic text-xl font-black text-white">
                 {team.keyHonour}
               </p>
             </div>

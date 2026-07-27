@@ -40,7 +40,7 @@ export default function InfoCell({
       </p>
       <div
         className={cn(
-          "font-heading italic font-black",
+          "font-heading not-italic font-black tabular-nums",
           highlighted ? "text-3xl" : "text-base"
         )}
       >

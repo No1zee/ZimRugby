@@ -4,7 +4,8 @@
 The design system for Zimbabwe Rugby Union (ZimRugby) is built around a clean, institutional, yet highly dynamic aesthetic. The core visual identity shifts away from dark, heavy interfaces towards a "Milk White" premium feel, accented by the official ZRU Green. 
 
 ## 2. Color Palette
-- **Primary Green (ZRU Green)**: `#006747` (Pantone 349 C). This is the only brand accent color. No gold or other accents are permitted.
+- **Primary Green (ZRU Green)**: `#006747` (Pantone 349 C). This is the primary brand accent color.
+- **Accent Teal**: `#00C88C`. Secondary accent for highlights, badges, and interactive emphasis.
 - **Background (Milk White)**: `#FDFBF0`. This serves as the primary canvas for the application, providing a warm, premium feel.
 - **Base Text (Black)**: `#000000`. High contrast for readability against the Milk White background.
 - **Contrasts (White)**: `#FFFFFF`. Used for text on dark backgrounds or solid structural elements.

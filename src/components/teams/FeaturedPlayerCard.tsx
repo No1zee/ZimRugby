@@ -19,7 +19,7 @@ export default function FeaturedPlayerCard({ player }: FeaturedPlayerCardProps) 
     player.slug ?? player.name.toLowerCase().replace(/\s+/g, "-");
 
   const cardContent = (
-    <div className="group relative rounded-2xl bg-white border border-black/5 overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 w-full">
+    <div className="group relative rounded-2xl bg-white border border-black/5 overflow-hidden shadow-sm hover:shadow-lg hover:border-zru-green/20 transition-all duration-300 w-full">
       {/* Image area with shield clip-path */}
       <div className="relative">
         <div
@@ -29,7 +29,7 @@ export default function FeaturedPlayerCard({ player }: FeaturedPlayerCardProps) 
           {/* Watermark name */}
           <div className="pointer-events-none absolute inset-0 flex items-center justify-center overflow-hidden">
             <span
-              className="font-heading text-[4rem] sm:text-[5rem] leading-[0.85] font-black uppercase italic text-white/[0.08] text-center select-none break-all"
+              className="font-heading text-[4rem] sm:text-[5rem] leading-[0.85] font-black uppercase not-italic text-white/[0.08] text-center select-none break-all"
               style={{ writingMode: "vertical-lr" }}
             >
               {player.name}
@@ -43,7 +43,7 @@ export default function FeaturedPlayerCard({ player }: FeaturedPlayerCardProps) 
               alt={player.name}
               fill
               sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-              className="object-cover object-top group-hover:scale-105 transition-transform duration-500"
+              className="object-cover object-top group-hover:brightness-110 transition-[filter] duration-500"
             />
           ) : (
             <div className="absolute inset-0 flex items-center justify-center">

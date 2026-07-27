@@ -5,17 +5,18 @@ interface FeaturedPlayersGridProps {
   players: FeaturedPlayer[];
 }
 
-/**
- * Fixed 3-column grid of FeaturedPlayerCards for the homepage.
- * Always one row — cards scale down on small screens.
- */
 export default function FeaturedPlayersGrid({
   players,
 }: FeaturedPlayersGridProps) {
   return (
-    <div className="grid grid-cols-3 gap-3 sm:gap-4 lg:gap-6 justify-items-center">
-      {players.map((player) => (
-        <FeaturedPlayerCard key={player.name} player={player} />
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-4 sm:gap-5 lg:gap-6 items-start">
+      {players.map((player, i) => (
+        <div
+          key={player.name}
+          className={i === 0 ? "lg:col-span-2" : i === 1 ? "lg:col-span-2 lg:mt-8" : "lg:col-span-2 lg:mt-4"}
+        >
+          <FeaturedPlayerCard player={player} />
+        </div>
       ))}
     </div>
   );

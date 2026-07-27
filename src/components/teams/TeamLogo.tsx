@@ -34,13 +34,11 @@ export default function TeamLogo({
   return (
     <div
       className={cn(
-        "relative shrink-0 rounded-full flex items-center justify-center transition-all duration-300",
-        isActive && "drop-shadow-[0_0_18px_var(--tw-shadow-color)]"
+        "relative shrink-0 rounded-full flex items-center justify-center transition-all duration-300"
       )}
       style={{
         width: s.container,
         height: s.container,
-        boxShadow: isActive ? `0 0 24px ${accent}55` : undefined,
       }}
     >
       <svg
@@ -56,8 +54,8 @@ export default function TeamLogo({
           r="48"
           fill="none"
           stroke={accent}
-          strokeWidth={s.ring}
-          opacity={isActive ? 1 : 0.6}
+          strokeWidth={isActive ? s.ring + 1 : s.ring}
+          opacity={isActive ? 1 : 0.5}
         />
 
         {/* Inner fill */}

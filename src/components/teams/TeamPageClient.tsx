@@ -77,7 +77,7 @@ export default function TeamPageClient({ team }: TeamPageClientProps) {
               <div className="relative inline-block text-left z-40">
                 <button
                   onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                  className="flex items-center gap-3 text-5xl sm:text-7xl font-black uppercase italic tracking-tighter text-glow-green leading-none hover:text-zru-green transition-colors text-left"
+                  className="flex items-center gap-3 text-5xl sm:text-7xl font-black uppercase not-italic tracking-tighter text-glow-green leading-none hover:text-zru-green transition-colors text-left"
                 >
                   <span>{team.name}</span>
                   <ChevronDown className={`w-8 h-8 transition-transform duration-300 ${isDropdownOpen ? "rotate-180" : ""}`} />
@@ -125,7 +125,7 @@ export default function TeamPageClient({ team }: TeamPageClientProps) {
               {team.stats.map((stat, idx) => (
                 <div key={idx} className="flex flex-col border-r border-black/10 last:border-0 pr-6 last:pr-0">
                   <span className="text-[10px] text-black/40 font-bold uppercase tracking-wider">{stat.label}</span>
-                  <span className="text-xl font-black text-zru-green uppercase italic mt-1">{stat.value}</span>
+                  <span className="text-xl font-black text-zru-green uppercase not-italic mt-1 tabular-nums">{stat.value}</span>
                 </div>
               ))}
             </div>
@@ -140,7 +140,7 @@ export default function TeamPageClient({ team }: TeamPageClientProps) {
       </div>
 
       {/* 3. Interactive Navigation Tabs */}
-      <div className="border-b border-black/10 bg-milk-white/90 sticky top-16 z-30 backdrop-blur-md">
+      <div className="border-b border-black/10 bg-milk-white sticky top-16 z-30">
         <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex overflow-x-auto py-4 gap-2 no-scrollbar">
             {tabItems.map((tab) => {
@@ -150,7 +150,7 @@ export default function TeamPageClient({ team }: TeamPageClientProps) {
                 <button
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id)}
-                  className={`flex items-center gap-2 px-5 py-2.5 clip-slanted-sm text-xs font-black uppercase tracking-wider transition-all duration-300 ${
+                  className={`flex items-center gap-2 px-5 py-2.5 clip-slanted-sm text-xs font-black uppercase tracking-wider whitespace-nowrap transition-colors duration-200 ${
                     isActive 
                       ? "bg-zru-green text-white shadow-lg shadow-zru-green/20" 
                       : "text-black/60 hover:text-black hover:bg-black/5"
@@ -184,8 +184,8 @@ export default function TeamPageClient({ team }: TeamPageClientProps) {
             {/* Coaching Staff tab content */}
             {activeTab === "coaching" && (
               <div className="space-y-12">
-                <div className="border-l-4 border-zru-green pl-4">
-                  <h2 className="text-2xl font-black uppercase tracking-wider text-rich-black">COACHING & MANAGEMENT</h2>
+                <div>
+                  <h2 className="font-heading not-italic text-2xl font-black uppercase tracking-wider text-rich-black">COACHING & MANAGEMENT</h2>
                   <p className="text-sm text-black/50 mt-1">The strategic minds behind {team.name}&apos;s performances and preparation.</p>
                 </div>
 
@@ -193,9 +193,9 @@ export default function TeamPageClient({ team }: TeamPageClientProps) {
                   {team.coachingStaff.map((coach, idx) => (
                     <div 
                       key={idx} 
-                      className="bg-white border border-black/5 shadow-sm rounded-xl p-6 flex items-center gap-6 group hover:shadow-md transition-shadow"
+                      className="bg-white border border-black/5 shadow-sm rounded-xl p-6 flex items-center gap-6 group hover:shadow-md hover:border-zru-green/20 transition-shadow duration-300"
                     >
-                      <div className="w-16 h-16 bg-black/5 rounded-full flex items-center justify-center border border-black/10 relative overflow-hidden shrink-0 group-hover:scale-105 transition-transform duration-300">
+                      <div className="w-16 h-16 bg-black/5 rounded-full flex items-center justify-center border border-black/10 relative overflow-hidden shrink-0 group-hover:border-zru-green/30 transition-colors duration-300">
                         {coach.image ? (
                           <Image
                             src={coach.image}
@@ -221,8 +221,8 @@ export default function TeamPageClient({ team }: TeamPageClientProps) {
             {/* Fixtures & Results tab content */}
             {activeTab === "matches" && (
               <div className="space-y-12">
-                <div className="border-l-4 border-zru-green pl-4">
-                  <h2 className="text-2xl font-black uppercase tracking-wider text-rich-black">FIXTURES & RESULTS</h2>
+                <div>
+                  <h2 className="font-heading not-italic text-2xl font-black uppercase tracking-wider text-rich-black">FIXTURES & RESULTS</h2>
                   <p className="text-sm text-black/50 mt-1">Track the match history and upcoming international campaigns for {team.name}.</p>
                 </div>
 
@@ -256,7 +256,7 @@ export default function TeamPageClient({ team }: TeamPageClientProps) {
                           {isCompleted ? (
                             <div className="flex flex-col md:items-center">
                               <span className="text-[9px] text-black/40 font-black uppercase tracking-wider">FINAL SCORE</span>
-                              <span className="text-2xl font-black italic tracking-tighter text-zru-green">{match.score}</span>
+                              <span className="text-2xl font-black not-italic tracking-tighter text-zru-green tabular-nums">{match.score}</span>
                             </div>
                           ) : (
                             <div className="flex flex-col md:items-center">
@@ -295,8 +295,8 @@ export default function TeamPageClient({ team }: TeamPageClientProps) {
             {/* History tab content */}
             {activeTab === "history" && (
               <div className="space-y-12">
-                <div className="border-l-4 border-zru-green pl-4">
-                  <h2 className="text-2xl font-black uppercase tracking-wider text-rich-black">TEAM HISTORY & LEGACY</h2>
+                <div>
+                  <h2 className="font-heading not-italic text-2xl font-black uppercase tracking-wider text-rich-black">TEAM HISTORY & LEGACY</h2>
                   <p className="text-sm text-black/50 mt-1">Understanding the origins, historic achievements, and identity of {team.name}.</p>
                 </div>
 
@@ -311,8 +311,8 @@ export default function TeamPageClient({ team }: TeamPageClientProps) {
             {/* Gallery tab content */}
             {activeTab === "gallery" && (
               <div className="space-y-12">
-                <div className="border-l-4 border-zru-green pl-4">
-                  <h2 className="text-2xl font-black uppercase tracking-wider text-rich-black">PHOTO GALLERY</h2>
+                <div>
+                  <h2 className="font-heading not-italic text-2xl font-black uppercase tracking-wider text-rich-black">PHOTO GALLERY</h2>
                   <p className="text-sm text-black/50 mt-1">Cinematic snapshots of {team.name} in action, during training campaigns and historic matches.</p>
                 </div>
 
@@ -325,7 +325,7 @@ export default function TeamPageClient({ team }: TeamPageClientProps) {
                           alt={`${team.name} gallery image ${idx + 1}`} 
                           fill 
                           sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                          className="object-cover transition-transform duration-700 group-hover:scale-110" 
+                          className="object-cover transition-[filter] duration-700 group-hover:brightness-110" 
                         />
                         <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-5">
                           <div className="flex items-center justify-between w-full">
@@ -351,7 +351,7 @@ export default function TeamPageClient({ team }: TeamPageClientProps) {
         <div className="mt-20 pt-12 border-t border-black/10 grid grid-cols-1 sm:grid-cols-2 gap-6 relative z-10">
           <Link
             href={prevTeam.href}
-            className="bg-white border border-black/5 shadow-sm rounded-2xl p-6 flex items-center justify-between group hover:border-zru-green hover:shadow-md transition-all text-left"
+            className="bg-white border border-black/5 shadow-sm rounded-2xl p-6 flex items-center justify-between group hover:border-zru-green hover:shadow-md transition-all duration-300 text-left"
           >
             <div className="flex items-center gap-4">
               <div className="w-10 h-10 rounded-full bg-black/5 flex items-center justify-center text-black/60 group-hover:bg-zru-green/10 group-hover:text-zru-green transition-colors border border-black/5">
@@ -366,7 +366,7 @@ export default function TeamPageClient({ team }: TeamPageClientProps) {
 
           <Link
             href={nextTeam.href}
-            className="bg-white border border-black/5 shadow-sm rounded-2xl p-6 flex items-center justify-between group hover:border-zru-green hover:shadow-md transition-all text-right"
+            className="bg-white border border-black/5 shadow-sm rounded-2xl p-6 flex items-center justify-between group hover:border-zru-green hover:shadow-md transition-all duration-300 text-right"
           >
             <div className="flex items-center gap-4 justify-end w-full">
               <div>

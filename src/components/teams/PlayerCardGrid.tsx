@@ -33,8 +33,8 @@ export default function PlayerCardGrid({ squad, teamName }: PlayerCardGridProps)
   return (
     <div className="space-y-8">
       <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
-        <div className="border-l-4 border-zru-green pl-4">
-          <h2 className="text-2xl font-black uppercase tracking-wider text-rich-black">ACTIVE SQUAD</h2>
+        <div>
+          <h2 className="font-heading not-italic text-2xl font-black uppercase tracking-wider text-rich-black">ACTIVE SQUAD</h2>
           <p className="text-sm text-black/50 mt-1">
             {squad.length} players representing {teamName} on the international stage.
           </p>
@@ -70,7 +70,7 @@ export default function PlayerCardGrid({ squad, teamName }: PlayerCardGridProps)
             className="group"
           >
             {/* Card */}
-            <div className="relative rounded-2xl bg-white border border-black/5 overflow-hidden shadow-sm group-hover:shadow-lg transition-all duration-300">
+            <div className="relative rounded-2xl bg-white border border-black/5 overflow-hidden shadow-sm group-hover:shadow-lg group-hover:border-zru-green/20 transition-shadow duration-300">
               {/* Image area with shield clip-path */}
               <div className="relative">
                 <div
@@ -80,7 +80,7 @@ export default function PlayerCardGrid({ squad, teamName }: PlayerCardGridProps)
                   {/* Watermark name */}
                   <div className="pointer-events-none absolute inset-0 flex items-center justify-center overflow-hidden">
                     <span
-                      className="font-heading text-[5rem] leading-[0.85] font-black uppercase italic text-white/[0.08] text-center select-none break-all"
+                      className="font-heading text-[5rem] leading-[0.85] font-black uppercase not-italic text-white/[0.08] text-center select-none break-all"
                       style={{ writingMode: "vertical-lr" }}
                     >
                       {player.name}
@@ -94,7 +94,7 @@ export default function PlayerCardGrid({ squad, teamName }: PlayerCardGridProps)
                       alt={player.name}
                       fill
                       sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
-                      className="object-cover object-top group-hover:scale-105 transition-transform duration-500"
+                      className="object-cover object-top group-hover:brightness-110 transition-[filter] duration-500"
                     />
                   ) : (
                     <div className="absolute inset-0 flex items-center justify-center">

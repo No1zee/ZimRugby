@@ -16,9 +16,6 @@ export default function TeamRailShell({ teams, activeTeam, onSelect }: Props) {
       className="space-y-3 sm:space-y-4"
     >
       <div className="flex flex-col gap-1 px-4 sm:px-8">
-        <p className="text-[11px] font-semibold tracking-[0.18em] uppercase text-accent-teal">
-          NATIONAL TEAMS
-        </p>
         <h2
           id="national-teams-rail-heading"
           className="font-heading text-base sm:text-lg text-white/80"

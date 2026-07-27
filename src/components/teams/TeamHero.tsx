@@ -61,7 +61,7 @@ export default function TeamHero({
             {team.category}
           </p>
 
-          <h1 className="font-heading text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-black italic leading-[0.88] text-glow-green text-white">
+          <h1 className="font-heading not-italic text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-black leading-[0.88] text-glow-green text-white">
             {team.fullName}
           </h1>
 
@@ -88,7 +88,7 @@ export default function TeamHero({
                   <p className="text-[10px] uppercase tracking-wider text-white/40 mb-1">
                     {stat.label}
                   </p>
-                  <p className="font-heading italic text-2xl font-black text-white">
+                  <p className="font-heading not-italic text-2xl font-black text-white">
                     {stat.value}
                   </p>
                 </div>
@@ -115,7 +115,7 @@ export default function TeamHero({
 
         {/* Right: featured promo card */}
         <div className="lg:col-span-5">
-          <div className="card-surface rounded-lg overflow-hidden h-full flex flex-col">
+          <div className="rounded-lg overflow-hidden h-full flex flex-col border border-white/10">
             <div
               className="px-5 py-3 text-[11px] uppercase tracking-wider font-bold text-white"
               style={{ background: "linear-gradient(90deg, #00704D, #005238)" }}
@@ -138,7 +138,7 @@ export default function TeamHero({
                   <p className="text-[10px] uppercase tracking-wider text-white/60">
                     Featured Playmaker
                   </p>
-                  <p className="font-heading italic font-black text-white text-lg">
+                  <p className="font-heading not-italic font-black text-white text-lg">
                     {team.featuredPlayer}
                   </p>
                 </div>
