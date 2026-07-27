@@ -79,29 +79,27 @@ export default function Footer() {
 
       <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 relative z-10 space-y-0">
         
-        {/* Compact Single-Row Header: Title & Contact Pill */}
-        <div className="flex flex-col items-center gap-6 pb-8">
-          <div className="flex items-center gap-5">
-            <div className="relative w-28 h-28 sm:w-36 sm:h-36 shrink-0 flex items-center justify-center">
-              <Image
-                src="/zru logo main.svg"
-                alt="Zimbabwe Rugby Union Logo"
-                width={80}
-                height={80}
-                className="w-full h-full object-contain"
-              />
-            </div>
-            <div className="w-full max-w-[480px]">
-              <span className="block font-heading font-black text-[2.25rem] sm:text-7xl md:text-8xl uppercase text-[#003822] italic leading-[0.85] select-none w-full text-center tracking-[0.02em] sm:tracking-[0.2em] whitespace-nowrap">
-                Zimbabwe
-              </span>
-              <span className="block font-subheading font-black text-[1.75rem] sm:text-5xl md:text-6xl uppercase text-[#006747] italic leading-[0.85] select-none w-full text-center tracking-[0.02em] sm:tracking-[0.35em] whitespace-nowrap">
-                Rugby Union
-              </span>
-              <p className="text-[#003822]/70 text-[11px] sm:text-xs font-bold uppercase tracking-widest mt-2 text-center">
-                Official Governing Body of Rugby Union in Zimbabwe • Est. 1895
-              </p>
-            </div>
+        {/* Compact Header: Logo + Title (stacked, always centered) */}
+        <div className="flex flex-col items-center gap-4 pb-8">
+          <div className="relative w-28 h-28 sm:w-36 sm:h-36 shrink-0">
+            <Image
+              src="/zru logo main.svg"
+              alt="Zimbabwe Rugby Union Logo"
+              width={80}
+              height={80}
+              className="w-full h-full object-contain"
+            />
+          </div>
+          <div className="text-center">
+            <span className="block font-heading font-black text-[2.25rem] sm:text-7xl md:text-8xl uppercase text-[#003822] not-italic leading-[0.85] select-none tracking-[0.02em] sm:tracking-[0.2em] whitespace-nowrap">
+              Zimbabwe
+            </span>
+            <span className="block font-subheading font-black text-[1.75rem] sm:text-5xl md:text-6xl uppercase text-[#006747] not-italic leading-[0.85] select-none tracking-[0.02em] sm:tracking-[0.35em] whitespace-nowrap">
+              Rugby Union
+            </span>
+            <p className="text-[#003822]/70 text-[11px] sm:text-xs font-bold uppercase tracking-widest mt-2">
+              Official Governing Body of Rugby Union in Zimbabwe • Est. 1895
+            </p>
           </div>
 
           {/* Contact Details + Socials — stacked and centered on mobile */}
