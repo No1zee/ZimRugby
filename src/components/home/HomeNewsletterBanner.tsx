@@ -56,11 +56,11 @@ export default function HomeNewsletterBanner() {
             </div>
 
             {/* Headline & Paragraph — Fades out and collapses on hover */}
-            <div className="space-y-1.5 transition-all duration-500 origin-left max-w-lg opacity-100 group-hover/uiverseCard:opacity-0 group-hover/uiverseCard:max-w-0 group-hover/uiverseCard:scale-95 group-hover/uiverseCard:overflow-hidden group-focus-within/uiverseCard:opacity-0 group-focus-within/uiverseCard:max-w-0 group-focus-within/uiverseCard:scale-95 group-focus-within/uiverseCard:overflow-hidden shrink">
-              <h2 className="text-2xl sm:text-3xl text-white font-heading font-black uppercase tracking-tight whitespace-nowrap">
+            <div className="space-y-1.5 transition-all duration-500 origin-left max-w-lg opacity-100 group-hover/uiverseCard:opacity-0 group-hover/uiverseCard:max-w-0 group-hover/uiverseCard:scale-95 group-hover/uiverseCard:overflow-hidden group-focus-within/uiverseCard:opacity-0 group-focus-within/uiverseCard:max-w-0 group-focus-within/uiverseCard:scale-95 group-focus-within/uiverseCard:overflow-hidden shrink min-w-0">
+              <h2 className="text-xl sm:text-2xl md:text-3xl text-white font-heading font-black uppercase tracking-tight leading-tight">
                 JOIN THE FAN ZONE
               </h2>
-              <p className="text-xs sm:text-sm text-white/80 font-normal leading-relaxed font-body line-clamp-2">
+              <p className="text-[11px] sm:text-xs md:text-sm text-white/80 font-normal leading-relaxed font-body line-clamp-2">
                 Subscribe to our official newsletter and be the first to receive match ticket drops, Sable squad announcements, and inner-sanctum updates.
               </p>
             </div>
