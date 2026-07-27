@@ -307,7 +307,7 @@ export default function MatchdayVideoHighlights({
                   const cosVal = Math.cos((netAngle * Math.PI) / 180);
 
                   // Virtualization: skip cards far behind the ring
-                  if (cosVal > -0.3) return null;
+                  if (cosVal < -0.3) return null;
 
                   const cardOpacity = Math.max(0.3, (cosVal + 0.4) / 1.4);
                   const zIndexVal = Math.round(1000 + cosVal * 500);
