@@ -94,16 +94,16 @@ export default function SponsorGrid() {
   const activeSponsor = SPONSORS[activeIdx];
 
   return (
-    <section ref={sectionRef} id="partners" className="bg-[#FDFBF0] border-t border-black/5 pt-6 sm:pt-8 pb-0 px-4 sm:px-6 lg:px-8">
+    <section ref={sectionRef} id="partners" className="bg-[#FDFBF0] border-t border-black/5 pt-8 sm:pt-10 pb-0 px-4 sm:px-6 lg:px-8">
       <div className="max-w-[1280px] mx-auto space-y-6">
         
         {/* ── 1. Minimal Header ── */}
         <div className="space-y-1.5">
-          <h2 className="font-heading text-2xl lg:text-3xl font-black uppercase text-rich-black tracking-tight">
+          <h2 className="font-heading text-3xl sm:text-4xl font-black uppercase text-rich-black tracking-tight">
             POWERING ZIMBABWE{" "}
             <span className="text-accent-teal">RUGBY</span>
           </h2>
-          <div className="w-10 h-1 bg-[#006747] rounded-full mt-2 opacity-80" />
+          <div className="w-12 h-1 bg-[#006747] rounded-full mt-2 opacity-80" />
         </div>
 
         {/* ── 2. Interactive Logo Dock (5 Partners) ── */}
@@ -118,7 +118,7 @@ export default function SponsorGrid() {
               <button
                 key={s.id}
                 onClick={() => setActiveIdx(idx)}
-                className={`group relative bg-white rounded-xl p-4 h-20 flex items-center justify-center border transition-colors duration-300 cursor-pointer ${
+                className={`group relative bg-white rounded-xl p-4 h-[84px] flex items-center justify-center border transition-colors duration-300 cursor-pointer ${
                   isActive
                     ? "bg-gradient-to-b from-[#00704D] to-[#005238] border-transparent shadow-md"
                     : "border-gray-200/80 shadow-xs hover:border-[#006747]/40 hover:shadow-sm"
@@ -135,7 +135,7 @@ export default function SponsorGrid() {
                   />
                 </div>
                 {isActive && (
-                  <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-2 h-2 rounded-full bg-[#006747]" />
+                  <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full bg-[#006747]" />
                 )}
               </button>
             );
@@ -143,7 +143,7 @@ export default function SponsorGrid() {
         </div>
 
         {/* ── 3. Active Partner Minimal Spotlight Card ── */}
-        <div className="max-w-2xl mx-auto bg-white rounded-2xl p-6 border border-gray-200/90 shadow-md hover:shadow-lg transition-shadow duration-300 flex flex-col sm:flex-row items-center justify-between gap-6">
+        <div className="max-w-2xl mx-auto bg-white rounded-2xl p-5 sm:p-6 border border-gray-200/90 shadow-md hover:shadow-lg transition-shadow duration-300 flex flex-col sm:flex-row items-center justify-between gap-6">
           
           <div className="space-y-1 text-center sm:text-left flex-1 min-w-0">
             <div className="flex items-center justify-center sm:justify-start gap-2 mb-1">
@@ -175,7 +175,7 @@ export default function SponsorGrid() {
         <div className="text-center pt-2">
           <Link
             href="/partners"
-            className="text-[10px] font-extrabold uppercase tracking-[0.25em] text-[#006747] hover:underline inline-flex items-center gap-1.5 transition-colors"
+            className="text-[11px] font-extrabold uppercase tracking-[0.25em] text-[#006747] hover:underline inline-flex items-center gap-1.5 transition-colors"
           >
             BECOME AN OFFICIAL PARTNER &rarr;
           </Link>
@@ -184,7 +184,7 @@ export default function SponsorGrid() {
       </div>
 
       {/* Green bottom padding */}
-      <div className="bg-[#006747] -mx-4 sm:-mx-6 lg:-mx-8 px-4 sm:px-6 lg:px-8 py-8 sm:py-12" />
+      <div className="bg-[#006747] -mx-4 sm:-mx-6 lg:-mx-8 px-4 sm:px-6 lg:px-8 py-10 sm:py-14" />
     </section>
   );
 }

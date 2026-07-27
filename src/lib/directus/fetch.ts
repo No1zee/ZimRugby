@@ -41,12 +41,17 @@ export async function directusFetch<T>(
   }
 
   try {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 5000);
+
     const res = await fetch(url.toString(), {
       next: { revalidate: revalidateSeconds },
       headers: {
         "Content-Type": "application/json",
       },
+      signal: controller.signal,
     });
+    clearTimeout(timeoutId);
 
     if (!res.ok) {
       throw new Error(`Directus returned status ${res.status} for collection ${collection}`);

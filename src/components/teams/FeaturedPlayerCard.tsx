@@ -23,7 +23,7 @@ export default function FeaturedPlayerCard({ player }: FeaturedPlayerCardProps) 
       {/* Image area with shield clip-path */}
       <div className="relative">
         <div
-          className="relative h-[280px] sm:h-[300px] lg:h-[340px] bg-gradient-to-b from-zru-green to-[#003822]"
+          className="relative h-[260px] sm:h-[280px] lg:h-[320px] bg-gradient-to-b from-zru-green to-[#003822]"
           style={{ clipPath: "polygon(0 0, 100% 0, 100% 92%, 50% 100%, 0 92%)" }}
         >
           {/* Watermark name */}
@@ -64,20 +64,20 @@ export default function FeaturedPlayerCard({ player }: FeaturedPlayerCardProps) 
 
       {/* Name */}
       <div className="pt-8 pb-2 px-4 text-center">
-        <h3 className="font-heading text-base sm:text-lg font-black uppercase tracking-tight text-rich-black leading-tight">
+        <h3 className="font-heading text-sm sm:text-base lg:text-lg font-black uppercase tracking-tight text-rich-black leading-tight">
           {player.name}
         </h3>
         <p className="text-[10px] sm:text-xs text-neutral-mid mt-0.5">{player.team}</p>
       </div>
 
       {/* Stats row */}
-      <div className="mx-auto grid w-fit grid-cols-2 divide-x divide-black/5 py-3 border-t border-black/5">
+      <div className="mx-auto grid w-fit grid-cols-2 divide-x divide-black/5 py-2.5 border-t border-black/5">
         <div className="px-5 text-center">
-          <div className="text-sm font-bold text-rich-black">{player.caps}</div>
+          <div className="text-[13px] font-bold text-rich-black">{player.caps}</div>
           <div className="text-[9px] uppercase tracking-widest text-black/40 font-bold mt-0.5">Caps</div>
         </div>
         <div className="px-5 text-center">
-          <div className="text-sm font-bold text-rich-black">{player.age}</div>
+          <div className="text-[13px] font-bold text-rich-black">{player.age}</div>
           <div className="text-[9px] uppercase tracking-widest text-black/40 font-bold mt-0.5">Age</div>
         </div>
       </div>
@@ -86,7 +86,7 @@ export default function FeaturedPlayerCard({ player }: FeaturedPlayerCardProps) 
       <div className="px-4 pb-4 pt-1 text-center">
         <Link
           href={`/players/${slug}`}
-          className="inline-block clip-slanted-sm bg-gradient-to-b from-[#00704D] to-[#005238] hover:from-[#006747] hover:to-[#00402B] text-white font-heading font-black text-[9px] sm:text-[10px] lg:text-[11px] uppercase tracking-[0.18em] px-5 sm:px-6 py-2 transition-all duration-300 shadow-sm hover:shadow-md"
+          className="inline-block clip-slanted-sm bg-gradient-to-b from-[#00704D] to-[#005238] hover:from-[#006747] hover:to-[#00402B] text-white font-heading font-black text-[10px] sm:text-[11px] uppercase tracking-[0.18em] px-5 py-2 transition-all duration-300 shadow-sm hover:shadow-md"
         >
           View Profile
         </Link>

@@ -25,7 +25,7 @@ export default function HomeNewsletterBanner() {
   };
 
   return (
-    <section className="w-full bg-milk-white py-8 sm:py-12 lg:py-16 relative z-20">
+    <section className="w-full bg-milk-white py-10 sm:py-14 lg:py-20 relative z-20">
       <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Interactive Uiverse Card Container */}
@@ -57,10 +57,10 @@ export default function HomeNewsletterBanner() {
 
             {/* Headline & Paragraph — Fades out and collapses on hover */}
             <div className="space-y-1.5 transition-[opacity,max-width,transform] duration-500 origin-left max-w-lg opacity-100 group-hover/uiverseCard:opacity-0 group-hover/uiverseCard:max-w-0 group-hover/uiverseCard:scale-95 group-hover/uiverseCard:overflow-hidden group-focus-within/uiverseCard:opacity-0 group-focus-within/uiverseCard:max-w-0 group-focus-within/uiverseCard:scale-95 group-focus-within/uiverseCard:overflow-hidden shrink min-w-0">
-              <h2 className="text-xl sm:text-2xl md:text-3xl text-white font-heading font-black uppercase tracking-tight leading-tight">
+              <h2 className="text-2xl sm:text-3xl text-white font-heading font-black uppercase tracking-tight leading-tight">
                 JOIN THE FAN ZONE
               </h2>
-              <p className="text-[11px] sm:text-xs md:text-sm text-white/80 font-normal leading-relaxed font-body line-clamp-2">
+              <p className="text-xs sm:text-sm text-white/80 font-normal leading-relaxed font-body line-clamp-2">
                 Subscribe to our official newsletter and be the first to receive match ticket drops, Sable squad announcements, and inner-sanctum updates.
               </p>
             </div>
@@ -92,7 +92,7 @@ export default function HomeNewsletterBanner() {
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       placeholder="name@domain.com"
-                      className="w-full bg-black/5 text-[#0E0E0E] px-4 py-3.5 rounded-xl border border-black/10 focus:outline-none focus:border-[#006747] text-sm placeholder:text-[#0E0E0E]/40 transition-colors min-h-[46px]"
+                      className="w-full bg-black/5 text-[#0E0E0E] px-4 py-3.5 rounded-xl border border-black/10 focus:outline-none focus:border-zru-green text-sm placeholder:text-[#0E0E0E]/40 transition-colors min-h-[46px]"
                     />
                   </div>
 

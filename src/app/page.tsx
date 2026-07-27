@@ -69,8 +69,8 @@ export default async function Home() {
         <CleanCountdownBanner />
 
         {/* 5. Featured Players — CometCard 3D tilt on desktop */}
-        <section className="px-4 sm:px-6 lg:px-8 py-16 max-w-6xl mx-auto">
-          <div className="mb-10">
+        <section className="px-4 sm:px-6 lg:px-8 py-14 sm:py-20 max-w-[1200px] mx-auto">
+          <div className="mb-8">
             <h2 className="text-3xl sm:text-5xl font-heading font-black uppercase tracking-tight text-rich-black not-italic">
               FEATURED{" "}
               <span className="text-accent-teal">PLAYERS</span>

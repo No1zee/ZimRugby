@@ -10,7 +10,7 @@ export default function CleanCountdownBanner() {
 
   return (
     <section
-      className="py-4 sm:py-6 text-white border-y border-white/10 relative overflow-hidden select-none"
+      className="py-5 sm:py-7 text-white border-y border-white/10 relative overflow-hidden select-none min-h-[120px] sm:min-h-[160px]"
       style={{
         background: "radial-gradient(circle at 50% 25%, #007A50 0%, #004D2C 60%, #002D1A 100%)",
       }}
@@ -70,7 +70,7 @@ export default function CleanCountdownBanner() {
 
       <div className="relative z-20 max-w-[1360px] mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center text-center">
         {/* Title */}
-        <span className="text-xs sm:text-sm font-bold tracking-[0.3em] uppercase text-white/90 mb-4 font-heading">
+        <span className="text-[11px] sm:text-xs font-bold tracking-[0.25em] uppercase text-white/90 mb-4 font-heading">
           ROAD TO AUSTRALIA 2027
         </span>
 

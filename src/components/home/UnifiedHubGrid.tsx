@@ -77,7 +77,7 @@ export default async function UnifiedHubGrid() {
                       <span className="inline-block px-1.5 py-0.5 bg-emerald-500/20 text-emerald-300 rounded text-[8px] font-extrabold tracking-widest uppercase mb-1">
                         {article.category || "NEWS"}
                       </span>
-                      <h3 className="font-heading font-black text-[13px] leading-[1.25] uppercase text-white group-hover/item:text-emerald-300 transition-colors line-clamp-2">
+                      <h3 className="font-heading font-black text-[14px] leading-[1.25] uppercase text-white group-hover/item:text-emerald-300 transition-colors line-clamp-2">
                         {article.title}
                       </h3>
                       <p className="text-[9px] font-bold text-white/50 mt-1">{article.date?.toUpperCase()}</p>
@@ -159,23 +159,23 @@ export default async function UnifiedHubGrid() {
           <div className="relative z-10 flex items-center justify-between my-2">
             {/* Home Team */}
             <div className="flex flex-col items-center group/team cursor-pointer">
-              <div className="relative w-16 h-16 bg-white rounded-full flex items-center justify-center p-2 mb-2 shadow-lg ring-2 ring-emerald-400/40 group-hover/team:brightness-110 transition-[filter]">
+              <div className="relative w-[72px] h-[72px] bg-white rounded-full flex items-center justify-center p-2 mb-2 shadow-lg ring-2 ring-emerald-400/40 group-hover/team:brightness-110 transition-[filter]">
                 <Image
                   src="/images/teams/zimbabwe.png"
                   alt="Zimbabwe"
-                  width={40}
-                  height={40}
+                  width={44}
+                  height={44}
                   className="object-contain"
                 />
               </div>
-              <span className="font-heading font-black text-[11px] leading-[1.1] text-center text-white uppercase">
+              <span className="font-heading font-black text-xs leading-[1.1] text-center text-white uppercase">
                 {nextMatch ? nextMatch.homeTeam.name.split(" ").join("\n") : "ZIMBABWE\nSABLES"}
               </span>
             </div>
 
             {/* VS Badge */}
             <div className="flex flex-col items-center">
-              <div className="w-9 h-9 rounded-full bg-emerald-500/20 border border-emerald-400/40 flex items-center justify-center text-emerald-300 font-heading font-black text-base shadow-inner mb-1">
+              <div className="w-10 h-10 rounded-full bg-emerald-500/20 border border-emerald-400/40 flex items-center justify-center text-emerald-300 font-heading font-black text-base shadow-inner mb-1">
                 VS
               </div>
               {nextMatch?.competition && (
@@ -187,23 +187,23 @@ export default async function UnifiedHubGrid() {
 
             {/* Away Team */}
             <div className="flex flex-col items-center group/team cursor-pointer">
-              <div className="relative w-16 h-16 bg-white rounded-full flex items-center justify-center p-2 mb-2 shadow-lg ring-2 ring-white/20 group-hover/team:brightness-110 transition-[filter]">
+              <div className="relative w-[72px] h-[72px] bg-white rounded-full flex items-center justify-center p-2 mb-2 shadow-lg ring-2 ring-white/20 group-hover/team:brightness-110 transition-[filter]">
                 <Image
                   src="/images/teams/namibia.png"
                   alt="Namibia"
-                  width={40}
-                  height={40}
+                  width={44}
+                  height={44}
                   className="object-contain"
                 />
               </div>
-              <span className="font-heading font-black text-[11px] leading-[1.1] text-center text-white uppercase">
+              <span className="font-heading font-black text-xs leading-[1.1] text-center text-white uppercase">
                 {nextMatch ? nextMatch.awayTeam.name.split(" ").join("\n") : "NAMIBIA\nWELWITSCHIAS"}
               </span>
             </div>
           </div>
 
           {/* Glassmorphic Match Details */}
-          <div className="relative z-10 bg-black/40 rounded-xl p-3.5 border border-white/10 space-y-2 my-2">
+          <div className="relative z-10 bg-black/40 rounded-xl p-4 border border-white/10 space-y-2 my-2">
             <div className="flex items-center gap-2 text-white/90">
               <Calendar size={16} className="text-emerald-400" />
               <span className="font-body font-bold text-[11px] uppercase tracking-wider">
@@ -244,11 +244,11 @@ export default async function UnifiedHubGrid() {
           {/* Header + Price Tag */}
           <div className="relative z-10 flex justify-between items-center">
             <span className="text-[11px] font-extrabold uppercase tracking-[0.2em] text-accent-teal">Match Tickets</span>
-            <span className="bg-accent-teal/20 text-accent-teal px-2 py-0.5 text-[10px] font-bold uppercase rounded-full tracking-wider">From US$5</span>
+            <span className="bg-white/10 text-accent-teal px-2 py-0.5 text-[10px] font-bold uppercase rounded-full tracking-wider">From US$5</span>
           </div>
 
           {/* Match Reference — ties to Next Match fixture */}
-          <div className="relative z-10 p-4 border border-accent-teal/30 rounded flex flex-col gap-1">
+          <div className="relative z-10 p-4 border border-accent-teal/20 rounded-xl flex flex-col gap-1">
             <h4 className="font-heading text-sm not-italic text-white">
               {nextMatch ? `${nextMatch.homeTeam.name} vs ${nextMatch.awayTeam.name}` : "Sables vs Namibia"}
             </h4>
@@ -285,10 +285,8 @@ export default async function UnifiedHubGrid() {
       </div>
 
       {/* ── Matchday Video Highlights Section ── */}
-      <div className="mt-12 pt-10 border-t border-black/10">
+      <div className="mt-10 pt-8 border-t border-black/10">
         <MatchdayVideoHighlights
-          title="NATIONS CUP"
-          subtitle="MATCH HIGHLIGHTS"
           showChannelLink={true}
         />
       </div>

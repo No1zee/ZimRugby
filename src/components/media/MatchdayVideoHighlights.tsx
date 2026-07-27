@@ -66,13 +66,13 @@ const DEFAULT_HIGHLIGHTS: YouTubeVideoItem[] = [
 ];
 
 interface MatchdayVideoHighlightsProps {
-  title?: string;
+  title?: React.ReactNode;
   subtitle?: string;
   showChannelLink?: boolean;
 }
 
 export default function MatchdayVideoHighlights({
-  title = "NATIONS CUP",
+  title,
   subtitle = "MATCH HIGHLIGHTS",
   showChannelLink = true,
 }: MatchdayVideoHighlightsProps) {
@@ -213,8 +213,8 @@ export default function MatchdayVideoHighlights({
   // ── Dynamic Ring Math (responsive) ──
   const count = videos.length;
   const cardWidth = isMobile
-    ? Math.min(180, containerWidth * 0.7)
-    : Math.min(320, containerWidth * 0.26);
+    ? Math.min(160, containerWidth * 0.55)
+    : Math.min(260, containerWidth * 0.22);
   const cardGap = cardWidth * 0.08;
 
   const minRadius = count <= 1
@@ -223,13 +223,13 @@ export default function MatchdayVideoHighlights({
 
   const maxRadius = isMobile
     ? containerWidth * 0.38
-    : containerWidth * 0.45;
+    : containerWidth * 0.42;
   const radius = Math.min(minRadius, maxRadius);
 
   const angleStep = count > 0 ? 360 / count : 0;
 
-  // Only render cards within ±120° of front-facing (virtualization)
-  const VISIBLE_ARC = 120;
+  // Only render cards within ±150° of front-facing (virtualization)
+  const VISIBLE_ARC = 150;
 
   // ── 0 cards: empty state ──
   if (count === 0) {
@@ -307,7 +307,7 @@ export default function MatchdayVideoHighlights({
                   const cosVal = Math.cos((netAngle * Math.PI) / 180);
 
                   // Virtualization: skip cards far behind the ring
-                  if (cosVal < -0.3) return null;
+                  if (cosVal < -0.8) return null;
 
                   const cardOpacity = Math.max(0.3, (cosVal + 0.4) / 1.4);
                   const zIndexVal = Math.round(1000 + cosVal * 500);
@@ -425,7 +425,7 @@ function HeaderStrip({
   setViewMode,
 }: {
   subtitle: string;
-  title: string;
+  title: React.ReactNode;
   showChannelLink: boolean;
   viewMode: "ring" | "grid";
   setViewMode: (m: "ring" | "grid") => void;
@@ -433,14 +433,8 @@ function HeaderStrip({
   return (
     <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
       <div>
-        <div className="flex items-center gap-2 mb-1">
-          <span className="w-6 h-0.5 bg-[#006747]" />
-          <span className="text-[11px] font-heading font-black uppercase tracking-[0.25em] text-[#006747]">
-            {subtitle}
-          </span>
-        </div>
-        <h2 className="text-3xl sm:text-5xl font-heading font-black uppercase tracking-tight text-rich-black italic">
-          {title}
+        <h2 className="text-3xl sm:text-5xl font-heading font-black uppercase tracking-tight text-rich-black not-italic">
+          {title ?? <>NATIONS <span className="text-accent-teal">CUP</span></>}
         </h2>
       </div>
 

@@ -37,7 +37,14 @@ export async function getTicketmasterFixtures(): Promise<Fixture[]> {
             + `&classificationName=sports&apikey=${TM_API_KEY}`;
 
   try {
-    const res = await fetch(url, { next: { revalidate: 3600 } });
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 5000);
+
+    const res = await fetch(url, {
+      next: { revalidate: 3600 },
+      signal: controller.signal,
+    });
+    clearTimeout(timeoutId);
     const data = await res.json();
     
     const events: TMEvent[] = data._embedded?.events ?? [];

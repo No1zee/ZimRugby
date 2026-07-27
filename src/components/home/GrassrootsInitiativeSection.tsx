@@ -47,7 +47,7 @@ const INITIATIVES = [
 
 export default function GrassrootsInitiativeSection() {
   return (
-    <section className="py-10 sm:py-14 bg-[#006747] text-white relative overflow-hidden select-none">
+    <section className="py-12 sm:py-16 bg-[#006747] text-white relative overflow-hidden select-none">
       
       {/* Background ambient pitch watermark & diagonal brand lines */}
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(255,255,255,0.08)_0%,transparent_70%)] pointer-events-none" />
@@ -100,7 +100,7 @@ export default function GrassrootsInitiativeSection() {
                   <span className="text-[10px] font-extrabold text-[#006747] tracking-widest uppercase block">
                     {item.subtitle}
                   </span>
-                  <h3 className="font-heading font-black text-sm sm:text-lg text-black uppercase leading-snug group-hover/card:text-[#006747] transition-colors line-clamp-2">
+                  <h3 className="font-heading font-black text-base sm:text-lg text-black uppercase leading-snug group-hover/card:text-[#006747] transition-colors line-clamp-2">
                     {item.title}
                   </h3>
                   <p className="text-black/70 text-xs font-normal leading-relaxed line-clamp-3">
@@ -124,12 +124,12 @@ export default function GrassrootsInitiativeSection() {
         </div>
 
         {/* Editorial Impact Stat Bar (Clean White Text on ZRU Green Background) */}
-        <div className="pt-6 border-t border-white/20 grid grid-cols-4 divide-x divide-white/20 text-center text-white tabular-nums">
+        <div className="pt-8 border-t border-white/20 grid grid-cols-4 divide-x divide-white/20 text-center text-white tabular-nums">
           
           <div className="flex flex-col items-center justify-center px-1 sm:px-4 space-y-1 group">
             <div className="flex items-center gap-1.5 text-white">
               <Users className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-white/80" />
-              <span className="font-heading font-black text-xl sm:text-3xl text-white tracking-tight not-italic">15,000+</span>
+              <span className="font-heading font-black text-2xl sm:text-3xl text-white tracking-tight not-italic">15,000+</span>
             </div>
             <span className="text-[8px] sm:text-[11px] font-extrabold text-white/80 uppercase tracking-wider block font-heading leading-tight">
               Active Youth Players
@@ -139,7 +139,7 @@ export default function GrassrootsInitiativeSection() {
           <div className="flex flex-col items-center justify-center px-1 sm:px-4 space-y-1 group">
             <div className="flex items-center gap-1.5 text-white">
               <GraduationCap className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-white/80" />
-              <span className="font-heading font-black text-xl sm:text-3xl text-white tracking-tight not-italic">120+</span>
+              <span className="font-heading font-black text-2xl sm:text-3xl text-white tracking-tight not-italic">120+</span>
             </div>
             <span className="text-[8px] sm:text-[11px] font-extrabold text-white/80 uppercase tracking-wider block font-heading leading-tight">
               Schools &amp; Clubs
@@ -149,7 +149,7 @@ export default function GrassrootsInitiativeSection() {
           <div className="flex flex-col items-center justify-center px-1 sm:px-4 space-y-1 group">
             <div className="flex items-center gap-1.5 text-white">
               <Trophy className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-white/80" />
-              <span className="font-heading font-black text-xl sm:text-3xl text-white tracking-tight not-italic">10</span>
+              <span className="font-heading font-black text-2xl sm:text-3xl text-white tracking-tight not-italic">10</span>
             </div>
             <span className="text-[8px] sm:text-[11px] font-extrabold text-white/80 uppercase tracking-wider block font-heading leading-tight">
               Provincial Unions
@@ -159,7 +159,7 @@ export default function GrassrootsInitiativeSection() {
           <div className="flex flex-col items-center justify-center px-1 sm:px-4 space-y-1 group">
             <div className="flex items-center gap-1.5 text-white">
               <CheckCircle2 className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-white/80" />
-              <span className="font-heading font-black text-xl sm:text-3xl text-white tracking-tight not-italic">45%</span>
+              <span className="font-heading font-black text-2xl sm:text-3xl text-white tracking-tight not-italic">45%</span>
             </div>
             <span className="text-[8px] sm:text-[11px] font-extrabold text-white/80 uppercase tracking-wider block font-heading leading-tight">
               Female Participation

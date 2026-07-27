@@ -53,7 +53,7 @@ export default function Footer() {
   if (pathname?.startsWith('/clubhouse') || pathname?.startsWith('/admin')) return null;
 
   return (
-    <footer className="bg-[#FDFBF0] text-[#003822] border-t border-black/10 pb-8 relative overflow-hidden">
+    <footer className="bg-[#FDFBF0] text-[#003822] border-t border-black/10 pb-8 relative overflow-hidden pt-12 lg:pt-16">
       
       {/* Schema.org Sports Organization Metadata */}
       <script
@@ -92,8 +92,7 @@ export default function Footer() {
           </div>
 
           {/* Right Column — Heading, Tagline, Location, CTA (2/3) */}
-          <div className="col-span-2 flex flex-col items-center justify-center text-center px-[4%] gap-4">
-            <div>
+          <div className="col-span-2 flex flex-col items-center justify-center text-center px-[4%] gap-4">            <div>
               <span className="block font-heading font-black text-[1.8rem] sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl uppercase text-[#003822] not-italic leading-[0.85] select-none tracking-[0.02em] sm:tracking-[0.15em]">
                 Zimbabwe
               </span>
@@ -112,7 +111,7 @@ export default function Footer() {
 
         {/* Compact 4-Column Navigation Links */}
         <div className="bg-[#006747] -mx-4 sm:-mx-6 lg:-mx-8 px-4 sm:px-6 lg:px-8 py-8 rounded-lg">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 lg:gap-12">
             {footerColumns.map((col) => (
               <nav key={col.title} aria-label={col.title} className="space-y-3">
                 <span className="block font-heading font-black text-xs sm:text-sm uppercase tracking-wider text-white border-b border-white/20 pb-2">
@@ -123,7 +122,7 @@ export default function Footer() {
                     <li key={link.label}>
                       <Link
                         href={link.href}
-                        className="text-xs font-bold text-white/70 hover:text-white transition-colors inline-block"
+                        className="text-[13px] font-bold text-white/70 hover:text-zru-green transition-colors inline-block"
                       >
                         {link.label}
                       </Link>

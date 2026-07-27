@@ -80,7 +80,7 @@ function SlideContent({
       initial="hidden"
       animate="visible"
       key={slide.id}
-      className="space-y-6 max-w-3xl"
+      className="space-y-6 max-w-3xl lg:max-w-4xl"
     >
       {/* Left Column / Main Stack */}
       <div className="space-y-6 z-20">
@@ -104,7 +104,7 @@ function SlideContent({
               <div className="overflow-hidden block py-0.5">
                 <motion.span 
                   variants={lineVariants}
-                  className="block relative z-20 text-3xl sm:text-4xl md:text-[44px] tracking-tight leading-[1.0] text-glow-heavy text-white drop-shadow-2xl font-heading font-black"
+                  className="block relative z-20 text-4xl sm:text-5xl md:text-[56px] tracking-tight leading-[0.95] text-glow-heavy text-white drop-shadow-2xl font-heading font-black"
                 >
                   {slide.headline.line1}
                 </motion.span>
@@ -112,7 +112,7 @@ function SlideContent({
               <div className="overflow-hidden block py-0.5">
                 <motion.span 
                   variants={lineVariants}
-                  className="block relative z-20 text-3xl sm:text-4xl md:text-[44px] tracking-tight leading-[1.0] text-accent-teal drop-shadow-2xl font-heading font-black"
+                  className="block relative z-20 text-4xl sm:text-5xl md:text-[56px] tracking-tight leading-[0.95] text-accent-teal drop-shadow-2xl font-heading font-black"
                 >
                   {slide.headline.line2}
                 </motion.span>
@@ -120,7 +120,7 @@ function SlideContent({
             </motion.h1>
 
             {/* Subtext */}
-            <motion.p variants={itemVariants} className="text-white/60 text-sm sm:text-base font-normal max-w-md leading-relaxed drop-shadow-2xl font-body">
+            <motion.p variants={itemVariants} className="text-white/60 text-sm sm:text-[15px] font-normal max-w-lg leading-relaxed drop-shadow-2xl font-body">
               {slide.subtext}
             </motion.p>
           </>
@@ -128,7 +128,7 @@ function SlideContent({
 
         {/* CTAs & Directly Attached Navigation Indicators */}
         <div className="space-y-4 pt-2">
-          <div className="flex flex-col sm:flex-row gap-4 justify-start items-center">
+          <div className="flex flex-col sm:flex-row gap-3 justify-start items-center">
             {/* Primary CTA: Sign In */}
             <motion.div
               initial={{ opacity: 0, y: 15 }}
@@ -169,7 +169,7 @@ function SlideContent({
               aria-label="Previous Slide"
               title="Previous Slide"
             >
-                <ChevronLeft size={24} />
+                <ChevronLeft size={20} />
             </button>
             <div className="flex gap-2.5">
                {slides.map((_, i) => {
@@ -178,8 +178,8 @@ function SlideContent({
                    <button
                      key={i}
                      onClick={() => setCurrentSlide(i)}
-                     className={`h-2 transition-all duration-500 clip-slanted-sm relative overflow-hidden ${
-                       isActive ? 'w-14 bg-white/20' : 'w-7 bg-white/40 hover:bg-white/60'
+                     className={`h-1.5 transition-all duration-500 clip-slanted-sm relative overflow-hidden ${
+                       isActive ? 'w-12 bg-white/20' : 'w-6 bg-white/40 hover:bg-white/60'
                      }`}
                      aria-label={`Go to slide ${i + 1}`}
                      title={`Go to slide ${i + 1}`}
@@ -204,7 +204,7 @@ function SlideContent({
               aria-label="Next Slide"
               title="Next Slide"
             >
-                <ChevronRight size={24} />
+                <ChevronRight size={20} />
             </button>
           </div>
         </div>
@@ -325,7 +325,7 @@ export default function HeroCarousel({ slides }: { slides: HeroSlideData[] }) {
       </AnimatePresence>
 
       {/* Content Layer */}
-      <motion.div style={{ y: yText, opacity: opacityText }} className="relative z-20 w-full max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 h-full flex items-end justify-start pb-28 lg:pb-36">
+      <motion.div style={{ y: yText, opacity: opacityText }} className="relative z-20 w-full max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 h-full flex items-end justify-start pb-24 lg:pb-32">
         <div className="text-left w-full mr-auto">
           <SlideContent 
             slide={activeSlide} 

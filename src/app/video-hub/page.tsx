@@ -88,7 +88,7 @@ export default function VideoHubPage() {
       )}
 
       {/* 2. Matchday Media & Nations Cup Video Highlights */}
-      <MatchdayVideoHighlights title="NATIONS CUP" subtitle="MATCH HIGHLIGHTS" />
+      <MatchdayVideoHighlights />
 
       {/* 3. Navigation Filters & Search */}
       <div className="border-y border-white/10 bg-rich-black/80 sticky top-16 z-30 backdrop-blur-md py-6">

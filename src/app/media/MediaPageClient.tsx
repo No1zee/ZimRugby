@@ -116,7 +116,7 @@ export default function MediaPageClient({ initialSocialPosts }: MediaPageClientP
 
         {/* Nations Cup Matchday Media & Video Highlights */}
         <div className="mb-16">
-          <MatchdayVideoHighlights title="NATIONS CUP" subtitle="MATCH HIGHLIGHTS" />
+          <MatchdayVideoHighlights />
         </div>
 
         {/* Filters */}
