@@ -34,7 +34,6 @@ const pageSpecificHeaders = [
 ];
 
 const nextConfig: NextConfig = {
-  output: 'standalone',
   reactStrictMode: true,
   experimental: {
     optimizePackageImports: ['framer-motion', 'lucide-react'],
