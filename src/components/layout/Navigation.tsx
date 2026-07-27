@@ -171,19 +171,19 @@ export default function Navigation() {
             : "bg-transparent py-5"
         }`}
       >
-        <div className="w-full pr-4 sm:pr-6 lg:pr-8 pl-0 grid grid-cols-[auto_1fr_auto] items-center gap-2 lg:gap-4">
+        <div className="w-full pl-2 sm:pl-4 lg:pl-8 pr-2 sm:pr-4 lg:pr-8 grid grid-cols-[auto_1fr_auto] items-center gap-1.5 sm:gap-2 lg:gap-4">
 
           {/* ── Logo Brand Block ── */}
           <Link
             href="/"
-            className="flex items-center gap-2.5 sm:gap-4 group z-50 transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] shrink-0"
+            className="flex items-center gap-2 sm:gap-2.5 md:gap-4 group z-50 transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] shrink-0"
           >
             {/* Emblem — large on hero, shrinks on scroll */}
             <div
               className={`relative transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:rotate-6 flex items-center justify-center shrink-0 ${
                 isOnHero
-                  ? "w-24 h-24 sm:w-28 sm:h-28 md:w-32 md:h-32 drop-shadow-[0_10px_25px_rgba(0,0,0,0.5)]"
-                  : "w-9 h-9 sm:w-10 sm:h-10 md:w-12 md:h-12"
+                  ? "w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 lg:w-28 lg:h-28 xl:w-32 xl:h-32 drop-shadow-[0_10px_25px_rgba(0,0,0,0.5)]"
+                  : "w-8 h-8 sm:w-9 sm:h-9 md:w-10 md:h-10 lg:w-10 lg:h-10 xl:w-12 xl:h-12"
               }`}
             >
               <Image
@@ -290,18 +290,18 @@ export default function Navigation() {
           </div>
 
           {/* ── Mobile Actions ── */}
-          <div className="lg:hidden flex items-center gap-2 shrink-0">
+          <div className="lg:hidden flex items-center gap-1.5 sm:gap-2 shrink-0">
             <button
               onClick={() => setIsSearchOpen(true)}
-              className={`p-2 transition-colors cursor-pointer ${navTextClass}`}
+              className={`p-1.5 sm:p-2 transition-colors cursor-pointer ${navTextClass}`}
               aria-label="Search site"
             >
-              <Search className="w-5 h-5" />
+              <Search className="w-4.5 h-4.5 sm:w-5 sm:h-5" />
             </button>
-            <SlantedButton href="/login" variant="primary" size="sm">
-              <div className="flex items-center gap-1.5">
-                <User className="w-3.5 h-3.5" />
-                <span className="text-xs font-black uppercase tracking-wider">Sign In</span>
+            <SlantedButton href="/login" variant="primary" size="sm" className="px-4 sm:px-6 py-1.5 sm:py-2 text-[10px] sm:text-base">
+              <div className="flex items-center gap-1 sm:gap-1.5">
+                <User className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
+                <span className="hidden min-[380px]:inline text-[10px] sm:text-xs font-black uppercase tracking-wider">Sign In</span>
               </div>
             </SlantedButton>
           </div>
