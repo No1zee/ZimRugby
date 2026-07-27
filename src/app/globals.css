@@ -522,8 +522,22 @@ html, body {
   height: 100%;
   color: white;
   text-decoration: none;
-  transition: 0.25s;
+  opacity: 0;
+  transition: opacity 0.2s ease 0.25s;
 }
+
+.social-card:hover .social-icon-link,
+.social-card.is-open .social-icon-link {
+  opacity: 1;
+  transition-delay: 0.15s;
+}
+
+.social-card .social-icon-link:nth-child(2) { transition-delay: 0.18s; }
+.social-card .social-icon-link:nth-child(3) { transition-delay: 0.21s; }
+.social-card .social-icon-link:nth-child(4) { transition-delay: 0.24s; }
+.social-card .social-icon-link:nth-child(5) { transition-delay: 0.27s; }
+.social-card .social-icon-link:nth-child(6) { transition-delay: 0.30s; }
+.social-card .social-icon-link:nth-child(7) { transition-delay: 0.33s; }
 
 .social-card .social-icon-link svg {
   width: 18px;
