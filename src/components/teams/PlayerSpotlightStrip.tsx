@@ -1,8 +1,6 @@
-"use client";
-
 import Image from "next/image";
 import Link from "next/link";
-import { Star, Award, Zap, ArrowRight } from "lucide-react";
+import { Star, ArrowRight } from "lucide-react";
 
 export default function PlayerSpotlightStrip() {
   return (

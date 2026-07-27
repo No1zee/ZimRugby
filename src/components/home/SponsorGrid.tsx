@@ -56,12 +56,37 @@ const SPONSORS = [
 export default function SponsorGrid() {
   const [activeIdx, setActiveIdx] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
+  const sectionRef = React.useRef<HTMLElement>(null);
+  const inViewRef = React.useRef(false);
+  const hiddenRef = React.useRef(false);
 
-  // Subtle auto-rotation every 4 seconds unless hovered
+  React.useEffect(() => {
+    const el = sectionRef.current;
+    const observer = el
+      ? new IntersectionObserver(([entry]) => {
+          inViewRef.current = entry.isIntersecting;
+        }, { threshold: 0 })
+      : null;
+    if (el) observer.observe(el);
+
+    function handleVisibility() {
+      hiddenRef.current = document.hidden;
+    }
+    document.addEventListener("visibilitychange", handleVisibility);
+
+    return () => {
+      observer?.disconnect();
+      document.removeEventListener("visibilitychange", handleVisibility);
+    };
+  }, []);
+
+  // Subtle auto-rotation every 4 seconds unless hovered or off-screen
   useEffect(() => {
     if (isHovered) return;
     const timer = setInterval(() => {
-      setActiveIdx((prev) => (prev + 1) % SPONSORS.length);
+      if (inViewRef.current && !hiddenRef.current) {
+        setActiveIdx((prev) => (prev + 1) % SPONSORS.length);
+      }
     }, 4000);
     return () => clearInterval(timer);
   }, [isHovered]);
@@ -69,7 +94,7 @@ export default function SponsorGrid() {
   const activeSponsor = SPONSORS[activeIdx];
 
   return (
-    <section id="partners" className="bg-[#FDFBF0] border-t border-black/5 pt-6 sm:pt-8 pb-0 px-6 lg:px-12">
+    <section ref={sectionRef} id="partners" className="bg-[#FDFBF0] border-t border-black/5 pt-6 sm:pt-8 pb-0 px-6 lg:px-12">
       <div className="max-w-[1280px] mx-auto space-y-6">
         
         {/* ── 1. Minimal Header ── */}

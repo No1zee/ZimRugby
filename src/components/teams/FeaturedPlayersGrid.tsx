@@ -1,5 +1,3 @@
-"use client";
-
 import FeaturedPlayerCard from "./FeaturedPlayerCard";
 import type { FeaturedPlayer } from "@/types";
 

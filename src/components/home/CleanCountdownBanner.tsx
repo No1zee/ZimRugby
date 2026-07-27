@@ -47,7 +47,6 @@ export default function CleanCountdownBanner() {
           height={360}
           className="w-full h-full object-contain object-bottom drop-shadow-[0_15px_30px_rgba(0,0,0,0.7)]"
           unoptimized
-          priority
         />
       </motion.div>
 
@@ -66,7 +65,6 @@ export default function CleanCountdownBanner() {
           height={360}
           className="w-full h-full object-contain object-bottom drop-shadow-[0_15px_30px_rgba(0,0,0,0.7)]"
           unoptimized
-          priority
         />
       </motion.div>
 

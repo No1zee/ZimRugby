@@ -271,17 +271,46 @@ export function AnimatedCountdown({
   const sizePreset = sizeClasses[size];
   const displayTimeLeft = isStatic ? staticTime : timeLeft;
   const completed = mounted && !isStatic && isFinished(displayTimeLeft);
+  const containerRef = React.useRef<HTMLDivElement>(null);
+  const inViewRef = React.useRef(false);
+  const hiddenRef = React.useRef(false);
 
   React.useEffect(() => {
     setMounted(true);
     if (isStatic) return;
 
+    const el = containerRef.current;
+    const observer = el
+      ? new IntersectionObserver(([entry]) => {
+          inViewRef.current = entry.isIntersecting;
+          if (inViewRef.current && !hiddenRef.current) {
+            setTimeLeft(getTimeLeft(targetDate));
+          }
+        }, { threshold: 0 })
+      : null;
+
+    if (el) observer.observe(el);
+
+    function handleVisibility() {
+      hiddenRef.current = document.hidden;
+      if (!document.hidden && inViewRef.current) {
+        setTimeLeft(getTimeLeft(targetDate));
+      }
+    }
+    document.addEventListener("visibilitychange", handleVisibility);
+
     setTimeLeft(getTimeLeft(targetDate));
     const interval = window.setInterval(() => {
-      setTimeLeft(getTimeLeft(targetDate));
+      if (inViewRef.current && !hiddenRef.current) {
+        setTimeLeft(getTimeLeft(targetDate));
+      }
     }, 1000);
 
-    return () => window.clearInterval(interval);
+    return () => {
+      window.clearInterval(interval);
+      observer?.disconnect();
+      document.removeEventListener("visibilitychange", handleVisibility);
+    };
   }, [isStatic, targetDate]);
 
   React.useEffect(() => {
@@ -295,8 +324,79 @@ export function AnimatedCountdown({
     ...(accentColor ? { "--countdown-accent": accentColor } as React.CSSProperties : null),
   } as React.CSSProperties;
 
+  if (!mounted) {
+    return (
+      <div
+        ref={containerRef}
+        aria-label={ariaLabel}
+        className={cn(
+          "inline-flex max-w-full flex-col items-center rounded-[1.75rem] border",
+          variantClasses[variant],
+          sizePreset.container,
+          compact && "rounded-2xl",
+          containerClassName,
+          className,
+        )}
+        style={style}
+      >
+        <div
+          className={cn(
+            "flex max-w-full items-stretch gap-2 justify-center flex-wrap",
+            showSeparators && "sm:gap-0",
+          )}
+        >
+          {visibleUnits.map((unit, index) => (
+            <React.Fragment key={unit}>
+              <div
+                className={cn(
+                  "relative flex flex-col items-center justify-center overflow-hidden border text-center",
+                  unitVariantClasses[variant],
+                  sizePreset.unit,
+                  unitClassName,
+                )}
+              >
+                <span
+                  className={cn(
+                    "relative inline-grid min-w-[2ch] place-items-center tabular-nums font-bold leading-none tracking-tight text-foreground",
+                    variant === "digital" && "font-mono text-cyan-100",
+                    sizePreset.number,
+                    numberClassName,
+                  )}
+                >
+                  {format(displayTimeLeft[unit])}
+                </span>
+                <span
+                  className={cn(
+                    "mt-2 font-semibold uppercase tracking-[0.18em] text-muted-foreground",
+                    variant === "digital" && "text-cyan-200/55",
+                    sizePreset.label,
+                    labelClassName,
+                  )}
+                >
+                  {UNIT_LABELS[unit]}
+                </span>
+              </div>
+              {showSeparators && index < visibleUnits.length - 1 && (
+                <span
+                  className={cn(
+                    "hidden items-center px-2 text-2xl font-semibold text-muted-foreground/50 sm:flex",
+                    variant === "digital" && "font-mono text-cyan-200/45",
+                  )}
+                  aria-hidden
+                >
+                  {separator}
+                </span>
+              )}
+            </React.Fragment>
+          ))}
+        </div>
+      </div>
+    );
+  }
+
   return (
     <motion.div
+      ref={containerRef}
       initial={false}
       animate={{ opacity: 1, y: 0, scale: 1 }}
       transition={{ duration: 0.5, ease: "easeOut" }}

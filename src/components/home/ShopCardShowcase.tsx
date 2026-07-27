@@ -23,11 +23,36 @@ const SHOP_PRODUCTS = [
 export default function ShopCardShowcase() {
   const [activeIndex, setActiveIndex] = React.useState(0);
   const [isHovered, setIsHovered] = React.useState(false);
+  const wrapperRef = React.useRef<HTMLDivElement>(null);
+  const inViewRef = React.useRef(false);
+  const hiddenRef = React.useRef(false);
+
+  React.useEffect(() => {
+    const el = wrapperRef.current;
+    const observer = el
+      ? new IntersectionObserver(([entry]) => {
+          inViewRef.current = entry.isIntersecting;
+        }, { threshold: 0 })
+      : null;
+    if (el) observer.observe(el);
+
+    function handleVisibility() {
+      hiddenRef.current = document.hidden;
+    }
+    document.addEventListener("visibilitychange", handleVisibility);
+
+    return () => {
+      observer?.disconnect();
+      document.removeEventListener("visibilitychange", handleVisibility);
+    };
+  }, []);
 
   React.useEffect(() => {
     if (isHovered) return;
     const interval = setInterval(() => {
-      setActiveIndex((prev) => (prev + 1) % SHOP_PRODUCTS.length);
+      if (inViewRef.current && !hiddenRef.current) {
+        setActiveIndex((prev) => (prev + 1) % SHOP_PRODUCTS.length);
+      }
     }, 4500);
     return () => clearInterval(interval);
   }, [isHovered]);
@@ -35,6 +60,7 @@ export default function ShopCardShowcase() {
   const currentProduct = SHOP_PRODUCTS[activeIndex];
 
   return (
+    <div ref={wrapperRef}>
     <Link
       href="/clubhouse"
       onMouseEnter={() => setIsHovered(true)}
@@ -75,5 +101,6 @@ export default function ShopCardShowcase() {
         </div>
       </div>
     </Link>
+    </div>
   );
 }

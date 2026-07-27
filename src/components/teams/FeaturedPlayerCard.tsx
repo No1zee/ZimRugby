@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { CometCard } from "@/components/ui/comet-card";
 import { usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion";
+import { useIsMobile } from "@/hooks/useIsMobile";
 import type { FeaturedPlayer } from "@/types";
 
 interface FeaturedPlayerCardProps {
@@ -12,6 +13,7 @@ interface FeaturedPlayerCardProps {
 
 export default function FeaturedPlayerCard({ player }: FeaturedPlayerCardProps) {
   const prefersReduced = usePrefersReducedMotion();
+  const isMobile = useIsMobile();
 
   const slug =
     player.slug ?? player.name.toLowerCase().replace(/\s+/g, "-");
@@ -92,7 +94,7 @@ export default function FeaturedPlayerCard({ player }: FeaturedPlayerCardProps) 
     </div>
   );
 
-  if (prefersReduced) {
+  if (prefersReduced || isMobile) {
     return <div className="w-full">{cardContent}</div>;
   }
 

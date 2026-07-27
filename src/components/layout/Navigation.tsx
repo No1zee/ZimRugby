@@ -171,7 +171,7 @@ export default function Navigation() {
             : "bg-transparent py-5"
         }`}
       >
-        <div className="w-full px-4 sm:px-6 lg:px-8 grid grid-cols-[auto_1fr_auto] items-center gap-2 lg:gap-4">
+        <div className="w-full pr-4 sm:pr-6 lg:pr-8 pl-0 grid grid-cols-[auto_1fr_auto] items-center gap-2 lg:gap-4">
 
           {/* ── Logo Brand Block ── */}
           <Link

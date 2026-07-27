@@ -1,6 +1,6 @@
 ﻿"use client";
 
-import React, { useState, useEffect, useRef, useCallback, useMemo } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import Image from "next/image";
 import { Play, ExternalLink, X, CircleDot, LayoutGrid, MoveHorizontal } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -76,7 +76,6 @@ export default function MatchdayVideoHighlights({
   subtitle = "MATCH HIGHLIGHTS",
   showChannelLink = true,
 }: MatchdayVideoHighlightsProps) {
-  // Use fallback videos only
   const videos = DEFAULT_HIGHLIGHTS;
   const [activeVideo, setActiveVideo] = useState<YouTubeVideoItem | null>(null);
   const [viewMode, setViewMode] = useState<"ring" | "grid">("ring");
@@ -87,28 +86,71 @@ export default function MatchdayVideoHighlights({
   const [showDragToast, setShowDragToast] = useState(true);
 
   const containerRef = useRef<HTMLDivElement>(null);
+  const ringContainerRef = useRef<HTMLDivElement>(null);
   const [containerWidth, setContainerWidth] = useState(800);
+  const [isMobile, setIsMobile] = useState(false);
 
-  // Measure container width
+  // Viewport + visibility refs for pausing rAF
+  const inViewRef = useRef(false);
+  const hiddenRef = useRef(false);
+  const rafRef = useRef<number>(0);
+
+  // Measure container width + detect mobile
   useEffect(() => {
-    if (!containerRef.current) return;
-    const observer = new ResizeObserver((entries) => {
-      for (const entry of entries) {
-        setContainerWidth(entry.contentRect.width);
-      }
-    });
-    observer.observe(containerRef.current);
+    function measure() {
+      if (!containerRef.current) return;
+      const w = containerRef.current.clientWidth;
+      setContainerWidth(w);
+      setIsMobile(w < 640);
+    }
+    measure();
+    const observer = new ResizeObserver(measure);
+    if (containerRef.current) observer.observe(containerRef.current);
     return () => observer.disconnect();
   }, []);
 
-  // Auto-rotate
+  // IntersectionObserver + visibility for pausing rAF
   useEffect(() => {
-    if (isDragging || viewMode !== "ring" || videos.length <= 1) return;
-    const interval = setInterval(() => {
-      setRotationY((prev) => prev - 0.25);
-    }, 30);
-    return () => clearInterval(interval);
-  }, [isDragging, viewMode, videos.length]);
+    const el = ringContainerRef.current;
+    const observer = el
+      ? new IntersectionObserver(([entry]) => {
+          inViewRef.current = entry.isIntersecting;
+        }, { threshold: 0 })
+      : null;
+    if (el) observer.observe(el);
+
+    function handleVisibility() {
+      hiddenRef.current = document.hidden;
+    }
+    document.addEventListener("visibilitychange", handleVisibility);
+
+    return () => {
+      observer?.disconnect();
+      document.removeEventListener("visibilitychange", handleVisibility);
+    };
+  }, []);
+
+  // Auto-rotate via requestAnimationFrame (replaces setInterval at 30ms)
+  useEffect(() => {
+    let lastTime = 0;
+    const SPEED = 8; // degrees per second
+
+    function tick(now: number) {
+      if (inViewRef.current && !hiddenRef.current && !isDragging && viewMode === "ring") {
+        if (lastTime) {
+          const dt = (now - lastTime) / 1000;
+          setRotationY((prev) => prev - SPEED * dt);
+        }
+        lastTime = now;
+      } else {
+        lastTime = 0;
+      }
+      rafRef.current = requestAnimationFrame(tick);
+    }
+
+    rafRef.current = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(rafRef.current);
+  }, [isDragging, viewMode]);
 
   // Drag handlers
   const handleMouseDown = useCallback((e: React.MouseEvent | React.TouchEvent) => {
@@ -131,29 +173,33 @@ export default function MatchdayVideoHighlights({
 
   // Auto-dismiss drag toast
   useEffect(() => {
-    if (viewMode === "ring" && videos.length > 1) {
+    if (viewMode === "ring" && videos.length > 1 && !isMobile) {
       setShowDragToast(true);
       const timer = setTimeout(() => setShowDragToast(false), 3500);
       return () => clearTimeout(timer);
     }
-  }, [viewMode, videos.length]);
+  }, [viewMode, videos.length, isMobile]);
 
-  // ── Dynamic Ring Math ──
+  // ── Dynamic Ring Math (responsive) ──
   const count = videos.length;
-  const isMobile = containerWidth < 640;
-  const cardWidth = isMobile ? 220 : Math.min(360, containerWidth * 0.28);
+  const cardWidth = isMobile
+    ? Math.min(220, containerWidth * 0.85)
+    : Math.min(320, containerWidth * 0.26);
   const cardGap = cardWidth * 0.08;
 
-  // Radius: big enough so cards barely touch (arc distance ≈ cardWidth + gap)
   const minRadius = count <= 1
     ? 0
     : (cardWidth + cardGap) * count / (2 * Math.PI);
 
-  // Clamp radius — never exceed container half-width (cards stay on screen)
-  const maxRadius = containerWidth * 0.45;
+  const maxRadius = isMobile
+    ? containerWidth * 0.42
+    : containerWidth * 0.45;
   const radius = Math.min(minRadius, maxRadius);
 
   const angleStep = count > 0 ? 360 / count : 0;
+
+  // On mobile, default to grid view unless user explicitly chose ring
+  const effectiveViewMode = isMobile && viewMode === "ring" ? "grid" : viewMode;
 
   // Only render cards within ±120° of front-facing (virtualization)
   const VISIBLE_ARC = 120;
@@ -163,7 +209,7 @@ export default function MatchdayVideoHighlights({
     return (
       <section className="py-4 sm:py-6 bg-milk-white border-t border-black/5 select-none overflow-visible">
         <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 space-y-3">
-          <HeaderStrip subtitle={subtitle} title={title} showChannelLink={showChannelLink} viewMode={viewMode} setViewMode={setViewMode} />
+          <HeaderStrip subtitle={subtitle} title={title} showChannelLink={showChannelLink} viewMode={effectiveViewMode} setViewMode={setViewMode} />
           <div className="flex items-center justify-center h-[280px] sm:h-[340px] text-neutral-mid text-sm">
             No highlight videos available yet.
           </div>
@@ -177,7 +223,7 @@ export default function MatchdayVideoHighlights({
     return (
       <section className="py-4 sm:py-6 bg-milk-white border-t border-black/5 select-none overflow-visible">
         <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 space-y-3">
-          <HeaderStrip subtitle={subtitle} title={title} showChannelLink={showChannelLink} viewMode={viewMode} setViewMode={setViewMode} />
+          <HeaderStrip subtitle={subtitle} title={title} showChannelLink={showChannelLink} viewMode={effectiveViewMode} setViewMode={setViewMode} />
           <div className="flex items-center justify-center py-6">
             <VideoCard video={videos[0]} isDragging={isDragging} onClick={() => setActiveVideo(videos[0])} />
           </div>
@@ -189,11 +235,11 @@ export default function MatchdayVideoHighlights({
 
   return (
     <section className="py-4 sm:py-6 bg-milk-white border-t border-black/5 select-none overflow-visible">
-      <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 space-y-3">
-        <HeaderStrip subtitle={subtitle} title={title} showChannelLink={showChannelLink} viewMode={viewMode} setViewMode={setViewMode} />
+      <div ref={containerRef} className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 space-y-3">
+        <HeaderStrip subtitle={subtitle} title={title} showChannelLink={showChannelLink} viewMode={effectiveViewMode} setViewMode={setViewMode} />
 
-        {viewMode === "ring" ? (
-          <div className="relative w-full py-6 select-none overflow-visible" ref={containerRef}>
+        {effectiveViewMode === "ring" ? (
+          <div className="relative w-full py-6 select-none overflow-visible" ref={ringContainerRef}>
             {/* Drag Toast */}
             <AnimatePresence>
               {showDragToast && (
@@ -211,7 +257,8 @@ export default function MatchdayVideoHighlights({
             </AnimatePresence>
 
             <div
-              className="relative w-full h-[280px] sm:h-[340px] flex items-center justify-center cursor-grab active:cursor-grabbing perspective-1000 overflow-visible"
+              className="relative w-full h-[280px] sm:h-[340px] flex items-center justify-center cursor-grab active:cursor-grabbing overflow-visible"
+              style={{ perspective: isMobile ? "800px" : "1200px" }}
               onMouseDown={handleMouseDown}
               onMouseMove={handleMouseMove}
               onMouseUp={handleMouseUp}
@@ -233,8 +280,7 @@ export default function MatchdayVideoHighlights({
                   const cosVal = Math.cos((netAngle * Math.PI) / 180);
 
                   // Virtualization: skip cards far behind the ring
-                  const isFrontFacing = cosVal > -0.3;
-                  if (!isFrontFacing) return null;
+                  if (cosVal > -0.3) return null;
 
                   const cardOpacity = Math.max(0.3, (cosVal + 0.4) / 1.4);
                   const zIndexVal = Math.round(1000 + cosVal * 500);
@@ -271,7 +317,7 @@ export default function MatchdayVideoHighlights({
                         </div>
                         {video.category && (
                           <div className="absolute top-3 left-3">
-                            <span className="px-2.5 py-1 bg-black/70 backdrop-blur-md text-white text-[9px] font-black uppercase tracking-widest rounded-lg border border-white/20">
+                            <span className="px-2.5 py-1 bg-black/70 text-white text-[9px] font-black uppercase tracking-widest rounded-lg border border-white/20">
                               {video.category}
                             </span>
                           </div>
@@ -294,13 +340,13 @@ export default function MatchdayVideoHighlights({
             </div>
           </div>
         ) : (
-          /* Grid View */
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-3 sm:gap-6">
+          /* Grid View (default on mobile) */
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4 lg:gap-6">
             {videos.map((video) => (
               <div
                 key={video.id}
                 onClick={() => setActiveVideo(video)}
-                className="bg-white rounded-3xl border border-black/10 overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 group cursor-pointer flex flex-col justify-between"
+                className="bg-white rounded-2xl sm:rounded-3xl border border-black/10 overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 group cursor-pointer flex flex-col justify-between"
               >
                 <div className="relative aspect-video w-full overflow-hidden bg-black">
                   <Image
@@ -308,7 +354,7 @@ export default function MatchdayVideoHighlights({
                     alt={video.title}
                     fill
                     className="object-cover group-hover:scale-105 transition-transform duration-700 opacity-95"
-                    sizes="(max-width: 768px) 100vw, 33vw"
+                    sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, 33vw"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
                   <div className="absolute inset-0 flex items-center justify-center">
@@ -318,17 +364,17 @@ export default function MatchdayVideoHighlights({
                   </div>
                   {video.category && (
                     <div className="absolute top-3 left-3">
-                      <span className="px-2.5 py-1 bg-black/70 backdrop-blur-md border border-white/20 text-white text-[9px] font-black uppercase tracking-widest rounded-lg">
+                      <span className="px-2.5 py-1 bg-black/70 border border-white/20 text-white text-[9px] font-black uppercase tracking-widest rounded-lg">
                         {video.category}
                       </span>
                     </div>
                   )}
                 </div>
-                <div className="p-5 space-y-1.5 bg-white">
+                <div className="p-4 sm:p-5 space-y-1.5 bg-white">
                   <span className="text-[10px] font-bold text-[#006747] uppercase tracking-widest block">
                     {video.publishedAt || "WORLD RUGBY MATCH HIGHLIGHTS"}
                   </span>
-                  <p className="font-heading font-black text-base sm:text-lg text-rich-black uppercase leading-snug group-hover:text-[#006747] transition-colors">
+                  <p className="font-heading font-black text-sm sm:text-base md:text-lg text-rich-black uppercase leading-snug group-hover:text-[#006747] transition-colors line-clamp-2">
                     {video.title}
                   </p>
                 </div>
@@ -443,7 +489,7 @@ function VideoCard({ video, isDragging, onClick }: { video: YouTubeVideoItem; is
         </div>
         {video.category && (
           <div className="absolute top-3 left-3">
-            <span className="px-2.5 py-1 bg-black/70 backdrop-blur-md text-white text-[9px] font-black uppercase tracking-widest rounded-lg border border-white/20">
+            <span className="px-2.5 py-1 bg-black/70 text-white text-[9px] font-black uppercase tracking-widest rounded-lg border border-white/20">
               {video.category}
             </span>
           </div>
@@ -508,7 +554,7 @@ function VideoModal({
             <div className="p-5 sm:p-6 bg-milk-white border-t border-black/10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
               <div>
                 <span className="text-[10px] font-black text-[#006747] uppercase tracking-widest block">
-                  ZIMBABWE RUGBY UNION • IN-SITE MATCHDAY MEDIA
+                  ZIMBABWE RUGBY UNION &bull; IN-SITE MATCHDAY MEDIA
                 </span>
                 <p className="font-heading font-black text-lg sm:text-xl text-rich-black uppercase italic">
                   {activeVideo.title}
