@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useCallback, useEffect } from "react";
+import { useState, useRef, useCallback } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
@@ -11,7 +11,6 @@ import {
   Target,
   Users,
   Calendar,
-  ClipboardList,
   BookOpen,
   Star,
 } from "lucide-react";
@@ -37,7 +36,6 @@ interface ControlRoomTeam {
   heroImage: string;
   featuredImage: string;
   href: string;
-  filters: string[];
   recentRecord: string;
   competitionBadges: string[];
   heroStats: { label: string; value: string }[];
@@ -65,7 +63,6 @@ const TEAMS: ControlRoomTeam[] = [
     heroImage: "/images/gallery/zimbabwe-sables-battle-of-zambezi-gameday1-505.webp",
     featuredImage: "/images/gallery/zimbabwe-sables-0351.webp",
     href: "/teams/sables",
-    filters: ["15s"],
     recentRecord: "4W – 1L – 0D",
     competitionBadges: ["Africa Cup", "RWC 2027 Qualifiers"],
     heroStats: [
@@ -95,7 +92,6 @@ const TEAMS: ControlRoomTeam[] = [
     heroImage: "/images/hero/lady-sables.webp",
     featuredImage: "/images/gallery/sables-women-9.webp",
     href: "/teams/lady-sables",
-    filters: ["15s", "women"],
     recentRecord: "2W – 3L – 0D",
     competitionBadges: ["Africa Women's Cup", "Rugby Africa"],
     heroStats: [
@@ -125,7 +121,6 @@ const TEAMS: ControlRoomTeam[] = [
     heroImage: "/images/hero/cheetahs-hero.webp",
     featuredImage: "/images/teams/cheetahs.jpg",
     href: "/teams/cheetahs",
-    filters: ["7s"],
     recentRecord: "3W – 2L – 0D",
     competitionBadges: ["Sevens Challenger Series", "Africa 7s Cup"],
     heroStats: [
@@ -155,7 +150,6 @@ const TEAMS: ControlRoomTeam[] = [
     heroImage: "/images/hero/junior-sables-hero.webp",
     featuredImage: "/images/hero/zim-u20s.webp",
     href: "/teams/junior-sables",
-    filters: ["15s", "u20"],
     recentRecord: "5W – 0L – 0D",
     competitionBadges: ["Barthes Trophy", "U20 World Trophy"],
     heroStats: [
@@ -166,55 +160,24 @@ const TEAMS: ControlRoomTeam[] = [
   },
 ];
 
-const FILTERS = [
-  { id: "all", label: "ALL" },
-  { id: "15s", label: "15s" },
-  { id: "7s", label: "7s" },
-  { id: "women", label: "WOMEN" },
-  { id: "u20", label: "U20" },
-];
-
 export default function NationalSquadsControlRoom() {
   const [activeIdx, setActiveIdx] = useState(0);
-  const [activeFilter, setActiveFilter] = useState("all");
   const railRef = useRef<HTMLDivElement>(null);
 
-  const filteredTeams =
-    activeFilter === "all"
-      ? TEAMS
-      : TEAMS.filter((t) => t.filters.includes(activeFilter));
-
   const activeTeam = TEAMS[activeIdx];
-
-  const currentFilteredIdx = filteredTeams.findIndex(
-    (t) => t.id === activeTeam.id
-  );
-
-  useEffect(() => {
-    if (filteredTeams.length > 0) {
-      const stillVisible = filteredTeams.some(
-        (t) => t.id === TEAMS[activeIdx].id
-      );
-      if (!stillVisible) {
-        setActiveIdx(TEAMS.indexOf(filteredTeams[0]));
-      }
-    }
-  }, [activeFilter]);
 
   const handleKeyDown = useCallback(
     (e: React.KeyboardEvent) => {
       if (e.key === "ArrowRight") {
         e.preventDefault();
-        const next = Math.min(currentFilteredIdx + 1, filteredTeams.length - 1);
-        setActiveIdx(TEAMS.indexOf(filteredTeams[next]));
+        setActiveIdx((prev) => Math.min(prev + 1, TEAMS.length - 1));
       }
       if (e.key === "ArrowLeft") {
         e.preventDefault();
-        const prev = Math.max(currentFilteredIdx - 1, 0);
-        setActiveIdx(TEAMS.indexOf(filteredTeams[prev]));
+        setActiveIdx((prev) => Math.max(prev - 1, 0));
       }
     },
-    [currentFilteredIdx, filteredTeams]
+    []
   );
 
   return (
@@ -240,7 +203,7 @@ export default function NationalSquadsControlRoom() {
 
       <div className="relative z-10 max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
         {/* ─── 1. CAMPAIGN RIBBON ─── */}
-        <div className="pt-6 pb-2">
+        <div className="pt-8 pb-1">
           <AnimatePresence mode="wait">
             <motion.div
               key={activeTeam.id}
@@ -264,181 +227,155 @@ export default function NationalSquadsControlRoom() {
           </AnimatePresence>
         </div>
 
-        {/* ─── 2. FILTER CHIPS ─── */}
-        <div
-          className="flex items-center gap-2 py-3 overflow-x-auto no-scrollbar"
-          role="toolbar"
-          aria-label="Filter teams by format"
-        >
-          {FILTERS.map((f) => {
-            const isActive = activeFilter === f.id;
-            const count =
-              f.id === "all"
-                ? TEAMS.length
-                : TEAMS.filter((t) => t.filters.includes(f.id)).length;
-            return (
-              <button
-                key={f.id}
-                onClick={() => setActiveFilter(f.id)}
-                className={`px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest transition-all duration-300 whitespace-nowrap cursor-pointer border ${
-                  isActive
-                    ? "bg-white text-[#050D08] border-white shadow-lg shadow-white/10"
-                    : "bg-white/5 text-white/50 border-white/8 hover:bg-white/10 hover:text-white hover:border-white/20"
-                }`}
-              >
-                {f.label}
-                <span
-                  className={`ml-1.5 text-[8px] ${
-                    isActive ? "text-[#050D08]/50" : "text-white/30"
+        {/* ─── 2. TEAM RAIL — unified segmented control ─── */}
+        <div className="pt-5 pb-2">
+          <div
+            ref={railRef}
+            role="tablist"
+            aria-label="National teams"
+            onKeyDown={handleKeyDown}
+            className="flex gap-3 overflow-x-auto no-scrollbar -mx-4 px-4"
+          >
+            {TEAMS.map((team) => {
+              const isActive = team.id === activeTeam.id;
+              const idx = TEAMS.indexOf(team);
+              return (
+                <button
+                  key={team.id}
+                  role="tab"
+                  aria-selected={isActive}
+                  aria-label={`${team.name} — ${team.format} — ${team.ranking}`}
+                  tabIndex={isActive ? 0 : -1}
+                  onClick={() => setActiveIdx(idx)}
+                  className={`group relative flex-shrink-0 w-[260px] rounded-2xl p-5 text-left transition-all duration-300 cursor-pointer overflow-hidden outline-none focus-visible:ring-2 focus-visible:ring-white/50 ${
+                    isActive
+                      ? "shadow-2xl shadow-black/50"
+                      : "border border-white/5 hover:border-white/15 hover:shadow-lg hover:shadow-black/30"
                   }`}
+                  style={{
+                    borderTop: `3px solid ${isActive ? team.accentColor : "transparent"}`,
+                    backgroundColor: isActive
+                      ? `${team.accentRaw}10`
+                      : "rgba(255,255,255,0.02)",
+                    transform: isActive ? "scale(1.02)" : undefined,
+                  }}
                 >
-                  {count}
-                </span>
-              </button>
-            );
-          })}
-        </div>
-
-        {/* ─── 3. TEAM RAIL ─── */}
-        <div
-          ref={railRef}
-          role="tablist"
-          aria-label="National teams"
-          onKeyDown={handleKeyDown}
-          className="flex gap-3 overflow-x-auto no-scrollbar py-4 -mx-4 px-4"
-        >
-          {filteredTeams.map((team) => {
-            const isActive = team.id === activeTeam.id;
-            const globalIdx = TEAMS.indexOf(team);
-            return (
-              <button
-                key={team.id}
-                role="tab"
-                aria-selected={isActive}
-                aria-label={`${team.name} — ${team.ranking}`}
-                tabIndex={isActive ? 0 : -1}
-                onClick={() => setActiveIdx(globalIdx)}
-                className={`group relative flex-shrink-0 w-[210px] rounded-2xl p-4 text-left transition-all duration-300 cursor-pointer border overflow-hidden outline-none focus-visible:ring-2 focus-visible:ring-white/50 ${
-                  isActive
-                    ? "border-white/25 shadow-2xl shadow-black/40"
-                    : "border-white/5 hover:border-white/15 hover:shadow-lg hover:shadow-black/20"
-                }`}
-                style={{
-                  backgroundColor: isActive
-                    ? `${team.accentRaw}12`
-                    : "rgba(255,255,255,0.02)",
-                  transform: isActive ? "scale(1.03)" : undefined,
-                }}
-              >
-                {/* Hover background image */}
-                <div className="absolute inset-0 opacity-0 group-hover:opacity-15 transition-opacity duration-500">
-                  <Image
-                    src={team.featuredImage}
-                    alt=""
-                    fill
-                    className="object-cover"
-                    sizes="210px"
-                  />
-                  <div className="absolute inset-0 bg-[#050D08]/85" />
-                </div>
-
-                <div className="relative z-10 space-y-3">
-                  {/* Crest + Jersey Colors */}
-                  <div className="flex items-center gap-2.5">
-                    <div className="w-10 h-10 rounded-full overflow-hidden border border-white/15 bg-white/5">
-                      <Image
-                        src={team.featuredImage}
-                        alt={team.name}
-                        width={40}
-                        height={40}
-                        className="object-cover w-full h-full"
-                      />
-                    </div>
-                    <div className="flex gap-1">
-                      {team.jerseyColors.map((c, i) => (
-                        <span
-                          key={i}
-                          className="w-3 h-3 rounded-full border border-white/20"
-                          style={{ backgroundColor: c }}
-                        />
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* Short tagline */}
-                  <p className="text-[11px] font-bold text-white/60 leading-tight line-clamp-2 min-h-[2.5em]">
-                    {team.tagline}
-                  </p>
-
-                  {/* Key stat */}
-                  <div className="flex items-center gap-1.5">
-                    <Trophy
-                      className="w-3 h-3"
-                      style={{ color: team.accentColor }}
+                  {/* Hover background image */}
+                  <div className="absolute inset-0 opacity-0 group-hover:opacity-15 transition-opacity duration-500">
+                    <Image
+                      src={team.featuredImage}
+                      alt=""
+                      fill
+                      className="object-cover"
+                      sizes="260px"
                     />
-                    <span
-                      className="text-[11px] font-black uppercase tracking-wider"
-                      style={{ color: team.accentColor }}
-                    >
-                      {team.ranking}
-                    </span>
+                    <div className="absolute inset-0 bg-[#050D08]/85" />
                   </div>
 
-                  {/* Quick actions on hover */}
-                  <div className="flex gap-1.5 opacity-0 group-hover:opacity-100 translate-y-1 group-hover:translate-y-0 transition-all duration-300">
-                    <Link
-                      href={`${team.href}#fixtures`}
-                      onClick={(e) => e.stopPropagation()}
-                      className="inline-flex items-center gap-1 px-2 py-1 bg-white/8 hover:bg-white/15 rounded text-[8px] font-bold uppercase tracking-wider text-white/60 hover:text-white transition-colors"
-                    >
-                      <Calendar className="w-2.5 h-2.5" />
-                      Fixtures
-                    </Link>
-                    <Link
-                      href={`${team.href}#squad`}
-                      onClick={(e) => e.stopPropagation()}
-                      className="inline-flex items-center gap-1 px-2 py-1 bg-white/8 hover:bg-white/15 rounded text-[8px] font-bold uppercase tracking-wider text-white/60 hover:text-white transition-colors"
-                    >
-                      <Users className="w-2.5 h-2.5" />
-                      Roster
-                    </Link>
-                    <Link
-                      href={`${team.href}#media`}
-                      onClick={(e) => e.stopPropagation()}
-                      className="inline-flex items-center gap-1 px-2 py-1 bg-white/8 hover:bg-white/15 rounded text-[8px] font-bold uppercase tracking-wider text-white/60 hover:text-white transition-colors"
-                    >
-                      <BookOpen className="w-2.5 h-2.5" />
-                      Story
-                    </Link>
-                  </div>
-                </div>
+                  <div className="relative z-10 space-y-2.5">
+                    {/* Top row: format badge + jersey colors */}
+                    <div className="flex items-center justify-between">
+                      <span
+                        className="px-2 py-0.5 rounded text-[9px] font-black uppercase tracking-widest border"
+                        style={{
+                          color: team.accentColor,
+                          backgroundColor: `${team.accentRaw}18`,
+                          borderColor: `${team.accentRaw}30`,
+                        }}
+                      >
+                        {team.formatTag}
+                      </span>
+                      <div className="flex gap-1">
+                        {team.jerseyColors.map((c, i) => (
+                          <span
+                            key={i}
+                            className="w-3 h-3 rounded-full border border-white/20"
+                            style={{ backgroundColor: c }}
+                          />
+                        ))}
+                      </div>
+                    </div>
 
-                {/* Active indicator bar */}
-                {isActive && (
-                  <motion.div
-                    layoutId="rail-indicator"
-                    className="absolute bottom-0 left-0 right-0 h-[2px]"
-                    style={{ backgroundColor: team.accentColor }}
-                    transition={{
-                      type: "spring",
-                      stiffness: 400,
-                      damping: 30,
-                    }}
-                  />
-                )}
-              </button>
-            );
-          })}
+                    {/* Team name — primary text, standardized */}
+                    <h3 className="font-heading text-lg font-black uppercase tracking-tight leading-[1.0] italic text-white">
+                      {team.shortName}
+                    </h3>
+
+                    {/* Tagline — secondary text, standardized */}
+                    <p className="text-[11px] font-bold text-white/50 leading-snug line-clamp-2 min-h-[2em]">
+                      {team.tagline}
+                    </p>
+
+                    {/* Key stat with accent */}
+                    <div className="flex items-center gap-1.5 pt-0.5">
+                      <Trophy
+                        className="w-3 h-3 flex-shrink-0"
+                        style={{ color: team.accentColor }}
+                      />
+                      <span
+                        className="text-[11px] font-black uppercase tracking-wider"
+                        style={{ color: team.accentColor }}
+                      >
+                        {team.ranking}
+                      </span>
+                    </div>
+
+                    {/* Quick actions on hover */}
+                    <div className="flex gap-1.5 opacity-0 group-hover:opacity-100 translate-y-1 group-hover:translate-y-0 transition-all duration-300">
+                      <Link
+                        href={`${team.href}#fixtures`}
+                        onClick={(e) => e.stopPropagation()}
+                        className="inline-flex items-center gap-1 px-2 py-1 bg-white/8 hover:bg-white/15 rounded text-[8px] font-bold uppercase tracking-wider text-white/50 hover:text-white transition-colors"
+                      >
+                        <Calendar className="w-2.5 h-2.5" />
+                        Fixtures
+                      </Link>
+                      <Link
+                        href={`${team.href}#squad`}
+                        onClick={(e) => e.stopPropagation()}
+                        className="inline-flex items-center gap-1 px-2 py-1 bg-white/8 hover:bg-white/15 rounded text-[8px] font-bold uppercase tracking-wider text-white/50 hover:text-white transition-colors"
+                      >
+                        <Users className="w-2.5 h-2.5" />
+                        Roster
+                      </Link>
+                      <Link
+                        href={`${team.href}#media`}
+                        onClick={(e) => e.stopPropagation()}
+                        className="inline-flex items-center gap-1 px-2 py-1 bg-white/8 hover:bg-white/15 rounded text-[8px] font-bold uppercase tracking-wider text-white/50 hover:text-white transition-colors"
+                      >
+                        <BookOpen className="w-2.5 h-2.5" />
+                        Story
+                      </Link>
+                    </div>
+                  </div>
+
+                  {/* Active indicator bar */}
+                  {isActive && (
+                    <motion.div
+                      layoutId="rail-indicator"
+                      className="absolute bottom-0 left-0 right-0 h-[2px]"
+                      style={{ backgroundColor: team.accentColor }}
+                      transition={{
+                        type: "spring",
+                        stiffness: 400,
+                        damping: 30,
+                      }}
+                    />
+                  )}
+                </button>
+              );
+            })}
+          </div>
         </div>
 
-        {/* ─── 4. CINEMATIC HERO PANEL ─── */}
-        <div className="pt-4 pb-12">
+        {/* ─── 3. CINEMATIC HERO PANEL ─── */}
+        <div className="pt-6 pb-16">
           <AnimatePresence mode="wait">
             <motion.div
               key={activeTeam.id}
-              initial={{ opacity: 0, y: 16 }}
+              initial={{ opacity: 0, y: 14 }}
               animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -16 }}
+              exit={{ opacity: 0, y: -14 }}
               transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
               className="relative rounded-3xl overflow-hidden border border-white/8"
             >
@@ -449,15 +386,15 @@ export default function NationalSquadsControlRoom() {
                   alt={activeTeam.name}
                   fill
                   priority
-                  className="object-cover object-center brightness-[0.25] contrast-110"
+                  className="object-cover object-center brightness-[0.22] contrast-110"
                 />
-                <div className="absolute inset-0 bg-gradient-to-r from-[#050D08] via-[#050D08]/88 to-[#050D08]/50" />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#050D08] via-transparent to-[#050D08]/50" />
+                <div className="absolute inset-0 bg-gradient-to-r from-[#050D08] via-[#050D08]/90 to-[#050D08]/55" />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#050D08] via-transparent to-[#050D08]/40" />
               </div>
 
               {/* Split layout */}
-              <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-8 p-6 sm:p-8 lg:p-10 min-h-[420px] lg:min-h-[480px] items-center">
-                {/* ── Left: Big typographic identity ── */}
+              <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-10 p-6 sm:p-8 lg:p-12 min-h-[400px] lg:min-h-[460px] items-center">
+                {/* ── Left: Identity + inline stats ── */}
                 <div className="lg:col-span-7 space-y-5">
                   <span
                     className="text-[11px] font-extrabold uppercase tracking-[0.2em] block"
@@ -470,9 +407,34 @@ export default function NationalSquadsControlRoom() {
                     {activeTeam.name}
                   </h1>
 
-                  <p className="text-white/65 text-sm sm:text-base font-body leading-relaxed max-w-xl">
+                  <p className="text-white/60 text-sm sm:text-base font-body leading-relaxed max-w-xl">
                     {activeTeam.description}
                   </p>
+
+                  {/* Inline stats row — directly under hero copy */}
+                  <div className="flex items-center gap-0 pt-2">
+                    {activeTeam.heroStats.map((st, idx) => (
+                      <div
+                        key={idx}
+                        className="flex items-center gap-3"
+                      >
+                        {idx > 0 && (
+                          <span className="w-px h-8 bg-white/15" />
+                        )}
+                        <div className="text-center px-2">
+                          <span
+                            className="block text-base sm:text-lg font-heading font-black"
+                            style={{ color: activeTeam.accentColor }}
+                          >
+                            {st.value}
+                          </span>
+                          <span className="text-[8px] sm:text-[9px] text-white/40 uppercase tracking-widest block whitespace-nowrap">
+                            {st.label}
+                          </span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
 
                   {/* Competition badges */}
                   <div className="flex flex-wrap gap-2 pt-1">
@@ -491,92 +453,88 @@ export default function NationalSquadsControlRoom() {
                     ))}
                   </div>
 
-                  {/* CTAs */}
-                  <div className="flex flex-wrap items-center gap-3 pt-3">
+                  {/* CTAs — both parallelogram for consistency */}
+                  <div className="flex flex-wrap items-center gap-3 pt-2">
                     <Link href={activeTeam.href}>
                       <SlantedButton
                         variant="primary"
                         size="lg"
                         className="inline-flex items-center gap-2"
                       >
-                        <span>
-                          Explore {activeTeam.shortName.replace("ZIMBABWE ", "")}
-                        </span>
+                        <span>Explore {activeTeam.shortName.replace("ZIMBABWE ", "")}</span>
                         <ArrowRight className="w-4 h-4" />
                       </SlantedButton>
                     </Link>
-                    <Link
-                      href={`/match-centre?team=${encodeURIComponent(activeTeam.name)}`}
-                      className="px-6 py-3 bg-white/5 hover:bg-white/10 border border-white/15 text-white text-xs font-bold uppercase tracking-widest transition-all duration-300 rounded-xl"
-                    >
-                      Fixtures & Results
+                    <Link href={activeTeam.href}>
+                      <SlantedButton
+                        variant="outline"
+                        size="lg"
+                        className="inline-flex items-center gap-2"
+                      >
+                        <span>Fixtures & Results</span>
+                        <ArrowRight className="w-4 h-4" />
+                      </SlantedButton>
                     </Link>
                   </div>
                 </div>
 
-                {/* ── Right: Featured image + stats ── */}
-                <div className="lg:col-span-5 space-y-4">
-                  {/* Featured image card */}
-                  <div className="relative h-52 sm:h-56 rounded-2xl overflow-hidden border border-white/10">
-                    <Image
-                      src={activeTeam.featuredImage}
-                      alt={activeTeam.name}
-                      fill
-                      className="object-cover object-top filter brightness-95"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black via-black/10 to-transparent" />
-
-                    {/* Ranking overlay */}
-                    <div className="absolute bottom-4 left-4 right-4 flex justify-between items-end">
-                      <div>
-                        <span
-                          className="text-[9px] font-black uppercase tracking-widest block"
-                          style={{ color: activeTeam.accentColor }}
-                        >
-                          Team Ranking
-                        </span>
-                        <span className="font-heading text-xl font-black text-white">
-                          {activeTeam.ranking}
-                        </span>
-                      </div>
-                      <Shield
-                        className="w-7 h-7"
-                        style={{ color: activeTeam.accentColor }}
+                {/* ── Right: Featured image promo card ── */}
+                <div className="lg:col-span-5">
+                  <div
+                    className="relative rounded-2xl overflow-hidden border shadow-2xl shadow-black/40"
+                    style={{ borderColor: `${activeTeam.accentRaw}25` }}
+                  >
+                    {/* Image */}
+                    <div className="relative h-56 sm:h-64">
+                      <Image
+                        src={activeTeam.featuredImage}
+                        alt={activeTeam.name}
+                        fill
+                        className="object-cover object-top filter brightness-95"
                       />
-                    </div>
-                  </div>
+                      <div className="absolute inset-0 bg-gradient-to-t from-black via-black/10 to-transparent" />
 
-                  {/* Stat grid */}
-                  <div className="grid grid-cols-3 gap-2">
-                    {activeTeam.heroStats.map((st, idx) => (
-                      <div
-                        key={idx}
-                        className="p-3 bg-white/5 border border-white/8 rounded-xl text-center"
-                      >
-                        {idx === 0 ? (
-                          <Trophy
-                            className="w-3.5 h-3.5 mx-auto mb-1"
+                      {/* Ranking overlay */}
+                      <div className="absolute bottom-4 left-4 right-4 flex justify-between items-end">
+                        <div>
+                          <span
+                            className="text-[9px] font-black uppercase tracking-widest block"
                             style={{ color: activeTeam.accentColor }}
-                          />
-                        ) : idx === 1 ? (
-                          <Target
-                            className="w-3.5 h-3.5 mx-auto mb-1"
-                            style={{ color: activeTeam.accentColor }}
-                          />
-                        ) : (
-                          <Users
-                            className="w-3.5 h-3.5 mx-auto mb-1"
-                            style={{ color: activeTeam.accentColor }}
-                          />
-                        )}
-                        <span className="block text-sm font-heading font-black text-white">
-                          {st.value}
-                        </span>
-                        <span className="text-[8px] text-white/40 uppercase tracking-wider block line-clamp-1">
-                          {st.label}
+                          >
+                            Team Ranking
+                          </span>
+                          <span className="font-heading text-xl font-black text-white">
+                            {activeTeam.ranking}
+                          </span>
+                        </div>
+                        <Shield
+                          className="w-7 h-7"
+                          style={{ color: activeTeam.accentColor }}
+                        />
+                      </div>
+                    </div>
+
+                    {/* Promo footer — single primary CTA */}
+                    <div
+                      className="p-4 flex items-center justify-between"
+                      style={{ backgroundColor: `${activeTeam.accentRaw}12` }}
+                    >
+                      <div>
+                        <span className="text-[9px] font-black uppercase tracking-widest text-white/50 block">
+                          {activeTeam.keyHonour}
                         </span>
                       </div>
-                    ))}
+                      <Link href={activeTeam.href}>
+                        <SlantedButton
+                          variant="primary"
+                          size="sm"
+                          className="inline-flex items-center gap-1.5"
+                        >
+                          <span>Visit Hub</span>
+                          <ArrowRight className="w-3.5 h-3.5" />
+                        </SlantedButton>
+                      </Link>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -591,34 +549,9 @@ export default function NationalSquadsControlRoom() {
             </motion.div>
           </AnimatePresence>
         </div>
-
-        {/* ─── 5. STICKY SUB-NAV ─── */}
-        <div className="sticky top-0 z-30 -mx-4 sm:-mx-6 lg:-mx-8 px-4 sm:px-6 lg:px-8 pb-3">
-          <div className="flex items-center gap-1 bg-[#0a1610]/95 backdrop-blur-lg border border-white/8 rounded-xl px-2 py-1.5 overflow-x-auto no-scrollbar">
-            {[
-              { label: "Overview", href: "#overview", icon: Shield },
-              { label: "Fixtures", href: `${activeTeam.href}#fixtures`, icon: Calendar },
-              { label: "Squad", href: `${activeTeam.href}#squad`, icon: Users },
-              { label: "Media", href: `${activeTeam.href}#media`, icon: BookOpen },
-              { label: "Pathway", href: "#pathway", icon: Target },
-            ].map((item) => {
-              const Icon = item.icon;
-              return (
-                <a
-                  key={item.label}
-                  href={item.href}
-                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[10px] font-bold uppercase tracking-widest text-white/50 hover:text-white hover:bg-white/8 transition-all duration-200 whitespace-nowrap"
-                >
-                  <Icon className="w-3 h-3" />
-                  {item.label}
-                </a>
-              );
-            })}
-          </div>
-        </div>
       </div>
 
-      {/* ─── 6. INFO GRID — light section ─── */}
+      {/* ─── 4. INFO GRID — light section ─── */}
       <div id="overview" className="bg-milk-white text-rich-black">
         <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
           <AnimatePresence mode="wait">
