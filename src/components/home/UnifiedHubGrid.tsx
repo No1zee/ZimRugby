@@ -45,11 +45,11 @@ export default async function UnifiedHubGrid() {
         </h2>
       </div>
 
-      {/* 4-Column Bento Grid */}
+      {/* Asymmetrical Grid — News wider (2 cols), Match + Shop narrower (1 col each) */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4 md:gap-5">
 
-        {/* ═══════════ COLUMN 1: LATEST NEWS ═══════════ */}
-        <div className="bg-gradient-to-b from-[#003822] via-[#002B19] to-[#001D11] text-white p-5 rounded-lg flex flex-col h-[460px] lg:h-[480px] xl:h-[500px] overflow-hidden border border-black/10 hover:border-green-primary/60 shadow-lg hover:shadow-2xl transition-shadow">
+        {/* ═══════════ COLUMN 1: LATEST NEWS (wider — spans 2 cols) ═══════════ */}
+        <div className="md:col-span-2 bg-gradient-to-b from-[#003822] via-[#002B19] to-[#001D11] text-white p-5 rounded-lg flex flex-col h-[460px] lg:h-[480px] xl:h-[500px] overflow-hidden border border-black/10 hover:border-green-primary/60 shadow-lg hover:shadow-2xl transition-shadow">
           {/* Header */}
           <div className="flex items-center justify-between bg-gradient-to-b from-[#00704D] to-[#005238] text-white px-5 py-4 -mx-5 -mt-5 mb-4 shrink-0 border-b border-emerald-500/20">
             <span className="text-[11px] font-extrabold uppercase tracking-[0.2em] text-white">
@@ -285,7 +285,7 @@ export default async function UnifiedHubGrid() {
       </div>
 
       {/* ── Matchday Video Highlights Section ── */}
-      <div className="mt-10 pt-8 border-t border-black/10">
+      <div className="mt-10 pt-6">
         <MatchdayVideoHighlights
           showChannelLink={true}
         />

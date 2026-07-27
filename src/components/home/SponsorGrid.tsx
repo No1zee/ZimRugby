@@ -94,7 +94,7 @@ export default function SponsorGrid() {
   const activeSponsor = SPONSORS[activeIdx];
 
   return (
-    <section ref={sectionRef} id="partners" className="bg-[#FDFBF0] border-t border-black/5 pt-8 sm:pt-10 pb-0 px-4 sm:px-6 lg:px-8">
+    <section ref={sectionRef} id="partners" className="bg-white border-t border-black/5 pt-8 sm:pt-10 pb-0 px-4 sm:px-6 lg:px-8">
       <div className="max-w-[1280px] mx-auto space-y-6">
         
         {/* ── 1. Minimal Header ── */}

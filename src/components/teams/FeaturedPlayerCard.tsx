@@ -23,7 +23,7 @@ export default function FeaturedPlayerCard({ player }: FeaturedPlayerCardProps) 
       {/* Image area with shield clip-path */}
       <div className="relative">
         <div
-          className="relative h-[260px] sm:h-[280px] lg:h-[320px] bg-gradient-to-b from-zru-green to-[#003822]"
+          className="relative h-[240px] sm:h-[260px] lg:h-[300px] bg-gradient-to-b from-zru-green to-[#003822]"
           style={{ clipPath: "polygon(0 0, 100% 0, 100% 92%, 50% 100%, 0 92%)" }}
         >
           {/* Watermark name */}
@@ -54,9 +54,9 @@ export default function FeaturedPlayerCard({ player }: FeaturedPlayerCardProps) 
           )}
         </div>
 
-        {/* Position badge — overlaps the shield clip edge */}
+        {/* Position badge — outlined chip, overlaps the shield clip edge */}
         <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 z-10">
-          <div className="clip-slanted-sm bg-zru-green text-white text-[10px] font-black uppercase tracking-widest px-4 py-1.5 shadow-lg shadow-zru-green/30">
+          <div className="bg-white text-zru-green text-[10px] font-black uppercase tracking-widest px-4 py-1.5 shadow-lg border border-zru-green/20">
             {player.position}
           </div>
         </div>
@@ -70,14 +70,14 @@ export default function FeaturedPlayerCard({ player }: FeaturedPlayerCardProps) 
         <p className="text-[10px] sm:text-xs text-neutral-mid mt-0.5">{player.team}</p>
       </div>
 
-      {/* Stats row */}
-      <div className="mx-auto grid w-fit grid-cols-2 divide-x divide-black/5 py-2.5 border-t border-black/5">
-        <div className="px-5 text-center">
-          <div className="text-[13px] font-bold text-rich-black">{player.caps}</div>
+      {/* Stats row — tabular-nums for editorial alignment */}
+      <div className="mx-auto grid w-fit grid-cols-2 divide-x divide-black/5 py-3 border-t border-black/5">
+        <div className="px-6 text-center">
+          <div className="text-sm font-black text-rich-black tabular-nums">{player.caps}</div>
           <div className="text-[9px] uppercase tracking-widest text-black/40 font-bold mt-0.5">Caps</div>
         </div>
-        <div className="px-5 text-center">
-          <div className="text-[13px] font-bold text-rich-black">{player.age}</div>
+        <div className="px-6 text-center">
+          <div className="text-sm font-black text-rich-black tabular-nums">{player.age}</div>
           <div className="text-[9px] uppercase tracking-widest text-black/40 font-bold mt-0.5">Age</div>
         </div>
       </div>

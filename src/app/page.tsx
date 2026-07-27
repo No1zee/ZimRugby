@@ -59,18 +59,24 @@ export default async function Home() {
 
       <div className="relative z-10">
 
-        {/* 2. Unified 4-Column Hub Grid (News Stack + Match Tickets + Official Shop + Nations Cup Videos) */}
+        {/* 2. Unified Hub Grid — 3-col asymmetrical: News wider, Match + Shop narrower */}
         <UnifiedHubGrid />
 
-        {/* 3. Full-Width ZRU Green Newsletter Banner (Matching Stitch Reference Layout) */}
+        {/* Hairline divider — editorial rhythm */}
+        <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8"><div className="h-px bg-rich-black/8" /></div>
+
+        {/* 3. Newsletter — simplified inline form */}
         <HomeNewsletterBanner />
 
-        {/* 4. Road to Australia 2027 Minimal Countdown Banner */}
+        {/* 4. Road to Australia 2027 — inline stat-bar style */}
         <CleanCountdownBanner />
 
-        {/* 5. Featured Players — CometCard 3D tilt on desktop */}
-        <section className="px-4 sm:px-6 lg:px-8 py-14 sm:py-20 max-w-[1200px] mx-auto">
-          <div className="mb-8">
+        {/* Hairline divider */}
+        <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8"><div className="h-px bg-rich-black/8" /></div>
+
+        {/* 5. Featured Players — editorial cards */}
+        <section className="px-4 sm:px-6 lg:px-8 py-10 sm:py-14 max-w-[1200px] mx-auto">
+          <div className="mb-6">
             <h2 className="text-3xl sm:text-5xl font-heading font-black uppercase tracking-tight text-rich-black not-italic">
               FEATURED{" "}
               <span className="text-accent-teal">PLAYERS</span>
@@ -79,8 +85,14 @@ export default async function Home() {
           <FeaturedPlayersGrid players={featuredPlayers} />
         </section>
 
+        {/* Hairline divider */}
+        <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8"><div className="h-px bg-rich-black/8" /></div>
+
         {/* 6. Grassroots & Growing the Sport Section */}
         <GrassrootsInitiativeSection />
+
+        {/* Hairline divider */}
+        <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8"><div className="h-px bg-rich-black/8" /></div>
 
         {/* 7. Commercial Partners & Sponsors Logo Grid */}
         <SponsorGrid />
