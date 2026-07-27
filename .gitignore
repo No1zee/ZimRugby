@@ -2,6 +2,7 @@
 
 # Large source asset directories (served via Vercel direct upload, not git)
 Gallery/
+!src/components/gallery/
 scratch/
 public/images/cutouts/
 

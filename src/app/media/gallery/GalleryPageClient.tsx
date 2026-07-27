@@ -8,11 +8,13 @@ import EdgyGradient from "@/components/ui/EdgyGradient";
 import { Photo } from "@/types";
 import PageHero from "@/components/ui/PageHero";
 import { ThreeDImageRing, ImageRingItem } from "@/components/lightswind/draggable-3d-image-ring";
+import ArchiveFolderCard from "@/components/gallery/ArchiveFolderCard";
 
 interface FolderMetaData {
   name: string;
   description: string;
   image: string;
+  images: string[];
   date: string;
   count: number;
 }
@@ -39,6 +41,10 @@ export default function GalleryPageClient({ initialPhotos }: GalleryPageClientPr
       image = items[0].image;
     }
 
+    // Up to 4 images for the fanned stack
+    const images = items.slice(0, 4).map((p) => p.image || image);
+    if (images.length === 0) images.push(image);
+
     let date = "2026";
     let description = "Archived squad and campaign photography.";
 
@@ -56,7 +62,7 @@ export default function GalleryPageClient({ initialPhotos }: GalleryPageClientPr
       description = "General collections, historical squad pictures, community festivals, and training camps.";
     }
 
-    return { name, description, image, date, count };
+    return { name, description, image, images, date, count };
   };
 
   const folders = folderNames
@@ -134,50 +140,20 @@ export default function GalleryPageClient({ initialPhotos }: GalleryPageClientPr
                 <h2 className="text-sm font-black uppercase tracking-widest text-zru-green">Select Archive Folder</h2>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 justify-items-center gap-10 py-4">
                 {folders.map((folder) => (
-                  <div
+                  <ArchiveFolderCard
                     key={folder.name}
+                    name={folder.name}
+                    images={folder.images}
+                    date={folder.date}
+                    count={folder.count}
+                    description={folder.description}
                     onClick={() => {
                       setActiveFolder(folder.name);
                       setActiveAlbum("All");
                     }}
-                    className="relative rounded-2xl border border-black/5 bg-white overflow-hidden group cursor-pointer hover:border-zru-green/30 transition-all duration-500 shadow-md flex flex-col h-80 justify-end p-8"
-                  >
-                    {/* Folder Image Cover */}
-                    <div className="absolute inset-0 z-0">
-                      <Image
-                        src={folder.image}
-                        alt={folder.name}
-                        fill
-                        sizes="(max-width: 768px) 100vw, 50vw"
-                        className="object-cover opacity-30 group-hover:opacity-50 group-hover:scale-105 transition-all duration-700"
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-white via-white/80 to-transparent" />
-                    </div>
-
-                    {/* Metadata tags */}
-                    <div className="relative z-10 space-y-4">
-                      <div className="flex gap-2 items-center text-[10px] font-black uppercase tracking-widest text-zru-green">
-                        <span>{folder.date}</span>
-                        <span className="text-black/20">•</span>
-                        <span>{folder.count} IMAGES</span>
-                      </div>
-
-                      <h3 className="text-2xl font-black uppercase tracking-tight text-rich-black group-hover:text-zru-green transition-colors duration-300">
-                        {folder.name}
-                      </h3>
-
-                      <p className="text-rich-black/50 text-sm leading-relaxed max-w-lg">
-                        {folder.description}
-                      </p>
-
-                      <div className="pt-2 flex items-center gap-2 text-xs font-black uppercase tracking-wider text-rich-black/40 group-hover:text-rich-black transition-colors">
-                        <span>Open Folder</span>
-                        <span className="group-hover:translate-x-1 transition-transform">→</span>
-                      </div>
-                    </div>
-                  </div>
+                  />
                 ))}
               </div>
             </motion.div>
