@@ -10,6 +10,7 @@ import { useState } from "react";
 import PageAnnouncements from "@/components/ui/PageAnnouncements";
 import HeroMatchSpotlight from "@/components/matches/HeroMatchSpotlight";
 import type { LeagueTableRow } from "@/types";
+import Image from "next/image";
 
 import PageHero from "@/components/ui/PageHero";
 import SlantedButton from "@/components/ui/SlantedButton";
@@ -255,7 +256,7 @@ export default function MatchCentreClient({ initialFixtures, initialResults, ini
                                       <div className="space-y-6">
                                           <div className="flex items-center gap-4">
                                               <div className="w-12 h-12 rounded-full overflow-hidden border-2 border-zru-green shrink-0">
-                                                  <img className="w-full h-full object-cover" src="/images/gallery/zimbabwe-sables-0351.webp" alt="Tapiwa Mafura" />
+                                                  <Image className="w-full h-full object-cover" src="/images/gallery/zimbabwe-sables-0351.webp" alt="Tapiwa Mafura" width={48} height={48} />
                                               </div>
                                               <div className="flex-grow">
                                                   <div className="flex justify-between items-center">
@@ -270,7 +271,7 @@ export default function MatchCentreClient({ initialFixtures, initialResults, ini
 
                                           <div className="flex items-center gap-4">
                                               <div className="w-12 h-12 rounded-full overflow-hidden border-2 border-zru-green/20 shrink-0">
-                                                  <img className="w-full h-full object-cover" src="/images/gallery/zimbabwe-sables-0351.webp" alt="Hilton Mudariki" />
+                                                  <Image className="w-full h-full object-cover" src="/images/gallery/zimbabwe-sables-0351.webp" alt="Hilton Mudariki" width={48} height={48} />
                                               </div>
                                               <div className="flex-grow">
                                                   <div className="flex justify-between items-center">

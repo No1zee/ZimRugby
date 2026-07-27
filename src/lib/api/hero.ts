@@ -8,6 +8,7 @@ export type { HeroSlideData };
  */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { directusFetch } from "@/lib/directus/fetch";
+import { heroAssetUrl } from "@/lib/directus/assets";
 
 const MOCK_SLIDES: HeroSlideData[] = [
     {
@@ -71,7 +72,7 @@ export async function getHeroSlides(): Promise<HeroSlideData[]> {
           id: Number(slide.id),
           tag: slide.tag,
           contextPill: slide.context_pill,
-          image: slide.image ? `${process.env.NEXT_PUBLIC_DIRECTUS_URL}/assets/${slide.image}` : slide.image_url,
+          image: heroAssetUrl(slide.image) || slide.image_url,
           video: slide.video ? `${process.env.NEXT_PUBLIC_DIRECTUS_URL}/assets/${slide.video}` : slide.video_url,
           headline: {
             line1: slide.headline_line1 || "",

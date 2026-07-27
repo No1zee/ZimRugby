@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { directusFetch } from "@/lib/directus/fetch";
+import { logoAssetUrl } from "@/lib/directus/assets";
 import type { RankingDetail, RankingsData } from "@/types";
 
 export type { RankingDetail, RankingsData };
@@ -70,7 +71,7 @@ export async function getRankingsData(): Promise<RankingsData> {
             name: rival.name,
             position: Number(rival.position),
             points: Number(rival.points),
-            logo: rival.logo ? `${process.env.NEXT_PUBLIC_DIRECTUS_URL}/assets/${rival.logo}` : rival.logo_url
+            logo: logoAssetUrl(rival.logo) || rival.logo_url
           }))
         };
       }

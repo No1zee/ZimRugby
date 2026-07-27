@@ -1,4 +1,5 @@
 import { directusFetch } from "@/lib/directus/fetch";
+import { photoAssetUrl } from "@/lib/directus/assets";
 import type { EventItem } from "@/types";
 
 export type { EventItem };
@@ -87,7 +88,7 @@ export async function getEvents(): Promise<EventItem[]> {
             location: item.location || "",
             description: item.description || "",
             tags: parsedTags,
-            image: item.image ? `${process.env.NEXT_PUBLIC_DIRECTUS_URL}/assets/${item.image}` : (item.image_url || "/images/events/super-league.jpg"),
+            image: photoAssetUrl(item.image) || (item.image_url || "/images/events/super-league.jpg"),
             content: item.content || "",
             ticketUrl: item.ticket_url || "/tickets"
           };

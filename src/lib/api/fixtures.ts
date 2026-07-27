@@ -1,5 +1,6 @@
 import { Match } from "@/types";
 import { directusFetch } from "@/lib/directus/fetch";
+import { logoAssetUrl } from "@/lib/directus/assets";
 import type { FixtureTwinData, DirectusMatchItem } from "@/types";
 
 export type { FixtureTwinData, DirectusMatchItem };
@@ -74,12 +75,12 @@ export async function getFixtureTwinData(): Promise<FixtureTwinData> {
           venue: m.venue || "TBA",
           homeTeam: {
             name: m.home_team_name || "Zimbabwe Sables",
-            logo: m.home_team_logo ? `${process.env.NEXT_PUBLIC_DIRECTUS_URL}/assets/${m.home_team_logo}` : undefined,
+            logo: logoAssetUrl(m.home_team_logo),
             score: m.home_team_score !== null ? Number(m.home_team_score) : undefined
           },
           awayTeam: {
             name: m.away_team_name || "Opponent",
-            logo: m.away_team_logo ? `${process.env.NEXT_PUBLIC_DIRECTUS_URL}/assets/${m.away_team_logo}` : undefined,
+            logo: logoAssetUrl(m.away_team_logo),
             score: m.away_team_score !== null ? Number(m.away_team_score) : undefined
           },
           status: m.status as Match["status"],

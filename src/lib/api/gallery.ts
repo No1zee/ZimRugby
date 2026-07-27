@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Photo } from "@/types";
 import { directusFetch } from "@/lib/directus/fetch";
+import { photoAssetUrl } from "@/lib/directus/assets";
 
 import manifestData from "../../../public/data/media-manifest.json";
 
@@ -127,7 +128,7 @@ export async function getPhotos(): Promise<Photo[]> {
           id: String(photo.id),
           title: photo.title || "",
           album: photo.album || "General",
-          image: photo.image ? `${process.env.NEXT_PUBLIC_DIRECTUS_URL}/assets/${photo.image}` : photo.image_url,
+          image: photoAssetUrl(photo.image) || photo.image_url,
           date: photo.date_label || new Date(photo.date).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric', timeZone: 'UTC' }).toUpperCase(),
           description: photo.description || ""
         }));

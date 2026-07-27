@@ -1,5 +1,6 @@
 import { Metadata } from "next";
 import Link from "next/link";
+import Image from "next/image";
 import { GraduationCap, Trophy, Users, ShieldCheck, Mail } from "lucide-react";
 import PageHero from "@/components/ui/PageHero";
 
@@ -101,10 +102,12 @@ export default function SchoolsPage() {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div className="group relative h-80 rounded-2xl overflow-hidden shadow-md border border-black/5">
-              <img
+              <Image
                 src="/images/schools/schoolboy-action-1.jpg"
                 alt="Schoolboy Rugby Action - Breakaway Play"
-                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                fill
+                sizes="(max-width: 768px) 100vw, 33vw"
+                className="object-cover group-hover:scale-105 transition-transform duration-500"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent flex items-end p-6">
                 <div>
@@ -115,10 +118,12 @@ export default function SchoolsPage() {
             </div>
 
             <div className="group relative h-80 rounded-2xl overflow-hidden shadow-md border border-black/5">
-              <img
+              <Image
                 src="/images/schools/schoolboy-team-group.jpg"
                 alt="Schoolboy Rugby Squad - Post Match Group Photo"
-                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                fill
+                sizes="(max-width: 768px) 100vw, 33vw"
+                className="object-cover group-hover:scale-105 transition-transform duration-500"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent flex items-end p-6">
                 <div>
@@ -129,10 +134,12 @@ export default function SchoolsPage() {
             </div>
 
             <div className="group relative h-80 rounded-2xl overflow-hidden shadow-md border border-black/5">
-              <img
+              <Image
                 src="/images/schools/schoolboy-lineout.jpg"
                 alt="Schoolboy Rugby Lineout Jump Action"
-                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                fill
+                sizes="(max-width: 768px) 100vw, 33vw"
+                className="object-cover group-hover:scale-105 transition-transform duration-500"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent flex items-end p-6">
                 <div>

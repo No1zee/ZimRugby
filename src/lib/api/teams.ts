@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Team } from "@/types";
 import { directusFetch } from "@/lib/directus/fetch";
+import { photoAssetUrl, logoAssetUrl, headshotAssetUrl } from "@/lib/directus/assets";
 
 const MOCK_TEAMS: Record<string, Team> = {
     "sables": {
@@ -195,18 +196,18 @@ export async function getTeamData(slug: string): Promise<Team | null> {
             position: s.position,
             club: s.club,
             caps: s.caps ? Number(s.caps) : undefined,
-            image: s.image ? `${process.env.NEXT_PUBLIC_DIRECTUS_URL}/assets/${s.image}` : (s.image_url || "/images/teams/player-placeholder.webp")
+            image: headshotAssetUrl(s.image) || (s.image_url || "/images/teams/player-placeholder.webp")
           })),
           matches: (team.matches || []).map((m: any) => ({
             opponent: m.opponent,
-            opponentLogo: m.opponent_logo ? `${process.env.NEXT_PUBLIC_DIRECTUS_URL}/assets/${m.opponent_logo}` : m.opponent_logo_url,
+            opponentLogo: logoAssetUrl(m.opponent_logo) || m.opponent_logo_url,
             date: m.date_label || new Date(m.date).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric', timeZone: 'UTC' }),
             venue: m.venue || "TBA",
             score: m.score,
             status: m.status || "upcoming"
           })),
           gallery: (team.gallery || []).map((img: any) => 
-            img.image ? `${process.env.NEXT_PUBLIC_DIRECTUS_URL}/assets/${img.image}` : img.image_url
+            photoAssetUrl(img.image) || img.image_url
           )
         };
       }

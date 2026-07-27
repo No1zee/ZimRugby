@@ -8,6 +8,7 @@ interface ImageTransformations {
   height?: number;
   quality?: number;
   format?: 'webp' | 'png' | 'jpg';
+  fit?: 'cover' | 'contain' | 'fill' | 'inside' | 'outside';
 }
 
 export function assetUrl(id?: string, transform?: ImageTransformations): string | undefined {
@@ -26,7 +27,10 @@ export function assetUrl(id?: string, transform?: ImageTransformations): string 
     if (transform.quality) {
       url.searchParams.append("quality", String(transform.quality));
     }
-    // Set webp as standard default if requested
+    if (transform.fit) {
+      url.searchParams.append("fit", transform.fit);
+    }
+    // Set webp as standard default
     if (transform.format) {
       url.searchParams.append("format", transform.format);
     } else {
@@ -35,4 +39,29 @@ export function assetUrl(id?: string, transform?: ImageTransformations): string 
   }
 
   return url.toString();
+}
+
+/** Hero banner — full-width, high quality */
+export function heroAssetUrl(id?: string): string | undefined {
+  return assetUrl(id, { width: 1920, quality: 80, fit: 'cover' });
+}
+
+/** Team logo — small, square */
+export function logoAssetUrl(id?: string): string | undefined {
+  return assetUrl(id, { width: 96, quality: 75, fit: 'contain' });
+}
+
+/** Gallery / event photo — medium */
+export function photoAssetUrl(id?: string): string | undefined {
+  return assetUrl(id, { width: 800, quality: 75, fit: 'cover' });
+}
+
+/** Video thumbnail — small */
+export function thumbnailAssetUrl(id?: string): string | undefined {
+  return assetUrl(id, { width: 400, quality: 70, fit: 'cover' });
+}
+
+/** Player headshot — small */
+export function headshotAssetUrl(id?: string): string | undefined {
+  return assetUrl(id, { width: 200, quality: 75, fit: 'cover' });
 }

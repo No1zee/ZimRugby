@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Video } from "@/types";
 import { directusFetch } from "@/lib/directus/fetch";
+import { thumbnailAssetUrl } from "@/lib/directus/assets";
 
 export async function getVideos(): Promise<Video[]> {
   const mockVideos: Video[] = [
@@ -78,7 +79,7 @@ export async function getVideos(): Promise<Video[]> {
           category: video.category || "General",
           duration: video.duration || "0:00",
           date: video.date_label || new Date(video.date).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric', timeZone: 'UTC' }).toUpperCase(),
-          thumbnail: video.thumbnail ? `${process.env.NEXT_PUBLIC_DIRECTUS_URL}/assets/${video.thumbnail}` : video.thumbnail_url,
+          thumbnail: thumbnailAssetUrl(video.thumbnail) || video.thumbnail_url,
           embedUrl: video.embed_url || "",
           description: video.description || ""
         }));
