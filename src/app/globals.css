@@ -568,3 +568,19 @@ html, body {
   filter: drop-shadow(0 8px 24px rgba(0, 103, 71, 0.3));
 }
 
+@keyframes page-in {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 1023px) {
+  @keyframes page-in {
+    from { opacity: 0; transform: translateX(20px); }
+    to { opacity: 1; transform: translateX(0); }
+  }
+}
+
+.animate-page-in {
+  animation-name: page-in;
+}
+
