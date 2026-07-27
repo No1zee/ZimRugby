@@ -39,7 +39,7 @@ export default function HeroBanner({
         <div className="absolute inset-0 bg-gradient-to-t from-rich-black/80 via-rich-black/30 to-transparent" />
       )}
       <div className="absolute inset-0 flex items-end pb-16 md:pb-24">
-        <div className="max-w-[1440px] mx-auto px-6 w-full">
+        <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 w-full">
           <h1 className="font-heading text-5xl md:text-7xl lg:text-8xl font-black uppercase tracking-tighter text-white leading-[1.0] max-w-4xl">
             {accentTitle ? (
               <>

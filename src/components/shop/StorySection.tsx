@@ -6,7 +6,7 @@ import Image from "next/image";
 
 export default function StorySection() {
   return (
-    <section className="bg-white py-24 px-6 md:px-12 border-t border-gray-100">
+    <section className="bg-white py-24 px-4 sm:px-6 lg:px-8 border-t border-gray-100">
       <div className="max-w-[1440px] mx-auto flex flex-col md:flex-row items-center gap-16 md:gap-24">
         
         {/* Supporting Image */}

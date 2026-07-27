@@ -22,7 +22,7 @@ export default function Section({
   className = "",
 }: SectionProps) {
   return (
-    <section className={`py-16 px-6 lg:px-12 ${className}`}>
+    <section className={`py-16 px-4 sm:px-6 lg:px-8 ${className}`}>
       <div className="max-w-[1440px] mx-auto">
         {(title || subtitle || tag) && (
           <div className="flex flex-col md:flex-row justify-between items-end gap-6 mb-12">

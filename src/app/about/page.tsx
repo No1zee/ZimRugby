@@ -15,7 +15,7 @@ export default function AboutOverviewPage() {
   ];
 
   return (
-    <div className="space-y-12">
+    <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
       
       {/* 1. overview summary */}
       <div className="border-l-4 border-zru-green pl-4 mb-8">

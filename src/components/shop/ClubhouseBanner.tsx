@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 
 export default function ClubhouseBanner() {
   return (
-    <section className="bg-white py-32 px-6 md:px-12 relative overflow-hidden grain-texture">
+    <section className="bg-white py-32 px-4 sm:px-6 lg:px-8 relative overflow-hidden grain-texture">
       <div className="max-w-[1440px] mx-auto">
         <div className="bg-clubhouse-charcoal relative overflow-hidden group rounded-sm border border-white/5 transition-all duration-700 hover:border-zru-green/50 shadow-2xl">
           

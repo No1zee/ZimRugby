@@ -153,7 +153,7 @@ export default function PlayRugbyPage() {
           </p>
           <Link 
             href="/contact"
-            className="inline-flex items-center gap-2 bg-zru-green text-zru-green px-8 py-4 font-bold uppercase tracking-wider rounded hover:bg-green-700 transition-colors"
+            className="inline-flex items-center gap-2 bg-white text-zru-green px-8 py-4 font-bold uppercase tracking-wider rounded hover:bg-white/90 transition-colors"
           >
             Get in Touch <ArrowRight className="w-5 h-5" />
           </Link>

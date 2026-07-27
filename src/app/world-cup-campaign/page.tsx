@@ -232,7 +232,7 @@ export default function WorldCupCampaignPage() {
           <div className="absolute inset-0 bg-linear-to-r from-rich-black via-transparent to-transparent" />
         </motion.div>
 
-        <div className="max-w-[1440px] mx-auto px-6 md:px-12 w-full relative z-10">
+        <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 w-full relative z-10">
           <div className="grid lg:grid-cols-2 gap-16 items-center">
             
             {/* Hero Content */}
@@ -299,7 +299,7 @@ export default function WorldCupCampaignPage() {
       <section className="py-32 relative overflow-hidden bg-rich-black [content-visibility:auto]">
         <StripedBackground position="left" variant="subtle" color="gold" />
         
-        <div className="max-w-[1440px] mx-auto px-6 md:px-12 relative z-10">
+        <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="grid lg:grid-cols-2 gap-24 items-center">
             
             {/* Story Text */}
@@ -366,7 +366,7 @@ export default function WorldCupCampaignPage() {
 
       {/* SECTION 3: PLEDGES */}
       <section id="pledges" className="py-32 bg-linear-to-b from-rich-black to-[#0a0a0a] relative [content-visibility:auto]">
-        <div className="max-w-[1440px] mx-auto px-6 md:px-12 relative z-10">
+        <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="text-center max-w-3xl mx-auto mb-20">
             <span className="inline-block text-[10px] font-black uppercase tracking-[0.4em] text-zru-green mb-6 border-b border-zru-green/30 pb-2">
               Monthly Pledges
@@ -440,7 +440,7 @@ export default function WorldCupCampaignPage() {
           <div className="absolute inset-0 bg-rich-black/80" />
         </div>
 
-        <div className="max-w-[1440px] mx-auto px-6 md:px-12 w-full relative z-10">
+        <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 w-full relative z-10">
           <div className="grid lg:grid-cols-2 gap-24 items-center">
             <div>
               <h2 className="text-5xl md:text-7xl font-black text-white uppercase tracking-tighter mb-8 leading-[0.9]">
@@ -537,7 +537,7 @@ export default function WorldCupCampaignPage() {
       {/* SECTION 5: MERCH */}
       <section className="py-32 bg-rich-black relative [content-visibility:auto]">
         <BackgroundText text="CLUBHOUSE" color="gray" />
-        <div className="max-w-[1440px] mx-auto px-6 md:px-12 relative z-10">
+        <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="flex flex-col lg:flex-row lg:items-end justify-between mb-20 gap-8">
             <div className="max-w-2xl">
               <span className="block text-[10px] font-black uppercase tracking-[0.4em] text-zru-green mb-8">
@@ -597,7 +597,7 @@ export default function WorldCupCampaignPage() {
 
       {/* SECTION 6: IMPACT & SOCIAL PROOF */}
       <section className="py-32 card-green border-y relative">
-        <div className="max-w-[1440px] mx-auto px-6 md:px-12 relative z-10">
+        <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           
           <div className="mb-24">
             <div className="flex items-center justify-between mb-6">
@@ -648,7 +648,7 @@ export default function WorldCupCampaignPage() {
 
       {/* SECTION 7: FAQ */}
       <section className="py-32 bg-rich-black">
-        <div className="max-w-[1440px] mx-auto px-6 md:px-12">
+        <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid lg:grid-cols-3 gap-24">
             <div>
               <span className="block text-[10px] font-black uppercase tracking-[0.4em] text-zru-green mb-8">Transparency</span>
@@ -688,7 +688,7 @@ export default function WorldCupCampaignPage() {
       {/* SECTION 8: CLOSING */}
       <section className="py-32 bg-linear-to-b from-rich-black to-clubhouse-charcoal relative overflow-hidden text-center">
         <div className="absolute inset-0 opacity-5 bg-pattern-diagonal-lines" />
-        <div className="max-w-3xl mx-auto px-6 relative z-10">
+        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <h2 className="text-5xl md:text-8xl font-black text-white uppercase tracking-tighter mb-10 italic">
             OUR MOMENT <br /> IS NOW.
           </h2>

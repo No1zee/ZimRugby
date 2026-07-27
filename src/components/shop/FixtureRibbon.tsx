@@ -44,7 +44,7 @@ export default function FixtureRibbon() {
           transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
           className="bg-zru-green text-clubhouse-charcoal overflow-hidden relative z-60"
         >
-          <div className="max-w-[1440px] mx-auto px-6 py-2 flex items-center justify-between">
+          <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-2 flex items-center justify-between">
             
             {/* Left: Match Alert */}
             <div className="flex items-center space-x-4">

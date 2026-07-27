@@ -42,7 +42,7 @@ const collections = [
 
 export default function CollectionsStrip() {
   return (
-    <section id="collections-section" className="py-20 px-6 max-w-[1440px] mx-auto bg-milk-white">
+    <section id="collections-section" className="py-20 px-4 sm:px-6 lg:px-8 max-w-[1440px] mx-auto bg-milk-white">
       {/* Section Header */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-12 gap-4">
         <div>

@@ -46,7 +46,7 @@ const products = [
 export default function ProductCarousel() {
   return (
     <section id="drop-section" className="py-20 bg-milk-white border-t border-b border-black/10">
-      <div className="max-w-[1440px] mx-auto px-6 md:px-12">
+      <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="flex justify-between items-end mb-12">
           <motion.div

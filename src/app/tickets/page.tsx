@@ -201,7 +201,7 @@ export default function TicketsPage() {
           <StripedBackground color="green" variant="subtle" position="left" className="opacity-10" />
         </div>
 
-        <div className="max-w-[1440px] mx-auto px-6 md:px-12 w-full relative z-10">
+        <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 w-full relative z-10">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             
             {/* Hero Text */}
@@ -262,7 +262,7 @@ export default function TicketsPage() {
 
       {/* SECTION B: FIXTURES GRID */}
       <section id="fixtures" className="py-24 bg-milk-white border-y border-black/5 scroll-mt-20">
-        <div className="max-w-[1440px] mx-auto px-6 md:px-12">
+        <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
           {/* Page Announcements */}
           <PageAnnouncements scope="tickets" className="mb-12" />
           
@@ -338,7 +338,7 @@ export default function TicketsPage() {
 
       {/* SECTION C: HOW IT WORKS */}
       <section className="py-24 bg-milk-white border-b border-black/5">
-        <div className="max-w-[1440px] mx-auto px-6 md:px-12">
+        <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-2xl mb-20">
              <span className="block text-[10px] font-black uppercase tracking-[0.4em] text-zru-green mb-6">Simple Entry</span>
              <h2 className="text-4xl md:text-5xl font-black text-rich-black uppercase tracking-tighter">HOW TO GET YOUR TICKETS</h2>
@@ -392,7 +392,7 @@ export default function TicketsPage() {
 
       {/* SECTION D: CATEGORIES */}
       <section className="py-24 bg-milk-white border-b border-black/5">
-        <div className="max-w-[1440px] mx-auto px-6 md:px-12">
+        <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-24 items-start">
             <div>
               <span className="block text-[10px] font-black uppercase tracking-[0.4em] text-zru-green mb-8">Seating Overview</span>
@@ -434,7 +434,7 @@ export default function TicketsPage() {
       <section className="py-16 bg-zru-green relative overflow-hidden group">
         <Link href="/world-cup-campaign" className="absolute inset-0 z-10" />
         <div className="absolute inset-0 bg-black/5 opacity-0 group-hover:opacity-100 transition-opacity" />
-        <div className="max-w-[1440px] mx-auto px-6 md:px-12 relative z-20 flex flex-col md:flex-row items-center justify-between gap-8">
+        <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 relative z-20 flex flex-col md:flex-row items-center justify-between gap-8">
            <div className="max-w-2xl">
               <h2 className="text-2xl md:text-3xl font-black text-white uppercase tracking-tighter leading-none mb-3">MATCHDAY AND THE WORLD CUP JOURNEY</h2>
               <p className="text-sm text-white/80 font-bold leading-relaxed pr-8">
@@ -452,7 +452,7 @@ export default function TicketsPage() {
 
       {/* SECTION F: FAQ */}
       <section id="faqs" className="py-32 bg-milk-white scroll-mt-20">
-        <div className="max-w-[1440px] mx-auto px-6 md:px-12">
+        <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid lg:grid-cols-3 gap-24">
             <div>
               <span className="block text-[10px] font-black uppercase tracking-[0.4em] text-zru-green mb-8">Security First</span>

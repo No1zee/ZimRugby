@@ -36,7 +36,7 @@ export default async function UnifiedHubGrid() {
   const [news, nextMatch] = await Promise.all([getLatestNews(), getNextMatch()]);
 
   return (
-    <section className="py-12 md:py-16 px-5 md:px-8 lg:px-12 max-w-7xl mx-auto">
+    <section className="py-12 md:py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
       {/* Section Title — Nations Cup format */}
       <div className="mb-8">
         <div className="flex items-center gap-2 mb-1">

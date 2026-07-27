@@ -45,7 +45,7 @@ const journalPosts = [
 
 export default function JournalStrip() {
   return (
-    <section className="bg-white py-32 px-6 overflow-hidden">
+    <section className="bg-white py-32 px-4 sm:px-6 lg:px-8 overflow-hidden">
       <div className="max-w-[1440px] mx-auto">
         
         {/* Header: Directorial Entrance */}

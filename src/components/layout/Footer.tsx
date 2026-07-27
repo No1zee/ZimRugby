@@ -77,7 +77,7 @@ export default function Footer() {
         }}
       />
 
-      <div className="max-w-[1440px] mx-auto px-6 sm:px-8 relative z-10 space-y-0">
+      <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 relative z-10 space-y-0">
         
         {/* Compact Single-Row Header: Title & Contact Pill */}
         <div className="flex flex-col items-center gap-6 pb-8">
@@ -115,7 +115,7 @@ export default function Footer() {
         </div>
 
         {/* Compact 4-Column Navigation Links */}
-        <div className="bg-[#006747] -mx-6 sm:-mx-8 px-6 sm:px-8 py-8 rounded-lg">
+        <div className="bg-[#006747] -mx-4 sm:-mx-6 lg:-mx-8 px-4 sm:px-6 lg:px-8 py-8 rounded-lg">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8">
             {footerColumns.map((col) => (
               <nav key={col.title} aria-label={col.title} className="space-y-3">

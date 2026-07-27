@@ -79,7 +79,7 @@ export default function VariantsPage() {
   return (
     <main className="bg-rich-black min-h-screen">
       
-      <div className="pt-40 pb-24 max-w-[1440px] mx-auto px-6 md:px-12">
+      <div className="pt-40 pb-24 max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
         <header className="mb-16 border-l-4 border-zru-green pl-8">
           <span className="text-[10px] font-black text-zru-green uppercase tracking-[0.4em] mb-4 block">Design System / Core Components</span>
           <h1 className="text-5xl md:text-7xl font-black text-white uppercase tracking-tighter leading-none mb-4">FixtureCard Variants</h1>

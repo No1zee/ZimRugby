@@ -16,7 +16,7 @@ export default function CampaignSection() {
 
   return (
     <section ref={containerRef} className="bg-clubhouse-charcoal py-32 relative overflow-hidden grain-texture">
-      <div className="max-w-[1440px] mx-auto px-6 md:px-12 flex flex-col lg:flex-row items-center gap-16 lg:gap-24 relative z-10">
+      <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 flex flex-col lg:flex-row items-center gap-16 lg:gap-24 relative z-10">
         
         {/* Left: Narrative */}
         <div className="flex-1 text-left z-20 w-full lg:w-auto">

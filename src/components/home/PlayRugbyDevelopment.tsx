@@ -44,7 +44,7 @@ const programs = [
 export default function PlayRugbyDevelopment() {
   return (
     <section className="bg-white py-32 overflow-hidden relative">
-      <div className="max-w-[1440px] mx-auto px-6 relative z-10">
+      <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         
         {/* Section Header: Directorial Style */}
         <div className="mb-24 flex flex-col items-center text-center max-w-3xl mx-auto space-y-6">

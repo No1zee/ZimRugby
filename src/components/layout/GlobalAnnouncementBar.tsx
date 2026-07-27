@@ -103,7 +103,7 @@ export default function GlobalAnnouncementBar() {
           {/* Subtle Shimmer Light Sweep Accent */}
           <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full animate-[shimmer_3s_infinite] pointer-events-none" />
 
-          <div className="max-w-[1440px] mx-auto px-6 py-2.5 flex items-center justify-between gap-4 relative z-10">
+          <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-2.5 flex items-center justify-between gap-4 relative z-10">
             <div className="flex-1 flex items-center justify-center gap-3">
               {/* Pulsing indicator icon */}
               <div className="relative flex items-center justify-center shrink-0">

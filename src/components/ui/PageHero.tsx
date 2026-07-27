@@ -52,7 +52,7 @@ export default function PageHero({
         <div className="absolute bottom-0 left-0 w-full h-[3px] bg-gradient-to-r from-transparent via-zru-green/50 to-transparent" />
       </div>
 
-      <div className="max-w-[1440px] mx-auto px-6 md:px-12 w-full relative z-10">
+      <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 w-full relative z-10">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}

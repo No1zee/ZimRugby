@@ -76,7 +76,7 @@ export function HamburgerMenuOverlay({
           </div>
 
           {/* Top Header Bar */}
-          <div className="max-w-[1440px] w-full mx-auto px-6 py-6 flex items-center justify-between relative z-10 border-b border-white/10">
+          <div className="max-w-[1440px] w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 flex items-center justify-between relative z-10 border-b border-white/10">
             <Link href="/" onClick={onClose} className="flex items-center gap-3 group">
               <Image
                 src="/images/logos/zru-logo.svg"
