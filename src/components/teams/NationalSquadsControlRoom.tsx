@@ -8,7 +8,6 @@ import {
   ArrowRight,
   Trophy,
   Shield,
-  Target,
   Users,
   Calendar,
   BookOpen,
@@ -23,7 +22,6 @@ interface ControlRoomTeam {
   category: string;
   format: string;
   formatTag: string;
-  campaignRibbon: string;
   tagline: string;
   description: string;
   ranking: string;
@@ -37,7 +35,6 @@ interface ControlRoomTeam {
   featuredImage: string;
   href: string;
   recentRecord: string;
-  competitionBadges: string[];
   heroStats: { label: string; value: string }[];
 }
 
@@ -49,7 +46,6 @@ const TEAMS: ControlRoomTeam[] = [
     category: "Senior Men's 15s National Team",
     format: "15-a-side",
     formatTag: "15s",
-    campaignRibbon: "WORLD CUP QUALIFIERS",
     tagline: "Reigning Africa Champions driving towards the global stage.",
     description:
       "The flagship men's 15s national team representing Zimbabwe on the world rugby stage. Reigning African Champions pursuing World Cup qualification with pride, speed, and physicality.",
@@ -64,7 +60,6 @@ const TEAMS: ControlRoomTeam[] = [
     featuredImage: "/images/gallery/zimbabwe-sables-0351.webp",
     href: "/teams/sables",
     recentRecord: "4W – 1L – 0D",
-    competitionBadges: ["Africa Cup", "RWC 2027 Qualifiers"],
     heroStats: [
       { label: "Africa Cup Titles", value: "2" },
       { label: "RWC Appearances", value: "2" },
@@ -78,7 +73,6 @@ const TEAMS: ControlRoomTeam[] = [
     category: "Senior Women's National Team",
     format: "15-a-side",
     formatTag: "15s",
-    campaignRibbon: "AFRICA WOMEN'S CUP 2026",
     tagline: "The pride of women's rugby in Zimbabwe, competing across Africa.",
     description:
       "Zimbabwe's senior women's national team. Competing in Rugby Africa tournaments and international test matches, driving growth and excellence across women's rugby.",
@@ -93,7 +87,6 @@ const TEAMS: ControlRoomTeam[] = [
     featuredImage: "/images/gallery/sables-women-9.webp",
     href: "/teams/lady-sables",
     recentRecord: "2W – 3L – 0D",
-    competitionBadges: ["Africa Women's Cup", "Rugby Africa"],
     heroStats: [
       { label: "Africa Cup Apps", value: "4" },
       { label: "Registered Players", value: "1.2K+" },
@@ -107,7 +100,6 @@ const TEAMS: ControlRoomTeam[] = [
     category: "Senior Men's Sevens Team",
     format: "7-a-side",
     formatTag: "7s",
-    campaignRibbon: "SEVENS WORLD CIRCUIT",
     tagline: "High-octane sevens with pace, flair, and Olympic ambition.",
     description:
       "High-octane sevens squad representing Zimbabwe on the World Rugby Sevens Challenger Series and Olympic qualifying circuits with pace, flair, and relentless speed.",
@@ -122,7 +114,6 @@ const TEAMS: ControlRoomTeam[] = [
     featuredImage: "/images/teams/cheetahs.jpg",
     href: "/teams/cheetahs",
     recentRecord: "3W – 2L – 0D",
-    competitionBadges: ["Sevens Challenger Series", "Africa 7s Cup"],
     heroStats: [
       { label: "Circuit", value: "WR 7s" },
       { label: "Speed Tier", value: "Elite" },
@@ -136,7 +127,6 @@ const TEAMS: ControlRoomTeam[] = [
     category: "U20 Men's 15s National Team",
     format: "15-a-side",
     formatTag: "15s",
-    campaignRibbon: "U20 PATHWAY TO SENIORS",
     tagline: "Back-to-back Barthes Trophy champions building the future.",
     description:
       "Back-to-back Barthes Trophy African U20 Champions and World Rugby Junior Trophy contenders. The high-performance pipeline producing the next generation of senior Sables.",
@@ -151,7 +141,6 @@ const TEAMS: ControlRoomTeam[] = [
     featuredImage: "/images/hero/zim-u20s.webp",
     href: "/teams/junior-sables",
     recentRecord: "5W – 0L – 0D",
-    competitionBadges: ["Barthes Trophy", "U20 World Trophy"],
     heroStats: [
       { label: "Barthes Cup", value: "1st" },
       { label: "World Trophy", value: "Finalists" },
@@ -202,32 +191,7 @@ export default function NationalSquadsControlRoom() {
       </div>
 
       <div className="relative z-10 max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
-        {/* ─── 1. CAMPAIGN RIBBON ─── */}
-        <div className="pt-8 pb-1">
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={activeTeam.id}
-              initial={{ opacity: 0, y: -6 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: 6 }}
-              transition={{ duration: 0.25 }}
-              className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-[0.2em] border"
-              style={{
-                backgroundColor: `${activeTeam.accentRaw}18`,
-                color: activeTeam.accentColor,
-                borderColor: `${activeTeam.accentRaw}40`,
-              }}
-            >
-              <span
-                className="w-1.5 h-1.5 rounded-full animate-pulse"
-                style={{ backgroundColor: activeTeam.accentColor }}
-              />
-              {activeTeam.campaignRibbon}
-            </motion.div>
-          </AnimatePresence>
-        </div>
-
-        {/* ─── 2. TEAM RAIL — card-surface system ─── */}
+        {/* ─── 1. TEAM RAIL — card-surface system ─── */}
         <div className="pt-5 pb-2">
           <div
             ref={railRef}
@@ -417,18 +381,6 @@ export default function NationalSquadsControlRoom() {
                           </span>
                         </div>
                       </div>
-                    ))}
-                  </div>
-
-                  {/* Competition badges */}
-                  <div className="flex flex-wrap gap-2 pt-1">
-                    {activeTeam.competitionBadges.map((badge) => (
-                      <span
-                        key={badge}
-                        className="px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-wider border border-emerald-500/30 bg-emerald-500/10 text-accent-teal"
-                      >
-                        {badge}
-                      </span>
                     ))}
                   </div>
 

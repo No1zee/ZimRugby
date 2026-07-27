@@ -1,6 +1,5 @@
 import { Metadata } from "next";
 import NationalSquadsControlRoom from "@/components/teams/NationalSquadsControlRoom";
-import PlayerSpotlightStrip from "@/components/teams/PlayerSpotlightStrip";
 import Link from "next/link";
 import { GraduationCap, MapPin } from "lucide-react";
 
@@ -15,10 +14,7 @@ export default function TeamsPage() {
       {/* 1. National Squads Control Room — cinematic team rail, hero, info grid */}
       <NationalSquadsControlRoom />
 
-      {/* 2. Player to Watch Editorial Interstitial */}
-      <PlayerSpotlightStrip />
-
-      {/* 3. Development & Pathways Banner */}
+      {/* 2. Development & Pathways Banner */}
       <section className="py-20 bg-milk-white">
         <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
           <div className="p-8 sm:p-12 bg-rich-black text-white rounded-3xl border border-white/10 relative overflow-hidden shadow-2xl">
