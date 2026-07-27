@@ -14,10 +14,10 @@ export default function PlayerSpotlightStrip() {
           
           {/* Left Column: Player Spotlight Details */}
           <div className="lg:col-span-7 space-y-6">
-            <span className="text-xs font-extrabold uppercase tracking-widest text-[#006747] block mb-2">Sables Player Spotlight</span>
-            <h2 className="font-heading text-4xl sm:text-6xl font-black uppercase tracking-tight italic">
+            <span className="text-xs font-extrabold uppercase tracking-widest text-accent-teal block mb-2">Sables Player Spotlight</span>
+            <h2 className="font-heading text-4xl sm:text-6xl font-black uppercase tracking-tight italic leading-[1.0]">
               TINOTENDA <br />
-              <span className="text-[#006747]">MASEKERE</span>
+              <span className="text-accent-teal">MASEKERE</span>
             </h2>
 
             <div className="flex flex-wrap items-center gap-4 text-xs font-bold uppercase tracking-wider text-white/60">

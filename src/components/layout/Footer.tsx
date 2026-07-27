@@ -54,7 +54,7 @@ export default function Footer() {
   if (pathname?.startsWith('/clubhouse') || pathname?.startsWith('/admin')) return null;
 
   return (
-    <footer className="bg-[#FDFBF0] text-[#003822] border-t border-black/10 pt-12 pb-8 relative overflow-hidden">
+    <footer className="bg-[#FDFBF0] text-[#003822] border-t border-black/10 pb-8 relative overflow-hidden">
       
       {/* Schema.org Sports Organization Metadata */}
       <script
@@ -77,10 +77,10 @@ export default function Footer() {
         }}
       />
 
-      <div className="max-w-[1440px] mx-auto px-6 sm:px-8 relative z-10 space-y-10">
+      <div className="max-w-[1440px] mx-auto px-6 sm:px-8 relative z-10 space-y-0">
         
         {/* Compact Single-Row Header: Title & Contact Pill */}
-        <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6 border-b border-[#003822]/15 pb-8">
+        <div className="flex flex-col items-center gap-6 pb-8">
           <div className="flex items-center gap-5">
             <div className="relative w-28 h-28 sm:w-36 sm:h-36 shrink-0 flex items-center justify-center">
               <Image
@@ -104,42 +104,43 @@ export default function Footer() {
             </div>
           </div>
 
-          {/* Contact Details + Socials */}
-          <div className="flex flex-wrap items-center gap-6 shrink-0 text-xs font-bold text-[#003822]/80">
+          {/* Contact Details + Socials — stacked and centered on mobile */}
+          <div className="flex flex-col items-center gap-3 text-xs font-bold text-[#003822]/80">
             <div className="flex items-center gap-2">
               <MapPin className="w-3.5 h-3.5 text-[#006747] shrink-0" />
               <span>Harare Sports Club HQ</span>
             </div>
-            <span className="text-[#003822]/20 hidden sm:inline">•</span>
             <SocialCard />
           </div>
         </div>
 
         {/* Compact 4-Column Navigation Links */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8">
-          {footerColumns.map((col) => (
-            <nav key={col.title} aria-label={col.title} className="space-y-3">
-              <span className="block font-heading font-black text-xs sm:text-sm uppercase tracking-wider text-[#003822] border-b border-[#003822]/15 pb-2">
-                {col.title}
-              </span>
-              <ul className="space-y-2">
-                {col.links.map((link) => (
-                  <li key={link.label}>
-                    <Link
-                      href={link.href}
-                      className="text-xs font-bold text-[#003822]/80 hover:text-[#006747] transition-colors inline-block"
-                    >
-                      {link.label}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </nav>
-          ))}
+        <div className="bg-[#006747] -mx-6 sm:-mx-8 px-6 sm:px-8 py-8 rounded-lg">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8">
+            {footerColumns.map((col) => (
+              <nav key={col.title} aria-label={col.title} className="space-y-3">
+                <span className="block font-heading font-black text-xs sm:text-sm uppercase tracking-wider text-white border-b border-white/20 pb-2">
+                  {col.title}
+                </span>
+                <ul className="space-y-2">
+                  {col.links.map((link) => (
+                    <li key={link.label}>
+                      <Link
+                        href={link.href}
+                        className="text-xs font-bold text-white/70 hover:text-white transition-colors inline-block"
+                      >
+                        {link.label}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </nav>
+            ))}
+          </div>
         </div>
 
         {/* Compact Legal & CDPA Compliance Bar */}
-        <div className="pt-6 border-t border-[#003822]/15 flex flex-col md:flex-row justify-between items-center gap-4 text-[11px] font-bold text-[#003822]/70">
+        <div className="pt-6 mt-10 border-t border-[#003822]/15 flex flex-col md:flex-row justify-between items-center gap-4 text-[11px] font-bold text-[#003822]/70">
           <div className="flex items-center gap-2">
             <ShieldCheck className="w-3.5 h-3.5 text-[#006747]" />
             <p>© {new Date().getFullYear()} Zimbabwe Rugby Union. All rights reserved.</p>

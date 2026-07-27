@@ -10,11 +10,6 @@ interface FeaturedPlayerCardProps {
   player: FeaturedPlayer;
 }
 
-/**
- * Compact player card wrapped in CometCard 3D tilt.
- * Shows: circular photo, name, position, team, caps/age stats, profile link.
- * Falls back to a static card on mobile and for prefers-reduced-motion.
- */
 export default function FeaturedPlayerCard({ player }: FeaturedPlayerCardProps) {
   const prefersReduced = usePrefersReducedMotion();
 
@@ -22,55 +17,74 @@ export default function FeaturedPlayerCard({ player }: FeaturedPlayerCardProps) 
     player.slug ?? player.name.toLowerCase().replace(/\s+/g, "-");
 
   const cardContent = (
-    <div className="bg-white rounded-2xl border border-black/5 overflow-hidden shadow-sm hover:shadow-lg transition-shadow duration-300 p-3 sm:p-4 lg:p-5 w-full">
-      {/* Photo */}
-      <div className="flex justify-center mb-3 lg:mb-4">
-        <div className="relative w-16 h-16 sm:w-20 sm:h-20 lg:w-24 lg:h-24 rounded-full overflow-hidden border-2 border-zru-green/20">
-          <Image
-            src={player.photo}
-            alt={player.name}
-            fill
-            sizes="96px"
-            className="object-cover"
-          />
+    <div className="group relative rounded-2xl bg-white border border-black/5 overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 w-full">
+      {/* Image area with shield clip-path */}
+      <div className="relative">
+        <div
+          className="relative h-[280px] sm:h-[300px] lg:h-[340px] bg-gradient-to-b from-zru-green to-[#003822]"
+          style={{ clipPath: "polygon(0 0, 100% 0, 100% 92%, 50% 100%, 0 92%)" }}
+        >
+          {/* Watermark name */}
+          <div className="pointer-events-none absolute inset-0 flex items-center justify-center overflow-hidden">
+            <span
+              className="font-heading text-[4rem] sm:text-[5rem] leading-[0.85] font-black uppercase italic text-white/[0.08] text-center select-none break-all"
+              style={{ writingMode: "vertical-lr" }}
+            >
+              {player.name}
+            </span>
+          </div>
+
+          {/* Player image */}
+          {player.photo && player.photo !== "/images/teams/player-placeholder.webp" ? (
+            <Image
+              src={player.photo}
+              alt={player.name}
+              fill
+              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+              className="object-cover object-top group-hover:scale-105 transition-transform duration-500"
+            />
+          ) : (
+            <div className="absolute inset-0 flex items-center justify-center">
+              <span className="text-6xl font-heading font-black text-white/20 tracking-tight">
+                {player.name.split(" ").map(n => n[0]).join("").substring(0, 2)}
+              </span>
+            </div>
+          )}
+        </div>
+
+        {/* Position badge — overlaps the shield clip edge */}
+        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 z-10">
+          <div className="clip-slanted-sm bg-zru-green text-white text-[10px] font-black uppercase tracking-widest px-4 py-1.5 shadow-lg shadow-zru-green/30">
+            {player.position}
+          </div>
         </div>
       </div>
 
       {/* Name */}
-      <h3 className="text-center font-heading font-black text-sm sm:text-base lg:text-lg uppercase tracking-wide text-rich-black leading-tight">
-        {player.name}
-      </h3>
-
-      {/* Position • Team */}
-      <p className="text-center text-xs sm:text-sm text-neutral-mid mt-1">
-        {player.position} • {player.team}
-      </p>
+      <div className="pt-8 pb-2 px-4 text-center">
+        <h3 className="font-heading text-base sm:text-lg font-black uppercase tracking-tight text-rich-black leading-tight">
+          {player.name}
+        </h3>
+        <p className="text-[10px] sm:text-xs text-neutral-mid mt-0.5">{player.team}</p>
+      </div>
 
       {/* Stats row */}
-      <div className="flex justify-center gap-6 sm:gap-8 mt-3 lg:mt-4 pt-3 border-t border-black/5">
-        <div className="text-center">
-          <span className="block text-base sm:text-lg font-black text-rich-black leading-none">
-            {player.caps}
-          </span>
-          <span className="text-[8px] sm:text-[9px] lg:text-[10px] font-black uppercase tracking-[0.2em] text-neutral-mid mt-1 block">
-            Caps
-          </span>
+      <div className="mx-auto grid w-fit grid-cols-2 divide-x divide-black/5 py-3 border-t border-black/5">
+        <div className="px-5 text-center">
+          <div className="text-sm font-bold text-rich-black">{player.caps}</div>
+          <div className="text-[9px] uppercase tracking-widest text-black/40 font-bold mt-0.5">Caps</div>
         </div>
-        <div className="text-center">
-          <span className="block text-base sm:text-lg font-black text-rich-black leading-none">
-            {player.age}
-          </span>
-          <span className="text-[8px] sm:text-[9px] lg:text-[10px] font-black uppercase tracking-[0.2em] text-neutral-mid mt-1 block">
-            Age
-          </span>
+        <div className="px-5 text-center">
+          <div className="text-sm font-bold text-rich-black">{player.age}</div>
+          <div className="text-[9px] uppercase tracking-widest text-black/40 font-bold mt-0.5">Age</div>
         </div>
       </div>
 
-      {/* View profile link */}
-      <div className="mt-3 lg:mt-4 text-center">
+      {/* View Profile CTA */}
+      <div className="px-4 pb-4 pt-1 text-center">
         <Link
           href={`/players/${slug}`}
-          className="inline-block clip-slanted-sm bg-gradient-to-b from-[#00704D] to-[#005238] hover:from-[#006747] hover:to-[#00402B] text-white font-heading font-black text-[9px] sm:text-[10px] lg:text-[11px] uppercase tracking-[0.18em] px-4 sm:px-5 lg:px-6 py-1.5 sm:py-2 transition-all duration-300 shadow-sm hover:shadow-md"
+          className="inline-block clip-slanted-sm bg-gradient-to-b from-[#00704D] to-[#005238] hover:from-[#006747] hover:to-[#00402B] text-white font-heading font-black text-[9px] sm:text-[10px] lg:text-[11px] uppercase tracking-[0.18em] px-5 sm:px-6 py-2 transition-all duration-300 shadow-sm hover:shadow-md"
         >
           View Profile
         </Link>
@@ -78,7 +92,6 @@ export default function FeaturedPlayerCard({ player }: FeaturedPlayerCardProps) 
     </div>
   );
 
-  // Static card: no 3D tilt on mobile or when reduced motion is preferred
   if (prefersReduced) {
     return <div className="w-full">{cardContent}</div>;
   }

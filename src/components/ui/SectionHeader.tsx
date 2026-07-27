@@ -30,7 +30,7 @@ export default function SectionHeader({
       )}
       
       <div className="border-l-4 border-zru-green pl-4 sm:pl-6 space-y-2">
-        <h2 className="text-2xl sm:text-3xl md:text-4xl font-heading font-black uppercase italic tracking-wide text-white leading-none">
+        <h2 className="text-2xl sm:text-3xl md:text-4xl font-heading font-black uppercase italic tracking-tight text-white leading-[1.0]">
           {title}
         </h2>
         {description && (

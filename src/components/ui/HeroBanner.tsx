@@ -5,6 +5,7 @@ import { ArrowRight } from "lucide-react";
 
 interface HeroBannerProps {
   title: string;
+  accentTitle?: string;
   subtitle?: string;
   backgroundImage: string;
   ctaLabel?: string;
@@ -15,6 +16,7 @@ interface HeroBannerProps {
 
 export default function HeroBanner({
   title,
+  accentTitle,
   subtitle,
   backgroundImage,
   ctaLabel,
@@ -38,8 +40,13 @@ export default function HeroBanner({
       )}
       <div className="absolute inset-0 flex items-end pb-16 md:pb-24">
         <div className="max-w-[1440px] mx-auto px-6 w-full">
-          <h1 className="font-heading text-5xl md:text-7xl lg:text-8xl font-black uppercase tracking-tighter text-white leading-[0.85] max-w-4xl">
-            {title}
+          <h1 className="font-heading text-5xl md:text-7xl lg:text-8xl font-black uppercase tracking-tighter text-white leading-[1.0] max-w-4xl">
+            {accentTitle ? (
+              <>
+                {title}{" "}
+                <span className="text-accent-teal">{accentTitle}</span>
+              </>
+            ) : title}
           </h1>
           {subtitle && (
             <p className="text-white/70 text-lg md:text-xl max-w-2xl mt-6 font-normal">

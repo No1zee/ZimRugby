@@ -1,8 +1,8 @@
 ﻿"use client";
 
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback, useMemo } from "react";
 import Image from "next/image";
-import { Play, ExternalLink, X, Film, Sparkles, LayoutGrid, CircleDot, MoveHorizontal, Youtube } from "lucide-react";
+import { Play, ExternalLink, X, CircleDot, LayoutGrid, MoveHorizontal } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
 export interface YouTubeVideoItem {
@@ -76,148 +76,125 @@ export default function MatchdayVideoHighlights({
   subtitle = "MATCH HIGHLIGHTS",
   showChannelLink = true,
 }: MatchdayVideoHighlightsProps) {
-  const [videos, setVideos] = useState<YouTubeVideoItem[]>(DEFAULT_HIGHLIGHTS);
+  // Use fallback videos only
+  const videos = DEFAULT_HIGHLIGHTS;
   const [activeVideo, setActiveVideo] = useState<YouTubeVideoItem | null>(null);
   const [viewMode, setViewMode] = useState<"ring" | "grid">("ring");
-
-  // 3D Ring Drag & Rotation State
   const [rotationY, setRotationY] = useState(0);
   const [isDragging, setIsDragging] = useState(false);
   const [startX, setStartX] = useState(0);
   const [startRotation, setStartRotation] = useState(0);
+  const [showDragToast, setShowDragToast] = useState(true);
 
-  // Auto-fetch latest videos from YouTube API route
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [containerWidth, setContainerWidth] = useState(800);
+
+  // Measure container width
   useEffect(() => {
-    async function loadLatestVideos() {
-      try {
-        const res = await fetch("/api/videos/youtube");
-        if (res.ok) {
-          const data = await res.json();
-          if (data && data.length > 0) {
-            setVideos(data);
-          }
-        }
-      } catch (err) {
-        console.error("Failed to load dynamic YouTube feed:", err);
+    if (!containerRef.current) return;
+    const observer = new ResizeObserver((entries) => {
+      for (const entry of entries) {
+        setContainerWidth(entry.contentRect.width);
       }
-    }
-    loadLatestVideos();
+    });
+    observer.observe(containerRef.current);
+    return () => observer.disconnect();
   }, []);
 
-  // Auto-rotate 3D Ring slowly when not dragging
+  // Auto-rotate
   useEffect(() => {
-    if (isDragging || viewMode !== "ring") return;
+    if (isDragging || viewMode !== "ring" || videos.length <= 1) return;
     const interval = setInterval(() => {
       setRotationY((prev) => prev - 0.25);
     }, 30);
     return () => clearInterval(interval);
-  }, [isDragging, viewMode]);
+  }, [isDragging, viewMode, videos.length]);
 
-  const handleMouseDown = (e: React.MouseEvent | React.TouchEvent) => {
+  // Drag handlers
+  const handleMouseDown = useCallback((e: React.MouseEvent | React.TouchEvent) => {
     setIsDragging(true);
     const clientX = "touches" in e ? e.touches[0].clientX : e.clientX;
     setStartX(clientX);
     setStartRotation(rotationY);
-  };
+  }, [rotationY]);
 
-  const handleMouseMove = (e: React.MouseEvent | React.TouchEvent) => {
+  const handleMouseMove = useCallback((e: React.MouseEvent | React.TouchEvent) => {
     if (!isDragging) return;
     const clientX = "touches" in e ? e.touches[0].clientX : e.clientX;
     const deltaX = clientX - startX;
     setRotationY(startRotation + deltaX * 0.4);
-  };
+  }, [isDragging, startX, startRotation]);
 
-  const handleMouseUp = () => {
+  const handleMouseUp = useCallback(() => {
     setIsDragging(false);
-  };
+  }, []);
 
-  const radius = typeof window !== "undefined" && window.innerWidth < 640 ? 130 : 340;
-  const angleStep = 360 / Math.max(videos.length, 1);
-
-  const [showDragToast, setShowDragToast] = useState(true);
-
-  // Auto-dismiss Drag Toast after 3.5 seconds
+  // Auto-dismiss drag toast
   useEffect(() => {
-    if (viewMode === "ring") {
+    if (viewMode === "ring" && videos.length > 1) {
       setShowDragToast(true);
-      const timer = setTimeout(() => {
-        setShowDragToast(false);
-      }, 3500);
+      const timer = setTimeout(() => setShowDragToast(false), 3500);
       return () => clearTimeout(timer);
     }
-  }, [viewMode]);
+  }, [viewMode, videos.length]);
+
+  // ── Dynamic Ring Math ──
+  const count = videos.length;
+  const isMobile = containerWidth < 640;
+  const cardWidth = isMobile ? 220 : Math.min(360, containerWidth * 0.28);
+  const cardGap = cardWidth * 0.08;
+
+  // Radius: big enough so cards barely touch (arc distance ≈ cardWidth + gap)
+  const minRadius = count <= 1
+    ? 0
+    : (cardWidth + cardGap) * count / (2 * Math.PI);
+
+  // Clamp radius — never exceed container half-width (cards stay on screen)
+  const maxRadius = containerWidth * 0.45;
+  const radius = Math.min(minRadius, maxRadius);
+
+  const angleStep = count > 0 ? 360 / count : 0;
+
+  // Only render cards within ±120° of front-facing (virtualization)
+  const VISIBLE_ARC = 120;
+
+  // ── 0 cards: empty state ──
+  if (count === 0) {
+    return (
+      <section className="py-4 sm:py-6 bg-milk-white border-t border-black/5 select-none overflow-visible">
+        <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 space-y-3">
+          <HeaderStrip subtitle={subtitle} title={title} showChannelLink={showChannelLink} viewMode={viewMode} setViewMode={setViewMode} />
+          <div className="flex items-center justify-center h-[280px] sm:h-[340px] text-neutral-mid text-sm">
+            No highlight videos available yet.
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  // ── 1 card: centered, no ring ──
+  if (count === 1) {
+    return (
+      <section className="py-4 sm:py-6 bg-milk-white border-t border-black/5 select-none overflow-visible">
+        <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 space-y-3">
+          <HeaderStrip subtitle={subtitle} title={title} showChannelLink={showChannelLink} viewMode={viewMode} setViewMode={setViewMode} />
+          <div className="flex items-center justify-center py-6">
+            <VideoCard video={videos[0]} isDragging={isDragging} onClick={() => setActiveVideo(videos[0])} />
+          </div>
+        </div>
+        <VideoModal activeVideo={activeVideo} onClose={() => setActiveVideo(null)} />
+      </section>
+    );
+  }
 
   return (
     <section className="py-4 sm:py-6 bg-milk-white border-t border-black/5 select-none overflow-visible">
       <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 space-y-3">
-        
-        {/* Header Strip & View Switcher */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
-          <div>
-            <div className="flex items-center gap-2 mb-1">
-              <span className="w-6 h-0.5 bg-[#006747]" />
-              <span className="text-[11px] font-heading font-black uppercase tracking-[0.25em] text-[#006747]">
-                {subtitle}
-              </span>
-            </div>
-            <h2 className="text-3xl sm:text-5xl font-heading font-black uppercase tracking-tight text-rich-black italic">
-              {title}
-            </h2>
-          </div>
+        <HeaderStrip subtitle={subtitle} title={title} showChannelLink={showChannelLink} viewMode={viewMode} setViewMode={setViewMode} />
 
-          <div className="flex items-center gap-3">
-            {/* Icon-Only View Switcher (Nimbus 3D Stage Icon & Grid View Icon) */}
-            <div className="flex items-center bg-black/5 p-1 rounded-xl border border-black/10 shadow-xs">
-              <button
-                onClick={() => setViewMode("ring")}
-                title="3D Stage View"
-                aria-label="3D Stage View"
-                className={`p-2 rounded-lg transition-all flex items-center justify-center ${
-                  viewMode === "ring"
-                    ? "bg-[#006747] text-white shadow-md scale-105"
-                    : "text-black/60 hover:text-black hover:bg-black/5"
-                }`}
-              >
-                <CircleDot className="w-4 h-4" />
-              </button>
-              <button
-                onClick={() => setViewMode("grid")}
-                title="Grid View"
-                aria-label="Grid View"
-                className={`p-2 rounded-lg transition-all flex items-center justify-center ${
-                  viewMode === "grid"
-                    ? "bg-[#006747] text-white shadow-md scale-105"
-                    : "text-black/60 hover:text-black hover:bg-black/5"
-                }`}
-              >
-                <LayoutGrid className="w-4 h-4" />
-              </button>
-            </div>
-
-            {/* ZRU Green YouTube Channel CTA Button */}
-            {showChannelLink && (
-              <a
-                href="https://www.youtube.com/@ZimbabweRugbyUnion"
-                target="_blank"
-                rel="noopener noreferrer"
-                title="Watch ZRU on YouTube"
-                aria-label="Watch ZRU on YouTube"
-                className="inline-flex items-center gap-2 px-3.5 py-2 bg-[#006747] hover:bg-[#005238] text-white rounded-xl text-[10px] sm:text-[11px] font-black uppercase tracking-wider transition-all duration-300 shadow-xs hover:shadow-md border border-[#006747] hover:scale-105 active:scale-95 group/yt shrink-0"
-              >
-                <svg className="w-5 h-3.5 shrink-0 group-hover/yt:scale-110 transition-transform" viewBox="0 0 24 17" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M23.498 2.622a3.008 3.008 0 0 0-2.116-2.126C19.513 0 12 0 12 0S4.487 0 2.618.496A3.008 3.008 0 0 0 .502 2.622C0 4.504 0 8.423 0 8.423s0 3.919.502 5.801a3.008 3.008 0 0 0 2.116 2.126C4.487 16.846 12 16.846 12 16.846s7.513 0 9.882-.496a3.008 3.008 0 0 0 2.116-2.126C24 12.342 24 8.423 24 8.423s0-3.919-.502-5.801z" fill="#FF0000"/>
-                  <path d="M9.545 12.016V4.83l6.273 3.593-6.273 3.593z" fill="#FFFFFF"/>
-                </svg>
-                <span className="whitespace-nowrap font-heading tracking-widest text-white">YOUTUBE</span>
-              </a>
-            )}
-          </div>
-        </div>
-
-        {/* ── MODE 1: 3D CYLINDRICAL DRAGGABLE RING SHOWCASE (BOX-LESS MILK WHITE) ── */}
         {viewMode === "ring" ? (
-          <div className="relative w-full py-6 select-none overflow-visible">
-            {/* Auto-Dismissing Drag Toast Notification */}
+          <div className="relative w-full py-6 select-none overflow-visible" ref={containerRef}>
+            {/* Drag Toast */}
             <AnimatePresence>
               {showDragToast && (
                 <motion.div
@@ -243,74 +220,65 @@ export default function MatchdayVideoHighlights({
               onTouchMove={handleMouseMove}
               onTouchEnd={handleMouseUp}
             >
-              {/* 3D Stage Rotator (Safari/WebKit Cross-Browser Fix) */}
               <div
                 className="relative w-full h-full flex items-center justify-center transition-transform duration-75"
                 style={{
                   transformStyle: "preserve-3d",
-                  WebkitTransformStyle: "preserve-3d",
                   transform: `rotateY(${rotationY}deg)`,
-                  WebkitTransform: `rotateY(${rotationY}deg)`,
                 }}
               >
                 {videos.map((video, idx) => {
                   const itemAngle = idx * angleStep;
-                  // Compute net angle relative to camera view for explicit Safari z-indexing
-                  const netAngle = (itemAngle + rotationY) % 360;
-                  const normalizedAngle = (netAngle + 360) % 360;
-                  const cosVal = Math.cos((normalizedAngle * Math.PI) / 180);
-                  
-                  // Hide or dim cards facing away to prevent back-side clipping bleed
-                  const isFrontFacing = cosVal > -0.2;
-                  const cardOpacity = isFrontFacing ? Math.max(0.35, (cosVal + 0.4) / 1.4) : 0;
+                  const netAngle = ((itemAngle + rotationY) % 360 + 360) % 360;
+                  const cosVal = Math.cos((netAngle * Math.PI) / 180);
+
+                  // Virtualization: skip cards far behind the ring
+                  const isFrontFacing = cosVal > -0.3;
+                  if (!isFrontFacing) return null;
+
+                  const cardOpacity = Math.max(0.3, (cosVal + 0.4) / 1.4);
                   const zIndexVal = Math.round(1000 + cosVal * 500);
+                  const scale = 0.85 + cosVal * 0.15;
 
                   return (
                     <div
                       key={video.id}
                       onClick={() => !isDragging && setActiveVideo(video)}
-                      className={`absolute w-[220px] sm:w-[320px] md:w-[360px] h-[190px] sm:h-[250px] rounded-2xl sm:rounded-3xl overflow-hidden shadow-[0_15px_30px_-5px_rgba(0,0,0,0.15)] border border-black/10 bg-white cursor-pointer group transition-all duration-300 flex flex-col justify-between ${
-                        !isFrontFacing ? 'pointer-events-none' : ''
-                      }`}
+                      className="absolute rounded-2xl sm:rounded-3xl overflow-hidden shadow-[0_15px_30px_-5px_rgba(0,0,0,0.15)] border border-black/10 bg-white cursor-pointer group transition-all duration-300 flex flex-col justify-between pointer-events-auto"
                       style={{
+                        width: `${cardWidth}px`,
                         transformStyle: "preserve-3d",
-                        WebkitTransformStyle: "preserve-3d",
                         backfaceVisibility: "hidden",
-                        WebkitBackfaceVisibility: "hidden",
-                        transform: `rotateY(${itemAngle}deg) translateZ(${radius}px)`,
-                        WebkitTransform: `rotateY(${itemAngle}deg) translateZ(${radius}px)`,
+                        transform: `rotateY(${itemAngle}deg) translateZ(${radius}px) scale(${scale})`,
                         zIndex: zIndexVal,
                         opacity: cardOpacity,
                       }}
                     >
-                      {/* Video Thumbnail */}
-                      <div className="relative aspect-video w-full overflow-hidden bg-black">
+                      {/* Thumbnail */}
+                      <div className="relative w-full overflow-hidden bg-black" style={{ aspectRatio: "16/9" }}>
                         <Image
                           src={video.thumbnail}
                           alt={video.title}
                           fill
                           className="object-cover group-hover:scale-105 transition-transform duration-500 opacity-95"
-                          sizes="(max-width: 640px) 280px, 350px"
+                          sizes={`${cardWidth}px`}
                         />
-
                         <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
-
-                        {/* Play Button Overlay */}
                         <div className="absolute inset-0 flex items-center justify-center">
                           <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-[#006747] text-white flex items-center justify-center shadow-xl group-hover:scale-110 group-hover:bg-black transition-all duration-300 border-2 border-white/40">
                             <Play className="w-5 h-5 sm:w-6 sm:h-6 fill-current translate-x-0.5 text-white" />
                           </div>
                         </div>
-
-                        {/* Category Tag */}
-                        <div className="absolute top-3 left-3">
-                          <span className="px-2.5 py-1 bg-black/70 backdrop-blur-md text-white text-[9px] font-black uppercase tracking-widest rounded-lg border border-white/20">
-                            {video.category || "NATIONS CUP"}
-                          </span>
-                        </div>
+                        {video.category && (
+                          <div className="absolute top-3 left-3">
+                            <span className="px-2.5 py-1 bg-black/70 backdrop-blur-md text-white text-[9px] font-black uppercase tracking-widest rounded-lg border border-white/20">
+                              {video.category}
+                            </span>
+                          </div>
+                        )}
                       </div>
 
-                      {/* Title & Published Date Footer */}
+                      {/* Footer */}
                       <div className="p-4 space-y-1 bg-white border-t border-black/5">
                         <span className="text-[9px] font-bold text-[#006747] uppercase tracking-widest block">
                           {video.publishedAt || "JULY 2026"}
@@ -326,15 +294,14 @@ export default function MatchdayVideoHighlights({
             </div>
           </div>
         ) : (
-          /* ── MODE 2: 2-COLUMN MOBILE GRID VIEW ── */
+          /* Grid View */
           <div className="grid grid-cols-2 md:grid-cols-3 gap-3 sm:gap-6">
-            {videos.slice(0, 6).map((video) => (
+            {videos.map((video) => (
               <div
                 key={video.id}
                 onClick={() => setActiveVideo(video)}
                 className="bg-white rounded-3xl border border-black/10 overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 group cursor-pointer flex flex-col justify-between"
               >
-                {/* Thumbnail Container with Play Overlay */}
                 <div className="relative aspect-video w-full overflow-hidden bg-black">
                   <Image
                     src={video.thumbnail}
@@ -343,18 +310,12 @@ export default function MatchdayVideoHighlights({
                     className="object-cover group-hover:scale-105 transition-transform duration-700 opacity-95"
                     sizes="(max-width: 768px) 100vw, 33vw"
                   />
-
-                  {/* Dark Gradient Shield */}
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
-
-                  {/* Central Play Button Badge */}
                   <div className="absolute inset-0 flex items-center justify-center">
                     <div className="w-14 h-14 rounded-full bg-[#006747] text-white flex items-center justify-center shadow-xl group-hover:scale-110 group-hover:bg-black transition-all duration-300 border-2 border-white/40">
                       <Play className="w-6 h-6 fill-current translate-x-0.5 text-white" />
                     </div>
                   </div>
-
-                  {/* Category Badge Tag */}
                   {video.category && (
                     <div className="absolute top-3 left-3">
                       <span className="px-2.5 py-1 bg-black/70 backdrop-blur-md border border-white/20 text-white text-[9px] font-black uppercase tracking-widest rounded-lg">
@@ -363,8 +324,6 @@ export default function MatchdayVideoHighlights({
                     </div>
                   )}
                 </div>
-
-                {/* Card Footer Info */}
                 <div className="p-5 space-y-1.5 bg-white">
                   <span className="text-[10px] font-bold text-[#006747] uppercase tracking-widest block">
                     {video.publishedAt || "WORLD RUGBY MATCH HIGHLIGHTS"}
@@ -377,74 +336,197 @@ export default function MatchdayVideoHighlights({
             ))}
           </div>
         )}
-
       </div>
 
-      {/* INLINE VIDEO MODAL (Does not redirect to YouTube) */}
-      <AnimatePresence>
-        {activeVideo && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[1000] bg-[#010B07]/90 backdrop-blur-xl flex items-center justify-center p-4 sm:p-8"
-          >
-            {/* Overlay Backdrop Click */}
-            <div className="absolute inset-0" onClick={() => setActiveVideo(null)} />
-
-            <motion.div
-              initial={{ scale: 0.9, opacity: 0, y: 20 }}
-              animate={{ scale: 1, opacity: 1, y: 0 }}
-              exit={{ scale: 0.9, opacity: 0, y: 20 }}
-              transition={{ type: "spring", stiffness: 300, damping: 25 }}
-              className="relative w-full max-w-5xl bg-black rounded-3xl overflow-hidden shadow-2xl border border-white/10 z-10 flex flex-col"
-            >
-              {/* Close Button */}
-              <button
-                onClick={() => setActiveVideo(null)}
-                className="absolute top-4 right-4 z-20 p-2.5 rounded-full bg-black/80 hover:bg-[#006747] text-white border border-white/20 transition-all shadow-lg"
-                aria-label="Close Video Player"
-                title="Close Video"
-              >
-                <X className="w-5 h-5" />
-              </button>
-
-              {/* Responsive 16:9 Iframe Player */}
-              <div className="relative aspect-video w-full bg-black">
-                <iframe
-                  src={`https://www.youtube-nocookie.com/embed/${activeVideo.videoId}?autoplay=1&rel=0&modestbranding=1`}
-                  title={activeVideo.title}
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowFullScreen
-                  className="w-full h-full border-0"
-                />
-              </div>
-
-              {/* Player Header Bar */}
-              <div className="p-5 sm:p-6 bg-milk-white border-t border-black/10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-                <div>
-                  <span className="text-[10px] font-black text-[#006747] uppercase tracking-widest block">
-                    ZIMBABWE RUGBY UNION • IN-SITE MATCHDAY MEDIA
-                  </span>
-                  <p className="font-heading font-black text-lg sm:text-xl text-rich-black uppercase italic">
-                    {activeVideo.title}
-                  </p>
-                </div>
-
-                <a
-                  href={`https://www.youtube.com/watch?v=${activeVideo.videoId}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1.5 px-4 py-2 bg-black/5 hover:bg-black text-rich-black hover:text-white rounded-xl text-xs font-heading font-black tracking-widest uppercase transition-all"
-                >
-                  <span>WATCH ON YOUTUBE</span>
-                  <ExternalLink className="w-3.5 h-3.5" />
-                </a>
-              </div>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      <VideoModal activeVideo={activeVideo} onClose={() => setActiveVideo(null)} />
     </section>
+  );
+}
+
+// ── Header Strip (extracted) ──
+function HeaderStrip({
+  subtitle,
+  title,
+  showChannelLink,
+  viewMode,
+  setViewMode,
+}: {
+  subtitle: string;
+  title: string;
+  showChannelLink: boolean;
+  viewMode: "ring" | "grid";
+  setViewMode: (m: "ring" | "grid") => void;
+}) {
+  return (
+    <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
+      <div>
+        <div className="flex items-center gap-2 mb-1">
+          <span className="w-6 h-0.5 bg-[#006747]" />
+          <span className="text-[11px] font-heading font-black uppercase tracking-[0.25em] text-[#006747]">
+            {subtitle}
+          </span>
+        </div>
+        <h2 className="text-3xl sm:text-5xl font-heading font-black uppercase tracking-tight text-rich-black italic">
+          {title}
+        </h2>
+      </div>
+
+      <div className="flex items-center gap-3">
+        <div className="flex items-center bg-black/5 p-1 rounded-xl border border-black/10 shadow-xs">
+          <button
+            onClick={() => setViewMode("ring")}
+            title="3D Stage View"
+            aria-label="3D Stage View"
+            className={`p-2 rounded-lg transition-all flex items-center justify-center ${
+              viewMode === "ring"
+                ? "bg-[#006747] text-white shadow-md scale-105"
+                : "text-black/60 hover:text-black hover:bg-black/5"
+            }`}
+          >
+            <CircleDot className="w-4 h-4" />
+          </button>
+          <button
+            onClick={() => setViewMode("grid")}
+            title="Grid View"
+            aria-label="Grid View"
+            className={`p-2 rounded-lg transition-all flex items-center justify-center ${
+              viewMode === "grid"
+                ? "bg-[#006747] text-white shadow-md scale-105"
+                : "text-black/60 hover:text-black hover:bg-black/5"
+            }`}
+          >
+            <LayoutGrid className="w-4 h-4" />
+          </button>
+        </div>
+
+        {showChannelLink && (
+          <a
+            href="https://www.youtube.com/@ZimbabweRugbyUnion"
+            target="_blank"
+            rel="noopener noreferrer"
+            title="Watch ZRU on YouTube"
+            aria-label="Watch ZRU on YouTube"
+            className="inline-flex items-center gap-2 px-3.5 py-2 bg-[#006747] hover:bg-[#005238] text-white rounded-xl text-[10px] sm:text-[11px] font-black uppercase tracking-wider transition-all duration-300 shadow-xs hover:shadow-md border border-[#006747] hover:scale-105 active:scale-95 group/yt shrink-0"
+          >
+            <svg className="w-5 h-3.5 shrink-0 group-hover/yt:scale-110 transition-transform" viewBox="0 0 24 17" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M23.498 2.622a3.008 3.008 0 0 0-2.116-2.126C19.513 0 12 0 12 0S4.487 0 2.618.496A3.008 3.008 0 0 0 .502 2.622C0 4.504 0 8.423 0 8.423s0 3.919.502 5.801a3.008 3.008 0 0 0 2.116 2.126C4.487 16.846 12 16.846 12 16.846s7.513 0 9.882-.496a3.008 3.008 0 0 0 2.116-2.126C24 12.342 24 8.423 24 8.423s0-3.919-.502-5.801z" fill="#FF0000"/>
+              <path d="M9.545 12.016V4.83l6.273 3.593-6.273 3.593z" fill="#FFFFFF"/>
+            </svg>
+            <span className="whitespace-nowrap font-heading tracking-widest text-white">YOUTUBE</span>
+          </a>
+        )}
+      </div>
+    </div>
+  );
+}
+
+// ── Single Video Card (reused for 1-card layout) ──
+function VideoCard({ video, isDragging, onClick }: { video: YouTubeVideoItem; isDragging: boolean; onClick: () => void }) {
+  return (
+    <div
+      onClick={() => !isDragging && onClick()}
+      className="w-[280px] sm:w-[360px] rounded-2xl sm:rounded-3xl overflow-hidden shadow-[0_15px_30px_-5px_rgba(0,0,0,0.15)] border border-black/10 bg-white cursor-pointer group transition-all duration-300 flex flex-col justify-between hover:scale-105"
+    >
+      <div className="relative w-full overflow-hidden bg-black" style={{ aspectRatio: "16/9" }}>
+        <Image
+          src={video.thumbnail}
+          alt={video.title}
+          fill
+          className="object-cover group-hover:scale-105 transition-transform duration-500 opacity-95"
+          sizes="360px"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+        <div className="absolute inset-0 flex items-center justify-center">
+          <div className="w-14 h-14 rounded-full bg-[#006747] text-white flex items-center justify-center shadow-xl group-hover:scale-110 group-hover:bg-black transition-all duration-300 border-2 border-white/40">
+            <Play className="w-6 h-6 fill-current translate-x-0.5 text-white" />
+          </div>
+        </div>
+        {video.category && (
+          <div className="absolute top-3 left-3">
+            <span className="px-2.5 py-1 bg-black/70 backdrop-blur-md text-white text-[9px] font-black uppercase tracking-widest rounded-lg border border-white/20">
+              {video.category}
+            </span>
+          </div>
+        )}
+      </div>
+      <div className="p-4 space-y-1 bg-white border-t border-black/5">
+        <span className="text-[9px] font-bold text-[#006747] uppercase tracking-widest block">
+          {video.publishedAt || "JULY 2026"}
+        </span>
+        <p className="font-heading font-black text-xs sm:text-sm text-rich-black uppercase tracking-wide line-clamp-1 group-hover:text-[#006747] transition-colors">
+          {video.title}
+        </p>
+      </div>
+    </div>
+  );
+}
+
+// ── Video Modal ──
+function VideoModal({
+  activeVideo,
+  onClose,
+}: {
+  activeVideo: YouTubeVideoItem | null;
+  onClose: () => void;
+}) {
+  return (
+    <AnimatePresence>
+      {activeVideo && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          className="fixed inset-0 z-[1000] bg-[#010B07]/90 backdrop-blur-xl flex items-center justify-center p-4 sm:p-8"
+        >
+          <div className="absolute inset-0" onClick={onClose} />
+          <motion.div
+            initial={{ scale: 0.9, opacity: 0, y: 20 }}
+            animate={{ scale: 1, opacity: 1, y: 0 }}
+            exit={{ scale: 0.9, opacity: 0, y: 20 }}
+            transition={{ type: "spring", stiffness: 300, damping: 25 }}
+            className="relative w-full max-w-5xl bg-black rounded-3xl overflow-hidden shadow-2xl border border-white/10 z-10 flex flex-col"
+          >
+            <button
+              onClick={onClose}
+              className="absolute top-4 right-4 z-20 p-2.5 rounded-full bg-black/80 hover:bg-[#006747] text-white border border-white/20 transition-all shadow-lg"
+              aria-label="Close Video Player"
+              title="Close Video"
+            >
+              <X className="w-5 h-5" />
+            </button>
+
+            <div className="relative aspect-video w-full bg-black">
+              <iframe
+                src={`https://www.youtube-nocookie.com/embed/${activeVideo.videoId}?autoplay=1&rel=0&modestbranding=1`}
+                title={activeVideo.title}
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+                className="w-full h-full border-0"
+              />
+            </div>
+
+            <div className="p-5 sm:p-6 bg-milk-white border-t border-black/10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+              <div>
+                <span className="text-[10px] font-black text-[#006747] uppercase tracking-widest block">
+                  ZIMBABWE RUGBY UNION • IN-SITE MATCHDAY MEDIA
+                </span>
+                <p className="font-heading font-black text-lg sm:text-xl text-rich-black uppercase italic">
+                  {activeVideo.title}
+                </p>
+              </div>
+              <a
+                href={`https://www.youtube.com/watch?v=${activeVideo.videoId}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1.5 px-4 py-2 bg-black/5 hover:bg-black text-rich-black hover:text-white rounded-xl text-xs font-heading font-black tracking-widest uppercase transition-all"
+              >
+                <span>WATCH ON YOUTUBE</span>
+                <ExternalLink className="w-3.5 h-3.5" />
+              </a>
+            </div>
+          </motion.div>
+        </motion.div>
+      )}
+    </AnimatePresence>
   );
 }

@@ -21,7 +21,6 @@ const ZIM_MATCH_PATTERNS = [
   /\bzimbabwe\b/i,
   /\bsables\b/i,
   /\bzim\b/i,
-  /\bnations\s*cup\b/i,
 ];
 
 // Hardcoded fallback if RSS fails

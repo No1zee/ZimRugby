@@ -105,7 +105,7 @@ function SlideContent({
               <div className="overflow-hidden block py-0.5">
                 <motion.span 
                   variants={lineVariants}
-                  className="block relative z-20 text-3xl sm:text-4xl md:text-[44px] tracking-wide leading-[1.1] text-glow-heavy text-white drop-shadow-2xl font-heading font-black"
+                  className="block relative z-20 text-3xl sm:text-4xl md:text-[44px] tracking-tight leading-[1.0] text-glow-heavy text-white drop-shadow-2xl font-heading font-black"
                 >
                   {slide.headline.line1}
                 </motion.span>
@@ -113,7 +113,7 @@ function SlideContent({
               <div className="overflow-hidden block py-0.5">
                 <motion.span 
                   variants={lineVariants}
-                  className="block relative z-20 text-3xl sm:text-4xl md:text-[44px] tracking-wide leading-[1.1] text-glow-green text-white drop-shadow-2xl font-heading font-black"
+                  className="block relative z-20 text-3xl sm:text-4xl md:text-[44px] tracking-tight leading-[1.0] text-accent-teal drop-shadow-2xl font-heading font-black"
                 >
                   {slide.headline.line2}
                 </motion.span>

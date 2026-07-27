@@ -6,6 +6,8 @@ export const metadata: Metadata = {
   title: "Zimbabwe Rugby Union | Official Home of the Sables",
   description: "Official website of the Zimbabwe Rugby Union. Follow the Sables, Lady Sables, and all Zimbabwe rugby teams. Fixtures, results, news, and tickets.",
 };
+
+export const revalidate = 300;
 import UnifiedHubGrid from "@/components/home/UnifiedHubGrid";
 import HomeNewsletterBanner from "@/components/home/HomeNewsletterBanner";
 import CleanCountdownBanner from "@/components/home/CleanCountdownBanner";
@@ -68,12 +70,18 @@ export default async function Home() {
 
         {/* 5. Featured Players — CometCard 3D tilt on desktop */}
         <section className="px-4 sm:px-6 lg:px-8 py-16 max-w-6xl mx-auto">
-          <h2 className="text-center font-heading font-black text-3xl sm:text-4xl uppercase tracking-tight text-rich-black mb-2">
-            Featured Players
-          </h2>
-          <p className="text-center text-neutral-mid text-sm mb-10">
-            Meet the Sables leading the charge to Australia 2027
-          </p>
+          <div className="mb-10">
+            <div className="flex items-center gap-2 mb-1">
+              <span className="w-6 h-0.5 bg-[#006747]" />
+              <span className="text-[11px] font-heading font-black uppercase tracking-[0.25em] text-[#006747]">
+                SQUAD SPOTLIGHT
+              </span>
+            </div>
+            <h2 className="text-3xl sm:text-5xl font-heading font-black uppercase tracking-tight text-rich-black italic">
+              FEATURED{" "}
+              <span className="text-accent-teal">PLAYERS</span>
+            </h2>
+          </div>
           <FeaturedPlayersGrid players={featuredPlayers} />
         </section>
 

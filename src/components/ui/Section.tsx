@@ -33,7 +33,7 @@ export default function Section({
                 </span>
               )}
               {title && (
-                <h2 className="font-heading text-3xl md:text-5xl font-black uppercase text-rich-black tracking-tight">
+                <h2 className="font-heading text-3xl md:text-5xl font-black uppercase text-rich-black tracking-tight leading-[1.0]">
                   {title}
                 </h2>
               )}

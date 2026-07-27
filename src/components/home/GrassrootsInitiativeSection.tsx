@@ -55,23 +55,19 @@ export default function GrassrootsInitiativeSection() {
 
       <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8 relative z-10 space-y-10">
         
-        {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto space-y-3">
-          <div className="flex items-center justify-center gap-2 mb-1">
-            <span className="w-8 h-0.5 bg-white/40" />
+        {/* Section Header — Nations Cup format */}
+        <div className="max-w-3xl">
+          <div className="flex items-center gap-2 mb-1">
+            <span className="w-6 h-0.5 bg-white/60" />
             <span className="text-[11px] font-heading font-black uppercase tracking-[0.25em] text-white/80">
-              GROWING THE SPORT • COMMUNITY & DEVELOPMENT
+              GROWING THE SPORT • COMMUNITY &amp; DEVELOPMENT
             </span>
-            <span className="w-8 h-0.5 bg-white/40" />
           </div>
-
-          <h2 className="text-3xl sm:text-5xl font-heading font-black uppercase tracking-tight text-white italic font-heading">
-            GRASSROOTS & YOUTH RUGBY INITIATIVES
+          <h2 className="text-3xl sm:text-5xl font-heading font-black uppercase tracking-tight text-white italic leading-[1.0]">
+            GRASSROOTS &{" "}
+            <span className="text-accent-teal">YOUTH RUGBY</span>{" "}
+            INITIATIVES
           </h2>
-
-          <p className="text-white/80 text-sm sm:text-base font-normal leading-relaxed">
-            Building Zimbabwe&apos;s rugby legacy from provincial primary school festivals to national team caps. Discover our grassroots programs, coach education, and community pathways.
-          </p>
         </div>
 
         {/* 3-Column Bento Grid (White High-Contrast Cards on ZRU Green Background) */}

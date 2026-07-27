@@ -68,7 +68,7 @@ export default function HomeNewsletterBanner() {
           </div>
 
           {/* Right Group: Subscription Form Container — Default compact SUBSCRIBE button, expands on hover */}
-          <div className="relative z-10 w-full lg:w-auto lg:group-hover/uiverseCard:w-2/3 lg:group-focus-within/uiverseCard:w-2/3 flex flex-col items-center lg:items-end transition-all duration-500">
+          <div className="relative z-10 w-full lg:w-2/5 lg:group-hover/uiverseCard:w-2/3 lg:group-focus-within/uiverseCard:w-2/3 flex flex-col items-center lg:items-center lg:group-hover/uiverseCard:items-end lg:group-focus-within/uiverseCard:items-end transition-all duration-500">
             <div className="w-full lg:w-auto lg:group-hover/uiverseCard:w-full lg:group-focus-within/uiverseCard:w-full bg-white p-3 group-hover/uiverseCard:p-5 sm:group-hover/uiverseCard:p-7 group-focus-within/uiverseCard:p-5 sm:group-focus-within/uiverseCard:p-7 rounded-2xl border border-black/5 group-hover/uiverseCard:border-[#006747]/60 group-focus-within/uiverseCard:border-[#006747]/60 transition-all duration-500 ease-in-out shadow-lg">
               
               {/* Header Label — Hidden before hover */}
@@ -82,7 +82,7 @@ export default function HomeNewsletterBanner() {
                   <span>Welcome to the Zimbabwe Rugby Fan Zone!</span>
                 </div>
               ) : (
-                <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-2.5 w-full items-center justify-end">
+                <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-2.5 w-full items-center justify-center group-hover/uiverseCard:justify-end group-focus-within/uiverseCard:justify-end transition-all duration-500">
                   {/* Email Input Field — Hidden before hover */}
                   <div className="w-0 opacity-0 max-w-0 overflow-hidden transition-all duration-500 ease-in-out group-hover/uiverseCard:w-full group-hover/uiverseCard:opacity-100 group-hover/uiverseCard:max-w-full group-focus-within/uiverseCard:w-full group-focus-within/uiverseCard:opacity-100 group-focus-within/uiverseCard:max-w-full flex-1">
                     <input

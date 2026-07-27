@@ -13,6 +13,7 @@ interface BreadcrumbItem {
 
 interface PageHeroProps {
   title: string;
+  accentTitle?: string;
   subtitle: string;
   backgroundImage?: string;
   tag?: string;
@@ -21,6 +22,7 @@ interface PageHeroProps {
 
 export default function PageHero({
   title,
+  accentTitle,
   subtitle,
   backgroundImage,
   tag,
@@ -86,8 +88,13 @@ export default function PageHero({
           </div>
 
           {/* Heading */}
-          <h1 className="text-3xl sm:text-5xl md:text-7xl font-heading font-black italic text-white tracking-tight uppercase">
-            {title}
+          <h1 className="text-3xl sm:text-5xl md:text-7xl font-heading font-black italic text-white tracking-tight uppercase leading-[1.0]">
+            {accentTitle ? (
+              <>
+                {title}{" "}
+                <span className="text-accent-teal">{accentTitle}</span>
+              </>
+            ) : title}
           </h1>
 
           {/* Subtitle */}

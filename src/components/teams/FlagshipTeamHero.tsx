@@ -152,11 +152,11 @@ export default function FlagshipTeamHero() {
                 transition={{ duration: 0.4 }}
                 className="space-y-4"
               >
-                <span className="text-xs font-extrabold uppercase tracking-widest text-[#006747] block">
+                <span className="text-xs font-extrabold uppercase tracking-widest text-accent-teal block">
                   {activeTeam.category}
                 </span>
 
-                <h1 className="font-heading text-4xl sm:text-6xl lg:text-7xl font-black uppercase tracking-tighter leading-[0.95] italic text-white">
+                <h1 className="font-heading text-4xl sm:text-6xl lg:text-7xl font-black uppercase tracking-tighter leading-[1.0] italic text-white">
                   {activeTeam.name}
                 </h1>
 
