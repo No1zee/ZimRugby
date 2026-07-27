@@ -1,8 +1,8 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Trophy, ShieldCheck, Zap } from "lucide-react";
 import { cn } from "@/lib/utils";
+import TeamLogo from "./TeamLogo";
 import type { Team } from "@/types/team";
 
 interface Props {
@@ -35,72 +35,48 @@ export default function TeamRailCard({
       }}
       whileHover={!isActive ? { y: -4 } : undefined}
       className={cn(
-        "group relative snap-center shrink-0 w-[260px] rounded-2xl p-5 text-left transition-shadow duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-teal",
+        "group relative snap-center shrink-0 flex flex-col items-center gap-3 py-4 px-5 rounded-2xl transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-teal cursor-pointer",
         isActive
-          ? "card-green shadow-[0_12px_32px_rgba(0,150,70,0.25)]"
-          : "card-surface card-glow-green hover:shadow-[0_10px_24px_rgba(0,0,0,0.35)]"
+          ? "bg-white/[0.08] ring-1 ring-white/15"
+          : "hover:bg-white/[0.04]"
       )}
-      style={
-        isActive
-          ? {
-              borderTop: `3px solid ${team.accent}`,
-              transform: "scale(1.02)",
-            }
-          : undefined
-      }
     >
-      <div className="flex items-center justify-between mb-4">
-        <span
-          className="inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-[10px] font-bold tracking-wider"
-          style={{
-            backgroundColor: `${team.accent}22`,
-            color: team.accent,
-          }}
-        >
-          {team.format === "7s" ? (
-            <Zap className="w-3 h-3" />
-          ) : (
-            <ShieldCheck className="w-3 h-3" />
+      <TeamLogo
+        name={team.shortName}
+        accent={team.accent}
+        jerseyColors={team.jerseyColors}
+        isActive={isActive}
+        size="lg"
+      />
+
+      <div className="text-center space-y-1">
+        <h3
+          className={cn(
+            "font-heading italic text-sm sm:text-base font-black uppercase tracking-wide transition-colors duration-300",
+            isActive ? "text-white" : "text-white/60 group-hover:text-white/80"
           )}
-          {team.format.toUpperCase()}
-        </span>
+        >
+          {team.shortName}
+        </h3>
 
-        {isActive ? (
-          <span className="inline-flex items-center gap-1 text-[10px] font-semibold text-accent-teal">
-            <ShieldCheck className="w-3.5 h-3.5" />
-            Active
-          </span>
-        ) : (
-          <div className="flex gap-1">
-            {team.jerseyColors.map((c, i) => (
-              <span
-                key={i}
-                className="w-2.5 h-2.5 rounded-full ring-1 ring-white/20"
-                style={{ backgroundColor: c }}
-              />
-            ))}
-          </div>
-        )}
+        <p
+          className={cn(
+            "text-[10px] font-bold uppercase tracking-widest transition-colors duration-300",
+            isActive ? "text-accent-teal" : "text-white/30"
+          )}
+        >
+          {team.ranking}
+        </p>
       </div>
 
-      <h3 className="font-heading italic text-2xl font-black text-white mb-1 leading-none">
-        {team.shortName}
-      </h3>
-      <p className="text-xs text-white/50 mb-3 line-clamp-2">
-        {team.tagline}
-      </p>
-
-      <div
-        className="flex items-center gap-1.5 text-sm font-bold tracking-wide"
-        style={{ color: team.accent }}
-      >
-        <Trophy className="w-4 h-4" />
-        {team.ranking}
-      </div>
-
-      <span className="absolute bottom-4 right-5 text-[10px] uppercase tracking-wider text-white/0 group-hover:text-white/50 transition-colors duration-300">
-        View Team →
-      </span>
+      {/* Active indicator dot */}
+      {isActive && (
+        <motion.div
+          layoutId="active-dot"
+          className="w-1.5 h-1.5 rounded-full bg-accent-teal"
+          transition={{ type: "spring", stiffness: 400, damping: 30 }}
+        />
+      )}
     </motion.button>
   );
 }
