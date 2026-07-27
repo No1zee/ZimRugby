@@ -476,6 +476,15 @@ html, body {
   transform: translateY(100%);
 }
 
+/* Touch / click toggle — mirrors hover for mobile */
+.social-card.is-open .card-face-top {
+  transform: translateY(-100%);
+}
+
+.social-card.is-open .card-face-bottom {
+  transform: translateY(100%);
+}
+
 .social-card .card-label {
   position: absolute;
   display: flex;
@@ -495,6 +504,11 @@ html, body {
 }
 
 .social-card:hover .card-label {
+  opacity: 0;
+  z-index: -3;
+}
+
+.social-card.is-open .card-label {
   opacity: 0;
   z-index: -3;
 }
@@ -532,6 +546,10 @@ html, body {
 }
 
 .social-card:hover {
+  filter: drop-shadow(0 8px 24px rgba(0, 103, 71, 0.3));
+}
+
+.social-card.is-open {
   filter: drop-shadow(0 8px 24px rgba(0, 103, 71, 0.3));
 }
 
