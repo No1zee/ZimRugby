@@ -38,14 +38,14 @@ export default function InfoCell({
       >
         {label}
       </p>
-      <p
+      <div
         className={cn(
           "font-heading italic font-black",
           highlighted ? "text-3xl" : "text-base"
         )}
       >
         {value}
-      </p>
+      </div>
     </div>
   );
 }
