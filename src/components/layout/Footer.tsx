@@ -79,39 +79,38 @@ export default function Footer() {
 
       <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 relative z-10 space-y-0">
         
-        {/* Header: Logo 1/4 + Text 3/4 — centered grid */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 md:gap-10 items-center pb-8 max-w-5xl mx-auto">
-          <div className="flex justify-center md:justify-end">
-            <div className="relative w-40 h-40 sm:w-48 sm:h-48 md:w-full md:h-auto md:aspect-square md:max-w-[260px]">
-              <Image
-                src="/zru logo main.svg"
-                alt="Zimbabwe Rugby Union Logo"
-                width={260}
-                height={260}
-                className="w-full h-full object-contain"
-              />
-            </div>
+        {/* Header: Emblem 1/3 + Text/CTA 2/3 — always 3-col, never stacks */}
+        <div className="grid grid-cols-3 items-center pb-8">
+          {/* Left Column — Emblem (1/3) */}
+          <div className="flex items-center justify-center px-[8%] py-4">
+            <Image
+              src="/zru logo main.svg"
+              alt="Zimbabwe Rugby Union Logo"
+              width={300}
+              height={300}
+              className="w-full h-auto object-contain"
+            />
           </div>
-          <div className="md:col-span-3 flex flex-col justify-center text-center md:text-left">
-            <span className="block font-heading font-black text-[2.5rem] sm:text-6xl md:text-7xl lg:text-8xl uppercase text-[#003822] not-italic leading-[0.85] select-none tracking-[0.02em] sm:tracking-[0.15em] whitespace-nowrap">
-              Zimbabwe
-            </span>
-            <span className="block font-subheading font-black text-[2rem] sm:text-4xl md:text-5xl lg:text-6xl uppercase text-[#006747] not-italic leading-[0.85] select-none tracking-[0.02em] sm:tracking-[0.3em] whitespace-nowrap">
-              Rugby Union
-            </span>
-            <p className="text-[#003822]/70 text-[10px] sm:text-xs font-bold uppercase tracking-widest mt-3 sm:mt-4">
-              Official Governing Body of Rugby Union in Zimbabwe • Est. 1895
-            </p>
-          </div>
-        </div>
 
-        {/* Contact Details + Socials — centered below header */}
-        <div className="flex flex-col items-center gap-3 text-xs font-bold text-[#003822]/80 pb-8">
-          <div className="flex items-center gap-2">
-            <MapPin className="w-3.5 h-3.5 text-[#006747] shrink-0" />
-            <span>Harare Sports Club HQ</span>
+          {/* Right Column — Heading, Tagline, Location, CTA (2/3) */}
+          <div className="col-span-2 flex flex-col items-center justify-center text-center px-[4%] gap-4">
+            <div>
+              <span className="block font-heading font-black text-[1.8rem] sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl uppercase text-[#003822] not-italic leading-[0.85] select-none tracking-[0.02em] sm:tracking-[0.15em]">
+                Zimbabwe
+              </span>
+              <span className="block font-subheading font-black text-[1.4rem] sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl uppercase text-[#006747] not-italic leading-[0.85] select-none tracking-[0.02em] sm:tracking-[0.3em]">
+                Rugby Union
+              </span>
+              <p className="text-[#003822]/70 text-[10px] sm:text-xs font-bold uppercase tracking-widest mt-2 sm:mt-3">
+                Official Governing Body of Rugby Union in Zimbabwe • Est. 1895
+              </p>
+            </div>
+            <div className="flex items-center gap-2 text-xs font-bold text-[#003822]/80">
+              <MapPin className="w-3.5 h-3.5 text-[#006747] shrink-0" />
+              <span>Harare Sports Club HQ</span>
+            </div>
+            <SocialCard />
           </div>
-          <SocialCard />
         </div>
 
         {/* Compact 4-Column Navigation Links */}
