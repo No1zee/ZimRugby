@@ -2,8 +2,6 @@
 @import "../styles/grain.css";
 @import "../styles/typography.css";
 
-/* Hallmark · macrostructure: stat-led · genre: editorial · theme: sport · nav: N10 · footer: Ft5 · stamped: 2026-07-25 */
-
 /* eslint-disable-next-line */
 /* Note: @theme is standard Tailwind v4 syntax. Ignore "Unknown at rule" warnings. */
 @theme {
