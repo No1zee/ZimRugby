@@ -53,7 +53,7 @@ export default function Footer() {
   if (pathname?.startsWith('/clubhouse') || pathname?.startsWith('/admin')) return null;
 
   return (
-    <footer className="bg-[#FDFBF0] text-[#003822] border-t border-black/10 pb-8 relative overflow-hidden pt-10 lg:pt-14">
+    <footer className="bg-[#FDFBF0] text-[#003822] border-t border-black/10 pb-8 relative overflow-hidden pt-12 lg:pt-16">
       
       {/* Schema.org Sports Organization Metadata */}
       <script
@@ -78,58 +78,67 @@ export default function Footer() {
 
       <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 relative z-10 space-y-0">
         
-        {/* Statement — large typographic identity, emblem inline */}
-        <div className="flex flex-col lg:flex-row items-center lg:items-start gap-8 lg:gap-12 pb-10">
-          {/* Emblem */}
-          <div className="shrink-0">
+        {/* Header: Emblem 1/3 + Text/CTA 2/3 — always 3-col, never stacks */}
+        <div className="grid grid-cols-3 items-center pb-8">
+          {/* Left Column — Emblem (1/3) */}
+          <div className="flex items-center justify-center px-[8%] py-4">
             <Image
               src="/zru logo main.svg"
               alt="Zimbabwe Rugby Union Logo"
-              width={200}
-              height={200}
-              className="w-28 sm:w-36 lg:w-44 h-auto object-contain"
+              width={300}
+              height={300}
+              className="w-full h-auto object-contain"
             />
           </div>
 
-          {/* Large typographic statement */}
-          <div className="flex-1 text-center lg:text-left">
-            <span className="block font-heading font-black text-[2rem] sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl uppercase text-[#003822] not-italic leading-[0.82] select-none tracking-[0.02em] sm:tracking-[0.12em]">
-              Zimbabwe
-            </span>
-            <span className="block font-subheading font-black text-[1.6rem] sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl uppercase text-[#006747] not-italic leading-[0.82] select-none tracking-[0.02em] sm:tracking-[0.25em]">
-              Rugby Union
-            </span>
-            <p className="text-[#003822]/50 text-[10px] sm:text-xs font-bold uppercase tracking-widest mt-3 sm:mt-4">
-              Official Governing Body of Rugby Union in Zimbabwe &bull; Est. 1895
-            </p>
-            <div className="mt-5">
+          {/* Right Column — Heading, Tagline, Location, CTA (2/3) */}
+          <div className="col-span-2 flex flex-col items-center justify-center text-center px-[4%] gap-4">            <div>
+              <span className="block font-heading font-black text-[1.8rem] sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl uppercase text-[#003822] not-italic leading-[0.85] select-none tracking-[0.02em] sm:tracking-[0.15em]">
+                Zimbabwe
+              </span>
+              <span className="block font-subheading font-black text-[1.4rem] sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl uppercase text-[#006747] not-italic leading-[0.85] select-none tracking-[0.02em] sm:tracking-[0.3em]">
+                Rugby Union
+              </span>
+              <p className="text-[#003822]/70 text-[10px] sm:text-xs font-bold uppercase tracking-widest mt-2 sm:mt-3">
+                Official Governing Body of Rugby Union in Zimbabwe • Est. 1895
+              </p>
+            </div>
+            <div className="mt-3">
               <SocialCard />
             </div>
           </div>
         </div>
 
-        {/* Minimal nav strip — single horizontal row, all columns inline */}
-        <div className="border-t border-[#003822]/10 py-6">
-          <div className="flex flex-wrap justify-center lg:justify-start gap-x-8 gap-y-3">
-            {footerColumns.flatMap((col) =>
-              col.links.map((link) => (
-                <Link
-                  key={link.label}
-                  href={link.href}
-                  className="text-[11px] font-extrabold uppercase tracking-[0.15em] text-[#003822]/50 hover:text-[#006747] transition-colors"
-                >
-                  {link.label}
-                </Link>
-              ))
-            )}
+        {/* Compact 4-Column Navigation Links */}
+        <div className="bg-[#006747] -mx-4 sm:-mx-6 lg:-mx-8 px-4 sm:px-6 lg:px-8 py-8 rounded-lg">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 lg:gap-12">
+            {footerColumns.map((col) => (
+              <nav key={col.title} aria-label={col.title} className="space-y-3">
+                <span className="block font-heading font-black text-xs sm:text-sm uppercase tracking-wider text-white border-b border-white/20 pb-2">
+                  {col.title}
+                </span>
+                <ul className="space-y-2">
+                  {col.links.map((link) => (
+                    <li key={link.label}>
+                      <Link
+                        href={link.href}
+                        className="text-[13px] font-bold text-white/70 hover:text-zru-green transition-colors inline-block"
+                      >
+                        {link.label}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </nav>
+            ))}
           </div>
         </div>
 
-        {/* Legal & CDPA Compliance Bar */}
-        <div className="pt-6 border-t border-[#003822]/10 flex flex-col md:flex-row justify-between items-center gap-4 text-[11px] font-bold text-[#003822]/70">
+        {/* Compact Legal & CDPA Compliance Bar */}
+        <div className="pt-6 mt-10 border-t border-[#003822]/15 flex flex-col md:flex-row justify-between items-center gap-4 text-[11px] font-bold text-[#003822]/70">
           <div className="flex items-center gap-2">
             <ShieldCheck className="w-3.5 h-3.5 text-[#006747]" />
-            <p>&copy; {new Date().getFullYear()} Zimbabwe Rugby Union. All rights reserved.</p>
+            <p>© {new Date().getFullYear()} Zimbabwe Rugby Union. All rights reserved.</p>
           </div>
 
           <nav aria-label="Legal Links" className="flex flex-wrap items-center gap-5 text-[10px] font-extrabold uppercase tracking-wider">

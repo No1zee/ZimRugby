@@ -340,30 +340,8 @@ export default function HeroCarousel({ slides }: { slides: HeroSlideData[] }) {
 
 
 
-      {/* Stat Strip — Editorial data-anchored band at hero base */}
-      <div className="absolute bottom-0 left-0 w-full z-10 pointer-events-none">
-        <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 pb-10 lg:pb-14">
-          <div className="flex flex-wrap items-end gap-8 lg:gap-14 pointer-events-auto">
-            <div className="space-y-1">
-              <span className="block font-heading font-black text-5xl sm:text-6xl lg:text-7xl text-white tracking-tight leading-none tabular-nums">131</span>
-              <span className="block text-[10px] sm:text-xs font-extrabold uppercase tracking-[0.2em] text-white/50 font-heading">Years of Rugby</span>
-            </div>
-            <div className="hidden sm:block w-px h-12 bg-white/15 self-center" />
-            <div className="space-y-1">
-              <span className="block font-heading font-black text-5xl sm:text-6xl lg:text-7xl text-white tracking-tight leading-none tabular-nums">6</span>
-              <span className="block text-[10px] sm:text-xs font-extrabold uppercase tracking-[0.2em] text-white/50 font-heading">National Teams</span>
-            </div>
-            <div className="hidden sm:block w-px h-12 bg-white/15 self-center" />
-            <div className="space-y-1">
-              <span className="block font-heading font-black text-5xl sm:text-6xl lg:text-7xl text-accent-teal tracking-tight leading-none tabular-nums">2027</span>
-              <span className="block text-[10px] sm:text-xs font-extrabold uppercase tracking-[0.2em] text-white/50 font-heading">Rugby World Cup</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
       {/* Bottom Fade */}
-      <div className="absolute bottom-0 left-0 w-full h-48 bg-linear-to-t from-rich-black via-rich-black/50 to-transparent pointer-events-none z-[9]" />
+      <div className="absolute bottom-0 left-0 w-full h-48 bg-linear-to-t from-rich-black via-rich-black/50 to-transparent pointer-events-none z-10" />
 
 
       {/* Decorative Slanted Brand Frames (Angle-Cut Overlays) */}
