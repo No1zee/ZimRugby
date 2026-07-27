@@ -67,32 +67,30 @@ const CLUBS = [
 
 export default function ClubsPage() {
   return (
-    <main className="bg-milk-white min-h-screen pb-24">
+    <main className="bg-milk-white min-h-screen pb-12">
       {/* PageHero header */}
-      <div className="pt-24">
-        <PageHero
-          title="Club Directory"
-          subtitle="Explore the competitive heartbeat of Zimbabwe Rugby. Browse registered clubs and join the league."
-          tag="National Ecosystem"
-          backgroundImage="/images/gallery/zimbabwe-sables-0351.webp"
-          breadcrumb={[{ label: "Clubs", href: "/clubs" }]}
-        />
-      </div>
+      <PageHero
+        title="Club Directory"
+        subtitle="Explore the competitive heartbeat of Zimbabwe Rugby. Browse registered clubs and join the league."
+        tag="National Ecosystem"
+        backgroundImage="/images/gallery/zimbabwe-sables-0351.webp"
+        breadcrumb={[{ label: "Clubs", href: "/clubs" }]}
+      />
 
-      <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 pt-16">
+      <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 pt-8">
         {/* Intro */}
-        <div className="max-w-3xl mb-16">
+        <div className="max-w-3xl mb-8">
           <p className="text-lg text-rich-black/70 leading-relaxed font-body">
             Clubs are the foundational core of the Zimbabwe Rugby Union. Across our provinces, official registered clubs provide pathways from grassroots school levels straight into national selection camps for the **Sables**, **Lady Sables**, and **Cheetahs**.
           </p>
         </div>
 
         {/* Clubs Directory Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {CLUBS.map((club) => (
             <div 
               key={club.name}
-              className="group flex flex-col justify-between p-8 bg-white border border-black/5 hover:border-zru-green/25 rounded-2xl shadow-md transition-all duration-300"
+              className="group flex flex-col justify-between p-5 bg-white border border-black/5 hover:border-zru-green/25 rounded-2xl shadow-md transition-all duration-300"
             >
               <div className="space-y-6">
                 {/* Header */}
@@ -121,7 +119,7 @@ export default function ClubsPage() {
               </div>
 
               {/* Footer info & CTA */}
-              <div className="pt-8 mt-8 border-t border-black/5 space-y-4">
+              <div className="pt-6 mt-6 border-t border-black/5 space-y-3">
                 <div className="flex items-start gap-2.5 text-xs text-rich-black/50">
                   <MapPin className="w-4 h-4 text-zru-green shrink-0 mt-0.5" />
                   <span className="font-body">{club.venue}</span>
@@ -140,7 +138,7 @@ export default function ClubsPage() {
         </div>
 
         {/* Registration Promo */}
-        <div className="mt-20 p-8 md:p-12 bg-rich-black rounded-3xl border border-white/10 relative overflow-hidden shadow-2xl">
+        <div className="mt-10 p-6 md:p-8 bg-rich-black rounded-3xl border border-white/10 relative overflow-hidden shadow-2xl">
           <div className="absolute top-0 right-0 w-1/3 h-full bg-[radial-gradient(circle_at_top_right,rgba(0,107,63,0.12),transparent_70%)]" />
           <div className="relative z-10 max-w-2xl space-y-6">
             <span className="text-[10px] font-black text-zru-green uppercase tracking-[0.3em]">Union Governance</span>

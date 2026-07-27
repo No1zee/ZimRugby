@@ -65,24 +65,22 @@ export default function RefereesPortalPage() {
   ];
 
   return (
-    <main className="bg-milk-white min-h-screen pb-24 text-rich-black">
+    <main className="bg-milk-white min-h-screen pb-12 text-rich-black">
 
       {/* PageHero header */}
-      <div className="pt-24">
-        <PageHero
-          title="Referees & Officials"
-          subtitle="Access domestic variations, training certifications, course calendars, and rules amendments for match officials in Zimbabwe."
-          tag="Official Representation"
-          backgroundImage="/images/media/vid1.jpg"
-          breadcrumb={[{ label: "Referees", href: "/referees" }]}
-        />
-      </div>
+      <PageHero
+        title="Referees & Officials"
+        subtitle="Access domestic variations, training certifications, course calendars, and rules amendments for match officials in Zimbabwe."
+        tag="Official Representation"
+        backgroundImage="/images/media/vid1.jpg"
+        breadcrumb={[{ label: "Referees", href: "/referees" }]}
+      />
 
-      <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 pt-16">
+      <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 pt-8">
 
 
         {/* Tab Selection */}
-        <div className="flex border-b border-black/10 py-1 overflow-x-auto gap-4 mb-12">
+        <div className="flex border-b border-black/10 py-1 overflow-x-auto gap-4 mb-8">
           {tabs.map((tab) => {
             const Icon = tab.icon;
             const isActive = activeTab === tab.id;

@@ -23,7 +23,7 @@ export default function AboutLayout({
   ];
 
   return (
-    <div className="bg-milk-white min-h-screen text-rich-black pt-24 pb-20 relative overflow-hidden">
+    <div className="bg-milk-white min-h-screen text-rich-black pb-12 relative overflow-hidden">
       {/* Institutional Banner */}
       <PageHero 
         title="About The Union"
@@ -34,7 +34,7 @@ export default function AboutLayout({
 
       {/* Main Grid Layout: Sidebar + Content */}
       <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-12">
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
           
           {/* Responsive Left Sidebar */}
           <aside className="lg:col-span-1">

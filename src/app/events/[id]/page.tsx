@@ -114,18 +114,16 @@ export default async function EventDetailPage({ params }: { params: Promise<{ id
   return (
     <main className="bg-milk-white min-h-screen pb-24 text-rich-black">
       {/* Hero */}
-      <div className="pt-20 sm:pt-24">
-        <PageHero
-          title={event.title}
-          subtitle={event.subtitle}
-          tag={event.category}
-          backgroundImage={event.image}
-          breadcrumb={[
-            { label: "Events", href: "/events" },
-            { label: event.title, href: `/events/${event.id}` },
-          ]}
-        />
-      </div>
+      <PageHero
+        title={event.title}
+        subtitle={event.subtitle}
+        tag={event.category}
+        backgroundImage={event.image}
+        breadcrumb={[
+          { label: "Events", href: "/events" },
+          { label: event.title, href: `/events/${event.id}` },
+        ]}
+      />
 
       <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8 pt-12 sm:pt-16">
         {/* Metadata Strip */}

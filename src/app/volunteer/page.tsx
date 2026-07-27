@@ -37,21 +37,19 @@ const PATHWAYS = [
 
 export default function VolunteerPage() {
   return (
-    <main className="bg-milk-white min-h-screen pb-24">
+    <main className="bg-milk-white min-h-screen pb-12">
       {/* PageHero header */}
-      <div className="pt-24">
-        <PageHero
-          title="Volunteer & Officiate"
-          subtitle="Be the backbone of Zimbabwe Rugby. Certified refereeing, coaching accreditations, and matchday operations."
-          tag="Community & Officiating"
-          backgroundImage="/images/gallery/zimbabwe-sables-0351.webp"
-          breadcrumb={[{ label: "Volunteer", href: "/volunteer" }]}
-        />
-      </div>
+      <PageHero
+        title="Volunteer & Officiate"
+        subtitle="Be the backbone of Zimbabwe Rugby. Certified refereeing, coaching accreditations, and matchday operations."
+        tag="Community & Officiating"
+        backgroundImage="/images/gallery/zimbabwe-sables-0351.webp"
+        breadcrumb={[{ label: "Volunteer", href: "/volunteer" }]}
+      />
 
-      <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 pt-16">
+      <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 pt-8">
         {/* Intro */}
-        <div className="max-w-3xl mb-16 space-y-4">
+        <div className="max-w-3xl mb-8 space-y-3">
           <h2 className="font-heading text-3xl md:text-4xl text-rich-black font-black uppercase tracking-wide">
             Powering Every Kickoff
           </h2>
@@ -61,13 +59,13 @@ export default function VolunteerPage() {
         </div>
 
         {/* Pathways Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-20">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-10">
           {PATHWAYS.map((path) => {
             const Icon = path.icon;
             return (
               <div 
                 key={path.title}
-                className="group flex flex-col justify-between p-8 bg-white border border-black/5 rounded-2xl shadow-sm hover:shadow-md hover:border-zru-green/25 transition-all duration-300"
+                className="group flex flex-col justify-between p-5 bg-white border border-black/5 rounded-2xl shadow-sm hover:shadow-md hover:border-zru-green/25 transition-all duration-300"
               >
                 <div className="space-y-6">
                   <div className="w-12 h-12 rounded-xl bg-zru-green/5 border border-zru-green/10 flex items-center justify-center text-zru-green">
@@ -86,7 +84,7 @@ export default function VolunteerPage() {
                   </p>
                 </div>
 
-                <div className="pt-8 border-t border-black/5 mt-8">
+                <div className="pt-6 border-t border-black/5 mt-6">
                   <a 
                     href={path.href}
                     className="w-full inline-flex items-center justify-center gap-2 py-3 bg-black/5 hover:bg-zru-green hover:text-white border border-black/10 hover:border-zru-green rounded-xl text-xs font-bold uppercase tracking-widest text-rich-black/80 transition-all duration-300"
@@ -101,7 +99,7 @@ export default function VolunteerPage() {
         </div>
 
         {/* Safeguarding Policy Section */}
-        <div className="p-8 md:p-12 bg-rich-black rounded-3xl border border-white/10 relative overflow-hidden shadow-2xl">
+        <div className="p-6 md:p-8 bg-rich-black rounded-3xl border border-white/10 relative overflow-hidden shadow-2xl">
           <div className="absolute top-0 right-0 w-1/3 h-full bg-[radial-gradient(circle_at_top_right,rgba(0,107,63,0.12),transparent_70%)]" />
           <div className="relative z-10 max-w-3xl space-y-6">
             <div className="flex items-center gap-3">

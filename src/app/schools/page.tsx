@@ -31,21 +31,19 @@ const INITIATIVES = [
 
 export default function SchoolsPage() {
   return (
-    <main className="bg-milk-white min-h-screen pb-24">
+    <main className="bg-milk-white min-h-screen pb-12">
       {/* PageHero header */}
-      <div className="pt-24">
-        <PageHero
-          title="School Rugby"
-          subtitle="The historic breeding ground of Zimbabwe Sables champions. Discover school leagues and development structures."
-          tag="Youth Development"
-          backgroundImage="/images/schools/schoolboy-action-1.jpg"
-          breadcrumb={[{ label: "Schools", href: "/schools" }]}
-        />
-      </div>
+      <PageHero
+        title="School Rugby"
+        subtitle="The historic breeding ground of Zimbabwe Sables champions. Discover school leagues and development structures."
+        tag="Youth Development"
+        backgroundImage="/images/schools/schoolboy-action-1.jpg"
+        breadcrumb={[{ label: "Schools", href: "/schools" }]}
+      />
 
-      <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 pt-16">
+      <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 pt-8">
         {/* Intro Section */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 mb-20 items-center">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-10 items-center">
           <div className="lg:col-span-7 space-y-6">
             <h2 className="font-heading text-3xl md:text-4xl text-rich-black font-black uppercase tracking-wide">
               The Foundation of National Excellence
@@ -57,7 +55,7 @@ export default function SchoolsPage() {
               ZRU oversees school structures across all ten provinces, organizing leagues, certifying schoolmasters, enforcing strict age-grade regulations, and ensuring medical safety compliance at all schoolboy fixtures.
             </p>
           </div>
-          <div className="lg:col-span-5 p-8 bg-zru-green/5 border border-zru-green/10 rounded-3xl space-y-6">
+          <div className="lg:col-span-5 p-5 bg-zru-green/5 border border-zru-green/10 rounded-3xl space-y-4">
             <div className="w-12 h-12 rounded-xl bg-zru-green/10 border border-zru-green/20 flex items-center justify-center text-zru-green">
               <GraduationCap className="w-6 h-6" />
             </div>
@@ -86,7 +84,7 @@ export default function SchoolsPage() {
         </div>
 
         {/* Authentic Schoolboy Rugby Action Gallery */}
-        <div className="mb-20">
+        <div className="mb-10">
           <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-8 gap-4">
             <div>
               <span className="text-xs font-bold uppercase tracking-widest text-zru-green font-heading block mb-1">
@@ -147,13 +145,13 @@ export default function SchoolsPage() {
         </div>
 
         {/* Initiatives Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-20">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-10">
           {INITIATIVES.map((item) => {
             const Icon = item.icon;
             return (
               <div 
                 key={item.title}
-                className="p-8 bg-white border border-black/5 rounded-2xl shadow-sm space-y-6 hover:shadow-md transition-shadow duration-300"
+                className="p-5 bg-white border border-black/5 rounded-2xl shadow-sm space-y-4 hover:shadow-md transition-shadow duration-300"
               >
                 <div className="flex justify-between items-center">
                   <div className="w-12 h-12 rounded-xl bg-zru-green/5 border border-zru-green/10 flex items-center justify-center text-zru-green">
@@ -177,7 +175,7 @@ export default function SchoolsPage() {
         </div>
 
         {/* Contact CTA */}
-        <div className="p-8 md:p-12 bg-rich-black rounded-3xl border border-white/10 relative overflow-hidden shadow-2xl">
+        <div className="p-6 md:p-8 bg-rich-black rounded-3xl border border-white/10 relative overflow-hidden shadow-2xl">
           <div className="absolute top-0 right-0 w-1/3 h-full bg-[radial-gradient(circle_at_top_right,rgba(0,107,63,0.12),transparent_70%)]" />
           <div className="relative z-10 max-w-2xl space-y-6">
             <span className="text-[10px] font-black text-zru-green uppercase tracking-[0.3em]">Schools Association</span>

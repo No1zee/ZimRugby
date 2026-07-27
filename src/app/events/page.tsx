@@ -150,23 +150,21 @@ function EventsInner() {
     : generalEvents;
 
   return (
-    <main className="bg-milk-white min-h-screen pb-24 relative overflow-hidden text-rich-black">
+    <main className="bg-milk-white min-h-screen pb-12 relative overflow-hidden text-rich-black">
       
       {/* PageHero header */}
-      <div className="pt-24">
-        <PageHero
-          title="Competitions & Events"
-          subtitle="Explore the full heartbeat of Zimbabwean rugby. Drill down into active leagues, regional championships, and official union events."
-          tag="Tournaments & Hub"
-          backgroundImage="/images/gallery/zimbabwe-sables-0350.webp"
-          breadcrumb={[{ label: "Events", href: "/events" }]}
-        />
-      </div>
+      <PageHero
+        title="Competitions & Events"
+        subtitle="Explore the full heartbeat of Zimbabwean rugby. Drill down into active leagues, regional championships, and official union events."
+        tag="Tournaments & Hub"
+        backgroundImage="/images/gallery/zimbabwe-sables-0350.webp"
+        breadcrumb={[{ label: "Events", href: "/events" }]}
+      />
 
-      <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 pt-16 relative z-10">
+      <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 pt-8 relative z-10">
 
         {/* Page Announcements */}
-        <PageAnnouncements scope="events" className="mb-12" />
+        <PageAnnouncements scope="events" className="mb-8" />
 
         {/* 1. Browse by Rugby Level Block (First-Class Shortcuts) */}
         <div className="mb-16">

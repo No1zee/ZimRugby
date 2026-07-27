@@ -99,22 +99,20 @@ export default function MediaPageClient({ initialSocialPosts }: MediaPageClientP
   });
 
   return (
-    <main className="bg-milk-white min-h-screen pb-24 relative overflow-hidden text-rich-black">
+    <main className="bg-milk-white min-h-screen pb-12 relative overflow-hidden text-rich-black">
       {/* PageHero header */}
-      <div className="pt-24">
-        <PageHero
-          title="Media Hub"
-          subtitle="Watch highlights, interviews, and full matches. Stay up to date with the latest news and social updates."
-          tag="Latest Content"
-          backgroundImage="/images/media/vid1.jpg"
-          breadcrumb={[{ label: "Media", href: "/media" }]}
-        />
-      </div>
+      <PageHero
+        title="Media Hub"
+        subtitle="Watch highlights, interviews, and full matches. Stay up to date with the latest news and social updates."
+        tag="Latest Content"
+        backgroundImage="/images/media/vid1.jpg"
+        breadcrumb={[{ label: "Media", href: "/media" }]}
+      />
 
-      <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 pt-16">
+      <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 pt-8">
 
         {/* Page Announcements */}
-        <PageAnnouncements scope="media" className="mb-12" />
+        <PageAnnouncements scope="media" className="mb-8" />
 
         {/* Nations Cup Matchday Media & Video Highlights */}
         <div className="mb-16">

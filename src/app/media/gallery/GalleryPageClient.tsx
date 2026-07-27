@@ -84,17 +84,16 @@ export default function GalleryPageClient({ initialPhotos }: GalleryPageClientPr
       </div>
 
       {/* Header section with Dynamic Titles */}
-      <div className="pt-24">
-        <PageHero
-          title={activeFolder ? activeFolder : "ZRU Media Archives"}
-          subtitle={
-            activeFolder
-              ? folders.find((f) => f.name === activeFolder)?.description || ""
-              : "Access the definitive high-performance matchday logs, campaign histories, and squad galleries."
-          }
-          tag="Historical Archive"
-          backgroundImage="/images/media/vid1.jpg"
-          breadcrumb={
+      <PageHero
+        title={activeFolder ? activeFolder : "ZRU Media Archives"}
+        subtitle={
+          activeFolder
+            ? folders.find((f) => f.name === activeFolder)?.description || ""
+            : "Access the definitive high-performance matchday logs, campaign histories, and squad galleries."
+        }
+        tag="Historical Archive"
+        backgroundImage="/images/media/vid1.jpg"
+        breadcrumb={
             activeFolder
               ? [
                   { label: "Archives", href: "/media/gallery" },
@@ -103,7 +102,6 @@ export default function GalleryPageClient({ initialPhotos }: GalleryPageClientPr
               : [{ label: "Archives", href: "/media/gallery" }]
           }
         />
-      </div>
 
       <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 pt-12 relative z-10">
         <AnimatePresence mode="wait">

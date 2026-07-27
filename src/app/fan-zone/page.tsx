@@ -68,13 +68,13 @@ export default function FanZonePage() {
   };
 
   return (
-    <main className="bg-milk-white min-h-screen pb-24 text-rich-black relative overflow-hidden">
+    <main className="bg-milk-white min-h-screen pb-12 text-rich-black relative overflow-hidden">
       <div className="absolute inset-0 pointer-events-none select-none z-0">
         <EdgyGradient opacity={0.15} />
       </div>
 
       {/* PageHero header */}
-      <div className="pt-24 relative z-10">
+      <div className="relative z-10">
         <PageHero
           title="Fan Zone"
           subtitle="The heartbeat of Zimbabwe Rugby. Join our global supporters network, get the latest inside scoops, and unlock members-only benefits."
@@ -84,7 +84,7 @@ export default function FanZonePage() {
         />
       </div>
 
-      <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 pt-12 sm:pt-16 relative z-10">
+      <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 pt-8 relative z-10">
 
         {/* Replay Benefits Preview Option */}
         {isCenterStage && !submitted && (
