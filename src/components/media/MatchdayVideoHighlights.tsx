@@ -95,6 +95,9 @@ export default function MatchdayVideoHighlights({
   const hiddenRef = useRef(false);
   const rafRef = useRef<number>(0);
 
+  // Mobile intro spin: runs once on mount, then stops
+  const introDoneRef = useRef(false);
+
   // Measure container width + detect mobile
   useEffect(() => {
     function measure() {
@@ -130,31 +133,58 @@ export default function MatchdayVideoHighlights({
     };
   }, []);
 
-  // Auto-rotate via requestAnimationFrame (replaces setInterval at 30ms)
+  // Auto-rotate via requestAnimationFrame
+  // Desktop: continuous rotation at 8°/sec
+  // Mobile: single intro spin (~20° over 1.5s) then stops to signal draggability
   useEffect(() => {
+    if (viewMode !== "ring") return;
+
     let lastTime = 0;
-    const SPEED = 8; // degrees per second
+    const DESKTOP_SPEED = 8;
+    const MOBILE_INTRO_ANGLE = 20;
+    const MOBILE_INTRO_DURATION = 1.5;
 
     function tick(now: number) {
-      if (inViewRef.current && !hiddenRef.current && !isDragging && viewMode === "ring") {
+      if (!inViewRef.current || hiddenRef.current || isDragging) {
+        lastTime = 0;
+        rafRef.current = requestAnimationFrame(tick);
+        return;
+      }
+
+      if (isMobile) {
+        // Mobile: one-time intro spin, then stop
+        if (!introDoneRef.current) {
+          if (lastTime === 0) lastTime = now;
+          const elapsed = (now - lastTime) / 1000;
+          const progress = Math.min(elapsed / MOBILE_INTRO_DURATION, 1);
+          // Ease-out curve for smooth deceleration
+          const eased = 1 - Math.pow(1 - progress, 3);
+          setRotationY(-MOBILE_INTRO_ANGLE * eased);
+
+          if (progress >= 1) {
+            introDoneRef.current = true;
+          }
+        }
+        // Mobile: no more rotation after intro — rAF stops scheduling itself
+      } else {
+        // Desktop: continuous rotation
         if (lastTime) {
           const dt = (now - lastTime) / 1000;
-          setRotationY((prev) => prev - SPEED * dt);
+          setRotationY((prev) => prev - DESKTOP_SPEED * dt);
         }
         lastTime = now;
-      } else {
-        lastTime = 0;
+        rafRef.current = requestAnimationFrame(tick);
       }
-      rafRef.current = requestAnimationFrame(tick);
     }
 
     rafRef.current = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(rafRef.current);
-  }, [isDragging, viewMode]);
+  }, [isDragging, viewMode, isMobile]);
 
   // Drag handlers
   const handleMouseDown = useCallback((e: React.MouseEvent | React.TouchEvent) => {
     setIsDragging(true);
+    introDoneRef.current = true; // stop intro spin if user drags during it
     const clientX = "touches" in e ? e.touches[0].clientX : e.clientX;
     setStartX(clientX);
     setStartRotation(rotationY);
@@ -173,17 +203,17 @@ export default function MatchdayVideoHighlights({
 
   // Auto-dismiss drag toast
   useEffect(() => {
-    if (viewMode === "ring" && videos.length > 1 && !isMobile) {
+    if (viewMode === "ring" && videos.length > 1) {
       setShowDragToast(true);
       const timer = setTimeout(() => setShowDragToast(false), 3500);
       return () => clearTimeout(timer);
     }
-  }, [viewMode, videos.length, isMobile]);
+  }, [viewMode, videos.length]);
 
   // ── Dynamic Ring Math (responsive) ──
   const count = videos.length;
   const cardWidth = isMobile
-    ? Math.min(220, containerWidth * 0.85)
+    ? Math.min(180, containerWidth * 0.7)
     : Math.min(320, containerWidth * 0.26);
   const cardGap = cardWidth * 0.08;
 
@@ -192,14 +222,11 @@ export default function MatchdayVideoHighlights({
     : (cardWidth + cardGap) * count / (2 * Math.PI);
 
   const maxRadius = isMobile
-    ? containerWidth * 0.42
+    ? containerWidth * 0.38
     : containerWidth * 0.45;
   const radius = Math.min(minRadius, maxRadius);
 
   const angleStep = count > 0 ? 360 / count : 0;
-
-  // On mobile, default to grid view unless user explicitly chose ring
-  const effectiveViewMode = isMobile && viewMode === "ring" ? "grid" : viewMode;
 
   // Only render cards within ±120° of front-facing (virtualization)
   const VISIBLE_ARC = 120;
@@ -209,7 +236,7 @@ export default function MatchdayVideoHighlights({
     return (
       <section className="py-4 sm:py-6 bg-milk-white border-t border-black/5 select-none overflow-visible">
         <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 space-y-3">
-          <HeaderStrip subtitle={subtitle} title={title} showChannelLink={showChannelLink} viewMode={effectiveViewMode} setViewMode={setViewMode} />
+          <HeaderStrip subtitle={subtitle} title={title} showChannelLink={showChannelLink} viewMode={viewMode} setViewMode={setViewMode} />
           <div className="flex items-center justify-center h-[280px] sm:h-[340px] text-neutral-mid text-sm">
             No highlight videos available yet.
           </div>
@@ -223,7 +250,7 @@ export default function MatchdayVideoHighlights({
     return (
       <section className="py-4 sm:py-6 bg-milk-white border-t border-black/5 select-none overflow-visible">
         <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 space-y-3">
-          <HeaderStrip subtitle={subtitle} title={title} showChannelLink={showChannelLink} viewMode={effectiveViewMode} setViewMode={setViewMode} />
+          <HeaderStrip subtitle={subtitle} title={title} showChannelLink={showChannelLink} viewMode={viewMode} setViewMode={setViewMode} />
           <div className="flex items-center justify-center py-6">
             <VideoCard video={videos[0]} isDragging={isDragging} onClick={() => setActiveVideo(videos[0])} />
           </div>
@@ -236,9 +263,9 @@ export default function MatchdayVideoHighlights({
   return (
     <section className="py-4 sm:py-6 bg-milk-white border-t border-black/5 select-none overflow-visible">
       <div ref={containerRef} className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 space-y-3">
-        <HeaderStrip subtitle={subtitle} title={title} showChannelLink={showChannelLink} viewMode={effectiveViewMode} setViewMode={setViewMode} />
+        <HeaderStrip subtitle={subtitle} title={title} showChannelLink={showChannelLink} viewMode={viewMode} setViewMode={setViewMode} />
 
-        {effectiveViewMode === "ring" ? (
+        {viewMode === "ring" ? (
           <div className="relative w-full py-6 select-none overflow-visible" ref={ringContainerRef}>
             {/* Drag Toast */}
             <AnimatePresence>
@@ -257,7 +284,7 @@ export default function MatchdayVideoHighlights({
             </AnimatePresence>
 
             <div
-              className="relative w-full h-[280px] sm:h-[340px] flex items-center justify-center cursor-grab active:cursor-grabbing overflow-visible"
+              className="relative w-full h-[220px] sm:h-[280px] md:h-[340px] flex items-center justify-center cursor-grab active:cursor-grabbing overflow-visible"
               style={{ perspective: isMobile ? "800px" : "1200px" }}
               onMouseDown={handleMouseDown}
               onMouseMove={handleMouseMove}
