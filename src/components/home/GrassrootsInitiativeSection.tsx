@@ -55,35 +55,30 @@ export default function GrassrootsInitiativeSection() {
 
       <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8 relative z-10 space-y-10">
         
-        {/* Section Header — Nations Cup format */}
+        {/* Section Header */}
         <div className="max-w-3xl">
-          <div className="flex items-center gap-2 mb-1">
-            <span className="w-6 h-0.5 bg-white/60" />
-            <span className="text-[11px] font-heading font-black uppercase tracking-[0.25em] text-white/80">
-              GROWING THE SPORT • COMMUNITY &amp; DEVELOPMENT
-            </span>
-          </div>
-          <h2 className="text-3xl sm:text-5xl font-heading font-black uppercase tracking-tight text-white italic leading-[1.0]">
+          <h2 className="text-3xl sm:text-5xl font-heading font-black uppercase tracking-tight text-white not-italic leading-[1.0]">
             GRASSROOTS &{" "}
-            <span className="text-accent-teal">YOUTH RUGBY</span>{" "}
-            INITIATIVES
+            <span className="text-accent-teal">YOUTH RUGBY</span>
           </h2>
         </div>
 
-        {/* 3-Column Bento Grid (White High-Contrast Cards on ZRU Green Background) */}
-        <div className="flex flex-nowrap md:grid md:grid-cols-3 overflow-x-auto md:overflow-visible snap-x snap-mandatory scroll-smooth no-scrollbar -mx-4 px-4 sm:mx-0 sm:px-0 gap-4 sm:gap-6 items-stretch py-2">
-          {INITIATIVES.map((item) => (
+        {/* 3-Column Asymmetric Grid — Card 1 wide (50%), Cards 2-3 narrow (25% each) */}
+        <div className="flex flex-nowrap md:grid md:grid-cols-4 overflow-x-auto md:overflow-visible snap-x snap-mandatory scroll-smooth no-scrollbar -mx-4 px-4 sm:mx-0 sm:px-0 gap-4 sm:gap-6 items-stretch py-2">
+          {INITIATIVES.map((item, idx) => (
             <div
               key={item.id}
-              className="w-[280px] xs:w-[310px] md:w-auto shrink-0 snap-start box-border flex flex-col h-[440px] sm:h-[470px] rounded-2xl overflow-hidden border border-white/20 hover:border-white shadow-2xl transition-all duration-300 group/card bg-white relative text-black"
+              className={`w-[280px] xs:w-[310px] md:w-auto shrink-0 snap-start box-border flex flex-col rounded-2xl overflow-hidden border border-white/20 hover:border-white shadow-2xl transition-shadow duration-300 group/card bg-white relative text-black ${
+                idx === 0 ? "md:col-span-2" : "md:col-span-1"
+              }`}
             >
               {/* Image Header with Floating Badges */}
-              <div className="relative h-44 sm:h-48 w-full overflow-hidden shrink-0">
+              <div className={`relative w-full overflow-hidden shrink-0 ${idx === 0 ? "h-52 sm:h-60" : "h-40 sm:h-44"}`}>
                 <Image
                   src={item.image}
                   alt={item.title}
                   fill
-                  className="object-cover transition-transform duration-700 group-hover/card:scale-105"
+                  className="object-cover transition-[filter] duration-500 group-hover/card:brightness-110"
                   sizes="(max-width: 768px) 85vw, 33vw"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
@@ -93,7 +88,7 @@ export default function GrassrootsInitiativeSection() {
                   <span className="px-2.5 py-1 bg-[#004D34] border border-white/20 text-white rounded-full text-[10px] font-black tracking-widest uppercase shadow-md">
                     {item.badge}
                   </span>
-                  <span className="px-2.5 py-1 bg-black/65 backdrop-blur-md border border-white/20 text-white rounded-full text-[9px] font-bold tracking-wider uppercase">
+                  <span className="px-2.5 py-1 bg-black/65 border border-white/20 text-white rounded-full text-[9px] font-bold tracking-wider uppercase">
                     {item.stats}
                   </span>
                 </div>
@@ -117,7 +112,7 @@ export default function GrassrootsInitiativeSection() {
                 <div className="pt-3 border-t border-black/10 mt-3">
                   <Link
                     href={item.link}
-                    className="w-full bg-[#006747] hover:bg-[#004D34] text-white font-extrabold flex items-center justify-between clip-slanted px-4 py-3 transition-all duration-300 shadow-sm hover:shadow-md text-xs tracking-wider uppercase font-heading group/btn"
+                    className="w-full bg-[#006747] hover:bg-[#004D34] text-white font-extrabold flex items-center justify-between clip-slanted px-4 py-3 transition-colors duration-300 shadow-sm hover:shadow-md text-xs tracking-wider uppercase font-heading group/btn"
                   >
                     <span>{item.btnText}</span>
                     <ArrowRight className="w-4 h-4 transition-transform group-hover/btn:translate-x-1 shrink-0" />
@@ -129,12 +124,12 @@ export default function GrassrootsInitiativeSection() {
         </div>
 
         {/* Editorial Impact Stat Bar (Clean White Text on ZRU Green Background) */}
-        <div className="pt-6 border-t border-white/20 grid grid-cols-4 divide-x divide-white/20 text-center text-white">
+        <div className="pt-6 border-t border-white/20 grid grid-cols-4 divide-x divide-white/20 text-center text-white tabular-nums">
           
           <div className="flex flex-col items-center justify-center px-1 sm:px-4 space-y-1 group">
             <div className="flex items-center gap-1.5 text-white">
               <Users className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-white/80" />
-              <span className="font-heading font-black text-xl sm:text-3xl text-white tracking-tight italic">15,000+</span>
+              <span className="font-heading font-black text-xl sm:text-3xl text-white tracking-tight not-italic">15,000+</span>
             </div>
             <span className="text-[8px] sm:text-[11px] font-extrabold text-white/80 uppercase tracking-wider block font-heading leading-tight">
               Active Youth Players
@@ -144,7 +139,7 @@ export default function GrassrootsInitiativeSection() {
           <div className="flex flex-col items-center justify-center px-1 sm:px-4 space-y-1 group">
             <div className="flex items-center gap-1.5 text-white">
               <GraduationCap className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-white/80" />
-              <span className="font-heading font-black text-xl sm:text-3xl text-white tracking-tight italic">120+</span>
+              <span className="font-heading font-black text-xl sm:text-3xl text-white tracking-tight not-italic">120+</span>
             </div>
             <span className="text-[8px] sm:text-[11px] font-extrabold text-white/80 uppercase tracking-wider block font-heading leading-tight">
               Schools &amp; Clubs
@@ -154,7 +149,7 @@ export default function GrassrootsInitiativeSection() {
           <div className="flex flex-col items-center justify-center px-1 sm:px-4 space-y-1 group">
             <div className="flex items-center gap-1.5 text-white">
               <Trophy className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-white/80" />
-              <span className="font-heading font-black text-xl sm:text-3xl text-white tracking-tight italic">10</span>
+              <span className="font-heading font-black text-xl sm:text-3xl text-white tracking-tight not-italic">10</span>
             </div>
             <span className="text-[8px] sm:text-[11px] font-extrabold text-white/80 uppercase tracking-wider block font-heading leading-tight">
               Provincial Unions
@@ -164,7 +159,7 @@ export default function GrassrootsInitiativeSection() {
           <div className="flex flex-col items-center justify-center px-1 sm:px-4 space-y-1 group">
             <div className="flex items-center gap-1.5 text-white">
               <CheckCircle2 className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-white/80" />
-              <span className="font-heading font-black text-xl sm:text-3xl text-white tracking-tight italic">45%</span>
+              <span className="font-heading font-black text-xl sm:text-3xl text-white tracking-tight not-italic">45%</span>
             </div>
             <span className="text-[8px] sm:text-[11px] font-extrabold text-white/80 uppercase tracking-wider block font-heading leading-tight">
               Female Participation

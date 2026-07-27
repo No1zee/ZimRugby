@@ -74,7 +74,7 @@ export default function ShopCardShowcase() {
           src={currentProduct.cutout}
           alt="Shop merchandise"
           fill
-          className="object-contain object-bottom scale-[1.72] -translate-y-[32%] drop-shadow-[0_-8px_30px_rgba(0,0,0,0.25)] group-hover:scale-[1.82] transition-transform duration-500 ease-out"
+          className="object-contain object-bottom scale-[1.72] -translate-y-[32%] drop-shadow-[0_-8px_30px_rgba(0,0,0,0.25)] group-hover:brightness-110 transition-[filter] duration-500 ease-out"
           sizes="(max-width: 768px) 100vw, 25vw"
         />
       </div>
@@ -96,7 +96,7 @@ export default function ShopCardShowcase() {
       </div>
       {/* Bottom Button */}
       <div className="absolute bottom-4 left-4 right-4 z-10">
-        <div className="w-full bg-white/10 backdrop-blur-md border border-white/20 text-white py-3 font-extrabold text-[11px] uppercase italic flex justify-center items-center gap-2 group-hover:bg-white group-hover:text-green-primary transition-all">
+        <div className="w-full bg-white/10 border border-white/20 text-white py-3 font-extrabold text-[11px] uppercase not-italic flex justify-center items-center gap-2 group-hover:bg-white group-hover:text-green-primary transition-colors">
           Shop Collection <ShoppingBag size={16} />
         </div>
       </div>

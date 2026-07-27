@@ -98,11 +98,12 @@ export default function SponsorGrid() {
       <div className="max-w-[1280px] mx-auto space-y-6">
         
         {/* ── 1. Minimal Header ── */}
-        <div className="text-center space-y-1.5">
+        <div className="space-y-1.5">
           <h2 className="font-heading text-2xl lg:text-3xl font-black uppercase text-rich-black tracking-tight">
-            POWERING ZIMBABWE RUGBY
+            POWERING ZIMBABWE{" "}
+            <span className="text-accent-teal">RUGBY</span>
           </h2>
-          <div className="w-10 h-1 bg-[#006747] mx-auto rounded-full mt-2 opacity-80" />
+          <div className="w-10 h-1 bg-[#006747] rounded-full mt-2 opacity-80" />
         </div>
 
         {/* ── 2. Interactive Logo Dock (5 Partners) ── */}
@@ -117,19 +118,19 @@ export default function SponsorGrid() {
               <button
                 key={s.id}
                 onClick={() => setActiveIdx(idx)}
-                className={`group relative bg-white rounded-xl p-4 h-20 flex items-center justify-center border transition-all duration-300 cursor-pointer ${
+                className={`group relative bg-white rounded-xl p-4 h-20 flex items-center justify-center border transition-colors duration-300 cursor-pointer ${
                   isActive
-                    ? "bg-gradient-to-b from-[#00704D] to-[#005238] border-transparent shadow-md scale-[1.03]"
+                    ? "bg-gradient-to-b from-[#00704D] to-[#005238] border-transparent shadow-md"
                     : "border-gray-200/80 shadow-xs hover:border-[#006747]/40 hover:shadow-sm"
                 }`}
               >
-                <div className="relative w-full h-10 transition-transform duration-300">
+                <div className="relative w-full h-10 transition-[filter] duration-300">
                   <Image
                     src={s.logo}
                     alt={s.name}
                     fill
-                    className={`object-contain transition-all duration-300 ${
-                      isActive ? "opacity-100 scale-105" : "opacity-60 group-hover:opacity-100"
+                    className={`object-contain transition-[filter] duration-300 ${
+                      isActive ? "opacity-100 brightness-110" : "opacity-60 group-hover:opacity-100"
                     }`}
                   />
                 </div>
@@ -142,7 +143,7 @@ export default function SponsorGrid() {
         </div>
 
         {/* ── 3. Active Partner Minimal Spotlight Card ── */}
-        <div className="max-w-2xl mx-auto bg-white rounded-2xl p-6 border border-gray-200/90 shadow-xl hover:shadow-2xl transition-shadow duration-300 flex flex-col sm:flex-row items-center justify-between gap-6 transition-all duration-500">
+        <div className="max-w-2xl mx-auto bg-white rounded-2xl p-6 border border-gray-200/90 shadow-md hover:shadow-lg transition-shadow duration-300 flex flex-col sm:flex-row items-center justify-between gap-6">
           
           <div className="space-y-1 text-center sm:text-left flex-1 min-w-0">
             <div className="flex items-center justify-center sm:justify-start gap-2 mb-1">
@@ -162,7 +163,7 @@ export default function SponsorGrid() {
             href={activeSponsor.href}
             target="_blank"
             rel="noopener noreferrer"
-            className="bg-gradient-to-b from-[#00704D] to-[#005238] hover:from-[#005238] hover:to-[#004522] text-white font-extrabold text-[10px] tracking-widest uppercase px-5 py-3 rounded-lg shadow-md transition-all flex items-center gap-1.5 shrink-0 group"
+            className="bg-gradient-to-b from-[#00704D] to-[#005238] hover:from-[#005238] hover:to-[#004522] text-white font-extrabold text-[10px] tracking-widest uppercase px-5 py-3 rounded-lg shadow-md transition-colors flex items-center gap-1.5 shrink-0 group"
           >
             <span>VISIT SITE</span>
             <ArrowRight size={14} className="transition-transform duration-300 group-hover:translate-x-1" />

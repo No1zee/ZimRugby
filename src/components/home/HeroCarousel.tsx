@@ -5,7 +5,6 @@ import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion"
 import { LucideIcon, ArrowRight, Play, Ticket, ChevronLeft, ChevronRight } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
-import { FloatingParticles } from "../ui/animations";
 import MagneticElement from "../ui/MagneticElement";
 import type { HeroSlideData } from "@/lib/api/hero";
 
@@ -137,7 +136,7 @@ function SlideContent({
               transition={{ delay: 1.0, duration: 0.6, ease: [0.25, 1, 0.5, 1] }}
             >
               <MagneticElement intensity={0.25}>
-                <Link href={slide.ctas.primary.href} className="inline-flex items-center justify-center font-subheading tracking-widest uppercase transition-all duration-300 bg-white text-rich-black hover:bg-zru-green hover:text-white border border-white hover:border-zru-green px-8 py-3.5 text-xs font-black clip-slanted shadow-2xl min-w-[200px] gap-3">
+                <Link href={slide.ctas.primary.href} className="inline-flex items-center justify-center font-subheading tracking-widest uppercase transition-colors duration-300 bg-white text-rich-black hover:bg-zru-green hover:text-white border border-white hover:border-zru-green px-8 py-3.5 text-xs font-black clip-slanted shadow-2xl min-w-[200px] gap-3">
                   {slide.ctas.primary.iconName && iconMap[slide.ctas.primary.iconName] && (() => {
                     const Icon = iconMap[slide.ctas.primary.iconName];
                     return <Icon className="w-4.5 h-4.5" />;
@@ -150,7 +149,7 @@ function SlideContent({
             {slide.ctas.secondary && (
               <motion.div variants={itemVariants}>
                 <MagneticElement intensity={0.25}>
-                  <Link href={slide.ctas.secondary.href} className="inline-flex items-center justify-center font-subheading tracking-widest uppercase transition-all duration-300 bg-transparent border-2 border-white/20 text-white hover:bg-white hover:border-white hover:text-rich-black px-8 py-3.5 text-xs font-black clip-slanted min-w-[200px] gap-3 backdrop-blur-xs">
+                  <Link href={slide.ctas.secondary.href} className="inline-flex items-center justify-center font-subheading tracking-widest uppercase transition-colors duration-300 bg-transparent border-2 border-white/20 text-white hover:bg-white hover:border-white hover:text-rich-black px-8 py-3.5 text-xs font-black clip-slanted min-w-[200px] gap-3 backdrop-blur-xs">
                     {slide.ctas.secondary.iconName && iconMap[slide.ctas.secondary.iconName] && (() => {
                       const Icon = iconMap[slide.ctas.secondary.iconName];
                       return <Icon className="w-4.5 h-4.5" />;
@@ -324,11 +323,6 @@ export default function HeroCarousel({ slides }: { slides: HeroSlideData[] }) {
             <div className="absolute inset-0 bg-gradient-to-t from-rich-black/90 via-rich-black/30 to-black/30 z-10" />
         </motion.div>
       </AnimatePresence>
-
-      {/* Floating Particles (Global) */}
-      <div className="hidden md:block absolute inset-0 z-10 pointer-events-none">
-          <FloatingParticles count={15} />
-      </div>
 
       {/* Content Layer */}
       <motion.div style={{ y: yText, opacity: opacityText }} className="relative z-20 w-full max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 h-full flex items-end justify-start pb-28 lg:pb-36">

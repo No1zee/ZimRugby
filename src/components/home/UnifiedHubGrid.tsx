@@ -39,14 +39,9 @@ export default async function UnifiedHubGrid() {
     <section className="py-12 md:py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
       {/* Section Title — Nations Cup format */}
       <div className="mb-8">
-        <div className="flex items-center gap-2 mb-1">
-          <span className="w-6 h-0.5 bg-[#006747]" />
-          <span className="text-[11px] font-heading font-black uppercase tracking-[0.25em] text-[#006747]">
-            QUICK ACCESS
-          </span>
-        </div>
-        <h2 className="text-3xl sm:text-5xl font-heading font-black uppercase tracking-tight text-rich-black italic">
-          MATCHDAY, MEDIA &amp; MERCHANDISE
+        <h2 className="text-3xl sm:text-5xl font-heading font-black uppercase tracking-tight text-rich-black not-italic">
+          MATCHDAY, MEDIA &amp;{" "}
+          <span className="text-accent-teal">MERCHANDISE</span>
         </h2>
       </div>
 
@@ -54,7 +49,7 @@ export default async function UnifiedHubGrid() {
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4 md:gap-5">
 
         {/* ═══════════ COLUMN 1: LATEST NEWS ═══════════ */}
-        <div className="bg-gradient-to-b from-[#003822] via-[#002B19] to-[#001D11] text-white p-5 rounded-lg flex flex-col h-[460px] lg:h-[480px] xl:h-[500px] overflow-hidden border border-black/10 hover:border-green-primary/60 shadow-lg hover:shadow-2xl transition-all duration-300">
+        <div className="bg-gradient-to-b from-[#003822] via-[#002B19] to-[#001D11] text-white p-5 rounded-lg flex flex-col h-[460px] lg:h-[480px] xl:h-[500px] overflow-hidden border border-black/10 hover:border-green-primary/60 shadow-lg hover:shadow-2xl transition-shadow">
           {/* Header */}
           <div className="flex items-center justify-between bg-gradient-to-b from-[#00704D] to-[#005238] text-white px-5 py-4 -mx-5 -mt-5 mb-4 shrink-0 border-b border-emerald-500/20">
             <span className="text-[11px] font-extrabold uppercase tracking-[0.2em] text-white">
@@ -74,7 +69,7 @@ export default async function UnifiedHubGrid() {
                         src={article.image || "/images/teams/sables.jpg"}
                         alt={article.title}
                         fill
-                        className="object-cover transition-transform duration-300 group-hover/item:scale-110"
+                        className="object-cover transition-[filter] duration-300 group-hover/item:brightness-110"
                         sizes="64px"
                       />
                     </div>
@@ -144,7 +139,7 @@ export default async function UnifiedHubGrid() {
           {/* Explore All News CTA */}
           <Link
             href="/media"
-            className="relative z-10 w-full bg-white/10 hover:bg-white text-white hover:text-green-primary font-extrabold flex items-center justify-center gap-2 rounded-lg py-2.5 transition-all duration-300 text-xs tracking-widest uppercase border border-white/20 mt-3 font-heading"
+            className="relative z-10 w-full bg-white/10 hover:bg-white text-white hover:text-green-primary font-extrabold flex items-center justify-center gap-2 rounded-lg py-2.5 transition-colors duration-300 text-xs tracking-widest uppercase border border-white/20 mt-3 font-heading"
           >
             <span>EXPLORE ALL NEWS</span>
             <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
@@ -152,7 +147,7 @@ export default async function UnifiedHubGrid() {
         </div>
 
         {/* ═══════════ COLUMN 2: NEXT MATCH ═══════════ */}
-        <div className="bg-gradient-to-b from-[#00331F] via-[#002415] to-[#00160D] text-white p-5 rounded-lg flex flex-col h-[460px] lg:h-[480px] xl:h-[500px] overflow-hidden border border-black/10 hover:border-green-primary/60 shadow-lg hover:shadow-2xl transition-all duration-300">
+        <div className="bg-gradient-to-b from-[#00331F] via-[#002415] to-[#00160D] text-white p-5 rounded-lg flex flex-col h-[460px] lg:h-[480px] xl:h-[500px] overflow-hidden border border-black/10 hover:border-green-primary/60 shadow-lg hover:shadow-2xl transition-shadow">
           {/* Header */}
           <div className="flex items-center justify-between bg-gradient-to-b from-[#00704D] to-[#005238] text-white px-5 py-4 -mx-5 -mt-5 mb-4 shrink-0 border-b border-emerald-500/20">
             <span className="text-[11px] font-extrabold uppercase tracking-[0.2em] text-white">
@@ -164,7 +159,7 @@ export default async function UnifiedHubGrid() {
           <div className="relative z-10 flex items-center justify-between my-2">
             {/* Home Team */}
             <div className="flex flex-col items-center group/team cursor-pointer">
-              <div className="relative w-16 h-16 bg-white rounded-full flex items-center justify-center p-2 mb-2 shadow-lg ring-2 ring-emerald-400/40 group-hover/team:scale-105 transition-transform">
+              <div className="relative w-16 h-16 bg-white rounded-full flex items-center justify-center p-2 mb-2 shadow-lg ring-2 ring-emerald-400/40 group-hover/team:brightness-110 transition-[filter]">
                 <Image
                   src="/images/teams/zimbabwe.png"
                   alt="Zimbabwe"
@@ -192,7 +187,7 @@ export default async function UnifiedHubGrid() {
 
             {/* Away Team */}
             <div className="flex flex-col items-center group/team cursor-pointer">
-              <div className="relative w-16 h-16 bg-white rounded-full flex items-center justify-center p-2 mb-2 shadow-lg ring-2 ring-white/20 group-hover/team:scale-105 transition-transform">
+              <div className="relative w-16 h-16 bg-white rounded-full flex items-center justify-center p-2 mb-2 shadow-lg ring-2 ring-white/20 group-hover/team:brightness-110 transition-[filter]">
                 <Image
                   src="/images/teams/namibia.png"
                   alt="Namibia"
@@ -208,7 +203,7 @@ export default async function UnifiedHubGrid() {
           </div>
 
           {/* Glassmorphic Match Details */}
-          <div className="relative z-10 bg-black/40 backdrop-blur-md rounded-xl p-3.5 border border-white/10 space-y-2 my-2">
+          <div className="relative z-10 bg-black/40 rounded-xl p-3.5 border border-white/10 space-y-2 my-2">
             <div className="flex items-center gap-2 text-white/90">
               <Calendar size={16} className="text-emerald-400" />
               <span className="font-body font-bold text-[11px] uppercase tracking-wider">
@@ -234,7 +229,7 @@ export default async function UnifiedHubGrid() {
           {/* Match Centre CTA */}
           <Link
             href="/match-centre"
-            className="relative z-10 mt-auto w-full bg-emerald-500 hover:bg-emerald-400 text-black font-extrabold flex items-center justify-center gap-2 rounded-lg py-3 transition-all duration-300 shadow-lg shadow-emerald-950/40 text-xs tracking-widest uppercase group/btn font-heading"
+            className="relative z-10 mt-auto w-full bg-emerald-500 hover:bg-emerald-400 text-black font-extrabold flex items-center justify-center gap-2 rounded-lg py-3 transition-colors duration-300 shadow-lg shadow-emerald-950/40 text-xs tracking-widest uppercase group/btn font-heading"
           >
             <span>MATCH CENTRE</span>
             <ArrowRight size={16} className="transition-transform duration-300 group-hover/btn:translate-x-1" />
@@ -254,7 +249,7 @@ export default async function UnifiedHubGrid() {
 
           {/* Match Reference — ties to Next Match fixture */}
           <div className="relative z-10 p-4 border border-accent-teal/30 rounded flex flex-col gap-1">
-            <h4 className="font-heading text-sm italic text-white">
+            <h4 className="font-heading text-sm not-italic text-white">
               {nextMatch ? `${nextMatch.homeTeam.name} vs ${nextMatch.awayTeam.name}` : "Sables vs Namibia"}
             </h4>
             <div className="text-[11px] text-white/50 font-bold uppercase tracking-wider">
@@ -270,7 +265,7 @@ export default async function UnifiedHubGrid() {
           {/* Primary CTA — Buy Tickets */}
           <Link
             href="/tickets"
-            className="relative z-10 mt-auto bg-accent-teal text-green-primary py-3 font-extrabold text-[11px] uppercase tracking-[0.2em] flex justify-center items-center gap-2 hover:bg-accent-teal-dark transition-all shadow-lg shadow-accent-teal/20"
+            className="relative z-10 mt-auto bg-accent-teal text-green-primary py-3 font-extrabold text-[11px] uppercase tracking-[0.2em] flex justify-center items-center gap-2 hover:bg-accent-teal-dark transition-colors shadow-lg shadow-accent-teal/20"
           >
             Buy Tickets <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
           </Link>
