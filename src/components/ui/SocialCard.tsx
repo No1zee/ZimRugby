@@ -8,9 +8,13 @@ import {
   Youtube, 
   Linkedin,
   Phone,
+  MapPin,
 } from "lucide-react";
 
+const MAPS_URL = "https://maps.google.com/?q=Harare+Sports+Club,+Harare,+Zimbabwe";
+
 const platforms = [
+  { Icon: MapPin, href: MAPS_URL, label: "Location" },
   { Icon: Phone, href: "tel:+263242700100", label: "Call Us" },
   { Icon: Facebook, href: "https://facebook.com/zimbabwerugby", label: "Facebook" },
   { Icon: Twitter, href: "https://twitter.com/zimbabwerugby", label: "X" },

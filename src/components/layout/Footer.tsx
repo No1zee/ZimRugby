@@ -4,7 +4,6 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { 
-  MapPin, 
   ShieldCheck 
 } from "lucide-react";
 import SocialCard from "@/components/ui/SocialCard";
@@ -105,11 +104,9 @@ export default function Footer() {
                 Official Governing Body of Rugby Union in Zimbabwe • Est. 1895
               </p>
             </div>
-            <div className="flex items-center gap-2 text-xs font-bold text-[#003822]/80">
-              <MapPin className="w-3.5 h-3.5 text-[#006747] shrink-0" />
-              <span>Harare Sports Club HQ</span>
+            <div className="mt-3">
+              <SocialCard />
             </div>
-            <SocialCard />
           </div>
         </div>
 
