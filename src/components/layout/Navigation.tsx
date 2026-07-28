@@ -277,7 +277,7 @@ export default function Navigation() {
                           animate={{ opacity: 1, y: 0, scale: 1 }}
                           exit={{ opacity: 0, y: 8, scale: 0.96 }}
                           transition={{ duration: 0.2, ease: "easeOut" }}
-                          className={`absolute top-full left-1/2 -translate-x-1/2 mt-1 bg-[#005238] backdrop-blur-2xl rounded-2xl shadow-2xl py-3 border border-white/20 overflow-hidden z-[100] ${
+                          className={`absolute top-full left-1/2 -translate-x-1/2 mt-1 bg-[#00452A] rounded-2xl shadow-2xl py-3 overflow-hidden z-[100] ${
                             item.isMega
                               ? "w-[380px] xl:w-[420px] grid grid-cols-2 gap-x-2 px-3"
                               : "min-w-[220px] px-2"

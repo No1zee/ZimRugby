@@ -137,16 +137,14 @@ body::after {
 /* Bento Card styling */
 .bento-card {
   border: 1px solid rgba(0, 107, 63, 0.45);
-  background: rgba(0, 70, 35, 0.45);
-  backdrop-filter: blur(16px);
+  background: rgba(0, 70, 35, 0.65);
   border-radius: 16px;
   overflow: hidden;
-  transition: border-color 0.4s cubic-bezier(0.16, 1, 0.3, 1), background 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: border-color 0.4s cubic-bezier(0.16, 1, 0.3, 1), background 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 .bento-card:hover {
   border-color: rgba(0, 107, 63, 0.85);
-  background: rgba(0, 107, 63, 0.25);
-  box-shadow: 0 10px 30px -10px rgba(0, 107, 63, 0.45), 0 0 25px rgba(0, 107, 63, 0.30);
+  background: rgba(0, 107, 63, 0.35);
 }
 
 .perspective-1000 {
@@ -227,12 +225,7 @@ body::after {
 .card-surface-blur {
   background: linear-gradient(135deg, rgba(0, 107, 63, 0.35) 0%, rgba(0, 107, 63, 0.15) 100%);
   border: 1px solid rgba(0, 107, 63, 0.60);
-  box-shadow:
-    0 12px 45px rgba(0, 0, 0, 0.65),
-    inset 0 1px 0 rgba(0, 150, 70, 0.30),
-    0 0 20px rgba(0, 107, 63, 0.18);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
+  box-shadow: 0 12px 45px rgba(0, 0, 0, 0.65);
   position: relative;
   overflow: hidden;
 }
@@ -247,17 +240,13 @@ body::after {
   z-index: 1;
 }
 
-/* ZRU Green brand glow on hover */
+/* ZRU Green brand hover */
 .card-glow-green {
-  transition: border-color 300ms ease, box-shadow 300ms ease, background 300ms ease;
+  transition: border-color 300ms ease, background 300ms ease;
 }
 .card-glow-green:hover {
   border-color: rgba(0, 107, 63, 0.75) !important;
-  box-shadow:
-    0 12px 40px rgba(0, 0, 0, 0.65),
-    0 0 35px rgba(0, 107, 63, 0.35),
-    inset 0 1px 0 rgba(0, 150, 70, 0.30);
-  background: linear-gradient(135deg, rgba(0, 107, 63, 0.28) 0%, rgba(0, 107, 63, 0.12) 100%);
+  background: rgba(0, 107, 63, 0.18);
 }
 
 
@@ -286,17 +275,12 @@ body::after {
 .card-green {
   background: linear-gradient(135deg, rgba(0, 107, 63, 0.45) 0%, rgba(0, 107, 63, 0.16) 100%);
   border-color: rgba(0, 107, 63, 0.60);
-  box-shadow: 
-    0 10px 25px rgba(0, 0, 0, 0.45),
-    0 0 20px rgba(0, 107, 63, 0.15);
-  transition: border-color 300ms ease, box-shadow 300ms ease, background 300ms ease;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.45);
+  transition: border-color 300ms ease, background 300ms ease;
 }
 .card-green:hover {
   border-color: rgba(0, 107, 63, 0.90);
   background: linear-gradient(135deg, rgba(0, 107, 63, 0.55) 0%, rgba(0, 107, 63, 0.24) 100%);
-  box-shadow: 
-    0 15px 40px rgba(0, 0, 0, 0.65), 
-    0 0 35px rgba(0, 107, 63, 0.50);
 }
 
 .glare-effect {

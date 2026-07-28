@@ -201,8 +201,8 @@ export default async function UnifiedHubGrid() {
             </div>
           </div>
 
-          {/* Glassmorphic Match Details */}
-          <div className="relative z-10 bg-black/40 rounded-xl p-4 border border-white/10 space-y-2 my-2">
+          {/* Match Details */}
+          <div className="relative z-10 bg-black/60 rounded-xl p-4 space-y-2 my-2">
             <div className="flex items-center gap-2 text-white/90">
               <Calendar size={16} className="text-emerald-400" />
               <span className="font-body font-bold text-[11px] uppercase tracking-wider">
