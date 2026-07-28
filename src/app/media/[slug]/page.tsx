@@ -53,6 +53,7 @@ export default async function ReportPage({ params }: PageProps) {
           src={report.image}
           alt={report.title}
           fill
+          sizes="100vw"
           priority
           className="object-cover opacity-60 scale-105"
         />
@@ -128,6 +129,7 @@ export default async function ReportPage({ params }: PageProps) {
                         src="/images/media/1991-jersey-original.jpg" 
                         alt="1991 Jersey Detail" 
                         fill 
+                        sizes="(max-width: 768px) 192px, 256px"
                         className="object-cover rounded-2xl grayscale group-hover:grayscale-0 transition-all opacity-80"
                      />
                      <div className="absolute inset-0 border-2 border-zru-green/20 rounded-2xl" />

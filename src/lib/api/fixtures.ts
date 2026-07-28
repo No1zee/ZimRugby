@@ -55,7 +55,7 @@ export async function getFixtureTwinData(): Promise<FixtureTwinData> {
         },
         sort: ['-date'],
         limit: 1
-      });
+      }, 60);
       
       const nextMatches = await directusFetch<DirectusMatchItem>('matches', {
         filter: {
@@ -63,7 +63,7 @@ export async function getFixtureTwinData(): Promise<FixtureTwinData> {
         },
         sort: ['date'],
         limit: 1
-      });
+      }, 60);
       
       if (prevMatches?.[0] && nextMatches?.[0]) {
         const mapMatch = (m: DirectusMatchItem): Match => ({

@@ -73,7 +73,7 @@ export default function RootLayout({
         <PageTransitionLoader />
         <ClientLayoutShell>
           <Navigation />
-          <main id="main-content" className="relative pb-24 min-h-screen bg-milk-white">
+          <main id="main-content" className="relative min-h-screen bg-milk-white">
             {children}
           </main>
           <Footer />

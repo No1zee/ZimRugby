@@ -62,17 +62,17 @@ export default async function Home() {
         {/* 1b. Pinned Announcements — media-managed event/announcement strip */}
         <PinnedAnnouncements />
 
-        {/* 2. Unified 4-Column Hub Grid (News Stack + Match Tickets + Official Shop + Nations Cup Videos) */}
+        {/* 2. Unified 4-Column Hub Grid (Next Match + News + Shop + Tickets) */}
         <UnifiedHubGrid />
 
-        {/* 3. Full-Width ZRU Green Newsletter Banner (Matching Stitch Reference Layout) */}
-        <HomeNewsletterBanner />
-
-        {/* 4. Road to World Cup — frame with countdown + Nations Cup video + Featured Players */}
+        {/* 3. Road to World Cup — frame with countdown + Nations Cup video + Featured Players */}
         <RoadToWorldCup featuredPlayers={featuredPlayers} />
 
-        {/* 5. Grassroots & Growing the Sport Section */}
+        {/* 4. Grassroots & Growing the Sport Section */}
         <GrassrootsInitiativeSection />
+
+        {/* 5. Newsletter Banner */}
+        <HomeNewsletterBanner />
 
         {/* 6. Commercial Partners & Sponsors Logo Grid */}
         <SponsorGrid />

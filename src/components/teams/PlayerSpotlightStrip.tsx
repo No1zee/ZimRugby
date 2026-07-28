@@ -47,6 +47,7 @@ export default function PlayerSpotlightStrip() {
                   src="/images/gallery/zimbabwe-sables-0351.webp"
                   alt="Player to Watch Spotlight"
                   fill
+                  sizes="(max-width: 1024px) 100vw, 50vw"
                   className="object-cover object-center filter brightness-95"
                 />
                 <div className="absolute inset-0 bg-linear-to-t from-black via-transparent to-transparent" />

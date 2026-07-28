@@ -147,6 +147,7 @@ export default function ParticleBurstLoader({ isExiting = false }: ParticleBurst
             src="/images/logos/zru-logo.svg"
             alt="Zimbabwe Rugby Union Emblem"
             fill
+            sizes="320px"
             className={`object-contain transition-all duration-500 ${
               isExiting
                 ? "filter drop-shadow-[0_0_65px_rgba(0,255,137,1)] opacity-90"

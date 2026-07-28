@@ -179,7 +179,7 @@ export function ThreeDImageRing({ items, onSelectItem }: ThreeDImageRingProps) {
         <div className="bg-white border border-black/10 rounded-2xl p-4 sm:p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 shadow-xl">
           <div className="flex items-center gap-4">
             <div className="relative w-14 h-14 rounded-xl overflow-hidden shrink-0 border border-[#006747]/30 shadow-sm">
-              <Image src={activeItem.image} alt={activeItem.title} fill className="object-cover" />
+              <Image src={activeItem.image} alt={activeItem.title} fill sizes="56px" className="object-cover" />
             </div>
             <div>
               <span className="text-[9px] font-black text-[#006747] tracking-widest uppercase block">SELECTED FEATURED SHOT</span>

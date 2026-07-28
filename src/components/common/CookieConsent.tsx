@@ -30,7 +30,7 @@ export default function CookieConsent() {
   if (!showBanner) return null;
 
   return (
-    <div className="fixed bottom-6 left-6 right-6 md:left-auto md:max-w-md z-50 p-6 rounded-2xl bg-black/90 border border-white/10 text-white shadow-2xl backdrop-blur-md animate-in slide-in-from-bottom-5 duration-300">
+    <div className="fixed bottom-24 left-4 right-4 md:bottom-6 md:left-auto md:right-6 md:max-w-md z-[60] p-5 md:p-6 rounded-2xl bg-black/90 border border-white/10 text-white shadow-2xl backdrop-blur-md animate-in slide-in-from-bottom-5 duration-300">
       <div className="flex items-start gap-4">
         <ShieldCheck className="w-6 h-6 text-green-500 shrink-0 mt-1" />
         <div className="space-y-4">

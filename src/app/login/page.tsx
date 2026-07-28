@@ -213,7 +213,7 @@ export default function LoginPage() {
                   <SlantedButton type="submit" variant="primary" className="w-full justify-center" disabled={isLoading}>
                     {isLoading ? "Signing In..." : "Sign In"}
                   </SlantedButton>
-                  <SlantedButton type="button" variant="secondary" className="w-full justify-center" onClick={handleSignUp} disabled={isLoading}>
+                  <SlantedButton type="button" variant="secondary" className="w-full justify-center text-[11px] px-6 py-2" onClick={handleSignUp} disabled={isLoading}>
                     Create Account
                   </SlantedButton>
                 </div>

@@ -200,6 +200,7 @@ export default function FlagshipTeamHero() {
                     src={activeTeam.featuredImage}
                     alt={activeTeam.name}
                     fill
+                    sizes="(max-width: 768px) 100vw, 50vw"
                     priority
                     className="object-cover object-top filter brightness-95 contrast-105"
                   />

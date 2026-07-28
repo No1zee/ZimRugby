@@ -53,7 +53,7 @@ export default function Footer() {
   if (pathname?.startsWith('/clubhouse') || pathname?.startsWith('/admin')) return null;
 
   return (
-    <footer className="bg-[#FDFBF0] text-[#003822] border-t border-black/10 pb-8 relative overflow-hidden pt-12 lg:pt-16">
+    <footer className="bg-[#FDFBF0] text-[#003822] border-t border-black/10 pb-24 relative overflow-hidden pt-12 lg:pt-16">
       
       {/* Schema.org Sports Organization Metadata */}
       <script

@@ -1,3 +1,5 @@
+import { Ticket, ShoppingBag } from "lucide-react";
+
 export interface NavChild {
   label: string;
   href: string;
@@ -10,7 +12,15 @@ export interface NavItem {
   children?: NavChild[];
 }
 
-export const navConfig: NavItem[] = [
+export interface UtilityNavItem {
+  label: string;
+  href?: string;
+  icon: React.ComponentType<{ className?: string }>;
+  isAction?: boolean;
+}
+
+/* ── Main nav: 5 content categories ── */
+export const mainNav: NavItem[] = [
   {
     label: "NATIONAL TEAMS",
     href: "/teams",
@@ -23,7 +33,7 @@ export const navConfig: NavItem[] = [
     ],
   },
   {
-    label: "DOMESTIC RUGBY",
+    label: "DOMESTIC & MATCH CENTRE",
     href: "/match-centre",
     isMega: true,
     children: [
@@ -35,11 +45,10 @@ export const navConfig: NavItem[] = [
     ],
   },
   {
-    label: "EVENTS",
+    label: "WHAT'S ON",
     href: "/events",
     children: [
       { label: "Upcoming Events", href: "/events" },
-      { label: "Book Tickets", href: "/tickets" },
       { label: "Gallery", href: "/gallery" },
     ],
   },
@@ -65,3 +74,20 @@ export const navConfig: NavItem[] = [
     ],
   },
 ];
+
+/* ── Utility bar: Tickets (highlighted), Shop ── */
+export const utilityNav: UtilityNavItem[] = [
+  {
+    label: "TICKETS",
+    href: "/tickets",
+    icon: Ticket,
+  },
+  {
+    label: "SHOP",
+    href: "/shop",
+    icon: ShoppingBag,
+  },
+];
+
+/* ── Legacy export for backward compatibility ── */
+export const navConfig = mainNav;

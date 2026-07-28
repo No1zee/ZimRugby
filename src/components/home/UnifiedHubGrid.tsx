@@ -47,8 +47,110 @@ export default async function UnifiedHubGrid() {
       {/* 4-Column Bento Grid */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4 md:gap-5">
 
-        {/* ═══════════ COLUMN 1: LATEST NEWS ═══════════ */}
-        <div className="bg-gradient-to-b from-[#003822] via-[#002B19] to-[#001D11] text-white p-5 rounded-lg flex flex-col h-[460px] lg:h-[480px] xl:h-[500px] overflow-hidden border border-black/10 hover:border-green-primary/60 shadow-lg hover:shadow-2xl transition-shadow">
+        {/* ═══════════ COLUMN 1: NEXT MATCH ═══════════ */}
+        <div className="bg-gradient-to-b from-[#00331F] via-[#002415] to-[#00160D] text-white p-5 rounded-lg flex flex-col min-h-[400px] md:h-[460px] lg:h-[480px] xl:h-[500px] overflow-hidden border border-black/10 hover:border-green-primary/60 shadow-lg hover:shadow-2xl transition-shadow">
+          {/* Header */}
+          <div className="flex items-center justify-between bg-gradient-to-b from-[#00704D] to-[#005238] text-white px-5 py-4 -mx-5 -mt-5 mb-4 shrink-0 border-b border-emerald-500/20">
+            <span className="text-[11px] font-extrabold uppercase tracking-[0.2em] text-white">
+              NEXT MATCH
+            </span>
+          </div>
+
+          {/* Teams VS */}
+          <div className="relative z-10 flex items-center justify-between my-2">
+            {/* Home Team */}
+            <div className="flex flex-col items-center group/team cursor-pointer">
+              <div className="relative w-[72px] h-[72px] bg-white rounded-full flex items-center justify-center p-2 mb-2 shadow-lg ring-2 ring-emerald-400/40 group-hover/team:brightness-110 transition-[filter]">
+                {nextMatch?.homeTeam.logo ? (
+                  <Image
+                    src={nextMatch.homeTeam.logo}
+                    alt={nextMatch.homeTeam.name || "Zimbabwe"}
+                    width={44}
+                    height={44}
+                    className="object-contain"
+                  />
+                ) : (
+                  <span className="text-lg font-heading font-black text-zru-green/60">
+                    {(nextMatch?.homeTeam.name || "ZIM").split(" ").map((w: string) => w[0]).join("").substring(0, 3)}
+                  </span>
+                )}
+              </div>
+              <span className="font-heading font-black text-xs leading-[1.1] text-center text-white uppercase">
+                {nextMatch ? nextMatch.homeTeam.name.split(" ").join("\n") : "ZIMBABWE\nSABLES"}
+              </span>
+            </div>
+
+            {/* VS Badge */}
+            <div className="flex flex-col items-center">
+              <div className="w-10 h-10 rounded-full bg-emerald-500/20 border border-emerald-400/40 flex items-center justify-center text-emerald-300 font-heading font-black text-base shadow-inner mb-1">
+                VS
+              </div>
+              {nextMatch?.competition && (
+                <span className="text-[8px] font-extrabold tracking-widest text-emerald-400 uppercase max-w-[80px] text-center">
+                  {nextMatch.competition}
+                </span>
+              )}
+            </div>
+
+            {/* Away Team */}
+            <div className="flex flex-col items-center group/team cursor-pointer">
+              <div className="relative w-[72px] h-[72px] bg-white rounded-full flex items-center justify-center p-2 mb-2 shadow-lg ring-2 ring-white/20 group-hover/team:brightness-110 transition-[filter]">
+                {nextMatch?.awayTeam.logo ? (
+                  <Image
+                    src={nextMatch.awayTeam.logo}
+                    alt={nextMatch.awayTeam.name || "Opponent"}
+                    width={44}
+                    height={44}
+                    className="object-contain"
+                  />
+                ) : (
+                  <span className="text-lg font-heading font-black text-black/40">
+                    {(nextMatch?.awayTeam.name || "TBA").split(" ").map((w: string) => w[0]).join("").substring(0, 3)}
+                  </span>
+                )}
+              </div>
+              <span className="font-heading font-black text-xs leading-[1.1] text-center text-white uppercase">
+                {nextMatch ? nextMatch.awayTeam.name.split(" ").join("\n") : "TBA"}
+              </span>
+            </div>
+          </div>
+
+          {/* Match Details */}
+          <div className="relative z-10 bg-black/60 rounded-xl p-4 space-y-2 my-2">
+            <div className="flex items-center gap-2 text-white/90">
+              <Calendar size={16} className="text-emerald-400" />
+              <span className="font-body font-bold text-[11px] uppercase tracking-wider">
+                {nextMatch?.dateIso
+                  ? new Date(nextMatch.dateIso).toLocaleDateString("en-GB", { weekday: "short", day: "2-digit", month: "short", year: "numeric" }).toUpperCase()
+                  : "SAT, 24 MAY 2026"}
+              </span>
+            </div>
+            <div className="flex items-center gap-2 text-white/90">
+              <MapPin size={16} className="text-emerald-400" />
+              <span className="font-body font-bold text-[11px] uppercase tracking-wider truncate">
+                {nextMatch?.venue?.toUpperCase() || "HARARE SPORTS CLUB"}
+              </span>
+            </div>
+            <div className="flex items-center gap-2 text-white/90">
+              <Clock size={16} className="text-emerald-400" />
+              <span className="font-body font-bold text-[11px] uppercase tracking-wider">
+                {nextMatch?.time ? `${nextMatch.time} KICKOFF` : "15:30 CAT KICKOFF"}
+              </span>
+            </div>
+          </div>
+
+          {/* Match Centre CTA */}
+          <Link
+            href="/match-centre"
+            className="relative z-10 mt-auto w-full bg-emerald-500 hover:bg-emerald-400 text-black font-extrabold flex items-center justify-center gap-2 rounded-lg py-3 transition-colors duration-300 shadow-lg shadow-emerald-950/40 text-xs tracking-widest uppercase group/btn font-heading"
+          >
+            <span>MATCH CENTRE</span>
+            <ArrowRight size={16} className="transition-transform duration-300 group-hover/btn:translate-x-1" />
+          </Link>
+        </div>
+
+        {/* ═══════════ COLUMN 2: LATEST NEWS ═══════════ */}
+        <div className="bg-gradient-to-b from-[#003822] via-[#002B19] to-[#001D11] text-white p-5 rounded-lg flex flex-col min-h-[400px] md:h-[460px] lg:h-[480px] xl:h-[500px] overflow-hidden border border-black/10 hover:border-green-primary/60 shadow-lg hover:shadow-2xl transition-shadow">
           {/* Header */}
           <div className="flex items-center justify-between bg-gradient-to-b from-[#00704D] to-[#005238] text-white px-5 py-4 -mx-5 -mt-5 mb-4 shrink-0 border-b border-emerald-500/20">
             <span className="text-[11px] font-extrabold uppercase tracking-[0.2em] text-white">
@@ -145,97 +247,10 @@ export default async function UnifiedHubGrid() {
           </Link>
         </div>
 
-        {/* ═══════════ COLUMN 2: NEXT MATCH ═══════════ */}
-        <div className="bg-gradient-to-b from-[#00331F] via-[#002415] to-[#00160D] text-white p-5 rounded-lg flex flex-col h-[460px] lg:h-[480px] xl:h-[500px] overflow-hidden border border-black/10 hover:border-green-primary/60 shadow-lg hover:shadow-2xl transition-shadow">
-          {/* Header */}
-          <div className="flex items-center justify-between bg-gradient-to-b from-[#00704D] to-[#005238] text-white px-5 py-4 -mx-5 -mt-5 mb-4 shrink-0 border-b border-emerald-500/20">
-            <span className="text-[11px] font-extrabold uppercase tracking-[0.2em] text-white">
-              NEXT MATCH
-            </span>
-          </div>
+        {/* ═══════════ COLUMN 3: OFFICIAL SHOP ═══════════ */}
+        <ShopCardShowcase />
 
-          {/* Teams VS */}
-          <div className="relative z-10 flex items-center justify-between my-2">
-            {/* Home Team */}
-            <div className="flex flex-col items-center group/team cursor-pointer">
-              <div className="relative w-[72px] h-[72px] bg-white rounded-full flex items-center justify-center p-2 mb-2 shadow-lg ring-2 ring-emerald-400/40 group-hover/team:brightness-110 transition-[filter]">
-                <Image
-                  src="/images/teams/zimbabwe.png"
-                  alt="Zimbabwe"
-                  width={44}
-                  height={44}
-                  className="object-contain"
-                />
-              </div>
-              <span className="font-heading font-black text-xs leading-[1.1] text-center text-white uppercase">
-                {nextMatch ? nextMatch.homeTeam.name.split(" ").join("\n") : "ZIMBABWE\nSABLES"}
-              </span>
-            </div>
-
-            {/* VS Badge */}
-            <div className="flex flex-col items-center">
-              <div className="w-10 h-10 rounded-full bg-emerald-500/20 border border-emerald-400/40 flex items-center justify-center text-emerald-300 font-heading font-black text-base shadow-inner mb-1">
-                VS
-              </div>
-              {nextMatch?.competition && (
-                <span className="text-[8px] font-extrabold tracking-widest text-emerald-400 uppercase max-w-[80px] text-center">
-                  {nextMatch.competition}
-                </span>
-              )}
-            </div>
-
-            {/* Away Team */}
-            <div className="flex flex-col items-center group/team cursor-pointer">
-              <div className="relative w-[72px] h-[72px] bg-white rounded-full flex items-center justify-center p-2 mb-2 shadow-lg ring-2 ring-white/20 group-hover/team:brightness-110 transition-[filter]">
-                <Image
-                  src="/images/teams/namibia.png"
-                  alt="Namibia"
-                  width={44}
-                  height={44}
-                  className="object-contain"
-                />
-              </div>
-              <span className="font-heading font-black text-xs leading-[1.1] text-center text-white uppercase">
-                {nextMatch ? nextMatch.awayTeam.name.split(" ").join("\n") : "NAMIBIA\nWELWITSCHIAS"}
-              </span>
-            </div>
-          </div>
-
-          {/* Match Details */}
-          <div className="relative z-10 bg-black/60 rounded-xl p-4 space-y-2 my-2">
-            <div className="flex items-center gap-2 text-white/90">
-              <Calendar size={16} className="text-emerald-400" />
-              <span className="font-body font-bold text-[11px] uppercase tracking-wider">
-                {nextMatch?.dateIso
-                  ? new Date(nextMatch.dateIso).toLocaleDateString("en-GB", { weekday: "short", day: "2-digit", month: "short", year: "numeric" }).toUpperCase()
-                  : "SAT, 24 MAY 2026"}
-              </span>
-            </div>
-            <div className="flex items-center gap-2 text-white/90">
-              <MapPin size={16} className="text-emerald-400" />
-              <span className="font-body font-bold text-[11px] uppercase tracking-wider truncate">
-                {nextMatch?.venue?.toUpperCase() || "HARARE SPORTS CLUB"}
-              </span>
-            </div>
-            <div className="flex items-center gap-2 text-white/90">
-              <Clock size={16} className="text-emerald-400" />
-              <span className="font-body font-bold text-[11px] uppercase tracking-wider">
-                {nextMatch?.time ? `${nextMatch.time} KICKOFF` : "15:30 CAT KICKOFF"}
-              </span>
-            </div>
-          </div>
-
-          {/* Match Centre CTA */}
-          <Link
-            href="/match-centre"
-            className="relative z-10 mt-auto w-full bg-emerald-500 hover:bg-emerald-400 text-black font-extrabold flex items-center justify-center gap-2 rounded-lg py-3 transition-colors duration-300 shadow-lg shadow-emerald-950/40 text-xs tracking-widest uppercase group/btn font-heading"
-          >
-            <span>MATCH CENTRE</span>
-            <ArrowRight size={16} className="transition-transform duration-300 group-hover/btn:translate-x-1" />
-          </Link>
-        </div>
-
-        {/* ═══════════ COLUMN 3: MATCH TICKETS ═══════════ */}
+        {/* ═══════════ COLUMN 4: MATCH TICKETS ═══════════ */}
         <div className="bg-green-primary text-white p-5 rounded-lg flex flex-col gap-4 relative overflow-hidden group">
           {/* Soft blur accent */}
           <div className="absolute top-0 right-0 w-24 h-24 bg-accent-teal/10 blur-3xl rounded-full" />
@@ -277,9 +292,6 @@ export default async function UnifiedHubGrid() {
             Ticket info →
           </Link>
         </div>
-
-        {/* ═══════════ COLUMN 4: OFFICIAL SHOP ═══════════ */}
-        <ShopCardShowcase />
 
       </div>
     </section>

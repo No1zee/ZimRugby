@@ -190,6 +190,7 @@ export default function TicketsPage() {
             src="/images/campaign/hero.png" 
             alt="Zimbabwe Rugby Stadium"
             fill
+            sizes="100vw"
             className="object-cover opacity-10 blur-[2px] grayscale"
             priority
           />
@@ -372,7 +373,7 @@ export default function TicketsPage() {
               }
             ].map((step, i) => (
               <div key={i} className="relative group">
-                <div className="text-[60px] font-black text-black/5 absolute -top-10 -left-4 pointer-events-none group-hover:text-zru-green/5 transition-colors">{step.step}</div>
+                <div className="text-[40px] md:text-[60px] font-black text-black/5 absolute -top-6 md:-top-10 left-2 md:-left-4 pointer-events-none group-hover:text-zru-green/5 transition-colors">{step.step}</div>
                 <div className="p-8 rounded-xl bg-white border border-black/5 shadow-sm transition-all duration-500 h-full">
                   <div className="w-12 h-12 bg-zru-green/10 rounded flex items-center justify-center mb-8">
                     <step.icon className="w-6 h-6 text-zru-green" />

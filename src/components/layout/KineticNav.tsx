@@ -3,7 +3,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { ChevronRight, Ticket, Users, ShoppingBag, ShieldCheck, ArrowUpRight } from "lucide-react";
+import { ChevronRight, Ticket, Users, ShoppingBag, ShieldCheck, ArrowUpRight, User } from "lucide-react";
 import gsap from "gsap";
 import type { NavItem, NavChild } from "@/lib/navConfig";
 
@@ -155,8 +155,21 @@ export default function KineticNav({ isOpen, onClose, navItems, pathname }: Kine
                 </button>
               </div>
 
-              {/* Nav links */}
+              {/* Quick Actions strip */}
+              <div data-menu-fade className="k-quick-actions">
+                <Link href="/tickets" onClick={onClose} className="k-quick-action-primary">
+                  <Ticket className="w-4 h-4" />
+                  <span>MATCH TICKETS</span>
+                </Link>
+                <Link href="/shop" onClick={onClose} className="k-quick-action-secondary">
+                  <ShoppingBag className="w-4 h-4" />
+                  <span>STORE</span>
+                </Link>
+              </div>
+
+              {/* Nav links — grouped under Browse */}
               <div className="k-links-area">
+                <div className="k-section-label" data-menu-fade>BROWSE</div>
                 <ul className="k-nav-list">
                   {navItems.map((item) => {
                     const hasChildren = !!item.children?.length;
@@ -199,25 +212,26 @@ export default function KineticNav({ isOpen, onClose, navItems, pathname }: Kine
                     );
                   })}
                 </ul>
+
+                {/* Account & Actions section */}
+                <div className="k-section-label k-section-label--actions" data-menu-fade>ACCOUNT &amp; ACTIONS</div>
+                <ul className="k-nav-list" data-menu-fade>
+                  <li className="k-menu-item">
+                    <Link href="/login" onClick={onClose} className="k-link">
+                      <span className="k-link-text">SIGN IN</span>
+                    </Link>
+                  </li>
+                  <li className="k-menu-item">
+                    <Link href="/fan-zone" onClick={onClose} className="k-link">
+                      <span className="k-link-text">FAN ZONE</span>
+                    </Link>
+                  </li>
+                </ul>
               </div>
 
               {/* Bottom CTA strip */}
               <div className="k-bottom-strip">
                 <div className="k-bottom-inner">
-                  <div className="k-cta-group">
-                    <Link href="/tickets" onClick={onClose} className="k-cta-primary">
-                      <Ticket className="w-4 h-4" />
-                      <span>MATCH TICKETS</span>
-                    </Link>
-                    <Link href="/fan-zone" onClick={onClose} className="k-cta-secondary">
-                      <Users className="w-4 h-4" />
-                      <span>FAN ZONE</span>
-                    </Link>
-                    <Link href="/clubhouse" onClick={onClose} className="k-cta-secondary">
-                      <ShoppingBag className="w-4 h-4" />
-                      <span>STORE</span>
-                    </Link>
-                  </div>
                   <div className="k-copyright">
                     <ShieldCheck className="w-3.5 h-3.5" />
                     <span>ZIMBABWE RUGBY UNION &copy; {new Date().getFullYear()}</span>

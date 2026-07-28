@@ -32,6 +32,7 @@ export default function HeroBanner({
         src={backgroundImage}
         alt={title}
         fill
+        sizes="100vw"
         priority
         className="object-cover"
       />

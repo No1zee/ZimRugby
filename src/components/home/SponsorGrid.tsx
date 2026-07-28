@@ -3,7 +3,8 @@
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, ExternalLink } from "lucide-react";
+import SlantedButton from "@/components/ui/SlantedButton";
 
 const SPONSORS = [
   {
@@ -80,7 +81,7 @@ export default function SponsorGrid() {
     };
   }, []);
 
-  // Subtle auto-rotation every 4 seconds unless hovered or off-screen
+  // Auto-rotation every 4 seconds unless hovered
   useEffect(() => {
     if (isHovered) return;
     const timer = setInterval(() => {
@@ -94,99 +95,119 @@ export default function SponsorGrid() {
   const activeSponsor = SPONSORS[activeIdx];
 
   return (
-    <section ref={sectionRef} id="partners" className="bg-[#FDFBF0] border-t border-black/5 pt-8 sm:pt-10 pb-0 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-[1280px] mx-auto space-y-6">
+    <section ref={sectionRef} id="partners" className="bg-[#FDFBF0] border-t border-black/5 pt-12 sm:pt-16 pb-0 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-[1280px] mx-auto space-y-10">
         
-        {/* ── 1. Minimal Header ── */}
-        <div className="space-y-1.5">
-          <h2 className="font-heading text-3xl sm:text-4xl font-black uppercase text-rich-black tracking-tight">
-            POWERING ZIMBABWE{" "}
-            <span className="text-accent-teal">RUGBY</span>
+        {/* ── 1. Centered Header Narrative ── */}
+        <div className="text-center space-y-3 max-w-2xl mx-auto">
+          <h2 className="font-heading text-3xl sm:text-5xl font-black uppercase text-rich-black tracking-tight leading-tight">
+            POWERING ZIMBABWE <span className="text-accent-teal">RUGBY</span>
           </h2>
-          <div className="w-12 h-1 bg-[#006747] rounded-full mt-2 opacity-80" />
+          <p className="text-xs sm:text-sm text-rich-black/70 font-normal max-w-lg mx-auto">
+            Proudly supported by world-class commercial partners driving national team excellence and grassroots growth.
+          </p>
+          <div className="w-16 h-1 bg-[#006747] rounded-full mx-auto opacity-90 mt-2" />
         </div>
 
-        {/* ── 2. Interactive Logo Dock (5 Partners) ── */}
+        {/* ── 2. Unified Commercial Hub (Logo Dock + Active Spotlight) ── */}
         <div
-          className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 max-w-5xl mx-auto"
+          className="bg-white rounded-3xl p-6 sm:p-8 border border-black/10 shadow-lg space-y-8"
           onMouseEnter={() => setIsHovered(true)}
           onMouseLeave={() => setIsHovered(false)}
         >
-          {SPONSORS.map((s, idx) => {
-            const isActive = idx === activeIdx;
-            return (
-              <button
-                key={s.id}
-                onClick={() => setActiveIdx(idx)}
-                className={`group relative bg-white rounded-xl p-4 h-[84px] flex items-center justify-center border transition-colors duration-300 cursor-pointer ${
-                  isActive
-                    ? "bg-gradient-to-b from-[#00704D] to-[#005238] border-transparent shadow-md"
-                    : "border-gray-200/80 shadow-xs hover:border-[#006747]/40 hover:shadow-sm"
-                }`}
-              >
-                <div className="relative w-full h-10 transition-[filter] duration-300">
-                  <Image
-                    src={s.logo}
-                    alt={s.name}
-                    fill
-                    className={`object-contain transition-[filter] duration-300 ${
-                      isActive ? "opacity-100 brightness-110" : "opacity-60 group-hover:opacity-100"
-                    }`}
-                  />
-                </div>
-                {isActive && (
-                  <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full bg-[#006747]" />
-                )}
-              </button>
-            );
-          })}
-        </div>
-
-        {/* ── 3. Active Partner Minimal Spotlight Card ── */}
-        <div className="max-w-2xl mx-auto bg-white rounded-2xl p-5 sm:p-6 border border-gray-200/90 shadow-md hover:shadow-lg transition-shadow duration-300 flex flex-col sm:flex-row items-center justify-between gap-6">
-          
-          <div className="space-y-1 text-center sm:text-left flex-1 min-w-0">
-            <div className="flex items-center justify-center sm:justify-start gap-2 mb-1">
-              <span className="text-[9px] font-black uppercase tracking-widest bg-gradient-to-b from-[#00704D] to-[#005238] text-white px-2 py-0.5 rounded">
-                {activeSponsor.role}
-              </span>
-            </div>
-            <h3 className="font-heading text-lg font-black uppercase text-gray-900 tracking-tight">
-              {activeSponsor.name}
-            </h3>
-            <p className="text-xs text-gray-600 leading-relaxed max-w-md">
-              {activeSponsor.blurb}
-            </p>
+          {/* Logo Dock — Clean White Cards with High-Contrast Green Border Highlight */}
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
+            {SPONSORS.map((s, idx) => {
+              const isActive = idx === activeIdx;
+              return (
+                <button
+                  key={s.id}
+                  onClick={() => setActiveIdx(idx)}
+                  className={`group relative bg-white rounded-2xl p-4 h-[90px] flex items-center justify-center border transition-all duration-300 cursor-pointer ${
+                    isActive
+                      ? "border-[#006747] ring-2 ring-[#006747]/30 shadow-md scale-[1.02]"
+                      : "border-black/5 hover:border-[#006747]/40 shadow-xs hover:shadow-sm"
+                  }`}
+                >
+                  <div className="relative w-full h-11 transition-[filter] duration-300">
+                    <Image
+                      src={s.logo}
+                      alt={s.name}
+                      fill
+                      className={`object-contain transition-all duration-300 ${
+                        isActive ? "opacity-100 scale-105" : "opacity-50 group-hover:opacity-100"
+                      }`}
+                    />
+                  </div>
+                  {isActive && (
+                    <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-8 h-1 bg-[#006747] rounded-full" />
+                  )}
+                </button>
+              );
+            })}
           </div>
 
-          <a
-            href={activeSponsor.href}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="bg-gradient-to-b from-[#00704D] to-[#005238] hover:from-[#005238] hover:to-[#004522] text-white font-extrabold text-[10px] tracking-widest uppercase px-5 py-3 rounded-lg shadow-md transition-colors flex items-center gap-1.5 shrink-0 group"
-          >
-            <span>VISIT SITE</span>
-            <ArrowRight size={14} className="transition-transform duration-300 group-hover:translate-x-1" />
-          </a>
+          {/* Active Partner Spotlight Card */}
+          <div className="bg-[#002B19] text-white rounded-2xl p-6 sm:p-8 border border-emerald-500/20 shadow-md flex flex-col sm:flex-row items-center justify-between gap-6 relative overflow-hidden">
+            <div
+              className="absolute inset-0 opacity-10 pointer-events-none"
+              style={{
+                backgroundImage: "radial-gradient(circle, #ffffff 1px, transparent 1px)",
+                backgroundSize: "20px 20px",
+              }}
+            />
+            <div className="relative z-10 space-y-2 text-center sm:text-left flex-1 min-w-0">
+              <div className="flex items-center justify-center sm:justify-start gap-2 mb-1">
+                <span className="text-[10px] font-black uppercase tracking-widest bg-emerald-500/20 text-emerald-400 border border-emerald-400/30 px-3 py-1 rounded-md">
+                  {activeSponsor.role}
+                </span>
+              </div>
+              <h3 className="font-heading text-xl sm:text-2xl font-black uppercase tracking-tight text-white">
+                {activeSponsor.name}
+              </h3>
+              <p className="text-xs sm:text-sm text-white/80 leading-relaxed max-w-xl font-normal">
+                {activeSponsor.blurb}
+              </p>
+            </div>
 
-        </div>
-
-        {/* ── 4. Minimal Partner CTA ── */}
-        <div className="text-center pt-2">
-          <Link
-            href="/partners"
-            className="text-[11px] font-extrabold uppercase tracking-[0.25em] text-[#006747] hover:underline inline-flex items-center gap-1.5 transition-colors"
-          >
-            BECOME AN OFFICIAL PARTNER &rarr;
-          </Link>
+            <SlantedButton
+              href={activeSponsor.href}
+              variant="primary"
+              size="sm"
+              rightIcon={<ExternalLink size={14} />}
+              className="relative z-10 shrink-0"
+            >
+              VISIT SITE
+            </SlantedButton>
+          </div>
         </div>
 
       </div>
 
-      {/* Green bottom padding */}
-      <div className="bg-[#006747] -mx-4 sm:-mx-6 lg:-mx-8 px-4 sm:px-6 lg:px-8 py-10 sm:py-14" />
+      {/* ── 4. Straddled Green & White Bottom Banner with SlantedButton ── */}
+      <div className="relative -mx-4 sm:-mx-6 lg:-mx-8 mt-12">
+        {/* Green top half strip */}
+        <div className="bg-[#006747] h-20 sm:h-24 flex items-center justify-center">
+          <span className="text-white/40 text-[10px] font-extrabold tracking-[0.3em] uppercase hidden sm:block">
+            COMMERCIAL OPPORTUNITIES • ROAD TO AUSTRALIA 2027
+          </span>
+        </div>
+        
+        {/* White bottom half strip */}
+        <div className="bg-white h-20 sm:h-24" />
+
+        {/* SlantedButton — straddled 50% on green & 50% on white */}
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-auto z-20">
+          <SlantedButton
+            href="/partners"
+            variant="primary"
+            size="md"
+            rightIcon={<ArrowRight size={18} />}
+          >
+            BECOME AN OFFICIAL PARTNER
+          </SlantedButton>
+        </div>
+      </div>
     </section>
   );
 }
-
-

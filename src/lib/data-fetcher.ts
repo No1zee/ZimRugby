@@ -24,18 +24,22 @@ export interface Report {
   type?: 'news' | 'video';
 }
 
-async function readStaticJson<T>(filename: string): Promise<T[]> {
+/**
+ * Fetch static JSON from public/data with ISR revalidation.
+ * Uses fetch() with next.revalidate so Next.js caches and revalidates automatically.
+ */
+async function readStaticJson<T>(filename: string, revalidateSeconds: number): Promise<T[]> {
   try {
     if (typeof window === 'undefined') {
-      // Use dynamic imports to avoid bundling fs/path in the browser
-      const [fs, path] = await Promise.all([
-        import('fs'),
-        import('path')
-      ]);
-      const filePath = path.join(process.cwd(), 'public', 'data', filename);
-      const fileContent = fs.readFileSync(filePath, 'utf8');
-      return JSON.parse(fileContent);
+      // Server-side: fetch via internal URL to get ISR caching
+      const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
+      const res = await fetch(`${baseUrl}/data/${filename}`, {
+        next: { revalidate: revalidateSeconds },
+      });
+      if (!res.ok) throw new Error(`Failed to fetch ${filename}`);
+      return await res.json();
     } else {
+      // Client-side: direct fetch
       const res = await fetch(`/data/${filename}`);
       if (!res.ok) throw new Error(`Failed to fetch ${filename}`);
       return await res.json();
@@ -47,16 +51,16 @@ async function readStaticJson<T>(filename: string): Promise<T[]> {
 }
 
 export async function getLiveMatches(): Promise<Match[]> {
-  const data = await readStaticJson<Match>('matches.json');
-  return data.filter((m: Match) => m.homeTeam?.name !== 'Date'); // Filter header row if present
+  const data = await readStaticJson<Match>('matches.json', 60);
+  return data.filter((m: Match) => m.homeTeam?.name !== 'Date');
 }
 
 export async function getLatestReports(): Promise<Report[]> {
-  return await readStaticJson<Report>('reports.json');
+  return await readStaticJson<Report>('reports.json', 300);
 }
 
 export async function getSocialPosts(): Promise<Report[]> {
-  return await readStaticJson<Report>('social.json');
+  return await readStaticJson<Report>('social.json', 300);
 }
 
 export async function getReportById(id: string): Promise<Report | undefined> {

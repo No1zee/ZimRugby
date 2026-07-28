@@ -10,7 +10,7 @@ import SlantedButton from "../ui/SlantedButton";
 import GlobalAnnouncementBar from "./GlobalAnnouncementBar";
 import KineticNav from "@/components/layout/KineticNav";
 import type { NavItem, NavChild } from "@/lib/navConfig";
-import { navConfig } from "@/lib/navConfig";
+import { mainNav, utilityNav } from "@/lib/navConfig";
 import type { SearchEventResult } from "@/types";
 
 /* ── Static config ── */
@@ -25,8 +25,7 @@ export default function Navigation() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
-  const [expandedMobile, setExpandedMobile] = useState<string[]>([]);
-  const [dynamicNavItems, setDynamicNavItems] = useState<NavItem[]>(navConfig);
+  const [dynamicNavItems, setDynamicNavItems] = useState<NavItem[]>(mainNav);
 
   /* ── Search state ── */
   const [isSearchOpen, setIsSearchOpen] = useState(false);
@@ -101,7 +100,7 @@ export default function Navigation() {
               return { ...item, children: data.teams };
             }
             if (
-              (item.label === "DOMESTIC & MATCH CENTRE" || item.label === "DOMESTIC RUGBY") &&
+              item.label === "DOMESTIC & MATCH CENTRE" &&
               (data.competitions || data.events)
             ) {
               return { ...item, children: [...(data.competitions || []), ...(data.events || [])] };
@@ -146,7 +145,6 @@ export default function Navigation() {
       const [hrefPath, hrefQuery] = href.split("?");
       const pathMatches = pathname === hrefPath;
       if (!pathMatches) return false;
-      /* If this item has children, only show active when no child matches (parent is fallback) */
       if (children?.length) {
         const childMatches = children.some((child) => {
           const [childPath, childQuery] = child.href.split("?");
@@ -172,14 +170,85 @@ export default function Navigation() {
   const closeSearch = () => { setIsSearchOpen(false); setSearchQuery(""); };
 
   const navTextClass = showOpaqueHeader ? "text-black/70 hover:text-black" : "text-white/70 hover:text-white";
-  const actionBtnClass = showOpaqueHeader
-    ? "text-black/70 hover:text-black hover:bg-black/5"
-    : "text-white/70 hover:text-white hover:bg-white/10";
 
   return (
     <header className="fixed top-0 left-0 w-full z-50">
       {pathname !== "/fan-zone" && <GlobalAnnouncementBar />}
 
+      {/* ═══ UTILITY BAR ═══ */}
+      <div
+        className={`w-full transition-all duration-500 ${
+          showOpaqueHeader
+            ? "bg-[#002D1A]/95 backdrop-blur-md border-b border-white/5"
+            : "bg-[#002D1A]/80 backdrop-blur-sm"
+        }`}
+      >
+        <div className="w-full px-4 sm:px-6 lg:px-8 flex items-center justify-end gap-1 sm:gap-2 h-9">
+          {/* Desktop utility items */}
+          <div className="hidden lg:flex items-center gap-2">
+            {/* Live Score Ticker Pill */}
+            <div className="flex items-center gap-2 bg-[#001D11] border border-emerald-500/30 px-3 py-1 rounded-full text-[10px] font-heading font-black tracking-wider text-emerald-400">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+              <span>LIVE: ZIMBABWE 30 - 28 NAMIBIA [FINAL]</span>
+            </div>
+
+            {utilityNav.map((item) => {
+              const Icon = item.icon;
+              return (
+                <Link
+                  key={item.label}
+                  href={item.href || "#"}
+                  className={`flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-heading font-black uppercase tracking-wider transition-all ${
+                    item.label === "TICKETS"
+                      ? "bg-[#006747] text-white hover:bg-[#006747]/80"
+                      : "text-white/60 hover:text-white hover:bg-white/10"
+                  }`}
+                >
+                  <Icon className="w-3 h-3" />
+                  <span>{item.label}</span>
+                </Link>
+              );
+            })}
+
+            <div className="w-px h-4 bg-white/15 mx-1" />
+
+            <button
+              onClick={() => setIsSearchOpen(true)}
+              className="p-1.5 text-white/50 hover:text-white hover:bg-white/10 rounded-full transition-all cursor-pointer"
+              aria-label="Search site"
+            >
+              <Search className="w-3.5 h-3.5" />
+            </button>
+
+            <Link
+              href="/login"
+              className="flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-heading font-black uppercase tracking-wider text-white/60 hover:text-white hover:bg-white/10 transition-all"
+            >
+              <User className="w-3 h-3" />
+              <span>SIGN IN</span>
+            </Link>
+          </div>
+
+          {/* Mobile utility: Search + Tickets */}
+          <div className="lg:hidden flex items-center gap-1">
+            <button
+              onClick={() => setIsSearchOpen(true)}
+              className={`p-1.5 transition-colors cursor-pointer text-white/60 hover:text-white`}
+              aria-label="Search site"
+            >
+              <Search className="w-4 h-4" />
+            </button>
+            <Link
+              href="/tickets"
+              className="flex items-center gap-1 px-2.5 py-1 rounded-full bg-[#006747] text-white text-[10px] font-heading font-black uppercase tracking-wider"
+            >
+              TICKETS
+            </Link>
+          </div>
+        </div>
+      </div>
+
+      {/* ═══ MAIN NAV ═══ */}
       <nav
         className={`w-full transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${
           showOpaqueHeader
@@ -187,14 +256,13 @@ export default function Navigation() {
             : "bg-transparent py-5"
         }`}
       >
-        <div className="w-full pl-2 sm:pl-4 lg:pl-8 pr-2 sm:pr-4 lg:pr-8 grid grid-cols-[1fr_auto] lg:grid-cols-[auto_1fr_auto] items-center gap-1.5 sm:gap-2 lg:gap-4">
+        <div className="w-full px-4 sm:px-6 lg:px-8 flex items-center justify-between lg:justify-start gap-1.5 sm:gap-2 lg:gap-4">
 
           {/* ── Logo Brand Block ── */}
           <Link
             href="/"
             className="flex items-center gap-2 sm:gap-2.5 md:gap-4 group z-50 transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] shrink-0"
           >
-            {/* Emblem — large on hero, shrinks on scroll */}
             <div
               className={`relative transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:rotate-6 flex items-center justify-center shrink-0 ${
                 isOnHero
@@ -212,7 +280,6 @@ export default function Navigation() {
               />
             </div>
 
-            {/* Text — hidden on hero, shows when scrolled */}
             <div
               className={`flex flex-col justify-center items-center transition-opacity duration-500 ${
                 isOnHero ? "opacity-0 pointer-events-none" : "opacity-100"
@@ -240,7 +307,7 @@ export default function Navigation() {
           </Link>
 
           {/* ── Desktop Nav Items ── */}
-          <div className="hidden lg:flex items-center justify-center gap-2 xl:gap-5 2xl:gap-8 overflow-visible px-2">
+          <div className="hidden lg:flex items-center justify-center gap-2 xl:gap-5 2xl:gap-8 overflow-visible px-2 flex-1">
             <div className="flex items-center gap-2.5 xl:gap-5 2xl:gap-8 overflow-visible">
               {dynamicNavItems.map((item) => (
                 <div
@@ -305,40 +372,19 @@ export default function Navigation() {
             </div>
           </div>
 
-          {/* ── Mobile Actions ── */}
-          <div className="lg:hidden flex items-center gap-1.5 sm:gap-2 shrink-0">
+          {/* ── Mobile: Hamburger (triggers KineticNav) ── */}
+          <div className="lg:hidden shrink-0">
             <button
-              onClick={() => setIsSearchOpen(true)}
-              className={`p-1.5 sm:p-2 transition-colors cursor-pointer ${navTextClass}`}
-              aria-label="Search site"
+              onClick={toggleMenu}
+              className="p-2 transition-colors cursor-pointer"
+              aria-label="Open menu"
             >
-              <Search className="w-4.5 h-4.5 sm:w-5 sm:h-5" />
-            </button>
-            <SlantedButton href="/login" variant="primary" size="sm" className="px-4 sm:px-6 py-1.5 sm:py-2 text-[10px] sm:text-base">
-              <div className="flex items-center gap-1 sm:gap-1.5">
-                <User className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
-                <span className="hidden min-[380px]:inline text-[10px] sm:text-xs font-black uppercase tracking-wider">Sign In</span>
+              <div className="flex flex-col gap-1.5">
+                <span className={`block w-6 h-[2px] transition-all ${showOpaqueHeader ? "bg-black" : "bg-white"}`} />
+                <span className={`block w-4 h-[2px] transition-all ${showOpaqueHeader ? "bg-black" : "bg-white"}`} />
+                <span className={`block w-6 h-[2px] transition-all ${showOpaqueHeader ? "bg-black" : "bg-white"}`} />
               </div>
-            </SlantedButton>
-          </div>
-
-          {/* ── Desktop Actions ── */}
-          <div className="hidden lg:flex items-center justify-end gap-2 xl:gap-4 shrink-0 z-50">
-            <button
-              onClick={() => setIsSearchOpen(true)}
-              className={`p-2 xl:p-2.5 rounded-full transition-all cursor-pointer ${actionBtnClass}`}
-              aria-label="Search site"
-            >
-              <Search className="w-4 h-4 xl:w-5 xl:h-5" />
             </button>
-            <SlantedButton href="/login" variant="primary" size="sm">
-              <div className="flex items-center gap-1.5 xl:gap-2">
-                <User className="w-3.5 h-3.5 xl:w-4 xl:h-4" />
-                <span className="text-[10px] xl:text-xs font-black uppercase tracking-wider whitespace-nowrap">
-                  Sign In
-                </span>
-              </div>
-            </SlantedButton>
           </div>
         </div>
       </nav>

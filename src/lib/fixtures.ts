@@ -117,8 +117,8 @@ export function formatFixtureForUI(fixture: Fixture) {
  * Returns the earliest upcoming fixture or null.
  */
 export function getNextUnionMatch(
-  fixtures: { status?: string; dateIso?: string; teamCategory?: string; homeTeam: { name: string }; awayTeam: { name: string }; venue: string; competition: string; id: string | number; time: string; ticketUrl?: string }[]
-): { id: string | number; homeTeam: { name: string }; awayTeam: { name: string }; venue: string; competition: string; teamCategory?: string; dateIso: string; time: string; ticketUrl?: string } | null {
+  fixtures: { status?: string; dateIso?: string; teamCategory?: string; homeTeam: { name: string; logo?: string }; awayTeam: { name: string; logo?: string }; venue: string; competition: string; id: string | number; time: string; ticketUrl?: string }[]
+): { id: string | number; homeTeam: { name: string; logo?: string }; awayTeam: { name: string; logo?: string }; venue: string; competition: string; teamCategory?: string; dateIso: string; time: string; ticketUrl?: string } | null {
   const now = Date.now();
 
   const upcoming = fixtures
@@ -137,5 +137,5 @@ export function getNextUnionMatch(
     return ta - tb;
   });
 
-  return upcoming[0] as { id: string | number; homeTeam: { name: string }; awayTeam: { name: string }; venue: string; competition: string; teamCategory?: string; dateIso: string; time: string; ticketUrl?: string };
+  return upcoming[0] as { id: string | number; homeTeam: { name: string; logo?: string }; awayTeam: { name: string; logo?: string }; venue: string; competition: string; teamCategory?: string; dateIso: string; time: string; ticketUrl?: string };
 }

@@ -37,7 +37,7 @@ export default function VideoHubPage() {
       
       {/* 1. Widescreen Cinematic Header / Hero Video */}
       {featuredVideo && (
-        <div className="relative w-full h-[65vh] min-h-[450px] overflow-hidden flex items-end">
+        <div className="relative w-full h-[50vh] md:h-[65vh] min-h-[320px] md:min-h-[450px] overflow-hidden flex items-end">
           {/* Cover/Thumbnail */}
           <div className="absolute inset-0 z-0">
             <Image

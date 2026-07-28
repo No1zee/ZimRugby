@@ -38,6 +38,7 @@ export default function PageHero({
               src={backgroundImage}
               alt={title}
               fill
+              sizes="100vw"
               className="object-cover opacity-80"
               priority
             />
