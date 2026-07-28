@@ -178,7 +178,7 @@ function SlideContent({
                    <button
                      key={i}
                      onClick={() => setCurrentSlide(i)}
-                     className={`h-1.5 transition-all duration-500 clip-slanted-sm relative overflow-hidden ${
+                      className={`h-1.5 transition-[width,background-color] duration-500 clip-slanted-sm relative overflow-hidden ${
                        isActive ? 'w-12 bg-white/20' : 'w-6 bg-white/40 hover:bg-white/60'
                      }`}
                      aria-label={`Go to slide ${i + 1}`}
@@ -217,12 +217,22 @@ export default function HeroCarousel({ slides }: { slides: HeroSlideData[] }) {
   const [currentSlide, setCurrentSlide] = useState(0);
   const containerRef = useRef<HTMLElement>(null);
   const [isMobile, setIsMobile] = useState(false);
+  const [isPaused, setIsPaused] = useState(false);
+  const prefersReducedMotion = useRef(false);
 
   useEffect(() => {
     const checkMobile = () => setIsMobile(window.innerWidth < 768);
     checkMobile();
     window.addEventListener('resize', checkMobile);
     return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
+  useEffect(() => {
+    const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
+    prefersReducedMotion.current = mq.matches;
+    const handler = (e: MediaQueryListEvent) => { prefersReducedMotion.current = e.matches; };
+    mq.addEventListener('change', handler);
+    return () => mq.removeEventListener('change', handler);
   }, []);
 
   // Scroll Parallax Hooks — disabled on mobile to avoid RAF scroll listener overhead
@@ -246,18 +256,26 @@ export default function HeroCarousel({ slides }: { slides: HeroSlideData[] }) {
   }, [slides.length]);
 
   useEffect(() => {
+    if (prefersReducedMotion.current || isPaused) return;
     const timer = setInterval(() => {
       nextSlide();
-    }, 12000); // 12 seconds per slide (marinating time)
+    }, 12000);
 
     return () => clearInterval(timer);
-  }, [nextSlide]);
+  }, [nextSlide, isPaused]);
 
   const activeSlide = slides[currentSlide];
   const nextSlideData = slides[(currentSlide + 1) % slides.length];
 
   return (
-    <section ref={containerRef} className="relative w-full h-[100dvh] bg-rich-black overflow-hidden flex items-center justify-center">
+    <section
+      ref={containerRef}
+      className="relative w-full min-h-[85dvh] bg-rich-black overflow-hidden"
+      onMouseEnter={() => setIsPaused(true)}
+      onMouseLeave={() => setIsPaused(false)}
+      onFocus={() => setIsPaused(true)}
+      onBlur={() => setIsPaused(false)}
+    >
       {/* Hidden preloader for next slide image */}
       {nextSlideData && !nextSlideData.video && (
         <div className="hidden">

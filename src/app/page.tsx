@@ -31,7 +31,7 @@ async function HeroSection() {
 
 function HeroSkeleton() {
   return (
-    <section className="relative w-full h-[100dvh] bg-rich-black overflow-hidden flex items-center justify-center">
+    <section className="relative w-full min-h-[85dvh] bg-rich-black overflow-hidden flex items-end justify-start pb-24">
       <div className="absolute inset-0 bg-gradient-to-b from-[#003822] via-[#002B19] to-[#001D11]" />
       <div className="relative z-20 space-y-6 max-w-3xl px-4">
         <div className="space-y-3">
