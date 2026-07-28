@@ -46,7 +46,7 @@ export default function ContactPage() {
 
   return (
     <main className="bg-rich-black min-h-screen text-white flex flex-col justify-between selection:bg-zru-green selection:text-white">
-      <div className="flex-1 max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 pt-32 pb-24 w-full">
+      <div className="flex-1 max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 pt-32 pb-12 md:pb-16 w-full">
         
         {/* Header Section */}
         <section className="mb-16 border-l-4 border-zru-green pl-6">

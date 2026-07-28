@@ -8,7 +8,7 @@ export const metadata: Metadata = {
 export default function ComingSoonPage() {
   return (
     <main className="min-h-screen bg-rich-black flex flex-col">
-      <div className="flex-1 flex flex-col items-center justify-center pt-24 pb-24 px-6 text-center">
+      <div className="flex-1 flex flex-col items-center justify-center pt-12 md:pt-16 pb-12 md:pb-16 px-6 text-center">
         <span className="block text-[10px] font-black uppercase tracking-[0.4em] text-zru-green mb-6">
           Work in Progress
         </span>

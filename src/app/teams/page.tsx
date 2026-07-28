@@ -155,7 +155,7 @@ export default function TeamsPage() {
       />
 
       {/* Bento Grid */}
-      <div className="pt-16">
+      <div className="pt-10 md:pt-12">
         <Suspense>
           <TeamBentoGrid teams={TEAMS} />
         </Suspense>
@@ -163,43 +163,45 @@ export default function TeamsPage() {
 
       {/* Fan Zone Signup */}
       <section className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="bg-white border border-black/5 rounded-2xl p-6 md:p-8">
-          <FanZoneSignup variant="compact" />
-        </div>
+        <FanZoneSignup />
       </section>
 
-      {/* Development & Pathways — Dark CTA Banner (family pattern) */}
+      {/* Development & Pathways — Dark CTA Banner (homepage pattern) */}
       <section className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="p-8 sm:p-12 bg-rich-black text-white rounded-3xl border border-white/10 relative overflow-hidden shadow-2xl">
-          <div className="absolute top-0 right-0 w-1/3 h-full bg-[radial-gradient(circle_at_top_right,rgba(0,107,63,0.25),transparent_70%)]" />
+        <div
+          className="group/devCard rounded-3xl p-6 sm:p-10 md:p-14 flex flex-col lg:flex-row items-center justify-between gap-6 lg:gap-10 relative overflow-hidden shadow-2xl transition-shadow duration-500 ease-in-out touch-manipulation cursor-pointer border border-white/10"
+          style={{ background: "radial-gradient(circle at 50% 25%, #0A1C15 0%, #00331F 60%, #001A10 100%)" }}
+        >
+          <div className="absolute inset-0 border border-white/10 group-hover/devCard:border-[#006747]/60 group-focus-within/devCard:border-[#006747]/60 group-hover/devCard:shadow-[inset_0_0_60px_rgba(0,103,71,0.4)] transition-shadow duration-700 pointer-events-none rounded-3xl" />
+          <div className="absolute inset-0 opacity-0 group-hover/devCard:opacity-20 group-focus-within/devCard:opacity-20 pointer-events-none bg-gradient-to-r from-transparent via-[#006747] to-transparent transition-opacity duration-700" />
 
-          <div className="relative z-10 max-w-3xl space-y-6">
-            <span className="text-[10px] font-black text-zru-green uppercase tracking-[0.3em] font-heading">
+          <div className="relative z-10 max-w-3xl space-y-4">
+            <span className="text-[10px] font-black text-accent-teal uppercase tracking-[0.3em] font-heading">
               Development &amp; Pathways
             </span>
-            <h2 className="font-heading text-3xl sm:text-4xl font-black uppercase tracking-wide not-italic text-white leading-tight">
+            <h2 className="font-heading text-2xl sm:text-3xl text-white font-black uppercase tracking-tight leading-tight">
               From Schoolboy Leagues to National Caps
             </h2>
-            <p className="text-white/60 text-sm font-body leading-relaxed">
+            <p className="text-xs sm:text-sm text-white/80 font-body leading-relaxed line-clamp-2">
               From premier high school competitions to provincial leagues,
               follow the talent pipeline driving Zimbabwean players onto the
               international stage.
             </p>
+          </div>
 
-            <div className="flex flex-wrap gap-4 pt-4">
-              <Link
-                href="/schools"
-                className="inline-flex items-center gap-2 px-6 py-3.5 bg-zru-green hover:bg-green-700 text-white rounded-xl text-xs font-bold uppercase tracking-widest transition-all shadow-lg"
-              >
-                School Rugby Leagues <GraduationCap className="w-4 h-4" />
-              </Link>
-              <Link
-                href="/clubs"
-                className="inline-flex items-center gap-2 px-6 py-3.5 bg-white/10 hover:bg-white/20 text-white border border-white/15 rounded-xl text-xs font-bold uppercase tracking-widest transition-all"
-              >
-                Find a Club <MapPin className="w-4 h-4" />
-              </Link>
-            </div>
+          <div className="relative z-10 flex flex-wrap gap-3 shrink-0">
+            <Link
+              href="/schools"
+              className="group/btn inline-flex items-center gap-2 px-8 py-3.5 bg-gradient-to-b from-[#00704D] to-[#005238] hover:from-[#00855B] hover:to-[#006747] text-white rounded-xl text-xs font-black uppercase tracking-widest transition-colors duration-300 shadow-lg shadow-[#006747]/30 font-heading"
+            >
+              School Rugby Leagues <GraduationCap className="w-4 h-4" />
+            </Link>
+            <Link
+              href="/clubs"
+              className="group/btn inline-flex items-center gap-2 px-8 py-3.5 bg-white/10 hover:bg-white/20 text-white border border-white/15 rounded-xl text-xs font-black uppercase tracking-widest transition-all duration-300 font-heading"
+            >
+              Find a Club <MapPin className="w-4 h-4" />
+            </Link>
           </div>
         </div>
       </section>

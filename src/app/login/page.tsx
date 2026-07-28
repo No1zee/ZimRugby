@@ -1,13 +1,10 @@
-import { Metadata } from "next";
-import { login, signup } from './actions'
-import SlantedButton from '@/components/ui/SlantedButton'
-import Link from 'next/link'
-import { ArrowLeft, Shield, Trophy, Ticket, Megaphone } from 'lucide-react'
+"use client"
 
-export const metadata: Metadata = {
-  title: "Fan Zone Login | Zimbabwe Rugby Union",
-  description: "Sign in to your Zimbabwe Rugby Union Fan Zone account for priority tickets, exclusive content, and member perks.",
-};
+import { useState } from "react";
+import Link from "next/link";
+import { ArrowLeft, Shield, Trophy, Ticket, Megaphone, Mail, Lock, AlertCircle } from "lucide-react";
+import { login, signup, signInWithProvider } from "./actions";
+import SlantedButton from "@/components/ui/SlantedButton";
 
 const benefits = [
   { icon: Ticket, label: "Priority ticket access" },
@@ -17,6 +14,67 @@ const benefits = [
 ];
 
 export default function LoginPage() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+
+  const validateEmail = (email: string) => {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  };
+
+  const handleSignIn = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError("");
+
+    if (!email || !password) {
+      setError("Please enter both email and password.");
+      return;
+    }
+    if (!validateEmail(email)) {
+      setError("Please enter a valid email address.");
+      return;
+    }
+
+    setIsLoading(true);
+    const formData = new FormData();
+    formData.set("email", email);
+    formData.set("password", password);
+
+    try {
+      await login(formData);
+    } catch {
+      setError("Could not authenticate user. Please check your credentials.");
+      setIsLoading(false);
+    }
+  };
+
+  const handleSignUp = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError("");
+
+    if (!email || !password) {
+      setError("Please enter both email and password.");
+      return;
+    }
+    if (!validateEmail(email)) {
+      setError("Please enter a valid email address.");
+      return;
+    }
+
+    setIsLoading(true);
+    const formData = new FormData();
+    formData.set("email", email);
+    formData.set("password", password);
+
+    try {
+      await signup(formData);
+    } catch {
+      setError("Could not create account. Please try again.");
+      setIsLoading(false);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-[#FDFBF0] flex flex-col selection:bg-zru-green selection:text-white">
       {/* Top back nav */}
@@ -92,32 +150,54 @@ export default function LoginPage() {
                 </p>
               </div>
 
-              <form className="flex flex-col gap-4">
+              {/* Error message */}
+              {error && (
+                <div className="flex items-center gap-2 p-3 mb-4 rounded-lg bg-red-50 border border-red-200 text-red-600 text-xs font-body">
+                  <AlertCircle className="w-4 h-4 shrink-0" />
+                  <span>{error}</span>
+                </div>
+              )}
+
+              <form onSubmit={handleSignIn} className="flex flex-col gap-4">
                 <div className="flex flex-col gap-1.5">
                   <label htmlFor="email" className="text-[10px] font-heading font-extrabold text-rich-black/50 uppercase tracking-[0.2em]">
                     Email Address
                   </label>
-                  <input
-                    id="email"
-                    name="email"
-                    type="email"
-                    required
-                    placeholder="you@example.com"
-                    className="bg-[#FDFBF0] border border-black/10 rounded-lg p-3 text-rich-black placeholder-rich-black/30 focus:border-zru-green focus:outline-none transition-[border-color] text-sm"
-                  />
+                  <div className="relative">
+                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-rich-black/30">
+                      <Mail className="w-4 h-4" />
+                    </span>
+                    <input
+                      id="email"
+                      name="email"
+                      type="email"
+                      required
+                      placeholder="you@example.com"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      className="w-full bg-[#FDFBF0] border border-black/10 rounded-lg pl-10 pr-3 py-3 text-rich-black placeholder-rich-black/30 focus:border-zru-green focus:outline-none transition-[border-color] text-sm"
+                    />
+                  </div>
                 </div>
                 <div className="flex flex-col gap-1.5">
                   <label htmlFor="password" className="text-[10px] font-heading font-extrabold text-rich-black/50 uppercase tracking-[0.2em]">
                     Password
                   </label>
-                  <input
-                    id="password"
-                    name="password"
-                    type="password"
-                    required
-                    placeholder="••••••••"
-                    className="bg-[#FDFBF0] border border-black/10 rounded-lg p-3 text-rich-black placeholder-rich-black/30 focus:border-zru-green focus:outline-none transition-[border-color] text-sm"
-                  />
+                  <div className="relative">
+                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-rich-black/30">
+                      <Lock className="w-4 h-4" />
+                    </span>
+                    <input
+                      id="password"
+                      name="password"
+                      type="password"
+                      required
+                      placeholder="••••••••"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      className="w-full bg-[#FDFBF0] border border-black/10 rounded-lg pl-10 pr-3 py-3 text-rich-black placeholder-rich-black/30 focus:border-zru-green focus:outline-none transition-[border-color] text-sm"
+                    />
+                  </div>
                 </div>
 
                 <div className="flex justify-end -mt-1">
@@ -130,14 +210,67 @@ export default function LoginPage() {
                 </div>
 
                 <div className="flex flex-col gap-3 mt-3">
-                  <SlantedButton formAction={login} variant="primary" className="w-full justify-center">
-                    Sign In
+                  <SlantedButton type="submit" variant="primary" className="w-full justify-center" disabled={isLoading}>
+                    {isLoading ? "Signing In..." : "Sign In"}
                   </SlantedButton>
-                  <SlantedButton formAction={signup} variant="secondary" className="w-full justify-center">
+                  <SlantedButton type="button" variant="secondary" className="w-full justify-center" onClick={handleSignUp} disabled={isLoading}>
                     Create Account
                   </SlantedButton>
                 </div>
               </form>
+
+              {/* Social login divider */}
+              <div className="flex items-center w-full my-5">
+                <div className="flex-grow border-t border-dashed border-black/10"></div>
+                <span className="mx-3 text-[10px] text-black/30 font-heading font-bold uppercase tracking-[0.15em]">Or sign in with</span>
+                <div className="flex-grow border-t border-dashed border-black/10"></div>
+              </div>
+
+              {/* Social login buttons */}
+              <div className="flex gap-3 w-full justify-center">
+                <form action={signInWithProvider} className="contents">
+                  <button
+                    type="submit"
+                    name="provider"
+                    value="google"
+                    className="flex items-center justify-center w-12 h-12 rounded-xl border border-black/10 bg-[#FDFBF0] hover:bg-black/5 transition-colors grow"
+                  >
+                    <img
+                      src="https://www.svgrepo.com/show/475656/google-color.svg"
+                      alt="Google"
+                      className="w-5 h-5"
+                    />
+                  </button>
+                </form>
+                <form action={signInWithProvider} className="contents">
+                  <button
+                    type="submit"
+                    name="provider"
+                    value="facebook"
+                    className="flex items-center justify-center w-12 h-12 rounded-xl border border-black/10 bg-[#FDFBF0] hover:bg-black/5 transition-colors grow"
+                  >
+                    <img
+                      src="https://www.svgrepo.com/show/448224/facebook.svg"
+                      alt="Facebook"
+                      className="w-5 h-5"
+                    />
+                  </button>
+                </form>
+                <form action={signInWithProvider} className="contents">
+                  <button
+                    type="submit"
+                    name="provider"
+                    value="apple"
+                    className="flex items-center justify-center w-12 h-12 rounded-xl border border-black/10 bg-[#FDFBF0] hover:bg-black/5 transition-colors grow"
+                  >
+                    <img
+                      src="https://www.svgrepo.com/show/511330/apple-173.svg"
+                      alt="Apple"
+                      className="w-5 h-5"
+                    />
+                  </button>
+                </form>
+              </div>
             </div>
 
             <p className="text-center text-[10px] text-rich-black/30 mt-4 font-body">
@@ -153,9 +286,9 @@ export default function LoginPage() {
       {/* Slim footer */}
       <div className="flex-none text-center px-6 py-4 border-t border-black/5">
         <p className="text-[10px] text-rich-black/30 font-body">
-          © {new Date().getFullYear()} Zimbabwe Rugby Union. All rights reserved.
+          &copy; {new Date().getFullYear()} Zimbabwe Rugby Union. All rights reserved.
         </p>
       </div>
     </div>
-  )
+  );
 }

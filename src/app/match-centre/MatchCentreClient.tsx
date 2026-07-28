@@ -311,7 +311,7 @@ export default function MatchCentreClient({ initialFixtures, initialResults, ini
                           {filteredFixtures.length > 0 ? (
                               <MatchList matches={filteredFixtures} />
                           ) : (
-                              <div className="text-center py-20 border border-dashed border-black/10 rounded-2xl bg-milk-white">
+                              <div className="text-center py-10 md:py-14 border border-dashed border-black/10 rounded-2xl bg-milk-white">
                                   <p className="text-black/40 font-heading text-lg">NO UPCOMING FIXTURES MATCHING FILTER</p>
                               </div>
                           )}
@@ -328,7 +328,7 @@ export default function MatchCentreClient({ initialFixtures, initialResults, ini
                       {filteredResults.length > 0 ? (
                           <MatchList matches={filteredResults} />
                       ) : (
-                          <div className="text-center py-20 border border-dashed border-white/10 rounded-2xl card-green">
+                          <div className="text-center py-10 md:py-14 border border-dashed border-white/10 rounded-2xl card-green">
                               <p className="text-gray-500 font-heading">NO RECENT RESULTS MATCHING FILTER</p>
                           </div>
                       )}

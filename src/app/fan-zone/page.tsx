@@ -81,7 +81,7 @@ export default function FanZonePage() {
           title="Fan Zone"
           subtitle="The heartbeat of Zimbabwe Rugby. Join our global supporters network, get the latest inside scoops, and unlock members-only benefits."
           tag="Official Supporters Club"
-          backgroundImage="/images/gallery/zimbabwe-sables-0351.webp"
+          backgroundImage="/images/gallery/zimbabwe-sables-0350.webp"
           breadcrumb={[{ label: "Fan Zone", href: "/fan-zone" }]}
         />
       </div>

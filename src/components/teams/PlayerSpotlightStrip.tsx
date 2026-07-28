@@ -4,7 +4,7 @@ import { Star, ArrowRight } from "lucide-react";
 
 export default function PlayerSpotlightStrip() {
   return (
-    <section className="py-20 bg-rich-black text-white relative overflow-hidden border-t border-b border-white/10">
+    <section className="py-10 md:py-14 bg-rich-black text-white relative overflow-hidden border-t border-b border-white/10">
       <div className="absolute top-0 right-0 w-1/3 h-full bg-[radial-gradient(circle_at_top_right,rgba(0,107,63,0.2),transparent_70%)] pointer-events-none" />
 
       <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 relative z-10">

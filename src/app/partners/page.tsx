@@ -14,7 +14,7 @@ export default function PartnersPage() {
       
       <PartnersHero />
 
-      <div className="relative z-10 w-full pb-20">
+      <div className="relative z-10 w-full pb-10 md:pb-14">
         {partnerData.map((tier, index) => (
           <PartnerTierSection 
             key={tier.id} 

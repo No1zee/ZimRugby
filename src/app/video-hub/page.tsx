@@ -33,7 +33,7 @@ export default function VideoHubPage() {
   const featuredVideo = videos[0];
 
   return (
-    <main className="bg-rich-black min-h-screen pt-24 pb-24 text-white">
+    <main className="bg-rich-black min-h-screen pt-12 md:pt-16 pb-12 md:pb-16 text-white">
       
       {/* 1. Widescreen Cinematic Header / Hero Video */}
       {featuredVideo && (
@@ -133,7 +133,7 @@ export default function VideoHubPage() {
       </div>
 
       {/* 3. Video Grid Section */}
-      <section className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-16">
+      <section className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-10 md:py-12">
         <div className="flex items-center gap-4 mb-8">
           <h2 className="text-2xl font-black uppercase tracking-wider flex items-center gap-2">
             <Film className="w-5 h-5 text-zru-green" />
@@ -189,7 +189,7 @@ export default function VideoHubPage() {
             ))}
           </div>
         ) : (
-          <div className="text-center py-24 border-2 border-dashed border-white/10 rounded-2xl">
+          <div className="text-center py-10 md:py-14 border-2 border-dashed border-white/10 rounded-2xl">
             <Film className="w-12 h-12 text-white/20 mx-auto mb-4" />
             <p className="text-white/40 font-black uppercase tracking-wider">No videos found matching the criteria</p>
           </div>
@@ -261,9 +261,7 @@ export default function VideoHubPage() {
       </AnimatePresence>
 
       <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="bg-white border border-black/5 rounded-2xl p-6 md:p-8">
-          <FanZoneSignup variant="compact" />
-        </div>
+          <FanZoneSignup />
       </div>
 
     </main>

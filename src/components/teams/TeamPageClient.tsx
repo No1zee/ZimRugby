@@ -166,7 +166,7 @@ export default function TeamPageClient({ team }: TeamPageClientProps) {
       </div>
 
       {/* 4. Dynamic Content Panels */}
-      <main className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-16">
+      <main className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-10 md:py-12">
         <AnimatePresence mode="wait">
           <motion.div
             key={activeTab}

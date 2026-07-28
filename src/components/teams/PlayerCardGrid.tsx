@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { Users, Shield } from "lucide-react";
 import { Player } from "@/types";
 
@@ -64,10 +65,13 @@ export default function PlayerCardGrid({ squad, teamName }: PlayerCardGridProps)
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-        {filtered.map((player, idx) => (
-          <div
+        {filtered.map((player, idx) => {
+          const playerSlug = player.name.toLowerCase().replace(/\s+/g, "-");
+          return (
+          <Link
             key={`${player.name}-${idx}`}
-            className="group"
+            href={`/players/${playerSlug}`}
+            className="group block"
           >
             {/* Card */}
             <div className="relative rounded-2xl bg-white border border-black/5 overflow-hidden shadow-sm group-hover:shadow-lg group-hover:border-zru-green/20 transition-shadow duration-300">
@@ -136,8 +140,8 @@ export default function PlayerCardGrid({ squad, teamName }: PlayerCardGridProps)
                 </div>
               </div>
             </div>
-          </div>
-        ))}
+          </Link>
+        )})}
       </div>
 
       {filtered.length === 0 && (

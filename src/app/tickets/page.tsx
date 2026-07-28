@@ -183,7 +183,7 @@ export default function TicketsPage() {
   return (
     <main className="bg-milk-white min-h-screen selection:bg-zru-green selection:text-white text-rich-black">
       {/* SECTION A: HERO */}
-      <section className="relative min-h-[60vh] flex items-center pt-32 pb-16 overflow-hidden">
+      <section className="relative min-h-[60vh] flex items-center pt-32 pb-10 md:pb-12 overflow-hidden">
         {/* Stadium Background */}
         <div className="absolute inset-0 z-0">
           <Image 
@@ -261,7 +261,7 @@ export default function TicketsPage() {
       </section>
 
       {/* SECTION B: FIXTURES GRID */}
-      <section id="fixtures" className="py-24 bg-milk-white border-y border-black/5 scroll-mt-20">
+      <section id="fixtures" className="py-12 md:py-16 bg-milk-white border-y border-black/5 scroll-mt-20">
         <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
           {/* Page Announcements */}
           <PageAnnouncements scope="tickets" className="mb-12" />
@@ -337,7 +337,7 @@ export default function TicketsPage() {
       </section>
 
       {/* SECTION C: HOW IT WORKS */}
-      <section className="py-24 bg-milk-white border-b border-black/5">
+      <section className="py-12 md:py-16 bg-milk-white border-b border-black/5">
         <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-2xl mb-20">
              <span className="block text-[10px] font-black uppercase tracking-[0.4em] text-zru-green mb-6">Simple Entry</span>
@@ -391,7 +391,7 @@ export default function TicketsPage() {
       </section>
 
       {/* SECTION D: CATEGORIES */}
-      <section className="py-24 bg-milk-white border-b border-black/5">
+      <section className="py-12 md:py-16 bg-milk-white border-b border-black/5">
         <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-24 items-start">
             <div>
@@ -431,7 +431,7 @@ export default function TicketsPage() {
       </section>
 
       {/* SECTION E: CAMPAIGN HOOK */}
-      <section className="py-16 bg-zru-green relative overflow-hidden group">
+      <section className="py-10 md:py-12 bg-zru-green relative overflow-hidden group">
         <Link href="/world-cup-campaign" className="absolute inset-0 z-10" />
         <div className="absolute inset-0 bg-black/5 opacity-0 group-hover:opacity-100 transition-opacity" />
         <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 relative z-20 flex flex-col md:flex-row items-center justify-between gap-8">

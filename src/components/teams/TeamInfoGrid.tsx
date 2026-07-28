@@ -30,7 +30,7 @@ export default function TeamInfoGrid({
     <motion.section
       {...variants}
       transition={{ duration: 0.4 }}
-      className="bg-milk-white py-16 px-4 sm:px-8"
+      className="bg-milk-white py-10 md:py-12 px-4 sm:px-8"
     >
       <div className="max-w-6xl mx-auto">
         <h2 className="font-heading not-italic text-3xl sm:text-4xl font-black mb-8">

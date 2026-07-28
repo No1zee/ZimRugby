@@ -39,3 +39,23 @@ export async function signup(formData: FormData) {
   revalidatePath('/', 'layout')
   redirect('/dashboard')
 }
+
+export async function signInWithProvider(formData: FormData) {
+  const supabase = await createClient()
+  const provider = formData.get('provider') as string
+
+  const { data, error } = await supabase.auth.signInWithOAuth({
+    provider: provider as 'google' | 'facebook' | 'apple',
+    options: {
+      redirectTo: `${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/auth/callback`,
+    },
+  })
+
+  if (error) {
+    redirect('/login?message=Could not authenticate with provider')
+  }
+
+  if (data?.url) {
+    redirect(data.url)
+  }
+}

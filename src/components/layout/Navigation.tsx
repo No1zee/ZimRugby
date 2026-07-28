@@ -8,7 +8,7 @@ import { ChevronDown, Search, X, User } from "lucide-react";
 import { motion, AnimatePresence, useScroll, useMotionValueEvent } from "framer-motion";
 import SlantedButton from "../ui/SlantedButton";
 import GlobalAnnouncementBar from "./GlobalAnnouncementBar";
-import { HamburgerMenuOverlay } from "@/components/lightswind/HamburgerMenuOverlay";
+import KineticNav from "@/components/layout/KineticNav";
 import type { NavItem, NavChild } from "@/lib/navConfig";
 import { navConfig } from "@/lib/navConfig";
 import type { SearchEventResult } from "@/types";
@@ -344,7 +344,7 @@ export default function Navigation() {
       </nav>
 
       {/* ── Mobile Menu Overlay ── */}
-      <HamburgerMenuOverlay isOpen={isOpen} onClose={toggleMenu} navItems={dynamicNavItems} pathname={pathname} />
+      <KineticNav isOpen={isOpen} onClose={toggleMenu} navItems={dynamicNavItems} pathname={pathname} />
 
       {/* ── Search Overlay ── */}
       <AnimatePresence>

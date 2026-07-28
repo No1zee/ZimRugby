@@ -9,20 +9,20 @@ export async function getFixtureTwinData(): Promise<FixtureTwinData> {
   const fallback = {
     previous: {
       id: "prev-1",
-      competition: "Africa Cup",
-      round: "Semi-Final",
-      date: "22 June 2026",
+      competition: "Nations Cup",
+      round: "Round 6",
+      date: "18 July 2026",
       time: "15:00",
-      venue: "Kyadondo Rugby Club, Kampala",
+      venue: "Princess Auto Stadium, Winnipeg",
       homeTeam: {
-        name: "Zimbabwe Sables",
-        logo: "/zru logo main.svg",
-        score: 32
+        name: "Canada",
+        logo: "https://r2.thesportsdb.com/images/media/team/badge/euxlik1566381764.png",
+        score: 23
       },
       awayTeam: {
-        name: "Namibia Welwitschias",
-        logo: "https://flagcdn.com/w160/na.png",
-        score: 10
+        name: "Zimbabwe",
+        logo: "https://r2.thesportsdb.com/images/media/team/badge/6iaf541773658274.png",
+        score: 19
       },
       status: "completed" as const,
       category: "Sables"
@@ -30,17 +30,17 @@ export async function getFixtureTwinData(): Promise<FixtureTwinData> {
     upcoming: {
       id: "next-1",
       competition: "Africa Cup",
-      round: "Cup Final",
-      date: "06 July 2026",
-      time: "16:00",
-      venue: "Mweru Stadium, Lusaka",
+      round: "TBA",
+      date: "TBA",
+      time: "TBA",
+      venue: "TBA",
       homeTeam: {
-        name: "Zimbabwe Sables",
-        logo: "/zru logo main.svg"
+        name: "Zimbabwe",
+        logo: "https://r2.thesportsdb.com/images/media/team/badge/6iaf541773658274.png"
       },
       awayTeam: {
-        name: "Algeria",
-        logo: "https://flagcdn.com/w160/dz.png"
+        name: "TBA",
+        logo: ""
       },
       status: "upcoming" as const,
       category: "Sables"

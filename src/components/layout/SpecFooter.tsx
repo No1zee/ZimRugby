@@ -36,11 +36,11 @@ export default function SpecFooter() {
         <div className="space-y-6">
           <h4 className="text-[11px] font-black uppercase tracking-widest text-black/50 mb-6">FOLLOW US</h4>
           <div className="flex gap-4">
-            <a href="https://facebook.com" className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center text-black/70 hover:bg-zru-green hover:text-white transition-colors"><Facebook className="w-4 h-4" /></a>
-            <a href="https://twitter.com" className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center text-black/70 hover:bg-zru-green hover:text-white transition-colors"><Twitter className="w-4 h-4" /></a>
-            <a href="https://instagram.com" className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center text-black/70 hover:bg-zru-green hover:text-white transition-colors"><Instagram className="w-4 h-4" /></a>
-            <a href="https://youtube.com" className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center text-black/70 hover:bg-zru-green hover:text-white transition-colors"><Youtube className="w-4 h-4" /></a>
-            <a href="https://linkedin.com" className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center text-black/70 hover:bg-zru-green hover:text-white transition-colors"><Linkedin className="w-4 h-4" /></a>
+            <a href="https://facebook.com/zimbabwerugby" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center text-black/70 hover:bg-zru-green hover:text-white transition-colors"><Facebook className="w-4 h-4" /></a>
+            <a href="https://twitter.com/zimbabwerugby" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center text-black/70 hover:bg-zru-green hover:text-white transition-colors"><Twitter className="w-4 h-4" /></a>
+            <a href="https://instagram.com/zimbabwerugby" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center text-black/70 hover:bg-zru-green hover:text-white transition-colors"><Instagram className="w-4 h-4" /></a>
+            <a href="https://youtube.com/zimbabwerugby" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center text-black/70 hover:bg-zru-green hover:text-white transition-colors"><Youtube className="w-4 h-4" /></a>
+            <a href="https://linkedin.com/zimbabwerugby" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center text-black/70 hover:bg-zru-green hover:text-white transition-colors"><Linkedin className="w-4 h-4" /></a>
           </div>
           <div className="mt-8">
              <Image src="/images/logos/zru-logo.svg" alt="ZRU" width={60} height={60} className="w-16 h-auto opacity-20 grayscale" />
@@ -50,7 +50,7 @@ export default function SpecFooter() {
         {/* Column 4: FAN ZONE */}
         <div className="space-y-6">
           <h4 className="text-[11px] font-black uppercase tracking-widest text-black/50 mb-6">FAN ZONE</h4>
-          <FanZoneSignup variant="compact" />
+          <FanZoneSignup />
         </div>
 
       </div>

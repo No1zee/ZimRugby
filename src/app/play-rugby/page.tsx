@@ -53,7 +53,7 @@ export default function PlayRugbyPage() {
     <main className="bg-rich-black min-h-screen">
       
       {/* Hero */}
-      <section className="pt-32 pb-16 bg-zru-green relative overflow-hidden">
+      <section className="pt-32 pb-10 md:pb-12 bg-zru-green relative overflow-hidden">
         <div 
           className="absolute inset-0 opacity-10 bg-pattern-dots"
         />
@@ -71,7 +71,7 @@ export default function PlayRugbyPage() {
       <PlayRugbyDevelopment />
 
       {/* Programmes Grid */}
-      <section className="py-16 bg-white">
+      <section className="py-10 md:py-12 bg-white">
         <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-3xl font-black text-zru-green uppercase mb-8">Find Your Path</h2>
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -98,7 +98,7 @@ export default function PlayRugbyPage() {
       </section>
 
       {/* Club Finder */}
-      <section className="py-16 bg-gray-50">
+      <section className="py-10 md:py-12 bg-gray-50">
         <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-8">
             <div>
@@ -143,7 +143,7 @@ export default function PlayRugbyPage() {
       </section>
 
       {/* CTA Banner */}
-      <section className="py-16 bg-zru-green">
+      <section className="py-10 md:py-12 bg-zru-green">
         <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl md:text-4xl font-black text-white uppercase mb-4">
             Ready to Start?

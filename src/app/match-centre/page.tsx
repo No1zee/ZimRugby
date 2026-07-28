@@ -6,7 +6,7 @@ import type { LeagueTableRow } from "@/types";
 const MatchCentreClient = dynamic(() => import("./MatchCentreClient"), {
   loading: () => (
     <main className="bg-milk-white min-h-screen">
-      <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 pt-32 pb-16">
+      <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 pt-32 pb-10 md:pb-12">
         <div className="animate-pulse space-y-6">
           <div className="h-8 w-48 bg-black/5 rounded" />
           <div className="h-4 w-80 bg-black/5 rounded" />

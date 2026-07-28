@@ -102,7 +102,7 @@ export default function RoadToWorldCup({ featuredPlayers }: RoadToWorldCupProps)
 
         {/* White center tile — sits on top of the green */}
         <div className="relative z-20 max-w-[1360px] mx-auto px-8 lg:px-10">
-          <div className="bg-[#FDFBF0] rounded-t-2xl shadow-[0_-8px_40px_rgba(0,0,0,0.15)] overflow-hidden">
+          <div className="bg-[#FDFBF0] rounded-2xl shadow-[0_-8px_40px_rgba(0,0,0,0.15)] overflow-hidden">
             {/* Countdown row */}
             <div className="px-8 py-10 flex flex-col items-center border-b border-black/5">
               <AnimatedCountdown
@@ -137,7 +137,9 @@ export default function RoadToWorldCup({ featuredPlayers }: RoadToWorldCupProps)
         </div>
 
         {/* Spacer — green extends this far below the white tile, -mb-32 pulls Grassroots behind it */}
-        <div className="h-32" aria-hidden="true" />
+        <div className="h-32 relative" aria-hidden="true">
+          <div className="absolute inset-0 bg-gradient-to-b from-transparent to-[#006747]" />
+        </div>
       </div>
     </section>
   );
