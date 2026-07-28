@@ -1,7 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
 import { ArrowRight, Newspaper, Calendar, MapPin, Clock } from "lucide-react";
-import MatchdayVideoHighlights from "@/components/media/MatchdayVideoHighlights";
 import ShopCardShowcase from "@/components/home/ShopCardShowcase";
 import { getAllFixtures, formatFixtureForUI, getNextUnionMatch } from "@/lib/fixtures";
 import { getLatestReports, getSocialPosts, type Report } from "@/lib/data-fetcher";
@@ -282,13 +281,6 @@ export default async function UnifiedHubGrid() {
         {/* ═══════════ COLUMN 4: OFFICIAL SHOP ═══════════ */}
         <ShopCardShowcase />
 
-      </div>
-
-      {/* ── Matchday Video Highlights Section ── */}
-      <div className="mt-10 pt-8 border-t border-black/10">
-        <MatchdayVideoHighlights
-          showChannelLink={true}
-        />
       </div>
     </section>
   );

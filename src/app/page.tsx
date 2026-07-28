@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 export const revalidate = 300;
 import UnifiedHubGrid from "@/components/home/UnifiedHubGrid";
 import HomeNewsletterBanner from "@/components/home/HomeNewsletterBanner";
-import CleanCountdownBanner from "@/components/home/CleanCountdownBanner";
+import RoadToWorldCup from "@/components/home/RoadToWorldCup";
 import FeaturedPlayersGrid from "@/components/teams/FeaturedPlayersGrid";
 import GrassrootsInitiativeSection from "@/components/home/GrassrootsInitiativeSection";
 import SponsorGrid from "@/components/home/SponsorGrid";
@@ -69,8 +69,8 @@ export default async function Home() {
         {/* 3. Full-Width ZRU Green Newsletter Banner (Matching Stitch Reference Layout) */}
         <HomeNewsletterBanner />
 
-        {/* 4. Road to Australia 2027 Minimal Countdown Banner */}
-        <CleanCountdownBanner />
+        {/* 4. Road to World Cup — frame with countdown + Nations Cup video highlights */}
+        <RoadToWorldCup />
 
         {/* 5. Featured Players — CometCard 3D tilt on desktop */}
         <section className="px-4 sm:px-6 lg:px-8 py-14 sm:py-20 max-w-[1200px] mx-auto">
