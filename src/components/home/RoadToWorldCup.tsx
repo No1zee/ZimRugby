@@ -88,7 +88,7 @@ export default function RoadToWorldCup() {
         </div>
 
         {/* White center tile — sits on top of the green */}
-        <div className="relative z-20 max-w-[1080px] mx-auto px-8 lg:px-12">
+        <div className="relative z-20 max-w-[1200px] mx-auto px-8 lg:px-16">
           <div className="bg-[#FDFBF0] rounded-t-2xl shadow-[0_-8px_40px_rgba(0,0,0,0.15)] overflow-hidden">
             {/* Countdown row */}
             <div className="px-8 py-10 flex flex-col items-center border-b border-black/5">
@@ -106,8 +106,6 @@ export default function RoadToWorldCup() {
             {/* Video carousel */}
             <div className="px-2 sm:px-4 py-6">
               <MatchdayVideoHighlights
-                title={<>ROAD TO <span className="text-accent-teal">WORLD CUP</span></>}
-                subtitle="NATIONS CUP HIGHLIGHTS"
                 showChannelLink={true}
               />
             </div>
