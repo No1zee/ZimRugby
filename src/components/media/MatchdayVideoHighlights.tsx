@@ -317,7 +317,7 @@ export default function MatchdayVideoHighlights({
                     <div
                       key={video.id}
                       onClick={() => !isDragging && setActiveVideo(video)}
-                      className="absolute rounded-2xl sm:rounded-3xl overflow-hidden shadow-[0_15px_30px_-5px_rgba(0,0,0,0.15)] border border-black/10 bg-white cursor-pointer group transition-all duration-300 flex flex-col justify-between pointer-events-auto"
+                      className="absolute rounded-2xl sm:rounded-3xl overflow-hidden shadow-[0_15px_30px_-5px_rgba(0,0,0,0.15)] border border-black/10 bg-white cursor-pointer group transition-[box-shadow] duration-300 flex flex-col justify-between pointer-events-auto"
                       style={{
                         width: `${cardWidth}px`,
                         transformStyle: "preserve-3d",
@@ -333,12 +333,12 @@ export default function MatchdayVideoHighlights({
                           src={video.thumbnail}
                           alt={video.title}
                           fill
-                          className="object-cover group-hover:scale-105 transition-transform duration-500 opacity-95"
+                          className="object-cover group-hover:brightness-110 transition-[filter] duration-500 opacity-95"
                           sizes={`${cardWidth}px`}
                         />
                         <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
                         <div className="absolute inset-0 flex items-center justify-center">
-                          <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-[#006747] text-white flex items-center justify-center shadow-xl group-hover:scale-110 group-hover:bg-black transition-all duration-300 border-2 border-white/40">
+                          <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-[#006747] text-white flex items-center justify-center shadow-xl group-hover:bg-black transition-[background-color] duration-300 border-2 border-white/40">
                             <Play className="w-5 h-5 sm:w-6 sm:h-6 fill-current translate-x-0.5 text-white" />
                           </div>
                         </div>
@@ -373,19 +373,19 @@ export default function MatchdayVideoHighlights({
               <div
                 key={video.id}
                 onClick={() => setActiveVideo(video)}
-                className="bg-white rounded-2xl sm:rounded-3xl border border-black/10 overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 group cursor-pointer flex flex-col justify-between"
+                className="bg-white rounded-2xl sm:rounded-3xl border border-black/10 overflow-hidden shadow-lg hover:shadow-2xl transition-[box-shadow] duration-500 group cursor-pointer flex flex-col justify-between"
               >
                 <div className="relative aspect-video w-full overflow-hidden bg-black">
                   <Image
                     src={video.thumbnail}
                     alt={video.title}
                     fill
-                    className="object-cover group-hover:scale-105 transition-transform duration-700 opacity-95"
+                    className="object-cover group-hover:brightness-110 transition-[filter] duration-700 opacity-95"
                     sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, 33vw"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
                   <div className="absolute inset-0 flex items-center justify-center">
-                    <div className="w-14 h-14 rounded-full bg-[#006747] text-white flex items-center justify-center shadow-xl group-hover:scale-110 group-hover:bg-black transition-all duration-300 border-2 border-white/40">
+                    <div className="w-14 h-14 rounded-full bg-[#006747] text-white flex items-center justify-center shadow-xl group-hover:bg-black transition-[background-color] duration-300 border-2 border-white/40">
                       <Play className="w-6 h-6 fill-current translate-x-0.5 text-white" />
                     </div>
                   </div>
@@ -444,9 +444,9 @@ function HeaderStrip({
             onClick={() => setViewMode("ring")}
             title="3D Stage View"
             aria-label="3D Stage View"
-            className={`p-2 rounded-lg transition-all flex items-center justify-center ${
+            className={`p-2 rounded-lg transition-[background-color,color,box-shadow] flex items-center justify-center ${
               viewMode === "ring"
-                ? "bg-[#006747] text-white shadow-md scale-105"
+                ? "bg-[#006747] text-white shadow-md"
                 : "text-black/60 hover:text-black hover:bg-black/5"
             }`}
           >
@@ -456,7 +456,7 @@ function HeaderStrip({
             onClick={() => setViewMode("grid")}
             title="Grid View"
             aria-label="Grid View"
-            className={`p-2 rounded-lg transition-all flex items-center justify-center ${
+            className={`p-2 rounded-lg transition-[background-color,color,box-shadow] flex items-center justify-center ${
               viewMode === "grid"
                 ? "bg-[#006747] text-white shadow-md scale-105"
                 : "text-black/60 hover:text-black hover:bg-black/5"
@@ -473,7 +473,7 @@ function HeaderStrip({
             rel="noopener noreferrer"
             title="Watch ZRU on YouTube"
             aria-label="Watch ZRU on YouTube"
-            className="inline-flex items-center gap-2 px-3.5 py-2 bg-[#006747] hover:bg-[#005238] text-white rounded-xl text-[10px] sm:text-[11px] font-black uppercase tracking-wider transition-all duration-300 shadow-xs hover:shadow-md border border-[#006747] hover:scale-105 active:scale-95 group/yt shrink-0"
+            className="inline-flex items-center gap-2 px-3.5 py-2 bg-[#006747] hover:bg-[#005238] text-white rounded-xl text-[10px] sm:text-[11px] font-black uppercase tracking-wider transition-[background-color,box-shadow] duration-300 shadow-xs hover:shadow-md border border-[#006747] group/yt shrink-0"
           >
             <svg className="w-5 h-3.5 shrink-0 group-hover/yt:scale-110 transition-transform" viewBox="0 0 24 17" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M23.498 2.622a3.008 3.008 0 0 0-2.116-2.126C19.513 0 12 0 12 0S4.487 0 2.618.496A3.008 3.008 0 0 0 .502 2.622C0 4.504 0 8.423 0 8.423s0 3.919.502 5.801a3.008 3.008 0 0 0 2.116 2.126C4.487 16.846 12 16.846 12 16.846s7.513 0 9.882-.496a3.008 3.008 0 0 0 2.116-2.126C24 12.342 24 8.423 24 8.423s0-3.919-.502-5.801z" fill="#FF0000"/>
@@ -492,19 +492,19 @@ function VideoCard({ video, isDragging, onClick }: { video: YouTubeVideoItem; is
   return (
     <div
       onClick={() => !isDragging && onClick()}
-      className="w-[280px] sm:w-[360px] rounded-2xl sm:rounded-3xl overflow-hidden shadow-[0_15px_30px_-5px_rgba(0,0,0,0.15)] border border-black/10 bg-white cursor-pointer group transition-all duration-300 flex flex-col justify-between hover:scale-105"
+      className="w-[280px] sm:w-[360px] rounded-2xl sm:rounded-3xl overflow-hidden shadow-[0_15px_30px_-5px_rgba(0,0,0,0.15)] border border-black/10 bg-white cursor-pointer group transition-[box-shadow] duration-300 flex flex-col justify-between"
     >
       <div className="relative w-full overflow-hidden bg-black" style={{ aspectRatio: "16/9" }}>
         <Image
           src={video.thumbnail}
           alt={video.title}
           fill
-          className="object-cover group-hover:scale-105 transition-transform duration-500 opacity-95"
+          className="object-cover group-hover:brightness-110 transition-[filter] duration-500 opacity-95"
           sizes="360px"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
         <div className="absolute inset-0 flex items-center justify-center">
-          <div className="w-14 h-14 rounded-full bg-[#006747] text-white flex items-center justify-center shadow-xl group-hover:scale-110 group-hover:bg-black transition-all duration-300 border-2 border-white/40">
+          <div className="w-14 h-14 rounded-full bg-[#006747] text-white flex items-center justify-center shadow-xl group-hover:bg-black transition-[background-color] duration-300 border-2 border-white/40">
             <Play className="w-6 h-6 fill-current translate-x-0.5 text-white" />
           </div>
         </div>
@@ -555,7 +555,7 @@ function VideoModal({
           >
             <button
               onClick={onClose}
-              className="absolute top-4 right-4 z-20 p-2.5 rounded-full bg-black/80 hover:bg-[#006747] text-white border border-white/20 transition-all shadow-lg"
+              className="absolute top-4 right-4 z-20 p-2.5 rounded-full bg-black/80 hover:bg-[#006747] text-white border border-white/20 transition-[background-color] shadow-lg"
               aria-label="Close Video Player"
               title="Close Video"
             >
@@ -577,7 +577,7 @@ function VideoModal({
                 <span className="text-[10px] font-black text-[#006747] uppercase tracking-widest block">
                   ZIMBABWE RUGBY UNION &bull; IN-SITE MATCHDAY MEDIA
                 </span>
-                <p className="font-heading font-black text-lg sm:text-xl text-rich-black uppercase italic">
+                <p className="font-heading font-black text-lg sm:text-xl text-rich-black uppercase not-italic">
                   {activeVideo.title}
                 </p>
               </div>
@@ -585,7 +585,7 @@ function VideoModal({
                 href={`https://www.youtube.com/watch?v=${activeVideo.videoId}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-1.5 px-4 py-2 bg-black/5 hover:bg-black text-rich-black hover:text-white rounded-xl text-xs font-heading font-black tracking-widest uppercase transition-all"
+                className="inline-flex items-center gap-1.5 px-4 py-2 bg-black/5 hover:bg-black text-rich-black hover:text-white rounded-xl text-xs font-heading font-black tracking-widest uppercase transition-[background-color,color]"
               >
                 <span>WATCH ON YOUTUBE</span>
                 <ExternalLink className="w-3.5 h-3.5" />

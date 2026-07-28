@@ -9,7 +9,7 @@ import { motion, AnimatePresence, useScroll, useMotionValueEvent } from "framer-
 import SlantedButton from "../ui/SlantedButton";
 import GlobalAnnouncementBar from "./GlobalAnnouncementBar";
 import { HamburgerMenuOverlay } from "@/components/lightswind/HamburgerMenuOverlay";
-import type { NavItem } from "@/lib/navConfig";
+import type { NavItem, NavChild } from "@/lib/navConfig";
 import { navConfig } from "@/lib/navConfig";
 import type { SearchEventResult } from "@/types";
 
@@ -141,14 +141,28 @@ export default function Navigation() {
 
   /* ── Active route check (memoized per pathname) ── */
   const isActive = useCallback(
-    (href: string) => {
+    (href: string, children?: NavChild[]) => {
       if (href === "/" && pathname !== "/") return false;
       const [hrefPath, hrefQuery] = href.split("?");
       const pathMatches = pathname === hrefPath;
-      if (!hrefQuery || typeof window === "undefined") return pathMatches;
+      if (!pathMatches) return false;
+      /* If this item has children, only show active when no child matches (parent is fallback) */
+      if (children?.length) {
+        const childMatches = children.some((child) => {
+          const [childPath, childQuery] = child.href.split("?");
+          if (pathname !== childPath) return false;
+          if (!childQuery) return true;
+          if (typeof window === "undefined") return false;
+          const currentParams = new URLSearchParams(window.location.search);
+          const targetParams = new URLSearchParams(childQuery);
+          return Array.from(targetParams.entries()).every(([k, v]) => currentParams.get(k) === v);
+        });
+        if (childMatches) return false;
+      }
+      if (!hrefQuery || typeof window === "undefined") return true;
       const currentParams = new URLSearchParams(window.location.search);
       const targetParams = new URLSearchParams(hrefQuery);
-      return pathMatches && Array.from(targetParams.entries()).every(([k, v]) => currentParams.get(k) === v);
+      return Array.from(targetParams.entries()).every(([k, v]) => currentParams.get(k) === v);
     },
     [pathname]
   );
@@ -239,10 +253,10 @@ export default function Navigation() {
                     href={item.href}
                     className={`
                       flex items-center gap-1 xl:gap-1.5 py-2 font-subheading tracking-wider text-[9px] xl:text-[10px] 2xl:text-xs uppercase font-black transition-colors relative whitespace-nowrap
-                      ${isActive(item.href) ? "text-zru-green" : navTextClass}
+                      ${isActive(item.href, item.children) ? "text-zru-green" : navTextClass}
                     `}
                   >
-                    {isActive(item.href) && (
+                    {isActive(item.href, item.children) && (
                       <motion.span
                         layoutId="activeIndicator"
                         className="absolute bottom-0 left-0 w-full h-[2px] bg-zru-green"

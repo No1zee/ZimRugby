@@ -5,7 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { motion, AnimatePresence, Variants } from "framer-motion";
 import { X, ChevronRight, Ticket, Users, ShoppingBag, ArrowUpRight, ShieldCheck } from "lucide-react";
-import type { NavItem } from "@/lib/navConfig";
+import type { NavItem, NavChild } from "@/lib/navConfig";
 
 interface HamburgerMenuOverlayProps {
   isOpen: boolean;
@@ -28,9 +28,20 @@ export function HamburgerMenuOverlay({
     );
   };
 
-  const isActive = (href: string) => {
+  const isActive = (href: string, children?: NavChild[]) => {
     if (href === "/") return pathname === "/";
-    return pathname.startsWith(href);
+    const [hrefPath] = href.split("?");
+    const pathMatches = pathname.startsWith(hrefPath);
+    if (!pathMatches) return false;
+    /* If this item has children, only show active when no child matches */
+    if (children?.length) {
+      const childMatches = children.some((child) => {
+        const [childPath] = child.href.split("?");
+        return pathname.startsWith(childPath);
+      });
+      if (childMatches) return false;
+    }
+    return true;
   };
 
   const containerVariants: Variants = {
@@ -115,7 +126,7 @@ export function HamburgerMenuOverlay({
             >
               {navItems.map((item) => {
                 const isExpanded = expandedItems.includes(item.label);
-                const active = isActive(item.href);
+                const active = isActive(item.href, item.children);
 
                 return (
                   <motion.div key={item.label} variants={itemVariants} className="border-b border-white/5 pb-2">

@@ -124,25 +124,25 @@ export default function MediaPageClient({ initialSocialPosts }: MediaPageClientP
             <div className="flex p-1 bg-black/5 rounded-xl border border-black/10 w-fit overflow-x-auto no-scrollbar">
                 <button 
                     onClick={() => setActiveTab("all")}
-                    className={`px-6 py-2 rounded-lg text-[10px] font-black tracking-[0.2em] uppercase transition-all whitespace-nowrap ${activeTab === "all" ? "bg-zru-green text-white shadow-lg" : "text-black/60 hover:text-black"}`}
+                    className={`px-6 py-2 rounded-lg text-[10px] font-black tracking-[0.2em] uppercase transition-[background-color,color,box-shadow] whitespace-nowrap ${activeTab === "all" ? "bg-zru-green text-white shadow-lg" : "text-black/60 hover:text-black"}`}
                 >
                     All
                 </button>
                 <button 
                     onClick={() => setActiveTab("videos")}
-                    className={`px-6 py-2 rounded-lg text-[10px] font-black tracking-[0.2em] uppercase transition-all whitespace-nowrap ${activeTab === "videos" ? "bg-zru-green text-white shadow-lg" : "text-black/60 hover:text-black"}`}
+                    className={`px-6 py-2 rounded-lg text-[10px] font-black tracking-[0.2em] uppercase transition-[background-color,color,box-shadow] whitespace-nowrap ${activeTab === "videos" ? "bg-zru-green text-white shadow-lg" : "text-black/60 hover:text-black"}`}
                 >
                     Videos
                 </button>
                 <button 
                     onClick={() => setActiveTab("news")}
-                    className={`px-6 py-2 rounded-lg text-[10px] font-black tracking-[0.2em] uppercase transition-all whitespace-nowrap ${activeTab === "news" ? "bg-zru-green text-white shadow-lg" : "text-black/60 hover:text-black"}`}
+                    className={`px-6 py-2 rounded-lg text-[10px] font-black tracking-[0.2em] uppercase transition-[background-color,color,box-shadow] whitespace-nowrap ${activeTab === "news" ? "bg-zru-green text-white shadow-lg" : "text-black/60 hover:text-black"}`}
                 >
                     Official
                 </button>
                 <button 
                     onClick={() => setActiveTab("social")}
-                    className={`px-6 py-2 rounded-lg text-[10px] font-black tracking-[0.2em] uppercase transition-all whitespace-nowrap flex items-center gap-2 ${activeTab === "social" ? "bg-zru-green text-white shadow-lg" : "text-black/60 hover:text-black"}`}
+                    className={`px-6 py-2 rounded-lg text-[10px] font-black tracking-[0.2em] uppercase transition-[background-color,color,box-shadow] whitespace-nowrap flex items-center gap-2 ${activeTab === "social" ? "bg-zru-green text-white shadow-lg" : "text-black/60 hover:text-black"}`}
                 >
                     Social <Facebook className={`w-3 h-3 ${activeTab === "social" ? "text-white" : "text-black/40"}`} />
                 </button>
@@ -155,7 +155,7 @@ export default function MediaPageClient({ initialSocialPosts }: MediaPageClientP
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     placeholder="Search news & videos… e.g. Sables" 
-                    className="w-full bg-black/5 border border-black/10 rounded-lg pl-10 pr-4 py-3 text-rich-black placeholder-black/45 focus:outline-none focus:border-zru-green text-sm transition-all"
+                    className="w-full bg-black/5 border border-black/10 rounded-lg pl-10 pr-4 py-3 text-rich-black placeholder-black/45 focus:outline-none focus:border-zru-green text-sm transition-[border-color]"
                 />
             </div>
         </div>
@@ -250,7 +250,7 @@ export default function MediaPageClient({ initialSocialPosts }: MediaPageClientP
                             href={item.url || item.slug || '#'}
                             target={item.source === 'facebook' ? '_blank' : '_self'}
                             rel={item.source === 'facebook' ? 'noopener noreferrer' : ''}
-                            className="block bg-white border border-black/5 rounded-2xl overflow-hidden hover:shadow-lg hover:border-zru-green/30 transition-all group"
+                            className="block bg-white border border-black/5 rounded-2xl overflow-hidden hover:shadow-lg hover:border-zru-green/30 transition-[box-shadow,border-color] group"
                           >
                             {item.image && item.image !== '/images/media/fb_placeholder.jpg' && (
                               <div className="relative h-48 w-full overflow-hidden">
@@ -259,7 +259,7 @@ export default function MediaPageClient({ initialSocialPosts }: MediaPageClientP
                                   alt={item.title}
                                   fill
                                   sizes="(max-width: 768px) 100vw, 50vw"
-                                  className="object-cover group-hover:scale-105 transition-transform duration-500"
+                                  className="object-cover group-hover:brightness-110 transition-[filter] duration-500"
                                 />
                                 <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent" />
                               </div>
@@ -288,7 +288,7 @@ export default function MediaPageClient({ initialSocialPosts }: MediaPageClientP
                               <p className="text-black/60 text-sm leading-relaxed line-clamp-2 mb-3">
                                 {item.excerpt}
                               </p>
-                              <span className="text-zru-green text-[10px] font-black uppercase tracking-[0.15em] flex items-center gap-1.5 group-hover:gap-2.5 transition-all">
+                              <span className="text-zru-green text-[10px] font-black uppercase tracking-[0.15em] flex items-center gap-1.5 group-hover:gap-2.5 transition-[gap]">
                                 {item.source === 'facebook' ? 'View on Facebook' : 'Read More'}
                                 <ArrowRight className="w-3 h-3" />
                               </span>

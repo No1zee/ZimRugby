@@ -125,7 +125,7 @@ export default function FlagshipTeamHero() {
               <button
                 key={team.id}
                 onClick={() => setActiveIdx(idx)}
-                className={`px-4 py-2 rounded-xl text-xs font-black uppercase tracking-wider transition-all duration-300 whitespace-nowrap cursor-pointer flex items-center gap-2 border ${
+                className={`px-4 py-2 rounded-xl text-xs font-black uppercase tracking-wider transition-[background-color,color,border-color,box-shadow] duration-300 whitespace-nowrap cursor-pointer flex items-center gap-2 border ${
                   isActive
                     ? "bg-[#006747] text-white border-[#006747] shadow-lg scale-105"
                     : "bg-white/5 hover:bg-white/10 text-white/70 hover:text-white border-white/10"
@@ -156,7 +156,7 @@ export default function FlagshipTeamHero() {
                   {activeTeam.category}
                 </span>
 
-                <h1 className="font-heading text-4xl sm:text-6xl lg:text-7xl font-black uppercase tracking-tighter leading-[1.0] italic text-white">
+                <h1 className="font-heading text-4xl sm:text-6xl lg:text-7xl font-black uppercase tracking-tighter leading-[1.0] not-italic text-white">
                   {activeTeam.name}
                 </h1>
 
@@ -176,7 +176,7 @@ export default function FlagshipTeamHero() {
               </Link>
               <Link 
                 href={`/match-centre?team=${encodeURIComponent(activeTeam.name)}`}
-                className="px-6 py-3.5 bg-white/5 hover:bg-white/10 border border-white/15 hover:border-[#006747] text-white rounded-xl text-xs font-bold uppercase tracking-widest transition-all duration-300"
+                className="px-6 py-3.5 bg-white/5 hover:bg-white/10 border border-white/15 hover:border-[#006747] text-white rounded-xl text-xs font-bold uppercase tracking-widest transition-[background-color,border-color] duration-300"
               >
                 View Fixtures & Results
               </Link>
@@ -192,7 +192,7 @@ export default function FlagshipTeamHero() {
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.96 }}
                 transition={{ duration: 0.4 }}
-                className="relative rounded-3xl overflow-hidden border border-white/10 bg-rich-black/60 shadow-2xl p-6 space-y-6 backdrop-blur-xl"
+                className="relative rounded-3xl overflow-hidden border border-white/10 bg-rich-black shadow-2xl p-6 space-y-6"
               >
                 {/* Featured Image */}
                 <div className="relative h-60 sm:h-64 w-full rounded-2xl overflow-hidden border border-white/10">

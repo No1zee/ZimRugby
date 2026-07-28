@@ -138,7 +138,7 @@ export default function MatchCentreClient({ initialFixtures, initialResults, ini
                   <button
                     key={teamName}
                     onClick={() => setSelectedTeam(teamName)}
-                    className={`px-5 py-2 clip-slanted-sm text-xs font-black uppercase tracking-wider transition-all duration-300 whitespace-nowrap ${
+                    className={`px-5 py-2 clip-slanted-sm text-xs font-black uppercase tracking-wider transition-[background-color,color,box-shadow] duration-300 whitespace-nowrap ${
                       isActive 
                         ? "bg-zru-green text-white shadow-lg" 
                         : "bg-black/5 border border-black/10 text-black/60 hover:text-black hover:border-black/20"
@@ -239,7 +239,7 @@ export default function MatchCentreClient({ initialFixtures, initialResults, ini
                                   
                                   <button 
                                       onClick={() => setActiveTab("results")} 
-                                      className="w-full mt-6 py-2.5 font-heading text-sm text-zru-green border border-zru-green hover:bg-zru-green hover:text-white rounded-xl transition-all"
+                                      className="w-full mt-6 py-2.5 font-heading text-sm text-zru-green border border-zru-green hover:bg-zru-green hover:text-white rounded-xl transition-[background-color,color]"
                                   >
                                       VIEW ARCHIVE
                                   </button>

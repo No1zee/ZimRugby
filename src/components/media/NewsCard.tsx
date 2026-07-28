@@ -1,6 +1,5 @@
 "use client";
 
-import { motion } from "framer-motion";
 import { ArrowRight, Facebook } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
@@ -26,13 +25,12 @@ export default function NewsCard({
 }: NewsCardProps) {
   return (
     <Link href={slug} target={source === 'facebook' ? "_blank" : "_self"} rel={source === 'facebook' ? "noopener noreferrer" : ""}>
-        <motion.div 
-            whileHover={{ y: -2 }}
-            className="flex flex-col md:flex-row gap-6 group cursor-pointer card-green p-4 md:p-6 rounded-2xl border glow-green-card relative overflow-hidden"
+        <div 
+            className="flex flex-col md:flex-row gap-6 group cursor-pointer card-green p-4 md:p-6 rounded-2xl border relative overflow-hidden"
         >
             {source === 'facebook' && (
                 <div className="absolute top-4 right-4 z-10">
-                    <div className="w-8 h-8 bg-zru-green rounded-full flex items-center justify-center shadow-lg transform group-hover:scale-110 transition-transform">
+                    <div className="w-8 h-8 bg-zru-green rounded-full flex items-center justify-center shadow-lg">
                         <Facebook className="w-4 h-4 text-white fill-current" />
                     </div>
                 </div>
@@ -45,7 +43,7 @@ export default function NewsCard({
                         alt={title} 
                         fill 
                         sizes="(max-width: 768px) 100vw, 20vw"
-                        className="object-cover opacity-90 group-hover:opacity-100 transition-all duration-500 group-hover:scale-110" 
+                        className="object-cover opacity-90 group-hover:opacity-100 group-hover:brightness-110 transition-[filter,opacity] duration-500" 
                     />
                 </div>
             )}
@@ -65,7 +63,7 @@ export default function NewsCard({
                     {source === 'facebook' ? "View on Facebook" : "Read More"} <ArrowRight className="w-3 h-3 transition-transform group-hover:translate-x-1" />
                 </span>
             </div>
-        </motion.div>
+        </div>
     </Link>
   );
 }

@@ -91,7 +91,7 @@ export default function TeamPageClient({ team }: TeamPageClientProps) {
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: 10 }}
-                        className="absolute left-0 mt-3 w-72 rounded-xl card-green border p-2 shadow-2xl backdrop-blur-md z-50"
+                        className="absolute left-0 mt-3 w-72 rounded-xl card-green border p-2 shadow-2xl z-50"
                       >
                         <div className="px-3 py-2 border-b border-white/5 mb-1.5">
                           <span className="text-[9px] font-black uppercase tracking-widest text-white/40">Switch Squad</span>
@@ -121,7 +121,7 @@ export default function TeamPageClient({ team }: TeamPageClientProps) {
             </div>
 
             {/* Quick Stats Grid */}
-            <div className="flex flex-wrap gap-4 lg:gap-6 bg-white border border-black/10 rounded-xl p-4 backdrop-blur-md">
+            <div className="flex flex-wrap gap-4 lg:gap-6 bg-white border border-black/10 rounded-xl p-4">
               {team.stats.map((stat, idx) => (
                 <div key={idx} className="flex flex-col border-r border-black/10 last:border-0 pr-6 last:pr-0">
                   <span className="text-[10px] text-black/40 font-bold uppercase tracking-wider">{stat.label}</span>
@@ -351,7 +351,7 @@ export default function TeamPageClient({ team }: TeamPageClientProps) {
         <div className="mt-20 pt-12 border-t border-black/10 grid grid-cols-1 sm:grid-cols-2 gap-6 relative z-10">
           <Link
             href={prevTeam.href}
-            className="bg-white border border-black/5 shadow-sm rounded-2xl p-6 flex items-center justify-between group hover:border-zru-green hover:shadow-md transition-all duration-300 text-left"
+            className="bg-white border border-black/5 shadow-sm rounded-2xl p-6 flex items-center justify-between group hover:border-zru-green hover:shadow-md transition-[border-color,box-shadow] duration-300 text-left"
           >
             <div className="flex items-center gap-4">
               <div className="w-10 h-10 rounded-full bg-black/5 flex items-center justify-center text-black/60 group-hover:bg-zru-green/10 group-hover:text-zru-green transition-colors border border-black/5">
@@ -366,7 +366,7 @@ export default function TeamPageClient({ team }: TeamPageClientProps) {
 
           <Link
             href={nextTeam.href}
-            className="bg-white border border-black/5 shadow-sm rounded-2xl p-6 flex items-center justify-between group hover:border-zru-green hover:shadow-md transition-all duration-300 text-right"
+            className="bg-white border border-black/5 shadow-sm rounded-2xl p-6 flex items-center justify-between group hover:border-zru-green hover:shadow-md transition-[border-color,box-shadow] duration-300 text-right"
           >
             <div className="flex items-center gap-4 justify-end w-full">
               <div>

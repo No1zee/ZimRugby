@@ -57,7 +57,7 @@ export default function RecentResultsStrip({ matches, teamName }: RecentResultsS
           return (
             <div
               key={idx}
-              className={`rounded-xl border p-4 flex items-center gap-4 transition-all hover:shadow-md ${style.bg} ${style.border}`}
+              className={`rounded-xl border p-4 flex items-center gap-4 transition-[box-shadow] hover:shadow-md ${style.bg} ${style.border}`}
             >
               <div className={`w-10 h-10 rounded-full flex items-center justify-center shrink-0 border ${style.border}`}>
                 <ResultIcon className={`w-5 h-5 ${style.color}`} />
@@ -86,7 +86,7 @@ export default function RecentResultsStrip({ matches, teamName }: RecentResultsS
               </div>
 
               <div className="text-right shrink-0">
-                <span className={`text-xl font-black italic tracking-tighter ${style.color}`}>
+                <span className={`text-xl font-black not-italic tracking-tighter ${style.color}`}>
                   {match.score}
                 </span>
                 <span className={`block text-[9px] font-black uppercase tracking-widest ${style.color} mt-0.5`}>

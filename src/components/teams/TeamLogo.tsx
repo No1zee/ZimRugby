@@ -34,7 +34,7 @@ export default function TeamLogo({
   return (
     <div
       className={cn(
-        "relative shrink-0 rounded-full flex items-center justify-center transition-all duration-300"
+        "relative shrink-0 rounded-full flex items-center justify-center transition-[filter] duration-300"
       )}
       style={{
         width: s.container,

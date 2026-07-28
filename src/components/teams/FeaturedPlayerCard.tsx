@@ -19,7 +19,7 @@ export default function FeaturedPlayerCard({ player }: FeaturedPlayerCardProps) 
     player.slug ?? player.name.toLowerCase().replace(/\s+/g, "-");
 
   const cardContent = (
-    <div className="group relative rounded-2xl bg-white border border-black/5 overflow-hidden shadow-sm hover:shadow-lg hover:border-zru-green/20 transition-all duration-300 w-full">
+    <div className="group relative rounded-2xl bg-white border border-black/5 overflow-hidden shadow-sm hover:shadow-lg hover:border-zru-green/20 transition-[box-shadow,border-color] duration-300 w-full">
       {/* Image area with shield clip-path */}
       <div className="relative">
         <div
@@ -86,7 +86,7 @@ export default function FeaturedPlayerCard({ player }: FeaturedPlayerCardProps) 
       <div className="px-4 pb-4 pt-1 text-center">
         <Link
           href={`/players/${slug}`}
-          className="inline-block clip-slanted-sm bg-gradient-to-b from-[#00704D] to-[#005238] hover:from-[#006747] hover:to-[#00402B] text-white font-heading font-black text-[10px] sm:text-[11px] uppercase tracking-[0.18em] px-5 py-2 transition-all duration-300 shadow-sm hover:shadow-md"
+          className="inline-block clip-slanted-sm bg-gradient-to-b from-[#00704D] to-[#005238] hover:from-[#006747] hover:to-[#00402B] text-white font-heading font-black text-[10px] sm:text-[11px] uppercase tracking-[0.18em] px-5 py-2 transition-[background-color,box-shadow] duration-300 shadow-sm hover:shadow-md"
         >
           View Profile
         </Link>

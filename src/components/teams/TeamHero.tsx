@@ -99,14 +99,14 @@ export default function TeamHero({
           <div className="flex flex-wrap gap-4">
             <Link
               href={team.href}
-              className="inline-flex items-center justify-center font-heading tracking-wider uppercase transition-all duration-300 active:scale-95 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-zru-green bg-gradient-to-b from-[#00704D] to-[#005238] hover:from-[#006747] hover:to-[#00402B] text-white shadow-md hover:shadow-xl shadow-[#006747]/25 border-t border-white/20 clip-slanted px-12 py-4 text-2xl gap-2"
+              className="inline-flex items-center justify-center font-heading tracking-wider uppercase transition-[background,box-shadow] duration-300 active:scale-95 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-zru-green bg-gradient-to-b from-[#00704D] to-[#005238] hover:from-[#006747] hover:to-[#00402B] text-white shadow-md hover:shadow-xl shadow-[#006747]/25 border-t border-white/20 clip-slanted px-12 py-4 text-2xl gap-2"
             >
               Explore {team.shortName}
               <ArrowRight className="w-5 h-5" />
             </Link>
             <Link
               href={`${team.href}#fixtures`}
-              className="inline-flex items-center justify-center font-heading tracking-wider uppercase transition-all duration-300 active:scale-95 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-zru-green border border-white/40 bg-white/[0.06] backdrop-blur-sm hover:bg-white/[0.12] hover:border-white/70 text-white clip-slanted px-12 py-4 text-2xl gap-2"
+              className="inline-flex items-center justify-center font-heading tracking-wider uppercase transition-[background,border-color,box-shadow] duration-300 active:scale-95 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-zru-green border border-white/40 bg-white/[0.06] backdrop-blur-sm hover:bg-white/[0.12] hover:border-white/70 text-white clip-slanted px-12 py-4 text-2xl gap-2"
             >
               Fixtures & Results
             </Link>
@@ -162,7 +162,7 @@ export default function TeamHero({
               </p>
               <Link
                 href={team.href}
-                className="inline-flex items-center justify-center font-heading tracking-wider uppercase transition-all duration-300 active:scale-95 bg-white/15 hover:bg-white/25 text-white clip-slanted !py-1.5 !px-4 text-xs"
+                className="inline-flex items-center justify-center font-heading tracking-wider uppercase transition-[background-color] duration-300 active:scale-95 bg-white/15 hover:bg-white/25 text-white clip-slanted !py-1.5 !px-4 text-xs"
               >
                 Visit Hub
               </Link>

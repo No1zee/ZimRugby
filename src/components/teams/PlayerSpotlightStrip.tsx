@@ -13,7 +13,7 @@ export default function PlayerSpotlightStrip() {
           {/* Left Column: Player Spotlight Details */}
           <div className="lg:col-span-7 space-y-6">
             <span className="text-xs font-extrabold uppercase tracking-widest text-accent-teal block mb-2">Sables Player Spotlight</span>
-            <h2 className="font-heading text-4xl sm:text-6xl font-black uppercase tracking-tight italic leading-[1.0]">
+            <h2 className="font-heading text-4xl sm:text-6xl font-black uppercase tracking-tight not-italic leading-[1.0]">
               TINOTENDA <br />
               <span className="text-accent-teal">MASEKERE</span>
             </h2>
@@ -32,7 +32,7 @@ export default function PlayerSpotlightStrip() {
               {/* TODO: Link to Tinotenda Masekere's actual article slug once a CMS article is created */}
               <Link
                 href="/teams/sables"
-                className="inline-flex items-center gap-2 px-6 py-3.5 bg-zru-green hover:bg-green-700 text-white rounded-xl text-xs font-bold uppercase tracking-widest transition-all shadow-lg"
+                className="inline-flex items-center gap-2 px-6 py-3.5 bg-zru-green hover:bg-green-700 text-white rounded-xl text-xs font-bold uppercase tracking-widest transition-[background-color,box-shadow] shadow-lg"
               >
                 Read Player Feature <ArrowRight className="w-4 h-4" />
               </Link>
@@ -41,7 +41,7 @@ export default function PlayerSpotlightStrip() {
 
           {/* Right Column: Player Photo Card */}
           <div className="lg:col-span-5">
-            <div className="relative rounded-3xl overflow-hidden border border-white/15 bg-white/5 p-6 backdrop-blur-xl space-y-4">
+            <div className="relative rounded-3xl overflow-hidden border border-white/15 bg-white/10 p-6 space-y-4">
               <div className="relative h-80 sm:h-96 w-full rounded-2xl overflow-hidden">
                 <Image
                   src="/images/gallery/zimbabwe-sables-0351.webp"

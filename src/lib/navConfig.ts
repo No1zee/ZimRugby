@@ -23,26 +23,24 @@ export const navConfig: NavItem[] = [
     ],
   },
   {
-    label: "DOMESTIC & MATCH CENTRE",
+    label: "DOMESTIC RUGBY",
     href: "/match-centre",
     isMega: true,
     children: [
       { label: "Fixtures & Results", href: "/match-centre" },
+      { label: "Live Matches", href: "/live" },
       { label: "Club Championship", href: "/events?tab=competitions" },
       { label: "Schools Rugby", href: "/schools" },
       { label: "Referees & Laws", href: "/referees" },
-      { label: "Book Match Tickets", href: "/tickets" },
-      { label: "Live Matches", href: "/live" },
     ],
   },
   {
-    label: "WHAT'S ON",
+    label: "EVENTS",
     href: "/events",
     children: [
-      { label: "Competitions", href: "/events?tab=competitions" },
-      { label: "Federation Events", href: "/events?tab=events" },
+      { label: "Upcoming Events", href: "/events" },
+      { label: "Book Tickets", href: "/tickets" },
       { label: "Gallery", href: "/gallery" },
-      { label: "Video Hub", href: "/video-hub" },
     ],
   },
   {
@@ -51,7 +49,6 @@ export const navConfig: NavItem[] = [
     children: [
       { label: "Latest News", href: "/media" },
       { label: "Video Hub", href: "/video-hub" },
-      { label: "Gallery", href: "/gallery" },
     ],
   },
   {

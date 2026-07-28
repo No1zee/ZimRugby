@@ -83,7 +83,7 @@ export default function TeamCardBento() {
         {/* Section Header */}
         <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 mb-16">
           <div className="space-y-3 max-w-2xl">
-            <h2 className="font-heading text-4xl sm:text-5xl font-black uppercase tracking-tight text-rich-black italic">
+            <h2 className="font-heading text-4xl sm:text-5xl font-black uppercase tracking-tight text-rich-black not-italic">
               OUR NATIONAL TEAMS
             </h2>
             <p className="text-rich-black/70 text-base font-body leading-relaxed">
@@ -99,7 +99,7 @@ export default function TeamCardBento() {
             return (
               <div
                 key={team.slug}
-                className={`group relative rounded-3xl overflow-hidden border border-black/5 hover:border-zru-green/30 transition-all duration-300 flex flex-col justify-between p-8 sm:p-10 shadow-lg ${
+                className={`group relative rounded-3xl overflow-hidden border border-black/5 hover:border-zru-green/30 transition-[border-color] duration-300 flex flex-col justify-between p-8 sm:p-10 shadow-lg ${
                   team.accentStyle === "green" 
                     ? "bg-zru-green text-white" 
                     : team.accentStyle === "dark" 
@@ -152,7 +152,7 @@ export default function TeamCardBento() {
                     }`}>
                       {team.category}
                     </span>
-                    <h3 className="font-heading text-3xl sm:text-4xl font-black uppercase tracking-wide leading-none italic">
+                    <h3 className="font-heading text-3xl sm:text-4xl font-black uppercase tracking-wide leading-none not-italic">
                       {team.name}
                     </h3>
                     <p className={`text-sm font-body leading-relaxed max-w-md ${
@@ -182,7 +182,7 @@ export default function TeamCardBento() {
 
                   <Link 
                     href={`/teams/${team.slug}`}
-                    className={`inline-flex items-center gap-2 px-5 py-3 rounded-xl text-xs font-bold uppercase tracking-widest transition-all duration-300 ${
+                    className={`inline-flex items-center gap-2 px-5 py-3 rounded-xl text-xs font-bold uppercase tracking-widest transition-[background-color,color] duration-300 ${
                       team.accentStyle === "green" 
                         ? "bg-white text-zru-green hover:bg-milk-white" 
                         : team.accentStyle === "dark" 

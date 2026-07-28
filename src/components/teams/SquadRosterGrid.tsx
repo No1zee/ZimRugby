@@ -31,7 +31,7 @@ export default function SquadRosterGrid({ players = SAMPLE_ROSTER }: { players?:
             <button
               key={tab}
               onClick={() => setFilter(tab)}
-              className={`px-4 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wider transition-all ${
+              className={`px-4 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wider transition-[background-color,color] ${
                 filter === tab 
                   ? "bg-zru-green text-white shadow-md" 
                   : "text-rich-black/60 hover:text-rich-black"
@@ -48,7 +48,7 @@ export default function SquadRosterGrid({ players = SAMPLE_ROSTER }: { players?:
         {filtered.map((player) => (
           <div 
             key={player.name}
-            className="group p-6 bg-white border border-black/5 rounded-2xl shadow-sm hover:shadow-md hover:border-zru-green/30 transition-all duration-300 space-y-4"
+            className="group p-6 bg-white border border-black/5 rounded-2xl shadow-sm hover:shadow-md hover:border-zru-green/30 transition-[box-shadow,border-color] duration-300 space-y-4"
           >
             <div className="flex justify-between items-start">
               <div className="w-10 h-10 rounded-xl bg-zru-green/10 flex items-center justify-center text-zru-green">

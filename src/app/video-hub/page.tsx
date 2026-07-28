@@ -55,7 +55,7 @@ export default function VideoHubPage() {
               <span className="bg-zru-green text-rich-black px-3 py-1 rounded text-[10px] font-black uppercase tracking-wider w-fit block">
                 FEATURED VIDEO
               </span>
-              <h1 className="text-4xl sm:text-6xl font-black uppercase italic tracking-tighter text-glow-green leading-none">
+              <h1 className="text-4xl sm:text-6xl font-black uppercase not-italic tracking-tighter text-glow-green leading-none">
                 {featuredVideo.title}
               </h1>
               <p className="text-white/70 text-base md:text-lg font-normal leading-relaxed">
@@ -91,7 +91,7 @@ export default function VideoHubPage() {
       <MatchdayVideoHighlights />
 
       {/* 3. Navigation Filters & Search */}
-      <div className="border-y border-white/10 bg-rich-black/80 sticky top-16 z-30 backdrop-blur-md py-6">
+      <div className="border-y border-white/10 bg-rich-black sticky top-16 z-30 py-6">
         <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col lg:flex-row justify-between items-center gap-6">
             
@@ -103,7 +103,7 @@ export default function VideoHubPage() {
                   <button
                     key={cat}
                     onClick={() => setActiveCategory(cat)}
-                    className={`px-5 py-2.5 clip-slanted-sm text-xs font-black uppercase tracking-wider transition-all duration-300 whitespace-nowrap ${
+                    className={`px-5 py-2.5 clip-slanted-sm text-xs font-black uppercase tracking-wider transition-[background-color,color] duration-300 whitespace-nowrap ${
                       isActive 
                         ? "bg-zru-green text-rich-black shadow-lg" 
                         : "text-white/60 hover:text-white hover:bg-zru-green/10"
@@ -123,7 +123,7 @@ export default function VideoHubPage() {
                 placeholder="Search videos… e.g. Highlights"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full card-green border rounded-full pl-10 pr-4 py-2.5 text-white placeholder-gray-500 focus:outline-none focus:border-zru-green text-sm transition-all"
+                className="w-full card-green border rounded-full pl-10 pr-4 py-2.5 text-white placeholder-gray-500 focus:outline-none focus:border-zru-green text-sm transition-[border-color]"
               />
             </div>
 
@@ -146,8 +146,7 @@ export default function VideoHubPage() {
             {filteredVideos.map((video) => (
               <motion.div
                 key={video.id}
-                whileHover={{ y: -5 }}
-                className="card-green border rounded-2xl overflow-hidden group cursor-pointer shadow-xl glow-green-card"
+                className="card-green border rounded-2xl overflow-hidden group cursor-pointer shadow-xl"
                 onClick={() => setActiveVideo(video)}
               >
                 {/* Thumbnail container */}
@@ -157,11 +156,11 @@ export default function VideoHubPage() {
                     alt={video.title}
                     fill
                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                    className="object-cover opacity-75 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700"
+                    className="object-cover opacity-75 group-hover:opacity-100 group-hover:brightness-110 transition-[filter,opacity] duration-700"
                   />
                   {/* Play Button Overlay */}
                   <div className="absolute inset-0 flex items-center justify-center bg-black/20 opacity-80 group-hover:opacity-100 transition-opacity">
-                    <div className="w-14 h-14 rounded-full bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center group-hover:bg-white group-hover:text-black transition-all duration-300">
+                    <div className="w-14 h-14 rounded-full bg-white/10 border border-white/20 flex items-center justify-center group-hover:bg-white group-hover:text-black transition-[background-color,color] duration-300">
                       <Play className="w-5 h-5 ml-1 fill-current" />
                     </div>
                   </div>

@@ -70,7 +70,7 @@ export default function TeamMediaSection({ teamName, teamId }: TeamMediaSectionP
   return (
     <div className="space-y-12">
       {/* Section Header */}
-      <div className="border-l-4 border-zru-green pl-4">
+      <div className="pl-0">
         <h2 className="text-2xl font-black uppercase tracking-wider text-rich-black">MEDIA & UPDATES</h2>
         <p className="text-sm text-black/50 mt-1">
           Highlights, press conferences, and the latest from {teamName}.
@@ -89,7 +89,7 @@ export default function TeamMediaSection({ teamName, teamId }: TeamMediaSectionP
             <div
               key={video.id}
               onClick={() => setActiveVideo(video)}
-              className="bg-white border border-black/5 rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition-all group cursor-pointer"
+              className="bg-white border border-black/5 rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition-[box-shadow] group cursor-pointer"
             >
               {/* Thumbnail */}
               <div className="relative aspect-video w-full bg-black">
@@ -98,7 +98,7 @@ export default function TeamMediaSection({ teamName, teamId }: TeamMediaSectionP
                   alt={video.title}
                   fill
                   sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                  className="object-cover group-hover:scale-105 transition-transform duration-500"
+                    className="object-cover group-hover:brightness-110 transition-[filter] duration-500"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
                 <div className="absolute inset-0 flex items-center justify-center">
@@ -133,7 +133,7 @@ export default function TeamMediaSection({ teamName, teamId }: TeamMediaSectionP
             href="https://www.youtube.com/@ZimbabweRugbyUnion"
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 px-4 py-2.5 bg-zru-green hover:bg-[#005238] text-white rounded-xl text-xs font-black uppercase tracking-wider transition-all shadow-sm hover:shadow-md"
+            className="inline-flex items-center gap-2 px-4 py-2.5 bg-zru-green hover:bg-[#005238] text-white rounded-xl text-xs font-black uppercase tracking-wider transition-[background-color,box-shadow] shadow-sm hover:shadow-md"
           >
             <ExternalLink className="w-3.5 h-3.5" />
             VIEW ALL ON YOUTUBE
@@ -172,7 +172,7 @@ export default function TeamMediaSection({ teamName, teamId }: TeamMediaSectionP
                   {ann.ctaLabel && ann.ctaUrl && (
                     <a
                       href={ann.ctaUrl}
-                      className="shrink-0 px-4 py-2 border border-zru-green text-zru-green text-[10px] font-black uppercase tracking-widest rounded-lg hover:bg-zru-green hover:text-white transition-all"
+                      className="shrink-0 px-4 py-2 border border-zru-green text-zru-green text-[10px] font-black uppercase tracking-widest rounded-lg hover:bg-zru-green hover:text-white transition-[background-color,color]"
                     >
                       {ann.ctaLabel}
                     </a>
@@ -203,7 +203,7 @@ export default function TeamMediaSection({ teamName, teamId }: TeamMediaSectionP
             >
               <button
                 onClick={() => setActiveVideo(null)}
-                className="absolute top-4 right-4 z-20 p-2.5 rounded-full bg-black/80 hover:bg-zru-green text-white border border-white/20 transition-all shadow-lg"
+                className="absolute top-4 right-4 z-20 p-2.5 rounded-full bg-black/80 hover:bg-zru-green text-white border border-white/20 transition-[background-color] shadow-lg"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -220,7 +220,7 @@ export default function TeamMediaSection({ teamName, teamId }: TeamMediaSectionP
                 <span className="text-[10px] font-black text-zru-green uppercase tracking-widest block mb-1">
                   {activeVideo.category || "MATCH HIGHLIGHTS"}
                 </span>
-                <h3 className="font-black text-lg text-rich-black uppercase italic">{activeVideo.title}</h3>
+                <h3 className="font-black text-lg text-rich-black uppercase not-italic">{activeVideo.title}</h3>
               </div>
             </motion.div>
           </motion.div>

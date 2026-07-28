@@ -78,12 +78,6 @@ function TeamTile({ team }: { team: Team }) {
         </div>
       )}
 
-      {/* Accent left bar */}
-      <div
-        className="absolute top-0 left-0 w-1 h-full rounded-l-2xl"
-        style={{ background: team.accent }}
-      />
-
       {/* Content */}
       <div className="relative z-10 flex flex-col justify-between h-full p-6 sm:p-8">
         {/* Top: category label */}
@@ -133,11 +127,8 @@ function TeamTile({ team }: { team: Team }) {
 export default function TeamBentoGrid({ teams }: { teams: Team[] }) {
   return (
     <>
-      {/* Section label + heading */}
+      {/* Section heading */}
       <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 pt-16 mb-8 sm:mb-12">
-        <span className="block text-[10px] font-bold uppercase tracking-[0.2em] text-zru-green font-heading mb-2">
-          National Programmes
-        </span>
         <h2 className="font-heading text-3xl sm:text-4xl font-black uppercase tracking-tight not-italic text-rich-black leading-[1.05]">
           Our Teams
         </h2>

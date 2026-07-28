@@ -26,26 +26,25 @@ export default function VideoCard({
 
   return (
     <>
-      <motion.div
-        whileHover={{ y: -5 }}
+      <div
         onClick={() => videoId && setPlaying(true)}
-        className={`group ${videoId ? 'cursor-pointer' : ''} card-green p-4 rounded-2xl border glow-green-card`}
+        className={`group ${videoId ? 'cursor-pointer' : ''} card-green p-4 rounded-2xl border`}
       >
-        <div className="relative aspect-video bg-white/10 rounded-xl overflow-hidden mb-4 transition-colors">
+        <div className="relative aspect-video bg-white/10 rounded-xl overflow-hidden mb-4">
           <div className="absolute inset-0 bg-gray-800">
             <Image
               src={thumbnail}
               alt={title}
               fill
               sizes="(max-width: 768px) 100vw, 25vw"
-              className="object-cover opacity-90 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700"
+              className="object-cover opacity-90 group-hover:opacity-100 group-hover:brightness-110 transition-[filter,opacity] duration-700"
             />
           </div>
 
           <div className="absolute inset-0 bg-black/20 group-hover:bg-black/45 transition-colors" />
 
           <div className="absolute inset-0 flex items-center justify-center">
-            <div className="w-14 h-14 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center group-hover:scale-110 group-hover:bg-zru-green transition-all duration-300 shadow-lg">
+            <div className="w-14 h-14 bg-white/20 rounded-full flex items-center justify-center group-hover:bg-zru-green transition-[background-color] duration-300 shadow-lg">
               <Play className="w-6 h-6 text-white ml-1" fill="currentColor" />
             </div>
           </div>
@@ -64,7 +63,7 @@ export default function VideoCard({
           </h3>
           <span className="text-zinc-300 text-xs font-bold uppercase">{date}</span>
         </div>
-      </motion.div>
+      </div>
 
       {/* YouTube Embed Modal */}
       <AnimatePresence>
@@ -94,7 +93,7 @@ export default function VideoCard({
 
               <button
                 onClick={() => setPlaying(false)}
-                className="absolute top-4 right-4 z-10 w-10 h-10 bg-black/60 hover:bg-black/80 rounded-full flex items-center justify-center text-white transition-colors"
+                className="absolute top-4 right-4 z-10 w-10 h-10 bg-black/60 hover:bg-black/80 rounded-full flex items-center justify-center text-white transition-[background-color]"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -103,7 +102,7 @@ export default function VideoCard({
                 href={`https://www.youtube.com/watch?v=${videoId}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="absolute bottom-4 right-4 z-10 px-4 py-2 bg-red-600 hover:bg-red-700 text-white text-xs font-bold uppercase tracking-wider rounded-lg flex items-center gap-2 transition-colors"
+                className="absolute bottom-4 right-4 z-10 px-4 py-2 bg-red-600 hover:bg-red-700 text-white text-xs font-bold uppercase tracking-wider rounded-lg flex items-center gap-2 transition-[background-color]"
               >
                 <ExternalLink className="w-3.5 h-3.5" />
                 YouTube

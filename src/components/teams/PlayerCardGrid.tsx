@@ -47,7 +47,7 @@ export default function PlayerCardGrid({ squad, teamName }: PlayerCardGridProps)
               <button
                 key={f}
                 onClick={() => setFilter(f)}
-                className={`flex items-center gap-1.5 px-4 py-2 rounded-full text-[10px] font-black uppercase tracking-widest transition-all duration-300 ${
+                className={`flex items-center gap-1.5 px-4 py-2 rounded-full text-[10px] font-black uppercase tracking-widest transition-[background-color,color,border-color,box-shadow] duration-300 ${
                   filter === f
                     ? "bg-zru-green text-white shadow-md shadow-zru-green/20"
                     : "bg-white border border-black/10 text-black/50 hover:border-zru-green/40 hover:text-zru-green"
