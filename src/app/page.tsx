@@ -11,7 +11,6 @@ export const revalidate = 300;
 import UnifiedHubGrid from "@/components/home/UnifiedHubGrid";
 import HomeNewsletterBanner from "@/components/home/HomeNewsletterBanner";
 import RoadToWorldCup from "@/components/home/RoadToWorldCup";
-import FeaturedPlayersGrid from "@/components/teams/FeaturedPlayersGrid";
 import GrassrootsInitiativeSection from "@/components/home/GrassrootsInitiativeSection";
 import SponsorGrid from "@/components/home/SponsorGrid";
 import PinnedAnnouncements from "@/components/home/PinnedAnnouncements";
@@ -69,24 +68,13 @@ export default async function Home() {
         {/* 3. Full-Width ZRU Green Newsletter Banner (Matching Stitch Reference Layout) */}
         <HomeNewsletterBanner />
 
-        {/* 4. Road to World Cup — frame with countdown + Nations Cup video highlights */}
-        <RoadToWorldCup />
+        {/* 4. Road to World Cup — frame with countdown + Nations Cup video + Featured Players */}
+        <RoadToWorldCup featuredPlayers={featuredPlayers} />
 
-        {/* 5. Featured Players — CometCard 3D tilt on desktop */}
-        <section className="px-4 sm:px-6 lg:px-8 py-14 sm:py-20 max-w-[1200px] mx-auto">
-          <div className="mb-8">
-            <h2 className="text-3xl sm:text-5xl font-heading font-black uppercase tracking-tight text-rich-black not-italic">
-              FEATURED{" "}
-              <span className="text-accent-teal">PLAYERS</span>
-            </h2>
-          </div>
-          <FeaturedPlayersGrid players={featuredPlayers} />
-        </section>
-
-        {/* 6. Grassroots & Growing the Sport Section */}
+        {/* 5. Grassroots & Growing the Sport Section */}
         <GrassrootsInitiativeSection />
 
-        {/* 7. Commercial Partners & Sponsors Logo Grid */}
+        {/* 6. Commercial Partners & Sponsors Logo Grid */}
         <SponsorGrid />
 
       </div>

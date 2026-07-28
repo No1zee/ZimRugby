@@ -4,8 +4,14 @@ import React from "react";
 import Image from "next/image";
 import { AnimatedCountdown } from "@/components/ui/animated-countdown";
 import MatchdayVideoHighlights from "@/components/media/MatchdayVideoHighlights";
+import FeaturedPlayersGrid from "@/components/teams/FeaturedPlayersGrid";
+import type { FeaturedPlayer } from "@/types";
 
-export default function RoadToWorldCup() {
+interface RoadToWorldCupProps {
+  featuredPlayers: FeaturedPlayer[];
+}
+
+export default function RoadToWorldCup({ featuredPlayers }: RoadToWorldCupProps) {
   const targetDate = new Date("2027-10-01T20:00:00");
 
   return (
@@ -57,7 +63,7 @@ export default function RoadToWorldCup() {
         />
 
         {/* Left player cutout */}
-        <div className="absolute bottom-0 left-0 w-56 lg:w-72 h-[300px] lg:h-[360px] pointer-events-none z-[5]">
+        <div className="absolute bottom-0 left-0 w-40 lg:w-52 h-[260px] lg:h-[320px] pointer-events-none z-[5]">
           <Image
             src="/images/cutouts/3.svg"
             alt=""
@@ -69,7 +75,7 @@ export default function RoadToWorldCup() {
         </div>
 
         {/* Right player cutout */}
-        <div className="absolute bottom-0 right-0 w-56 lg:w-72 h-[300px] lg:h-[360px] pointer-events-none z-[5]">
+        <div className="absolute bottom-0 right-0 w-40 lg:w-52 h-[260px] lg:h-[320px] pointer-events-none z-[5]">
           <Image
             src="/images/cutouts/1.svg"
             alt=""
@@ -81,14 +87,14 @@ export default function RoadToWorldCup() {
         </div>
 
         {/* Section heading on the green */}
-        <div className="relative z-10 max-w-[1280px] mx-auto px-8 lg:px-12 text-center pt-14 mb-8">
+        <div className="relative z-10 max-w-[1360px] mx-auto px-8 lg:px-10 text-center pt-14 mb-8">
           <span className="text-[11px] font-bold tracking-[0.25em] uppercase text-white/80 font-heading">
             ROAD TO AUSTRALIA 2027
           </span>
         </div>
 
         {/* White center tile — sits on top of the green */}
-        <div className="relative z-20 max-w-[1200px] mx-auto px-8 lg:px-16">
+        <div className="relative z-20 max-w-[1360px] mx-auto px-8 lg:px-10">
           <div className="bg-[#FDFBF0] rounded-t-2xl shadow-[0_-8px_40px_rgba(0,0,0,0.15)] overflow-hidden">
             {/* Countdown row */}
             <div className="px-8 py-10 flex flex-col items-center border-b border-black/5">
@@ -108,6 +114,17 @@ export default function RoadToWorldCup() {
               <MatchdayVideoHighlights
                 showChannelLink={true}
               />
+            </div>
+
+            {/* Featured Players */}
+            <div className="px-4 sm:px-6 lg:px-8 py-10 border-t border-black/5">
+              <div className="mb-8">
+                <h2 className="text-3xl sm:text-5xl font-heading font-black uppercase tracking-tight text-rich-black not-italic">
+                  FEATURED{" "}
+                  <span className="text-accent-teal">PLAYERS</span>
+                </h2>
+              </div>
+              <FeaturedPlayersGrid players={featuredPlayers} />
             </div>
           </div>
         </div>
