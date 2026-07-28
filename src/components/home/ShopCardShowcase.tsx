@@ -3,7 +3,7 @@
 import React from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowRight, Store } from "lucide-react";
+import { ShoppingBag } from "lucide-react";
 
 const SHOP_PRODUCTS = [
   {
@@ -62,7 +62,7 @@ export default function ShopCardShowcase() {
   return (
     <div ref={wrapperRef}>
     <Link
-      href="/fan-zone"
+      href="/clubhouse"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       className="relative bg-white rounded-lg overflow-hidden group h-[320px] md:h-full flex flex-col"
@@ -72,9 +72,9 @@ export default function ShopCardShowcase() {
         <Image
           key={currentProduct.id}
           src={currentProduct.cutout}
-          alt="Official ZRU merchandise"
+          alt="Shop merchandise"
           fill
-          className="object-contain object-bottom scale-[1.72] -translate-y-[32%] drop-shadow-[0_-8px_30px_rgba(0,0,0,0.25)] group-hover:brightness-110 transition-[filter] duration-500 ease-out opacity-40"
+          className="object-contain object-bottom scale-[1.72] -translate-y-[32%] drop-shadow-[0_-8px_30px_rgba(0,0,0,0.25)] group-hover:scale-[1.82] transition-transform duration-500 ease-out"
           sizes="(max-width: 768px) 100vw, 25vw"
         />
       </div>
@@ -82,24 +82,22 @@ export default function ShopCardShowcase() {
       {/* Gradient Overlay — subtle bottom for depth */}
       <div className="absolute inset-0 bg-gradient-to-t from-green-primary/40 via-transparent to-transparent" />
 
-      {/* Content */}
-      <div className="absolute inset-0 flex flex-col justify-between p-4 z-10">
-        {/* Top: badge */}
-        <div className="flex items-center gap-1.5 self-start">
-          <Store className="w-3.5 h-3.5 text-white" />
-          <span className="text-[9px] font-black uppercase tracking-widest text-white">
-            Official Store
-          </span>
-        </div>
-
-        {/* Bottom */}
-        <div className="space-y-2">
-          <p className="text-[10px] text-white/70 font-bold uppercase tracking-wider leading-relaxed">
-            Join the Fan Zone for exclusive merch access and 10% off
-          </p>
-          <div className="w-full bg-white/10 border border-white/20 text-white py-3 font-extrabold text-[11px] uppercase not-italic flex justify-center items-center gap-2 group-hover:bg-white group-hover:text-green-primary transition-[background-color,color] duration-300">
-            Join the Fan Zone <ArrowRight size={14} />
-          </div>
+      {/* Product Dots */}
+      <div className="absolute top-4 left-4 flex gap-1 z-10">
+        {SHOP_PRODUCTS.map((prod, idx) => (
+          <button
+            key={prod.id}
+            onClick={(e) => { e.preventDefault(); setActiveIndex(idx); }}
+            className={`w-2 h-2 rounded-full transition-colors duration-300 cursor-pointer ${
+              idx === activeIndex ? "bg-accent-teal" : "bg-white/50"
+            }`}
+          />
+        ))}
+      </div>
+      {/* Bottom Button */}
+      <div className="absolute bottom-4 left-4 right-4 z-10">
+        <div className="w-full bg-white/10 backdrop-blur-md border border-white/20 text-white py-3 font-extrabold text-[11px] uppercase italic flex justify-center items-center gap-2 group-hover:bg-white group-hover:text-green-primary transition-all">
+          Shop Collection <ShoppingBag size={16} />
         </div>
       </div>
     </Link>
