@@ -270,7 +270,7 @@ export default function HeroCarousel({ slides }: { slides: HeroSlideData[] }) {
   return (
     <section
       ref={containerRef}
-      className="relative w-full min-h-[85dvh] bg-rich-black overflow-hidden"
+      className="relative w-full h-[100dvh] bg-rich-black overflow-hidden flex items-center justify-center"
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}
       onFocus={() => setIsPaused(true)}
