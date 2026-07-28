@@ -14,6 +14,7 @@ import CleanCountdownBanner from "@/components/home/CleanCountdownBanner";
 import FeaturedPlayersGrid from "@/components/teams/FeaturedPlayersGrid";
 import GrassrootsInitiativeSection from "@/components/home/GrassrootsInitiativeSection";
 import SponsorGrid from "@/components/home/SponsorGrid";
+import PinnedAnnouncements from "@/components/home/PinnedAnnouncements";
 
 import { getHeroSlides } from "@/lib/api/hero";
 import type { FeaturedPlayer } from "@/types";
@@ -58,6 +59,9 @@ export default async function Home() {
       </Suspense>
 
       <div className="relative z-10">
+
+        {/* 1b. Pinned Announcements — media-managed event/announcement strip */}
+        <PinnedAnnouncements />
 
         {/* 2. Unified 4-Column Hub Grid (News Stack + Match Tickets + Official Shop + Nations Cup Videos) */}
         <UnifiedHubGrid />

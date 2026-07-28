@@ -4,11 +4,12 @@ import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion } from "framer-motion";
-import { Home, Trophy, Newspaper, Users, Menu } from "lucide-react";
+import { Home, Trophy, Newspaper, Users, Menu, Shield } from "lucide-react";
 import { cn } from "../../lib/utils";
 
 const dockItems = [
   { label: "Home", icon: Home, href: "/" },
+  { label: "Teams", icon: Shield, href: "/teams" },
   { label: "Matches", icon: Trophy, href: "/match-centre" },
   { label: "Media", icon: Newspaper, href: "/media" },
   { label: "Fan Zone", icon: Users, href: "/fan-zone" },
@@ -70,7 +71,7 @@ export default function MobileDock() {
               {...(linkProps as Record<string, unknown>)}
               onClick={(e: React.MouseEvent) => handleInteraction(item, e)}
               whileTap={{ scale: 0.85 }}
-              className="relative flex flex-col items-center justify-center p-2 sm:p-2.5 min-w-[64px] sm:min-w-[80px] outline-none"
+              className="relative flex flex-col items-center justify-center p-2 sm:p-2.5 min-w-0 flex-1 outline-none"
             >
               {isActive && (
                 <motion.div
