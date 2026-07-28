@@ -31,8 +31,11 @@ export default function RoadToWorldCup({ featuredPlayers }: RoadToWorldCupProps)
           }}
         />
         <div className="relative z-20 max-w-[1360px] mx-auto px-4 flex flex-col items-center text-center">
-          <span className="text-[11px] font-bold tracking-[0.25em] uppercase text-white/90 mb-4 font-heading">
-            ROAD TO AUSTRALIA 2027
+          <span className="text-[11px] font-bold tracking-[0.25em] uppercase text-white/90 mb-3 font-heading block">
+            ROAD TO AUSTRALIA
+          </span>
+          <span className="text-[9px] font-normal tracking-[0.2em] uppercase text-white/50 mb-4 font-heading block">
+            2027 RUGBY WORLD CUP
           </span>
           <AnimatedCountdown
             targetDate={targetDate}
@@ -87,10 +90,14 @@ export default function RoadToWorldCup({ featuredPlayers }: RoadToWorldCupProps)
         </div>
 
         {/* Section heading on the green */}
-        <div className="relative z-10 max-w-[1360px] mx-auto px-8 lg:px-10 text-center pt-14 mb-8">
-          <span className="text-[11px] font-bold tracking-[0.25em] uppercase text-white/80 font-heading">
-            ROAD TO AUSTRALIA 2027
-          </span>
+        <div className="relative z-10 max-w-[1360px] mx-auto px-8 lg:px-10 text-center pt-14 mb-10">
+          <h2 className="text-4xl sm:text-5xl lg:text-6xl font-heading font-black uppercase tracking-tight text-white not-italic leading-[1.0]">
+            ROAD TO{" "}
+            <span className="text-accent-teal">AUSTRALIA</span>
+            <span className="block text-lg sm:text-xl lg:text-2xl text-white/60 font-normal tracking-[0.15em] mt-2">
+              2027 RUGBY WORLD CUP
+            </span>
+          </h2>
         </div>
 
         {/* White center tile — sits on top of the green */}
