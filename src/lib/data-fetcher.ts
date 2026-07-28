@@ -28,16 +28,14 @@ export interface Report {
  * Fetch static JSON from public/data with ISR revalidation.
  * Uses fetch() with next.revalidate so Next.js caches and revalidates automatically.
  */
-async function readStaticJson<T>(filename: string, revalidateSeconds: number): Promise<T[]> {
+async function readStaticJson<T>(filename: string, _revalidateSeconds: number): Promise<T[]> {
   try {
     if (typeof window === 'undefined') {
-      // Server-side: fetch via internal URL to get ISR caching
-      const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
-      const res = await fetch(`${baseUrl}/data/${filename}`, {
-        next: { revalidate: revalidateSeconds },
-      });
-      if (!res.ok) throw new Error(`Failed to fetch ${filename}`);
-      return await res.json();
+      // Server-side / Build-time: Read directly from public/data via fs to avoid localhost ECONNREFUSED during static export
+      const [fs, path] = await Promise.all([import('fs'), import('path')]);
+      const filePath = path.join(process.cwd(), 'public', 'data', filename);
+      const fileContent = fs.readFileSync(filePath, 'utf8');
+      return JSON.parse(fileContent);
     } else {
       // Client-side: direct fetch
       const res = await fetch(`/data/${filename}`);
