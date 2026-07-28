@@ -28,7 +28,7 @@ export function isValidEmail(email: string): boolean {
 export interface FormSubmission {
   id: string;
   timestamp: string;
-  formType: "newsletter" | "referee_course" | "ticket_interest" | "contact_message";
+  formType: "newsletter" | "fan_zone_member" | "referee_course" | "ticket_interest" | "contact_message";
   data: Record<string, unknown>;
 }
 

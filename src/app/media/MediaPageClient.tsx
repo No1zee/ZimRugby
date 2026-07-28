@@ -12,6 +12,7 @@ import PageAnnouncements from "@/components/ui/PageAnnouncements";
 import MatchdayVideoHighlights from "@/components/media/MatchdayVideoHighlights";
 import Image from "next/image";
 import Link from "next/link";
+import FanZoneSignup from "@/components/fanzone/FanZoneSignup";
 
 interface MediaPageClientProps {
   initialSocialPosts: any[];
@@ -314,7 +315,13 @@ export default function MediaPageClient({ initialSocialPosts }: MediaPageClientP
 
       </div>
       
-      <section className="mt-24 border-t border-black/5 pt-24">
+      <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div className="bg-white border border-black/5 rounded-2xl p-6 md:p-8">
+          <FanZoneSignup variant="compact" />
+        </div>
+      </div>
+
+      <section className="mt-12 border-t border-black/5 pt-24">
         <JournalStrip />
       </section>
     </main>

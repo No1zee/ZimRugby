@@ -317,13 +317,18 @@ export default function RefereesPortalPage() {
                   <p className="text-black/60 text-xs leading-relaxed max-w-[220px] mx-auto font-normal">
                     Thank you, <strong>{formName}</strong>. Your registration for <strong>{formCourse}</strong> has been filed. The Referees Committee will contact you at <strong>{formEmail}</strong>.
                   </p>
+                  <div className="pt-3 border-t border-black/5">
+                    <a href="/fan-zone" className="text-[9px] font-black uppercase text-zru-green hover:text-black transition-[color] tracking-widest">
+                      Join the Fan Zone for exclusive benefits
+                    </a>
+                  </div>
                   <button 
                     onClick={() => {
                       setFormSubmitted(false);
                       setFormName("");
                       setFormEmail("");
                     }}
-                    className="text-[9px] font-black uppercase text-zru-green hover:text-black transition-colors tracking-widest pt-4"
+                    className="text-[9px] font-black uppercase text-black/50 hover:text-black transition-[color] tracking-widest pt-2"
                   >
                     Register Another Person
                   </button>

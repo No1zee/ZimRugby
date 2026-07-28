@@ -53,7 +53,7 @@ export default function FanZonePage() {
     setSubmitError("");
 
     try {
-      await saveSubmission("newsletter", {
+      await saveSubmission("fan_zone_member", {
         name,
         email,
         country,

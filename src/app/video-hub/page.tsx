@@ -8,6 +8,7 @@ import { getVideos } from "@/lib/api/videos";
 import { Video } from "@/types";
 import { GlowButton } from "@/components/ui/animations";
 import MatchdayVideoHighlights from "@/components/media/MatchdayVideoHighlights";
+import FanZoneSignup from "@/components/fanzone/FanZoneSignup";
 
 export default function VideoHubPage() {
   const [videos, setVideos] = useState<Video[]>([]);
@@ -258,6 +259,12 @@ export default function VideoHubPage() {
           </motion.div>
         )}
       </AnimatePresence>
+
+      <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div className="bg-white border border-black/5 rounded-2xl p-6 md:p-8">
+          <FanZoneSignup variant="compact" />
+        </div>
+      </div>
 
     </main>
   );

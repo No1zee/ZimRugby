@@ -5,6 +5,7 @@ import PageHero from "@/components/ui/PageHero";
 import Link from "next/link";
 import { GraduationCap, MapPin } from "lucide-react";
 import type { Team } from "@/types/team";
+import FanZoneSignup from "@/components/fanzone/FanZoneSignup";
 
 export const metadata: Metadata = {
   title: "National Teams | Zimbabwe Rugby Union",
@@ -159,6 +160,13 @@ export default function TeamsPage() {
           <TeamBentoGrid teams={TEAMS} />
         </Suspense>
       </div>
+
+      {/* Fan Zone Signup */}
+      <section className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div className="bg-white border border-black/5 rounded-2xl p-6 md:p-8">
+          <FanZoneSignup variant="compact" />
+        </div>
+      </section>
 
       {/* Development & Pathways — Dark CTA Banner (family pattern) */}
       <section className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">

@@ -111,9 +111,15 @@ export default function ContactPage() {
                 <p className="text-white/70 text-xs leading-relaxed max-w-sm mx-auto font-normal">
                   Thank you! Your enquiry has been safely received. A ZRU representative from the selected department will reply to your email shortly.
                 </p>
+                <div className="pt-4 border-t border-white/5 max-w-sm mx-auto">
+                  <p className="text-white/40 text-[10px] uppercase tracking-widest font-bold mb-2">While you wait</p>
+                  <a href="/fan-zone" className="inline-flex items-center gap-1.5 text-zru-green text-xs font-black uppercase tracking-wider hover:text-white transition-[color] duration-300">
+                    Join the Fan Zone for priority tickets and exclusive benefits
+                  </a>
+                </div>
                 <button 
                   onClick={() => setSubmitSuccess(false)}
-                  className="text-xs font-black uppercase text-zru-green hover:text-white transition-colors tracking-widest pt-6 block mx-auto underline"
+                  className="text-xs font-black uppercase text-zru-green hover:text-white transition-[color] tracking-widest pt-2 block mx-auto underline"
                 >
                   Send another message
                 </button>

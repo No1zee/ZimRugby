@@ -530,9 +530,16 @@ export default function TicketsPage() {
                   <motion.div 
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
-                    className="p-6 bg-green-500/10 border border-green-500/20 rounded-xl mb-8"
+                    className="space-y-4"
                   >
-                    <p className="text-sm text-green-500 font-bold">Priority registration recorded! We&apos;ll alert you via email as soon as tickets go on sale.</p>
+                    <div className="p-6 bg-green-500/10 border border-green-500/20 rounded-xl">
+                      <p className="text-sm text-green-500 font-bold">Priority registration recorded! We&apos;ll alert you via email as soon as tickets go on sale.</p>
+                    </div>
+                    <div className="text-center">
+                      <a href="/fan-zone" className="text-[10px] font-black uppercase tracking-widest text-zru-green hover:text-rich-black transition-[color] duration-300">
+                        Join the Fan Zone for priority presale access
+                      </a>
+                    </div>
                   </motion.div>
                 ) : (
                   <p className="text-sm text-black/60 font-normal mb-8 pr-12">

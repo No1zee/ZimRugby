@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { Facebook, Twitter, Instagram, Youtube, Linkedin } from "lucide-react";
+import FanZoneSignup from "@/components/fanzone/FanZoneSignup";
 
 export default function SpecFooter() {
   return (
@@ -46,24 +47,10 @@ export default function SpecFooter() {
           </div>
         </div>
 
-        {/* Column 4: NEWSLETTER (Alternative Placement) */}
+        {/* Column 4: FAN ZONE */}
         <div className="space-y-6">
-          <h4 className="text-[11px] font-black uppercase tracking-widest text-black/50 mb-6">NEWSLETTER</h4>
-          <p className="text-sm font-normal text-black/70 mb-4">Stay updated with the latest from the Sables.</p>
-          <form className="flex w-full" onSubmit={(e) => e.preventDefault()}>
-            <input 
-              type="email" 
-              placeholder="Email address" 
-              className="bg-white border border-gray-200 text-black px-4 py-3 w-full rounded-l-md outline-none placeholder:text-gray-400 font-normal text-sm"
-              required
-            />
-            <button 
-              type="submit"
-              className="bg-zru-green text-white font-black uppercase px-6 py-3 rounded-r-md hover:bg-[#00452A] transition-colors text-xs shrink-0"
-            >
-              JOIN
-            </button>
-          </form>
+          <h4 className="text-[11px] font-black uppercase tracking-widest text-black/50 mb-6">FAN ZONE</h4>
+          <FanZoneSignup variant="compact" />
         </div>
 
       </div>
