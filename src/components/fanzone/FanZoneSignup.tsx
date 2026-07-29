@@ -47,7 +47,7 @@ export default function FanZoneSignup({
       <div
         className="rounded-3xl p-6 sm:p-10 text-center space-y-2 border border-white/10"
         style={{
-          background: "radial-gradient(circle at 50% 25%, #0A1C15 0%, #00331F 60%, #001A10 100%)",
+          background: "radial-gradient(circle at 50% 25%, #006747 0%, #004D34 60%, #003322 100%)",
         }}
       >
         <CheckCircle className="w-8 h-8 text-emerald-400 mx-auto" />
@@ -66,7 +66,7 @@ export default function FanZoneSignup({
       <div
         className="group/fzCard rounded-3xl p-5 sm:p-6 flex flex-col sm:flex-row items-center justify-between gap-4 relative overflow-hidden shadow-2xl transition-shadow duration-500 ease-in-out touch-manipulation cursor-pointer border border-white/10"
         style={{
-          background: "radial-gradient(circle at 50% 25%, #0A1C15 0%, #00331F 60%, #001A10 100%)",
+          background: "radial-gradient(circle at 50% 25%, #006747 0%, #004D34 60%, #003322 100%)",
         }}
       >
         {/* Border glow */}
@@ -146,7 +146,7 @@ export default function FanZoneSignup({
     <div
       className="group/fzCard rounded-3xl p-6 sm:p-10 md:p-14 flex flex-col lg:flex-row items-center justify-between gap-6 lg:gap-10 relative overflow-hidden shadow-2xl transition-shadow duration-500 ease-in-out touch-manipulation cursor-pointer border border-white/10"
       style={{
-        background: "radial-gradient(circle at 50% 25%, #0A1C15 0%, #00331F 60%, #001A10 100%)",
+        background: "radial-gradient(circle at 50% 25%, #006747 0%, #004D34 60%, #003322 100%)",
       }}
     >
       {/* Border glow */}
