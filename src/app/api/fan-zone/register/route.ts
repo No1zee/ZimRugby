@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { fanSignupSchema } from "@/lib/validations/fanSignup";
 import { saveSubmission } from "@/lib/mockStorage";
+import { supabase } from "@/lib/supabase/client";
 
 // Simple in-memory rate limiter: max 5 requests per minute per IP
 const rateLimitMap = new Map<string, { count: number; resetTime: number }>();
@@ -40,12 +41,26 @@ export async function POST(req: Request) {
     }
 
     const memberData = {
-      ...result.data,
-      vipCode: "SABLES2027",
-      registeredAt: new Date().toISOString(),
+      name: result.data.name,
+      email: result.data.email,
+      favorite_team: result.data.favoriteTeam,
+      cdpa_consent: result.data.cdpaConsent,
+      vip_code: "SABLES2027",
+      registered_at: new Date().toISOString(),
     };
 
-    // Dual-write buffer (primary storage + local failover buffer)
+    // 1. Write to Supabase (if configured)
+    if (process.env.NEXT_PUBLIC_SUPABASE_URL) {
+      const { error: dbError } = await supabase
+        .from("fan_zone_members")
+        .insert([memberData]);
+      
+      if (dbError) {
+        console.warn("Supabase write fallback to local buffer:", dbError.message);
+      }
+    }
+
+    // 2. Dual-write buffer (local failover log)
     await saveSubmission("fan_zone_member", memberData);
 
     return NextResponse.json({
