@@ -101,7 +101,7 @@ export default function SponsorGrid() {
         {/* ── 1. Centered Header Narrative ── */}
         <div className="text-center space-y-3 max-w-2xl mx-auto">
           <h2 className="font-heading text-3xl sm:text-5xl font-black uppercase text-rich-black tracking-tight leading-tight">
-            POWERING ZIMBABWE <span className="text-accent-teal">RUGBY</span>
+            POWERING ZIMBABWEAN <span className="text-accent-teal">RUGBY</span>
           </h2>
           <p className="text-xs sm:text-sm text-rich-black/70 font-normal max-w-lg mx-auto">
             Proudly supported by world-class commercial partners driving national team excellence and grassroots growth.
@@ -184,20 +184,38 @@ export default function SponsorGrid() {
 
       </div>
 
-      {/* ── 4. Straddled Green & White Bottom Banner with SlantedButton ── */}
+      {/* ── 4. Green & White Strips with Logo Dock + Bottom CTA ── */}
       <div className="relative -mx-4 sm:-mx-6 lg:-mx-8 mt-12">
-        {/* Green top half strip */}
-        <div className="bg-[#006747] h-20 sm:h-24 flex items-center justify-center">
-          <span className="text-white/40 text-[10px] font-extrabold tracking-[0.3em] uppercase hidden sm:block">
+        {/* Green top strip */}
+        <div className="bg-[#006747] py-6 sm:py-8 flex items-center justify-center">
+          <span className="text-white/70 text-[10px] sm:text-xs font-black tracking-[0.3em] uppercase">
             COMMERCIAL OPPORTUNITIES • ROAD TO AUSTRALIA 2027
           </span>
         </div>
         
-        {/* White bottom half strip */}
-        <div className="bg-white h-20 sm:h-24" />
+        {/* White bottom strip — contains sponsor logos */}
+        <div className="bg-white py-6 sm:py-8 px-4 sm:px-6 lg:px-8 border-b border-black/5">
+          <div className="max-w-[1440px] mx-auto flex flex-wrap items-center justify-center gap-6 sm:gap-10">
+            {SPONSORS.map((s, idx) => (
+              <button
+                key={s.id}
+                onClick={() => setActiveIdx(idx)}
+                className="relative h-10 sm:h-12 w-28 sm:w-36 transition-all duration-300 opacity-75 hover:opacity-100 hover:scale-105 cursor-pointer"
+                title={s.name}
+              >
+                <Image
+                  src={s.logo}
+                  alt={s.name}
+                  fill
+                  className="object-contain"
+                />
+              </button>
+            ))}
+          </div>
+        </div>
 
-        {/* SlantedButton — straddled 50% on green & 50% on white */}
-        <div className="absolute inset-0 flex items-center justify-center pointer-events-auto z-20">
+        {/* CTA Button placed below the strips */}
+        <div className="py-8 flex items-center justify-center bg-milk-white">
           <SlantedButton
             href="/partners"
             variant="primary"
