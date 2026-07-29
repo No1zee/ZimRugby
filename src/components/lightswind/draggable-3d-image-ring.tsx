@@ -5,6 +5,8 @@ import Image from "next/image";
 import { Camera, MoveHorizontal, Maximize2, ShieldCheck } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
+import { useAdaptivePerformance } from "@/components/providers/AdaptivePerformanceProvider";
+
 export interface ImageRingItem {
   id: string;
   image: string;
@@ -20,6 +22,7 @@ interface ThreeDImageRingProps {
 }
 
 export function ThreeDImageRing({ items, onSelectItem }: ThreeDImageRingProps) {
+  const { isLowTierDevice, isSlowNetwork, shouldReduceMotion } = useAdaptivePerformance();
   const [rotationY, setRotationY] = useState(0);
   const [isDragging, setIsDragging] = useState(false);
   const [startX, setStartX] = useState(0);
@@ -42,9 +45,9 @@ export function ThreeDImageRing({ items, onSelectItem }: ThreeDImageRingProps) {
   const radius = typeof window !== "undefined" && window.innerWidth < 640 ? 170 : 420;
   const angleStep = 360 / totalItems;
 
-  // Auto-rotate slowly when not dragging (bypassed on mobile to prevent scroll jank)
+  // Auto-rotate slowly when not dragging (bypassed on low-tier mobile/networks or reduced motion)
   useEffect(() => {
-    if (isDragging) return;
+    if (isDragging || isLowTierDevice || isSlowNetwork || shouldReduceMotion) return;
     const isMobileDevice = typeof window !== "undefined" && window.innerWidth < 768;
     if (isMobileDevice) return; // Disable continuous 3D rotation loop on mobile
 
@@ -53,7 +56,7 @@ export function ThreeDImageRing({ items, onSelectItem }: ThreeDImageRingProps) {
     }, 30);
 
     return () => clearInterval(interval);
-  }, [isDragging]);
+  }, [isDragging, isLowTierDevice, isSlowNetwork, shouldReduceMotion]);
 
   const handleMouseDown = (e: React.MouseEvent | React.TouchEvent) => {
     setIsDragging(true);

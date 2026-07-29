@@ -4,6 +4,7 @@ import Navigation from "@/components/layout/Navigation";
 import Footer from "@/components/layout/Footer";
 import ClientLayoutShell from "@/components/layout/ClientLayoutShell";
 import PageTransitionLoader from "@/components/common/PageTransitionLoader";
+import { AdaptivePerformanceProvider } from "@/components/providers/AdaptivePerformanceProvider";
 
 export const viewport: Viewport = {
   themeColor: [
@@ -64,6 +65,12 @@ export default function RootLayout({
         >
           Skip to main content
         </a>
+        <a
+          href="#main-content"
+          className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-[100] focus:px-4 focus:py-2 focus:bg-zru-green focus:text-white focus:rounded-md focus:outline-none"
+        >
+          Skip to main content
+        </a>
         <noscript>
           <div className="bg-red-950 text-white p-4 text-center font-bold text-sm font-body">
             JavaScript is disabled. For the best experience on the Zimbabwe Rugby Union platform, please enable JavaScript in your browser settings.
@@ -71,13 +78,15 @@ export default function RootLayout({
         </noscript>
         {/* Page transition particle burst loader — fires on mount and on every route change */}
         <PageTransitionLoader />
-        <ClientLayoutShell>
-          <Navigation />
-          <main id="main-content" className="relative min-h-screen bg-milk-white">
-            {children}
-          </main>
-          <Footer />
-        </ClientLayoutShell>
+        <AdaptivePerformanceProvider>
+          <ClientLayoutShell>
+            <Navigation />
+            <main id="main-content" className="relative min-h-screen bg-milk-white">
+              {children}
+            </main>
+            <Footer />
+          </ClientLayoutShell>
+        </AdaptivePerformanceProvider>
       </body>
     </html>
   );
