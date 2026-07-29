@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { fanSignupSchema } from "@/lib/validations/fanSignup";
 import { saveSubmission } from "@/lib/mockStorage";
 import { supabase } from "@/lib/supabase/client";
+import { publishToQueue } from "@/lib/qstash/client";
 
 // Simple in-memory rate limiter: max 5 requests per minute per IP
 const rateLimitMap = new Map<string, { count: number; resetTime: number }>();
@@ -48,6 +49,13 @@ export async function POST(req: Request) {
       vip_code: "SABLES2027",
       registered_at: new Date().toISOString(),
     };
+
+    // Publish to QStash queue buffer for zero-data-loss 202 Accepted processing
+    const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://zimrugby.vercel.app";
+    await publishToQueue(`${baseUrl}/api/queue/worker`, {
+      formType: "fan_zone_member",
+      data: memberData,
+    });
 
     // 1. Write to Supabase (if configured)
     if (process.env.NEXT_PUBLIC_SUPABASE_URL) {
