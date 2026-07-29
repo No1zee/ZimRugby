@@ -1,6 +1,6 @@
 /**
  * Reusable plain-REST fetch helper to interact with Directus collections.
- * Avoids SDK generic constraint issues at compile time.
+ * Uses native fetch with ISR revalidation — no SDK generics.
  */
 
 interface FetchParams {
@@ -15,12 +15,17 @@ interface FetchParams {
 export async function directusFetch<T>(
   collection: string,
   params: FetchParams = {},
-  revalidateSeconds: number = 300
+  revalidateSeconds: number = 60
 ): Promise<T[]> {
-  const baseUrl = process.env.NEXT_PUBLIC_DIRECTUS_URL || "http://localhost:8055";
+  const baseUrl = process.env.NEXT_PUBLIC_DIRECTUS_URL;
+
+  if (!baseUrl) {
+    console.warn(`Directus URL not configured — returning empty fallback for collection "${collection}".`);
+    return [] as T[];
+  }
+
   const url = new URL(`${baseUrl}/items/${collection}`);
 
-  // Compile Directus API query options
   if (params.fields) {
     url.searchParams.append("fields", params.fields.join(","));
   }

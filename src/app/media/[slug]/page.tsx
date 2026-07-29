@@ -64,11 +64,11 @@ export default async function ReportPage({ params }: PageProps) {
             href="/media" 
             className="group inline-flex items-center gap-3 text-[10px] font-heading font-black uppercase tracking-[0.15em] text-zru-green mb-10 transition-all hover:gap-4"
           >
-            <ArrowLeft className="w-4 h-4" /> Back to News & Media
+            <ArrowLeft className="w-4 h-4" /> Back to Media
           </Link>
           
           <div className="flex flex-wrap items-center gap-6 mb-8">
-            <span className="bg-zru-green text-black px-6 py-1.5 text-[10px] font-black uppercase tracking-[0.2em] rounded-full shadow-[0_0_20px_rgba(0,107,63,0.3)]">
+            <span className="bg-zru-green text-black px-6 py-1.5 text-[10px] font-black uppercase tracking-[0.2em] rounded-full">
               {report.category}
             </span>
             <div className="flex items-center gap-3 text-white/40 text-[10px] font-bold uppercase tracking-widest">
@@ -79,7 +79,7 @@ export default async function ReportPage({ params }: PageProps) {
             </div>
           </div>
           
-          <h1 className="text-5xl md:text-8xl lg:text-9xl font-black uppercase tracking-tighter leading-[0.8] italic mb-4 max-w-5xl text-glow-heavy">
+          <h1 className="text-5xl md:text-8xl lg:text-9xl font-black uppercase tracking-tighter leading-[0.8] italic mb-4 max-w-5xl">
             {report.title}
           </h1>
         </div>
