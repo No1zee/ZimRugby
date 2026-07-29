@@ -3,6 +3,7 @@ import { fanSignupSchema } from "@/lib/validations/fanSignup";
 import { saveSubmission } from "@/lib/mockStorage";
 import { supabase } from "@/lib/supabase/client";
 import { publishToQueue } from "@/lib/qstash/client";
+import { sendVIPWelcomeEmail } from "@/lib/email/client";
 
 // Simple in-memory rate limiter: max 5 requests per minute per IP
 const rateLimitMap = new Map<string, { count: number; resetTime: number }>();
@@ -55,6 +56,14 @@ export async function POST(req: Request) {
     await publishToQueue(`${baseUrl}/api/queue/worker`, {
       formType: "fan_zone_member",
       data: memberData,
+    });
+
+    // Trigger automated VIP welcome email with merchandise discount code
+    await sendVIPWelcomeEmail({
+      name: result.data.name,
+      email: result.data.email,
+      vipCode: "SABLES2027",
+      favoriteTeam: result.data.favoriteTeam,
     });
 
     // 1. Write to Supabase (if configured)
