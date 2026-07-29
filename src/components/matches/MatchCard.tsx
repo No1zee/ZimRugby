@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import { Calendar, Clock, MapPin } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import SlantedButton from "@/components/ui/SlantedButton";
 import { getFlagUrl } from "@/lib/flags";
 
 interface MatchCardProps {
@@ -108,8 +109,8 @@ export default function MatchCard({
               </div>
             )}
             {status === "live" && (
-              <span className="text-zru-green text-[10px] font-extrabold tracking-widest uppercase mt-2 animate-pulse flex items-center gap-1">
-                <span className="w-2 h-2 rounded-full bg-zru-green" /> LIVE NOW
+              <span className="text-zru-green text-[10px] font-black tracking-wider uppercase mt-2 flex items-center gap-1.5 px-2 py-0.5 rounded bg-zru-green/10 border border-zru-green/20">
+                <span className="w-1.5 h-1.5 rounded-full bg-zru-green" /> LIVE NOW
               </span>
             )}
           </div>
@@ -165,9 +166,9 @@ export default function MatchCard({
         {/* Action Button */}
         <div className="pt-5">
           <Link href={`/matches/${id}`} className="w-full block">
-            <button className="w-full py-2.5 font-heading text-xs font-extrabold uppercase border border-zru-green/30 text-zru-green hover:bg-zru-green hover:text-white rounded-xl transition-all duration-300 shadow-sm">
-              VIEW MATCH DETAILS
-            </button>
+            <SlantedButton variant="secondary" size="sm" className="w-full justify-center">
+              MATCH DETAILS
+            </SlantedButton>
           </Link>
         </div>
       </div>
