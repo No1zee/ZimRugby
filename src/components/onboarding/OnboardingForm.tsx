@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { SlantedButton } from "@/components/ui/SlantedButton";
+import SlantedButton from "@/components/ui/SlantedButton";
 
 interface OnboardingFormProps {
   actor: "player" | "coach" | "referee" | "club-registrar";
