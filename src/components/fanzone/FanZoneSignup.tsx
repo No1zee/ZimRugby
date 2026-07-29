@@ -15,28 +15,43 @@ export default function FanZoneSignup({
   variant = "compact",
   showBenefits = false,
 }: FanZoneSignupProps) {
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
+  const [favoriteTeam, setFavoriteTeam] = useState<"Sables" | "Lady Sables" | "Cheetahs" | "Junior Sables" | "Domestic Rugby">("Sables");
+  const [cdpaConsent, setCdpaConsent] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [vipBadge, setVipBadge] = useState<{ code: string; title: string; discount: string } | null>(null);
   const [error, setError] = useState("");
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!email.trim()) return;
+    if (!email.trim() || !name.trim()) return;
 
     setIsSubmitting(true);
     setError("");
 
     try {
-      await saveSubmission("fan_zone_member", {
-        email,
-        source: variant === "compact" ? "Footer/Signup" : "Fan Zone Page",
-        submittedAt: new Date().toISOString(),
+      const res = await fetch("/api/fan-zone/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name,
+          email,
+          favoriteTeam,
+          cdpaConsent,
+        }),
       });
+
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Registration failed");
+
       setSubmitted(true);
+      setVipBadge(data.vipBadge || { code: "SABLES2027", title: "VIP SABLES MEMBER PASS", discount: "10% OFF MERCH" });
       setEmail("");
-    } catch {
-      setError("Something went wrong. Please try again.");
+      setName("");
+    } catch (err: any) {
+      setError(err.message || "Something went wrong. Please try again.");
     } finally {
       setIsSubmitting(false);
     }
@@ -45,18 +60,35 @@ export default function FanZoneSignup({
   if (submitted) {
     return (
       <div
-        className="rounded-3xl p-6 sm:p-10 text-center space-y-2 border border-white/10"
+        className="rounded-3xl p-6 sm:p-10 text-center space-y-4 border border-white/10"
         style={{
           background: "radial-gradient(circle at 50% 25%, #006747 0%, #004D34 60%, #003322 100%)",
         }}
       >
-        <CheckCircle className="w-8 h-8 text-emerald-400 mx-auto" />
-        <p className="text-xs font-black uppercase tracking-wider text-white">
-          Welcome to the Fan Zone!
-        </p>
-        <p className="text-[10px] text-white/50">
-          Check your inbox for exclusive member benefits.
-        </p>
+        <CheckCircle className="w-10 h-10 text-emerald-400 mx-auto" />
+        <div className="space-y-1">
+          <p className="text-lg font-black uppercase tracking-wider text-white font-heading">
+            WELCOME TO THE SABLES FAN ZONE!
+          </p>
+          <p className="text-xs text-white/70">
+            Your VIP registration is confirmed under CDPA 2021. Check your inbox for details.
+          </p>
+        </div>
+
+        {/* Digital VIP Pass Badge */}
+        {vipBadge && (
+          <div className="bg-white/10 backdrop-blur-md border border-white/20 p-4 rounded-2xl max-w-sm mx-auto space-y-2 text-white">
+            <span className="text-[10px] font-black tracking-widest text-emerald-400 bg-emerald-950/80 px-2.5 py-1 rounded uppercase">
+              {vipBadge.title}
+            </span>
+            <div className="text-2xl font-black font-heading tracking-widest text-white">
+              CODE: {vipBadge.code}
+            </div>
+            <p className="text-[10px] text-white/80 font-bold uppercase">
+              {vipBadge.discount}
+            </p>
+          </div>
+        )}
       </div>
     );
   }
@@ -189,14 +221,22 @@ export default function FanZoneSignup({
           )}
 
           <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-2.5 w-full items-center justify-center group-hover/fzCard:justify-end group-focus-within/fzCard:justify-end transition-[justify-content] duration-500">
-            <div className="w-0 opacity-0 max-w-0 overflow-hidden transition-[width,opacity,max-width] duration-500 ease-in-out group-hover/fzCard:w-full group-hover/fzCard:opacity-100 group-hover/fzCard:max-w-full group-focus-within/fzCard:w-full group-focus-within/fzCard:opacity-100 group-focus-within/fzCard:max-w-full flex-1">
+            <div className="w-0 opacity-0 max-w-0 overflow-hidden transition-[width,opacity,max-width] duration-500 ease-in-out group-hover/fzCard:w-full group-hover/fzCard:opacity-100 group-hover/fzCard:max-w-full group-focus-within/fzCard:w-full group-focus-within/fzCard:opacity-100 group-focus-within/fzCard:max-w-full flex-1 flex flex-col gap-2">
+              <input
+                type="text"
+                required
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                placeholder="Your Full Name"
+                className="w-full bg-black/5 text-[#0E0E0E] px-4 py-2.5 rounded-xl border border-black/10 focus:outline-none focus:border-zru-green text-sm placeholder:text-[#0E0E0E]/40 transition-[border-color] duration-300"
+              />
               <input
                 type="email"
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="name@domain.com"
-                className="w-full bg-black/5 text-[#0E0E0E] px-4 py-3.5 rounded-xl border border-black/10 focus:outline-none focus:border-zru-green text-sm placeholder:text-[#0E0E0E]/40 transition-[border-color] duration-300 min-h-[46px]"
+                className="w-full bg-black/5 text-[#0E0E0E] px-4 py-2.5 rounded-xl border border-black/10 focus:outline-none focus:border-zru-green text-sm placeholder:text-[#0E0E0E]/40 transition-[border-color] duration-300"
               />
             </div>
 
