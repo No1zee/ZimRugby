@@ -120,12 +120,12 @@ export default async function CampaignsIndexPage() {
                   className="group relative bg-white/60 border border-black/5 rounded-2xl overflow-hidden hover:border-black/20 transition-all duration-300 flex flex-col opacity-70 hover:opacity-100"
                 >
                   <div className="aspect-[16/9] relative overflow-hidden bg-zru-green/5">
-                        fill
-                        className="object-cover grayscale group-hover:grayscale-0 transition-all duration-500"
-                      />
-                    ) : (
-                      <div className="w-full h-full flex items-center justify-center" />
-                    )}
+                    <Image
+                      src={getCampaignImage(campaign.slug, campaign.hero_image)}
+                      alt={campaign.name}
+                      fill
+                      className="object-cover grayscale group-hover:grayscale-0 transition-all duration-500"
+                    />
                     <span className="absolute top-3 left-3 px-2 py-1 bg-black/40 text-white/60 text-[8px] font-black uppercase tracking-widest rounded">
                       Archived
                     </span>
