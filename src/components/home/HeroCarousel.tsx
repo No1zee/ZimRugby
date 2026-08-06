@@ -188,77 +188,77 @@ function SlideContent({
                      title={`Go to slide ${i + 1}`}
                    >
                      <span className="sr-only">Go to slide {i + 1}</span>
-        {/* CTAs + Controls Row - Progress bar always between the two buttons */}
-        <div className="flex flex-wrap items-center gap-4 sm:gap-6 pt-2">
-          {/* Primary CTA */}
+      {/* CTAs + Controls Row - Progress bar always between the two buttons */}
+      <div className="flex flex-wrap items-center gap-4 sm:gap-6 pt-2">
+        {/* Primary CTA */}
+        {slide.ctaText && slide.ctaHref && (
           <Link
-            href={slide.ctas.primary.href}
+            href={slide.ctaHref}
             className="group relative inline-flex items-center gap-2.5 px-7 py-3.5 bg-zru-green text-white font-bold text-sm uppercase tracking-wider overflow-hidden rounded-sm transition-all duration-300 shadow-[0_4px_20px_rgba(0,107,63,0.4)] hover:shadow-[0_6px_28px_rgba(0,107,63,0.6)] hover:-translate-y-0.5 active:translate-y-0"
             style={{ clipPath: 'polygon(0 0, 100% 0, 95% 100%, 0 100%)' }}
           >
             <div className="absolute inset-0 bg-white/20 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700 ease-out" />
             <Play className="w-4 h-4 fill-current text-white relative z-10 transition-transform group-hover:scale-110" />
-            <span className="relative z-10">{slide.ctas.primary.label}</span>
+            <span className="relative z-10">{slide.ctaText}</span>
           </Link>
+        )}
 
-          {/* Carousel Indicators / Navigation Bar */}
-          <div className="flex items-center gap-3 bg-black/40 backdrop-blur-md px-4 py-2.5 rounded-full border border-white/10 shadow-lg">
-            <button
-              onClick={prevSlide}
-              className="p-1 text-white/70 hover:text-white transition-colors"
-              aria-label="Previous slide"
-            >
-              <ChevronLeft className="w-4 h-4" />
-            </button>
+        {/* Carousel Indicators / Navigation Bar */}
+        <div className="flex items-center gap-3 bg-black/40 backdrop-blur-md px-4 py-2.5 rounded-full border border-white/10 shadow-lg">
+          <button
+            onClick={onPrev}
+            className="p-1 text-white/70 hover:text-white transition-colors"
+            aria-label="Previous slide"
+          >
+            <ChevronLeft className="w-4 h-4" />
+          </button>
 
-            <div className="flex items-center gap-1.5">
-              {slides.map((s, idx) => {
-                const isActive = idx === currentSlide
-                return (
-                  <button
-                    key={s.id || idx}
-                    onClick={() => setCurrentSlide(idx)}
-                    className={`relative h-2 rounded-full transition-all duration-300 ${
-                      isActive ? 'w-10 bg-zru-green' : 'w-6 bg-white/30 hover:bg-white/50'
-                    }`}
-                    style={{ clipPath: 'polygon(15% 0, 100% 0, 85% 100%, 0 100%)' }}
-                    aria-label={`Go to slide ${idx + 1}`}
-                  >
-                    {isActive && (
-                      <motion.div
-                        className="absolute inset-0 bg-zru-green rounded-full origin-left"
-                        initial={{ scaleX: 0 }}
-                        animate={{ scaleX: 1 }}
-                        transition={{ duration: 5, ease: 'linear' }}
-                      />
-                    )}
-                  </button>
-                )
-              })}
-            </div>
-
-            <button
-              onClick={nextSlide}
-              className="p-1 text-white/70 hover:text-white transition-colors"
-              aria-label="Next slide"
-            >
-              <ChevronRight className="w-4 h-4" />
-            </button>
+          <div className="flex items-center gap-1.5">
+            {slides.map((s, idx) => {
+              const isActive = idx === currentIndex
+              return (
+                <button
+                  key={s.id || idx}
+                  onClick={() => onSelect(idx)}
+                  className={`relative h-2 rounded-full transition-all duration-300 ${
+                    isActive ? 'w-10 bg-zru-green' : 'w-6 bg-white/30 hover:bg-white/50'
+                  }`}
+                  style={{ clipPath: 'polygon(15% 0, 100% 0, 85% 100%, 0 100%)' }}
+                  aria-label={`Go to slide ${idx + 1}`}
+                >
+                  {isActive && (
+                    <motion.div
+                      className="absolute inset-0 bg-zru-green rounded-full origin-left"
+                      initial={{ scaleX: 0 }}
+                      animate={{ scaleX: 1 }}
+                      transition={{ duration: 5, ease: 'linear' }}
+                    />
+                  )}
+                </button>
+              )
+            })}
           </div>
 
-          {/* Secondary CTA */}
-          {slide.ctas.secondary && (
-            <Link
-              href={slide.ctas.secondary.href}
-              className="group inline-flex items-center gap-2 px-6 py-3.5 bg-white/10 hover:bg-white/20 backdrop-blur-md text-white font-semibold text-sm tracking-wide rounded-sm border border-white/20 hover:border-white/40 transition-all duration-300 hover:-translate-y-0.5"
-            >
-              <ArrowRight className="w-4 h-4 text-white/70 group-hover:text-white group-hover:translate-x-1 transition-all" />
-              <span>{slide.ctas.secondary.label}</span>
-            </Link>
-          )}
+          <button
+            onClick={onNext}
+            className="p-1 text-white/70 hover:text-white transition-colors"
+            aria-label="Next slide"
+          >
+            <ChevronRight className="w-4 h-4" />
+          </button>
         </div>
+
+        {/* Secondary CTA */}
+        {slide.secondaryCtaText && slide.secondaryCtaHref && (
+          <Link
+            href={slide.secondaryCtaHref}
+            className="group inline-flex items-center gap-2 px-6 py-3.5 bg-white/10 hover:bg-white/20 backdrop-blur-md text-white font-semibold text-sm tracking-wide rounded-sm border border-white/20 hover:border-white/40 transition-all duration-300 hover:-translate-y-0.5"
+          >
+            <span>{slide.secondaryCtaText}</span>
+            <ArrowRight className="w-4 h-4 text-white/70 group-hover:text-white group-hover:translate-x-1 transition-all" />
+          </Link>
+        )}
       </div>
-    </motion.div>
   );
 }
 
