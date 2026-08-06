@@ -55,19 +55,16 @@ function persistSession(profile: FanProfile) {
   }
 }
 
-export async function signInWithOAuth(provider: "google" | "github" | "apple") {
-  const siteUrl =
-    process.env.NEXT_PUBLIC_SITE_URL ||
-    (typeof window !== "undefined" ? window.location.origin : "http://localhost:3000");
-
-  const { error } = await supabase.auth.signInWithOAuth({
+export async function signInWithOAuth(provider: 'google' | 'apple') {
+  const origin = typeof window !== 'undefined' ? window.location.origin : process.env.NEXT_PUBLIC_SITE_URL || 'https://zimrugby.vercel.app';
+  const { data, error } = await supabase.auth.signInWithOAuth({
     provider,
     options: {
-      redirectTo: `${siteUrl}/auth/callback?next=/fan-zone`,
+      redirectTo: `${origin}/auth/callback`,
     },
   });
-
   if (error) throw error;
+  return data;
 }
 
 export async function signUpFan(data: {

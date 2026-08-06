@@ -44,22 +44,8 @@ const nextConfig: NextConfig = {
     optimizePackageImports: ['framer-motion', 'lucide-react'],
   },
   images: {
-    qualities: [60, 75],
     formats: ['image/avif', 'image/webp'],
-    localPatterns: [
-      { pathname: '/api/assets/**' },
-      { pathname: '/images/**' },
-    ],
     remotePatterns: [
-      { protocol: 'https', hostname: 'images.unsplash.com' },
-      { protocol: 'https', hostname: 'plus.unsplash.com' },
-      { protocol: 'https', hostname: 'assets.directus.io' },
-      { protocol: 'https', hostname: 'r2.thesportsdb.com' },
-      { protocol: 'https', hostname: 'flagcdn.com' },
-      { protocol: 'https', hostname: 'zru.co.zw' },
-      { protocol: 'https', hostname: 'img.youtube.com' },
-      { protocol: 'https', hostname: 'i.ytimg.com' },
-      { protocol: 'https', hostname: 'i1.ytimg.com' },
       { protocol: 'https', hostname: 'i2.ytimg.com' },
       { protocol: 'https', hostname: 'i3.ytimg.com' },
       { protocol: 'https', hostname: 'i4.ytimg.com' },
