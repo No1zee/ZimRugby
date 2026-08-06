@@ -339,7 +339,7 @@ export default function HeroCarousel({ slides = [], autoplayInterval = 8000 }: {
                     className="object-cover object-center"
                   />
                 )
-              )}
+              }
             </motion.div>
             {/* Overlay */}
             <div className="absolute inset-0 bg-gradient-to-t from-rich-black/90 via-rich-black/30 to-black/30 z-10" />
