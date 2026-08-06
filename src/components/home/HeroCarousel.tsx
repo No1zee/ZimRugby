@@ -324,27 +324,27 @@ export function HeroCarousel({ slides, autoplayInterval = 8000 }: HeroSlideData[
                       className="object-cover"
                     />
                   ) : (
-                    {shouldAutoPlayVideo && slide.video_url ? (
-                <video
-                  autoPlay
-                  loop
-                  muted
-                  playsInline
-                  poster={heroAssetUrl(slide.background_image) || "/images/campaign/hero.png"}
-                  className="w-full h-full object-cover"
-                >
-                  <source src={slide.video_url} type="video/mp4" />
-                </video>
-              ) : (
-                <Image
-                  src={heroAssetUrl(slide.background_image) || "/images/campaign/hero.png"}
-                  alt={slide.title}
-                  fill
-                  priority={index === 0}
-                  sizes="100vw"
-                  className="object-cover object-center"
-                />
-              )}
+                    shouldAutoPlayVideo && slide.video_url ? (
+                    <video
+                      autoPlay
+                      loop
+                      muted
+                      playsInline
+                      poster={heroAssetUrl(slide.background_image) || "/images/campaign/hero.png"}
+                      className="w-full h-full object-cover"
+                    >
+                      <source src={slide.video_url} type="video/mp4" />
+                    </video>
+                  ) : (
+                    <Image
+                      src={heroAssetUrl(slide.background_image) || "/images/campaign/hero.png"}
+                      alt={slide.title}
+                      fill
+                      priority={index === 0}
+                      sizes="100vw"
+                      className="object-cover object-center"
+                    />
+                  )
                   )
                 ) : (
                   <Image
