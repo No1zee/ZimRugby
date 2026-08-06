@@ -1,9 +1,10 @@
-﻿"use client";
+"use client";
 
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import Image from "next/image";
 import { Play, ExternalLink, X, CircleDot, LayoutGrid, MoveHorizontal } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useDragControls } from "framer-motion";
+import { VideoPlayer } from "./VideoPlayer";
 
 export interface YouTubeVideoItem {
   id: string;
@@ -528,7 +529,7 @@ function VideoCard({ video, isDragging, onClick }: { video: YouTubeVideoItem; is
   );
 }
 
-// ── Video Modal ──
+// ── Viewport-Centered Floating Resizable Video Modal ──
 function VideoModal({
   activeVideo,
   onClose,
@@ -536,63 +537,63 @@ function VideoModal({
   activeVideo: YouTubeVideoItem | null;
   onClose: () => void;
 }) {
+  const dragControls = useDragControls();
+
   return (
     <AnimatePresence>
       {activeVideo && (
         <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          className="fixed inset-0 z-[1000] bg-[#010B07]/90 backdrop-blur-xl flex items-center justify-center p-4 sm:p-8"
+          drag
+          dragControls={dragControls}
+          dragListener={false}
+          dragMomentum={false}
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          exit={{ opacity: 0, scale: 0.95 }}
+          transition={{ type: "spring", stiffness: 300, damping: 25 }}
+          className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-[999999] pointer-events-auto w-[90vw] max-w-2xl bg-black rounded-2xl overflow-hidden shadow-2xl border border-white/20 flex flex-col group select-none resize aspect-video min-w-[320px] max-h-[85vh]"
         >
-          <div className="absolute inset-0" onClick={onClose} />
-          <motion.div
-            initial={{ scale: 0.9, opacity: 0, y: 20 }}
-            animate={{ scale: 1, opacity: 1, y: 0 }}
-            exit={{ scale: 0.9, opacity: 0, y: 20 }}
-            transition={{ type: "spring", stiffness: 300, damping: 25 }}
-            className="relative w-full max-w-5xl bg-black rounded-3xl overflow-hidden shadow-2xl border border-white/10 z-10 flex flex-col"
-          >
-            <button
-              onClick={onClose}
-              className="absolute top-4 right-4 z-20 p-2.5 rounded-full bg-black/80 hover:bg-[#006747] text-white border border-white/20 transition-[background-color] shadow-lg"
-              aria-label="Close Video Player"
-              title="Close Video"
+          {/* Header Drag Bar - ONLY area that initiates drag */}
+            <div
+              onPointerDown={(e) => {
+                dragControls.start(e);
+              }}
+              className="bg-[#010B07] px-3.5 py-2.5 border-b border-white/10 flex items-center justify-between text-white select-none cursor-grab active:cursor-grabbing shrink-0"
             >
-              <X className="w-5 h-5" />
-            </button>
+              <span className="text-[11px] font-bold tracking-wide text-white/80 truncate max-w-[70%] pointer-events-none">
+                {activeVideo.title}
+              </span>
 
-            <div className="relative aspect-video w-full bg-black">
-              <iframe
-                src={`https://www.youtube-nocookie.com/embed/${activeVideo.videoId}?autoplay=1&rel=0&modestbranding=1`}
-                title={activeVideo.title}
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-                className="w-full h-full border-0"
-              />
+              <div className="flex items-center gap-1.5 shrink-0 pointer-events-auto">
+                <a
+                  href={`https://www.youtube.com/watch?v=${activeVideo.videoId}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="p-1 rounded-lg text-white/60 hover:text-white hover:bg-white/10 transition-colors"
+                  title="Watch on YouTube"
+                >
+                  <ExternalLink className="w-3.5 h-3.5" />
+                </a>
+
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onClose();
+                  }}
+                  className="p-1 rounded-lg text-white/60 hover:text-white hover:bg-red-600/80 transition-colors"
+                  aria-label="Close Video Player"
+                  title="Close Video"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
             </div>
 
-            <div className="p-5 sm:p-6 bg-milk-white border-t border-black/10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-              <div>
-                <span className="text-[10px] font-black text-[#006747] uppercase tracking-widest block">
-                  ZIMBABWE RUGBY UNION &bull; IN-SITE MATCHDAY MEDIA
-                </span>
-                <p className="font-heading font-black text-lg sm:text-xl text-rich-black uppercase not-italic">
-                  {activeVideo.title}
-                </p>
-              </div>
-              <a
-                href={`https://www.youtube.com/watch?v=${activeVideo.videoId}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-1.5 px-4 py-2 bg-black/5 hover:bg-black text-rich-black hover:text-white rounded-xl text-xs font-heading font-black tracking-widest uppercase transition-[background-color,color]"
-              >
-                <span>WATCH ON YOUTUBE</span>
-                <ExternalLink className="w-3.5 h-3.5" />
-              </a>
+            {/* Video Body */}
+            <div className="flex-1 w-full bg-black relative min-h-0">
+              <VideoPlayer videoId={activeVideo.videoId} title={activeVideo.title} autoPlay />
             </div>
           </motion.div>
-        </motion.div>
       )}
     </AnimatePresence>
   );

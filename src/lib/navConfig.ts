@@ -53,6 +53,15 @@ export const mainNav: NavItem[] = [
     ],
   },
   {
+    label: "CAMPAIGNS",
+    href: "/campaigns",
+    children: [
+      { label: "Active Campaigns", href: "/campaigns" },
+      { label: "Road to Australia 2027", href: "/campaigns/road-to-australia-2027" },
+      { label: "Africa Cup Tour", href: "/campaigns/africa-cup-tour-2026" },
+    ],
+  },
+  {
     label: "MEDIA",
     href: "/media",
     children: [

@@ -79,6 +79,8 @@ export default function SocialCard() {
         <a
           key={label}
           href={isOpen ? href : "#"}
+          tabIndex={isOpen ? undefined : -1}
+          aria-hidden={!isOpen}
           onClick={(e) => {
             if (!isOpen) {
               e.preventDefault();

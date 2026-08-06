@@ -1,0 +1,17 @@
+{
+  "address": "36 Walmer Drive, Harare, Zimbabwe",
+  "email": "info@zru.co.zw",
+  "phone": "+263 78 919 9906",
+  "social": {
+    "facebook": "https://www.facebook.com/ZimbabweRugbyUnion/",
+    "twitter": "https://twitter.com/",
+    "instagram": "https://www.instagram.com/"
+  },
+  "copyright": "© Copyright 2026 Zimbabwe Rugby Union. All rights reserved.",
+  "partnerCta": {
+    "title": "BECOME A ZIMBABWE RUGBY UNION PARTNER",
+    "description": "Grow your business by advertising on this website.",
+    "ctaLabel": "BECOME A PARTNER",
+    "ctaUrl": "/contact/"
+  }
+}

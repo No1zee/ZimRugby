@@ -1,0 +1,574 @@
+"use client";
+
+import React, { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { 
+  ChevronRight, 
+  ArrowRight, 
+  Shield, 
+  Ticket, 
+  CheckCircle2, 
+  HelpCircle,
+  ExternalLink,
+  Info,
+  Search,
+  X,
+  AlertCircle
+} from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
+
+
+import Button from "@/components/common/Button";
+import SlantedButton from "@/components/ui/SlantedButton";
+import { FixtureCard, type Fixture } from "@/components/tickets/FixtureCard";
+import { StripedBackground } from "@/components/ui/StripedBackground";
+import { saveSubmission } from "@/lib/mockStorage";
+import PageAnnouncements from "@/components/ui/PageAnnouncements";
+
+// --- Local Components ---
+
+const OfficialChannelBadge = () => (
+  <motion.div 
+    initial={{ opacity: 0, x: 20 }}
+    animate={{ opacity: 1, x: 0 }}
+    className="inline-flex items-center gap-3 px-4 py-2 bg-zru-green/10 border border-zru-green/20 rounded-full"
+  >
+    <div className="w-5 h-5 bg-zru-green rounded-full flex items-center justify-center">
+      <Shield className="w-3 h-3 text-rich-black" fill="currentColor" />
+    </div>
+    <span className="text-[10px] font-black text-zru-green uppercase tracking-[0.2em]">Official ZRU Ticketing Channel</span>
+  </motion.div>
+);
+
+
+const FAQItem = ({ question, answer }: { question: string, answer: string }) => {
+  const [isOpen, setIsOpen] = useState(false);
+  return (
+    <div className="border-b border-black/5 last:border-none">
+      <button 
+        onClick={() => setIsOpen(!isOpen)}
+        className="w-full py-6 flex items-center justify-between text-left group"
+      >
+        <span className="text-lg font-bold text-rich-black uppercase tracking-tight group-hover:text-zru-green transition-colors pr-8 leading-tight">
+          {question}
+        </span>
+        <HelpCircle className={`w-6 h-6 shrink-0 transition-transform duration-500 ${isOpen ? "rotate-180 text-zru-green" : "text-black/40"}`} />
+      </button>
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: "auto", opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.4, ease: "easeInOut" }}
+            className="overflow-hidden"
+          >
+            <p className="pb-6 text-black/60 text-sm leading-relaxed max-w-3xl">
+              {answer}
+            </p>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+};
+
+// --- Page Component ---
+
+interface FaqItemData {
+  id: string | number;
+  question?: string;
+  answer?: string;
+}
+
+interface TicketsClientProps {
+  cmsPage?: any;
+  fixtures: Fixture[];
+  faqs?: FaqItemData[];
+}
+
+const FALLBACK_FAQS: Array<{ question: string; answer: string }> = [
+  {
+    question: "How do I know this is the official ticket source?",
+    answer: "This page lists every official ticket outlet for ZRU fixtures. If you’re following a link from zimrugby.co.zw or this Tickets page, you are on an approved route.",
+  },
+  {
+    question: "Will I be redirected to another site to buy?",
+    answer: "Yes. We partner with trusted ticketing providers like Paynow or Ticketmaster for sales and seat selection. You’ll complete your booking on their secure checkout pages.",
+  },
+  {
+    question: "What should I watch out for to avoid scams?",
+    answer: "Only buy using links from this page. Be wary of social media resellers and unofficial marketplaces—especially those offering tickets at suspicious prices. ZRU cannot honour counterfeit tickets.",
+  },
+  {
+    question: "Are digital tickets accepted at the gate?",
+    answer: "Yes. Most fixtures accept mobile tickets—simply present the QR or barcode at the gate. Follow the instructions in your confirmation email.",
+  },
+  {
+    question: "Can I change or upgrade my seats after purchase?",
+    answer: "Seat changes and upgrades depend on our ticketing partners and venue rules. Check your confirmation email or the partner’s help section for options.",
+  },
+  {
+    question: "Is there an official resale or ticket transfer option?",
+    answer: "For selected fixtures, official resale or ticket transfer may be available through our partners. Avoid third‑party resellers that are not listed here.",
+  },
+];
+
+export default function TicketsPage({ cmsPage, fixtures, faqs }: TicketsClientProps) {
+  const [filter, setFilter] = useState("All");
+  const [isRegistering, setIsRegistering] = useState<Fixture | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
+  const [submitError, setSubmitError] = useState("");
+  
+  const [formData, setFormData] = useState({ name: "", email: "" });
+
+  const handleRegister = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!isRegistering) return;
+    
+    setIsSubmitting(true);
+    setSubmitError("");
+    try {
+      const res = await saveSubmission("ticket_interest", { fixtureId: isRegistering.id, name: formData.name, email: formData.email });
+      if (res.success) {
+        setIsSuccess(true);
+        setTimeout(() => {
+          setIsRegistering(null);
+          setIsSuccess(false);
+          setFormData({ name: "", email: "" });
+        }, 2500);
+      } else {
+        setSubmitError(res.message);
+      }
+    } catch {
+      setSubmitError("An error occurred during submission.");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+  
+  const filteredFixtures = fixtures.filter(f => {
+    if (filter === "All") return true;
+    if (filter === "World Cup Pathway") return f.isWorldCupPathway || f.tags?.includes("World Cup Pathway Fixture");
+    return f.category === filter;
+  });
+
+  const CATEGORIES = ["All", "Sables", "Lady Sables", "Sevens", "Domestic", "World Cup Pathway"];
+
+  const cmsFaqs = (faqs || [])
+    .filter((f) => f.question && f.answer)
+    .map((f) => ({ question: f.question!, answer: f.answer! }));
+  const faqItems = cmsFaqs.length > 0 ? cmsFaqs : FALLBACK_FAQS;
+
+  return (
+    <main className="bg-milk-white min-h-screen selection:bg-zru-green selection:text-white text-rich-black">
+      {/* SECTION A: HERO */}
+      <section className="relative min-h-[60vh] flex items-center pt-32 pb-10 md:pb-12 overflow-hidden">
+        {/* Stadium Background */}
+        <div className="absolute inset-0 z-0">
+          <Image 
+            src="/images/campaign/hero.png" 
+            alt="Zimbabwe Rugby Stadium"
+            fill
+            sizes="100vw"
+            className="object-cover opacity-10 blur-[2px] grayscale"
+            priority
+          />
+          <div className="absolute inset-0 bg-linear-to-b from-milk-white via-milk-white/40 to-milk-white" />
+          <div className="absolute inset-0 bg-[url('/noise.png')] opacity-5 pointer-events-none" />
+          {/* Splash of Green */}
+          <div className="absolute top-1/4 -left-10 w-96 h-96 bg-green-900/5 blur-[120px] rounded-full pointer-events-none" />
+          <div className="absolute bottom-1/4 -right-10 w-96 h-96 bg-green-900/5 blur-[120px] rounded-full pointer-events-none" />
+          <StripedBackground color="green" variant="subtle" position="left" className="opacity-10" />
+        </div>
+
+        <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 w-full relative z-10">
+          <div className="grid lg:grid-cols-2 gap-12 items-center">
+            
+            {/* Hero Text */}
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8 }}
+            >
+              <OfficialChannelBadge />
+              <h1 className="text-6xl md:text-8xl lg:text-9xl font-black text-rich-black leading-[0.9] uppercase tracking-tighter mt-8 mb-8">
+                {(cmsPage?.hero_title || "OFFICIAL TICKETS").split(" ").map((word: string, i: number, arr: string[]) => {
+                  const isLastTwo = i >= arr.length - 2;
+                  return (
+                    <span key={i} className={isLastTwo ? "text-zru-green" : ""}>
+                      {word}{" "}
+                    </span>
+                  );
+                })}
+              </h1>
+              <p className="text-lg md:text-xl text-black/60 max-w-xl mb-12 font-normal leading-relaxed">
+                {cmsPage?.hero_intro || "Welcome to the official home of Sables and ZRU tickets. Every link on this page takes you to an authorised partner, with transparent pricing and secure checkout."}
+              </p>
+              
+              <div className="bg-white border border-black/5 border-l-2 border-l-zru-green p-4 mb-12 max-w-lg shadow-sm">
+                <p className="text-xs font-bold text-black/60 uppercase tracking-widest leading-loose">
+                  <Shield className="inline-block w-3 h-3 mr-2 mb-0.5 text-zru-green" />
+                  If you didn’t start from <span className="text-rich-black font-black">zimrugby.co.zw</span> or this page, double‑check before you buy.
+                </p>
+              </div>
+
+              <div className="flex flex-wrap gap-6 items-center">
+                <Link href="#fixtures">
+                  <button className="text-[10px] font-black text-rich-black uppercase tracking-[0.4em] flex items-center gap-2 group hover:text-zru-green transition-colors">
+                    View upcoming fixtures
+                    <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                  </button>
+                </Link>
+                <Link href="#faqs">
+                  <button className="text-[10px] font-black text-rich-black uppercase tracking-[0.4em] flex items-center gap-2 group hover:text-zru-green transition-colors opacity-40 hover:opacity-100">
+                    Ticket FAQs & safety
+                    <ChevronRight className="w-4 h-4" />
+                  </button>
+                </Link>
+              </div>
+            </motion.div>
+
+            {/* Stadium Visual / Decoration */}
+            <div className="hidden lg:flex justify-end pr-20">
+                <motion.div 
+                  animate={{ y: [0, -20, 0] }}
+                  transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+                  className="relative w-64 h-64 border border-black/5 bg-white rounded-2xl p-8 flex flex-center items-center justify-center rotate-3 shadow-sm"
+                >
+                  <Ticket className="w-32 h-32 text-zru-green/10" />
+                  <div className="absolute inset-0 bg-linear-to-tr from-zru-green/5 to-transparent rounded-2xl" />
+                  <div className="absolute -top-4 -right-4 w-12 h-12 bg-white border border-black/10 rounded-full flex items-center justify-center shadow-2xl">
+                    <CheckCircle2 className="w-6 h-6 text-zru-green" />
+                  </div>
+               </motion.div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* SECTION B: FIXTURES GRID */}
+      <section id="fixtures" className="py-12 md:py-16 bg-milk-white border-y border-black/5 scroll-mt-20">
+        <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
+          {/* Page Announcements */}
+          <PageAnnouncements scope="tickets" className="mb-12" />
+          
+          {/* Header & Filter */}
+          <div className="flex flex-col lg:flex-row justify-between items-start lg:items-end gap-10 mb-16">
+            <div className="max-w-xl">
+               <span className="block text-[10px] font-black uppercase tracking-[0.4em] text-zru-green mb-6">Upcoming Matches</span>
+               <h2 className="text-4xl md:text-5xl font-black text-rich-black uppercase tracking-tighter">FIXTURES & TICKETS</h2>
+            </div>
+            
+            {/* Filter Bar */}
+            <div className="w-full lg:w-auto overflow-x-auto pb-4 lg:pb-0 scrollbar-hide">
+              <div className="flex gap-2 min-w-max">
+                {CATEGORIES.map((cat) => (
+                  <SlantedButton
+                    key={cat}
+                    onClick={() => setFilter(cat)}
+                    variant="chip"
+                    active={filter === cat}
+                  >
+                    {cat}
+                  </SlantedButton>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Grid Content */}
+          <AnimatePresence mode="popLayout">
+            {filteredFixtures.length > 0 ? (
+              <motion.div 
+                layout
+                className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+              >
+                {filteredFixtures.map((fixture) => (
+                  <FixtureCard 
+                    key={fixture.id} 
+                    fixture={fixture} 
+                    onRegister={(f) => setIsRegistering(f)}
+                  />
+                ))}
+              </motion.div>
+            ) : (
+              <motion.div 
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                className="py-32 text-center border border-dashed border-black/10 rounded-2xl bg-black/5"
+              >
+                <div className="mb-6 opacity-20">
+                   <Ticket className="w-16 h-16 mx-auto text-rich-black" />
+                </div>
+                <h3 className="text-2xl font-black text-rich-black uppercase tracking-tight mb-4">No fixtures currently on sale</h3>
+                <p className="text-black/60 font-normal mb-10 max-w-sm mx-auto">We’re finalising the next block of fixtures. Check back soon or join ZRU Nation for early ticket alerts.</p>
+                <Button variant="secondary" size="xl" href="/world-cup-campaign">
+                  Join ZRU Nation
+                </Button>
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+          {/* Helper Text */}
+          <div className="mt-16 flex items-start gap-4 p-6 bg-white border border-black/5 rounded-xl max-w-4xl shadow-sm">
+            <Info className="w-5 h-5 text-zru-green shrink-0 mt-0.5" />
+            <p className="text-xs text-black/60 font-normal leading-relaxed">
+              All ticket purchases for Sables and ZRU fixtures are handled by our authorised ticketing partners. You’ll complete your booking on their secure platforms.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* SECTION C: HOW IT WORKS */}
+      <section className="py-12 md:py-16 bg-milk-white border-b border-black/5">
+        <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="max-w-2xl mb-20">
+             <span className="block text-[10px] font-black uppercase tracking-[0.4em] text-zru-green mb-6">Simple Entry</span>
+             <h2 className="text-4xl md:text-5xl font-black text-rich-black uppercase tracking-tighter">HOW TO GET YOUR TICKETS</h2>
+          </div>
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+            {[
+              {
+                step: "01",
+                icon: Search,
+                title: "Choose your fixture",
+                desc: "Browse the list of upcoming tests and tournaments and pick the match you want to attend."
+              },
+              {
+                step: "02",
+                icon: ExternalLink,
+                title: "Go to our official partner",
+                desc: "Click “Buy tickets” to be redirected to our authorised ticketing partner for that event."
+              },
+              {
+                step: "03",
+                icon: Shield,
+                title: "Select seats & confirm",
+                desc: "On the partner site, choose your seats or category, confirm your details and complete payment."
+              },
+              {
+                step: "04",
+                icon: Ticket,
+                title: "Receive your tickets",
+                desc: "Your tickets will be sent as mobile or printable tickets. Bring them, plus ID if required, on matchday."
+              }
+            ].map((step, i) => (
+              <div key={i} className="relative group">
+                <div className="text-[40px] md:text-[60px] font-black text-black/5 absolute -top-6 md:-top-10 left-2 md:-left-4 pointer-events-none group-hover:text-zru-green/5 transition-colors">{step.step}</div>
+                <div className="p-8 rounded-xl bg-white border border-black/5 shadow-sm transition-all duration-500 h-full">
+                  <div className="w-12 h-12 bg-zru-green/10 rounded flex items-center justify-center mb-8">
+                    <step.icon className="w-6 h-6 text-zru-green" />
+                  </div>
+                  <h3 className="text-xl font-bold text-rich-black uppercase tracking-tight mb-4">{step.title}</h3>
+                  <p className="text-sm text-black/50 font-normal leading-relaxed">{step.desc}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+          
+          <p className="mt-12 text-center text-xs font-bold text-black/50 uppercase tracking-[0.2em] italic">
+            You’ll always see our name or crest on official partner pages. If something feels off, return here and follow the links.
+          </p>
+        </div>
+      </section>
+
+      {/* SECTION D: CATEGORIES */}
+      <section className="py-12 md:py-16 bg-milk-white border-b border-black/5">
+        <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid lg:grid-cols-2 gap-24 items-start">
+            <div>
+              <span className="block text-[10px] font-black uppercase tracking-[0.4em] text-zru-green mb-8">Seating Overview</span>
+              <h2 className="text-4xl md:text-5xl font-black text-rich-black uppercase tracking-tighter leading-none mb-8">TICKET TYPES <br />& AREAS</h2>
+              <p className="text-lg text-black/60 font-normal mb-12 max-w-lg leading-relaxed">
+                Different fixtures and venues use different seating maps, but most matches follow a similar structure. Use this as a guide before you buy.
+              </p>
+              
+              <div className="p-6 bg-white border border-black/5 rounded-xl shadow-sm">
+                 <div className="flex items-center gap-3 text-zru-green mb-4 font-black uppercase text-[10px] tracking-widest">
+                    <Info className="w-4 h-4" />
+                    Dynamic Pricing
+                 </div>
+                 <p className="text-xs text-black/50 font-normal leading-relaxed">
+                   Prices may vary by opponent, competition and demand. Some fixtures may use dynamic pricing—booking early is often your best value.
+                 </p>
+              </div>
+            </div>
+
+            <div className="space-y-4">
+              {[
+                { name: "Premium & hospitality", text: "Our most elevated matchday experience, with the best views, lounge access and, at selected fixtures, food and beverage included." },
+                { name: "Category 1", text: "Prime main-stand seating with the clearest view of the pitch and every key moment." },
+                { name: "Category 2–3", text: "Strong views at more accessible price points, often behind the posts or in corner sections." },
+                { name: "Family & supporter zones", text: "Sections designed for families and organised supporter groups. Expect more singing and atmosphere." },
+                { name: "Accessible seating", text: "Reserved areas for supporters with accessibility needs, with companion seating where available." }
+              ].map((c, i) => (
+                <div key={i} className="p-6 bg-white border border-black/5 rounded-lg shadow-sm">
+                  <h3 className="text-sm font-black text-rich-black uppercase tracking-widest mb-2">{c.name}</h3>
+                  <p className="text-xs text-black/50 font-normal leading-relaxed">{c.text}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* SECTION E: CAMPAIGN HOOK */}
+      <section className="py-10 md:py-12 bg-zru-green relative overflow-hidden group">
+        <Link href="/world-cup-campaign" className="absolute inset-0 z-10" />
+        <div className="absolute inset-0 bg-black/5 opacity-0 group-hover:opacity-100 transition-opacity" />
+        <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 relative z-20 flex flex-col md:flex-row items-center justify-between gap-8">
+           <div className="max-w-2xl">
+              <h2 className="text-2xl md:text-3xl font-black text-white uppercase tracking-tighter leading-none mb-3">MATCHDAY AND THE WORLD CUP JOURNEY</h2>
+              <p className="text-sm text-white/80 font-bold leading-relaxed pr-8">
+                 Every test is part of a bigger story. When you secure your seat, you’re already backing the Sables. To go further, consider becoming a monthly backer.
+              </p>
+           </div>
+           <div className="flex items-center gap-4 shrink-0">
+              <span className="text-sm font-black text-white uppercase tracking-widest">Explore Campaign</span>
+              <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center text-zru-green group-hover:scale-110 transition-transform">
+                 <ArrowRight className="w-5 h-5" />
+              </div>
+           </div>
+        </div>
+      </section>
+
+      {/* SECTION F: FAQ */}
+      <section id="faqs" className="py-32 bg-milk-white scroll-mt-20">
+        <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid lg:grid-cols-3 gap-24">
+            <div>
+              <span className="block text-[10px] font-black uppercase tracking-[0.4em] text-zru-green mb-8">Security First</span>
+              <h2 className="text-4xl font-black text-rich-black uppercase tracking-tighter leading-tight mb-8">TICKET FAQs <br />& SAFETY</h2>
+              <p className="text-black/50 font-normal leading-relaxed mb-8">Direct answers for your peace of mind.</p>
+              <div className="pt-8 border-t border-black/5">
+                 <p className="text-xs font-bold text-black/45 uppercase tracking-widest mb-4">Still unsure?</p>
+                 <Link href="/contact" className="inline-flex items-center gap-2 text-xs font-black text-zru-green uppercase tracking-widest hover:underline">
+                    Contact support team <ChevronRight className="w-3 h-3" />
+                 </Link>
+              </div>
+            </div>
+            
+            <div className="lg:col-span-2 bg-white border border-black/5 rounded-2xl p-8 md:p-12 shadow-sm">
+              {faqItems.map((f) => (
+                <FAQItem key={f.question} question={f.question} answer={f.answer} />
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* REGISTRATION MODAL */}
+      <AnimatePresence>
+        {isRegistering && (
+          <div className="fixed inset-0 z-100 flex items-center justify-center p-6">
+            <motion.div 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="absolute inset-0 bg-black/85 backdrop-blur-md"
+              onClick={() => setIsRegistering(null)}
+            />
+            <motion.div 
+              initial={{ opacity: 0, scale: 0.9, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.9, y: 20 }}
+              className="relative w-full max-w-lg bg-white border border-black/10 rounded-2xl overflow-hidden shadow-2xl"
+            >
+              <button
+                onClick={() => setIsRegistering(null)}
+                className="absolute top-6 right-6 text-black/60 hover:text-black p-2"
+                aria-label="Close"
+              >
+                <X className="w-5 h-5" />
+              </button>
+
+              <div className="p-8 pb-0">
+                <span className="inline-block text-[10px] font-black uppercase text-zru-green mb-2 tracking-widest">Priority Alert List</span>
+                <h3 className="text-3xl font-black text-rich-black uppercase tracking-tighter mb-4">
+                  {isRegistering.teams}
+                </h3>
+                {isSuccess ? (
+                  <motion.div 
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="space-y-4"
+                  >
+                    <div className="p-6 bg-green-500/10 border border-green-500/20 rounded-xl">
+                      <p className="text-sm text-green-500 font-bold">Priority registration recorded! We&apos;ll alert you via email as soon as tickets go on sale.</p>
+                    </div>
+                    <div className="text-center">
+                      <a href="/fan-zone" className="text-[10px] font-black uppercase tracking-widest text-zru-green hover:text-rich-black transition-[color] duration-300">
+                        Join the Fan Zone for priority presale access
+                      </a>
+                    </div>
+                  </motion.div>
+                ) : (
+                  <p className="text-sm text-black/60 font-normal mb-8 pr-12">
+                    Registration for this fixture hasn&apos;t opened yet. Be the first to know when tickets go live.
+                  </p>
+                )}
+              </div>
+
+              {!isSuccess && (
+                <form onSubmit={handleRegister} className="p-8 pt-0 space-y-6">
+                  {submitError && (
+                    <div className="bg-red-500/10 border border-red-500/20 rounded-xl p-4 flex items-center gap-3 text-red-500 text-xs font-bold">
+                      <AlertCircle className="w-4 h-4 shrink-0" />
+                      <span>{submitError}</span>
+                    </div>
+                  )}
+                  <div className="space-y-4">
+                    <div>
+                      <label htmlFor="reg-name" className="block text-[10px] font-black text-black/60 uppercase tracking-widest mb-2">FULL NAME</label>
+                      <input 
+                        id="reg-name"
+                        type="text" 
+                        required
+                        className="w-full bg-black/5 border border-black/10 rounded p-4 text-rich-black font-normal focus:outline-none focus:border-zru-green transition-colors" 
+                        placeholder="Enter your name" 
+                        value={formData.name}
+                        onChange={(e) => setFormData({...formData, name: e.target.value})}
+                      />
+                    </div>
+                    <div>
+                      <label htmlFor="reg-email" className="block text-[10px] font-black text-black/60 uppercase tracking-widest mb-2">EMAIL ADDRESS</label>
+                      <input 
+                        id="reg-email"
+                        type="email" 
+                        required
+                        className="w-full bg-black/5 border border-black/10 rounded p-4 text-rich-black font-normal focus:outline-none focus:border-zru-green transition-colors" 
+                        placeholder="your@email.com" 
+                        value={formData.email}
+                        onChange={(e) => setFormData({...formData, email: e.target.value})}
+                      />
+                    </div>
+                  </div>
+
+                  <div className="flex flex-col gap-4">
+                    <Button 
+                      variant="secondary" 
+                      size="xl" 
+                      className="w-full" 
+                      type="submit" 
+                      disabled={isSubmitting}
+                    >
+                      {isSubmitting ? "Processing…" : "Register Interest"}
+                    </Button>
+                    <p className="text-center text-[10px] font-bold text-black/60 uppercase tracking-widest">
+                      Already a ZRU Nation member? <Link href="/auth" className="text-zru-green underline">Sign in for one-click interest</Link>
+                    </p>
+                  </div>
+                </form>
+              )}
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
+
+    </main>
+  );
+}

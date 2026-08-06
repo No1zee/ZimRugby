@@ -7,6 +7,7 @@ import Link from "next/link";
 import { ChevronRight, ChevronDown, Calendar, MapPin, Users, Award, ShieldAlert, Image as ImageIcon, Film, Expand } from "lucide-react";
 import { Team } from "@/types";
 import { Tilt3DCard } from "@/components/ui/animations";
+import SlantedButton from "@/components/ui/SlantedButton";
 import PlayerCardGrid from "./PlayerCardGrid";
 import NextMatchBanner from "./NextMatchBanner";
 import RecentResultsStrip from "./RecentResultsStrip";
@@ -145,20 +146,16 @@ export default function TeamPageClient({ team }: TeamPageClientProps) {
           <div className="flex overflow-x-auto py-4 gap-2 no-scrollbar">
             {tabItems.map((tab) => {
               const Icon = tab.icon;
-              const isActive = activeTab === tab.id;
               return (
-                <button
+                <SlantedButton
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id)}
-                  className={`flex items-center gap-2 px-5 py-2.5 clip-slanted-sm text-xs font-black uppercase tracking-wider whitespace-nowrap transition-colors duration-200 ${
-                    isActive 
-                      ? "bg-zru-green text-white shadow-lg shadow-zru-green/20" 
-                      : "text-black/60 hover:text-black hover:bg-black/5"
-                  }`}
+                  variant="chip"
+                  active={activeTab === tab.id}
+                  leftIcon={<Icon className="w-4 h-4" />}
                 >
-                  <Icon className="w-4 h-4" />
-                  <span>{tab.label}</span>
-                </button>
+                  {tab.label}
+                </SlantedButton>
               );
             })}
           </div>

@@ -136,13 +136,16 @@ function SlideContent({
               transition={{ delay: 1.0, duration: 0.6, ease: [0.25, 1, 0.5, 1] }}
             >
               <MagneticElement intensity={0.25}>
-                <Link href={slide.ctas.primary.href} className="inline-flex items-center justify-center font-subheading tracking-widest uppercase transition-colors duration-300 bg-white text-rich-black hover:bg-zru-green hover:text-white border border-white hover:border-zru-green px-8 py-3.5 text-xs font-black clip-slanted shadow-2xl min-w-[200px] gap-3">
-                  {slide.ctas.primary.iconName && iconMap[slide.ctas.primary.iconName] && (() => {
-                    const Icon = iconMap[slide.ctas.primary.iconName];
-                    return <Icon className="w-4.5 h-4.5" />;
-                  })()}
-                  {slide.ctas.primary.label}
-                </Link>
+                <span className="relative inline-flex group">
+                  <span aria-hidden className="absolute inset-0 clip-slanted bg-[#003D20] translate-x-[5px] translate-y-[5px] transition-transform duration-200 group-hover:translate-x-[7px] group-hover:translate-y-[7px] group-active:translate-x-[3px] group-active:translate-y-[3px]" />
+                  <Link href={slide.ctas.primary.href} className="relative z-10 inline-flex items-center justify-center font-subheading tracking-widest uppercase transition-colors duration-300 bg-white text-rich-black hover:bg-zru-green hover:text-white border border-white hover:border-zru-green px-8 py-3.5 text-xs font-black clip-slanted shadow-[0_2px_4px_rgba(0,0,0,0.15)] min-w-[200px] gap-3">
+                    {slide.ctas.primary.iconName && iconMap[slide.ctas.primary.iconName] && (() => {
+                      const Icon = iconMap[slide.ctas.primary.iconName];
+                      return <Icon className="w-4.5 h-4.5" />;
+                    })()}
+                    {slide.ctas.primary.label}
+                  </Link>
+                </span>
               </MagneticElement>
             </motion.div>
             
@@ -213,14 +216,17 @@ function SlideContent({
   );
 }
 
-export default function HeroCarousel({ slides }: { slides: HeroSlideData[] }) {
+export default function HeroCarousel({ slides = [] }: { slides: HeroSlideData[] }) {
   const [currentSlide, setCurrentSlide] = useState(0);
+
   const containerRef = useRef<HTMLElement>(null);
   const [isMobile, setIsMobile] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
   const prefersReducedMotion = useRef(false);
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
+    setMounted(true);
     const checkMobile = () => setIsMobile(window.innerWidth < 768);
     checkMobile();
     window.addEventListener('resize', checkMobile);
@@ -237,7 +243,7 @@ export default function HeroCarousel({ slides }: { slides: HeroSlideData[] }) {
 
   // Scroll Parallax Hooks — disabled on mobile to avoid RAF scroll listener overhead
   const { scrollYProgress } = useScroll({
-    target: isMobile ? undefined : containerRef,
+    target: (mounted && !isMobile) ? containerRef : undefined,
     offset: ["start start", "end start"],
   });
 
@@ -263,6 +269,8 @@ export default function HeroCarousel({ slides }: { slides: HeroSlideData[] }) {
 
     return () => clearInterval(timer);
   }, [nextSlide, isPaused]);
+
+  if (!slides || slides.length === 0) return null;
 
   const activeSlide = slides[currentSlide];
   const nextSlideData = slides[(currentSlide + 1) % slides.length];

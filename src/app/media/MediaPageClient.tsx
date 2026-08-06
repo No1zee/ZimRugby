@@ -7,15 +7,18 @@ import Button from "@/components/common/Button";
 import VideoCard from "@/components/media/VideoCard";
 import { useState, useEffect } from "react";
 import JournalStrip from "@/components/home/JournalStrip";
-import PageHero from "@/components/ui/PageHero";
+import CmsHero from "@/components/cms/CmsHero";
 import PageAnnouncements from "@/components/ui/PageAnnouncements";
 import MatchdayVideoHighlights from "@/components/media/MatchdayVideoHighlights";
 import Image from "next/image";
 import Link from "next/link";
+import type { Report } from "@/lib/data-fetcher";
 import FanZoneSignup from "@/components/fanzone/FanZoneSignup";
 
 interface MediaPageClientProps {
   initialSocialPosts: any[];
+  cmsPage?: any;
+  initialNews?: Report[];
 }
 
 interface YouTubeVideo {
@@ -34,41 +37,11 @@ const FALLBACK_VIDEOS: YouTubeVideo[] = [
   { id: "yt-canada-replay", videoId: "kf33dibu7f0", title: "Sables Nations Cup Opener | Canada v Zimbabwe Full Match Replay", thumbnail: "https://img.youtube.com/vi/kf33dibu7f0/hqdefault.jpg", category: "MATCHDAY REPLAY", publishedAt: "JULY 2026" },
 ];
 
-const newsArchive = [
-  {
-    id: 1,
-    title: "ZRU announces new partnership with Nedbank",
-    category: "PARTNERSHIP",
-    date: "15 JUL 2025",
-    excerpt: "A landmark deal that will see sustained investment in grassroots development and high-performance programs.",
-  },
-  {
-    id: 2,
-    title: "Schools Rugby Festival: Fixtures confirmed",
-    category: "SCHOOLS",
-    date: "12 JUL 2025",
-    excerpt: "The country&apos;s top schools descend on Prince Edward for a week of exhilarating schoolboy rugby.",
-  },
-  {
-    id: 3,
-    title: "Cheetahs squad named for Sevens World Cup",
-    category: "CHEETAHS",
-    date: "10 JUL 2025",
-    excerpt: "Experienced campaigners return to the fold as the Cheetahs look to make an impact on the global stage.",
-  },
-  {
-    id: 4,
-    title: "Community Rugby: Growing the game in Matabeleland",
-    category: "DEVELOPMENT",
-    date: "08 JUL 2025",
-    excerpt: "New initiatives launched to increase participation and improve facilities in Bulawayo and surrounds.",
-  },
-];
-
-export default function MediaPageClient({ initialSocialPosts }: MediaPageClientProps) {
+export default function MediaPageClient({ initialSocialPosts, cmsPage, initialNews = [] }: MediaPageClientProps) {
   const [activeTab, setActiveTab] = useState<"all" | "videos" | "news" | "social">("all");
   const [searchQuery, setSearchQuery] = useState("");
   const [videos, setVideos] = useState<YouTubeVideo[]>(FALLBACK_VIDEOS);
+  const [selectedArticle, setSelectedArticle] = useState<Report | null>(null);
 
   useEffect(() => {
     fetch("/api/videos/youtube")
@@ -79,34 +52,26 @@ export default function MediaPageClient({ initialSocialPosts }: MediaPageClientP
       .catch(() => {});
   }, []);
 
-  const allNews = [...newsArchive, ...initialSocialPosts.map(p => ({
+  const authenticArticles = initialNews.map((n) => ({
+    ...n,
+    slug: n.url,
+    source: n.source || ('website' as const),
+  }));
+
+  const socialPosts = initialSocialPosts.map((p) => ({
     ...p,
     slug: p.url,
-    source: 'facebook' as const
-  }))].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
-
-  const filteredNews = allNews.filter(n => {
-    // Search filter
-    const matchesSearch = n.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
-                          (n.excerpt && n.excerpt.toLowerCase().includes(searchQuery.toLowerCase()));
-    
-    if (!matchesSearch) return false;
-
-    // Tab filter
-    if (activeTab === "all") return true;
-    if (activeTab === "news") return n.source !== 'facebook';
-    if (activeTab === "social") return n.source === 'facebook';
-    return false;
-  });
+    source: 'facebook' as const,
+  }));
 
   return (
     <main className="bg-milk-white min-h-screen pb-12 relative overflow-hidden text-rich-black">
       {/* PageHero header */}
-      <PageHero
-        title="Media Hub"
-        subtitle="Watch highlights, interviews, and full matches. Stay up to date with the latest news and social updates."
-        tag="Latest Content"
-        backgroundImage="/images/media/vid1.jpg"
+      <CmsHero
+        kicker={cmsPage?.hero_kicker || "Latest Content"}
+        title={cmsPage?.hero_title || "Media Hub"}
+        intro={cmsPage?.hero_intro || "Watch highlights, interviews, and full matches. Stay up to date with the latest news and social updates."}
+        image={cmsPage?.hero_image || "/images/media/vid1.jpg"}
         breadcrumb={[{ label: "Media", href: "/media" }]}
       />
 
@@ -116,204 +81,320 @@ export default function MediaPageClient({ initialSocialPosts }: MediaPageClientP
         <PageAnnouncements scope="media" className="mb-8" />
 
         {/* Nations Cup Matchday Media & Video Highlights */}
-        <div className="mb-16">
+        <div className="mb-14">
           <MatchdayVideoHighlights />
         </div>
 
         {/* Filters */}
-        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-12">
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-10">
             <div className="flex p-1 bg-black/5 rounded-xl border border-black/10 w-fit overflow-x-auto no-scrollbar">
                 <button 
                     onClick={() => setActiveTab("all")}
-                    className={`px-6 py-2 rounded-lg text-[10px] font-black tracking-[0.2em] uppercase transition-[background-color,color,box-shadow] whitespace-nowrap ${activeTab === "all" ? "bg-zru-green text-white shadow-lg" : "text-black/60 hover:text-black"}`}
+                    className={`px-5 py-2 rounded-lg text-[10px] font-black tracking-[0.2em] uppercase transition-[background-color,color,box-shadow] whitespace-nowrap ${activeTab === "all" ? "bg-zru-green text-white shadow-md" : "text-black/60 hover:text-black"}`}
                 >
                     All
                 </button>
                 <button 
                     onClick={() => setActiveTab("videos")}
-                    className={`px-6 py-2 rounded-lg text-[10px] font-black tracking-[0.2em] uppercase transition-[background-color,color,box-shadow] whitespace-nowrap ${activeTab === "videos" ? "bg-zru-green text-white shadow-lg" : "text-black/60 hover:text-black"}`}
+                    className={`px-5 py-2 rounded-lg text-[10px] font-black tracking-[0.2em] uppercase transition-[background-color,color,box-shadow] whitespace-nowrap ${activeTab === "videos" ? "bg-zru-green text-white shadow-md" : "text-black/60 hover:text-black"}`}
                 >
                     Videos
                 </button>
                 <button 
                     onClick={() => setActiveTab("news")}
-                    className={`px-6 py-2 rounded-lg text-[10px] font-black tracking-[0.2em] uppercase transition-[background-color,color,box-shadow] whitespace-nowrap ${activeTab === "news" ? "bg-zru-green text-white shadow-lg" : "text-black/60 hover:text-black"}`}
+                    className={`px-5 py-2 rounded-lg text-[10px] font-black tracking-[0.2em] uppercase transition-[background-color,color,box-shadow] whitespace-nowrap ${activeTab === "news" ? "bg-zru-green text-white shadow-md" : "text-black/60 hover:text-black"}`}
                 >
-                    Official
+                    Official News
                 </button>
                 <button 
                     onClick={() => setActiveTab("social")}
-                    className={`px-6 py-2 rounded-lg text-[10px] font-black tracking-[0.2em] uppercase transition-[background-color,color,box-shadow] whitespace-nowrap flex items-center gap-2 ${activeTab === "social" ? "bg-zru-green text-white shadow-lg" : "text-black/60 hover:text-black"}`}
+                    className={`px-5 py-2 rounded-lg text-[10px] font-black tracking-[0.2em] uppercase transition-[background-color,color,box-shadow] whitespace-nowrap ${activeTab === "social" ? "bg-zru-green text-white shadow-md" : "text-black/60 hover:text-black"}`}
                 >
-                    Social <Facebook className={`w-3 h-3 ${activeTab === "social" ? "text-white" : "text-black/40"}`} />
+                    Social Media Feed
                 </button>
             </div>
 
-            <div className="relative w-full sm:w-80">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-black/45" />
+            <div className="relative w-full sm:w-72">
+                <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-black/40" />
                 <input 
                     type="text" 
+                    placeholder="Search media..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    placeholder="Search news & videos… e.g. Sables" 
-                    className="w-full bg-black/5 border border-black/10 rounded-lg pl-10 pr-4 py-3 text-rich-black placeholder-black/45 focus:outline-none focus:border-zru-green text-sm transition-[border-color]"
+                    className="w-full pl-10 pr-4 py-2 bg-black/5 border border-black/10 rounded-xl text-xs text-rich-black placeholder:text-black/40 focus:outline-none focus:border-zru-green/50 transition-colors"
                 />
             </div>
         </div>
 
-        {/* Featured Video Section */}
+        {/* Section 1: Video Highlights */}
         {(activeTab === "all" || activeTab === "videos") && (
-            <motion.section 
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                className="mb-24"
-            >
-                <div className="flex items-center gap-4 mb-8">
-                    <h2 className="text-2xl font-heading text-rich-black flex items-center gap-3 uppercase">
-                        <Play className="w-6 h-6 text-zru-green" fill="currentColor" />
-                        Latest Videos
-                    </h2>
-                    <div className="h-px flex-1 bg-black/10" />
-                    {activeTab === "all" && (
-                        <button onClick={() => setActiveTab("videos")} className="text-zru-green text-[10px] font-black tracking-[0.2em] hover:text-black transition-colors uppercase">
-                            View All
-                        </button>
-                    )}
-                </div>
-                
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                    {videos.map((video, index) => (
-                        <motion.div
-                            key={video.id}
-                            initial={{ opacity: 0, y: 20 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            viewport={{ once: true }}
-                            transition={{ delay: index * 0.1 }}
-                        >
-                            <VideoCard
-                                title={video.title}
-                                duration=""
-                                date={video.publishedAt}
-                                thumbnail={video.thumbnail}
-                                category={video.category}
-                                videoId={video.videoId}
-                            />
-                        </motion.div>
-                    ))}
-                </div>
-                
-                {activeTab === "videos" && (
-                     <div className="mt-12 text-center flex justify-center">
-                        <Button variant="outline" className="text-rich-black border-black/20 hover:bg-black/5 px-12">
-                            LOAD MORE VIDEOS
-                        </Button>
-                    </div>
-                )}
-            </motion.section>
+          <section className="mb-14">
+            <div className="flex items-center justify-between mb-6 pb-3 border-b border-black/10">
+              <h2 className="text-xl font-heading font-bold text-rich-black uppercase tracking-wider flex items-center gap-2">
+                <Play className="w-5 h-5 text-zru-green fill-zru-green" />
+                Featured Video Highlights
+              </h2>
+              <span className="text-xs text-black/40 font-bold uppercase">{videos.length} Videos</span>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+              {videos
+                .filter(v => v.title.toLowerCase().includes(searchQuery.toLowerCase()))
+                .map((video) => (
+                  <VideoCard
+                    key={video.id}
+                    title={video.title}
+                    duration="HIGHLIGHTS"
+                    date={video.publishedAt}
+                    thumbnail={video.thumbnail}
+                    category={video.category}
+                    videoId={video.videoId}
+                  />
+                ))}
+            </div>
+          </section>
         )}
 
-        {/* News & Social Archive */}
-        {(activeTab === "all" || activeTab === "news" || activeTab === "social") && (
-            <motion.section
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-            >
-                <div className="flex items-center gap-4 mb-8">
-                    <h2 className="text-2xl font-heading text-rich-black uppercase">
-                        {activeTab === "social" ? "Social Feed" : activeTab === "news" ? "Official News" : "Recent Updates"}
-                    </h2>
-                    <div className="h-px flex-1 bg-black/10" />
-                     {activeTab === "all" && (
-                        <div className="flex gap-4">
-                            <button onClick={() => setActiveTab("news")} className="text-zru-green text-[10px] font-black tracking-[0.2em] hover:text-black transition-colors uppercase">
-                                News
-                            </button>
-                            <button onClick={() => setActiveTab("social")} className="text-zru-green text-[10px] font-black tracking-[0.2em] hover:text-black transition-colors uppercase">
-                                Social
-                            </button>
+        {/* Section 2: Official News & Press */}
+        {(activeTab === "all" || activeTab === "news") && (
+          <section className="mb-14">
+            <div className="flex items-center justify-between mb-6 pb-3 border-b border-black/10">
+              <h2 className="text-xl font-heading font-bold text-rich-black uppercase tracking-wider flex items-center gap-2">
+                <span className="w-2.5 h-2.5 rounded-full bg-zru-green" />
+                Official News & Press Releases
+              </h2>
+              <span className="text-xs text-black/40 font-bold uppercase">{authenticArticles.length} Articles</span>
+            </div>
+
+            {authenticArticles.filter(n => 
+              n.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
+              (n.excerpt && n.excerpt.toLowerCase().includes(searchQuery.toLowerCase()))
+            ).length > 0 ? (
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+                {authenticArticles
+                  .filter(n => 
+                    n.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
+                    (n.excerpt && n.excerpt.toLowerCase().includes(searchQuery.toLowerCase()))
+                  )
+                  .map((item, index) => (
+                    <motion.div
+                      key={item.id || index}
+                      initial={{ opacity: 0, y: 15 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ delay: index * 0.05 }}
+                      onClick={() => setSelectedArticle(item)}
+                      className="cursor-pointer group bg-white border border-black/10 rounded-xl overflow-hidden hover:shadow-xl hover:border-zru-green/50 transition-[box-shadow,border-color,transform] duration-300 hover:-translate-y-1 flex flex-col h-full"
+                    >
+                      {item.image && (
+                        <div className="relative h-44 w-full overflow-hidden bg-black/5">
+                          <Image
+                            src={item.image}
+                            alt={item.title}
+                            fill
+                            sizes="(max-width: 768px) 100vw, 33vw"
+                            className="object-cover group-hover:scale-108 transition-transform duration-700"
+                          />
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-80" />
+                          <span className="absolute bottom-2.5 left-3 text-[9px] font-black tracking-[0.18em] uppercase text-white bg-zru-green/95 px-2.5 py-0.5 rounded shadow-sm">
+                            {item.category || 'PRESS'}
+                          </span>
                         </div>
-                    )}
-                </div>
-                
-                {/* Animated Interactive News Grid */}
-                <div className="mb-12">
-                  {filteredNews.length > 0 ? (
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      {filteredNews.map((item, index) => (
-                        <motion.div
-                          key={item.id || index}
-                          initial={{ opacity: 0, y: 20 }}
-                          whileInView={{ opacity: 1, y: 0 }}
-                          viewport={{ once: true }}
-                          transition={{ delay: index * 0.05 }}
-                        >
-                          <Link
-                            href={item.url || item.slug || '#'}
-                            target={item.source === 'facebook' ? '_blank' : '_self'}
-                            rel={item.source === 'facebook' ? 'noopener noreferrer' : ''}
-                            className="block bg-white border border-black/5 rounded-2xl overflow-hidden hover:shadow-lg hover:border-zru-green/30 transition-[box-shadow,border-color] group"
-                          >
-                            {item.image && item.image !== '/images/media/fb_placeholder.jpg' && (
-                              <div className="relative h-48 w-full overflow-hidden">
-                                <Image
-                                  src={item.image}
-                                  alt={item.title}
-                                  fill
-                                  sizes="(max-width: 768px) 100vw, 50vw"
-                                  className="object-cover group-hover:brightness-110 transition-[filter] duration-500"
-                                />
-                                <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent" />
-                              </div>
-                            )}
-                            <div className="p-5">
-                              <div className="flex items-center gap-3 mb-3">
-                                <span className="text-[10px] font-black tracking-[0.15em] uppercase text-zru-green bg-zru-green/10 px-2.5 py-1 rounded-md">
-                                  {item.category || 'SOCIAL'}
-                                </span>
-                                {item.source === 'facebook' && (
-                                  <div className="flex items-center gap-1.5">
-                                    <div className="w-5 h-5 bg-zru-green rounded-full flex items-center justify-center">
-                                      <Facebook className="w-3 h-3 text-white fill-current" />
-                                    </div>
-                                    <span className="text-[10px] font-bold text-black/40 uppercase">Facebook</span>
-                                  </div>
-                                )}
-                                <div className="flex items-center gap-1.5 ml-auto text-black/40">
-                                  <Calendar className="w-3 h-3" />
-                                  <span className="text-[10px] font-bold uppercase">{item.date}</span>
-                                </div>
-                              </div>
-                              <h3 className="text-base font-heading font-bold text-rich-black mb-2 group-hover:text-zru-green transition-colors leading-snug line-clamp-2">
-                                {item.title}
-                              </h3>
-                              <p className="text-black/60 text-sm leading-relaxed line-clamp-2 mb-3">
-                                {item.excerpt}
-                              </p>
-                              <span className="text-zru-green text-[10px] font-black uppercase tracking-[0.15em] flex items-center gap-1.5 group-hover:gap-2.5 transition-[gap]">
-                                {item.source === 'facebook' ? 'View on Facebook' : 'Read More'}
-                                <ArrowRight className="w-3 h-3" />
-                              </span>
-                            </div>
-                          </Link>
-                        </motion.div>
-                      ))}
-                    </div>
-                  ) : (
-                    <div className="text-center py-10 md:py-12 text-black/40">
-                      <p className="text-sm font-normal">No updates found matching your search.</p>
-                    </div>
-                  )}
-                </div>
-
-                <div className="mt-12 flex justify-center">
-                     <Button variant="primary" className="bg-zru-green text-white hover:bg-zru-green/90 px-12">
-                        LOAD MORE UPDATES
-                     </Button>
-                </div>
-            </motion.section>
+                      )}
+                      <div className="p-4 flex-1 flex flex-col justify-between">
+                        <div>
+                          <div className="flex items-center gap-1.5 text-black/40 text-[10px] font-bold uppercase mb-2">
+                            <Calendar className="w-3 h-3" />
+                            {item.date}
+                          </div>
+                          <h3 className="text-base font-heading font-bold text-rich-black mb-2 group-hover:text-zru-green transition-colors leading-snug line-clamp-2">
+                            {item.title}
+                          </h3>
+                          <p className="text-black/60 text-xs leading-relaxed line-clamp-2 mb-3">
+                            {item.excerpt}
+                          </p>
+                        </div>
+                        <div className="pt-2 border-t border-black/5 flex items-center justify-between">
+                          <span className="text-zru-green text-[10px] font-black uppercase tracking-[0.15em] flex items-center gap-1 group-hover:gap-2 transition-[gap]">
+                            Quick View
+                            <ArrowRight className="w-3 h-3" />
+                          </span>
+                          <span className="text-[9px] font-bold text-black/30 uppercase tracking-widest">
+                            ZRU Press
+                          </span>
+                        </div>
+                      </div>
+                    </motion.div>
+                  ))}
+              </div>
+            ) : (
+              <div className="text-center py-8 text-black/40 text-sm">
+                No official news articles found matching your search.
+              </div>
+            )}
+          </section>
         )}
 
+        {/* Section 3: Social Media Feed */}
+        {(activeTab === "all" || activeTab === "social") && (
+          <section className="mb-14">
+            <div className="flex items-center justify-between mb-6 pb-3 border-b border-black/10">
+              <h2 className="text-xl font-heading font-bold text-rich-black uppercase tracking-wider flex items-center gap-2">
+                <Facebook className="w-5 h-5 text-[#1877F2]" />
+                Official Facebook Feed
+              </h2>
+              <span className="text-xs text-black/40 font-bold uppercase">{socialPosts.length} Updates</span>
+            </div>
+
+            {socialPosts.filter(p => (p.content || '').toLowerCase().includes(searchQuery.toLowerCase())).length > 0 ? (
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                {socialPosts
+                  .filter(p => (p.content || '').toLowerCase().includes(searchQuery.toLowerCase()))
+                  .map((post, index) => (
+                    <motion.div
+                      key={post.id || index}
+                      initial={{ opacity: 0, y: 20 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ delay: index * 0.05 }}
+                      className="bg-white rounded-2xl border border-black/10 overflow-hidden shadow-sm hover:shadow-xl transition-shadow flex flex-col justify-between"
+                    >
+                      <div className="p-5">
+                        <div className="flex items-center justify-between mb-4">
+                          <div className="flex items-center gap-3">
+                            <div className="w-10 h-10 rounded-full bg-[#1877F2]/10 border border-[#1877F2]/20 flex items-center justify-center font-bold text-[#1877F2] text-sm">
+                              ZRU
+                            </div>
+                            <div>
+                              <h4 className="text-sm font-bold text-rich-black">Zimbabwe Rugby Union</h4>
+                              <span className="text-[10px] text-black/40 font-bold uppercase">{post.date}</span>
+                            </div>
+                          </div>
+                          <Facebook className="w-4 h-4 text-[#1877F2]" />
+                        </div>
+
+                        {post.image && (
+                          <div className="relative aspect-video w-full rounded-xl overflow-hidden mb-4 bg-black/5">
+                            <Image
+                              src={post.image}
+                              alt="Social Post"
+                              fill
+                              sizes="(max-width: 768px) 100vw, 33vw"
+                              className="object-cover"
+                            />
+                          </div>
+                        )}
+
+                        <p className="text-black/80 text-xs sm:text-sm leading-relaxed whitespace-pre-wrap font-medium">
+                          {post.content}
+                        </p>
+                      </div>
+
+                      <Link
+                        href={post.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="px-5 py-3.5 bg-black/5 hover:bg-[#1877F2] text-black/60 hover:text-white border-t border-black/5 text-[10px] font-black uppercase tracking-widest transition-colors flex items-center justify-between group"
+                      >
+                        <span>View Post on Facebook</span>
+                        <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+                      </Link>
+                    </motion.div>
+                  ))}
+              </div>
+            ) : (
+              <div className="text-center py-8 text-black/40 text-sm">
+                No social media posts found matching your search.
+              </div>
+            )}
+          </section>
+        )}
       </div>
+
+      {/* Article Detail Full-Screen Immersive Modal Popup */}
+      {selectedArticle && (
+        <div
+          onClick={() => setSelectedArticle(null)}
+          className="fixed inset-0 z-[99999] bg-black/85 backdrop-blur-xl flex items-center justify-center p-3 sm:p-6 md:p-10 overflow-hidden"
+        >
+          <motion.div
+            initial={{ scale: 0.95, opacity: 0, y: 15 }}
+            animate={{ scale: 1, opacity: 1, y: 0 }}
+            exit={{ scale: 0.95, opacity: 0, y: 15 }}
+            transition={{ type: "spring", damping: 28, stiffness: 320 }}
+            onClick={(e) => e.stopPropagation()}
+            className="bg-white border border-white/20 rounded-3xl overflow-hidden max-w-4xl w-full max-h-[88vh] flex flex-col shadow-2xl relative"
+          >
+            {/* Header Image Banner */}
+            {selectedArticle.image && (
+              <div className="relative h-52 sm:h-72 md:h-80 w-full shrink-0">
+                <Image
+                  src={selectedArticle.image}
+                  alt={selectedArticle.title}
+                  fill
+                  className="object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent" />
+                
+                <button
+                  onClick={() => setSelectedArticle(null)}
+                  className="absolute top-4 right-4 bg-black/70 hover:bg-black text-white w-10 h-10 rounded-full flex items-center justify-center transition-transform hover:scale-110 text-sm font-bold shadow-lg z-10"
+                >
+                  ✕
+                </button>
+
+                <div className="absolute bottom-5 left-5 right-5 text-white max-w-3xl">
+                  <span className="text-[10px] font-black tracking-[0.2em] uppercase bg-zru-green text-white px-3 py-1 rounded-md mb-2 inline-block shadow-md">
+                    {selectedArticle.category || 'OFFICIAL PRESS'}
+                  </span>
+                  <h2 className="text-xl sm:text-2xl md:text-3xl font-heading font-black leading-tight text-white drop-shadow-md">
+                    {selectedArticle.title}
+                  </h2>
+                </div>
+              </div>
+            )}
+
+            {/* Modal Body Content */}
+            <div className="p-5 sm:p-8 overflow-y-auto space-y-5 text-rich-black flex-1">
+              <div className="flex items-center justify-between text-black/50 text-xs font-bold uppercase border-b border-black/10 pb-3">
+                <div className="flex items-center gap-2">
+                  <Calendar className="w-4 h-4 text-zru-green" />
+                  <span>Published {selectedArticle.date}</span>
+                </div>
+                <span className="text-zru-green font-black tracking-wider">Zimbabwe Rugby Union Press</span>
+              </div>
+
+              <div className="text-black/85 text-base leading-relaxed font-medium space-y-4">
+                {(selectedArticle.content || selectedArticle.excerpt || '')
+                  .replace(/<[^>]*>?/gm, '')
+                  .replace(/\[Harare,\s*Zimbabwe\]\s*–\s*\[[^\]]*\]/gi, '')
+                  .replace(/\[Source:[^\]]*\]\s*–/gi, '')
+                  .replace(/\[…\]|\[\.\.\.\]/gi, '')
+                  .trim()}
+              </div>
+
+              <div className="pt-4 flex items-center justify-between border-t border-black/10">
+                <a
+                  href={selectedArticle.url || '#'}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2.5 bg-zru-green hover:bg-zru-green/90 text-white text-xs sm:text-sm font-black uppercase tracking-widest px-6 py-3 rounded-xl shadow-lg transition-[background-color,transform] hover:scale-[1.02]"
+                >
+                  View Original Source
+                  <ArrowRight className="w-4 h-4" />
+                </a>
+
+                <button
+                  onClick={() => setSelectedArticle(null)}
+                  className="text-xs font-black text-black/50 hover:text-black uppercase tracking-widest px-4 py-2 rounded-lg hover:bg-black/5 transition-colors"
+                >
+                  Close Window
+                </button>
+              </div>
+            </div>
+          </motion.div>
+        </div>
+      )}
       
       <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-12">
           <FanZoneSignup />

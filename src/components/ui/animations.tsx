@@ -375,7 +375,9 @@ export function FloatingParticles({ count = 20, className = "" }: FloatingPartic
         navigator.hardwareConcurrency <= 4);
 
     if (isMobile || isLowPower) {
-      setMounted(false);
+      requestAnimationFrame(() => {
+        setMounted(false);
+      });
       return;
     }
 

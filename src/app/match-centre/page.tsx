@@ -1,9 +1,17 @@
 import { Metadata } from "next";
-import dynamic from "next/dynamic";
-import { getAllFixtures, formatFixtureForUI, getNextUnionMatch } from "@/lib/fixtures";
-import type { LeagueTableRow } from "@/types";
+import nextDynamic from "next/dynamic";
+import {
+  getMatchCentrePage,
+  getMatchCentreSettings,
+  getFanBulletin,
+  getActiveTeams,
+  getDirectusMatches,
+  getStandings,
+  getActiveAnnouncementStrip,
+} from "@/lib/match-centre/api";
+import { getActiveCampaigns } from "@/lib/api/campaigns";
 
-const MatchCentreClient = dynamic(() => import("./MatchCentreClient"), {
+const MatchCentreClient = nextDynamic(() => import("./MatchCentreClient"), {
   loading: () => (
     <main className="bg-milk-white min-h-screen">
       <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 pt-32 pb-10 md:pb-12">
@@ -22,28 +30,45 @@ export const metadata: Metadata = {
   description: "Fixtures, results, and league standings for Zimbabwe rugby teams.",
 };
 
-export const revalidate = 60;
-
-const STANDINGS: LeagueTableRow[] = [
-  { position: 1, team: "Zimbabwe Sables", played: 3, won: 3, drawn: 0, lost: 0, points: 15, form: ["W", "W", "W", "-", "-"] },
-  { position: 2, team: "Algeria", played: 3, won: 2, drawn: 0, lost: 1, points: 9, form: ["L", "W", "W", "-", "-"] },
-  { position: 3, team: "Namibia", played: 3, won: 1, drawn: 0, lost: 2, points: 5, form: ["L", "L", "W", "-", "-"] },
-  { position: 4, team: "Kenya", played: 3, won: 0, drawn: 0, lost: 3, points: 1, form: ["L", "L", "L", "-", "-"] },
-];
+export const dynamic = "force-dynamic";
 
 export default async function MatchCentre() {
-  const rawFixtures = await getAllFixtures();
-  const formattedFixtures = rawFixtures.map(formatFixtureForUI);
-  const initialFixtures = formattedFixtures.filter(f => f.status === 'upcoming');
-  const initialResults = formattedFixtures.filter(f => f.status === 'completed');
-  const nextUnionMatch = getNextUnionMatch(formattedFixtures);
+  const [
+    pageConfig,
+    settings,
+    bulletin,
+    teams,
+    allMatches,
+    standingsTables,
+    announcementStrip,
+    campaigns,
+  ] = await Promise.all([
+    getMatchCentrePage(),
+    getMatchCentreSettings(),
+    getFanBulletin(),
+    getActiveTeams(),
+    getDirectusMatches(),
+    getStandings(),
+    getActiveAnnouncementStrip(),
+    getActiveCampaigns(),
+  ]);
+
+  const initialFixtures = allMatches.filter((m) => m.status === "upcoming" || m.status === "live");
+  const initialResults = allMatches.filter((m) => m.status === "completed");
+  const nextUnionMatch = initialFixtures[0] || null;
 
   return (
     <MatchCentreClient
+      pageConfig={pageConfig}
+      settings={settings}
+      bulletin={bulletin}
+      teams={teams}
       initialFixtures={initialFixtures}
       initialResults={initialResults}
-      initialStandings={STANDINGS}
+      standingsTables={standingsTables}
       nextUnionMatch={nextUnionMatch}
+      announcementStrip={announcementStrip}
+      campaigns={campaigns}
     />
   );
 }

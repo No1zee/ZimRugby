@@ -1,0 +1,128 @@
+[
+  {
+    "id": "nav-1",
+    "label": "Home",
+    "url": "/",
+    "group": "header",
+    "order": 1
+  },
+  {
+    "id": "nav-2",
+    "label": "About ZRU",
+    "url": "/about-us/",
+    "group": "header",
+    "order": 2
+  },
+  {
+    "id": "nav-3",
+    "label": "News",
+    "url": "#",
+    "group": "header",
+    "order": 3
+  },
+  {
+    "id": "nav-4",
+    "label": "Latest News",
+    "url": "/latest-news/",
+    "group": "header",
+    "order": 4
+  },
+  {
+    "id": "nav-5",
+    "label": "Teams",
+    "url": "#",
+    "group": "header",
+    "order": 5
+  },
+  {
+    "id": "nav-6",
+    "label": "The Sables",
+    "url": "/team/the-sables/",
+    "group": "header",
+    "order": 6
+  },
+  {
+    "id": "nav-7",
+    "label": "Shop",
+    "url": "https://sablesrugbyshop.com/",
+    "group": "header",
+    "order": 7
+  },
+  {
+    "id": "nav-8",
+    "label": "Fixtures & Results",
+    "url": "#",
+    "group": "header",
+    "order": 8
+  },
+  {
+    "id": "nav-9",
+    "label": "Donate",
+    "url": "https://backasable.co.zw",
+    "group": "header",
+    "order": 9
+  },
+  {
+    "id": "nav-10",
+    "label": "Contact Us",
+    "url": "/contact-us/",
+    "group": "header",
+    "order": 10
+  },
+  {
+    "id": "nav-11",
+    "label": "About Us",
+    "url": "/about-us/",
+    "group": "footer",
+    "order": 11
+  },
+  {
+    "id": "nav-12",
+    "label": "Shop",
+    "url": "https://zimrugbyshop.co.zw/",
+    "group": "footer",
+    "order": 12
+  },
+  {
+    "id": "nav-13",
+    "label": "FAQ",
+    "url": "/?page_id=3729",
+    "group": "footer",
+    "order": 13
+  },
+  {
+    "id": "nav-14",
+    "label": "News",
+    "url": "/news/",
+    "group": "footer",
+    "order": 14
+  },
+  {
+    "id": "nav-15",
+    "label": "Team",
+    "url": "/team/spoclub/",
+    "group": "footer",
+    "order": 15
+  },
+  {
+    "id": "nav-16",
+    "label": "Calendar",
+    "url": "/calendar/large-calendar/",
+    "group": "footer",
+    "order": 16
+  },
+  {
+    "id": "nav-17",
+    "label": "Men",
+    "url": "/category/men/",
+    "group": "footer",
+    "order": 17
+  },
+  {
+    "id": "nav-18",
+    "label": "Women",
+    "url": "/category/women/",
+    "group": "footer",
+    "order": 18
+  }
+]

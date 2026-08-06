@@ -7,13 +7,15 @@ import Link from "next/link";
 import { Calendar, Clock, MapPin, ChevronLeft, FileText, BarChart3, Users, Ticket } from "lucide-react";
 import type { MatchDetailData } from "@/lib/api/matchDetail";
 import { getFlagUrl } from "@/lib/flags";
+import CampaignMatchBadge from "@/components/campaigns/CampaignMatchBadge";
+import SlantedButton from "@/components/ui/SlantedButton";
 
 interface MatchDetailClientProps {
   data: MatchDetailData;
 }
 
 export default function MatchDetailClient({ data }: MatchDetailClientProps) {
-  const { match, homeLineup, awayLineup, stats, report } = data;
+  const { match, homeLineup, awayLineup, stats, report, campaign } = data;
   const [activeTab, setActiveTab] = useState<"report" | "lineups" | "stats">(
     report ? "report" : "lineups"
   );
@@ -46,6 +48,11 @@ export default function MatchDetailClient({ data }: MatchDetailClientProps) {
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[60%] h-[60%] rounded-full bg-zru-green/10 opacity-30 blur-[100px] pointer-events-none" />
           
           <div className="relative z-10 flex flex-col items-center text-center">
+            {campaign && (
+              <div className="mb-4">
+                <CampaignMatchBadge campaignSlug={campaign.slug} campaignName={campaign.name} />
+              </div>
+            )}
             <span className="text-zru-green text-xs font-black uppercase tracking-[0.3em] mb-2">
               {match.competition}
             </span>
@@ -131,15 +138,14 @@ export default function MatchDetailClient({ data }: MatchDetailClientProps) {
             {/* Upcoming Ticket CTA */}
             {match.status === "upcoming" && (
               <div className="mt-8">
-                <Link href="/tickets">
-                  <motion.button 
-                    whileHover={{ scale: 1.05 }}
-                    className="bg-zru-green text-rich-black font-black text-xs uppercase tracking-[0.2em] px-8 py-3 clip-slanted flex items-center gap-2 shadow-lg hover:shadow-zru-green/20 transition-all"
-                  >
-                    <Ticket className="w-4 h-4" />
-                    <span>Purchase Match Tickets</span>
-                  </motion.button>
-                </Link>
+                <SlantedButton
+                  href="/tickets"
+                  variant="primary"
+                  size="sm"
+                  leftIcon={<Ticket className="w-4 h-4" />}
+                >
+                  Purchase Match Tickets
+                </SlantedButton>
               </div>
             )}
           </div>
@@ -192,7 +198,7 @@ export default function MatchDetailClient({ data }: MatchDetailClientProps) {
               <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
                 {/* Paragraphs and narrative */}
                 <div className="lg:col-span-2 space-y-6">
-                  <div className="border-l-4 border-zru-green pl-4 mb-8">
+                  <div>
                     <h2 className="text-xl font-black uppercase tracking-wider">MATCH REPORT</h2>
                     <p className="text-sm text-white/50 mt-1">Official match summary and timeline events.</p>
                   </div>
@@ -231,7 +237,7 @@ export default function MatchDetailClient({ data }: MatchDetailClientProps) {
             {/* Lineups Tab */}
             {activeTab === "lineups" && (
               <div className="space-y-12">
-                <div className="border-l-4 border-zru-green pl-4">
+                <div>
                   <h2 className="text-xl font-black uppercase tracking-wider">OFFICIAL LINEUPS & TEAM SHEETS</h2>
                   <p className="text-sm text-white/50 mt-1">Starting rosters and tactical reserves selected for this match.</p>
                 </div>
@@ -288,7 +294,7 @@ export default function MatchDetailClient({ data }: MatchDetailClientProps) {
             {/* Stats Tab */}
             {activeTab === "stats" && stats && (
               <div className="max-w-3xl mx-auto space-y-12">
-                <div className="border-l-4 border-zru-green pl-4">
+                <div>
                   <h2 className="text-xl font-black uppercase tracking-wider">STATS & PERFORMANCE COMPARISON</h2>
                   <p className="text-sm text-white/50 mt-1">A comparative look at key performance indicators.</p>
                 </div>

@@ -89,7 +89,7 @@ export default function PageHero({
           </div>
 
           {/* Heading */}
-          <h1 className="text-3xl sm:text-5xl md:text-7xl font-heading font-black not-italic text-white tracking-tight uppercase leading-[1.0]">
+          <h1 className="text-3xl sm:text-5xl md:text-7xl font-heading font-black not-italic text-white tracking-wide sm:tracking-widest uppercase leading-[1.05]">
             {accentTitle ? (
               <>
                 {title}{" "}

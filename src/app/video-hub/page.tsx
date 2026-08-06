@@ -1,14 +1,14 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import { Play, Search, X, Clock, Calendar, Film } from "lucide-react";
 import { getVideos } from "@/lib/api/videos";
 import { Video } from "@/types";
-import { GlowButton } from "@/components/ui/animations";
 import MatchdayVideoHighlights from "@/components/media/MatchdayVideoHighlights";
 import FanZoneSignup from "@/components/fanzone/FanZoneSignup";
+import SlantedButton from "@/components/ui/SlantedButton";
 
 export default function VideoHubPage() {
   const [videos, setVideos] = useState<Video[]>([]);
@@ -20,7 +20,10 @@ export default function VideoHubPage() {
     getVideos().then(setVideos);
   }, []);
 
-  const categories = ["All", "Match Highlights", "Press Conferences", "Player Features", "Rugby Explained"];
+  const categories = useMemo(
+    () => ["All", ...Array.from(new Set(videos.map((v) => v.category).filter(Boolean)))],
+    [videos]
+  );
 
   // Filter logic
   const filteredVideos = videos.filter((video) => {
@@ -64,14 +67,15 @@ export default function VideoHubPage() {
               </p>
               
               <div className="flex flex-wrap items-center gap-6 pt-2">
-                <GlowButton 
+                <SlantedButton
                   onClick={() => setActiveVideo(featuredVideo)}
-                  className="bg-white text-rich-black px-8 py-3.5 text-xs font-black uppercase tracking-[0.2em] clip-slanted flex items-center gap-2"
-                  glowColor="rgba(255, 255, 255, 0.3)"
+                  variant="primary"
+                  size="sm"
+                  white
+                  leftIcon={<Play className="w-4 h-4 fill-current" />}
                 >
-                  <Play className="w-4 h-4 fill-current" />
                   <span>Watch Highlights</span>
-                </GlowButton>
+                </SlantedButton>
                 <div className="flex items-center gap-4 text-xs text-white/50 font-bold uppercase">
                   <div className="flex items-center gap-1.5">
                     <Clock className="w-4 h-4 text-zru-green" />
@@ -99,19 +103,16 @@ export default function VideoHubPage() {
             {/* Category tabs */}
             <div className="flex overflow-x-auto py-1 gap-2 no-scrollbar w-full lg:w-auto">
               {categories.map((cat) => {
-                const isActive = activeCategory === cat;
                 return (
-                  <button
+                  <SlantedButton
                     key={cat}
                     onClick={() => setActiveCategory(cat)}
-                    className={`px-5 py-2.5 clip-slanted-sm text-xs font-black uppercase tracking-wider transition-[background-color,color] duration-300 whitespace-nowrap ${
-                      isActive 
-                        ? "bg-zru-green text-rich-black shadow-lg" 
-                        : "text-white/60 hover:text-white hover:bg-zru-green/10"
-                    }`}
+                    variant="chip"
+                    active={activeCategory === cat}
+                    tone="dark"
                   >
                     {cat}
-                  </button>
+                  </SlantedButton>
                 );
               })}
             </div>

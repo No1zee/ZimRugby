@@ -1,7 +1,7 @@
 "use client";
 
 import { motion, useScroll, useTransform } from "framer-motion";
-import { useRef } from "react";
+import { useRef, useState, useEffect } from "react";
 
 // =============================================================================
 // RUGBY BALL SVG - Decorative rugby ball shape
@@ -188,9 +188,17 @@ interface RugbyDecorationsProps {
 }
 
 export function RugbyDecorations({ variant = "mixed", className = "" }: RugbyDecorationsProps) {
-  const ref = useRef(null);
+  const ref = useRef<HTMLDivElement>(null);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    requestAnimationFrame(() => {
+      setMounted(true);
+    });
+  }, []);
+
   const { scrollYProgress } = useScroll({
-    target: ref,
+    target: mounted ? ref : undefined,
     offset: ["start end", "end start"]
   });
 

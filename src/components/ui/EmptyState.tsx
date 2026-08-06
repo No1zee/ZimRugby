@@ -1,8 +1,8 @@
 "use client";
 
 import { motion } from "framer-motion";
-import Link from "next/link";
 import { ArrowLeft, LucideIcon } from "lucide-react";
+import SlantedButton from "@/components/ui/SlantedButton";
 
 interface EmptyStateProps {
   title: string;
@@ -69,13 +69,14 @@ export default function EmptyState({
 
         {action && (
           <div className="pt-2">
-            <Link 
+            <SlantedButton
               href={action.href}
-              className="inline-flex items-center gap-2 px-6 py-2.5 bg-zru-green text-white hover:bg-zru-green/80 text-[10px] font-black uppercase tracking-widest clip-slanted transition-all duration-300 shadow-lg shadow-zru-green/10"
+              variant="primary"
+              size="sm"
+              leftIcon={<ArrowLeft className="w-3.5 h-3.5" />}
             >
-              <ArrowLeft className="w-3.5 h-3.5" />
-              <span>{action.label}</span>
-            </Link>
+              {action.label}
+            </SlantedButton>
           </div>
         )}
       </div>

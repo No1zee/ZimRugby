@@ -2,9 +2,12 @@ import React from "react";
 import SlantedButton from "@/components/ui/SlantedButton";
 
 interface ButtonProps {
-  variant?: "primary" | "secondary" | "outline" | "ghost" | "link";
-  size?: "sm" | "md" | "lg" | "xl";
+  variant?: "primary" | "secondary" | "outline" | "ghost" | "link" | "chip";
+  size?: "xs" | "sm" | "md" | "lg" | "xl";
   href?: string;
+  white?: boolean;
+  active?: boolean;
+  tone?: "light" | "dark";
   isLoading?: boolean;
   leftIcon?: React.ReactNode;
   rightIcon?: React.ReactNode;
@@ -14,15 +17,16 @@ interface ButtonProps {
   [key: string]: any;
 }
 
-const variantMap: Record<string, "primary" | "secondary" | "ghost"> = {
+const variantMap: Record<string, "primary" | "secondary" | "outline" | "ghost" | "chip"> = {
   primary: "primary",
   secondary: "secondary",
-  outline: "secondary",
+  outline: "outline",
   ghost: "ghost",
   link: "ghost",
 };
 
-const sizeMap: Record<string, "sm" | "md" | "lg"> = {
+const sizeMap: Record<string, "xs" | "sm" | "md" | "lg"> = {
+  xs: "xs",
   sm: "sm",
   md: "md",
   lg: "lg",
@@ -33,6 +37,9 @@ export default function Button({
   variant = "primary",
   size = "md",
   href,
+  white,
+  active,
+  tone,
   isLoading,
   leftIcon,
   rightIcon,
@@ -45,6 +52,9 @@ export default function Button({
       href={href}
       variant={variantMap[variant]}
       size={sizeMap[size]}
+      white={white}
+      active={active}
+      tone={tone}
       isLoading={isLoading}
       leftIcon={leftIcon}
       rightIcon={rightIcon}

@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect } from "react";
+import { usePathname } from "next/navigation";
 import dynamic from "next/dynamic";
 
 const SmoothScrollProvider = dynamic(() => import("./SmoothScrollProvider"));
@@ -9,6 +10,9 @@ const CmsBadge = dynamic(() => import("../ui/CmsBadge"), { ssr: false });
 const CookieConsent = dynamic(() => import("../common/CookieConsent"), { ssr: false });
 
 export default function ClientLayoutShell({ children }: { children: React.ReactNode }) {
+  const pathname = usePathname();
+  const isAdminRoute = pathname?.startsWith("/admin") || pathname?.startsWith("/admin-login");
+
   useEffect(() => {
     const loadTrackingScript = () => {
       const consent = localStorage.getItem("zru-cookie-consent");
@@ -41,9 +45,9 @@ export default function ClientLayoutShell({ children }: { children: React.ReactN
   return (
     <SmoothScrollProvider>
       {children}
-      <MobileDock />
-      <CmsBadge />
-      <CookieConsent />
+      {!isAdminRoute && <MobileDock />}
+      {!isAdminRoute && <CmsBadge />}
+      {!isAdminRoute && <CookieConsent />}
     </SmoothScrollProvider>
   );
 }

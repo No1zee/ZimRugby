@@ -4,7 +4,10 @@ import Navigation from "@/components/layout/Navigation";
 import Footer from "@/components/layout/Footer";
 import ClientLayoutShell from "@/components/layout/ClientLayoutShell";
 import PageTransitionLoader from "@/components/common/PageTransitionLoader";
+import CampaignAnnouncementBar from "@/components/campaigns/CampaignAnnouncementBar";
 import { AdaptivePerformanceProvider } from "@/components/providers/AdaptivePerformanceProvider";
+import { DraftAdminBar } from "@/components/admin/DraftAdminBar";
+import EditModeShell from "@/components/admin/EditModeShell";
 
 export const viewport: Viewport = {
   themeColor: [
@@ -59,12 +62,7 @@ export default function RootLayout({
         <meta name="apple-mobile-web-app-title" content="ZimRugby" />
       </head>
         <body className="antialiased min-h-dvh flex flex-col justify-between">
-        <a
-          href="#main-content"
-          className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-[100] focus:px-4 focus:py-2 focus:bg-zru-green focus:text-white focus:rounded-md focus:outline-none"
-        >
-          Skip to main content
-        </a>
+        <DraftAdminBar />
         <a
           href="#main-content"
           className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-[100] focus:px-4 focus:py-2 focus:bg-zru-green focus:text-white focus:rounded-md focus:outline-none"
@@ -77,15 +75,18 @@ export default function RootLayout({
           </div>
         </noscript>
         {/* Page transition particle burst loader — fires on mount and on every route change */}
+        <CampaignAnnouncementBar />
         <PageTransitionLoader />
         <AdaptivePerformanceProvider>
-          <ClientLayoutShell>
-            <Navigation />
-            <main id="main-content" className="relative min-h-screen bg-milk-white">
-              {children}
-            </main>
-            <Footer />
-          </ClientLayoutShell>
+          <EditModeShell>
+            <ClientLayoutShell>
+              <Navigation />
+              <main id="main-content" className="relative min-h-screen bg-milk-white">
+                {children}
+              </main>
+              <Footer />
+            </ClientLayoutShell>
+          </EditModeShell>
         </AdaptivePerformanceProvider>
       </body>
     </html>

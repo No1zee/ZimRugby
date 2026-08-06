@@ -2,6 +2,7 @@
 import { Team } from "@/types";
 import { directusFetch } from "@/lib/directus/fetch";
 import { photoAssetUrl, logoAssetUrl, headshotAssetUrl } from "@/lib/directus/assets";
+import type { Team as BentoTeam } from "@/types/team";
 
 const MOCK_TEAMS: Record<string, Team> = {
     "sables": {
@@ -178,37 +179,48 @@ export async function getTeamData(slug: string): Promise<Team | null> {
         filter: {
           slug: { _eq: slug }
         },
-        fields: ['*', 'coaching_staff.*', 'squad.*', 'matches.*', 'gallery.*'],
         limit: 1
       });
       if (response?.[0]) {
         const team = response[0];
-        
+        const mock = MOCK_TEAMS[slug];
+
+        const parseJson = (value: any, fallback: any): any => {
+          if (Array.isArray(value)) return value;
+          if (value) {
+            try {
+              const parsed = JSON.parse(value);
+              if (Array.isArray(parsed)) return parsed;
+            } catch {
+              // malformed JSON — fall through to fallback
+            }
+          }
+          return fallback;
+        };
+
         return {
           id: team.slug || team.id,
-          name: team.name || "",
-          tagline: team.tagline || "",
-          history: team.history || "",
-          stats: (team.stats || []).map((s: any) => ({ label: s.label, value: s.value })),
-          coachingStaff: (team.coaching_staff || []).map((c: any) => ({ name: c.name, role: c.role })),
-          squad: (team.squad || []).map((s: any) => ({
+          name: team.name || mock?.name || "",
+          tagline: team.tagline || mock?.tagline || "",
+          history: team.history || mock?.history || "",
+          stats: parseJson(team.stats, mock?.stats || []),
+          coachingStaff: parseJson(team.coaching_staff, mock?.coachingStaff || []),
+          squad: parseJson(team.squad, mock?.squad || []).map((s: any) => ({
             name: s.name,
             position: s.position,
             club: s.club,
             caps: s.caps ? Number(s.caps) : undefined,
-            image: headshotAssetUrl(s.image) || (s.image_url || "/images/teams/player-placeholder.webp")
+            image: s.image || "/images/teams/player-placeholder.webp"
           })),
-          matches: (team.matches || []).map((m: any) => ({
+          matches: parseJson(team.matches, mock?.matches || []).map((m: any) => ({
             opponent: m.opponent,
-            opponentLogo: logoAssetUrl(m.opponent_logo) || m.opponent_logo_url,
-            date: m.date_label || new Date(m.date).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric', timeZone: 'UTC' }),
+            opponentLogo: m.opponentLogo || "",
+            date: m.date || "",
             venue: m.venue || "TBA",
             score: m.score,
             status: m.status || "upcoming"
           })),
-          gallery: (team.gallery || []).map((img: any) => 
-            photoAssetUrl(img.image) || img.image_url
-          )
+          gallery: parseJson(team.gallery, mock?.gallery || [])
         };
       }
     }
@@ -282,5 +294,112 @@ export async function getAllTeamFixtures(): Promise<any[]> {
   });
 
   return allFixtures;
+}
+
+const BENTO_TEAMS: BentoTeam[] = [
+  {
+    id: "sables", slug: "sables", shortName: "SABLES", fullName: "ZIMBABWE SABLES",
+    category: "Senior Men's 15s National Team", format: "15s", formatLabel: "XV-A-Side Union",
+    accent: "#006747", jerseyColors: ["#006747", "#D4A843"],
+    tagline: "Reigning Africa Champions driving towards the global stage.",
+    description: "The flagship men's 15s national team representing Zimbabwe on the world rugby stage.",
+    ranking: "#28 World", rankingValue: "#28", worldRankingTier: "Tier 2 Nation",
+    keyHonour: "Africa Cup Champions", recentRecord: ["W", "W", "W", "W", "L"],
+    pathway: "From Junior Sables", squadSize: 36,
+    heroImage: "/images/gallery/zimbabwe-sables-battle-of-zambezi-gameday1-505.webp",
+    featuredImage: "/images/gallery/sables-0351.webp", featuredPlayer: "Tinotenda Masekere",
+    stats: [{ label: "Africa Cup Titles", value: "2" }, { label: "RWC Appearances", value: "2" }, { label: "Senior Roster", value: "36" }],
+    href: "/teams/sables"
+  },
+  {
+    id: "lady-sables", slug: "lady-sables", shortName: "LADY SABLES", fullName: "LADY SABLES",
+    category: "Senior Women's National Team", format: "15s", formatLabel: "XV-A-Side Union",
+    accent: "#00C88C", jerseyColors: ["#006747", "#FFFFFF"],
+    tagline: "The pride of women's rugby in Zimbabwe, competing across Africa.",
+    description: "Zimbabwe's senior women's national team.",
+    ranking: "Africa Top 8", rankingValue: "Top 8", worldRankingTier: "Continental Contender",
+    keyHonour: "Continental Contenders", recentRecord: ["L", "W", "L", "W", "L"],
+    pathway: "Schools & Clubs Pipeline", squadSize: 30,
+    heroImage: "/images/hero/lady-sables.webp",
+    featuredImage: "/images/gallery/sables-women-9.webp", featuredPlayer: "Paidashe Kambanje",
+    stats: [{ label: "Africa Cup Apps", value: "4" }, { label: "Registered Players", value: "1.2K+" }, { label: "Senior Roster", value: "30" }],
+    href: "/teams/lady-sables"
+  },
+  {
+    id: "cheetahs", slug: "cheetahs", shortName: "CHEETAHS", fullName: "ZIMBABWE CHEETAHS",
+    category: "Senior Men's Sevens Team", format: "7s", formatLabel: "Sevens Series",
+    accent: "#00704D", jerseyColors: ["#006747", "#D4A843"],
+    tagline: "High-octane sevens with pace, flair, and Olympic ambition.",
+    description: "High-octane sevens squad representing Zimbabwe on the World Rugby Sevens Challenger Series.",
+    ranking: "WR Challenger Series", rankingValue: "Challenger", worldRankingTier: "Sevens Circuit",
+    keyHonour: "Africa 7s Podium", recentRecord: ["W", "W", "L", "W", "L"],
+    pathway: "Crossover from Sables", squadSize: 18,
+    heroImage: "/images/hero/cheetahs-hero.webp",
+    featuredImage: "/images/teams/cheetahs.jpg", featuredPlayer: "Shane Makombe",
+    stats: [{ label: "Circuit", value: "WR 7s" }, { label: "Speed Tier", value: "Elite" }, { label: "Squad Roster", value: "18" }],
+    href: "/teams/cheetahs"
+  },
+  {
+    id: "junior-sables", slug: "junior-sables", shortName: "JUNIOR SABLES", fullName: "JUNIOR SABLES",
+    category: "U20 Men's 15s National Team", format: "15s", formatLabel: "XV-A-Side Union",
+    accent: "#00452A", jerseyColors: ["#006747", "#FFFFFF"],
+    tagline: "Back-to-back Barthes Trophy champions building the future.",
+    description: "Back-to-back Barthes Trophy African U20 Champions and World Rugby Junior Trophy contenders.",
+    ranking: "Africa U20 #1", rankingValue: "#1 Africa", worldRankingTier: "U20 Continental Elite",
+    keyHonour: "Barthes Trophy Champions", recentRecord: ["W", "W", "W", "W", "W"],
+    pathway: "Feeds Senior Sables", squadSize: 32,
+    heroImage: "/images/hero/junior-sables-hero.webp",
+    featuredImage: "/images/hero/zim-u20s.webp", featuredPlayer: "Tendai Mawara",
+    stats: [{ label: "Barthes Cup", value: "1st" }, { label: "World Trophy", value: "Finalists" }, { label: "U20 Roster", value: "32" }],
+    href: "/teams/junior-sables"
+  }
+];
+
+export async function getTeamsList(): Promise<BentoTeam[]> {
+  try {
+    if (process.env.NEXT_PUBLIC_DIRECTUS_URL) {
+      const items = await directusFetch<any>('teams', {
+        filter: { is_national_team: { _eq: true } },
+        sort: ['display_order'],
+        limit: 10
+      }, 300);
+
+      if (items.length > 0) {
+        return items.map((t) => {
+          const slug = t.slug || "";
+          const bento = BENTO_TEAMS.find(b => b.slug === slug);
+          return {
+            id: slug,
+            slug,
+            shortName: t.short_name || bento?.shortName || t.name,
+            fullName: t.name || bento?.fullName || "",
+            category: bento?.category || "",
+            format: bento?.format || "15s",
+            formatLabel: bento?.formatLabel || "",
+            accent: t.primary_color || bento?.accent || "#006747",
+            jerseyColors: [t.primary_color || "#006747", t.secondary_color || "#D4A843"] as [string, string],
+            tagline: t.tagline || bento?.tagline || "",
+            description: bento?.description || "",
+            ranking: bento?.ranking || "",
+            rankingValue: bento?.rankingValue || "",
+            worldRankingTier: bento?.worldRankingTier || "",
+            keyHonour: bento?.keyHonour || "",
+            recentRecord: bento?.recentRecord || [],
+            pathway: bento?.pathway || "",
+            squadSize: (Array.isArray(t.squad) && t.squad.length > 0) ? t.squad.length : (bento?.squadSize || 0),
+            heroImage: t.hero_image || bento?.heroImage || "",
+            featuredImage: bento?.featuredImage || "",
+            featuredPlayer: bento?.featuredPlayer || "",
+            stats: Array.isArray(t.stats) ? t.stats : JSON.parse(t.stats || "[]"),
+            href: `/teams/${slug}`
+          };
+        });
+      }
+    }
+  } catch (error) {
+    console.warn("Directus fetch failed for teams list, falling back to mock data:", error);
+  }
+
+  return BENTO_TEAMS;
 }
 

@@ -52,7 +52,7 @@ export default function MatchCard({
   return (
     <motion.div
       whileHover={{ y: -4 }}
-      className="h-full flex flex-col bg-white border border-black/10 hover:border-zru-green/60 rounded-2xl overflow-hidden group shadow-md hover:shadow-xl transition-all duration-300 text-black"
+      className="relative h-full flex flex-col bg-white border border-black/10 hover:border-zru-green/60 rounded-2xl overflow-hidden group shadow-[0_1px_2px_rgba(0,0,0,0.14),0_6px_16px_rgba(0,0,0,0.10)] hover:shadow-[0_2px_4px_rgba(0,0,0,0.14),0_14px_28px_rgba(0,0,0,0.16)] transition-all duration-300 text-black before:content-[''] before:absolute before:top-0 before:left-[12%] before:right-[12%] before:h-px before:bg-gradient-to-r before:from-transparent before:via-black/20 before:to-transparent"
     >
       {/* Header: Competition & Round */}
       <div className="bg-milk-white px-6 py-3.5 flex justify-between items-center border-b border-black/10">
@@ -97,7 +97,7 @@ export default function MatchCard({
           {/* VS / Score */}
           <div className="flex flex-col items-center justify-center w-1/3">
             {status === "completed" || status === "live" ? (
-              <div className="text-2xl font-heading text-zru-green bg-zru-green/10 border border-zru-green/20 px-4 py-1.5 rounded-lg tracking-widest font-black">
+              <div className="relative overflow-hidden text-2xl font-heading text-white bg-gradient-to-b from-[#0A7A55] to-[#005238] px-4 py-1.5 rounded-lg tracking-widest font-black shadow-[0_3px_0_#00301A,0_6px_12px_rgba(0,0,0,0.20)] before:content-[''] before:absolute before:inset-x-1 before:top-0 before:h-1/2 before:bg-gradient-to-b before:from-white/20 before:to-transparent">
                 {homeTeam.score} - {awayTeam.score}
               </div>
             ) : (

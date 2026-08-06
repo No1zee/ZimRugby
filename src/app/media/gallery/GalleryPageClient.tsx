@@ -9,6 +9,7 @@ import { Photo } from "@/types";
 import PageHero from "@/components/ui/PageHero";
 import { ThreeDImageRing, ImageRingItem } from "@/components/lightswind/draggable-3d-image-ring";
 import ArchiveFolderCard from "@/components/gallery/ArchiveFolderCard";
+import SlantedButton from "@/components/ui/SlantedButton";
 
 interface FolderMetaData {
   name: string;
@@ -167,13 +168,13 @@ export default function GalleryPageClient({ initialPhotos }: GalleryPageClientPr
             >
               {/* Back to folders navigation row */}
               <div className="flex justify-between items-center pb-4 border-b border-black/5">
-                <button
+                <SlantedButton
                   onClick={() => setActiveFolder(null)}
-                  className="flex items-center gap-2 px-4 py-2 clip-slanted-sm border border-black/10 hover:border-black/20 text-rich-black/60 hover:text-rich-black transition-all text-xs font-bold uppercase tracking-wider bg-black/5"
+                  variant="chip"
+                  leftIcon={<ChevronLeft className="w-4 h-4" />}
                 >
-                  <ChevronLeft className="w-4 h-4" />
-                  <span>Back to Archives</span>
-                </button>
+                  Back to Archives
+                </SlantedButton>
                 <div className="text-right">
                   <span className="text-[10px] font-bold text-rich-black/30 uppercase tracking-widest block">Viewing Archive</span>
                   <span className="text-xs font-black uppercase text-zru-green">{activeFolder}</span>
@@ -183,17 +184,14 @@ export default function GalleryPageClient({ initialPhotos }: GalleryPageClientPr
               {/* Album filter options inside the folder */}
               <div className="flex overflow-x-auto pb-4 gap-2 no-scrollbar">
                 {albums.map((album) => (
-                  <button
+                  <SlantedButton
                     key={album}
                     onClick={() => setActiveAlbum(album)}
-                    className={`px-5 py-2.5 clip-slanted-sm text-xs font-black uppercase tracking-wider transition-all duration-300 whitespace-nowrap ${
-                      activeAlbum === album
-                        ? "bg-zru-green text-white shadow-lg shadow-zru-green/20"
-                        : "text-rich-black/60 hover:text-rich-black hover:bg-black/5"
-                    }`}
+                    variant="chip"
+                    active={activeAlbum === album}
                   >
                     {album}
-                  </button>
+                  </SlantedButton>
                 ))}
               </div>
 

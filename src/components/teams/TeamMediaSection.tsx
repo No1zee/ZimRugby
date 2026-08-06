@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import Image from "next/image";
 import { Play, X, Film, Megaphone, ExternalLink } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { VideoPlayer } from "../media/VideoPlayer";
 
 interface VideoItem {
   id: string;
@@ -30,12 +31,9 @@ interface TeamMediaSectionProps {
 }
 
 const DEFAULT_VIDEOS: VideoItem[] = [
-  { id: "yt-canada-v-zim-2026", videoId: "kf33dibu7f0", title: "Canada v Zimbabwe | Nations Cup 2026 Extended Highlights", thumbnail: "https://img.youtube.com/vi/kf33dibu7f0/hqdefault.jpg", category: "NATIONS CUP", publishedAt: "JULY 2026" },
-  { id: "yt-usa-v-zim-2026", videoId: "2koQbsHjg14", title: "USA v Zimbabwe | Nations Cup 2026 Extended Highlights", thumbnail: "https://img.youtube.com/vi/2koQbsHjg14/hqdefault.jpg", category: "NATIONS CUP", publishedAt: "JULY 2026" },
-  { id: "yt-tonga-v-zim-2026", videoId: "h3iy3mTIhs4", title: "Tonga v Zimbabwe | Nations Cup 2026 Extended Highlights", thumbnail: "https://img.youtube.com/vi/h3iy3mTIhs4/hqdefault.jpg", category: "NATIONS CUP", publishedAt: "JULY 2026" },
-  { id: "yt-canada-replay", videoId: "kf33dibu7f0", title: "Sables Nations Cup Opener | Canada v Zimbabwe Full Match Replay", thumbnail: "https://img.youtube.com/vi/kf33dibu7f0/hqdefault.jpg", category: "MATCHDAY REPLAY", publishedAt: "JULY 2026" },
-  { id: "yt-usa-tries", videoId: "2koQbsHjg14", title: "Top Sables Tries & Match Reaction | USA v Zimbabwe", thumbnail: "https://img.youtube.com/vi/2koQbsHjg14/hqdefault.jpg", category: "TRIES & REACTION", publishedAt: "JULY 2026" },
-  { id: "yt-tonga-analysis", videoId: "h3iy3mTIhs4", title: "Tactical Breakdown & Big Hits | Tonga v Zimbabwe", thumbnail: "https://img.youtube.com/vi/h3iy3mTIhs4/hqdefault.jpg", category: "TACTICAL BREAKDOWN", publishedAt: "JULY 2026" },
+  { id: "yt-canada-v-zim-2026", videoId: "kf33dibu7f0", title: "O Canada | Canada v Zimbabwe | Nations Cup 2026 | Match Highlights", thumbnail: "https://img.youtube.com/vi/kf33dibu7f0/hqdefault.jpg", category: "NATIONS CUP", publishedAt: "JULY 2026" },
+  { id: "yt-usa-v-zim-2026", videoId: "2koQbsHjg14", title: "A BIG home win | USA v Zimbabwe | Nations Cup 2026 | Match Highlights", thumbnail: "https://img.youtube.com/vi/2koQbsHjg14/hqdefault.jpg", category: "NATIONS CUP", publishedAt: "JULY 2026" },
+  { id: "yt-tonga-v-zim-2026", videoId: "h3iy3mTIhs4", title: "A TOUGH TEST for Tonga | Tonga v Zimbabwe | Nations Cup 2026 | Match Highlights", thumbnail: "https://img.youtube.com/vi/h3iy3mTIhs4/hqdefault.jpg", category: "NATIONS CUP", publishedAt: "JULY 2026" },
 ];
 
 const MOCK_ANNOUNCEMENTS: AnnouncementItem[] = [
@@ -207,14 +205,8 @@ export default function TeamMediaSection({ teamName, teamId }: TeamMediaSectionP
               >
                 <X className="w-5 h-5" />
               </button>
-              <div className="relative aspect-video w-full bg-black">
-                <iframe
-                  src={`https://www.youtube-nocookie.com/embed/${activeVideo.videoId}?autoplay=1&rel=0&modestbranding=1`}
-                  title={activeVideo.title}
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowFullScreen
-                  className="w-full h-full border-0"
-                />
+              <div className="relative w-full bg-black">
+                <VideoPlayer videoId={activeVideo.videoId} title={activeVideo.title} autoPlay />
               </div>
               <div className="p-5 bg-milk-white border-t border-black/10">
                 <span className="text-[10px] font-black text-zru-green uppercase tracking-widest block mb-1">

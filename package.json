@@ -8,11 +8,15 @@
     "start": "next start",
     "lint": "eslint",
     "audit:rsc": "node scripts/check-rsc-boundaries.js",
-    "sync:facebook": "node scripts/update-social.js"
+    "sync:facebook": "node scripts/update-social.js",
+    "cms:types": "ts-node scripts/generate-directus-types.ts"
   },
   "dependencies": {
     "@chenglou/pretext": "^0.0.5",
     "@directus/sdk": "^23.0.0",
+    "@dnd-kit/core": "^6.3.1",
+    "@dnd-kit/sortable": "^10.0.0",
+    "@dnd-kit/utilities": "^3.2.2",
     "@iconify/react": "^6.0.2",
     "@supabase/ssr": "^0.12.0",
     "@supabase/supabase-js": "^2.110.0",

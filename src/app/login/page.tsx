@@ -14,6 +14,7 @@ const benefits = [
 ];
 
 export default function LoginPage() {
+  const [isSignUp, setIsSignUp] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -23,7 +24,7 @@ export default function LoginPage() {
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
   };
 
-  const handleSignIn = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
 
@@ -42,35 +43,13 @@ export default function LoginPage() {
     formData.set("password", password);
 
     try {
-      await login(formData);
+      if (isSignUp) {
+        await signup(formData);
+      } else {
+        await login(formData);
+      }
     } catch {
-      setError("Could not authenticate user. Please check your credentials.");
-      setIsLoading(false);
-    }
-  };
-
-  const handleSignUp = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setError("");
-
-    if (!email || !password) {
-      setError("Please enter both email and password.");
-      return;
-    }
-    if (!validateEmail(email)) {
-      setError("Please enter a valid email address.");
-      return;
-    }
-
-    setIsLoading(true);
-    const formData = new FormData();
-    formData.set("email", email);
-    formData.set("password", password);
-
-    try {
-      await signup(formData);
-    } catch {
-      setError("Could not create account. Please try again.");
+      setError(isSignUp ? "Could not create account. Please try again." : "Could not authenticate user. Please check your credentials.");
       setIsLoading(false);
     }
   };
@@ -125,7 +104,7 @@ export default function LoginPage() {
             </div>
           </div>
 
-          {/* Right — Sign-in form */}
+          {/* Right — Sign-in / Sign-up form */}
           <div className="w-full max-w-md mx-auto">
             {/* Mobile-only heading */}
             <div className="md:hidden text-center mb-6">
@@ -133,20 +112,20 @@ export default function LoginPage() {
                 FAN ZONE
               </span>
               <h1 className="text-3xl font-heading font-black uppercase tracking-tight text-rich-black">
-                Sign In
+                {isSignUp ? "Create Account" : "Sign In"}
               </h1>
               <p className="text-rich-black/50 text-xs font-body mt-1">
-                Access your Zimbabwe Rugby Union Fan Zone account
+                {isSignUp ? "Join the Zimbabwe Rugby Union Fan Zone" : "Access your Zimbabwe Rugby Union Fan Zone account"}
               </p>
             </div>
 
             <div className="bg-white rounded-2xl border border-black/5 shadow-[0_1px_3px_rgba(0,0,0,0.04)] p-6 sm:p-8">
               <div className="text-center mb-6 hidden md:block">
                 <h2 className="text-2xl font-heading font-black uppercase tracking-tight text-rich-black">
-                  Sign In
+                  {isSignUp ? "Create Account" : "Sign In"}
                 </h2>
                 <p className="text-rich-black/40 text-xs font-body mt-1">
-                  Welcome back to the Fan Zone
+                  {isSignUp ? "Join the Fan Zone today" : "Welcome back to the Fan Zone"}
                 </p>
               </div>
 
@@ -158,7 +137,7 @@ export default function LoginPage() {
                 </div>
               )}
 
-              <form onSubmit={handleSignIn} className="flex flex-col gap-4">
+              <form onSubmit={handleSubmit} className="flex flex-col gap-4">
                 <div className="flex flex-col gap-1.5">
                   <label htmlFor="email" className="text-[10px] font-heading font-extrabold text-rich-black/50 uppercase tracking-[0.2em]">
                     Email Address
@@ -200,24 +179,36 @@ export default function LoginPage() {
                   </div>
                 </div>
 
-                <div className="flex justify-end -mt-1">
-                  <Link
-                    href="/contact"
-                    className="text-[11px] text-zru-green hover:text-[#005238] transition-[color] font-heading font-bold uppercase tracking-[0.2em]"
-                  >
-                    Forgot password?
-                  </Link>
-                </div>
+                {!isSignUp && (
+                  <div className="flex justify-end -mt-1">
+                    <Link
+                      href="/contact"
+                      className="text-[11px] text-zru-green hover:text-[#005238] transition-[color] font-heading font-bold uppercase tracking-[0.2em]"
+                    >
+                      Forgot password?
+                    </Link>
+                  </div>
+                )}
 
                 <div className="flex flex-col gap-3 mt-3">
                   <SlantedButton type="submit" variant="primary" className="w-full justify-center" disabled={isLoading}>
-                    {isLoading ? "Signing In..." : "Sign In"}
+                    {isLoading ? (isSignUp ? "Creating Account..." : "Signing In...") : (isSignUp ? "Create Account" : "Sign In")}
                   </SlantedButton>
-                  <SlantedButton type="button" variant="secondary" className="w-full justify-center text-[11px] px-6 py-2" onClick={handleSignUp} disabled={isLoading}>
-                    Create Account
+                  <SlantedButton
+                    type="button"
+                    variant="secondary"
+                    className="w-full justify-center text-[11px] px-6 py-2"
+                    onClick={() => {
+                      setIsSignUp(!isSignUp);
+                      setError("");
+                    }}
+                    disabled={isLoading}
+                  >
+                    {isSignUp ? "Already have an account? Sign In" : "Need an account? Sign Up"}
                   </SlantedButton>
                 </div>
               </form>
+
 
               {/* Social login divider */}
               <div className="flex items-center w-full my-5">

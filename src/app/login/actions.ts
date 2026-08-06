@@ -25,20 +25,41 @@ export async function login(formData: FormData) {
 export async function signup(formData: FormData) {
   const supabase = await createClient()
 
-  const data = {
-    email: formData.get('email') as string,
-    password: formData.get('password') as string,
-  }
+  const email = formData.get('email') as string
+  const password = formData.get('password') as string
 
-  const { error } = await supabase.auth.signUp(data)
+  const { data, error } = await supabase.auth.signUp({
+    email,
+    password,
+    options: {
+      emailRedirectTo: `${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/auth/callback`,
+    },
+  })
+
+  // Prevent account enumeration by redirecting with a generic check-email message
+  // regardless of user status or exact email existence in database.
+  revalidatePath('/', 'layout')
+  redirect(`/verify-email?email=${encodeURIComponent(email)}`)
+}
+
+export async function resendVerification(email: string) {
+  const supabase = await createClient()
+
+  const { error } = await supabase.auth.resend({
+    type: 'signup',
+    email,
+    options: {
+      emailRedirectTo: `${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/auth/callback`,
+    },
+  })
 
   if (error) {
-    redirect('/login?message=Could not authenticate user')
+    return { success: false, error: error.message }
   }
 
-  revalidatePath('/', 'layout')
-  redirect('/dashboard')
+  return { success: true }
 }
+
 
 export async function signInWithProvider(formData: FormData) {
   const supabase = await createClient()

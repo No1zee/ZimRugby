@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { ArrowLeft, Share2, Calendar } from "lucide-react";
 import { notFound } from "next/navigation";
+import SlantedButton from "@/components/ui/SlantedButton";
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -137,9 +138,9 @@ export default async function ReportPage({ params }: PageProps) {
                   <div className="space-y-6 text-center md:text-left">
                     <h2 className="text-4xl font-black uppercase tracking-tighter">Own a Piece of <span className="text-zru-green">History</span></h2>
                     <p className="text-white/60 text-lg">The 1991 Heritage Jersey is available now in limited quantities. Every stitch tells a story of pride, passion, and the indestructible Sable spirit.</p>
-                    <Link href="/shop" className="inline-flex items-center gap-4 bg-zru-green text-black px-10 py-4 text-xs font-black uppercase tracking-[0.2em] clip-slanted hover:shadow-[0_0_30px_rgba(0,107,63,0.4)] transition-all">
-                      Visit Clubhouse Store <ArrowLeft className="w-4 h-4 rotate-180" />
-                    </Link>
+                    <SlantedButton href="/shop" variant="primary" size="sm" rightIcon={<ArrowLeft className="w-4 h-4 rotate-180" />}>
+                      Visit Clubhouse Store
+                    </SlantedButton>
                   </div>
                 </div>
               </div>

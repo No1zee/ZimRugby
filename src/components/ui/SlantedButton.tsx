@@ -3,8 +3,11 @@ import Link from 'next/link';
 
 interface SlantedButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   href?: string;
-  variant?: 'primary' | 'secondary' | 'outline' | 'ghost';
-  size?: 'sm' | 'md' | 'lg';
+  variant?: 'primary' | 'secondary' | 'outline' | 'ghost' | 'chip';
+  size?: 'xs' | 'sm' | 'md' | 'lg';
+  white?: boolean;
+  active?: boolean;
+  tone?: 'light' | 'dark';
   isLoading?: boolean;
   leftIcon?: React.ReactNode;
   rightIcon?: React.ReactNode;
@@ -14,6 +17,9 @@ export default function SlantedButton({
   href,
   variant = 'primary',
   size = 'md',
+  white = false,
+  active = false,
+  tone = 'light',
   className = '',
   isLoading,
   leftIcon,
@@ -22,11 +28,10 @@ export default function SlantedButton({
   disabled,
   ...props
 }: SlantedButtonProps) {
-  const resolvedVariant = variant === 'outline' ? 'secondary' : variant;
-
-  const baseClasses = "inline-flex items-center justify-center font-heading tracking-wider uppercase transition-all duration-300 active:scale-95 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-zru-green disabled:opacity-50 disabled:cursor-not-allowed";
+  const baseClasses = "inline-flex items-center justify-center font-heading tracking-wider uppercase focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-zru-green";
 
   const sizeClasses = {
+    xs: "px-5 py-2 text-[10px]",
     sm: "px-6 py-2 text-base",
     md: "px-10 py-3 text-xl",
     lg: "px-12 py-4 text-2xl"
@@ -50,7 +55,7 @@ export default function SlantedButton({
   );
 
   function renderGhost() {
-    const ghostClasses = `${baseClasses} bg-transparent text-white hover:text-zru-green gap-1.5 ${sizeClasses[size]} ${className}`;
+    const ghostClasses = `${baseClasses} bg-transparent text-white hover:text-zru-green gap-1.5 transition-all duration-300 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed ${sizeClasses[size]} ${className}`;
     if (href) {
       return <Link href={href} className={ghostClasses} onClick={isDisabled ? (e) => e.preventDefault() : undefined}>{content}</Link>;
     }
@@ -58,11 +63,39 @@ export default function SlantedButton({
   }
 
   function renderPrimary() {
-    const primaryClasses = `${baseClasses} bg-gradient-to-b from-[#00704D] to-[#005238] hover:from-[#006747] hover:to-[#00402B] text-white shadow-md hover:shadow-xl shadow-[#006747]/25 border-t border-white/20 clip-slanted ${sizeClasses[size]} ${className}`;
+    /* Edge Plaque — button with a dark slanted plate offset behind it.
+       Hover lifts the button and slides the plate further out; press sinks
+       the button into the plate. Disabled fades the whole stack uniformly.
+       The `white` variant flips the face to white-on-green with a deeper
+       plaque (#005238), matching the approved "Become a Partner" CTA. */
+    const plaqueTone = white ? 'bg-[#005238]' : 'bg-[#003D20]';
+    const faceTone = white
+      ? 'bg-white text-[#006747] hover:bg-white/90 border-t-white/60'
+      : 'bg-gradient-to-b from-[#00704D] to-[#005238] hover:from-[#006747] hover:to-[#00402B] text-white border-t border-white/20';
+    const wrapperClasses = `relative inline-flex group has-[:disabled]:opacity-60 ${className}`;
+    const plaqueClasses = `absolute inset-0 z-0 clip-slanted ${plaqueTone} translate-x-[5px] translate-y-[5px] transition-transform duration-200 group-hover:translate-x-[7px] group-hover:translate-y-[7px] group-active:translate-x-[3px] group-active:translate-y-[3px] ${isDisabled ? 'opacity-0' : ''}`;
+    const innerClasses = `relative z-10 w-full clip-slanted ${faceTone} shadow-[0_2px_4px_rgba(0,0,0,0.15)] transition-all duration-200 group-hover:-translate-y-px group-active:translate-x-[2px] group-active:translate-y-[2px] disabled:cursor-not-allowed ${sizeClasses[size]} ${white ? '' : className}`;
+    const inner = (
+      <span className={innerClasses}>{content}</span>
+    );
     if (href) {
-      return <Link href={href} className={primaryClasses} onClick={isDisabled ? (e) => e.preventDefault() : undefined}>{content}</Link>;
+      return (
+        <span className={wrapperClasses}>
+          <span aria-hidden className={plaqueClasses} />
+          <Link href={href} className="relative z-10 w-full inline-flex" onClick={isDisabled ? (e) => e.preventDefault() : undefined}>
+            {inner}
+          </Link>
+        </span>
+      );
     }
-    return <button className={primaryClasses} disabled={isDisabled} {...props}>{content}</button>;
+    return (
+      <span className={wrapperClasses}>
+        <span aria-hidden className={plaqueClasses} />
+        <button className="relative z-10 w-full inline-flex" disabled={isDisabled} {...props}>
+          {inner}
+        </button>
+      </span>
+    );
   }
 
   function renderSecondary() {
@@ -82,7 +115,39 @@ export default function SlantedButton({
     );
   }
 
-  if (resolvedVariant === 'ghost') return renderGhost();
-  if (resolvedVariant === 'primary') return renderPrimary();
-  return renderSecondary();
+  function renderOutline() {
+    /* Glass-free outlined key — translucent face with edge-light border.
+       Reads on dark backgrounds; callers override border/text via className
+       for light surfaces. No plaque: the outline is the elevation. */
+    const outlineClasses = `${baseClasses} clip-slanted border border-white/25 bg-white/5 text-white hover:border-white/50 hover:bg-white/10 transition-all duration-200 hover:-translate-y-px active:translate-y-px disabled:opacity-50 disabled:cursor-not-allowed ${sizeClasses[size]} ${className}`;
+    if (href) {
+      return <Link href={href} className={outlineClasses} onClick={isDisabled ? (e) => e.preventDefault() : undefined}>{content}</Link>;
+    }
+    return <button className={outlineClasses} disabled={isDisabled} {...props}>{content}</button>;
+  }
+
+  function renderChip() {
+    /* Compact filter/tab pill — flat, no plaque (chips sit in crowded rows). */
+    const inactive = tone === 'dark'
+      ? 'text-white/60 hover:text-white hover:bg-zru-green/10'
+      : 'text-black/60 hover:text-black hover:bg-black/5';
+    const chipClasses = `inline-flex items-center justify-center gap-2 clip-slanted-sm px-5 py-2.5 text-xs font-black uppercase tracking-wider whitespace-nowrap transition-all duration-300 ${active ? 'bg-zru-green text-white shadow-md shadow-zru-green/25' : inactive} ${isDisabled ? 'opacity-50 pointer-events-none' : ''} ${className}`;
+    if (href) {
+      return <Link href={href} className={chipClasses} onClick={isDisabled ? (e) => e.preventDefault() : undefined}>{content}</Link>;
+    }
+    return <button className={chipClasses} disabled={isDisabled} {...props}>{content}</button>;
+  }
+
+  switch (variant) {
+    case 'ghost':
+      return renderGhost();
+    case 'outline':
+      return renderOutline();
+    case 'chip':
+      return renderChip();
+    case 'primary':
+      return renderPrimary();
+    default:
+      return renderSecondary();
+  }
 }

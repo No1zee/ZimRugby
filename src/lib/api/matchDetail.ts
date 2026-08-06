@@ -3,6 +3,7 @@ import { Match } from "@/types";
 import { getLiveMatches } from "@/lib/data-fetcher";
 import { directusFetch } from "@/lib/directus/fetch";
 import { logoAssetUrl } from "@/lib/directus/assets";
+import { getCampaignByMatchId } from "@/lib/api/campaigns";
 import type { LineupPlayer, MatchStats, MatchDetailData } from "@/types";
 
 export type { LineupPlayer, MatchStats, MatchDetailData };
@@ -64,12 +65,16 @@ export async function getMatchDetail(id: string): Promise<MatchDetailData | null
     if (process.env.NEXT_PUBLIC_DIRECTUS_URL) {
       const response = await directusFetch<DirectusMatchDetailItem>('matches', {
         filter: {
-          id: { _eq: id }
+          _or: [
+            { id: { _eq: id } },
+            { slug: { _eq: id } }
+          ]
         },
         fields: ['*', 'home_lineup.*', 'away_lineup.*', 'stats.*', 'report.*'],
         limit: 1
       });
       const matchData = response?.[0];
+
       
       if (matchData) {
         const m = matchData as unknown as DirectusMatchDetailItem;
@@ -127,11 +132,14 @@ export async function getMatchDetail(id: string): Promise<MatchDetailData | null
           }))
         } : undefined;
 
+        const campaign = await getCampaignByMatchId(String(m.id)).catch(() => null);
+
         return {
           match,
           homeLineup,
           awayLineup,
           stats: match.status === 'finished' || match.status === 'completed' || match.status === 'live' ? stats : undefined,
+          campaign: campaign ? { slug: campaign.slug, name: campaign.name } : undefined,
           report: match.status === 'finished' || match.status === 'completed' ? report : undefined
         };
       }
@@ -215,11 +223,14 @@ export async function getMatchDetail(id: string): Promise<MatchDetailData | null
     ]
   };
 
+  const campaign = await getCampaignByMatchId(String(match.id)).catch(() => null);
+
   return {
     match,
     homeLineup,
     awayLineup,
     stats: match.status === 'finished' || match.status === 'completed' || match.status === 'live' ? stats : undefined,
+    campaign: campaign ? { slug: campaign.slug, name: campaign.name } : undefined,
     report: match.status === 'finished' || match.status === 'completed' ? report : undefined
   };
 }
