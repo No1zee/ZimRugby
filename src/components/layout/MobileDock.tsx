@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 import { motion } from "framer-motion";
 import { Home, Trophy, Newspaper, Users, Menu, Shield } from "lucide-react";
 import { cn } from "../../lib/utils";
+import { getFanSession, subscribeFanSession } from "@/lib/fanzone/fanSession";
 
 const dockItems = [
   { label: "Home", icon: Home, href: "/" },
@@ -19,7 +20,16 @@ const dockItems = [
 export default function MobileDock() {
   const pathname = usePathname();
   const [isHidden, setIsHidden] = useState(false);
+  const [isFanActive, setIsFanActive] = useState(false);
   const lastScrollY = useRef(0);
+
+  useEffect(() => {
+    setIsFanActive(!!getFanSession());
+    const unsubscribe = subscribeFanSession(() => {
+      setIsFanActive(!!getFanSession());
+    });
+    return unsubscribe;
+  }, []);
 
   // Hide on scroll down, show on scroll up — native passive listener (no framer-motion RAF)
   useEffect(() => {
@@ -81,17 +91,22 @@ export default function MobileDock() {
                 />
               )}
               
-              <Icon 
-                className={cn(
-                  "w-5 h-5 transition-colors",
-                  isActive ? "text-zru-green" : "text-black/50"
-                )} 
-              />
+              <div className="relative">
+                <Icon
+                  className={cn(
+                    "w-5 h-5 transition-colors duration-200",
+                    isActive ? "text-zru-green" : "text-black/50"
+                  )}
+                />
+                {item.label === "Fan Zone" && isFanActive && (
+                  <span className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-emerald-500 rounded-full border-2 border-white animate-pulse" />
+                )}
+              </div>
               <span className={cn(
                 "text-[10px] mt-1 font-extrabold tracking-wider uppercase transition-colors font-heading",
                 isActive ? "text-zru-green" : "text-black/60"
               )}>
-                {item.label}
+                {item.label === "Fan Zone" && isFanActive ? "VIP Member" : item.label}
               </span>
 
               {isActive && (

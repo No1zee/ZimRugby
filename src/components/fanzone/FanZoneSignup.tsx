@@ -1,10 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { CheckCircle, ArrowRight } from "lucide-react";
-import { saveSubmission } from "@/lib/mockStorage";
+import { CheckCircle, ArrowRight, ShieldCheck, LogOut, Ticket, Award } from "lucide-react";
+import { getFanSession, saveFanSession, clearFanSession, subscribeFanSession, FanSession } from "@/lib/fanzone/fanSession";
 
 interface FanZoneSignupProps {
   variant?: "compact" | "full";
@@ -20,9 +20,17 @@ export default function FanZoneSignup({
   const [favoriteTeam, setFavoriteTeam] = useState<"Sables" | "Lady Sables" | "Cheetahs" | "Junior Sables" | "Domestic Rugby">("Sables");
   const [cdpaConsent, setCdpaConsent] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitted, setSubmitted] = useState(false);
-  const [vipBadge, setVipBadge] = useState<{ code: string; title: string; discount: string } | null>(null);
   const [error, setError] = useState("");
+
+  const [activeSession, setActiveSession] = useState<FanSession | null>(null);
+
+  useEffect(() => {
+    setActiveSession(getFanSession());
+    const unsubscribe = subscribeFanSession(() => {
+      setActiveSession(getFanSession());
+    });
+    return unsubscribe;
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -46,8 +54,16 @@ export default function FanZoneSignup({
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Registration failed");
 
-      setSubmitted(true);
-      setVipBadge(data.vipBadge || { code: "SABLES2027", title: "VIP SABLES MEMBER PASS", discount: "10% OFF MERCH" });
+      const sessionData: FanSession = {
+        name: name.trim(),
+        email: email.trim(),
+        favoriteTeam,
+        vipCode: data.vipBadge?.code || "SABLES2027",
+        registeredAt: new Date().toISOString(),
+      };
+
+      saveFanSession(sessionData);
+      setActiveSession(sessionData);
       setEmail("");
       setName("");
     } catch (err: any) {
@@ -57,227 +73,172 @@ export default function FanZoneSignup({
     }
   };
 
-  if (submitted) {
+  const handleSignOut = () => {
+    clearFanSession();
+    setActiveSession(null);
+  };
+
+  // If Fan is already registered/authenticated
+  if (activeSession) {
     return (
       <div
-        className="rounded-3xl p-6 sm:p-10 text-center space-y-4 border border-white/10"
+        className="rounded-3xl p-6 sm:p-10 text-center space-y-6 border border-white/10 shadow-2xl relative overflow-hidden select-none"
         style={{
           background: "radial-gradient(circle at 50% 25%, #006747 0%, #004D34 60%, #003322 100%)",
         }}
       >
-        <CheckCircle className="w-10 h-10 text-emerald-400 mx-auto" />
+        <div className="inline-flex items-center gap-2 px-3 py-1 bg-white/10 border border-white/20 rounded-full text-emerald-300 text-[10px] font-black uppercase tracking-widest">
+          <ShieldCheck className="w-3.5 h-3.5" />
+          <span>ACTIVE VIP MEMBER SESSION</span>
+        </div>
+
         <div className="space-y-1">
-          <p className="text-lg font-black uppercase tracking-wider text-white font-heading">
-            WELCOME TO THE SABLES FAN ZONE!
-          </p>
+          <h2 className="text-2xl sm:text-3xl font-black uppercase tracking-wider text-white font-heading">
+            WELCOME BACK, {activeSession.name.toUpperCase()}!
+          </h2>
           <p className="text-xs text-white/70">
-            Your VIP registration is confirmed under CDPA 2021. Check your inbox for details.
+            Your VIP Sables Fan Zone Membership is active. Supporter Team: <span className="text-emerald-300 font-bold">{activeSession.favoriteTeam}</span>
           </p>
         </div>
 
-        {/* Digital VIP Pass Badge */}
-        {vipBadge && (
-          <div className="bg-white/10 backdrop-blur-md border border-white/20 p-4 rounded-2xl max-w-sm mx-auto space-y-2 text-white">
-            <span className="text-[10px] font-black tracking-widest text-emerald-400 bg-emerald-950/80 px-2.5 py-1 rounded uppercase">
-              {vipBadge.title}
+        {/* Digital VIP Pass Card */}
+        <div className="bg-white/10 backdrop-blur-md border border-white/20 p-5 rounded-2xl max-w-md mx-auto space-y-3 text-white shadow-xl relative">
+          <div className="flex items-center justify-between border-b border-white/15 pb-2">
+            <span className="text-[10px] font-mono text-emerald-300 font-bold uppercase tracking-wider flex items-center gap-1">
+              <Award className="w-3.5 h-3.5" />
+              VIP MEMBER PASS
             </span>
-            <div className="text-2xl font-black font-heading tracking-widest text-white">
-              CODE: {vipBadge.code}
+            <span className="text-[10px] font-mono text-white/60">{activeSession.email}</span>
+          </div>
+
+          <div className="py-2">
+            <span className="text-[10px] font-extrabold uppercase tracking-widest text-white/50 block">Your Exclusive Voucher Code</span>
+            <div className="text-2xl sm:text-3xl font-mono font-black tracking-widest text-emerald-300 my-1">
+              {activeSession.vipCode}
             </div>
-            <p className="text-[10px] text-white/80 font-bold uppercase">
-              {vipBadge.discount}
-            </p>
-          </div>
-        )}
-      </div>
-    );
-  }
-
-  if (variant === "compact") {
-    return (
-      <div
-        className="group/fzCard rounded-3xl p-5 sm:p-6 flex flex-col sm:flex-row items-center justify-between gap-4 relative overflow-hidden shadow-2xl transition-shadow duration-500 ease-in-out touch-manipulation cursor-pointer border border-white/10"
-        style={{
-          background: "radial-gradient(circle at 50% 25%, #006747 0%, #004D34 60%, #003322 100%)",
-        }}
-      >
-        {/* Border glow */}
-        <div className="absolute inset-0 border border-white/10 group-hover/fzCard:border-[#006747]/60 group-focus-within/fzCard:border-[#006747]/60 group-hover/fzCard:shadow-[inset_0_0_60px_rgba(0,103,71,0.4)] transition-shadow duration-700 pointer-events-none rounded-3xl" />
-        {/* Green gradient sweep */}
-        <div className="absolute inset-0 opacity-0 group-hover/fzCard:opacity-20 group-focus-within/fzCard:opacity-20 pointer-events-none bg-gradient-to-r from-transparent via-[#006747] to-transparent transition-opacity duration-700" />
-
-        {/* Left: Logo + Text */}
-        <div className="flex items-center justify-start group-hover/fzCard:justify-center group-focus-within/fzCard:justify-center gap-4 relative z-10 sm:w-3/5 group-hover/fzCard:w-1/3 group-focus-within/fzCard:w-1/3 transition-[width,justify-content] duration-500 shrink-0">
-          <div className="relative shrink-0 flex items-center justify-center transition-transform duration-500 group-hover/fzCard:scale-150">
-            <Image
-              src="/images/logos/zru-logo.svg"
-              alt="ZRU Emblem"
-              width={40}
-              height={40}
-              className="w-10 h-10 object-contain filter drop-shadow-[0_4px_30px_rgba(0,103,71,0.85)] group-hover/fzCard:drop-shadow-[0_8px_35px_rgba(52,211,153,0.6)] transition-[filter] duration-500"
-            />
+            <span className="text-[11px] text-white/80 font-bold uppercase tracking-wider">10% OFF OFFICIAL MERCHANDISE & MATCHDAY TICKETS</span>
           </div>
 
-          <div className="space-y-0.5 transition-[opacity,max-width,transform] duration-500 origin-left max-w-lg opacity-100 group-hover/fzCard:opacity-0 group-hover/fzCard:max-w-0 group-hover/fzCard:scale-95 group-hover/fzCard:overflow-hidden group-focus-within/fzCard:opacity-0 group-focus-within/fzCard:max-w-0 group-focus-within/fzCard:scale-95 group-focus-within/fzCard:overflow-hidden shrink min-w-0">
-            <h2 className="text-base sm:text-lg text-white font-heading font-black uppercase tracking-tight leading-tight">
-              JOIN THE FAN ZONE
-            </h2>
-            <p className="text-[10px] sm:text-xs text-white/70 font-normal leading-relaxed font-body line-clamp-2">
-              Priority ticket presale, 10% merch discounts, insider squad news, and VIP competitions.
-            </p>
-          </div>
-        </div>
-
-        {/* Right: Form */}
-        <div className="relative z-10 w-full sm:w-2/5 group-hover/fzCard:w-2/3 group-focus-within/fzCard:w-2/3 flex flex-col items-center sm:items-center group-hover/fzCard:items-end group-focus-within/fzCard:items-end transition-[width] duration-500">
-          <div className="w-full sm:w-auto group-hover/fzCard:w-full group-focus-within/fzCard:w-full bg-white p-3 group-hover/fzCard:p-4 group-focus-within/fzCard:p-4 rounded-2xl border border-black/5 group-hover/fzCard:border-[#006747]/60 group-focus-within/fzCard:border-[#006747]/60 transition-[width,padding,border-color] duration-500 ease-in-out shadow-lg">
-
-            <p className="text-[#003822]/70 text-[10px] font-bold uppercase tracking-wider font-heading transition-[opacity,max-height,margin,color] duration-500 opacity-0 max-h-0 overflow-hidden mb-0 group-hover/fzCard:opacity-100 group-hover/fzCard:max-h-10 group-hover/fzCard:mb-2 group-hover/fzCard:text-[#006747] group-focus-within/fzCard:opacity-100 group-focus-within/fzCard:max-h-10 group-focus-within/fzCard:mb-2 group-focus-within/fzCard:text-[#006747]">
-              ENTER YOUR EMAIL BELOW TO JOIN
-            </p>
-
-            {error && (
-              <p className="text-[10px] text-red-500 font-bold mb-2">{error}</p>
-            )}
-
-            <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-2 w-full items-center justify-center group-hover/fzCard:justify-end group-focus-within/fzCard:justify-end transition-[justify-content] duration-500">
-              <div className="w-0 opacity-0 max-w-0 overflow-hidden transition-[width,opacity,max-width] duration-500 ease-in-out group-hover/fzCard:w-full group-hover/fzCard:opacity-100 group-hover/fzCard:max-w-full group-focus-within/fzCard:w-full group-focus-within/fzCard:opacity-100 group-focus-within/fzCard:max-w-full flex-1">
-                <input
-                  type="email"
-                  required
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="name@domain.com"
-                  className="w-full bg-black/5 text-[#0E0E0E] px-3 py-2.5 rounded-xl border border-black/10 focus:outline-none focus:border-zru-green text-xs placeholder:text-[#0E0E0E]/40 transition-[border-color] duration-300 min-h-[40px]"
-                />
-              </div>
-
-              <button
-                type="submit"
-                disabled={isSubmitting}
-                className="group/btn bg-gradient-to-b from-[#00704D] to-[#005238] hover:from-[#00855B] hover:to-[#006747] text-white px-6 py-2.5 rounded-xl transition-colors duration-300 flex items-center justify-center gap-1.5 font-black text-[10px] tracking-widest uppercase font-heading shrink-0 shadow-lg shadow-[#006747]/30 min-h-[40px] w-full sm:w-auto disabled:opacity-50"
-              >
-                <span>{isSubmitting ? "…" : "JOIN"}</span>
-                <ArrowRight className="w-0 opacity-0 -translate-x-2 transition-[width,opacity,transform] duration-300 ease-in-out group-hover/fzCard:w-3 group-hover/fzCard:opacity-100 group-hover/fzCard:translate-x-0 group-focus-within/fzCard:w-3 group-focus-within/fzCard:opacity-100 group-focus-within/fzCard:translate-x-0 shrink-0" />
-              </button>
-            </form>
-
-            <div className="text-[9px] text-[#0E0E0E]/40 font-normal transition-[opacity,max-height,margin] duration-500 opacity-0 max-h-0 overflow-hidden mt-0 group-hover/fzCard:opacity-100 group-hover/fzCard:max-h-16 group-hover/fzCard:mt-2.5 group-focus-within/fzCard:opacity-100 group-focus-within/fzCard:max-h-16 group-focus-within/fzCard:mt-2.5 flex flex-col gap-1 w-full">
-              <span>Free to join. No spam. CDPA 2021 compliant.</span>
-              <span className="truncate">
-                <Link className="underline hover:text-[#006747] transition-[color]" href="/fan-zone">
-                  Learn more &rarr;
-                </Link>
-              </span>
-            </div>
+          <div className="pt-2 border-t border-white/15 flex items-center justify-between text-[11px]">
+            <Link href="/tickets" className="text-emerald-300 hover:underline font-bold flex items-center gap-1">
+              <Ticket className="w-3.5 h-3.5" />
+              <span>BUY TICKETS WITH DISCOUNT →</span>
+            </Link>
+            <button
+              onClick={handleSignOut}
+              className="text-white/50 hover:text-red-300 text-[10px] uppercase font-bold flex items-center gap-1 transition-colors"
+            >
+              <LogOut className="w-3 h-3" />
+              <span>SIGN OUT</span>
+            </button>
           </div>
         </div>
       </div>
     );
   }
 
+  // Standard Guest Registration Form
   return (
     <div
-      className="group/fzCard rounded-3xl p-6 sm:p-10 md:p-14 flex flex-col lg:flex-row items-center justify-between gap-6 lg:gap-10 relative overflow-hidden shadow-2xl transition-shadow duration-500 ease-in-out touch-manipulation cursor-pointer border border-white/10"
+      className="rounded-3xl p-6 sm:p-10 border border-white/10 shadow-2xl relative overflow-hidden select-none"
       style={{
         background: "radial-gradient(circle at 50% 25%, #006747 0%, #004D34 60%, #003322 100%)",
       }}
     >
-      {/* Border glow */}
-      <div className="absolute inset-0 border border-white/10 group-hover/fzCard:border-[#006747]/60 group-focus-within/fzCard:border-[#006747]/60 group-hover/fzCard:shadow-[inset_0_0_60px_rgba(0,103,71,0.4)] transition-shadow duration-700 pointer-events-none rounded-3xl" />
-      {/* Green gradient sweep */}
-      <div className="absolute inset-0 opacity-0 group-hover/fzCard:opacity-20 group-focus-within/fzCard:opacity-20 pointer-events-none bg-gradient-to-r from-transparent via-[#006747] to-transparent transition-opacity duration-700" />
-
-      {/* Left: Logo + Text */}
-      <div className="flex items-center justify-start lg:group-hover/fzCard:justify-center lg:group-focus-within/fzCard:justify-center gap-6 relative z-10 lg:w-3/5 lg:group-hover/fzCard:w-1/3 lg:group-focus-within/fzCard:w-1/3 transition-[width,justify-content] duration-500 shrink-0">
-        <div className="relative shrink-0 flex items-center justify-center transition-transform duration-500 group-hover/fzCard:scale-175 sm:group-hover/fzCard:scale-200">
-          <Image
-            src="/images/logos/zru-logo.svg"
-            alt="ZRU Emblem"
-            width={72}
-            height={72}
-            className="w-16 sm:w-20 h-16 sm:h-20 object-contain filter drop-shadow-[0_4px_30px_rgba(0,103,71,0.85)] group-hover/fzCard:drop-shadow-[0_8px_35px_rgba(52,211,153,0.6)] transition-[filter] duration-500"
-          />
-        </div>
-
-        <div className="space-y-1.5 transition-[opacity,max-width,transform] duration-500 origin-left max-w-lg opacity-100 group-hover/fzCard:opacity-0 group-hover/fzCard:max-w-0 group-hover/fzCard:scale-95 group-hover/fzCard:overflow-hidden group-focus-within/fzCard:opacity-0 group-focus-within/fzCard:max-w-0 group-focus-within/fzCard:scale-95 group-focus-within/fzCard:overflow-hidden shrink min-w-0">
-          <h2 className="text-2xl sm:text-3xl text-white font-heading font-black uppercase tracking-widest leading-tight">
-            JOIN THE FAN ZONE
+      <div className="max-w-xl mx-auto space-y-6">
+        <div className="text-center space-y-2">
+          <span className="text-[10px] font-black uppercase tracking-[0.3em] text-emerald-300 block">
+            OFFICIAL FAN ZONE
+          </span>
+          <h2 className="text-2xl sm:text-3xl font-black uppercase tracking-wider text-white font-heading">
+            JOIN THE SABLES FAN ZONE
           </h2>
-          <p className="text-xs sm:text-sm text-white/80 font-normal leading-relaxed font-body line-clamp-2">
-            Priority ticket presale, 10% merch discounts, insider squad news, and VIP competitions. Free to join.
+          <p className="text-xs text-white/70 max-w-md mx-auto">
+            Get 10% off official merchandise, priority ticket alerts, and exclusive Sables match updates.
           </p>
         </div>
-      </div>
 
-      {/* Right: Form */}
-      <div className="relative z-10 w-full lg:w-2/5 lg:group-hover/fzCard:w-2/3 lg:group-focus-within/fzCard:w-2/3 flex flex-col items-center lg:items-center lg:group-hover/fzCard:items-end lg:group-focus-within/fzCard:items-end transition-[width] duration-500">
-        <div className="w-full lg:w-auto lg:group-hover/fzCard:w-full lg:group-focus-within/fzCard:w-full bg-white p-3 group-hover/fzCard:p-5 sm:group-hover/fzCard:p-7 group-focus-within/fzCard:p-5 sm:group-focus-within/fzCard:p-7 rounded-2xl border border-black/5 group-hover/fzCard:border-[#006747]/60 group-focus-within/fzCard:border-[#006747]/60 transition-[width,padding,border-color] duration-500 ease-in-out shadow-lg">
-
-          <p className="text-[#003822]/70 text-xs font-bold uppercase tracking-wider font-heading transition-[opacity,max-height,margin,color] duration-500 opacity-0 max-h-0 overflow-hidden mb-0 group-hover/fzCard:opacity-100 group-hover/fzCard:max-h-10 group-hover/fzCard:mb-3 group-hover/fzCard:text-[#006747] group-focus-within/fzCard:opacity-100 group-focus-within/fzCard:max-h-10 group-focus-within/fzCard:mb-3 group-focus-within/fzCard:text-[#006747]">
-            ENTER YOUR EMAIL BELOW TO JOIN THE FAN ZONE
-          </p>
-
-          {error && (
-            <p className="text-[10px] text-red-500 font-bold mb-2">{error}</p>
-          )}
-
-          <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-2.5 w-full items-center justify-center group-hover/fzCard:justify-end group-focus-within/fzCard:justify-end transition-[justify-content] duration-500">
-            <div className="w-0 opacity-0 max-w-0 overflow-hidden transition-[width,opacity,max-width] duration-500 ease-in-out group-hover/fzCard:w-full group-hover/fzCard:opacity-100 group-hover/fzCard:max-w-full group-focus-within/fzCard:w-full group-focus-within/fzCard:opacity-100 group-focus-within/fzCard:max-w-full flex-1 flex flex-col gap-2">
-              <input
-                type="text"
-                required
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                placeholder="Your Full Name"
-                className="w-full bg-black/5 text-[#0E0E0E] px-4 py-2.5 rounded-xl border border-black/10 focus:outline-none focus:border-zru-green text-sm placeholder:text-[#0E0E0E]/40 transition-[border-color] duration-300"
-              />
-              <input
-                type="email"
-                required
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="name@domain.com"
-                className="w-full bg-black/5 text-[#0E0E0E] px-4 py-2.5 rounded-xl border border-black/10 focus:outline-none focus:border-zru-green text-sm placeholder:text-[#0E0E0E]/40 transition-[border-color] duration-300"
-              />
-            </div>
-
-            <button
-              type="submit"
-              disabled={isSubmitting}
-              className="group/btn bg-gradient-to-b from-[#00704D] to-[#005238] hover:from-[#00855B] hover:to-[#006747] text-white px-8 py-3.5 rounded-xl transition-colors duration-300 flex items-center justify-center gap-2 font-black text-xs tracking-widest uppercase font-heading shrink-0 shadow-lg shadow-[#006747]/30 min-h-[46px] w-full sm:w-auto disabled:opacity-50"
-            >
-              <span>{isSubmitting ? "…" : "JOIN"}</span>
-              <ArrowRight className="w-0 opacity-0 -translate-x-2 transition-[width,opacity,transform] duration-300 ease-in-out group-hover/fzCard:w-4 group-hover/fzCard:opacity-100 group-hover/fzCard:translate-x-0 group-focus-within/fzCard:w-4 group-focus-within/fzCard:opacity-100 group-focus-within/fzCard:translate-x-0 shrink-0" />
-            </button>
-          </form>
-
-          {showBenefits && (
-            <div className="grid grid-cols-2 gap-2 py-3 opacity-0 max-h-0 overflow-hidden transition-[opacity,max-height] duration-500 group-hover/fzCard:opacity-100 group-hover/fzCard:max-h-40 group-focus-within/fzCard:opacity-100 group-focus-within/fzCard:max-h-40">
-              {[
-                { text: "Priority ticket presale" },
-                { text: "10% merch discount" },
-                { text: "Insider squad newsletter" },
-                { text: "VIP fan competitions" },
-              ].map((b) => (
-                <div key={b.text} className="flex items-center gap-1.5 text-[10px] text-black/60">
-                  <span className="w-1 h-1 rounded-full bg-[#006747] shrink-0" />
-                  <span>{b.text}</span>
-                </div>
-              ))}
-            </div>
-          )}
-
-          <div className="text-[10px] text-[#0E0E0E]/40 font-normal transition-[opacity,max-height,margin] duration-500 opacity-0 max-h-0 overflow-hidden mt-0 group-hover/fzCard:opacity-100 group-hover/fzCard:max-h-16 group-hover/fzCard:mt-3.5 group-focus-within/fzCard:opacity-100 group-focus-within/fzCard:max-h-16 group-focus-within/fzCard:mt-3.5 flex flex-col gap-1 w-full">
-            <span>Priority tickets, discounts, and VIP access.</span>
-            <span className="flex items-center justify-between w-full">
-              <span className="text-[9px]">CDPA 2021 compliant. Your data is protected.</span>
-              <Link className="underline hover:text-[#006747] transition-[color]" href="/fan-zone">
-                Learn more &rarr;
-              </Link>
-            </span>
+        {error && (
+          <div className="p-3 bg-red-500/20 border border-red-500/30 rounded-xl text-red-200 text-xs text-center">
+            {error}
           </div>
-        </div>
+        )}
+
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div>
+            <label className="block text-[10px] font-black uppercase tracking-widest text-white/70 mb-1">
+              Full Name
+            </label>
+            <input
+              type="text"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              placeholder="e.g. Farai Moyo"
+              required
+              className="w-full bg-black/40 border border-white/15 rounded-xl px-4 py-3 text-white text-sm focus:outline-none focus:border-emerald-400 font-sans"
+            />
+          </div>
+
+          <div>
+            <label className="block text-[10px] font-black uppercase tracking-widest text-white/70 mb-1">
+              Email Address
+            </label>
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="farai@example.co.zw"
+              required
+              className="w-full bg-black/40 border border-white/15 rounded-xl px-4 py-3 text-white text-sm focus:outline-none focus:border-emerald-400 font-mono"
+            />
+          </div>
+
+          <div>
+            <label className="block text-[10px] font-black uppercase tracking-widest text-white/70 mb-1">
+              Favorite Rugby Team
+            </label>
+            <select
+              value={favoriteTeam}
+              onChange={(e: any) => setFavoriteTeam(e.target.value)}
+              className="w-full bg-black/40 border border-white/15 rounded-xl px-4 py-3 text-white text-sm focus:outline-none focus:border-emerald-400 font-sans"
+            >
+              <option value="Sables">Sables Men's XV</option>
+              <option value="Lady Sables">Lady Sables Women's XV</option>
+              <option value="Cheetahs">Cheetahs Sevens</option>
+              <option value="Junior Sables">Junior Sables (U20)</option>
+              <option value="Domestic Rugby">Domestic Club League</option>
+            </select>
+          </div>
+
+          <div className="flex items-center gap-2 pt-1">
+            <input
+              type="checkbox"
+              id="cdpaConsent"
+              checked={cdpaConsent}
+              onChange={(e) => setCdpaConsent(e.target.checked)}
+              required
+              className="rounded bg-black/40 border-white/20 text-emerald-500 focus:ring-emerald-400"
+            />
+            <label htmlFor="cdpaConsent" className="text-[11px] text-white/70">
+              I agree to receive ZRU news & ticket alerts (CDPA 2021 Compliant).
+            </label>
+          </div>
+
+          <button
+            type="submit"
+            disabled={isSubmitting}
+            className="w-full py-4 bg-[#00A85A] hover:bg-[#00B963] active:bg-[#008F4C] text-white font-heading font-black tracking-widest uppercase text-sm rounded-xl transition-all shadow-lg shadow-[#00A85A]/30 flex items-center justify-center gap-2 disabled:opacity-50"
+          >
+            {isSubmitting ? (
+              <span>GENERATING VIP PASS...</span>
+            ) : (
+              <>
+                <span>JOIN FAN ZONE & GET VIP PASS</span>
+                <ArrowRight className="w-4 h-4" />
+              </>
+            )}
+          </button>
+        </form>
       </div>
     </div>
   );

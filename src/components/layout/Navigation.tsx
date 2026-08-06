@@ -4,7 +4,7 @@ import { useState, useEffect, useMemo, useCallback } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { ChevronDown, Search, X, User } from "lucide-react";
+import { ChevronDown, Search, X, User, LogOut, ShieldCheck } from "lucide-react";
 import { motion, AnimatePresence, useScroll, useMotionValueEvent } from "framer-motion";
 import SlantedButton from "../ui/SlantedButton";
 import GlobalAnnouncementBar from "./GlobalAnnouncementBar";
@@ -12,6 +12,7 @@ import KineticNav from "@/components/layout/KineticNav";
 import type { NavItem, NavChild } from "@/lib/navConfig";
 import { mainNav, utilityNav } from "@/lib/navConfig";
 import type { SearchEventResult } from "@/types";
+import { getFanSession, subscribeFanSession, clearFanSession, FanSession } from "@/lib/fanzone/fanSession";
 
 /* ── Static config ── */
 const TRANSPARENT_ROUTES = ["/", "/live", "/world-cup-campaign", "/fan-zone", "/teams", "/match-centre", "/schools", "/clubs", "/about", "/events", "/media", "/volunteer", "/referees"];
@@ -26,6 +27,16 @@ export default function Navigation() {
   const [isOpen, setIsOpen] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
   const [dynamicNavItems, setDynamicNavItems] = useState<NavItem[]>(mainNav);
+  const [fanSession, setFanSession] = useState<FanSession | null>(null);
+  const [showFanMenu, setShowFanMenu] = useState(false);
+
+  useEffect(() => {
+    setFanSession(getFanSession());
+    const unsubscribe = subscribeFanSession(() => {
+      setFanSession(getFanSession());
+    });
+    return unsubscribe;
+  }, []);
 
   /* ── Search state ── */
   const [isSearchOpen, setIsSearchOpen] = useState(false);
@@ -224,13 +235,60 @@ export default function Navigation() {
               <Search className="w-3.5 h-3.5" />
             </button>
 
-            <Link
-              href="/login"
-              className="flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-heading font-black uppercase tracking-wider text-white/60 hover:text-white hover:bg-white/10 transition-all"
-            >
-              <User className="w-3 h-3" />
-              <span>SIGN IN</span>
-            </Link>
+            {fanSession ? (
+              <div className="relative">
+                <button
+                  onClick={() => setShowFanMenu(!showFanMenu)}
+                  className="flex items-center gap-1.5 px-3 py-1 bg-emerald-500/20 border border-emerald-500/40 rounded-full text-[10px] font-heading font-black uppercase tracking-wider text-emerald-300 hover:bg-emerald-500/30 transition-all cursor-pointer"
+                >
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                  <span>{fanSession.name.split(" ")[0]} (VIP)</span>
+                </button>
+
+                {showFanMenu && (
+                  <div className="absolute right-0 mt-2 w-56 bg-[#002D1A] border border-white/20 rounded-2xl p-3 shadow-2xl z-50 space-y-2 text-white text-xs">
+                    <div className="border-b border-white/10 pb-2">
+                      <p className="font-bold truncate text-emerald-300">{fanSession.name}</p>
+                      <p className="text-[10px] text-white/60 truncate">{fanSession.email}</p>
+                    </div>
+
+                    <div className="bg-white/5 p-2 rounded-xl text-[10px] font-mono space-y-1">
+                      <span className="text-white/50 block uppercase font-sans">VIP Pass Voucher</span>
+                      <span className="text-emerald-300 font-bold tracking-widest text-xs block">{fanSession.vipCode}</span>
+                      <span className="text-white/80 font-sans block">10% Merch Discount Active</span>
+                    </div>
+
+                    <Link
+                      href="/fan-zone"
+                      onClick={() => setShowFanMenu(false)}
+                      className="flex items-center gap-2 px-2 py-1.5 hover:bg-white/10 rounded-lg text-[11px] font-bold text-white transition-colors"
+                    >
+                      <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
+                      <span>My VIP Member Pass</span>
+                    </Link>
+
+                    <button
+                      onClick={() => {
+                        clearFanSession();
+                        setShowFanMenu(false);
+                      }}
+                      className="w-full flex items-center gap-2 px-2 py-1.5 hover:bg-red-500/20 text-red-300 rounded-lg text-[11px] font-bold transition-colors"
+                    >
+                      <LogOut className="w-3.5 h-3.5" />
+                      <span>Sign Out</span>
+                    </button>
+                  </div>
+                )}
+              </div>
+            ) : (
+              <Link
+                href="/fan-zone"
+                className="flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-heading font-black uppercase tracking-wider text-emerald-400 bg-emerald-500/10 border border-emerald-500/30 hover:bg-emerald-500/20 transition-all"
+              >
+                <User className="w-3 h-3" />
+                <span>JOIN FAN ZONE</span>
+              </Link>
+            )}
           </div>
 
           {/* Mobile utility: Search + Tickets */}

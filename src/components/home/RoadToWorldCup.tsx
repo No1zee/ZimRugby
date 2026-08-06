@@ -63,7 +63,7 @@ export default function RoadToWorldCup({ featuredPlayers, campaign }: RoadToWorl
 
       {/* ── Desktop: frame with green sides + white center tile ── */}
       <div
-        className="hidden md:block relative -mb-32"
+        className="hidden md:block relative mb-0 md:-mb-32"
         style={{
           background: "radial-gradient(ellipse at 50% 30%, #007A50 0%, #004D2C 50%, #002D1A 100%)",
         }}
