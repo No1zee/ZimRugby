@@ -236,13 +236,7 @@ export default function HeroCarousel({ slides = [], autoplayInterval = 8000 }: {
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
-  useEffect(() => {
-    const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
-    prefersReducedMotion.current = mq.matches;
-    const handler = (e: MediaQueryListEvent) => { prefersReducedMotion.current = e.matches; };
-    mq.addEventListener('change', handler);
-    return () => mq.removeEventListener('change', handler);
-  }, []);
+
 
   // Scroll Parallax Hooks — disabled on mobile to avoid RAF scroll listener overhead
   const { scrollYProgress } = useScroll({
