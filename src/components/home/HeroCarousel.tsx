@@ -340,10 +340,10 @@ export default function HeroCarousel({ slides = [], autoplayInterval = 8000 }: {
                   className="object-cover object-center"
                 />
               )}
-            {/* Overlay */}
-            <div className="absolute inset-0 bg-gradient-to-t from-rich-black/90 via-rich-black/30 to-black/30 z-10" />
-        </motion.div>
-      </AnimatePresence>
+              {/* Overlay */}
+              <div className="absolute inset-0 bg-gradient-to-t from-rich-black/90 via-rich-black/30 to-black/30 z-10" />
+            </motion.div>
+          </AnimatePresence>
 
       {/* Content Layer */}
       <motion.div style={{ y: yText, opacity: opacityText }} className="relative z-20 w-full max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 h-full flex items-end justify-start pb-24 lg:pb-32">
