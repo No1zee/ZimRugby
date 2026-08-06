@@ -307,32 +307,26 @@ export default function HeroCarousel({ slides = [], autoplayInterval = 8000 }: {
               style={isMobile ? undefined : { y: yBg, opacity: opacityBg }} // Disable scroll listener parallax on mobile
               className="relative w-full h-full hero-bg-media will-change-transform filter-[brightness(var(--hero-brightness,1))]"
             >
-                {activeSlide.video ? (
-                  isMobile ? (
-                    /* Mobile Fallback: Animated WebP bypasses all autoplay restrictions */
-                    <Image
-                      src={activeSlide.video.replace('.mp4', '.webp')}
-                  shouldAutoPlayVideo ? (
-                    <video
-                      src={activeSlide.video}
-                      autoPlay
-                      muted
-                      loop
-                      playsInline
-                      preload="metadata"
-                      poster={activeSlide.image}
-                      className="absolute inset-0 w-full h-full object-cover"
-                    />
-                  ) : (
-                    <Image
-                      src={activeSlide.image}
-                      alt={activeSlide.title}
-                      fill
-                      priority
-                      sizes="100vw"
-                      className="object-cover object-center"
-                    />
-                  )
+              {activeSlide.video ? (
+                isMobile ? (
+                  <Image
+                    src={activeSlide.video.replace('.mp4', '.webp')}
+                    alt=""
+                    fill
+                    sizes="100vw"
+                    className="object-cover"
+                  />
+                ) : shouldAutoPlayVideo ? (
+                  <video
+                    src={activeSlide.video}
+                    autoPlay
+                    muted
+                    loop
+                    playsInline
+                    preload="metadata"
+                    poster={activeSlide.image}
+                    className="absolute inset-0 w-full h-full object-cover"
+                  />
                 ) : (
                   <Image
                     src={activeSlide.image}
