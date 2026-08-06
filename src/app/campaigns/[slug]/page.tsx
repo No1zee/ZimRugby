@@ -3,7 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getCampaignBySlug, getActiveCampaigns } from "@/lib/api/campaigns";
-import { heroAssetUrl, photoAssetUrl } from "@/lib/directus/assets";
+import { heroAssetUrl, photoAssetUrl, assetUrl } from "@/lib/directus/assets";
 import { getPlayers } from "@/lib/api/players";
 import { getDirectusMatches } from "@/lib/match-centre/api";
 import type { Match } from "@/types";
