@@ -2,9 +2,12 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { ArrowLeft, Shield, Trophy, Ticket, Megaphone, Mail, Lock, AlertCircle } from "lucide-react";
-import { login, signup, signInWithProvider } from "./actions";
 import SlantedButton from "@/components/ui/SlantedButton";
+import { useAuth } from "@/context/AuthContext";
+import { signInFanWithPassword, signUpFan } from "@/lib/supabase/auth";
+import { signInWithProvider } from "./actions";
 
 const benefits = [
   { icon: Ticket, label: "Priority ticket access" },
@@ -14,9 +17,13 @@ const benefits = [
 ];
 
 export default function LoginPage() {
+  const { signInFan } = useAuth();
+  const router = useRouter();
+
   const [isSignUp, setIsSignUp] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [name, setName] = useState("");
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
@@ -38,16 +45,21 @@ export default function LoginPage() {
     }
 
     setIsLoading(true);
-    const formData = new FormData();
-    formData.set("email", email);
-    formData.set("password", password);
 
     try {
       if (isSignUp) {
-        await signup(formData);
+        const res = await signUpFan({
+          email,
+          password,
+          name: name.trim() || email.split("@")[0],
+          favoriteTeam: "Sables",
+        });
+        signInFan(res.profile);
       } else {
-        await login(formData);
+        const res = await signInFanWithPassword({ email, password });
+        signInFan(res.profile);
       }
+      router.push("/");
     } catch {
       setError(isSignUp ? "Could not create account. Please try again." : "Could not authenticate user. Please check your credentials.");
       setIsLoading(false);
