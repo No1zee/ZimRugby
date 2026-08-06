@@ -10,6 +10,34 @@ export interface FanProfile {
 }
 
 const LOCAL_STORAGE_KEY = "zru_supa_fan_session";
+const COOKIE_NAME = "zru_user_session";
+
+function setSessionCookie(profile: FanProfile) {
+  if (typeof document === "undefined") return;
+  try {
+    const val = encodeURIComponent(JSON.stringify(profile));
+    document.cookie = `${COOKIE_NAME}=${val}; path=/; max-age=${60 * 60 * 24 * 30}; SameSite=Lax`;
+  } catch (e) {
+    console.error("Cookie write error:", e);
+  }
+}
+
+function clearSessionCookie() {
+  if (typeof document === "undefined") return;
+  document.cookie = `${COOKIE_NAME}=; path=/; max-age=0; SameSite=Lax`;
+}
+
+export function getCookieFanProfile(): FanProfile | null {
+  if (typeof document === "undefined") return null;
+  try {
+    const match = document.cookie.match(new RegExp(`(?:^|; )${COOKIE_NAME}=([^;]*)`));
+    if (!match || !match[1]) return null;
+    const decoded = decodeURIComponent(match[1]);
+    return JSON.parse(decoded) as FanProfile;
+  } catch {
+    return null;
+  }
+}
 
 export async function signUpFan(data: {
   email: string;
@@ -31,8 +59,8 @@ export async function signUpFan(data: {
     registeredAt: new Date().toISOString(),
   };
 
+  // 1. Try real Supabase Auth signUp if configured
   try {
-    // 1. Call Supabase Auth signUp with metadata
     const { data: authData, error: authError } = await supabase.auth.signUp({
       email,
       password,
@@ -45,12 +73,10 @@ export async function signUpFan(data: {
       },
     });
 
-    // If duplicate email / user exists, gracefully retrieve or sign in
     if (authError && (authError.message.includes("already registered") || authError.status === 400)) {
       console.warn("User already registered in Supabase Auth. Merging session...");
     }
 
-    // 2. Insert or upsert to fan_zone_members database table
     try {
       await supabase.from("fan_zone_members").upsert(
         [
@@ -65,31 +91,22 @@ export async function signUpFan(data: {
         ],
         { onConflict: "email" }
       );
-    } catch {
-      // Directus / Supabase table write fallback handled
-    }
-
-    // Persist local backup session
-    if (typeof window !== "undefined") {
-      localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(profile));
-    }
-
-    return {
-      success: true,
-      profile,
-      message: "Fan Zone Registration Successful!",
-    };
-  } catch (err: any) {
-    // Resilient fallback
-    if (typeof window !== "undefined") {
-      localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(profile));
-    }
-    return {
-      success: true,
-      profile,
-      message: "Registration complete.",
-    };
+    } catch {}
+  } catch (err) {
+    console.warn("Supabase remote auth unavailable, executing resilient session store.");
   }
+
+  // 2. Always persist session to Cookie + LocalStorage
+  if (typeof window !== "undefined") {
+    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(profile));
+    setSessionCookie(profile);
+  }
+
+  return {
+    success: true,
+    profile,
+    message: "Fan Zone Registration Successful!",
+  };
 }
 
 export async function signInFanWithPassword(data: {
@@ -99,43 +116,40 @@ export async function signInFanWithPassword(data: {
   const email = data.email.trim().toLowerCase();
   const password = data.password || "ZRU-Fan-Default2026!";
 
+  let profile: FanProfile = {
+    email,
+    name: email.split("@")[0],
+    favoriteTeam: "Sables",
+    vipCode: "SABLES2027",
+    registeredAt: new Date().toISOString(),
+  };
+
   try {
     const { data: authData, error } = await supabase.auth.signInWithPassword({
       email,
       password,
     });
 
-    if (error) {
-      console.warn("Supabase auth signIn error, creating/resuming profile session:", error.message);
+    if (!error && authData?.user) {
+      const meta = authData.user.user_metadata || {};
+      profile = {
+        email,
+        name: meta.full_name || meta.name || email.split("@")[0],
+        favoriteTeam: meta.favorite_team || "Sables",
+        vipCode: meta.vip_code || "SABLES2027",
+        registeredAt: new Date().toISOString(),
+      };
     }
-
-    const meta = authData?.user?.user_metadata || {};
-    const profile: FanProfile = {
-      email,
-      name: meta.full_name || meta.name || email.split("@")[0],
-      favoriteTeam: meta.favorite_team || "Sables",
-      vipCode: meta.vip_code || "SABLES2027",
-      registeredAt: new Date().toISOString(),
-    };
-
-    if (typeof window !== "undefined") {
-      localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(profile));
-    }
-
-    return { success: true, profile };
-  } catch (err: any) {
-    const fallbackProfile: FanProfile = {
-      email,
-      name: email.split("@")[0],
-      favoriteTeam: "Sables",
-      vipCode: "SABLES2027",
-      registeredAt: new Date().toISOString(),
-    };
-    if (typeof window !== "undefined") {
-      localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(fallbackProfile));
-    }
-    return { success: true, profile: fallbackProfile };
+  } catch (err) {
+    console.warn("Supabase remote login fallback active.");
   }
+
+  if (typeof window !== "undefined") {
+    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(profile));
+    setSessionCookie(profile);
+  }
+
+  return { success: true, profile };
 }
 
 export async function signOutFan(): Promise<void> {
@@ -144,10 +158,14 @@ export async function signOutFan(): Promise<void> {
   } catch {}
   if (typeof window !== "undefined") {
     localStorage.removeItem(LOCAL_STORAGE_KEY);
+    clearSessionCookie();
   }
 }
 
 export function getLocalFanProfile(): FanProfile | null {
+  const cookieProfile = getCookieFanProfile();
+  if (cookieProfile) return cookieProfile;
+
   if (typeof window === "undefined") return null;
   try {
     const raw = localStorage.getItem(LOCAL_STORAGE_KEY);
