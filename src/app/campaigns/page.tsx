@@ -3,6 +3,23 @@ import Link from "next/link";
 import Image from "next/image";
 import { getActiveCampaigns } from "@/lib/api/campaigns";
 import { assetUrl } from "@/lib/directus/assets";
+
+const getCampaignImage = (slug: string, rawImage?: string) => {
+  if (rawImage) {
+    const url = assetUrl(rawImage, { width: 800, quality: 80 }, '');
+    if (url) return url;
+  }
+  switch (slug) {
+    case 'road-to-australia-2027':
+      return '/images/campaign/hero.png';
+    case 'africa-cup-tour-2026':
+      return '/images/campaign/huddle.png';
+    case 'schools-festival-2026':
+      return '/images/campaign/youth.png';
+    default:
+      return '/images/campaign/jersey.png';
+  }
+};
 import { Calendar, ChevronRight } from "lucide-react";
 
 export const metadata: Metadata = {
