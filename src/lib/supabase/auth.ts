@@ -55,6 +55,21 @@ function persistSession(profile: FanProfile) {
   }
 }
 
+export async function signInWithOAuth(provider: "google" | "github" | "apple") {
+  const siteUrl =
+    process.env.NEXT_PUBLIC_SITE_URL ||
+    (typeof window !== "undefined" ? window.location.origin : "http://localhost:3000");
+
+  const { error } = await supabase.auth.signInWithOAuth({
+    provider,
+    options: {
+      redirectTo: `${siteUrl}/auth/callback?next=/fan-zone`,
+    },
+  });
+
+  if (error) throw error;
+}
+
 export async function signUpFan(data: {
   email: string;
   name: string;
