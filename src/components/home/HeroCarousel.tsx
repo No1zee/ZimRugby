@@ -332,7 +332,13 @@ export default function HeroCarousel({ slides = [], autoplayInterval = 8000 }: {
                 ) : (
                   <Image
                     src={activeSlide.image}
-                )}
+                    alt={activeSlide.title}
+                    fill
+                    priority
+                    sizes="100vw"
+                    className="object-cover object-center"
+                  />
+                )
             </motion.div>
             {/* Overlay */}
             <div className="absolute inset-0 bg-gradient-to-t from-rich-black/90 via-rich-black/30 to-black/30 z-10" />
