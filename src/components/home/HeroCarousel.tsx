@@ -8,7 +8,7 @@ import { Play, ChevronLeft, ChevronRight, ArrowRight } from 'lucide-react'
 import { useAdaptivePerformance } from '@/context/AdaptivePerformanceContext'
 
 export interface HeroSlideData {
-  id: string
+  id: string | number
   headline: string | { line1: string; line2: string }
   headlineHighlight?: string
   subheadline?: string
