@@ -259,7 +259,7 @@ export default function HeroCarousel({ slides = [], autoplayInterval = 8000 }: {
   }, [slides.length]);
 
   useEffect(() => {
-    if (prefersReducedMotion.current || isPaused) return;
+    if (prefersReducedMotion || isPaused) return;
     const timer = setInterval(() => {
       nextSlide();
     }, 12000);
