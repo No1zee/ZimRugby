@@ -177,8 +177,8 @@ export default function HeroCarousel({ slides = DEFAULT_SLIDES }: HeroCarouselPr
   const [slideProgress, setSlideProgress] = useState(0)
   const containerRef = useRef<HTMLDivElement>(null)
 
-  const { isSlowConnection, isSaveData, prefersReducedMotion } = useAdaptivePerformance()
-  const shouldAutoPlayVideo = !isSlowConnection && !isSaveData
+  const { isSlowNetwork, saveData, prefersReducedMotion } = useAdaptivePerformance()
+  const shouldAutoPlayVideo = !isSlowNetwork && !saveData
 
   const activeSlide = slides[currentSlide] || slides[0]
 
