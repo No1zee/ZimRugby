@@ -4,8 +4,8 @@ export interface FanProfile {
   id?: string;
   email: string;
   name: string;
+  handle: string;
   favoriteTeam: string;
-  vipCode: string;
   registeredAt?: string;
 }
 
@@ -17,9 +17,7 @@ function setSessionCookie(profile: FanProfile) {
   try {
     const val = encodeURIComponent(JSON.stringify(profile));
     document.cookie = `${COOKIE_NAME}=${val}; path=/; max-age=${60 * 60 * 24 * 30}; SameSite=Lax`;
-  } catch (e) {
-    console.error("Cookie write error:", e);
-  }
+  } catch {}
 }
 
 function clearSessionCookie() {
@@ -32,10 +30,28 @@ export function getCookieFanProfile(): FanProfile | null {
   try {
     const match = document.cookie.match(new RegExp(`(?:^|; )${COOKIE_NAME}=([^;]*)`));
     if (!match || !match[1]) return null;
-    const decoded = decodeURIComponent(match[1]);
-    return JSON.parse(decoded) as FanProfile;
+    return JSON.parse(decodeURIComponent(match[1])) as FanProfile;
   } catch {
     return null;
+  }
+}
+
+/** Generate a unique @handle from the user's name: @edward4821 */
+function generateHandle(name: string): string {
+  const base = name
+    .trim()
+    .toLowerCase()
+    .split(" ")[0]
+    .replace(/[^a-z0-9]/g, "")
+    .slice(0, 12);
+  const suffix = Math.floor(1000 + Math.random() * 9000);
+  return `@${base || "fan"}${suffix}`;
+}
+
+function persistSession(profile: FanProfile) {
+  if (typeof window !== "undefined") {
+    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(profile));
+    setSessionCookie(profile);
   }
 }
 
@@ -44,69 +60,59 @@ export async function signUpFan(data: {
   name: string;
   favoriteTeam: string;
   password?: string;
+  handle?: string;
 }): Promise<{ success: boolean; profile: FanProfile; message?: string }> {
   const email = data.email.trim().toLowerCase();
   const name = data.name.trim();
   const favoriteTeam = data.favoriteTeam;
-  const vipCode = "SABLES2027";
-  const password = data.password || `ZRU-Fan-Default2026!`;
+  const password = data.password || "ZRU-Fan-Default2026!";
+  const handle = data.handle ? `@${data.handle.replace(/^@/, "")}` : generateHandle(name);
 
   const profile: FanProfile = {
     email,
     name,
+    handle,
     favoriteTeam,
-    vipCode,
     registeredAt: new Date().toISOString(),
   };
 
-  // 1. Try real Supabase Auth signUp if configured
   try {
-    const { data: authData, error: authError } = await supabase.auth.signUp({
+    const { error: authError } = await supabase.auth.signUp({
       email,
       password,
       options: {
         data: {
           full_name: name,
+          handle,
           favorite_team: favoriteTeam,
-          vip_code: vipCode,
         },
       },
     });
 
-    if (authError && (authError.message.includes("already registered") || authError.status === 400)) {
-      console.warn("User already registered in Supabase Auth. Merging session...");
+    if (authError && !authError.message.includes("already registered")) {
+      console.warn("Supabase signUp error:", authError.message);
     }
 
+    // Upsert into fan_zone_members
     try {
       await supabase.from("fan_zone_members").upsert(
-        [
-          {
-            email,
-            name,
-            favorite_team: favoriteTeam,
-            vip_code: vipCode,
-            cdpa_consent: true,
-            registered_at: new Date().toISOString(),
-          },
-        ],
+        [{
+          email,
+          name,
+          handle,
+          favorite_team: favoriteTeam,
+          cdpa_consent: true,
+          registered_at: new Date().toISOString(),
+        }],
         { onConflict: "email" }
       );
     } catch {}
   } catch (err) {
-    console.warn("Supabase remote auth unavailable, executing resilient session store.");
+    console.warn("Supabase unreachable, using resilient fallback.");
   }
 
-  // 2. Always persist session to Cookie + LocalStorage
-  if (typeof window !== "undefined") {
-    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(profile));
-    setSessionCookie(profile);
-  }
-
-  return {
-    success: true,
-    profile,
-    message: "Fan Zone Registration Successful!",
-  };
+  persistSession(profile);
+  return { success: true, profile };
 }
 
 export async function signInFanWithPassword(data: {
@@ -119,8 +125,8 @@ export async function signInFanWithPassword(data: {
   let profile: FanProfile = {
     email,
     name: email.split("@")[0],
+    handle: generateHandle(email.split("@")[0]),
     favoriteTeam: "Sables",
-    vipCode: "SABLES2027",
     registeredAt: new Date().toISOString(),
   };
 
@@ -130,25 +136,33 @@ export async function signInFanWithPassword(data: {
       password,
     });
 
-    if (!error && authData?.user) {
+    if (error) {
+      // Wrong password or not found
+      return { success: false, profile, message: error.message };
+    }
+
+    if (authData?.user) {
       const meta = authData.user.user_metadata || {};
       profile = {
         email,
         name: meta.full_name || meta.name || email.split("@")[0],
+        handle: meta.handle || generateHandle(meta.full_name || email.split("@")[0]),
         favoriteTeam: meta.favorite_team || "Sables",
-        vipCode: meta.vip_code || "SABLES2027",
         registeredAt: new Date().toISOString(),
       };
     }
   } catch (err) {
-    console.warn("Supabase remote login fallback active.");
+    console.warn("Supabase remote login unavailable, checking local session.");
+    // Try to retrieve local session
+    const local = getLocalFanProfile();
+    if (local && local.email === email) {
+      persistSession(local);
+      return { success: true, profile: local };
+    }
+    return { success: false, profile, message: "Unable to connect. Please check your connection." };
   }
 
-  if (typeof window !== "undefined") {
-    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(profile));
-    setSessionCookie(profile);
-  }
-
+  persistSession(profile);
   return { success: true, profile };
 }
 
@@ -165,7 +179,6 @@ export async function signOutFan(): Promise<void> {
 export function getLocalFanProfile(): FanProfile | null {
   const cookieProfile = getCookieFanProfile();
   if (cookieProfile) return cookieProfile;
-
   if (typeof window === "undefined") return null;
   try {
     const raw = localStorage.getItem(LOCAL_STORAGE_KEY);
