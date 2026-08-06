@@ -11,11 +11,17 @@ interface ImageTransformations {
   fit?: 'cover' | 'contain' | 'fill' | 'inside' | 'outside';
 }
 
+const UUID_RE = /^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$/i;
+
 export function assetUrl(id?: string, transform?: ImageTransformations): string | undefined {
   if (!id) return undefined;
+  if (id.startsWith("http://") || id.startsWith("https://") || id.startsWith("/")) {
+    return id;
+  }
+  if (!UUID_RE.test(id)) return undefined;
 
-  const baseUrl = process.env.NEXT_PUBLIC_DIRECTUS_URL || "http://localhost:8055";
-  const url = new URL(`${baseUrl}/assets/${id}`);
+  const url = new URL(`/api/assets/${id}`, "http://localhost:3000");
+  url.protocol = url.protocol;
 
   if (transform) {
     if (transform.width) {
@@ -30,7 +36,6 @@ export function assetUrl(id?: string, transform?: ImageTransformations): string 
     if (transform.fit) {
       url.searchParams.append("fit", transform.fit);
     }
-    // Set webp as standard default
     if (transform.format) {
       url.searchParams.append("format", transform.format);
     } else {
@@ -38,7 +43,7 @@ export function assetUrl(id?: string, transform?: ImageTransformations): string 
     }
   }
 
-  return url.toString();
+  return url.pathname + url.search;
 }
 
 /** Hero banner — full-width, high quality */

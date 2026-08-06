@@ -169,7 +169,11 @@ export default function Navigation() {
   const toggleMenu = () => setIsOpen((prev) => !prev);
   const closeSearch = () => { setIsSearchOpen(false); setSearchQuery(""); };
 
+  const isAdminRoute = pathname?.startsWith("/admin") || pathname?.startsWith("/admin-login");
+
   const navTextClass = showOpaqueHeader ? "text-black/70 hover:text-black" : "text-white/70 hover:text-white";
+
+  if (isAdminRoute) return null;
 
   return (
     <header className="fixed top-0 left-0 w-full z-50">
@@ -187,7 +191,7 @@ export default function Navigation() {
           {/* Desktop utility items */}
           <div className="hidden lg:flex items-center gap-2">
             {/* Live Score Ticker Pill */}
-            <div className="flex items-center gap-2 bg-[#001D11] border border-emerald-500/30 px-3 py-1 rounded-full text-[10px] font-heading font-black tracking-wider text-emerald-400">
+            <div className="flex items-center gap-2 bg-[#001D11] border border-emerald-500/30 px-3 py-1 rounded-full text-[10px] font-heading font-black tracking-wider text-emerald-400 shadow-[inset_0_1px_0_rgba(255,255,255,0.10),0_2px_6px_rgba(0,0,0,0.45)]">
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
               <span>LIVE: ZIMBABWE 30 - 28 NAMIBIA [FINAL]</span>
             </div>
@@ -200,7 +204,7 @@ export default function Navigation() {
                   href={item.href || "#"}
                   className={`flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-heading font-black uppercase tracking-wider transition-all ${
                     item.label === "TICKETS"
-                      ? "bg-[#006747] text-white hover:bg-[#006747]/80"
+                      ? "bg-[#006747] text-white hover:bg-[#006747]/80 shadow-[inset_0_1px_0_rgba(255,255,255,0.20),inset_0_-1px_0_rgba(0,0,0,0.25),0_3px_0_#003D20,0_5px_10px_rgba(0,0,0,0.35)]"
                       : "text-white/60 hover:text-white hover:bg-white/10"
                   }`}
                 >
@@ -240,7 +244,7 @@ export default function Navigation() {
             </button>
             <Link
               href="/tickets"
-              className="flex items-center gap-1 px-2.5 py-1 rounded-full bg-[#006747] text-white text-[10px] font-heading font-black uppercase tracking-wider"
+              className="flex items-center gap-1 px-2.5 py-1 rounded-full bg-[#006747] text-white text-[10px] font-heading font-black uppercase tracking-wider shadow-[inset_0_1px_0_rgba(255,255,255,0.20),inset_0_-1px_0_rgba(0,0,0,0.25),0_2px_0_#003D20,0_4px_8px_rgba(0,0,0,0.35)]"
             >
               TICKETS
             </Link>
@@ -344,7 +348,7 @@ export default function Navigation() {
                           animate={{ opacity: 1, y: 0, scale: 1 }}
                           exit={{ opacity: 0, y: 8, scale: 0.96 }}
                           transition={{ duration: 0.2, ease: "easeOut" }}
-                          className={`absolute top-full left-1/2 -translate-x-1/2 mt-1 bg-[#00452A] rounded-2xl shadow-2xl py-3 overflow-hidden z-[100] ${
+                          className={`absolute top-full left-1/2 -translate-x-1/2 mt-1 bg-gradient-to-b from-[#005232] to-[#00452A] rounded-2xl shadow-[inset_0_1px_0_rgba(255,255,255,0.08),0_4px_6px_rgba(0,0,0,0.35),0_30px_50px_-12px_rgba(0,0,0,0.55)] py-3 overflow-hidden z-[100] ${
                             item.isMega
                               ? "w-[380px] xl:w-[420px] grid grid-cols-2 gap-x-2 px-3"
                               : "min-w-[220px] px-2"
@@ -355,7 +359,7 @@ export default function Navigation() {
                               key={child.label}
                               href={child.href}
                               className={`
-                                block px-3.5 py-2.5 text-xs font-bold tracking-wide transition-all rounded-xl hover:bg-white/15 text-white
+                                block px-3.5 py-2.5 text-xs font-bold tracking-wide transition-all duration-200 rounded-xl hover:bg-zru-green/15 text-white hover:translate-x-[3px] hover:shadow-[0_2px_6px_rgba(0,0,0,0.25)]
                                 ${isActive(child.href) ? "text-white bg-white/20 font-black" : "text-white/90"}
                                 ${item.isMega ? "hover:pl-5" : "hover:pl-4"}
                               `}

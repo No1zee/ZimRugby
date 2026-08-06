@@ -1,0 +1,26 @@
+[
+  {
+    "id": "award-1",
+    "title": "Female Champions",
+    "year": "2022",
+    "category": "Women"
+  },
+  {
+    "id": "award-2",
+    "title": "Africa Gold Cup",
+    "year": "2022",
+    "category": "Men"
+  },
+  {
+    "id": "award-3",
+    "title": "Africa Cup",
+    "year": "2022",
+    "category": "Men"
+  },
+  {
+    "id": "award-4",
+    "title": "Africa Cup",
+    "year": "2018",
+    "category": "Men"
+  }
+]

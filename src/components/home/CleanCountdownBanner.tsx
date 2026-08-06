@@ -70,7 +70,7 @@ export default function CleanCountdownBanner() {
 
       <div className="relative z-20 max-w-[1360px] mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center text-center">
         {/* Title */}
-        <span className="text-[11px] sm:text-xs font-bold tracking-[0.25em] uppercase text-white/90 mb-4 font-heading">
+        <span className="text-[11px] sm:text-xs font-black tracking-[0.3em] uppercase text-white/90 mb-4 font-heading">
           ROAD TO AUSTRALIA 2027
         </span>
 

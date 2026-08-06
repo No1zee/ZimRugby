@@ -1,0 +1,42 @@
+[
+  {
+    "id": "zru-fixture-0",
+    "date": "FEB 14, 2026",
+    "homeTeam": "Sable 1st",
+    "awayTeam": "Sable U20",
+    "type": "friendly",
+    "competitionLabel": "Friendly",
+    "venue": "Harare Sports Club",
+    "countryCode": "ZW"
+  },
+  {
+    "id": "zru-fixture-1",
+    "date": "FEB 28, 2026",
+    "homeTeam": "Sable Green",
+    "awayTeam": "Sable Red",
+    "type": "friendly",
+    "competitionLabel": "Friendly",
+    "venue": "Harare Sports Club",
+    "countryCode": "ZW"
+  },
+  {
+    "id": "zru-fixture-2",
+    "date": "MAR 24, 2026",
+    "homeTeam": "Louis Trichart Team 1",
+    "awayTeam": "TBD",
+    "type": "preparation",
+    "competitionLabel": "Preparation",
+    "venue": "South Africa",
+    "countryCode": "ZA"
+  },
+  {
+    "id": "zru-fixture-3",
+    "date": "MAR 28, 2026",
+    "homeTeam": "Louis Trichart Team 2",
+    "awayTeam": "TBD",
+    "type": "preparation",
+    "competitionLabel": "Preparation",
+    "venue": "South Africa",
+    "countryCode": "ZA"
+  }
+]

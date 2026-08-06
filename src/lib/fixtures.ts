@@ -26,15 +26,81 @@ function matchToFixture(m: { id: string; homeTeam: { name: string; logo?: string
   };
 }
 
+import { directusFetch } from './directus/fetch';
+
+interface DirectusMatch {
+  id: number;
+  title?: string;
+  team_id?: number;
+  opponent_id?: number;
+  competition_id?: number;
+  venue_id?: number;
+  status: string;
+  home_or_away?: string;
+  kickoff_at?: string;
+  display_date_label?: string;
+  display_time_label?: string;
+  round_label?: string;
+  team_score?: number;
+  opponent_score?: number;
+  result_outcome?: string;
+  is_featured?: boolean;
+  is_next_match?: boolean;
+  show_on_match_centre?: boolean;
+  show_on_homepage?: boolean;
+  hero_image?: string | null;
+  // Joined fields from relations
+  team_name?: string;
+  team_crest?: string;
+  opponent_name?: string;
+  opponent_crest?: string;
+  competition_name?: string;
+  venue_name?: string;
+}
+
+function directusMatchToFixture(m: DirectusMatch): Fixture {
+  const kickoff = m.kickoff_at ? new Date(m.kickoff_at) : new Date();
+  const isHome = m.home_or_away === "home";
+
+  return {
+    id: `directus-${m.id}`,
+    competition: m.competition_name || "Rugby Africa Cup",
+    round: m.round_label || "Sables",
+    date: kickoff,
+    time: m.display_time_label || kickoff.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+    venue: m.venue_name || "TBA",
+    homeTeam: {
+      name: isHome ? (m.team_name || "Zimbabwe") : (m.opponent_name || "TBA"),
+      logo: isHome ? m.team_crest : m.opponent_crest,
+      score: isHome ? m.team_score : m.opponent_score,
+    },
+    awayTeam: {
+      name: isHome ? (m.opponent_name || "TBA") : (m.team_name || "Zimbabwe"),
+      logo: isHome ? m.opponent_crest : m.team_crest,
+      score: isHome ? m.opponent_score : m.team_score,
+    },
+    status: m.status === "completed" ? "completed" : m.status === "live" ? "live" : "upcoming",
+    teamCategory: "Sables",
+  };
+}
+
 export async function getAllFixtures(): Promise<Fixture[]> {
-  const [worldRugbyResults, tmResults, teamResults, staticMatches] = await Promise.allSettled([
+  const [worldRugbyResults, tmResults, teamResults, staticMatches, directusResults] = await Promise.allSettled([
     getWorldRugbyFixtures(),
     getTicketmasterFixtures(),
     getAllTeamFixtures(),
-    getLiveMatches()
+    getLiveMatches(),
+    directusFetch<DirectusMatch>("matches", {
+      fields: ["id", "title", "team_id", "opponent_id", "competition_id", "venue_id", "status", "home_or_away", "kickoff_at", "display_date_label", "display_time_label", "round_label", "team_score", "opponent_score", "result_outcome", "is_featured", "is_next_match", "show_on_match_centre", "show_on_homepage", "hero_image"],
+      sort: ["kickoff_at"],
+      limit: 100,
+    }, 60)
   ]);
 
+  const cmsFixtures = directusResults.status === 'fulfilled' ? directusResults.value.map(directusMatchToFixture) : [];
+
   const allFixtures: Fixture[] = [
+    ...cmsFixtures,
     ...(worldRugbyResults.status === 'fulfilled' ? worldRugbyResults.value.map(f => ({ ...f, teamCategory: "Sables" })) : []),
     ...(tmResults.status === 'fulfilled' ? tmResults.value.map(f => ({ ...f, teamCategory: "Sables" })) : []),
     ...getVerifiedStaticFixtures().map(f => ({ ...f, teamCategory: "Sables" })),
@@ -44,6 +110,7 @@ export async function getAllFixtures(): Promise<Fixture[]> {
 
   return deduplicateFixtures(allFixtures);
 }
+
 
 /**
  * Verified fixtures found via ZRU and World Rugby News that might not be in the ICAL feed yet.

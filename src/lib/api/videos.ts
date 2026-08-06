@@ -1,93 +1,55 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Video } from "@/types";
-import { directusFetch } from "@/lib/directus/fetch";
-import { thumbnailAssetUrl } from "@/lib/directus/assets";
 
+const mockVideos: Video[] = [
+  {
+    id: "yt-canada-v-zim-2026",
+    title: "CANADA v ZIMBABWE | Nations Cup 2026 | Match Highlights",
+    category: "Match Highlights",
+    duration: "11:27",
+    date: "18 JUL 2026",
+    thumbnail: "https://img.youtube.com/vi/kf33dibu7f0/hqdefault.jpg",
+    embedUrl: "https://www.youtube-nocookie.com/embed/kf33dibu7f0?rel=0&modestbranding=1",
+    description: "Full extended highlights of Canada v Zimbabwe from the 2026 Nations Cup, courtesy of World Rugby. The Sables fought to the final whistle in a physical encounter."
+  },
+  {
+    id: "yt-usa-v-zim-2026",
+    title: "USA v ZIMBABWE | Nations Cup 2026 | Match Highlights",
+    category: "Match Highlights",
+    duration: "11:38",
+    date: "11 JUL 2026",
+    thumbnail: "https://img.youtube.com/vi/2koQbsHjg14/hqdefault.jpg",
+    embedUrl: "https://www.youtube-nocookie.com/embed/2koQbsHjg14?rel=0&modestbranding=1",
+    description: "Extended highlights of USA v Zimbabwe from the 2026 Nations Cup, courtesy of World Rugby."
+  },
+  {
+    id: "yt-tonga-v-zim-2026",
+    title: "TONGA v ZIMBABWE | Nations Cup 2026 | Match Highlights",
+    category: "Match Highlights",
+    duration: "04:07",
+    date: "04 JUL 2026",
+    thumbnail: "https://img.youtube.com/vi/h3iy3mTIhs4/hqdefault.jpg",
+    embedUrl: "https://www.youtube-nocookie.com/embed/h3iy3mTIhs4?rel=0&modestbranding=1",
+    description: "Highlights of Tonga v Zimbabwe from the 2026 Nations Cup opener, courtesy of World Rugby. The Sables kicked off the campaign with a 22-15 win."
+  }
+];
+
+/**
+ * Fetch the merged video library (curated Directus entries + live uploads
+ * from the official @ZimRugby channel and World Rugby). Runs through a
+ * same-origin API route so browsers never call Directus directly.
+ */
 export async function getVideos(): Promise<Video[]> {
-  const mockVideos: Video[] = [
-    {
-      id: "vid-sables-namibia-2025",
-      title: "HIGHLIGHTS: Zimbabwe Sables vs Namibia | Africa Cup Final",
-      category: "Match Highlights",
-      duration: "12:45",
-      date: "22 JUL 2025",
-      thumbnail: "/images/media/vid1.jpg",
-      embedUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
-      description: "Catch all the thrilling action, tries, and celebrations from the Sables' historic victory over Namibia to claim the 2025 Rugby Africa Cup title."
-    },
-    {
-      id: "vid-press-benade-squad-2026",
-      title: "PRESS CONFERENCE: Piet Benade on Victoria Cup Squad Selection",
-      category: "Press Conferences",
-      duration: "05:30",
-      date: "20 APR 2026",
-      thumbnail: "/images/media/vid2.jpg",
-      embedUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
-      description: "Sables head coach Piet Benade addresses the media regarding the squad selection, captaincy choices, and training camp updates ahead of the Victoria Cup."
-    },
-    {
-      id: "vid-feature-mudariki-2026",
-      title: "PLAYER FEATURE: Hilton Mudariki's Journey to 40 Caps",
-      category: "Player Features",
-      duration: "08:15",
-      date: "18 APR 2026",
-      thumbnail: "/images/media/vid3.jpg",
-      embedUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
-      description: "A deep dive into the career of Sables captain Hilton Mudariki, exploring his rise through the ranks, international milestones, and leadership philosophy."
-    },
-    {
-      id: "vid-explain-scrum-2026",
-      title: "RUGBY EXPLAINED: The Mechanics of the Scrum",
-      category: "Rugby Explained",
-      duration: "04:50",
-      date: "10 APR 2026",
-      thumbnail: "/images/media/vid4.jpg",
-      embedUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
-      description: "Assistant coach Ricky Chirengende breaks down the technical rules, safety requirements, and strategic nuances of the scrum in modern rugby union."
-    },
-    {
-      id: "vid-lady-sables-camp-2026",
-      title: "TRAINING: Inside Camp with the Lady Sables",
-      category: "Player Features",
-      duration: "06:40",
-      date: "05 APR 2026",
-      thumbnail: "/images/teams/lady-sables.jpg",
-      embedUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
-      description: "Go behind the scenes at Harare Sports Club to see how the Lady Sables are preparing for their upcoming Rugby Africa Cup qualifiers."
-    },
-    {
-      id: "vid-press-chirengende-2026",
-      title: "PRESS CONFERENCE: Assistant Coach Ricky Chirengende Post-Match",
-      category: "Press Conferences",
-      duration: "04:15",
-      date: "28 MAR 2026",
-      thumbnail: "/images/media/vid1.jpg",
-      embedUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
-      description: "Assistant coach Ricky Chirengende analyzes the team's tactical performance, defensive adjustments, and areas of improvement following the international friendly."
-    }
-  ];
-
   try {
-    if (process.env.NEXT_PUBLIC_DIRECTUS_URL) {
-      const response = await directusFetch<any>('videos', {
-        sort: ['-date']
-      });
-      if (response && response.length > 0) {
-        return response.map((video: any) => ({
-          id: String(video.id),
-          title: video.title || "",
-          category: video.category || "General",
-          duration: video.duration || "0:00",
-          date: video.date_label || new Date(video.date).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric', timeZone: 'UTC' }).toUpperCase(),
-          thumbnail: thumbnailAssetUrl(video.thumbnail) || video.thumbnail_url,
-          embedUrl: video.embed_url || "",
-          description: video.description || ""
-        }));
+    const res = await fetch("/api/videos", { next: { revalidate: 300 } });
+    if (res.ok) {
+      const data = await res.json();
+      if (Array.isArray(data) && data.length > 0) {
+        return data as Video[];
       }
     }
   } catch (error) {
-    console.warn("Directus fetch failed for videos list, falling back to mock data:", error);
+    console.warn("Failed to fetch videos, using mock data:", error);
   }
-
   return mockVideos;
 }

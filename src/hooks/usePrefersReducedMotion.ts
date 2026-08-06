@@ -11,7 +11,9 @@ export function usePrefersReducedMotion(): boolean {
 
   useEffect(() => {
     const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
-    setPrefersReduced(mq.matches);
+    requestAnimationFrame(() => {
+      setPrefersReduced(mq.matches);
+    });
 
     function handler(e: MediaQueryListEvent) {
       setPrefersReduced(e.matches);

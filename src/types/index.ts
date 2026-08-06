@@ -91,7 +91,7 @@ export interface Article {
 export interface Video {
   id: string;
   title: string;
-  category: 'Match Highlights' | 'Press Conferences' | 'Player Features' | 'Rugby Explained';
+  category: string;
   duration: string;
   date: string;
   thumbnail: string;
@@ -232,7 +232,8 @@ export interface DirectusMatchItem {
   id: string | number;
   competition?: string;
   round?: string;
-  date: string;
+  date?: string;
+  kickoff_at?: string;
   date_label?: string;
   time?: string;
   venue?: string;
@@ -267,6 +268,10 @@ export interface MatchDetailData {
   homeLineup: LineupPlayer[];
   awayLineup: LineupPlayer[];
   stats?: MatchStats;
+  campaign?: {
+    slug: string;
+    name: string;
+  };
   report?: {
     summary: string;
     paragraphs: string[];

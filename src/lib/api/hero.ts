@@ -1,65 +1,8 @@
 import type { HeroSlideData } from "@/types";
-
-export type { HeroSlideData };
-
-/**
- * CMS_SWAP_TODO: Replace mock implementation with actual REST/GraphQL endpoints once backend is available.
- * Fully compatible with React Native / Mobile platforms for direct cross-platform consumption.
- */
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { directusFetch } from "@/lib/directus/fetch";
 import { heroAssetUrl } from "@/lib/directus/assets";
 
-const MOCK_SLIDES: HeroSlideData[] = [
-    {
-      id: 1,
-      tag: "ZIMBABWE RUGBY UNION",
-      contextPill: "OFFICIAL GOVERNING BODY",
-      image: "/images/hero/tonga-vs-zim.webp",
-      imagePosition: "center 40%",
-      headline: {
-        line1: "GOVERNING & GROWING",
-        line2: "ZIMBABWE RUGBY",
-      },
-      subtext: "From grassroots school leagues to the elite national Sables squads, ZRU is dedicated to developing character, discipline, and success.",
-      ctas: {
-        primary: { label: "Match Centre", href: "/match-centre", iconName: "ArrowRight" },
-        secondary: { label: "Play Rugby", href: "/play-rugby", iconName: "ArrowRight" },
-      },
-    },
-    {
-      id: 2,
-      tag: "SABLES",
-      contextPill: "AFRICA CUP CHAMPIONS",
-      image: "/images/hero/lady-sables.webp", // Standard fallback
-      imagePosition: "center top",
-      headline: {
-        line1: "THE PRIDE OF",
-        line2: "THE NATION",
-      },
-      subtext: "Witness the African Champions in their campaign to qualify for the Rugby World Cup. Bold, proud, and unstoppable.",
-      ctas: {
-        primary: { label: "Meet The Squad", href: "/teams/sables", iconName: "ArrowRight" },
-        secondary: { label: "Latest News", href: "/media", iconName: "ArrowRight" },
-      },
-    },
-    {
-      id: 3,
-      tag: "LADY SABLES",
-      contextPill: "WOMEN'S RUGBY DEVELOPMENT",
-      image: "/images/hero/zim-u20s.webp",
-      imagePosition: "center center",
-      headline: {
-        line1: "LADY SABLES",
-        line2: "INSPIRING THE FUTURE",
-      },
-      subtext: "The Lady Sables are leading the way in growing women's rugby across Zimbabwe. Be part of the legacy.",
-      ctas: {
-        primary: { label: "Lady Sables Squad", href: "/teams/lady-sables", iconName: "ArrowRight" },
-        secondary: { label: "Match Centre", href: "/match-centre", iconName: "ArrowRight" },
-      },
-    },
-  ];
+export type { HeroSlideData };
 
 export async function getHeroSlides(): Promise<HeroSlideData[]> {
   try {
@@ -68,12 +11,15 @@ export async function getHeroSlides(): Promise<HeroSlideData[]> {
         sort: ['sort'],
       });
       if (response && response.length > 0) {
-        return response.map((slide: any) => ({
-          id: Number(slide.id),
-          tag: slide.tag,
-          contextPill: slide.context_pill,
-          image: heroAssetUrl(slide.image) || slide.image_url,
-          video: slide.video ? `${process.env.NEXT_PUBLIC_DIRECTUS_URL}/assets/${slide.video}` : slide.video_url,
+        return response.map((slide: any) => {
+          const rawImage = slide.image || slide.image_url || "";
+          const isDirectUrl = rawImage.startsWith("http") || rawImage.startsWith("/");
+          return {
+            id: Number(slide.id),
+            tag: slide.tag,
+            contextPill: slide.context_pill,
+            image: isDirectUrl ? rawImage : (heroAssetUrl(rawImage) || rawImage),
+            video: slide.video ? `/api/assets/${slide.video}` : slide.video_url,
           headline: {
             line1: slide.headline_line1 || "",
             line2: slide.headline_line2 || "",
@@ -89,23 +35,24 @@ export async function getHeroSlides(): Promise<HeroSlideData[]> {
           } : undefined,
           ctas: {
             primary: {
-label: slide.cta_primary_label || "Learn More",
-    href: slide.cta_primary_href || "/teams",
-              iconName: slide.cta_primary_icon || "ArrowRight",
+              label: slide.cta1_label || slide.cta_primary_label || "Learn More",
+              href: slide.cta1_href || slide.cta_primary_href || "/teams",
+              iconName: slide.cta1_icon || slide.cta_primary_icon || "ArrowRight",
             },
-            secondary: slide.cta_secondary_label ? {
-              label: slide.cta_secondary_label,
-              href: slide.cta_secondary_href || "/match-centre",
-              iconName: slide.cta_secondary_icon,
+            secondary: (slide.cta2_label || slide.cta_secondary_label) ? {
+              label: slide.cta2_label || slide.cta_secondary_label,
+              href: slide.cta2_href || slide.cta_secondary_href || "/match-centre",
+              iconName: slide.cta2_icon || slide.cta_secondary_icon,
             } : undefined,
           },
           alignment: slide.alignment || "left",
-        }));
+        };
+      });
       }
     }
   } catch (error) {
-    console.warn("Directus fetch failed for hero slides, falling back to mock data:", error);
+    console.warn("Directus fetch failed for hero slides:", error);
   }
 
-  return MOCK_SLIDES;
+  return [];
 }

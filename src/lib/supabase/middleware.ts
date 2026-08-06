@@ -31,23 +31,39 @@ export async function updateSession(request: NextRequest) {
     }
   )
 
-  // IMPORTANT: Avoid writing any logic between createServerClient and
-  // supabase.auth.getUser(). A simple mistake could make it very hard to debug
-  // issues with users being randomly logged out.
-
   const {
     data: { user },
   } = await supabase.auth.getUser()
 
+  // Protect /dashboard and /admin routes — redirect to login if not authenticated
   if (
     !user &&
-    request.nextUrl.pathname.startsWith('/dashboard')
+    (request.nextUrl.pathname.startsWith('/dashboard') ||
+     request.nextUrl.pathname.startsWith('/admin'))
   ) {
-    // no user, potentially respond by redirecting the user to the login page
+    // Allow /admin/login through without auth
+    if (!request.nextUrl.pathname.startsWith('/admin/login')) {
+      const url = request.nextUrl.clone()
+      url.pathname = request.nextUrl.pathname.startsWith('/admin')
+        ? '/admin/login'
+        : '/login'
+      return NextResponse.redirect(url)
+    }
+  }
+
+  // Redirect authenticated but unverified accounts to verification notice if trying to access protected routes
+  if (
+    user &&
+    !user.email_confirmed_at &&
+    (request.nextUrl.pathname.startsWith('/dashboard') ||
+     request.nextUrl.pathname.startsWith('/admin'))
+  ) {
     const url = request.nextUrl.clone()
-    url.pathname = '/login'
+    url.pathname = '/verify-email'
+    url.searchParams.set('email', user.email || '')
     return NextResponse.redirect(url)
   }
 
   return supabaseResponse
 }
+

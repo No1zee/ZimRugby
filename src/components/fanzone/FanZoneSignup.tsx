@@ -162,11 +162,13 @@ export default function FanZoneSignup({
               </button>
             </form>
 
-            <div className="text-[9px] text-[#0E0E0E]/40 font-normal transition-[opacity,max-height,margin] duration-500 opacity-0 max-h-0 overflow-hidden mt-0 group-hover/fzCard:opacity-100 group-hover/fzCard:max-h-10 group-hover/fzCard:mt-2.5 group-focus-within/fzCard:opacity-100 group-focus-within/fzCard:max-h-10 group-focus-within/fzCard:mt-2.5 flex items-center justify-between w-full">
-              <span>Free to join. No spam.</span>
-              <Link className="underline hover:text-[#006747] transition-[color]" href="/fan-zone">
-                Learn more
-              </Link>
+            <div className="text-[9px] text-[#0E0E0E]/40 font-normal transition-[opacity,max-height,margin] duration-500 opacity-0 max-h-0 overflow-hidden mt-0 group-hover/fzCard:opacity-100 group-hover/fzCard:max-h-16 group-hover/fzCard:mt-2.5 group-focus-within/fzCard:opacity-100 group-focus-within/fzCard:max-h-16 group-focus-within/fzCard:mt-2.5 flex flex-col gap-1 w-full">
+              <span>Free to join. No spam. CDPA 2021 compliant.</span>
+              <span className="truncate">
+                <Link className="underline hover:text-[#006747] transition-[color]" href="/fan-zone">
+                  Learn more &rarr;
+                </Link>
+              </span>
             </div>
           </div>
         </div>
@@ -199,7 +201,7 @@ export default function FanZoneSignup({
         </div>
 
         <div className="space-y-1.5 transition-[opacity,max-width,transform] duration-500 origin-left max-w-lg opacity-100 group-hover/fzCard:opacity-0 group-hover/fzCard:max-w-0 group-hover/fzCard:scale-95 group-hover/fzCard:overflow-hidden group-focus-within/fzCard:opacity-0 group-focus-within/fzCard:max-w-0 group-focus-within/fzCard:scale-95 group-focus-within/fzCard:overflow-hidden shrink min-w-0">
-          <h2 className="text-2xl sm:text-3xl text-white font-heading font-black uppercase tracking-tight leading-tight">
+          <h2 className="text-2xl sm:text-3xl text-white font-heading font-black uppercase tracking-widest leading-tight">
             JOIN THE FAN ZONE
           </h2>
           <p className="text-xs sm:text-sm text-white/80 font-normal leading-relaxed font-body line-clamp-2">
@@ -266,11 +268,14 @@ export default function FanZoneSignup({
             </div>
           )}
 
-          <div className="text-[10px] text-[#0E0E0E]/40 font-normal transition-[opacity,max-height,margin] duration-500 opacity-0 max-h-0 overflow-hidden mt-0 group-hover/fzCard:opacity-100 group-hover/fzCard:max-h-10 group-hover/fzCard:mt-3.5 group-focus-within/fzCard:opacity-100 group-focus-within/fzCard:max-h-10 group-focus-within/fzCard:mt-3.5 flex items-center justify-between w-full">
+          <div className="text-[10px] text-[#0E0E0E]/40 font-normal transition-[opacity,max-height,margin] duration-500 opacity-0 max-h-0 overflow-hidden mt-0 group-hover/fzCard:opacity-100 group-hover/fzCard:max-h-16 group-hover/fzCard:mt-3.5 group-focus-within/fzCard:opacity-100 group-focus-within/fzCard:max-h-16 group-focus-within/fzCard:mt-3.5 flex flex-col gap-1 w-full">
             <span>Priority tickets, discounts, and VIP access.</span>
-            <Link className="underline hover:text-[#006747] transition-[color]" href="/fan-zone">
-              Learn more
-            </Link>
+            <span className="flex items-center justify-between w-full">
+              <span className="text-[9px]">CDPA 2021 compliant. Your data is protected.</span>
+              <Link className="underline hover:text-[#006747] transition-[color]" href="/fan-zone">
+                Learn more &rarr;
+              </Link>
+            </span>
           </div>
         </div>
       </div>

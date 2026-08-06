@@ -2,17 +2,29 @@
 
 import React from "react";
 import Image from "next/image";
+import { motion } from "framer-motion";
 import { AnimatedCountdown } from "@/components/ui/animated-countdown";
 import MatchdayVideoHighlights from "@/components/media/MatchdayVideoHighlights";
 import FeaturedPlayersGrid from "@/components/teams/FeaturedPlayersGrid";
 import type { FeaturedPlayer } from "@/types";
+import type { Campaign } from "@/lib/api/campaigns";
 
 interface RoadToWorldCupProps {
   featuredPlayers: FeaturedPlayer[];
+  campaign?: Campaign | null;
 }
 
-export default function RoadToWorldCup({ featuredPlayers }: RoadToWorldCupProps) {
-  const targetDate = new Date("2027-10-01T20:00:00");
+export default function RoadToWorldCup({ featuredPlayers, campaign }: RoadToWorldCupProps) {
+  const targetDate = campaign?.countdown_target
+    ? new Date(campaign.countdown_target)
+    : new Date("2027-10-01T20:00:00");
+
+  const headline = (campaign?.items as { headline?: string } | undefined)?.headline || "ROAD TO AUSTRALIA";
+  const subheadline = (campaign?.items as { subheadline?: string } | undefined)?.subheadline || "2027 RUGBY WORLD CUP";
+
+  const headlineParts = headline.split(" ");
+  const accentWord = headlineParts.pop() || "";
+  const mainHeadline = headlineParts.join(" ") || "";
 
   return (
     <section className="relative select-none">
@@ -32,10 +44,10 @@ export default function RoadToWorldCup({ featuredPlayers }: RoadToWorldCupProps)
         />
         <div className="relative z-20 max-w-[1360px] mx-auto px-4 flex flex-col items-center text-center">
           <span className="text-[11px] font-bold tracking-[0.25em] uppercase text-white/90 mb-3 font-heading block">
-            ROAD TO AUSTRALIA
+            {headline}
           </span>
           <span className="text-[9px] font-normal tracking-[0.2em] uppercase text-white/50 mb-4 font-heading block">
-            2027 RUGBY WORLD CUP
+            {subheadline}
           </span>
           <AnimatedCountdown
             targetDate={targetDate}
@@ -65,8 +77,14 @@ export default function RoadToWorldCup({ featuredPlayers }: RoadToWorldCupProps)
           }}
         />
 
-        {/* Left player cutout */}
-        <div className="absolute bottom-0 left-0 w-40 lg:w-52 h-[260px] lg:h-[320px] pointer-events-none z-[5]">
+        {/* Left player cutout with scroll reveal */}
+        <motion.div
+          initial={{ y: 80, opacity: 0 }}
+          whileInView={{ y: 0, opacity: 1 }}
+          viewport={{ once: true, margin: "-40px" }}
+          transition={{ duration: 0.8, ease: [0.25, 1, 0.5, 1] }}
+          className="absolute bottom-0 left-0 w-40 lg:w-52 h-[260px] lg:h-[320px] pointer-events-none z-[5]"
+        >
           <Image
             src="/images/cutouts/3.svg"
             alt=""
@@ -75,10 +93,16 @@ export default function RoadToWorldCup({ featuredPlayers }: RoadToWorldCupProps)
             className="w-full h-full object-contain object-bottom drop-shadow-[0_15px_30px_rgba(0,0,0,0.5)]"
             unoptimized
           />
-        </div>
+        </motion.div>
 
-        {/* Right player cutout */}
-        <div className="absolute bottom-0 right-0 w-40 lg:w-52 h-[260px] lg:h-[320px] pointer-events-none z-[5]">
+        {/* Right player cutout with scroll reveal */}
+        <motion.div
+          initial={{ y: 80, opacity: 0 }}
+          whileInView={{ y: 0, opacity: 1 }}
+          viewport={{ once: true, margin: "-40px" }}
+          transition={{ duration: 0.8, ease: [0.25, 1, 0.5, 1], delay: 0.15 }}
+          className="absolute bottom-0 right-0 w-40 lg:w-52 h-[260px] lg:h-[320px] pointer-events-none z-[5]"
+        >
           <Image
             src="/images/cutouts/1.svg"
             alt=""
@@ -87,21 +111,21 @@ export default function RoadToWorldCup({ featuredPlayers }: RoadToWorldCupProps)
             className="w-full h-full object-contain object-bottom drop-shadow-[0_15px_30px_rgba(0,0,0,0.5)]"
             unoptimized
           />
-        </div>
+        </motion.div>
 
         {/* Section heading on the green */}
-        <div className="relative z-10 max-w-[1360px] mx-auto px-8 lg:px-10 text-center pt-14 mb-10">
-          <h2 className="text-4xl sm:text-5xl lg:text-6xl font-heading font-black uppercase tracking-tight text-white not-italic leading-[1.0]">
-            ROAD TO{" "}
-            <span className="text-accent-teal">AUSTRALIA</span>
-            <span className="block text-lg sm:text-xl lg:text-2xl text-white/60 font-normal tracking-[0.15em] mt-2">
-              2027 RUGBY WORLD CUP
+        <div className="relative z-10 max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 text-center pt-14 mb-10">
+          <h2 className="text-4xl sm:text-5xl lg:text-6xl font-heading font-black uppercase tracking-wide sm:tracking-widest text-white not-italic leading-[1.05]">
+            {mainHeadline}{" "}
+            <span className="text-accent-teal">{accentWord}</span>
+            <span className="block text-lg sm:text-xl lg:text-2xl text-white/60 font-normal tracking-[0.15em] mt-3">
+              {subheadline}
             </span>
           </h2>
         </div>
 
         {/* White center tile — sits on top of the green */}
-        <div className="relative z-20 max-w-[1360px] mx-auto px-8 lg:px-10">
+        <div className="relative z-20 max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
           <div className="bg-[#FDFBF0] rounded-2xl shadow-[0_-8px_40px_rgba(0,0,0,0.15)] overflow-hidden">
             {/* Countdown row */}
             <div className="px-8 py-10 flex flex-col items-center border-b border-black/5">
@@ -125,8 +149,12 @@ export default function RoadToWorldCup({ featuredPlayers }: RoadToWorldCupProps)
 
             {/* Featured Players */}
             <div className="px-4 sm:px-6 lg:px-8 py-10 border-t border-black/5">
-              <div className="mb-8">
-                <h2 className="text-3xl sm:text-5xl font-heading font-black uppercase tracking-tight text-rich-black not-italic">
+              <div className="mb-8 max-w-3xl">
+                <p className="mb-3 flex items-center gap-3 text-[10px] font-black uppercase tracking-[0.4em] text-zru-green">
+                  <span className="h-px w-8 bg-zru-green/50" aria-hidden />
+                  Squad
+                </p>
+                <h2 className="text-3xl sm:text-5xl font-heading font-black uppercase tracking-wide sm:tracking-widest text-rich-black not-italic leading-[1.05]">
                   FEATURED{" "}
                   <span className="text-accent-teal">PLAYERS</span>
                 </h2>

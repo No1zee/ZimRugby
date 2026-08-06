@@ -7,105 +7,40 @@ import { useState, useEffect } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import PageAnnouncements from "@/components/ui/PageAnnouncements";
 
-import PageHero from "@/components/ui/PageHero";
+import CmsHero from "@/components/cms/CmsHero";
+import type { EventItem } from "@/types";
 
-const competitions = [
-  {
-    id: "comp-1",
-    title: "National Sevens Series",
-    level: "National / Sevens",
-    dateRange: "SEP - NOV 2026",
-    teamCount: "12 CLUBS",
-    status: "ONGOING",
-    description: "The premier domestic sevens tournament featuring Zimbabwe's top tier rugby clubs competing across multiple rounds.",
-    location: "Harare Sports Club / Hartsfield",
-    category: "SEVENS",
-    tags: ["National", "Sevens"]
-  },
-  {
-    id: "comp-2",
-    title: "Super Rugby Club Championship",
-    level: "Club Rugby",
-    dateRange: "APR - AUG 2026",
-    teamCount: "10 TEAMS",
-    status: "UPCOMING",
-    description: "The absolute pinnacle of local club XVs rugby. The champion earns direct qualification to regional club fixtures.",
-    location: "Harare / Bulawayo / Mutare",
-    category: "CLUBS",
-    tags: ["Clubs"]
-  },
-  {
-    id: "comp-3",
-    title: "National Schools Championship",
-    level: "Schools / Youth",
-    dateRange: "JUN - JUL 2026",
-    teamCount: "16 SCHOOLS",
-    status: "UPCOMING",
-    description: "The historical proving ground for Zimbabwe's future Sables. High-intensity schoolboy rugby at its finest.",
-    location: "Prince Edward School, Harare",
-    category: "SCHOOLS",
-    tags: ["Schools", "Youth"]
-  },
-  {
-    id: "comp-4",
-    title: "Women's Inter-Provincial Cup",
-    level: "Women's Rugby",
-    dateRange: "MAY - SEP 2026",
-    teamCount: "6 PROVINCES",
-    status: "ONGOING",
-    description: "The top-tier women's XVs competition showcasing elite provincial selections vying for national supremacy.",
-    location: "Hartsfield, Bulawayo",
-    category: "WOMEN",
-    tags: ["Women"]
-  }
-];
+interface Competition extends EventItem {
+  level: string;
+  dateRange: string;
+  teamCount: string;
+  status: string;
+  category: string;
+}
 
-const generalEvents = [
-  {
-    id: "event-1",
-    title: "ZRU Annual General Meeting",
-    date: "15 AUG 2026",
-    time: "10:00 - 13:00",
-    description: "The Annual General Meeting of the Zimbabwe Rugby Union involves all stakeholders, provincial boards, and partners.",
-    location: "ZRU Offices, Harare Sports Club",
-    category: "ADMINISTRATION",
-    color: "bg-neutral-800",
-    tags: ["National"]
-  },
-  {
-    id: "event-2",
-    title: "Level 1 Coaching Course (World Rugby)",
-    date: "20 AUG 2026",
-    time: "09:00 - 16:00",
-    description: "A foundational accreditation course for aspiring rugby coaches. Covers safety, laws of the game, and coaching drills.",
-    location: "Hartsfield, Bulawayo",
-    category: "EDUCATION",
-    color: "bg-zru-green",
-    tags: ["Clubs", "Youth"]
-  },
-  {
-    id: "event-3",
-    title: "Sables Fundraising Gala Dinner",
-    date: "10 SEP 2026",
-    time: "18:30 - 22:00",
-    description: "A high-profile benefit dinner supporting the Sables' World Cup qualification campaign. Special guest keynotes.",
-    location: "Meikles Hotel, Harare",
-    category: "SOCIAL",
-    color: "bg-zru-green",
-    tags: ["National"]
-  },
-  {
-    id: "event-4",
-    title: "National Youth Training Camp",
-    date: "17 SEP 2026",
-    time: "09:00 - 14:00",
-    description: "High-performance coaching clinic targeting selected regional youth pathway prospects under ZRU coordinators.",
-    location: "Harare Sports Club",
-    category: "DEVELOPMENT",
-    color: "bg-neutral-800",
-    tags: ["Youth"]
-  }
-];
+interface GeneralEvent extends EventItem {
+  time: string;
+  category: string;
+}
+
+function mapToCompetition(e: EventItem): Competition {
+  return {
+    ...e,
+    level: e.subtitle || "",
+    dateRange: e.date,
+    teamCount: e.tags?.[0] || "",
+    status: "UPCOMING",
+    category: e.subtitle || ""
+  };
+}
+
+function mapToGeneralEvent(e: EventItem): GeneralEvent {
+  return {
+    ...e,
+    time: "",
+    category: e.tags?.[0] || "EVENT"
+  };
+}
 
 const levels = [
   { name: "National Teams", icon: Shield, tag: "National" },
@@ -116,13 +51,22 @@ const levels = [
   { name: "Sevens Rugby", icon: Award, tag: "Sevens" }
 ];
 
-export default function EventsClient() {
+interface EventsClientProps {
+  cmsPage?: any;
+  competitions?: EventItem[];
+  generalEvents?: EventItem[];
+}
+
+export default function EventsClient({ cmsPage, competitions: apiCompetitions = [], generalEvents: apiGeneralEvents = [] }: EventsClientProps) {
   const searchParams = useSearchParams();
   const router = useRouter();
   const initialTab = searchParams?.get("tab") === "events" ? "events" : "competitions";
   
   const [activeTab, setActiveTab] = useState<"competitions" | "events">(initialTab);
   const [selectedLevel, setSelectedLevel] = useState<string | null>(null);
+
+  const competitions = apiCompetitions.map(mapToCompetition);
+  const generalEvents = apiGeneralEvents.map(mapToGeneralEvent);
 
   useEffect(() => {
     const tab = searchParams?.get("tab");
@@ -148,12 +92,13 @@ export default function EventsClient() {
   return (
     <main className="bg-milk-white min-h-screen pb-12 relative overflow-hidden text-rich-black">
       
-      <PageHero
-        title="Competitions & Events"
-        subtitle="Explore the full heartbeat of Zimbabwean rugby. Drill down into active leagues, regional championships, and official union events."
-        tag="Tournaments & Hub"
-        backgroundImage="/images/gallery/zimbabwe-sables-0350.webp"
+      <CmsHero
+        kicker={cmsPage?.hero_kicker || "Tournaments & Hub"}
+        title={cmsPage?.hero_title || "Competitions & Events"}
+        intro={cmsPage?.hero_intro || "Explore the full heartbeat of Zimbabwean rugby. Drill down into active leagues, regional championships, and official union events."}
+        image={cmsPage?.hero_image || "/images/gallery/zimbabwe-sables-0350.webp"}
         breadcrumb={[{ label: "Events", href: "/events" }]}
+        pageId={cmsPage?.id}
       />
 
       <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 pt-8 relative z-10">

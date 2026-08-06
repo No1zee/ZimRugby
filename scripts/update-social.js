@@ -251,12 +251,35 @@ async function updateSocialFeed() {
       const cleanTitle = cleanText(post.title);
       const cleanExcerpt = cleanText(post.excerpt);
 
+      // Ensure local image directory exists for permanent image persistence
+      const imgDir = path.join(__dirname, '..', 'public', 'images', 'social');
+      if (!fs.existsSync(imgDir)) fs.mkdirSync(imgDir, { recursive: true });
+
+      let localImagePath = '/images/teams/sables.jpg';
+      if (post.image && post.image.startsWith('http')) {
+        try {
+          const filename = `fb_${(postId || Date.now()).replace(/[^a-zA-Z0-9]/g, '_')}.jpg`;
+          const targetPath = path.join(imgDir, filename);
+          
+          // Use synchronous curl or fetch fallback to write image to disk
+          const { execSync } = require('child_process');
+          execSync(`curl -s -k -L "${post.image}" -o "${targetPath}"`, { timeout: 10000 });
+          if (fs.existsSync(targetPath) && fs.statSync(targetPath).size > 1000) {
+            localImagePath = `/images/social/${filename}`;
+          }
+        } catch {
+          localImagePath = '/images/teams/sables.jpg';
+        }
+      } else if (post.image && post.image.startsWith('/')) {
+        localImagePath = post.image;
+      }
+
       newPosts.push({
         id: postId || `fb_${Date.now()}_${newPosts.length}`,
         title: cleanTitle || 'Social Update',
         excerpt: cleanExcerpt || cleanTitle,
         date: displayDate,
-        image: post.image || '/images/media/fb_placeholder.jpg',
+        image: localImagePath,
         category: categorizePost(post.text),
         url: post.url,
         source: 'facebook'

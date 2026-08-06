@@ -1,13 +1,19 @@
 "use client";
 
 import { motion, useScroll, useTransform } from "framer-motion";
-import { useRef } from "react";
+import { useRef, useState, useEffect } from "react";
 import Link from "next/link";
 
 export default function CampaignSection() {
-  const containerRef = useRef(null);
+  const containerRef = useRef<HTMLElement>(null);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
   const { scrollYProgress } = useScroll({
-    target: containerRef,
+    target: mounted ? containerRef : undefined,
     offset: ["start end", "end start"]
   });
 
@@ -39,52 +45,42 @@ export default function CampaignSection() {
               href="/clubhouse/campaign"
               className="inline-flex items-center space-x-6 group"
             >
-              <span className="text-xs font-black uppercase tracking-[0.3em] text-white group-hover:text-zru-green transition-colors">
-                View the drop
+              <span className="text-xs font-black uppercase tracking-[0.3em] text-white group-hover:text-zru-green transition-colors duration-300">
+                Explore Lookbook
               </span>
-              <div className="w-20 h-[2px] bg-white/20 group-hover:bg-zru-green group-hover:w-32 transition-all duration-700 ease-in-out" />
+              <span className="w-12 h-[1px] bg-white/30 group-hover:bg-zru-green group-hover:w-16 transition-all duration-300" />
             </Link>
           </motion.div>
         </div>
 
-        {/* Right: Immersive Imagery with Parallax */}
-        <div className="flex-[1.2] relative w-full aspect-4/5 lg:aspect-auto lg:h-[800px]">
+        {/* Right: Asymmetric Product Collage */}
+        <div className="flex-1 w-full lg:w-auto flex justify-center relative">
+          {/* Large main image */}
           <motion.div 
             style={{ y: y1 }}
-            className="relative w-full h-full bg-white/5 overflow-hidden shadow-3xl rounded-sm shine-glass"
+            className="w-4/5 aspect-[3/4] overflow-hidden grayscale contrast-[1.1] brightness-90 border border-white/5"
           >
-            {/* Main Campaign Image */}
-            <div 
-              className="absolute inset-0 bg-[url('/images/shop/campaign-hero.png')] bg-cover bg-center grayscale-[0.4] opacity-70 group-hover:grayscale-0 transition-all duration-1000" 
+            <img 
+              src="https://images.unsplash.com/photo-1544698310-74ea9d1c8258?q=80&w=800&auto=format&fit=crop" 
+              alt="Sables Heritage Jersey Fit" 
+              className="w-full h-full object-cover transition-transform duration-700 hover:scale-105"
             />
-            
-            <div className="absolute inset-0 bg-linear-to-b from-transparent via-clubhouse-charcoal/20 to-clubhouse-charcoal/60" />
-
-            {/* Floating Detail Image (Stage 2 Parallax) */}
-            <motion.div 
-              style={{ y: y2 }}
-              className="absolute top-1/4 -right-10 w-3/5 aspect-square bg-clubhouse-charcoal border border-white/5 shadow-2x-strong z-30 overflow-hidden rounded-xs"
-            >
-              <div 
-                className="absolute inset-0 bg-[url('/images/shop/fabric-detail.png')] bg-cover bg-center grayscale-[0.2] opacity-90 group-hover:grayscale-0 transition-all duration-1000"
-              />
-              <div className="absolute inset-0 bg-clubhouse-green/30 mix-blend-multiply" />
-              <div className="absolute inset-x-0 bottom-0 p-6 bg-linear-to-t from-black to-transparent">
-                <span className="text-[9px] font-black uppercase tracking-[0.4em] text-zru-green">Fabric Detail // MK-1</span>
-              </div>
-            </motion.div>
+          </motion.div>
+          
+          {/* Overlapping secondary card */}
+          <motion.div 
+            style={{ y: y2 }}
+            className="absolute right-0 bottom-[-10%] w-2/5 aspect-[3/4] overflow-hidden border border-white/10 shadow-2xl hidden sm:block"
+          >
+            <img 
+              src="https://images.unsplash.com/photo-1508098682722-e99c43a406b2?q=80&w=800&auto=format&fit=crop" 
+              alt="Sables Gold Embroidery detail" 
+              className="w-full h-full object-cover"
+            />
           </motion.div>
         </div>
 
       </div>
-
-      {/* Large Background Text with slow parallax */}
-      <motion.div 
-        style={{ y: useTransform(scrollYProgress, [0, 1], [0, -400]) }}
-        className="absolute top-1/2 left-0 -translate-y-1/2 -translate-x-1/4 text-[25vw] font-black text-white/3 uppercase tracking-tighter whitespace-nowrap pointer-events-none z-0 italic"
-      >
-        CAMPAIGN
-      </motion.div>
     </section>
   );
 }

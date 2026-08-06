@@ -5,9 +5,9 @@
 /* eslint-disable-next-line */
 /* Note: @theme is standard Tailwind v4 syntax. Ignore "Unknown at rule" warnings. */
 @theme {
-  --font-heading: "Unison Pro", "Unison", "Arial Black", impact, sans-serif;
-  --font-subheading: "Helvetica Neue LT Std", "Helvetica Neue", Helvetica, Arial, sans-serif;
-  --font-body: "Helvetica Neue LT Std", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --font-heading: "Unison Pro", "Unison", "Bricolage Grotesque", "Anton", sans-serif;
+  --font-subheading: "The Future", "Geist", "Switzer", system-ui, sans-serif;
+  --font-body: "The Future", "Geist", "Switzer", system-ui, sans-serif;
   --font-serif: var(--font-serif);
 
   /* Unified Brand Colors from Audit Spec */
@@ -32,7 +32,7 @@
 
   /* Clubhouse Premium Tokens */
   --color-clubhouse-green: var(--color-green-dark);
-  --color-clubhouse-charcoal: #FDFBF0;
+  --color-clubhouse-charcoal: var(--color-rich-black);
   --color-clubhouse-accent: var(--color-clubhouse-green);
 
   /* Type Scale */
@@ -124,6 +124,58 @@ body::after {
   clip-path: polygon(40px 0, 100% 0, calc(100% - 40px) 100%, 0% 100%);
 }
 
+/* ═══ Layered Depth System (2026) ═══ */
+
+/* Typographic plate — slanted translucent slab behind section headings */
+.heading-plate {
+  position: relative;
+  display: inline-block;
+  isolation: isolate;
+}
+.heading-plate::before {
+  content: "";
+  position: absolute;
+  left: -14px;
+  right: -14px;
+  bottom: 3px;
+  height: 0.5em;
+  clip-path: polygon(10px 0, calc(100% - 4px) 0, calc(100% - 10px) 100%, 4px 100%);
+  background: rgba(0, 103, 71, 0.10);
+  z-index: -1;
+  pointer-events: none;
+}
+.heading-plate > * {
+  position: relative;
+  z-index: 1;
+}
+.heading-plate-light::before {
+  background: rgba(0, 200, 140, 0.14);
+}
+
+/* Sponsor logo plaque — offset plate revealed on hover */
+.sponsor-plate {
+  position: relative;
+  isolation: isolate;
+}
+.sponsor-plate::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 10px;
+  background: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.10);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12);
+  transform: translate(4px, 4px);
+  opacity: 0;
+  transition: transform 200ms ease, opacity 200ms ease;
+  z-index: -1;
+  pointer-events: none;
+}
+.sponsor-plate:hover::before {
+  transform: translate(6px, 6px);
+  opacity: 1;
+}
+
 @utility font-heading {
   font-family: "Unison Pro", "Unison", "Arial Black", impact, sans-serif;
 }
@@ -160,7 +212,7 @@ body::after {
 }
 
 .text-glow-green {
-  text-shadow: 0 0 50px rgba(0, 150, 70, 0.4), 0 10px 40px rgba(0, 0, 0, 0.8);
+  text-shadow: 0 4px 20px rgba(0, 0, 0, 0.7);
 }
 
 .text-stroke-charcoal {
@@ -419,6 +471,50 @@ html, body {
 .no-scrollbar {
   -ms-overflow-style: none;
   scrollbar-width: none;
+}
+
+/* ── Seamless Horizontal Marquee Animation ── */
+@keyframes marquee {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  100% {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+.animate-marquee {
+  display: flex;
+  width: max-content;
+  animation: marquee 30s linear infinite;
+}
+
+.animate-marquee:hover {
+  animation-play-state: paused;
+}
+
+@keyframes pulseSlow {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1) translateZ(0);
+  }
+  50% {
+    opacity: 0.95;
+    transform: scale(0.99) translateZ(0);
+  }
+}
+
+.animate-pulse-slow {
+  animation: pulseSlow 4s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-marquee {
+    animation: none;
+    flex-wrap: wrap;
+    justify-content: center;
+    width: 100%;
+  }
 }
 
 /* ── ZRU Social Card (adapted from Uiverse dovatgabriel) ── */
@@ -692,7 +788,7 @@ html, body {
 }
 
 .k-logo-subtitle {
-  font-size: 0.55rem;
+  font-size: 0.625rem;
   font-weight: 700;
   color: rgba(255, 255, 255, 0.6);
   letter-spacing: 0.15em;

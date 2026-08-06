@@ -1,11 +1,10 @@
 "use client";
 
 import Image from "next/image";
-import Link from "next/link";
 import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
+import SlantedButton from "@/components/ui/SlantedButton";
 import type { Team } from "@/types/team";
-
 const EASE = [0.22, 1, 0.36, 1] as const;
 
 export default function TeamHero({
@@ -97,19 +96,12 @@ export default function TeamHero({
           </div>
 
           <div className="flex flex-wrap gap-4">
-            <Link
-              href={team.href}
-              className="inline-flex items-center justify-center font-heading tracking-wider uppercase transition-[background,box-shadow] duration-300 active:scale-95 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-zru-green bg-gradient-to-b from-[#00704D] to-[#005238] hover:from-[#006747] hover:to-[#00402B] text-white shadow-md hover:shadow-xl shadow-[#006747]/25 border-t border-white/20 clip-slanted px-12 py-4 text-2xl gap-2"
-            >
+            <SlantedButton href={team.href} variant="primary" size="lg" rightIcon={<ArrowRight className="w-5 h-5" />}>
               Explore {team.shortName}
-              <ArrowRight className="w-5 h-5" />
-            </Link>
-            <Link
-              href={`${team.href}#fixtures`}
-              className="inline-flex items-center justify-center font-heading tracking-wider uppercase transition-[background,border-color,box-shadow] duration-300 active:scale-95 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-zru-green border border-white/40 bg-white/[0.06] backdrop-blur-sm hover:bg-white/[0.12] hover:border-white/70 text-white clip-slanted px-12 py-4 text-2xl gap-2"
-            >
+            </SlantedButton>
+            <SlantedButton href={`${team.href}#fixtures`} variant="outline" size="lg">
               Fixtures & Results
-            </Link>
+            </SlantedButton>
           </div>
         </div>
 
@@ -160,12 +152,14 @@ export default function TeamHero({
                 <span className="opacity-50 mx-1">•</span>{" "}
                 {team.squadSize} Players
               </p>
-              <Link
+              <SlantedButton
                 href={team.href}
-                className="inline-flex items-center justify-center font-heading tracking-wider uppercase transition-[background-color] duration-300 active:scale-95 bg-white/15 hover:bg-white/25 text-white clip-slanted !py-1.5 !px-4 text-xs"
+                variant="outline"
+                size="xs"
+                className="bg-white/15 hover:bg-white/25"
               >
                 Visit Hub
-              </Link>
+              </SlantedButton>
             </div>
           </div>
         </div>

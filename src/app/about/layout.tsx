@@ -1,6 +1,7 @@
 "use client";
 
 import PageHero from "@/components/ui/PageHero";
+import SlantedButton from "@/components/ui/SlantedButton";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 import { Info, Users, Shield, Landmark, Hourglass, Briefcase } from "lucide-react";
@@ -60,20 +61,16 @@ export default function AboutLayout({
               <nav className="flex lg:hidden overflow-x-auto py-2 gap-2 no-scrollbar">
                 {menuItems.map((item) => {
                   const Icon = item.icon;
-                  const isActive = pathname === item.href;
                   return (
-                    <Link
+                    <SlantedButton
                       key={item.href}
                       href={item.href}
-                      className={`flex items-center gap-2 px-4 py-2.5 clip-slanted-sm text-[10px] font-black uppercase tracking-widest transition-all duration-300 whitespace-nowrap ${
-                        isActive
-                          ? "bg-zru-green text-white shadow-md"
-                          : "text-black/60 hover:text-black hover:bg-black/5"
-                      }`}
+                      variant="chip"
+                      active={pathname === item.href}
+                      leftIcon={<Icon className="w-3.5 h-3.5" />}
                     >
-                      <Icon className="w-3.5 h-3.5" />
-                      <span>{item.label}</span>
-                    </Link>
+                      {item.label}
+                    </SlantedButton>
                   );
                 })}
               </nav>

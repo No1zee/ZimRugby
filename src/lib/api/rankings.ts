@@ -45,13 +45,13 @@ const MOCK_RANKINGS: RankingsData = {
 export async function getRankingsData(): Promise<RankingsData> {
   try {
     if (process.env.NEXT_PUBLIC_DIRECTUS_URL) {
-      const [response, rivalsResponse] = await Promise.all([
-        directusFetch<any>('rankings', { limit: 1 }),
-        directusFetch<any>('ranking_rivals', { sort: ['position'] })
-      ]);
-      
+      const response = await directusFetch<any>('rankings', { limit: 1 });
+
       if (response?.[0]) {
         const mainRank = response[0];
+        const items = mainRank.items as { rivals?: Array<{ name: string; position: number; points: number; logo?: string }> } | undefined;
+        const rivalsFromItems = items?.rivals || [];
+
         return {
           world: {
             position: Number(mainRank.world_position),
@@ -67,12 +67,7 @@ export async function getRankingsData(): Promise<RankingsData> {
             trend: mainRank.africa_trend || "stable",
             lastUpdated: mainRank.last_updated || "June 2026"
           },
-          rivals: (rivalsResponse || []).map((rival: any) => ({
-            name: rival.name,
-            position: Number(rival.position),
-            points: Number(rival.points),
-            logo: logoAssetUrl(rival.logo) || rival.logo_url
-          }))
+          rivals: rivalsFromItems.length > 0 ? rivalsFromItems : MOCK_RANKINGS.rivals,
         };
       }
     }

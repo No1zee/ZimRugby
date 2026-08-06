@@ -3,8 +3,8 @@
 import { useEffect } from "react";
 import { motion } from "framer-motion";
 import { RefreshCw, Home } from "lucide-react";
-import Link from "next/link";
 import Image from "next/image";
+import SlantedButton from "@/components/ui/SlantedButton";
 
 export default function GlobalError({
   error,
@@ -67,21 +67,25 @@ export default function GlobalError({
           transition={{ duration: 0.5, delay: 0.2 }}
           className="flex flex-col sm:flex-row items-center justify-center gap-4"
         >
-          <button
+          <SlantedButton
             onClick={() => reset()}
-            className="group flex items-center gap-3 bg-zru-green hover:bg-[#004d35] text-white clip-slanted px-8 py-4 font-black text-xs uppercase tracking-widest transition-all duration-300 w-full sm:w-auto justify-center shadow-lg"
+            variant="primary"
+            size="sm"
+            className="w-full sm:w-auto justify-center"
+            leftIcon={<RefreshCw className="w-4 h-4 group-hover:rotate-180 transition-transform duration-500" />}
           >
-            <RefreshCw className="w-4 h-4 group-hover:rotate-180 transition-transform duration-500" />
             Try Again
-          </button>
+          </SlantedButton>
 
-          <Link
+          <SlantedButton
             href="/"
-            className="flex items-center gap-3 border border-white/15 hover:border-zru-green bg-white/5 hover:bg-white/10 text-white clip-slanted px-8 py-4 font-black text-xs uppercase tracking-widest transition-all duration-300 w-full sm:w-auto justify-center"
+            variant="outline"
+            size="sm"
+            className="w-full sm:w-auto justify-center"
+            leftIcon={<Home className="w-4 h-4" />}
           >
-            <Home className="w-4 h-4" />
             Go Home
-          </Link>
+          </SlantedButton>
         </motion.div>
 
       </div>

@@ -1,6 +1,8 @@
 import { Metadata } from "next";
 import dynamic from "next/dynamic";
 import { Suspense } from "react";
+import { getPageBySlug } from "@/lib/api/pages";
+import { getCompetitions, getGeneralEvents } from "@/lib/api/events";
 
 const EventsClient = dynamic(() => import("./EventsClient"), {
   loading: () => (
@@ -18,7 +20,13 @@ export const metadata: Metadata = {
   description: "Browse domestic rugby competitions, tournaments, and official Zimbabwe Rugby Union events.",
 };
 
-export default function EventsPage() {
+export default async function EventsPage() {
+  const [cmsPage, competitions, generalEvents] = await Promise.all([
+    getPageBySlug("events"),
+    getCompetitions(),
+    getGeneralEvents()
+  ]);
+
   return (
     <Suspense fallback={
       <div className="min-h-screen bg-milk-white flex items-center justify-center text-rich-black">
@@ -28,7 +36,7 @@ export default function EventsPage() {
         </div>
       </div>
     }>
-      <EventsClient />
+      <EventsClient cmsPage={cmsPage} competitions={competitions} generalEvents={generalEvents} />
     </Suspense>
   );
 }

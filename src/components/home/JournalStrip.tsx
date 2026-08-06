@@ -66,10 +66,10 @@ export default function JournalStrip() {
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
             viewport={{ once: true }}
-            className="text-5xl md:text-8xl font-black uppercase tracking-tighter text-clubhouse-charcoal leading-none"
-          >
-            THE <span className="text-stroke-charcoal text-transparent">JOURNAL</span>
-          </motion.h2>
+  className="text-5xl md:text-8xl font-heading font-black uppercase tracking-wide sm:tracking-widest text-clubhouse-charcoal leading-none"
+>
+  THE <span className="text-stroke-charcoal text-transparent">JOURNAL</span>
+</motion.h2>
         </div>
 
         {/* The Grid: Featured + Secondary */}

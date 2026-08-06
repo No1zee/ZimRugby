@@ -1,10 +1,10 @@
 "use client";
 
 import Image from "next/image";
-import Link from "next/link";
 import { CometCard } from "@/components/ui/comet-card";
 import { usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion";
 import { useIsMobile } from "@/hooks/useIsMobile";
+import SlantedButton from "@/components/ui/SlantedButton";
 import type { FeaturedPlayer } from "@/types";
 
 interface FeaturedPlayerCardProps {
@@ -37,7 +37,7 @@ export default function FeaturedPlayerCard({ player }: FeaturedPlayerCardProps) 
           </div>
 
           {/* Player image */}
-          {player.photo && player.photo !== "/images/teams/player-placeholder.webp" ? (
+          {player.photo ? (
             <Image
               src={player.photo}
               alt={player.name}
@@ -84,12 +84,14 @@ export default function FeaturedPlayerCard({ player }: FeaturedPlayerCardProps) 
 
       {/* View Profile CTA */}
       <div className="px-4 pb-4 pt-1 text-center">
-        <Link
+        <SlantedButton
           href={`/players/${slug}`}
-          className="inline-block clip-slanted-sm bg-gradient-to-b from-[#00704D] to-[#005238] hover:from-[#006747] hover:to-[#00402B] text-white font-heading font-black text-[10px] sm:text-[11px] uppercase tracking-[0.18em] px-5 py-2 transition-[background-color,box-shadow] duration-300 shadow-sm hover:shadow-md"
+          variant="primary"
+          size="xs"
+          className="w-full"
         >
           View Profile
-        </Link>
+        </SlantedButton>
       </div>
     </div>
   );

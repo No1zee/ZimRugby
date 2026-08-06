@@ -1,128 +1,66 @@
 [
   {
-    "id": "2026-fixture-01",
+    "id": "zru-fixture-0",
     "homeTeam": {
-      "name": "Zimbabwe",
+      "name": "Sable 1st",
       "logo": "https://r2.thesportsdb.com/images/media/team/badge/6iaf541773658274.png"
     },
     "awayTeam": {
-      "name": "Zambia",
-      "logo": "https://r2.thesportsdb.com/images/media/team/badge/k4axcx1773657710.png"
+      "name": "Sable U20",
+      "logo": "https://r2.thesportsdb.com/images/media/team/badge/6iaf541773658274.png"
     },
-    "date": "25 April, 2026",
+    "date": "FEB 14, 2026",
     "time": "15:00",
     "venue": "Harare Sports Club",
-    "competition": "Battle of the Zambezi",
+    "competition": "Friendly",
     "category": "Sables",
-    "status": "finished",
-    "score": {
-      "home": 28,
-      "away": 14
-    }
+    "status": "upcoming"
   },
   {
-    "id": "2026-fixture-02",
+    "id": "zru-fixture-1",
     "homeTeam": {
-      "name": "Uganda",
-      "logo": "https://r2.thesportsdb.com/images/media/team/badge/7vehya1738931872.png"
-    },
-    "awayTeam": {
-      "name": "Zimbabwe",
+      "name": "Sable Green",
       "logo": "https://r2.thesportsdb.com/images/media/team/badge/6iaf541773658274.png"
     },
-    "date": "30 May, 2026",
-    "time": "15:30",
-    "venue": "Kyadondo Stadium, Kampala",
-    "competition": "Victoria Cup",
-    "category": "Sables",
-    "status": "finished",
-    "score": {
-      "home": 19,
-      "away": 25
-    }
-  },
-  {
-    "id": "2026-fixture-03",
-    "homeTeam": {
-      "name": "South Africa 'A'",
-      "logo": "https://r2.thesportsdb.com/images/media/team/badge/k5174f1721829684.png"
-    },
     "awayTeam": {
-      "name": "Zimbabwe",
+      "name": "Sable Red",
       "logo": "https://r2.thesportsdb.com/images/media/team/badge/6iaf541773658274.png"
     },
-    "date": "20 June, 2026",
-    "time": "16:00",
-    "venue": "Nelson Mandela Bay Stadium",
-    "competition": "International Challenge",
-    "category": "Sables",
-    "status": "finished",
-    "score": {
-      "home": 34,
-      "away": 28
-    }
-  },
-  {
-    "id": "2026-fixture-04",
-    "homeTeam": {
-      "name": "Tonga",
-      "logo": "https://r2.thesportsdb.com/images/media/team/badge/c17bu51566382452.png"
-    },
-    "awayTeam": {
-      "name": "Zimbabwe",
-      "logo": "https://r2.thesportsdb.com/images/media/team/badge/6iaf541773658274.png"
-    },
-    "date": "4 July, 2026",
+    "date": "FEB 28, 2026",
     "time": "15:00",
-    "venue": "Infinity Park, Denver",
-    "competition": "Nations Cup",
+    "venue": "Harare Sports Club",
+    "competition": "Friendly",
     "category": "Sables",
-    "status": "finished",
-    "score": {
-      "home": 15,
-      "away": 22
-    }
+    "status": "upcoming"
   },
   {
-    "id": "2026-fixture-05",
+    "id": "zru-fixture-2",
     "homeTeam": {
-      "name": "USA",
-      "logo": "https://r2.thesportsdb.com/images/media/team/badge/umtlrj1566382360.png"
+      "name": "Louis Trichart Team 1"
     },
     "awayTeam": {
-      "name": "Zimbabwe",
-      "logo": "https://r2.thesportsdb.com/images/media/team/badge/6iaf541773658274.png"
+      "name": "TBD"
     },
-    "date": "11 July, 2026",
-    "time": "14:00",
-    "venue": "American Legion Memorial",
-    "competition": "Nations Cup",
-    "category": "Sables",
-    "status": "finished",
-    "score": {
-      "home": 31,
-      "away": 15
-    }
-  },
-  {
-    "id": "2026-fixture-06",
-    "homeTeam": {
-      "name": "Canada",
-      "logo": "https://r2.thesportsdb.com/images/media/team/badge/euxlik1566381764.png"
-    },
-    "awayTeam": {
-      "name": "Zimbabwe",
-      "logo": "https://r2.thesportsdb.com/images/media/team/badge/6iaf541773658274.png"
-    },
-    "date": "18 July, 2026",
+    "date": "MAR 24, 2026",
     "time": "15:00",
-    "venue": "Princess Auto Stadium, Winnipeg",
-    "competition": "Nations Cup",
+    "venue": "South Africa",
+    "competition": "Preparation",
     "category": "Sables",
-    "status": "finished",
-    "score": {
-      "home": 23,
-      "away": 19
-    }
+    "status": "upcoming"
+  },
+  {
+    "id": "zru-fixture-3",
+    "homeTeam": {
+      "name": "Louis Trichart Team 2"
+    },
+    "awayTeam": {
+      "name": "TBD"
+    },
+    "date": "MAR 28, 2026",
+    "time": "15:00",
+    "venue": "South Africa",
+    "competition": "Preparation",
+    "category": "Sables",
+    "status": "upcoming"
   }
 ]

@@ -1,0 +1,139 @@
+import { directusFetch } from "@/lib/directus/fetch";
+import { assetUrl } from "@/lib/directus/assets";
+
+export interface Partner {
+  id: number;
+  name: string;
+  role: string;
+  logo: string;
+  blurb: string;
+  href: string;
+  badge: string;
+  sort: number;
+  is_active: boolean;
+}
+
+interface DirectusPartner {
+  id: number;
+  name: string;
+  role?: string;
+  logo?: string | null;
+  logo_url?: string;
+  description?: string;
+  website_url?: string;
+  badge?: string;
+  sort?: number;
+  status?: string;
+}
+
+const MOCK_PARTNERS: Partner[] = [
+  {
+    id: 1,
+    name: "Nedbank",
+    role: "HEADLINE SPONSOR",
+    logo: "/images/sponsors/Nedbank.jpeg",
+    blurb: "Official headline sponsor powering the Sables national team, domestic competitions, and grassroots rugby nationwide.",
+    href: "https://www.nedbank.co.zw",
+    badge: "PRIMARY PARTNER",
+    sort: 1,
+    is_active: true,
+  },
+  {
+    id: 2,
+    name: "Rugby Africa",
+    role: "CONTINENTAL BODY",
+    logo: "/images/sponsors/Rugby Africa.png",
+    blurb: "The administrative body for rugby union within Africa.",
+    href: "https://www.rugbyafrique.com",
+    badge: "GOVERNING BODY",
+    sort: 2,
+    is_active: true,
+  },
+  {
+    id: 3,
+    name: "World Rugby",
+    role: "GLOBAL BODY",
+    logo: "/images/sponsors/World_Rugby_logo.png",
+    blurb: "The world governing body for the sport of rugby union.",
+    href: "https://www.world.rugby",
+    badge: "GOVERNING BODY",
+    sort: 3,
+    is_active: true,
+  },
+  {
+    id: 4,
+    name: "Zimbabwean Olympic Committee",
+    role: "NATIONAL COMMITTEE",
+    logo: "/images/sponsors/Zimbabwean Olympic Comitte-Logo.png",
+    blurb: "The National Olympic Committee representing Zimbabwe.",
+    href: "#",
+    badge: "NATIONAL PARTNER",
+    sort: 4,
+    is_active: true,
+  },
+  {
+    id: 5,
+    name: "Sports and Recreation Commission",
+    role: "SPORTS COMMISSION",
+    logo: "/images/sponsors/src.png",
+    blurb: "Governing sports and recreation across Zimbabwe.",
+    href: "#",
+    badge: "NATIONAL PARTNER",
+    sort: 5,
+    is_active: true,
+  },
+];
+
+const LOCAL_LOGO_FALLBACKS: Record<string, string> = {
+  nedbank: "/images/sponsors/Nedbank.jpeg",
+  africa: "/images/sponsors/Rugby Africa.png",
+  world: "/images/sponsors/World_Rugby_logo.png",
+  olympic: "/images/sponsors/Zimbabwean Olympic Comitte-Logo.png",
+  src: "/images/sponsors/src.png",
+};
+
+function getFallbackLogo(name: string): string {
+  const lower = name.toLowerCase();
+  for (const key of Object.keys(LOCAL_LOGO_FALLBACKS)) {
+    if (lower.includes(key)) {
+      return LOCAL_LOGO_FALLBACKS[key];
+    }
+  }
+  return "/images/logos/zru-logo.svg"; // Fallback to main union logo if completely unknown
+}
+
+export async function getPartners(): Promise<Partner[]> {
+  try {
+    if (process.env.NEXT_PUBLIC_DIRECTUS_URL) {
+      const response = await directusFetch<DirectusPartner>("partners", {
+        fields: ["id", "name", "role", "logo", "description", "website_url", "badge", "sort", "status"],
+        filter: { status: { _eq: "published" } },
+        sort: ["sort"],
+        limit: 20,
+      }, 300);
+
+      if (response && response.length > 0) {
+        return response.map((p) => {
+          const directusLogo = assetUrl(p.logo ?? undefined);
+          return {
+            id: p.id,
+            name: p.name,
+            role: p.role || "PARTNER",
+            logo: directusLogo && !directusLogo.includes("undefined")
+              ? directusLogo
+              : getFallbackLogo(p.name),
+            blurb: p.description || "",
+            href: p.website_url || "#",
+            badge: p.badge || "PARTNER",
+            sort: p.sort || 0,
+            is_active: true,
+          };
+        });
+      }
+    }
+  } catch (error) {
+    console.warn("Directus fetch failed for partners, using mock data:", error);
+  }
+
+  return MOCK_PARTNERS;
+}

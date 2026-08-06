@@ -26,10 +26,10 @@ const pageSpecificHeaders = [
       "default-src 'self'",
       "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://vercel.live https://vercel.com https://*.vercel.live https://va.vercel-scripts.com",
       "style-src 'self' 'unsafe-inline' https://vercel.live https://*.vercel.live https://fonts.googleapis.com",
-      "img-src 'self' data: blob: https://assets.directus.io https://vercel.com https://vercel.live https://*.vercel.live https://images.unsplash.com https://plus.unsplash.com https://r2.thesportsdb.com https://flagcdn.com https://zru.co.zw https://img.youtube.com https://i.ytimg.com https://i1.ytimg.com https://i2.ytimg.com https://i3.ytimg.com https://i4.ytimg.com https://*.fbcdn.net https://*.facebook.com",
+      "img-src 'self' data: blob: http://localhost:8055 https://assets.directus.io https://vercel.com https://vercel.live https://*.vercel.live https://images.unsplash.com https://plus.unsplash.com https://r2.thesportsdb.com https://flagcdn.com https://zru.co.zw https://img.youtube.com https://i.ytimg.com https://i1.ytimg.com https://i2.ytimg.com https://i3.ytimg.com https://i4.ytimg.com https://*.fbcdn.net https://*.facebook.com",
       "font-src 'self' data: https://fonts.gstatic.com https://frontend-cdn.perplexity.ai",
       "frame-src 'self' https://www.youtube.com https://www.youtube-nocookie.com https://player.vimeo.com https://vercel.live https://*.vercel.live",
-      "connect-src 'self' ws: wss: https://vercel.live https://*.vercel.live wss://*.vercel.live wss://*.vercel.com https://*.supabase.co https://*.directus.app"
+      "connect-src 'self' ws: wss: http://localhost:8055 https://vercel.live https://*.vercel.live wss://*.vercel.live wss://*.vercel.com https://*.supabase.co https://*.directus.app"
     ].join("; ")
   },
   {
@@ -46,6 +46,10 @@ const nextConfig: NextConfig = {
   images: {
     qualities: [60, 75],
     formats: ['image/avif', 'image/webp'],
+    localPatterns: [
+      { pathname: '/api/assets/**' },
+      { pathname: '/images/**' },
+    ],
     remotePatterns: [
       { protocol: 'https', hostname: 'images.unsplash.com' },
       { protocol: 'https', hostname: 'plus.unsplash.com' },
@@ -60,6 +64,7 @@ const nextConfig: NextConfig = {
       { protocol: 'https', hostname: 'i3.ytimg.com' },
       { protocol: 'https', hostname: 'i4.ytimg.com' },
       { protocol: 'https', hostname: '*.fbcdn.net' },
+      { protocol: 'http', hostname: 'localhost', port: '8055' },
     ],
   },
   async headers() {

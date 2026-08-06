@@ -1,7 +1,12 @@
-import React from "react";
-import Link from "next/link";
+"use client";
+
+import React, { useState, useEffect, useRef, useSyncExternalStore } from "react";
 import Image from "next/image";
+import { motion, useReducedMotion } from "framer-motion";
 import { ArrowRight, CheckCircle2, Trophy, Users, GraduationCap } from "lucide-react";
+import SlantedButton from "@/components/ui/SlantedButton";
+
+const emptySubscribe = () => () => {};
 
 const INITIATIVES = [
   {
@@ -45,7 +50,59 @@ const INITIATIVES = [
   },
 ];
 
-export default function GrassrootsInitiativeSection() {
+function CountUp({ end, duration = 2000, suffix = "" }: { end: number; duration?: number; suffix?: string }) {
+  const [count, setCount] = useState(0);
+  const elementRef = useRef<HTMLSpanElement>(null);
+  const hasAnimated = useRef(false);
+  const reduceMotion = useReducedMotion();
+
+  useEffect(() => {
+    if (reduceMotion) {
+      setCount(end);
+      return;
+    }
+
+    const el = elementRef.current;
+    if (!el) return;
+
+    const observer = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting && !hasAnimated.current) {
+        hasAnimated.current = true;
+        const startTime = performance.now();
+
+        const animate = (currentTime: number) => {
+          const elapsed = currentTime - startTime;
+          const progress = Math.min(elapsed / duration, 1);
+          
+          // Easing function: easeOutQuad
+          const easeProgress = progress * (2 - progress);
+          
+          setCount(Math.floor(easeProgress * end));
+
+          if (progress < 1) {
+            requestAnimationFrame(animate);
+          } else {
+            setCount(end);
+          }
+        };
+
+        requestAnimationFrame(animate);
+      }
+    }, { threshold: 0.1 });
+
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [end, duration, reduceMotion]);
+
+  return <span ref={elementRef}>{count.toLocaleString()}{suffix}</span>;
+}
+
+export default function GrassrootsInitiativeSection({ initiatives: apiInitiatives }: { initiatives?: any[] } = {}) {
+  const initiatives = apiInitiatives || INITIATIVES;
+  const reduceMotion = useReducedMotion();
+  const mounted = useSyncExternalStore(emptySubscribe, () => true, () => false);
+  const isReduced = mounted && reduceMotion;
+
   return (
     <section className="py-12 sm:py-16 bg-[#006747] text-white relative overflow-hidden select-none">
       
@@ -56,18 +113,32 @@ export default function GrassrootsInitiativeSection() {
       <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8 relative z-10 space-y-10">
         
         {/* Section Header */}
-        <div className="max-w-3xl">
-          <h2 className="text-3xl sm:text-5xl font-heading font-black uppercase tracking-tight text-white not-italic leading-[1.0]">
+        <motion.div
+          initial={isReduced ? false : { opacity: 0, y: 24 }}
+          whileInView={isReduced ? undefined : { opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+          className="max-w-3xl"
+        >
+          <p className="mb-3 flex items-center gap-3 text-[10px] font-black uppercase tracking-[0.4em] text-accent-teal">
+            <span className="h-px w-8 bg-accent-teal/40" aria-hidden />
+            Community
+          </p>
+          <h2 className="text-3xl sm:text-5xl font-heading font-black uppercase tracking-wide sm:tracking-widest text-white not-italic leading-[1.05]">
             GRASSROOTS &{" "}
             <span className="text-accent-teal">YOUTH RUGBY</span>
           </h2>
-        </div>
+        </motion.div>
 
         {/* 3-Column Asymmetric Grid — Card 1 wide (50%), Cards 2-3 narrow (25% each) */}
         <div className="flex flex-nowrap md:grid md:grid-cols-4 overflow-x-auto md:overflow-visible snap-x snap-mandatory scroll-smooth no-scrollbar -mx-4 px-4 sm:mx-0 sm:px-0 gap-4 sm:gap-6 items-stretch py-2">
-          {INITIATIVES.map((item, idx) => (
-            <div
+          {initiatives.map((item: any, idx: number) => (
+            <motion.div
               key={item.id}
+              initial={isReduced ? false : { y: 40, opacity: 0 }}
+              whileInView={isReduced ? undefined : { y: 0, opacity: 1 }}
+              viewport={{ once: true, margin: "-20px" }}
+              transition={{ duration: 0.6, delay: isReduced ? 0 : idx * 0.15, ease: [0.25, 1, 0.5, 1] }}
               className={`w-[280px] xs:w-[310px] md:w-auto shrink-0 snap-start box-border flex flex-col rounded-2xl overflow-hidden border border-white/20 hover:border-white shadow-2xl transition-shadow duration-300 group/card bg-white relative text-black ${
                 idx === 0 ? "md:col-span-2" : "md:col-span-1"
               }`}
@@ -110,16 +181,18 @@ export default function GrassrootsInitiativeSection() {
 
                 {/* Bottom Action CTA */}
                 <div className="pt-3 border-t border-black/10 mt-3">
-                  <Link
-                    href={item.link}
-                    className="w-full bg-[#006747] hover:bg-[#004D34] text-white font-extrabold flex items-center justify-between clip-slanted px-4 py-3 transition-colors duration-300 shadow-sm hover:shadow-md text-xs tracking-wider uppercase font-heading group/btn"
-                  >
-                    <span>{item.btnText}</span>
-                    <ArrowRight className="w-4 h-4 transition-transform group-hover/btn:translate-x-1 shrink-0" />
-                  </Link>
+                <SlantedButton
+                  href={item.link}
+                  variant="primary"
+                  size="sm"
+                  className="w-full justify-between group/btn"
+                  rightIcon={<ArrowRight className="w-4 h-4 transition-transform group-hover/btn:translate-x-1 shrink-0" />}
+                >
+                  <span>{item.btnText}</span>
+                </SlantedButton>
                 </div>
               </div>
-            </div>
+            </motion.div>
           ))}
         </div>
 
@@ -129,7 +202,9 @@ export default function GrassrootsInitiativeSection() {
           <div className="flex flex-col items-center justify-center px-1 sm:px-4 space-y-1 group">
             <div className="flex items-center gap-1.5 text-white">
               <Users className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-white/80" />
-              <span className="font-heading font-black text-2xl sm:text-3xl text-white tracking-tight not-italic">15,000+</span>
+              <span className="font-heading font-black text-2xl sm:text-3xl text-white tracking-tight not-italic">
+                <CountUp end={15000} suffix="+" />
+              </span>
             </div>
             <span className="text-[8px] sm:text-[11px] font-extrabold text-white/80 uppercase tracking-wider block font-heading leading-tight">
               Active Youth Players
@@ -139,7 +214,9 @@ export default function GrassrootsInitiativeSection() {
           <div className="flex flex-col items-center justify-center px-1 sm:px-4 space-y-1 group">
             <div className="flex items-center gap-1.5 text-white">
               <GraduationCap className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-white/80" />
-              <span className="font-heading font-black text-2xl sm:text-3xl text-white tracking-tight not-italic">120+</span>
+              <span className="font-heading font-black text-2xl sm:text-3xl text-white tracking-tight not-italic">
+                <CountUp end={120} suffix="+" />
+              </span>
             </div>
             <span className="text-[8px] sm:text-[11px] font-extrabold text-white/80 uppercase tracking-wider block font-heading leading-tight">
               Schools &amp; Clubs
@@ -149,7 +226,9 @@ export default function GrassrootsInitiativeSection() {
           <div className="flex flex-col items-center justify-center px-1 sm:px-4 space-y-1 group">
             <div className="flex items-center gap-1.5 text-white">
               <Trophy className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-white/80" />
-              <span className="font-heading font-black text-2xl sm:text-3xl text-white tracking-tight not-italic">10</span>
+              <span className="font-heading font-black text-2xl sm:text-3xl text-white tracking-tight not-italic">
+                <CountUp end={10} />
+              </span>
             </div>
             <span className="text-[8px] sm:text-[11px] font-extrabold text-white/80 uppercase tracking-wider block font-heading leading-tight">
               Provincial Unions
@@ -159,7 +238,9 @@ export default function GrassrootsInitiativeSection() {
           <div className="flex flex-col items-center justify-center px-1 sm:px-4 space-y-1 group">
             <div className="flex items-center gap-1.5 text-white">
               <CheckCircle2 className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-white/80" />
-              <span className="font-heading font-black text-2xl sm:text-3xl text-white tracking-tight not-italic">45%</span>
+              <span className="font-heading font-black text-2xl sm:text-3xl text-white tracking-tight not-italic">
+                <CountUp end={45} suffix="%" />
+              </span>
             </div>
             <span className="text-[8px] sm:text-[11px] font-extrabold text-white/80 uppercase tracking-wider block font-heading leading-tight">
               Female Participation
