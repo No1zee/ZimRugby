@@ -312,33 +312,26 @@ export default function HeroCarousel({ slides = [], autoplayInterval = 8000 }: {
                     /* Mobile Fallback: Animated WebP bypasses all autoplay restrictions */
                     <Image
                       src={activeSlide.video.replace('.mp4', '.webp')}
-                      alt=""
-                      fill
-                      sizes="100vw"
-                      className="object-cover"
+                  shouldAutoPlayVideo ? (
+                    <video
+                      src={activeSlide.video}
+                      autoPlay
+                      muted
+                      loop
+                      playsInline
+                      preload="metadata"
+                      poster={activeSlide.image}
+                      className="absolute inset-0 w-full h-full object-cover"
                     />
                   ) : (
-                    shouldAutoPlayVideo && slide.video_url ? (
-                    <video
-                      autoPlay
-                      loop
-                      muted
-                      playsInline
-                      poster={heroAssetUrl(slide.background_image) || "/images/campaign/hero.png"}
-                      className="w-full h-full object-cover"
-                    >
-                      <source src={slide.video_url} type="video/mp4" />
-                    </video>
-                  ) : (
                     <Image
-                      src={heroAssetUrl(slide.background_image) || "/images/campaign/hero.png"}
-                      alt={slide.title}
+                      src={activeSlide.image}
+                      alt={activeSlide.title}
                       fill
-                      priority={index === 0}
+                      priority
                       sizes="100vw"
                       className="object-cover object-center"
                     />
-                  )
                   )
                 ) : (
                   <Image
