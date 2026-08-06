@@ -259,6 +259,7 @@ function SlideContent({
           </Link>
         )}
       </div>
+    </motion.div>
   );
 }
 
