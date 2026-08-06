@@ -45,10 +45,32 @@ const nextConfig: NextConfig = {
   },
   images: {
     formats: ['image/avif', 'image/webp'],
+    localPatterns: [
+      {
+        pathname: '/api/assets/**',
+        search: '?*',
+      },
+      {
+        pathname: '/api/assets/**',
+        search: '',
+      },
+      {
+        pathname: '/images/**',
+        search: '?*',
+      },
+      {
+        pathname: '/images/**',
+        search: '',
+      },
+    ],
     remotePatterns: [
-      { protocol: 'https', hostname: 'i2.ytimg.com' },
-      { protocol: 'https', hostname: 'i3.ytimg.com' },
-      { protocol: 'https', hostname: 'i4.ytimg.com' },
+      { protocol: 'https', hostname: 'zru-directus-cms-production.up.railway.app' },
+      { protocol: 'https', hostname: 'images.unsplash.com' },
+      { protocol: 'https', hostname: 'plus.unsplash.com' },
+      { protocol: 'https', hostname: 'zru.co.zw' },
+      { protocol: 'https', hostname: 'flagcdn.com' },
+      { protocol: 'https', hostname: 'r2.thesportsdb.com' },
+      { protocol: 'https', hostname: '*.ytimg.com' },
       { protocol: 'https', hostname: '*.fbcdn.net' },
       { protocol: 'http', hostname: 'localhost', port: '8055' },
     ],
