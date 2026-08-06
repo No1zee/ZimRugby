@@ -251,13 +251,20 @@ function SlideContent({
         {/* Secondary CTA */}
         {slide.secondaryCtaText && slide.secondaryCtaHref && (
           <Link
-            href={slide.secondaryCtaHref}
-            className="group inline-flex items-center gap-2 px-6 py-3.5 bg-white/10 hover:bg-white/20 backdrop-blur-md text-white font-semibold text-sm tracking-wide rounded-sm border border-white/20 hover:border-white/40 transition-all duration-300 hover:-translate-y-0.5"
-          >
-            <span>{slide.secondaryCtaText}</span>
-            <ArrowRight className="w-4 h-4 text-white/70 group-hover:text-white group-hover:translate-x-1 transition-all" />
-          </Link>
-        )}
+                   </button>
+                 );
+               })}
+            </div>
+            <button 
+              onClick={nextSlide} 
+              className="text-white/40 hover:text-white transition-colors p-1 -mr-1"
+              aria-label="Next Slide"
+              title="Next Slide"
+            >
+                <ChevronRight size={20} />
+            </button>
+          </div>
+        </div>
       </div>
     </motion.div>
   );
