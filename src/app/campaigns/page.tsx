@@ -120,10 +120,6 @@ export default async function CampaignsIndexPage() {
                   className="group relative bg-white/60 border border-black/5 rounded-2xl overflow-hidden hover:border-black/20 transition-all duration-300 flex flex-col opacity-70 hover:opacity-100"
                 >
                   <div className="aspect-[16/9] relative overflow-hidden bg-zru-green/5">
-                    {campaign.hero_image ? (
-                      <Image
-                        src={assetUrl(campaign.hero_image, { width: 600, height: 338, fit: "cover" }) || ""}
-                        alt={campaign.name}
                         fill
                         className="object-cover grayscale group-hover:grayscale-0 transition-all duration-500"
                       />

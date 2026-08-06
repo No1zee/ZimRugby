@@ -41,6 +41,23 @@ function CountdownDisplay({ target }: { target: string }) {
   );
 }
 
+const getCampaignImage = (slug: string, rawImage?: string) => {
+  if (rawImage) {
+    const url = assetUrl(rawImage, { width: 1200, quality: 85 }, '');
+    if (url) return url;
+  }
+  switch (slug) {
+    case 'road-to-australia-2027':
+      return '/images/campaign/hero.png';
+    case 'africa-cup-tour-2026':
+      return '/images/campaign/huddle.png';
+    case 'schools-festival-2026':
+      return '/images/campaign/youth.png';
+    default:
+      return '/images/campaign/jersey.png';
+  }
+};
+
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const campaign = await getCampaignBySlug(slug);
