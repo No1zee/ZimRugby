@@ -5,7 +5,6 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion'
 import { Play, ChevronLeft, ChevronRight, ArrowRight } from 'lucide-react'
-import BackgroundAccents from './BackgroundAccents'
 import { useAdaptivePerformance } from '@/context/AdaptivePerformanceContext'
 
 export interface HeroSlideData {
@@ -227,9 +226,6 @@ export default function HeroCarousel({ slides = DEFAULT_SLIDES }: HeroCarouselPr
       ref={containerRef}
       className="relative w-full min-h-[600px] h-[85vh] max-h-[900px] bg-rich-black overflow-hidden select-none"
     >
-      {/* Dynamic Background Grid & Accents */}
-      <BackgroundAccents />
-
       <AnimatePresence mode="wait">
         <motion.div
           key={activeSlide.id || currentSlide}
