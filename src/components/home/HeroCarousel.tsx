@@ -11,7 +11,7 @@ export interface HeroSlideData {
   id: string
   headline: string | { line1: string; line2: string }
   headlineHighlight?: string
-  subheadline: string
+  subheadline?: string
   ctaText?: string
   ctaHref?: string
   secondaryCtaText?: string
