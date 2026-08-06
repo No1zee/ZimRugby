@@ -333,7 +333,7 @@ export default function HeroCarousel({ slides = [], autoplayInterval = 8000 }: {
               {(!activeSlide.video || (!isMobile && !shouldAutoPlayVideo)) && (
                 <Image
                   src={activeSlide.image}
-                  alt={activeSlide.headline}
+                  alt={typeof activeSlide.headline === 'string' ? activeSlide.headline : `${(activeSlide.headline as any)?.line1 || ''} ${(activeSlide.headline as any)?.line2 || ''}`}
                   fill
                   priority
                   sizes="100vw"
