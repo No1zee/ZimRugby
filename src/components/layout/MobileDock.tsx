@@ -91,15 +91,12 @@ export default function MobileDock() {
                     isActive ? "text-zru-green" : "text-black/50"
                   )}
                 />
-                {item.label === "Fan Zone" && isFanActive && (
-                  <span className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-emerald-500 rounded-full border-2 border-white animate-pulse" />
-                )}
               </div>
               <span className={cn(
-                "text-[10px] mt-1 font-extrabold tracking-wider uppercase transition-colors font-heading",
+                "text-[10px] mt-1 font-bold tracking-tight uppercase transition-colors",
                 isActive ? "text-zru-green" : "text-black/60"
               )}>
-                {item.label === "Fan Zone" && isFanActive ? "VIP Member" : item.label}
+                {item.label}
               </span>
 
               {isActive && (

@@ -57,60 +57,34 @@ export default function FanZoneSignup({
     }
   };
 
-  // If Fan is already authenticated via Supabase Auth / Global AuthContext
+  // If Fan is already authenticated
   if (user) {
     return (
-      <div
-        className="rounded-3xl p-6 sm:p-10 text-center space-y-6 border border-white/10 shadow-2xl relative overflow-hidden select-none"
-        style={{
-          background: "radial-gradient(circle at 50% 25%, #006747 0%, #004D34 60%, #003322 100%)",
-        }}
-      >
-        <div className="inline-flex items-center gap-2 px-3 py-1 bg-white/10 border border-white/20 rounded-full text-emerald-300 text-[10px] font-black uppercase tracking-widest">
-          <ShieldCheck className="w-3.5 h-3.5" />
-          <span>AUTHENTICATED VIP FAN SESSION</span>
-        </div>
-
-        <div className="space-y-1">
-          <h2 className="text-2xl sm:text-3xl font-black uppercase tracking-wider text-white font-heading">
-            WELCOME BACK, {user.name.toUpperCase()}!
-          </h2>
-          <p className="text-xs text-white/70">
-            Your VIP Sables Fan Zone Membership is active. Supporter Team: <span className="text-emerald-300 font-bold">{user.favoriteTeam}</span>
-          </p>
-        </div>
-
-        {/* Digital VIP Pass Card */}
-        <div className="bg-white/10 backdrop-blur-md border border-white/20 p-5 rounded-2xl max-w-md mx-auto space-y-3 text-white shadow-xl relative">
-          <div className="flex items-center justify-between border-b border-white/15 pb-2">
-            <span className="text-[10px] font-mono text-emerald-300 font-bold uppercase tracking-wider flex items-center gap-1">
-              <Award className="w-3.5 h-3.5" />
-              VIP MEMBER PASS
+      <div className="rounded-2xl p-6 sm:p-8 border border-white/10 bg-[#002D1A] space-y-6 text-white select-none">
+        <div className="flex items-center gap-4 border-b border-white/10 pb-6">
+          <div className="w-14 h-14 rounded-full bg-[#006747] text-white flex items-center justify-center font-bold text-xl border border-white/20">
+            {user.name.charAt(0).toUpperCase()}
+          </div>
+          <div>
+            <h2 className="text-xl font-bold text-white font-sans">{user.name}</h2>
+            <p className="text-xs text-white/60 font-mono">{user.email}</p>
+            <span className="inline-block mt-1 text-[11px] text-emerald-400 font-medium">
+              Registered Fan • Supporter Team: {user.favoriteTeam}
             </span>
-            <span className="text-[10px] font-mono text-white/60">{user.email}</span>
           </div>
+        </div>
 
-          <div className="py-2">
-            <span className="text-[10px] font-extrabold uppercase tracking-widest text-white/50 block">Your Exclusive Voucher Code</span>
-            <div className="text-2xl sm:text-3xl font-mono font-black tracking-widest text-emerald-300 my-1">
-              {user.vipCode || "SABLES2027"}
-            </div>
-            <span className="text-[11px] text-white/80 font-bold uppercase tracking-wider">10% OFF OFFICIAL MERCHANDISE & MATCHDAY TICKETS</span>
-          </div>
-
-          <div className="pt-2 border-t border-white/15 flex items-center justify-between text-[11px]">
-            <Link href="/tickets" className="text-emerald-300 hover:underline font-bold flex items-center gap-1">
-              <Ticket className="w-3.5 h-3.5" />
-              <span>BUY TICKETS WITH DISCOUNT →</span>
-            </Link>
-            <button
-              onClick={() => signOut()}
-              className="text-white/50 hover:text-red-300 text-[10px] uppercase font-bold flex items-center gap-1 transition-colors"
-            >
-              <LogOut className="w-3 h-3" />
-              <span>SIGN OUT</span>
-            </button>
-          </div>
+        <div className="flex items-center justify-between pt-2 text-xs">
+          <Link href="/tickets" className="text-emerald-400 hover:underline font-medium">
+            Browse Match Tickets →
+          </Link>
+          <button
+            onClick={() => signOut()}
+            className="text-white/50 hover:text-red-300 text-xs font-medium flex items-center gap-1.5 transition-colors"
+          >
+            <LogOut className="w-3.5 h-3.5" />
+            <span>Sign Out</span>
+          </button>
         </div>
       </div>
     );
