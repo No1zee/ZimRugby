@@ -15,11 +15,15 @@ import CmsHero from "@/components/cms/CmsHero";
 import EdgyGradient from "@/components/ui/EdgyGradient";
 import FanzoneBenefits from "@/components/fanzone/FanzoneBenefits";
 
+import { useAuth } from "@/context/AuthContext";
+import Link from "next/link";
+
 interface FanZoneClientProps {
   cmsPage?: any;
 }
 
 export default function FanZonePage({ cmsPage }: FanZoneClientProps) {
+  const { user, isAuthenticated, signOut } = useAuth();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [country, setCountry] = useState("Zimbabwe");
@@ -92,11 +96,58 @@ export default function FanZonePage({ cmsPage }: FanZoneClientProps) {
 
       <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 pt-8 relative z-10 space-y-12">
 
-        {!submitted && <FanzoneBenefits />}
+        {!isAuthenticated && <FanzoneBenefits />}
 
-        <div className="grid grid-cols-1 lg:grid-cols-5 gap-8 lg:gap-12 items-start">
+        {/* Authenticated Member Passport View */}
+        {isAuthenticated && user ? (
+          <div className="max-w-2xl mx-auto">
+            <div className="bg-[#004D2C] text-white rounded-3xl p-8 shadow-2xl relative overflow-hidden border border-white/10">
+              <div className="absolute -right-12 -top-12 w-64 h-64 bg-white/5 rounded-full blur-2xl pointer-events-none" />
+              
+              <div className="flex items-center justify-between border-b border-white/15 pb-6 mb-6">
+                <div className="flex items-center gap-4">
+                  <div className="w-14 h-14 rounded-2xl bg-white/10 border border-white/20 flex items-center justify-center text-2xl font-black font-heading text-white">
+                    {user.name.charAt(0).toUpperCase()}
+                  </div>
+                  <div>
+                    <h3 className="text-xl font-bold font-heading tracking-wide text-white">{user.name}</h3>
+                    <p className="text-sm text-emerald-300 font-mono font-medium">{user.handle || "@supporter"}</p>
+                  </div>
+                </div>
+                <div className="bg-emerald-500/20 border border-emerald-400/30 text-emerald-300 text-xs font-semibold px-3 py-1.5 rounded-full flex items-center gap-1.5">
+                  <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
+                  <span>Official Supporter</span>
+                </div>
+              </div>
 
-          {!submitted && (
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8 text-xs">
+                <div className="bg-black/20 rounded-xl p-4 border border-white/5">
+                  <span className="text-white/50 font-medium block mb-1 uppercase tracking-wider text-[10px]">Email Address</span>
+                  <span className="text-white font-medium text-sm truncate block">{user.email}</span>
+                </div>
+                <div className="bg-black/20 rounded-xl p-4 border border-white/5">
+                  <span className="text-white/50 font-medium block mb-1 uppercase tracking-wider text-[10px]">Favorite Squad</span>
+                  <span className="text-white font-medium text-sm block">{user.favoriteTeam || "Zimbabwe Sables"}</span>
+                </div>
+              </div>
+
+              <div className="border-t border-white/15 pt-6 flex flex-wrap items-center justify-between gap-4">
+                <div className="flex items-center gap-2 text-xs text-white/70">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+                  <span>Authenticated via Supabase Session</span>
+                </div>
+                <button
+                  onClick={() => signOut()}
+                  className="text-xs text-white/60 hover:text-white underline transition-colors"
+                >
+                  Sign Out
+                </button>
+              </div>
+            </div>
+          </div>
+        ) : (
+          /* Non-authenticated Guest View */
+          <div className="grid grid-cols-1 lg:grid-cols-5 gap-8 lg:gap-12 items-start">
             <div className="lg:col-span-2 space-y-4 lg:sticky lg:top-24">
               <h2 className="text-2xl sm:text-3xl font-heading font-black text-rich-black uppercase tracking-tight">
                 Join the Fanzone
@@ -122,248 +173,34 @@ export default function FanZonePage({ cmsPage }: FanZoneClientProps) {
                 ))}
               </div>
             </div>
-          )}
 
-          <div
-            className={`${
-              submitted ? "lg:col-span-5 max-w-2xl mx-auto" : "lg:col-span-3"
-            }`}
-          >
-            <div
-              className={`bg-white border rounded-2xl p-6 md:p-8 transition-[border-color,box-shadow] duration-500 ${
-                submitted
-                  ? "border-zru-green shadow-lg"
-                  : "border-black/5 shadow-md"
-              }`}
-            >
-              {!submitted ? (
-                <>
-                  <div className="border-b border-black/5 pb-5 mb-5">
-                    <h3 className="text-base font-black uppercase tracking-widest text-zru-green flex items-center gap-2">
-                      <Mail className="w-4 h-4" />
-                      <span>Register</span>
-                    </h3>
-                    <p className="text-black/50 text-[10px] font-bold uppercase tracking-wider mt-1">
-                      Secure your supporters card
-                    </p>
-                  </div>
-
-                  <form onSubmit={handleSubscribe} className="space-y-4">
-                    {submitError && (
-                      <div className="bg-red-50 border border-red-200 rounded-xl p-3 flex items-center gap-2 text-red-600 text-[11px] font-bold">
-                        <AlertCircle className="w-3.5 h-3.5 shrink-0" />
-                        <span>{submitError}</span>
-                      </div>
-                    )}
-
-                    <div className="space-y-1.5">
-                      <label className="text-[10px] text-black/60 font-black uppercase tracking-wider block">
-                        Full Name
-                      </label>
-                      <input
-                        type="text"
-                        required
-                        value={name}
-                        onChange={(e) => setName(e.target.value)}
-                        placeholder="e.g. Adrian Garvey"
-                        className="w-full bg-black/5 border border-black/10 rounded-xl px-4 py-2.5 text-rich-black placeholder-black/30 focus:outline-none focus:border-zru-green text-xs transition-[border-color] duration-300"
-                      />
-                    </div>
-
-                    <div className="space-y-1.5">
-                      <label className="text-[10px] text-black/60 font-black uppercase tracking-wider block">
-                        Email Address
-                      </label>
-                      <input
-                        type="email"
-                        required
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        placeholder="e.g. adrian@sables.co.zw"
-                        className="w-full bg-black/5 border border-black/10 rounded-xl px-4 py-2.5 text-rich-black placeholder-black/30 focus:outline-none focus:border-zru-green text-xs transition-[border-color] duration-300"
-                      />
-                    </div>
-
-                    <div className="space-y-1.5">
-                      <label className="text-[10px] text-black/60 font-black uppercase tracking-wider block">
-                        Country of Residence
-                      </label>
-                      <select
-                        value={country}
-                        onChange={(e) => setCountry(e.target.value)}
-                        className="w-full bg-black/5 border border-black/10 rounded-xl px-4 py-2.5 text-rich-black focus:outline-none focus:border-zru-green text-xs transition-[border-color] duration-300"
-                      >
-                        {countries.map((c) => (
-                          <option
-                            key={c}
-                            value={c}
-                            className="bg-white text-rich-black"
-                          >
-                            {c}
-                          </option>
-                        ))}
-                      </select>
-                    </div>
-
-                    <div className="space-y-1.5">
-                      <label className="text-[10px] text-black/60 font-black uppercase tracking-wider block">
-                        Favorite National Squad
-                      </label>
-                      <select
-                        value={favTeam}
-                        onChange={(e) => setFavTeam(e.target.value)}
-                        className="w-full bg-black/5 border border-black/10 rounded-xl px-4 py-2.5 text-rich-black focus:outline-none focus:border-zru-green text-xs transition-[border-color] duration-300"
-                      >
-                        {teams.map((t) => (
-                          <option
-                            key={t}
-                            value={t}
-                            className="bg-white text-rich-black"
-                          >
-                            {t}
-                          </option>
-                        ))}
-                      </select>
-                    </div>
-
-                    <div className="flex items-start gap-3 pt-2">
-                      <input
-                        type="checkbox"
-                        id="agreed"
-                        required
-                        checked={agreed}
-                        onChange={(e) => setAgreed(e.target.checked)}
-                        className="mt-0.5 rounded border-black/20 bg-black/5 focus:ring-0 text-zru-green"
-                      />
-                      <label
-                        htmlFor="agreed"
-                        className="text-[10px] text-black/60 font-bold uppercase tracking-wider leading-relaxed cursor-pointer select-none"
-                      >
-                        I agree to join the Sables Supporters Club and receive
-                        weekly news, updates, and commercial offerings from ZRU.
-                      </label>
-                    </div>
-
-                    <button
-                      type="submit"
-                      disabled={isSubmitting}
-                      className="w-full bg-zru-green hover:bg-[#005238] text-white font-black text-xs uppercase tracking-[0.2em] py-3.5 rounded-xl flex items-center justify-center gap-2 transition-[background-color] duration-300 shadow-md mt-6 disabled:opacity-50"
-                    >
-                      <span>
-                        {isSubmitting ? "Registering…" : "Register supporters card"}
-                      </span>
-                      <ArrowRight className="w-4 h-4" />
-                    </button>
-                  </form>
-                </>
-              ) : (
-                <div className="text-center py-4 space-y-6">
-                  <div className="w-full max-w-sm mx-auto p-5 rounded-2xl bg-gradient-to-br from-[#003B24] via-[#002617] to-[#00170E] border border-[#006747]/40 shadow-xl text-left relative overflow-hidden">
-                    <div className="absolute -bottom-8 -right-8 opacity-10 pointer-events-none select-none">
-                      <Image
-                        src="/images/logos/zru-logo.svg"
-                        alt=""
-                        width={160}
-                        height={160}
-                        className="object-contain"
-                      />
-                    </div>
-
-                    <div className="flex items-center justify-between border-b border-white/10 pb-3 mb-3 relative z-10">
-                      <div className="flex items-center gap-2">
-                        <Image
-                          src="/images/logos/zru-logo.svg"
-                          alt="ZRU Crest"
-                          width={24}
-                          height={24}
-                          className="object-contain"
-                        />
-                        <div>
-                          <h5 className="font-heading font-black text-[10px] text-[#006747] uppercase tracking-wider leading-none">
-                            Zimbabwe Rugby
-                          </h5>
-                          <span className="text-[7px] font-bold text-white/50 uppercase tracking-widest">
-                            Official Fanzone Pass
-                          </span>
-                        </div>
-                      </div>
-                      <CheckCircle2 className="w-5 h-5 text-[#006747]" />
-                    </div>
-
-                    <div className="space-y-2.5 relative z-10">
-                      <div>
-                        <span className="text-[7px] text-white/40 uppercase tracking-widest font-bold block">
-                          Member Name
-                        </span>
-                        <span className="text-sm font-heading font-black text-white uppercase tracking-wide">
-                          {name}
-                        </span>
-                      </div>
-
-                      <div className="grid grid-cols-2 gap-2 pt-1.5 border-t border-white/10 text-[9px]">
-                        <div>
-                          <span className="text-[7px] text-white/40 uppercase tracking-widest font-bold block">
-                            Squad
-                          </span>
-                          <span className="font-bold text-[#006747] uppercase">
-                            {favTeam}
-                          </span>
-                        </div>
-                        <div>
-                          <span className="text-[7px] text-white/40 uppercase tracking-widest font-bold block">
-                            Country
-                          </span>
-                          <span className="font-bold text-white uppercase">
-                            {country}
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="mt-3 pt-2.5 border-t border-white/10 flex items-center justify-between text-[8px] font-body text-white/40 relative z-10">
-                      <span className="flex items-center gap-1">
-                        <ShieldCheck className="w-3 h-3 text-[#006747]" />
-                        <span>
-                          MEMBER ID: ZRU-
-                          {Math.floor(100000 + Math.random() * 900000)}
-                        </span>
-                      </span>
-                      <span className="text-[#006747] font-bold uppercase">
-                        Status: Active
-                      </span>
-                    </div>
-                  </div>
-
-                  <div className="space-y-2 max-w-sm mx-auto">
-                    <h4 className="font-black text-base text-rich-black uppercase tracking-wider leading-none">
-                      Welcome to the Fanzone!
-                    </h4>
-                    <p className="text-black/70 text-xs leading-relaxed font-normal">
-                      Your ZRU Supporter Membership has been successfully
-                      activated. A confirmation email and details regarding your{" "}
-                      <strong>10% Clubhouse discount</strong> have been sent to{" "}
-                      <strong>{email}</strong>.
-                    </p>
-                  </div>
-
-                  <button
-                    onClick={() => {
-                      setSubmitted(false);
-                      setName("");
-                      setEmail("");
-                      setAgreed(false);
-                    }}
-                    className="text-[10px] font-black uppercase text-black/50 hover:text-rich-black transition-[color] duration-300 tracking-widest block pt-2 mx-auto"
-                  >
-                    Create Another Supporter Account
-                  </button>
+            <div className="lg:col-span-3">
+              <div className="bg-white border border-black/10 rounded-3xl p-8 shadow-xl text-center space-y-6">
+                <div className="w-16 h-16 bg-[#006747]/10 text-[#006747] rounded-2xl flex items-center justify-center mx-auto">
+                  <ShieldCheck className="w-8 h-8" />
                 </div>
-              )}
+                <div>
+                  <h3 className="text-xl font-bold text-gray-900 font-heading uppercase tracking-wide">
+                    Sables Supporters Network
+                  </h3>
+                  <p className="text-sm text-gray-500 mt-2 max-w-md mx-auto">
+                    Sign in to your account or create a new profile with your unique handle to access pre-sales, merchandise discounts, and match alerts.
+                  </p>
+                </div>
+
+                <div className="pt-2 flex flex-col sm:flex-row items-center justify-center gap-3">
+                  <Link
+                    href="/login?redirect=/fan-zone"
+                    className="w-full sm:w-auto px-6 py-3 bg-[#006747] hover:bg-[#004D2C] text-white font-semibold text-sm rounded-xl transition-all shadow-md flex items-center justify-center gap-2 group"
+                  >
+                    <span>Sign In to Fan Zone</span>
+                    <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
+                  </Link>
+                </div>
+              </div>
             </div>
           </div>
-
-        </div>
-
+        )}
       </div>
     </main>
   );
