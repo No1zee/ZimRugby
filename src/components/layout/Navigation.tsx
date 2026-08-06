@@ -205,11 +205,7 @@ export default function Navigation() {
                 <Link
                   key={item.label}
                   href={item.href || "#"}
-                  className={`flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-heading font-black uppercase tracking-wider transition-all ${
-                    item.label === "TICKETS"
-                      ? "bg-[#006747] text-white hover:bg-[#006747]/80 shadow-[inset_0_1px_0_rgba(255,255,255,0.20),inset_0_-1px_0_rgba(0,0,0,0.25),0_3px_0_#003D20,0_5px_10px_rgba(0,0,0,0.35)]"
-                      : "text-white/60 hover:text-white hover:bg-white/10"
-                  }`}
+                  className="flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-heading font-black uppercase tracking-wider text-white/60 hover:text-white hover:bg-white/10 transition-all"
                 >
                   <Icon className="w-3 h-3" />
                   <span>{item.label}</span>
@@ -231,13 +227,13 @@ export default function Navigation() {
               <div className="relative">
                 <button
                   onClick={() => setShowFanMenu(!showFanMenu)}
-                  className="flex items-center gap-2 px-3 py-1 bg-white/10 hover:bg-white/15 rounded-full text-xs text-white font-medium transition-all cursor-pointer border border-white/10"
+                  className="flex items-center gap-2 px-3.5 py-1.5 bg-[#006747] hover:bg-[#006747]/80 text-white rounded-full text-xs font-bold uppercase tracking-wider transition-all cursor-pointer shadow-[inset_0_1px_0_rgba(255,255,255,0.20),inset_0_-1px_0_rgba(0,0,0,0.25),0_2px_0_#003D20,0_4px_8px_rgba(0,0,0,0.35)]"
                 >
-                  <div className="w-5 h-5 rounded-full bg-[#006747] text-white flex items-center justify-center font-bold text-[10px]">
+                  <div className="w-5 h-5 rounded-full bg-white/20 text-white flex items-center justify-center font-bold text-[10px]">
                     {user.name.charAt(0).toUpperCase()}
                   </div>
                   <span className="truncate max-w-[120px] font-sans">{user.name.split(" ")[0]}</span>
-                  <ChevronDown className="w-3 h-3 text-white/60" />
+                  <ChevronDown className="w-3 h-3 text-white/70" />
                 </button>
 
                 {showFanMenu && (
@@ -272,7 +268,7 @@ export default function Navigation() {
             ) : (
               <Link
                 href="/fan-zone"
-                className="flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium text-white/70 hover:text-white hover:bg-white/10 transition-all"
+                className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-[#006747] hover:bg-[#006747]/80 text-white text-[11px] font-heading font-black uppercase tracking-wider transition-all shadow-[inset_0_1px_0_rgba(255,255,255,0.20),inset_0_-1px_0_rgba(0,0,0,0.25),0_3px_0_#003D20,0_5px_10px_rgba(0,0,0,0.35)]"
               >
                 <User className="w-3.5 h-3.5" />
                 <span>SIGN IN</span>
