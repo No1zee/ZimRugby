@@ -14,7 +14,7 @@ interface NavigatorWithPerformance extends Navigator {
   deviceMemory?: number;
 }
 
-interface AdaptivePerformanceContextType {
+export interface AdaptivePerformanceContextType {
   isLowEndDevice: boolean;
   isSlowConnection: boolean;
   saveDataEnabled: boolean;
