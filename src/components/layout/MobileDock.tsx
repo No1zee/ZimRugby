@@ -6,7 +6,7 @@ import { usePathname } from "next/navigation";
 import { motion } from "framer-motion";
 import { Home, Trophy, Newspaper, Users, Menu, Shield } from "lucide-react";
 import { cn } from "../../lib/utils";
-import { getFanSession, subscribeFanSession } from "@/lib/fanzone/fanSession";
+import { useAuth } from "@/context/AuthContext";
 
 const dockItems = [
   { label: "Home", icon: Home, href: "/" },
@@ -19,17 +19,10 @@ const dockItems = [
 
 export default function MobileDock() {
   const pathname = usePathname();
+  const { user } = useAuth();
   const [isHidden, setIsHidden] = useState(false);
-  const [isFanActive, setIsFanActive] = useState(false);
+  const isFanActive = !!user;
   const lastScrollY = useRef(0);
-
-  useEffect(() => {
-    setIsFanActive(!!getFanSession());
-    const unsubscribe = subscribeFanSession(() => {
-      setIsFanActive(!!getFanSession());
-    });
-    return unsubscribe;
-  }, []);
 
   // Hide on scroll down, show on scroll up — native passive listener (no framer-motion RAF)
   useEffect(() => {

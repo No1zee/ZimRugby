@@ -12,7 +12,7 @@ import KineticNav from "@/components/layout/KineticNav";
 import type { NavItem, NavChild } from "@/lib/navConfig";
 import { mainNav, utilityNav } from "@/lib/navConfig";
 import type { SearchEventResult } from "@/types";
-import { getFanSession, subscribeFanSession, clearFanSession, FanSession } from "@/lib/fanzone/fanSession";
+import { useAuth } from "@/context/AuthContext";
 
 /* ── Static config ── */
 const TRANSPARENT_ROUTES = ["/", "/live", "/world-cup-campaign", "/fan-zone", "/teams", "/match-centre", "/schools", "/clubs", "/about", "/events", "/media", "/volunteer", "/referees"];
@@ -21,22 +21,14 @@ const SCROLL_THRESHOLD = 20;
 export default function Navigation() {
   const pathname = usePathname();
   const { scrollY } = useScroll();
+  const { user, signOut: authSignOut } = useAuth();
 
   /* ── Core UI state ── */
   const [isScrolled, setIsScrolled] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
   const [dynamicNavItems, setDynamicNavItems] = useState<NavItem[]>(mainNav);
-  const [fanSession, setFanSession] = useState<FanSession | null>(null);
   const [showFanMenu, setShowFanMenu] = useState(false);
-
-  useEffect(() => {
-    setFanSession(getFanSession());
-    const unsubscribe = subscribeFanSession(() => {
-      setFanSession(getFanSession());
-    });
-    return unsubscribe;
-  }, []);
 
   /* ── Search state ── */
   const [isSearchOpen, setIsSearchOpen] = useState(false);
@@ -235,26 +227,26 @@ export default function Navigation() {
               <Search className="w-3.5 h-3.5" />
             </button>
 
-            {fanSession ? (
+            {user ? (
               <div className="relative">
                 <button
                   onClick={() => setShowFanMenu(!showFanMenu)}
                   className="flex items-center gap-1.5 px-3 py-1 bg-emerald-500/20 border border-emerald-500/40 rounded-full text-[10px] font-heading font-black uppercase tracking-wider text-emerald-300 hover:bg-emerald-500/30 transition-all cursor-pointer"
                 >
                   <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                  <span>{fanSession.name.split(" ")[0]} (VIP)</span>
+                  <span>{user.name.split(" ")[0]} (VIP)</span>
                 </button>
 
                 {showFanMenu && (
                   <div className="absolute right-0 mt-2 w-56 bg-[#002D1A] border border-white/20 rounded-2xl p-3 shadow-2xl z-50 space-y-2 text-white text-xs">
                     <div className="border-b border-white/10 pb-2">
-                      <p className="font-bold truncate text-emerald-300">{fanSession.name}</p>
-                      <p className="text-[10px] text-white/60 truncate">{fanSession.email}</p>
+                      <p className="font-bold truncate text-emerald-300">{user.name}</p>
+                      <p className="text-[10px] text-white/60 truncate">{user.email}</p>
                     </div>
 
                     <div className="bg-white/5 p-2 rounded-xl text-[10px] font-mono space-y-1">
                       <span className="text-white/50 block uppercase font-sans">VIP Pass Voucher</span>
-                      <span className="text-emerald-300 font-bold tracking-widest text-xs block">{fanSession.vipCode}</span>
+                      <span className="text-emerald-300 font-bold tracking-widest text-xs block">{user.vipCode || "SABLES2027"}</span>
                       <span className="text-white/80 font-sans block">10% Merch Discount Active</span>
                     </div>
 
@@ -268,8 +260,8 @@ export default function Navigation() {
                     </Link>
 
                     <button
-                      onClick={() => {
-                        clearFanSession();
+                      onClick={async () => {
+                        await authSignOut();
                         setShowFanMenu(false);
                       }}
                       className="w-full flex items-center gap-2 px-2 py-1.5 hover:bg-red-500/20 text-red-300 rounded-lg text-[11px] font-bold transition-colors"

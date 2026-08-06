@@ -1,10 +1,11 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { CheckCircle, ArrowRight, ShieldCheck, LogOut, Ticket, Award } from "lucide-react";
-import { getFanSession, saveFanSession, clearFanSession, subscribeFanSession, FanSession } from "@/lib/fanzone/fanSession";
+import { useAuth } from "@/context/AuthContext";
+import { signUpFan } from "@/lib/supabase/auth";
 
 interface FanZoneSignupProps {
   variant?: "compact" | "full";
@@ -15,22 +16,14 @@ export default function FanZoneSignup({
   variant = "compact",
   showBenefits = false,
 }: FanZoneSignupProps) {
+  const { user, isAuthenticated, signOut, signInFan } = useAuth();
+
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [favoriteTeam, setFavoriteTeam] = useState<"Sables" | "Lady Sables" | "Cheetahs" | "Junior Sables" | "Domestic Rugby">("Sables");
   const [cdpaConsent, setCdpaConsent] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState("");
-
-  const [activeSession, setActiveSession] = useState<FanSession | null>(null);
-
-  useEffect(() => {
-    setActiveSession(getFanSession());
-    const unsubscribe = subscribeFanSession(() => {
-      setActiveSession(getFanSession());
-    });
-    return unsubscribe;
-  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -40,7 +33,8 @@ export default function FanZoneSignup({
     setError("");
 
     try {
-      const res = await fetch("/api/fan-zone/register", {
+      // 1. Send API registration payload
+      await fetch("/api/fan-zone/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -51,35 +45,20 @@ export default function FanZoneSignup({
         }),
       });
 
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error || "Registration failed");
-
-      const sessionData: FanSession = {
-        name: name.trim(),
-        email: email.trim(),
-        favoriteTeam,
-        vipCode: data.vipBadge?.code || "SABLES2027",
-        registeredAt: new Date().toISOString(),
-      };
-
-      saveFanSession(sessionData);
-      setActiveSession(sessionData);
+      // 2. Execute Supabase Auth Identity Creation / Session Merge
+      const authRes = await signUpFan({ email, name, favoriteTeam });
+      signInFan(authRes.profile);
       setEmail("");
       setName("");
     } catch (err: any) {
-      setError(err.message || "Something went wrong. Please try again.");
+      setError(err.message || "Registration encountered an issue. Please try again.");
     } finally {
       setIsSubmitting(false);
     }
   };
 
-  const handleSignOut = () => {
-    clearFanSession();
-    setActiveSession(null);
-  };
-
-  // If Fan is already registered/authenticated
-  if (activeSession) {
+  // If Fan is already authenticated via Supabase Auth / Global AuthContext
+  if (user) {
     return (
       <div
         className="rounded-3xl p-6 sm:p-10 text-center space-y-6 border border-white/10 shadow-2xl relative overflow-hidden select-none"
@@ -89,15 +68,15 @@ export default function FanZoneSignup({
       >
         <div className="inline-flex items-center gap-2 px-3 py-1 bg-white/10 border border-white/20 rounded-full text-emerald-300 text-[10px] font-black uppercase tracking-widest">
           <ShieldCheck className="w-3.5 h-3.5" />
-          <span>ACTIVE VIP MEMBER SESSION</span>
+          <span>AUTHENTICATED VIP FAN SESSION</span>
         </div>
 
         <div className="space-y-1">
           <h2 className="text-2xl sm:text-3xl font-black uppercase tracking-wider text-white font-heading">
-            WELCOME BACK, {activeSession.name.toUpperCase()}!
+            WELCOME BACK, {user.name.toUpperCase()}!
           </h2>
           <p className="text-xs text-white/70">
-            Your VIP Sables Fan Zone Membership is active. Supporter Team: <span className="text-emerald-300 font-bold">{activeSession.favoriteTeam}</span>
+            Your VIP Sables Fan Zone Membership is active. Supporter Team: <span className="text-emerald-300 font-bold">{user.favoriteTeam}</span>
           </p>
         </div>
 
@@ -108,13 +87,13 @@ export default function FanZoneSignup({
               <Award className="w-3.5 h-3.5" />
               VIP MEMBER PASS
             </span>
-            <span className="text-[10px] font-mono text-white/60">{activeSession.email}</span>
+            <span className="text-[10px] font-mono text-white/60">{user.email}</span>
           </div>
 
           <div className="py-2">
             <span className="text-[10px] font-extrabold uppercase tracking-widest text-white/50 block">Your Exclusive Voucher Code</span>
             <div className="text-2xl sm:text-3xl font-mono font-black tracking-widest text-emerald-300 my-1">
-              {activeSession.vipCode}
+              {user.vipCode || "SABLES2027"}
             </div>
             <span className="text-[11px] text-white/80 font-bold uppercase tracking-wider">10% OFF OFFICIAL MERCHANDISE & MATCHDAY TICKETS</span>
           </div>
@@ -125,7 +104,7 @@ export default function FanZoneSignup({
               <span>BUY TICKETS WITH DISCOUNT →</span>
             </Link>
             <button
-              onClick={handleSignOut}
+              onClick={() => signOut()}
               className="text-white/50 hover:text-red-300 text-[10px] uppercase font-bold flex items-center gap-1 transition-colors"
             >
               <LogOut className="w-3 h-3" />
@@ -148,7 +127,7 @@ export default function FanZoneSignup({
       <div className="max-w-xl mx-auto space-y-6">
         <div className="text-center space-y-2">
           <span className="text-[10px] font-black uppercase tracking-[0.3em] text-emerald-300 block">
-            OFFICIAL FAN ZONE
+            OFFICIAL FAN ZONE AUTHENTICATION
           </span>
           <h2 className="text-2xl sm:text-3xl font-black uppercase tracking-wider text-white font-heading">
             JOIN THE SABLES FAN ZONE
@@ -230,7 +209,7 @@ export default function FanZoneSignup({
             className="w-full py-4 bg-[#00A85A] hover:bg-[#00B963] active:bg-[#008F4C] text-white font-heading font-black tracking-widest uppercase text-sm rounded-xl transition-all shadow-lg shadow-[#00A85A]/30 flex items-center justify-center gap-2 disabled:opacity-50"
           >
             {isSubmitting ? (
-              <span>GENERATING VIP PASS...</span>
+              <span>AUTHENTICATING FAN SESSION...</span>
             ) : (
               <>
                 <span>JOIN FAN ZONE & GET VIP PASS</span>
