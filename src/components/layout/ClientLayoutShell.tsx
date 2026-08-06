@@ -3,6 +3,7 @@
 import React, { useEffect } from "react";
 import { usePathname } from "next/navigation";
 import dynamic from "next/dynamic";
+import { AuthProvider } from "@/context/AuthContext";
 
 const SmoothScrollProvider = dynamic(() => import("./SmoothScrollProvider"));
 const MobileDock = dynamic(() => import("./MobileDock"), { ssr: false });
@@ -43,11 +44,13 @@ export default function ClientLayoutShell({ children }: { children: React.ReactN
   }, []);
 
   return (
-    <SmoothScrollProvider>
-      {children}
-      {!isAdminRoute && <MobileDock />}
-      {!isAdminRoute && <CmsBadge />}
-      {!isAdminRoute && <CookieConsent />}
-    </SmoothScrollProvider>
+    <AuthProvider>
+      <SmoothScrollProvider>
+        {children}
+        {!isAdminRoute && <MobileDock />}
+        {!isAdminRoute && <CmsBadge />}
+        {!isAdminRoute && <CookieConsent />}
+      </SmoothScrollProvider>
+    </AuthProvider>
   );
 }
