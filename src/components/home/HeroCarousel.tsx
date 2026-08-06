@@ -219,7 +219,7 @@ function SlideContent({
 import { useAdaptivePerformance } from "@/context/AdaptivePerformanceContext";
 
 export default function HeroCarousel({ slides = [], autoplayInterval = 8000 }: { slides?: HeroSlideData[]; autoplayInterval?: number }) {
-  const [currentIndex, setCurrentIndex] = useState(0);
+  const [currentSlide, setCurrentSlide] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
   const { shouldAutoPlayVideo, prefersReducedMotion, isSlowConnection } = useAdaptivePerformance();
 
