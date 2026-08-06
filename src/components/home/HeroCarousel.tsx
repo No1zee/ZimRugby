@@ -300,11 +300,13 @@ export default function HeroCarousel({ slides = [], autoplayInterval = 8000 }: {
         >
           {/* Image/Video Background with GSAP-controlled media */}
             {/* Performance Hint: Removed heavy black overlay that delayed LCP */}
-            <motion.div 
-              initial={{ scale: 1 }}
-              animate={{ scale: isMobile ? 1 : 1.04 }} // Static scale on mobile to save GPU cycles
-              transition={{ duration: 12, ease: "linear" }}
-              style={isMobile ? undefined : { y: yBg, opacity: opacityBg }} // Disable scroll listener parallax on mobile
+            <motion.div
+              key={activeSlide.id || currentSlide}
+              initial={{ opacity: 0, scale: prefersReducedMotion ? 1 : 1.04 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: prefersReducedMotion ? 0.2 : 0.8 }}
+              style={isMobile ? undefined : { y: yBg, opacity: opacityBg }}
               className="relative w-full h-full hero-bg-media will-change-transform filter-[brightness(var(--hero-brightness,1))]"
             >
               {activeSlide.video ? (
@@ -330,15 +332,6 @@ export default function HeroCarousel({ slides = [], autoplayInterval = 8000 }: {
                 ) : (
                   <Image
                     src={activeSlide.image}
-                    alt={`${activeSlide.headline.line1} ${activeSlide.headline.line2}`}
-                    fill
-                    priority={currentSlide === 0}
-                    loading={currentSlide === 0 ? "eager" : "lazy"}
-                    sizes="(max-width: 768px) 100vw, 100vw"
-                    quality={60}
-                    className="object-cover"
-                    style={{ objectPosition: activeSlide.imagePosition ?? 'center center' }}
-                  />
                 )}
             </motion.div>
             {/* Overlay */}
