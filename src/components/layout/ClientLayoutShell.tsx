@@ -10,6 +10,8 @@ const MobileDock = dynamic(() => import("./MobileDock"), { ssr: false });
 const CmsBadge = dynamic(() => import("../ui/CmsBadge"), { ssr: false });
 const CookieConsent = dynamic(() => import("../common/CookieConsent"), { ssr: false });
 
+import { AdaptivePerformanceProvider } from "@/context/AdaptivePerformanceContext";
+
 export default function ClientLayoutShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const isAdminRoute = pathname?.startsWith("/admin") || pathname?.startsWith("/admin-login");
@@ -44,13 +46,15 @@ export default function ClientLayoutShell({ children }: { children: React.ReactN
   }, []);
 
   return (
-    <AuthProvider>
-      <SmoothScrollProvider>
-        {children}
-        {!isAdminRoute && <MobileDock />}
-        {!isAdminRoute && <CmsBadge />}
-        {!isAdminRoute && <CookieConsent />}
-      </SmoothScrollProvider>
-    </AuthProvider>
+    <AdaptivePerformanceProvider>
+      <AuthProvider>
+        <SmoothScrollProvider>
+          {children}
+          {!isAdminRoute && <MobileDock />}
+          {!isAdminRoute && <CmsBadge />}
+          {!isAdminRoute && <CookieConsent />}
+        </SmoothScrollProvider>
+      </AuthProvider>
+    </AdaptivePerformanceProvider>
   );
 }

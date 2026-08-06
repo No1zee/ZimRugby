@@ -216,13 +216,16 @@ function SlideContent({
   );
 }
 
-export default function HeroCarousel({ slides = [] }: { slides: HeroSlideData[] }) {
-  const [currentSlide, setCurrentSlide] = useState(0);
+import { useAdaptivePerformance } from "@/context/AdaptivePerformanceContext";
 
+export function HeroCarousel({ slides, autoplayInterval = 8000 }: HeroSlideData[]) {
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [isPaused, setIsPaused] = useState(false);
+  const { shouldAutoPlayVideo, prefersReducedMotion, isSlowConnection } = useAdaptivePerformance();
+
+  const activeInterval = prefersReducedMotion ? 0 : autoplayInterval;
   const containerRef = useRef<HTMLElement>(null);
   const [isMobile, setIsMobile] = useState(false);
-  const [isPaused, setIsPaused] = useState(false);
-  const prefersReducedMotion = useRef(false);
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
@@ -321,16 +324,27 @@ export default function HeroCarousel({ slides = [] }: { slides: HeroSlideData[] 
                       className="object-cover"
                     />
                   ) : (
-                    <video
-                      src={activeSlide.video}
-                      autoPlay
-                      muted
-                      loop
-                      playsInline
-                      preload="metadata"
-                      poster={activeSlide.image}
-                      className="absolute inset-0 w-full h-full object-cover"
-                    />
+                    {shouldAutoPlayVideo && slide.video_url ? (
+                <video
+                  autoPlay
+                  loop
+                  muted
+                  playsInline
+                  poster={heroAssetUrl(slide.background_image) || "/images/campaign/hero.png"}
+                  className="w-full h-full object-cover"
+                >
+                  <source src={slide.video_url} type="video/mp4" />
+                </video>
+              ) : (
+                <Image
+                  src={heroAssetUrl(slide.background_image) || "/images/campaign/hero.png"}
+                  alt={slide.title}
+                  fill
+                  priority={index === 0}
+                  sizes="100vw"
+                  className="object-cover object-center"
+                />
+              )}
                   )
                 ) : (
                   <Image
