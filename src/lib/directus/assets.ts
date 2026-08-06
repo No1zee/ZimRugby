@@ -13,15 +13,14 @@ interface ImageTransformations {
 
 const UUID_RE = /^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$/i;
 
-export function assetUrl(id?: string, transform?: ImageTransformations): string | undefined {
-  if (!id) return undefined;
+export function assetUrl(id?: string, transform?: ImageTransformations, fallbackUrl: string = '/zru-placeholder-hero.webp'): string {
+  if (!id) return fallbackUrl;
   if (id.startsWith("http://") || id.startsWith("https://") || id.startsWith("/")) {
     return id;
   }
-  if (!UUID_RE.test(id)) return undefined;
+  if (!UUID_RE.test(id)) return fallbackUrl;
 
   const url = new URL(`/api/assets/${id}`, "http://localhost:3000");
-  url.protocol = url.protocol;
 
   if (transform) {
     if (transform.width) {
