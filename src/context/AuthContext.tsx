@@ -35,11 +35,12 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const { data: authListener } = supabase.auth.onAuthStateChange(async (event, session) => {
       if (session?.user) {
         const meta = session.user.user_metadata || {};
+        const baseName = meta.full_name || meta.name || session.user.email?.split("@")[0] || "Fan";
         const profile: FanProfile = {
           email: session.user.email || "",
-          name: meta.full_name || meta.name || session.user.email?.split("@")[0] || "VIP Fan",
+          name: baseName,
+          handle: meta.handle || `@${baseName.toLowerCase().split(" ")[0].replace(/[^a-z0-9]/g, "")}`,
           favoriteTeam: meta.favorite_team || "Sables",
-          vipCode: meta.vip_code || "SABLES2027",
         };
         setUser(profile);
       } else if (event === "SIGNED_OUT") {

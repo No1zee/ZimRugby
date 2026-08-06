@@ -240,7 +240,7 @@ export default function Navigation() {
                   <div className="absolute right-0 mt-2 w-56 bg-[#002D1A] border border-white/15 rounded-xl p-3 shadow-xl z-50 space-y-2 text-white text-xs">
                     <div className="border-b border-white/10 pb-2">
                       <p className="font-bold truncate text-white">{user.name}</p>
-                      <p className="text-[11px] text-white/60 truncate">{user.email}</p>
+                      <p className="text-[11px] text-white/60 truncate">{user.handle || user.email}</p>
                     </div>
 
                     <Link
