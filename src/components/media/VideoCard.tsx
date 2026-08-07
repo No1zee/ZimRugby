@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import Image from 'next/image'
 import { Play, Clock, Eye, Calendar, Sparkles } from 'lucide-react'
-import VideoPlayer from './VideoPlayer'
+import { VideoPlayer } from './VideoPlayer'
 
 export interface VideoItem {
   id: string
