@@ -2,10 +2,7 @@ import { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { getActiveCampaigns } from "@/lib/api/campaigns";
-import { assetUrl } from "@/lib/directus/assets";
-import { getPageBySlug } from "@/lib/directus/fetch";
-import PageHero from "@/components/common/PageHero";
-import CleanBreadcrumb from "@/components/layout/CleanBreadcrumb";
+import { Trophy, ArrowRight, Sparkles } from "lucide-react";
 
 export const metadata: Metadata = {
   title: "Active Campaigns | Zimbabwe Rugby Union",
@@ -21,37 +18,25 @@ const CAMPAIGN_FALLBACK_IMAGES: Record<string, string> = {
 const GLOBAL_DEFAULT_IMAGE = "https://images.unsplash.com/photo-1544698310-74ea9d1c8258?auto=format&fit=crop&w=1200&q=80";
 
 export default async function CampaignsPage() {
-  const cmsPage = await getPageBySlug("campaigns");
   const campaigns = await getActiveCampaigns();
 
-  const heroData = {
-    title: cmsPage?.title || "ZRU CAMPAIGNS",
-    subtitle: cmsPage?.subtitle || "Supporting the Sables, youth development, and rugby infrastructure across Zimbabwe.",
-    badge: "Official Initiatives",
-    bgImage: cmsPage?.hero_image
-      ? assetUrl(cmsPage.hero_image, { width: 1920, height: 1080, fit: "cover" }) || "https://images.unsplash.com/photo-1544698310-74ea9d1c8258?auto=format&fit=crop&w=1920&q=80"
-      : "https://images.unsplash.com/photo-1544698310-74ea9d1c8258?auto=format&fit=crop&w=1920&q=80",
-  };
-
-  const breadcrumbs = [
-    { label: "Home", href: "/" },
-    { label: "Campaigns" },
-  ];
-
   return (
-    <div className="min-h-screen bg-rich-black text-white">
-      <PageHero
-        title={heroData.title}
-        subtitle={heroData.subtitle}
-        badge={heroData.badge}
-        bgImage={heroData.bgImage}
-      />
-
-      <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 -mt-6 relative z-10">
-        <CleanBreadcrumb items={breadcrumbs} />
+    <div className="min-h-screen bg-rich-black text-white py-16">
+      {/* Header Banner */}
+      <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 mb-12">
+        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 bg-zru-green/20 border border-zru-green/40 text-zru-green text-xs font-bold uppercase tracking-wider rounded-full mb-4">
+          <Sparkles className="w-3.5 h-3.5" />
+          <span>Official ZRU Flagship Initiatives</span>
+        </div>
+        <h1 className="text-3xl sm:text-5xl font-black text-white uppercase tracking-tight font-heading">
+          Active Campaigns
+        </h1>
+        <p className="text-white/70 text-sm sm:text-base max-w-2xl mt-2 font-light">
+          Supporting the Sables, youth development, and rugby infrastructure across Zimbabwe.
+        </p>
       </div>
 
-      <section className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <section className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {campaigns.map((campaign) => {
             const resolvedImage =
@@ -93,7 +78,7 @@ export default async function CampaignsPage() {
                       </p>
                     )}
                     {campaign.description && (
-                      <p className="text-white/70 text-sm line-clamp-3 leading-relaxed">
+                      <p className="text-white/70 text-sm line-clamp-3 leading-relaxed font-light">
                         {campaign.description}
                       </p>
                     )}
@@ -103,9 +88,10 @@ export default async function CampaignsPage() {
                 <div className="p-6 pt-0">
                   <Link
                     href={campaign.cta_url || `/campaigns/${campaign.slug}`}
-                    className="block w-full py-3 bg-zru-green hover:bg-zru-green/90 text-white text-center font-bold text-xs uppercase tracking-wider rounded-xl transition-colors shadow-md"
+                    className="flex items-center justify-center gap-2 w-full py-3 bg-zru-green hover:bg-zru-green/90 text-white text-center font-bold text-xs uppercase tracking-wider rounded-xl transition-colors shadow-md group"
                   >
-                    {campaign.cta_text || "Explore Campaign"}
+                    <span>{campaign.cta_text || "Explore Campaign"}</span>
+                    <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                   </Link>
                 </div>
               </div>
