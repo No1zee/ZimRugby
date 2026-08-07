@@ -74,15 +74,15 @@ export default function HeroCarousel({ slides }: { slides?: HeroSlideData[] }) {
   }
 
   return (
-    <section className="relative w-full h-[85vh] min-h-[620px] max-h-[900px] bg-rich-black overflow-hidden flex items-end pb-12 sm:pb-20 select-none">
+    <section className="relative w-full h-[58vh] min-h-[460px] max-h-[620px] bg-rich-black overflow-hidden flex items-end pb-8 sm:pb-12 select-none">
       {/* Background Image */}
       <AnimatePresence mode="wait">
         <motion.div
           key={slide.id || currentIndex}
-          initial={{ opacity: 0, scale: 1.05 }}
+          initial={{ opacity: 0, scale: 1.03 }}
           animate={{ opacity: 1, scale: 1 }}
           exit={{ opacity: 0 }}
-          transition={{ duration: 0.8 }}
+          transition={{ duration: 0.7 }}
           className="absolute inset-0 z-0"
         >
           <Image
@@ -98,80 +98,79 @@ export default function HeroCarousel({ slides }: { slides?: HeroSlideData[] }) {
       </AnimatePresence>
 
       {/* Main Content Container */}
-      <div className="relative z-20 w-full max-w-[1440px] mx-auto px-6 sm:px-10 lg:px-12">
+      <div className="relative z-20 w-full max-w-[1440px] mx-auto px-4 sm:px-8 lg:px-10">
         <motion.div
           key={currentIndex}
-          initial={{ opacity: 0, y: 25 }}
+          initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -20 }}
-          transition={{ duration: 0.5 }}
-          className="max-w-3xl space-y-4"
+          exit={{ opacity: 0, y: -15 }}
+          transition={{ duration: 0.4 }}
+          className="max-w-2xl space-y-2.5"
         >
-          {/* Main Headline */}
+          {/* Headline - Scaled Down Compact Sizes */}
           <div className="space-y-0">
-            <h1 className="text-5xl sm:text-7xl lg:text-8xl font-black text-white uppercase tracking-tight font-heading leading-none drop-shadow-xl">
+            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black text-white uppercase tracking-tight font-heading leading-tight drop-shadow-md">
               {slide.headline?.line1 || 'VICTORY IN'}
             </h1>
-            <h2 className="text-5xl sm:text-7xl lg:text-8xl font-black text-[#00E676] uppercase tracking-tight font-heading leading-none drop-shadow-xl">
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-[#00E676] uppercase tracking-tight font-heading leading-tight drop-shadow-md">
               {slide.headline?.line2 || 'THE ZAMBEZI'}
             </h2>
           </div>
 
-          {/* Subheadline */}
-          <p className="text-white/90 text-base sm:text-xl font-normal max-w-2xl pt-2 leading-relaxed drop-shadow-md">
+          {/* Subheadline - Compact Font & Padding */}
+          <p className="text-white/85 text-xs sm:text-sm font-normal max-w-lg leading-relaxed drop-shadow-xs">
             {slide.subheadline || 'Sables secure historic win against Namibia at Harare Sports Club'}
           </p>
 
-          {/* CTA Buttons & Slanted Controls */}
-          <div className="pt-6 flex flex-col gap-6">
-            <div className="flex flex-wrap items-center gap-5">
-              {/* Primary White Slanted Button */}
+          {/* CTA Buttons & Slanted Controls - Compact Proportions */}
+          <div className="pt-3 flex flex-col gap-4">
+            <div className="flex flex-wrap items-center gap-3.5">
+              {/* Primary White Slanted Button - Compact */}
               <div className="relative group">
-                {/* Green Offset Shadow Slash */}
                 <div 
-                  className="absolute inset-0 bg-[#006B3F] translate-x-1.5 translate-y-1.5 transition-transform group-hover:translate-x-2 group-hover:translate-y-2"
+                  className="absolute inset-0 bg-[#006B3F] translate-x-1 translate-y-1 transition-transform group-hover:translate-x-1.5 group-hover:translate-y-1.5"
                   style={{ clipPath: 'polygon(8% 0, 100% 0, 92% 100%, 0 100%)' }}
                 />
                 <Link
                   href={slide.ctaHref || '/video-hub'}
-                  className="relative flex items-center gap-3 px-8 py-4 bg-white text-black font-black text-sm sm:text-base uppercase tracking-wider transition-colors hover:bg-neutral-100 cursor-pointer"
+                  className="relative flex items-center gap-2 px-5 py-2.5 sm:px-6 sm:py-3 bg-white text-black font-black text-xs sm:text-sm uppercase tracking-wider transition-colors hover:bg-neutral-100 cursor-pointer"
                   style={{ clipPath: 'polygon(8% 0, 100% 0, 92% 100%, 0 100%)' }}
                 >
-                  <Play className="w-4 h-4 fill-black text-black" />
+                  <Play className="w-3.5 h-3.5 fill-black text-black" />
                   <span>{slide.ctaText || 'WATCH HIGHLIGHTS'}</span>
                 </Link>
               </div>
 
-              {/* Secondary Translucent Border Slanted Button */}
+              {/* Secondary Translucent Border Slanted Button - Compact */}
               <Link
                 href={slide.secondaryCtaHref || '/match-centre'}
-                className="relative flex items-center gap-3 px-8 py-4 bg-black/40 hover:bg-black/60 border-y border-white/40 text-white font-black text-sm sm:text-base uppercase tracking-wider transition-all cursor-pointer backdrop-blur-xs"
+                className="relative flex items-center gap-2 px-5 py-2.5 sm:px-6 sm:py-3 bg-black/40 hover:bg-black/60 border-y border-white/40 text-white font-black text-xs sm:text-sm uppercase tracking-wider transition-all cursor-pointer backdrop-blur-xs"
                 style={{ clipPath: 'polygon(8% 0, 100% 0, 92% 100%, 0 100%)' }}
               >
-                <ArrowRight className="w-4 h-4 text-white" />
+                <ArrowRight className="w-3.5 h-3.5 text-white" />
                 <span>{slide.secondaryCtaText || 'MATCH CENTRE'}</span>
               </Link>
             </div>
 
-            {/* Slanted Slide Progress Controls */}
-            <div className="flex items-center gap-4 pt-2">
+            {/* Slanted Slide Progress Controls - Compact */}
+            <div className="flex items-center gap-3 pt-1">
               <button
                 onClick={handlePrev}
-                className="text-white/60 hover:text-white transition-colors cursor-pointer p-1"
+                className="text-white/60 hover:text-white transition-colors cursor-pointer p-0.5"
                 aria-label="Previous slide"
               >
-                <ChevronLeft className="w-5 h-5" />
+                <ChevronLeft className="w-4 h-4" />
               </button>
 
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-1.5">
                 {activeSlides.map((_, idx) => {
                   const isActive = idx === currentIndex
                   return (
                     <button
                       key={idx}
                       onClick={() => setCurrentIndex(idx)}
-                      className={`h-2.5 transition-all duration-300 transform -skew-x-12 cursor-pointer ${
-                        isActive ? 'w-10 bg-[#00E676]' : 'w-7 bg-white/30 hover:bg-white/50'
+                      className={`h-2 transition-all duration-300 transform -skew-x-12 cursor-pointer ${
+                        isActive ? 'w-8 bg-[#00E676]' : 'w-5 bg-white/30 hover:bg-white/50'
                       }`}
                       aria-label={`Go to slide ${idx + 1}`}
                     />
@@ -181,10 +180,10 @@ export default function HeroCarousel({ slides }: { slides?: HeroSlideData[] }) {
 
               <button
                 onClick={handleNext}
-                className="text-white/60 hover:text-white transition-colors cursor-pointer p-1"
+                className="text-white/60 hover:text-white transition-colors cursor-pointer p-0.5"
                 aria-label="Next slide"
               >
-                <ChevronRight className="w-5 h-5" />
+                <ChevronRight className="w-4 h-4" />
               </button>
             </div>
           </div>
