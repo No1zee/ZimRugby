@@ -5,7 +5,11 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { ShieldCheck, ArrowRight, Sparkles, CheckCircle2, QrCode, UserCheck, AlertCircle } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
 
-export default function FanZoneClient() {
+interface FanZoneClientProps {
+  cmsPage?: any
+}
+
+export default function FanZoneClient({ cmsPage }: FanZoneClientProps) {
   const [fullName, setFullName] = useState('')
   const [email, setEmail] = useState('')
   const [favoriteTeam, setFavoriteTeam] = useState('sables')
