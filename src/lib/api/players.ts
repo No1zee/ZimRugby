@@ -58,7 +58,7 @@ export async function getFeaturedPlayers(): Promise<Player[]> {
       filter: { status: { _eq: "published" }, featured: { _eq: true } },
       sort: ["sort"],
       limit: 10,
-    });
+    }).catch(() => fallbackPlayers);
 
     if (players && players.length > 0) return players.map(mapPlayer);
 
