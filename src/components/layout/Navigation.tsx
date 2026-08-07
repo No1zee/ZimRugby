@@ -8,7 +8,7 @@ import { ChevronDown, Search, X, User, Ticket, ShoppingBag, LogOut } from "lucid
 import { motion, AnimatePresence } from "framer-motion";
 import KineticNav from "./KineticNav";
 import { createClient } from "@/lib/supabase/client";
-import { dynamicNavItems } from "@/lib/navConfig";
+import { mainNav } from "@/lib/navConfig";
 
 interface NavChild {
   label: string;
@@ -305,7 +305,7 @@ export default function Navigation() {
       </nav>
 
       {/* Mobile Menu Overlay */}
-      <KineticNav isOpen={isOpen} onClose={toggleMenu} navItems={dynamicNavItems} pathname={pathname} />
+      <KineticNav isOpen={isOpen} onClose={toggleMenu} navItems={mainNav} pathname={pathname} />
 
       {/* Search Overlay */}
       <AnimatePresence>
