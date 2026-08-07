@@ -37,7 +37,7 @@ export async function getPlayers(): Promise<Player[]> {
 
     const players = await directusFetch<Player>("players", {
       filter: { status: { _eq: "published" } },
-      sort: ["sort"],
+      sort: ["id"],
       limit: 50,
     });
 
@@ -56,7 +56,7 @@ export async function getFeaturedPlayers(): Promise<Player[]> {
 
     const players = await directusFetch<Player>("players", {
       filter: { status: { _eq: "published" }, featured: { _eq: true } },
-      sort: ["sort"],
+      sort: ["id"],
       limit: 10,
     }).catch(() => fallbackPlayers);
 
