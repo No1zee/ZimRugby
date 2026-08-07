@@ -215,13 +215,44 @@ export default function Navigation() {
 
             <div className="w-px h-4 bg-white/15 mx-1" />
 
+            {/* Right Action Buttons */}
+          <div className="flex items-center gap-3">
             <button
               onClick={() => setIsSearchOpen(true)}
-              className="p-1.5 text-white/50 hover:text-white hover:bg-white/10 rounded-full transition-all cursor-pointer"
+              className="p-2 text-white/80 hover:text-white hover:bg-white/10 rounded-full transition-colors"
               aria-label="Search site"
             >
-              <Search className="w-3.5 h-3.5" />
+              <Search className="w-5 h-5" />
             </button>
+
+            {/* Passport / Auth Button (Primary Action on Mobile & Desktop) */}
+            {user ? (
+              <Link
+                href="/onboarding/player"
+                className="inline-flex items-center gap-2 px-4 py-2 bg-zru-green hover:bg-zru-green/90 text-white font-bold text-xs uppercase tracking-wider rounded-md transition-all shadow-md hover:shadow-zru-green/20"
+              >
+                <UserCheck className="w-4 h-4" />
+                <span>Passport</span>
+              </Link>
+            ) : (
+              <Link
+                href="/login"
+                className="inline-flex items-center gap-2 px-4 py-2 bg-zru-green hover:bg-zru-green/90 text-white font-bold text-xs uppercase tracking-wider rounded-md transition-all shadow-md hover:shadow-zru-green/20"
+              >
+                <User className="w-4 h-4" />
+                <span>Sign In</span>
+              </Link>
+            )}
+
+            {/* TICKETS Button (Secondary) */}
+            <Link
+              href="/tickets"
+              className="hidden md:inline-flex items-center gap-2 px-4 py-2 bg-white/10 hover:bg-white/20 text-white font-semibold text-xs uppercase tracking-wider rounded-md border border-white/20 transition-all"
+            >
+              <Ticket className="w-4 h-4" />
+              <span>Tickets</span>
+            </Link>
+          </div>
 
             {user ? (
               <div className="relative">
