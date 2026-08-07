@@ -1,239 +1,207 @@
-'use client'
+"use client";
 
-import { useState } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
-import { Sparkles, ArrowRight, CheckCircle2, AlertCircle } from 'lucide-react'
-import { createClient } from '@/lib/supabase/client'
+import { useState } from "react";
+import {
+  Mail,
+  CheckCircle2,
+  ShieldCheck,
+  ArrowRight,
+  AlertCircle,
+} from "lucide-react";
+import { saveSubmission } from "@/lib/mockStorage";
+import Image from "next/image";
+
+import CmsHero from "@/components/cms/CmsHero";
+import EdgyGradient from "@/components/ui/EdgyGradient";
+import FanzoneBenefits from "@/components/fanzone/FanzoneBenefits";
+
+import { useAuth } from "@/context/AuthContext";
+import Link from "next/link";
 
 interface FanZoneClientProps {
-  cmsPage?: any
+  cmsPage?: any;
 }
 
-export default function FanZoneClient({ cmsPage }: FanZoneClientProps) {
-  const [fullName, setFullName] = useState('')
-  const [email, setEmail] = useState('')
-  const [favoriteTeam, setFavoriteTeam] = useState('sables')
-  const [consent, setConsent] = useState(true)
-  const [loading, setLoading] = useState(false)
-  const [googleLoading, setGoogleLoading] = useState(false)
-  const [registered, setRegistered] = useState(false)
-  const [error, setError] = useState<string | null>(null)
+export default function FanZonePage({ cmsPage }: FanZoneClientProps) {
+  const { user, isAuthenticated, signOut } = useAuth();
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [country, setCountry] = useState("Zimbabwe");
+  const [favTeam, setFavTeam] = useState("Zimbabwe Sables");
+  const [agreed, setAgreed] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState("");
 
-  const handleGoogleSignIn = async () => {
-    setGoogleLoading(true)
-    setError(null)
+  const countries = [
+    "Zimbabwe",
+    "South Africa",
+    "United Kingdom",
+    "Australia",
+    "United States",
+    "Canada",
+    "New Zealand",
+    "Zambia",
+    "Botswana",
+    "Other",
+  ];
+
+  const teams = [
+    "Zimbabwe Sables",
+    "Lady Sables",
+    "Junior Sables (U20)",
+    "Zimbabwe Cheetahs (7s)",
+  ];
+
+  const handleSubscribe = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!name || !email || !agreed) return;
+
+    setIsSubmitting(true);
+    setSubmitError("");
+
     try {
-      const supabase = createClient()
-      const origin = typeof window !== 'undefined' ? window.location.origin : 'https://zimrugby.vercel.app'
-      const { error } = await supabase.auth.signInWithOAuth({
-        provider: 'google',
-        options: {
-          redirectTo: `${origin}/auth/callback`,
-        },
-      })
-      if (error) throw error
-    } catch (err: any) {
-      console.error('Google Sign In Error:', err)
-      setError(err.message || 'Failed to initialize Google Sign In')
-      setGoogleLoading(false)
-    }
-  }
-
-  const handleRegister = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setLoading(true)
-    setError(null)
-
-    try {
-      const supabase = createClient()
-      const origin = typeof window !== 'undefined' ? window.location.origin : 'https://zimrugby.vercel.app'
-
-      const { error } = await supabase.auth.signInWithOtp({
+      await saveSubmission("fan_zone_member", {
+        name,
         email,
-        options: {
-          emailRedirectTo: `${origin}/auth/callback`,
-          data: {
-            full_name: fullName,
-            favorite_team: favoriteTeam,
-            cdpa_consent: consent,
-          },
-        },
-      })
-      if (error) throw error
-      setRegistered(true)
-    } catch (err: any) {
-      console.error('Registration Error:', err)
-      setError(err.message || 'Registration failed. Please try again.')
+        country,
+        favoriteTeam: favTeam,
+        source: "Fan Zone Supporters Registration",
+        submittedAt: new Date().toISOString(),
+      });
+
+      setSubmitted(true);
+    } catch {
+      setSubmitError("Failed to complete registration. Please try again.");
     } finally {
-      setLoading(false)
+      setIsSubmitting(false);
     }
-  }
+  };
 
   return (
-    <div className="min-h-screen bg-rich-black text-white relative overflow-hidden flex flex-col justify-center items-center px-4 py-16">
-      {/* Ambient Radial Background Accents */}
-      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-zru-green/20 rounded-full blur-[140px] pointer-events-none" />
+    <main className="bg-milk-white min-h-screen pb-12 text-rich-black relative overflow-hidden">
+      <div className="absolute inset-0 pointer-events-none select-none z-0">
+        <EdgyGradient opacity={0.15} />
+      </div>
 
-      <div className="relative z-10 w-full max-w-xl mx-auto">
-        <AnimatePresence mode="wait">
-          {!registered ? (
-            <motion.div
-              key="register-form"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
-              transition={{ duration: 0.6 }}
-              className="text-center"
-            >
-              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 bg-zru-green/20 border border-zru-green/40 text-zru-green text-xs font-bold uppercase tracking-wider rounded-full mb-6 shadow-[0_0_15px_rgba(0,107,63,0.3)]">
-                <Sparkles className="w-3.5 h-3.5" />
-                <span>Official Fan Zone Authentication</span>
+      <div className="relative z-10">
+        <CmsHero
+          kicker={cmsPage?.hero_kicker || "Official Supporters Club"}
+          title={cmsPage?.hero_title || "Fan Zone"}
+          intro={cmsPage?.hero_intro || "The heartbeat of Zimbabwe Rugby. Join our global supporters network, get the latest inside scoops, and unlock members-only benefits."}
+          image={cmsPage?.hero_image || "/images/gallery/zimbabwe-sables-0350.webp"}
+          breadcrumb={[{ label: "Fan Zone", href: "/fan-zone" }]}
+        />
+      </div>
+
+      <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 pt-8 relative z-10 space-y-12">
+
+        {!isAuthenticated && <FanzoneBenefits />}
+
+        {/* Authenticated Member Passport View */}
+        {isAuthenticated && user ? (
+          <div className="max-w-2xl mx-auto">
+            <div className="bg-[#004D2C] text-white rounded-3xl p-8 shadow-2xl relative overflow-hidden border border-white/10">
+              <div className="absolute -right-12 -top-12 w-64 h-64 bg-white/5 rounded-full blur-2xl pointer-events-none" />
+              
+              <div className="flex items-center justify-between border-b border-white/15 pb-6 mb-6">
+                <div className="flex items-center gap-4">
+                  <div className="w-14 h-14 rounded-2xl bg-white/10 border border-white/20 flex items-center justify-center text-2xl font-black font-heading text-white">
+                    {user.name.charAt(0).toUpperCase()}
+                  </div>
+                  <div>
+                    <h3 className="text-xl font-bold font-heading tracking-wide text-white">{user.name}</h3>
+                    <p className="text-sm text-emerald-300 font-mono font-medium">{user.handle || "@supporter"}</p>
+                  </div>
+                </div>
+                <div className="bg-emerald-500/20 border border-emerald-400/30 text-emerald-300 text-xs font-semibold px-3 py-1.5 rounded-full flex items-center gap-1.5">
+                  <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
+                  <span>Official Supporter</span>
+                </div>
               </div>
 
-              <h1 className="text-3xl sm:text-5xl font-black text-white uppercase tracking-tight mb-4 leading-tight">
-                Join The Sables Fan Zone
-              </h1>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8 text-xs">
+                <div className="bg-black/20 rounded-xl p-4 border border-white/5">
+                  <span className="text-white/50 font-medium block mb-1 uppercase tracking-wider text-[10px]">Email Address</span>
+                  <span className="text-white font-medium text-sm truncate block">{user.email}</span>
+                </div>
+                <div className="bg-black/20 rounded-xl p-4 border border-white/5">
+                  <span className="text-white/50 font-medium block mb-1 uppercase tracking-wider text-[10px]">Favorite Squad</span>
+                  <span className="text-white font-medium text-sm block">{user.favoriteTeam || "Zimbabwe Sables"}</span>
+                </div>
+              </div>
 
-              <p className="text-white/70 text-sm sm:text-base max-w-md mx-auto mb-8 font-light">
-                Get 10% off official merchandise, priority ticket alerts, and exclusive Sables match updates.
+              <div className="border-t border-white/15 pt-6 flex flex-wrap items-center justify-between gap-4">
+                <div className="flex items-center gap-2 text-xs text-white/70">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+                  <span>Authenticated via Supabase Session</span>
+                </div>
+                <button
+                  onClick={() => signOut()}
+                  className="text-xs text-white/60 hover:text-white underline transition-colors"
+                >
+                  Sign Out
+                </button>
+              </div>
+            </div>
+          </div>
+        ) : (
+          /* Non-authenticated Guest View */
+          <div className="grid grid-cols-1 lg:grid-cols-5 gap-8 lg:gap-12 items-start">
+            <div className="lg:col-span-2 space-y-4 lg:sticky lg:top-24">
+              <h2 className="text-2xl sm:text-3xl font-heading font-black text-rich-black uppercase tracking-tight">
+                Join the Fanzone
+              </h2>
+              <p className="text-xs text-black/60 font-normal leading-relaxed">
+                No cost. Premium experience. Globally connected.
               </p>
 
-              <div className="bg-black/40 backdrop-blur-xl p-6 sm:p-8 rounded-2xl border border-white/10 shadow-2xl text-left">
-                {/* Google Sign In Option */}
-                <div className="mb-6">
-                  <button
-                    type="button"
-                    onClick={handleGoogleSignIn}
-                    disabled={googleLoading}
-                    className="w-full py-3.5 px-4 bg-white/10 hover:bg-white/15 active:scale-[0.99] border border-white/20 hover:border-zru-green/60 text-white font-semibold text-sm rounded-xl transition-all flex items-center justify-center gap-3 shadow-md group cursor-pointer"
+              <div className="space-y-2.5 pt-2">
+                {[
+                  "Priority ticket presale access",
+                  "10% official merchandise discount",
+                  "Insider squad newsletter",
+                  "VIP fan competitions",
+                ].map((item) => (
+                  <div
+                    key={item}
+                    className="flex items-center gap-2.5 text-xs text-black/60"
                   >
-                    <svg className="w-5 h-5" viewBox="0 0 24 24">
-                      <path
-                        fill="#EA4335"
-                        d="M12 5c1.6 0 3 .6 4.1 1.6l3.1-3.1C17.3 1.7 14.8 1 12 1 7.5 1 3.7 3.6 1.9 7.3l3.7 2.9C6.5 7.4 9 5 12 5z"
-                      />
-                      <path
-                        fill="#4285F4"
-                        d="M23.5 12.3c0-.8-.1-1.6-.2-2.3H12v4.5h6.5c-.3 1.5-1.1 2.8-2.4 3.7l3.7 2.9c2.2-2 3.7-5 3.7-8.8z"
-                      />
-                      <path
-                        fill="#FBBC05"
-                        d="M5.6 14.8c-.2-.7-.4-1.5-.4-2.3s.2-1.6.4-2.3L1.9 7.3C.7 9.7 0 10.8 0 12.5s.7 2.8 1.9 5.2l3.7-2.9z"
-                      />
-                      <path
-                        fill="#34A853"
-                        d="M12 23c3.2 0 6-1.1 8-3l-3.7-2.9c-1.1.7-2.5 1.2-4.3 1.2-3 0-5.5-2.4-6.4-5.2L1.9 16C3.7 19.7 7.5 23 12 23z"
-                      />
-                    </svg>
-                    <span>{googleLoading ? 'Connecting to Google...' : 'Continue with Google'}</span>
-                  </button>
+                    <CheckCircle2 className="w-4 h-4 text-zru-green shrink-0" />
+                    <span>{item}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="lg:col-span-3">
+              <div className="bg-white border border-black/10 rounded-3xl p-8 shadow-xl text-center space-y-6">
+                <div className="w-16 h-16 bg-[#006747]/10 text-[#006747] rounded-2xl flex items-center justify-center mx-auto">
+                  <ShieldCheck className="w-8 h-8" />
+                </div>
+                <div>
+                  <h3 className="text-xl font-bold text-gray-900 font-heading uppercase tracking-wide">
+                    Sables Supporters Network
+                  </h3>
+                  <p className="text-sm text-gray-500 mt-2 max-w-md mx-auto">
+                    Sign in to your account or create a new profile with your unique handle to access pre-sales, merchandise discounts, and match alerts.
+                  </p>
                 </div>
 
-                <div className="relative flex items-center justify-center my-6">
-                  <div className="border-t border-white/10 w-full" />
-                  <span className="bg-black/60 px-3 text-xs text-white/50 uppercase font-medium absolute">Or Sign In with Email</span>
-                </div>
-
-                {error && (
-                  <div className="mb-5 p-4 bg-red-500/10 border border-red-500/30 rounded-xl flex items-center gap-3 text-red-400 text-sm">
-                    <AlertCircle className="w-5 h-5 flex-shrink-0" />
-                    <span>{error}</span>
-                  </div>
-                )}
-
-                <form onSubmit={handleRegister} className="space-y-4">
-                  <div>
-                    <label className="block text-xs font-bold text-white/80 uppercase tracking-wider mb-2">
-                      Full Name
-                    </label>
-                    <input
-                      type="text"
-                      required
-                      value={fullName}
-                      onChange={(e) => setFullName(e.target.value)}
-                      placeholder="e.g. Farai Moyo"
-                      className="w-full px-4 py-3.5 bg-black/30 border border-white/10 focus:border-zru-green rounded-xl text-white placeholder-white/30 text-sm focus:outline-none transition-colors"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-xs font-bold text-white/80 uppercase tracking-wider mb-2">
-                      Email Address
-                    </label>
-                    <input
-                      type="email"
-                      required
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      placeholder="farai@example.co.zw"
-                      className="w-full px-4 py-3.5 bg-black/30 border border-white/10 focus:border-zru-green rounded-xl text-white placeholder-white/30 text-sm focus:outline-none transition-colors"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-xs font-bold text-white/80 uppercase tracking-wider mb-2">
-                      Favorite Rugby Team
-                    </label>
-                    <select
-                      value={favoriteTeam}
-                      onChange={(e) => setFavoriteTeam(e.target.value)}
-                      className="w-full px-4 py-3.5 bg-black/30 border border-white/10 focus:border-zru-green rounded-xl text-white text-sm focus:outline-none transition-colors cursor-pointer"
-                    >
-                      <option value="sables">Sables Men's XV</option>
-                      <option value="cheetahs">Cheetahs Men's 7s</option>
-                      <option value="lady-sables">Lady Sables Women's XV</option>
-                      <option value="lady-cheetahs">Lady Cheetahs Women's 7s</option>
-                      <option value="junior-sables">Junior Sables (U20)</option>
-                    </select>
-                  </div>
-
-                  <div className="flex items-center gap-3 pt-2">
-                    <input
-                      type="checkbox"
-                      id="consent"
-                      required
-                      checked={consent}
-                      onChange={(e) => setConsent(e.target.checked)}
-                      className="w-4 h-4 rounded border-white/20 text-zru-green focus:ring-zru-green bg-black/30 cursor-pointer"
-                    />
-                    <label htmlFor="consent" className="text-xs text-white/70 cursor-pointer">
-                      I agree to receive ZRU news & match alerts (CDPA 2021 Compliant).
-                    </label>
-                  </div>
-
-                  <button
-                    type="submit"
-                    disabled={loading}
-                    className="w-full py-4 bg-zru-green hover:bg-zru-green/90 disabled:opacity-50 text-white font-bold text-sm uppercase tracking-wider rounded-xl transition-all shadow-lg hover:shadow-zru-green/20 flex items-center justify-center gap-2 mt-4 cursor-pointer"
+                <div className="pt-2 flex flex-col sm:flex-row items-center justify-center gap-3">
+                  <Link
+                    href="/login?redirect=/fan-zone"
+                    className="w-full sm:w-auto px-6 py-3 bg-[#006747] hover:bg-[#004D2C] text-white font-semibold text-sm rounded-xl transition-all shadow-md flex items-center justify-center gap-2 group"
                   >
-                    <span>{loading ? 'Signing In...' : 'Sign In & Join Fan Zone'}</span>
-                    <ArrowRight className="w-4 h-4" />
-                  </button>
-                </form>
+                    <span>Sign In to Fan Zone</span>
+                    <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
+                  </Link>
+                </div>
               </div>
-            </motion.div>
-          ) : (
-            <motion.div
-              key="pass-card"
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.5 }}
-              className="bg-black/50 backdrop-blur-xl p-8 rounded-2xl border border-zru-green/40 shadow-2xl text-center space-y-6"
-            >
-              <div className="w-16 h-16 bg-zru-green/20 border border-zru-green/50 text-zru-green rounded-full flex items-center justify-center mx-auto">
-                <CheckCircle2 className="w-8 h-8" />
-              </div>
-
-              <div>
-                <h2 className="text-2xl font-black uppercase text-white tracking-tight">You're Signed In!</h2>
-                <p className="text-white/70 text-sm mt-1">
-                  We sent a secure sign-in link to <span className="text-zru-green font-semibold">{email}</span>. Click the link in your email to complete sign in.
-                </p>
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
+            </div>
+          </div>
+        )}
       </div>
-    </div>
-  )
+    </main>
+  );
 }

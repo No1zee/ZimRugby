@@ -1,76 +1,114 @@
-'use client';
+"use client";
 
-import Link from 'next/link';
-import { usePathname } from 'next/navigation';
-import { Home, Calendar, User, Newspaper, Ticket, UserCheck } from 'lucide-react';
-import { useAuth } from '@/context/AuthContext';
+import React, { useState, useEffect, useRef } from "react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { motion } from "framer-motion";
+import { Home, Trophy, Newspaper, Users, Menu, Shield } from "lucide-react";
+import { cn } from "../../lib/utils";
+import { useAuth } from "@/context/AuthContext";
+
+const dockItems = [
+  { label: "Home", icon: Home, href: "/" },
+  { label: "Teams", icon: Shield, href: "/teams" },
+  { label: "Matches", icon: Trophy, href: "/match-centre" },
+  { label: "Media", icon: Newspaper, href: "/media" },
+  { label: "Fan Zone", icon: Users, href: "/fan-zone" },
+  { label: "Menu", icon: Menu, href: "#menu", isMenu: true },
+];
 
 export default function MobileDock() {
   const pathname = usePathname();
-  const { isAuthenticated, user } = useAuth();
+  const { user } = useAuth();
+  const [isHidden, setIsHidden] = useState(false);
+  const isFanActive = !!user;
+  const lastScrollY = useRef(0);
 
-  const mainAuthLabel = isAuthenticated ? (user?.handle || 'Passport') : 'Sign In';
-  const mainAuthHref = isAuthenticated ? '/fan-zone' : '/login';
+  // Hide on scroll down, show on scroll up — native passive listener (no framer-motion RAF)
+  useEffect(() => {
+    const onScroll = () => {
+      const current = window.scrollY;
+      if (current > lastScrollY.current && current > 150) {
+        setIsHidden(true);
+      } else {
+        setIsHidden(false);
+      }
+      lastScrollY.current = current;
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
-  const navItems = [
-    { href: '/', label: 'Home', icon: Home },
-    { href: '/matches', label: 'Fixtures', icon: Calendar },
-    {
-      href: mainAuthHref,
-      label: mainAuthLabel,
-      icon: isAuthenticated ? UserCheck : User,
-      primary: true,
-    },
-    { href: '/tickets', label: 'Tickets', icon: Ticket },
-    { href: '/media', label: 'News', icon: Newspaper },
-  ];
+  const handleInteraction = (item: typeof dockItems[0], e: React.MouseEvent) => {
+    // Haptic feedback (supported devices only)
+    if (typeof navigator !== 'undefined' && navigator.vibrate) {
+      navigator.vibrate(50);
+    }
+
+    if (item.isMenu) {
+      e.preventDefault();
+      // Dispatch custom event to Navigation.tsx
+      window.dispatchEvent(new CustomEvent('toggleMobileMenu'));
+    }
+  };
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 z-50 md:hidden pb-safe">
-      <div className="bg-emerald-950/90 backdrop-blur-xl border-t border-emerald-800/40 px-3 py-2 shadow-2xl">
-        <div className="flex items-center justify-around max-w-md mx-auto">
-          {navItems.map((item) => {
-            const Icon = item.icon;
-            const isActive = pathname === item.href || (item.href !== '/' && pathname.startsWith(item.href));
+    <motion.div 
+      initial={{ y: 100 }}
+      animate={{ y: isHidden ? 150 : 0 }}
+      transition={{ type: "spring", bounce: 0, duration: 0.4 }}
+      className="fixed bottom-0 left-0 right-0 z-50 lg:hidden pb-[max(env(safe-area-inset-bottom),16px)] pointer-events-none"
+    >
+      {/* Glassmorphism Background */}
+      <div className="mx-4 mt-4 sm:mx-auto sm:max-w-xl rounded-2xl bg-milk-white/95 backdrop-blur-xl border border-black/10 shadow-[0_-10px_40px_-15px_rgba(0,0,0,0.15)] flex items-center justify-around p-2 sm:p-3 pointer-events-auto">
+        {dockItems.map((item) => {
+          const isActive = !item.isMenu && (pathname === item.href || (item.href !== "/" && pathname.startsWith(item.href)));
+          const Icon = item.icon;
 
-            if (item.primary) {
-              return (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  className={`flex flex-col items-center justify-center -mt-5 transition-transform active:scale-95`}
-                >
-                  <div className={`w-13 h-13 rounded-full flex items-center justify-center shadow-lg border-2 ${
-                    isActive
-                      ? 'bg-emerald-500 border-white text-emerald-950 shadow-emerald-500/30'
-                      : 'bg-emerald-600 border-emerald-400/60 text-white shadow-emerald-900/50'
-                  }`}>
-                    <Icon className="w-6 h-6 stroke-[2.5]" />
-                  </div>
-                  <span className="text-[10px] font-bold mt-1 text-emerald-300 truncate max-w-[70px]">
-                    {item.label}
-                  </span>
-                </Link>
-              );
-            }
+          const LinkWrapper = item.isMenu ? motion.button : motion.create(Link);
+          const linkProps = item.isMenu ? { type: "button" } : { href: item.href };
 
-            return (
-              <Link
-                key={item.href}
-                href={item.href}
-                className={`flex flex-col items-center justify-center py-1 px-2 rounded-xl transition-colors ${
-                  isActive
-                    ? 'text-emerald-400 font-semibold'
-                    : 'text-zinc-400 hover:text-emerald-200'
-                }`}
-              >
-                <Icon className="w-5 h-5 mb-0.5" />
-                <span className="text-[10px] tracking-tight">{item.label}</span>
-              </Link>
-            );
-          })}
-        </div>
+          return (
+            <LinkWrapper
+              key={item.label}
+              {...(linkProps as Record<string, unknown>)}
+              onClick={(e: React.MouseEvent) => handleInteraction(item, e)}
+              whileTap={{ scale: 0.85 }}
+              className="relative flex flex-col items-center justify-center p-2 sm:p-2.5 min-w-0 flex-1 outline-none"
+            >
+              {isActive && (
+                <motion.div
+                  layoutId="activeDock"
+                  className="absolute inset-0 bg-zru-green/15 rounded-xl"
+                  transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
+                />
+              )}
+              
+              <div className="relative">
+                <Icon
+                  className={cn(
+                    "w-5 h-5 transition-colors duration-200",
+                    isActive ? "text-zru-green" : "text-black/50"
+                  )}
+                />
+              </div>
+              <span className={cn(
+                "text-[10px] mt-1 font-bold tracking-tight uppercase transition-colors",
+                isActive ? "text-zru-green" : "text-black/60"
+              )}>
+                {item.label}
+              </span>
+
+              {isActive && (
+                <motion.div 
+                  className="absolute -bottom-1 w-1.5 h-1.5 bg-zru-green rounded-full"
+                  layoutId="activeDot"
+                />
+              )}
+            </LinkWrapper>
+          );
+        })}
       </div>
-    </div>
+    </motion.div>
   );
 }
