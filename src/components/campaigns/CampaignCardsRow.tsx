@@ -19,12 +19,12 @@ export default async function CampaignCardsRow() {
   return (
     <section className="bg-rich-black py-16">
       <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center gap-4 mb-10">
-          <div className="h-px flex-1 bg-zru-green/30" />
+        <div className="flex items-center gap-3 mb-8">
+          <div className="w-8 h-1 bg-zru-green rounded-full" />
           <h2 className="text-white font-heading text-xl sm:text-2xl font-black tracking-wider uppercase">
             Active Campaigns
           </h2>
-          <div className="h-px flex-1 bg-zru-green/30" />
+          <div className="h-px flex-1 bg-zru-green/20" />
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
