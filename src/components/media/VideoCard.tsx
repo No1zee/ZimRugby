@@ -58,7 +58,7 @@ export default function VideoCard({ video, variant = 'grid', onSelect }: VideoCa
       <div className="group relative bg-black/40 border border-white/10 rounded-2xl overflow-hidden backdrop-blur-md shadow-2xl transition-all hover:border-zru-green/40">
         {isPlaying ? (
           <div className="aspect-video w-full">
-            <VideoPlayer embedUrl={video.embedUrl} title={video.title} autoPlay />
+            <VideoPlayer src={video.embedUrl || ''} title={video.title} autoPlay />
           </div>
         ) : (
           <div className="relative aspect-video w-full cursor-pointer overflow-hidden" onClick={handleClick}>
@@ -106,7 +106,7 @@ export default function VideoCard({ video, variant = 'grid', onSelect }: VideoCa
     <div className="group relative bg-black/40 border border-white/10 rounded-xl overflow-hidden backdrop-blur-md shadow-lg hover:border-zru-green/40 transition-all flex flex-col justify-between">
       {isPlaying ? (
         <div className="aspect-video w-full">
-          <VideoPlayer embedUrl={video.embedUrl} title={video.title} autoPlay />
+          <VideoPlayer src={video.embedUrl || ''} title={video.title} autoPlay />
         </div>
       ) : (
         <div className="relative aspect-video w-full cursor-pointer overflow-hidden" onClick={handleClick}>
