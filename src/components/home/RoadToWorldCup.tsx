@@ -59,7 +59,12 @@ const defaultCampaigns = [
   },
 ]
 
-export default function RoadToWorldCup() {
+interface RoadToWorldCupProps {
+  featuredPlayers?: any
+  campaign?: any
+}
+
+export default function RoadToWorldCup({ featuredPlayers, campaign }: RoadToWorldCupProps) {
   const [activeIndex, setActiveIndex] = useState(0)
   const current = defaultCampaigns[activeIndex]
 
