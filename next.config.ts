@@ -1,37 +1,25 @@
 import type { NextConfig } from "next";
 
-const remotePatterns: NextConfig["images"] extends { remotePatterns?: infer R }
-  ? R
-  : never = [
-  {
-    protocol: "https",
-    hostname: "images.unsplash.com",
-    port: "",
-    pathname: "/**",
-  },
-  {
-    protocol: "https",
-    hostname: "zru-directus-cms-production.up.railway.app",
-    port: "",
-    pathname: "/**",
-  },
-  {
-    protocol: "https",
-    hostname: "img.youtube.com",
-    port: "",
-    pathname: "/**",
-  },
-  {
-    protocol: "https",
-    hostname: "i.ytimg.com",
-    port: "",
-    pathname: "/**",
-  },
-];
-
 const nextConfig: NextConfig = {
   images: {
-    remotePatterns,
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "images.unsplash.com",
+      },
+      {
+        protocol: "https",
+        hostname: "zru-directus-cms-production.up.railway.app",
+      },
+      {
+        protocol: "https",
+        hostname: "img.youtube.com",
+      },
+      {
+        protocol: "https",
+        hostname: "i.ytimg.com",
+      },
+    ],
   },
   async headers() {
     return [
