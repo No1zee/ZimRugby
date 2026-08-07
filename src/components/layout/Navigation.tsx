@@ -268,7 +268,7 @@ export default function Navigation() {
               </div>
             ) : (
               <SlantedButton
-                href="/fan-zone"
+                href="/login"
                 variant="primary"
                 size="xs"
                 leftIcon={<User className="w-3.5 h-3.5" />}
