@@ -1,406 +1,229 @@
-"use client";
+'use client'
 
-import { useState, useEffect } from "react";
-import Link from "next/link";
-import { useRouter, useSearchParams } from "next/navigation";
-import { Eye, EyeOff, ArrowLeft } from "lucide-react";
-import { useAuth } from "@/context/AuthContext";
-import { signUpFan, signInFanWithPassword, signInWithOAuth } from "@/lib/supabase/auth";
+import { useState } from 'react'
+import Image from 'next/image'
+import Link from 'next/link'
+import { motion, AnimatePresence } from 'framer-motion'
+import { Sparkles, ArrowRight, ShieldCheck, CheckCircle2, Lock, Mail, User, AlertCircle } from 'lucide-react'
+import { createClient } from '@/lib/supabase/client'
 
 export default function LoginPage() {
-  const { signInFan, isAuthenticated } = useAuth();
-  const router = useRouter();
-  const searchParams = useSearchParams();
-  const redirect = searchParams.get("redirect") || "/fan-zone";
+  const [authMode, setAuthMode] = useState<'register' | 'magic_link'>('register')
+  const [fullName, setFullName] = useState('')
+  const [email, setEmail] = useState('')
+  const [favoriteTeam, setFavoriteTeam] = useState('sables')
+  const [consent, setConsent] = useState(true)
+  const [loading, setLoading] = useState(false)
+  const [googleLoading, setGoogleLoading] = useState(false)
+  const [message, setMessage] = useState<string | null>(null)
+  const [error, setError] = useState<string | null>(null)
 
-  const [mode, setMode] = useState<"signin" | "signup">("signin");
-  const [showPassword, setShowPassword] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState("");
-
-  // Form fields
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [handle, setHandle] = useState("");
-  const [handleStatus, setHandleStatus] = useState<"idle" | "checking" | "available" | "taken">("idle");
-
-  // Auto-suggest handle when name is typed
-  const suggestHandle = (fullName: string) => {
-    const base = fullName.trim().toLowerCase().split(" ")[0].replace(/[^a-z0-9]/g, "").slice(0, 12);
-    if (base) {
-      const suggested = `${base}${Math.floor(1000 + Math.random() * 9000)}`;
-      setHandle(suggested);
-      setHandleStatus("idle");
+  const handleGoogleSignIn = async () => {
+    setGoogleLoading(true)
+    setError(null)
+    try {
+      const supabase = createClient()
+      const origin = typeof window !== 'undefined' ? window.location.origin : 'https://zimrugby.vercel.app'
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: 'google',
+        options: {
+          redirectTo: `${origin}/auth/callback`,
+        },
+      })
+      if (error) throw error
+    } catch (err: any) {
+      console.error('Google Sign In Error:', err)
+      setError(err.message || 'Failed to initialize Google Sign In')
+      setGoogleLoading(false)
     }
-  };
+  }
 
-  // Debounced handle uniqueness check
-  useEffect(() => {
-    if (!handle || handle.length < 3) { setHandleStatus("idle"); return; }
-    setHandleStatus("checking");
-    const t = setTimeout(async () => {
-      try {
-        const { data } = await import("@/lib/supabase/client").then(m =>
-          m.supabase.from("fan_zone_members").select("handle").eq("handle", handle).maybeSingle()
-        );
-        setHandleStatus(data ? "taken" : "available");
-      } catch {
-        setHandleStatus("available"); // optimistic if table not yet set up
-      }
-    }, 500);
-    return () => clearTimeout(t);
-  }, [handle]);
-
-  // Redirect if already authenticated
-  useEffect(() => {
-    if (isAuthenticated) {
-      router.replace(redirect);
-    }
-  }, [isAuthenticated, redirect, router]);
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setError("");
-
-    if (!email || !password) {
-      setError("Please fill in all fields.");
-      return;
-    }
-    if (password.length < 8) {
-      setError("Password must be at least 8 characters.");
-      return;
-    }
-    if (mode === "signup" && !name.trim()) {
-      setError("Please enter your name.");
-      return;
-    }
-    if (mode === "signup" && handle.length < 3) {
-      setError("Handle must be at least 3 characters.");
-      return;
-    }
-    if (mode === "signup" && handleStatus === "taken") {
-      setError("That handle is already taken. Please choose another.");
-      return;
-    }
-
-    setIsLoading(true);
+  const handleAuthSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setLoading(true)
+    setError(null)
+    setMessage(null)
 
     try {
-      if (mode === "signup") {
-        const res = await signUpFan({
+      const supabase = createClient()
+      const origin = typeof window !== 'undefined' ? window.location.origin : 'https://zimrugby.vercel.app'
+
+      if (authMode === 'register' || authMode === 'magic_link') {
+        const { error } = await supabase.auth.signInWithOtp({
           email,
-          password,
-          name: name.trim(),
-          handle: handle.trim(),
-          favoriteTeam: "Sables",
-        });
-        if (res.success) {
-          signInFan(res.profile);
-          router.replace(redirect);
-        } else {
-          setError("Could not create account. Please try again.");
-        }
-      } else {
-        const res = await signInFanWithPassword({ email, password });
-        if (res.success) {
-          signInFan(res.profile);
-          router.replace(redirect);
-        } else {
-          setError("Incorrect email or password.");
-        }
+          options: {
+            emailRedirectTo: `${origin}/auth/callback`,
+            data: {
+              full_name: fullName,
+              favorite_team: favoriteTeam,
+              cdpa_consent: consent,
+            },
+          },
+        })
+        if (error) throw error
+        setMessage('Check your email! We sent you a magic login link to access your ZRU Passport.')
       }
-    } catch {
-      setError(
-        mode === "signup"
-          ? "Could not create account. Please try again."
-          : "Incorrect email or password."
-      );
+    } catch (err: any) {
+      console.error('Auth Submit Error:', err)
+      setError(err.message || 'Authentication failed. Please try again.')
     } finally {
-      setIsLoading(false);
+      setLoading(false)
     }
-  };
+  }
 
   return (
-    <div className="min-h-screen flex">
-      {/* Left panel — ZRU branded */}
-      <div className="hidden lg:flex lg:w-[44%] bg-[#004D2C] flex-col items-center justify-center p-12 relative overflow-hidden">
-        {/* Subtle texture rings */}
-        <div className="absolute inset-0 opacity-10">
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full border border-white/30" />
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] rounded-full border border-white/30" />
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[200px] h-[200px] rounded-full border border-white/30" />
-        </div>
+    <div className="min-h-screen bg-rich-black text-white relative overflow-hidden flex flex-col justify-center items-center px-4 py-16">
+      {/* Ambient Radial Background Accents */}
+      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-zru-green/20 rounded-full blur-[140px] pointer-events-none" />
 
-        <div className="relative flex flex-col items-center gap-8 text-center">
-          {/* ZRU Logo */}
-          <img
-            src="/images/zru-logo.png"
-            alt="Zimbabwe Rugby Union"
-            className="w-28 h-28 object-contain drop-shadow-2xl"
-            onError={(e) => {
-              (e.target as HTMLImageElement).style.display = "none";
-            }}
-          />
-
-          <div>
-            <h1 className="text-white font-heading font-black text-3xl uppercase tracking-widest leading-tight">
-              Zimbabwe
-            </h1>
-            <h2 className="text-white font-heading font-black text-3xl uppercase tracking-widest leading-tight">
-              Rugby Union
-            </h2>
-            <div className="mt-3 w-12 h-0.5 bg-white/40 mx-auto" />
-            <p className="mt-4 text-white/60 text-sm font-sans leading-relaxed max-w-[220px]">
-              One team. One nation. The Sables.
-            </p>
+      <div className="relative z-10 w-full max-w-xl mx-auto">
+        {/* Animated Card Container */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, ease: 'easeOut' }}
+          className="text-center"
+        >
+          {/* Green Badge Header */}
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 bg-zru-green/20 border border-zru-green/40 text-zru-green text-xs font-bold uppercase tracking-wider rounded-full mb-6 shadow-[0_0_15px_rgba(0,107,63,0.3)]">
+            <Sparkles className="w-3.5 h-3.5" />
+            <span>Official Fan Zone Authentication</span>
           </div>
-        </div>
-      </div>
 
-      {/* Right panel — Form */}
-      <div className="flex-1 flex flex-col">
-        {/* Back link */}
-        <div className="px-8 pt-8">
-          <Link
-            href="/"
-            className="inline-flex items-center gap-2 text-gray-400 hover:text-gray-700 transition-colors text-sm group"
-          >
-            <ArrowLeft className="w-4 h-4 group-hover:-translate-x-0.5 transition-transform" />
-            Back to site
-          </Link>
-        </div>
+          {/* Main Title */}
+          <h1 className="text-3xl sm:text-5xl font-black text-white uppercase tracking-tight mb-4 leading-tight">
+            Join The Sables Fan Zone
+          </h1>
 
-        {/* Centered form */}
-        <div className="flex-1 flex items-center justify-center px-8 py-12">
-          <div className="w-full max-w-[360px]">
-            {/* Heading */}
-            <div className="mb-8">
-              <h2 className="text-2xl font-bold text-gray-900 tracking-tight">
-                {mode === "signin" ? "Sign in" : "Create account"}
-              </h2>
-              <p className="mt-1.5 text-sm text-gray-500">
-                {mode === "signin"
-                  ? "Welcome back to Zimbabwe Rugby."
-                  : "Join the Sables supporters network."}
-              </p>
+          {/* Subheadline */}
+          <p className="text-white/70 text-sm sm:text-base max-w-md mx-auto mb-8 font-light">
+            Get 10% off official merchandise, priority ticket alerts, and exclusive Sables match updates.
+          </p>
+
+          {/* Form Box */}
+          <div className="bg-black/40 backdrop-blur-xl p-6 sm:p-8 rounded-2xl border border-white/10 shadow-2xl text-left">
+            {/* Quick Google Sign In */}
+            <div className="mb-6">
+              <button
+                type="button"
+                onClick={handleGoogleSignIn}
+                disabled={googleLoading}
+                className="w-full py-3.5 px-4 bg-white/10 hover:bg-white/15 active:scale-[0.99] border border-white/20 hover:border-zru-green/60 text-white font-semibold text-sm rounded-xl transition-all flex items-center justify-center gap-3 shadow-md group"
+              >
+                <svg className="w-5 h-5" viewBox="0 0 24 24">
+                  <path
+                    fill="#EA4335"
+                    d="M12 5c1.6 0 3 .6 4.1 1.6l3.1-3.1C17.3 1.7 14.8 1 12 1 7.5 1 3.7 3.6 1.9 7.3l3.7 2.9C6.5 7.4 9 5 12 5z"
+                  />
+                  <path
+                    fill="#4285F4"
+                    d="M23.5 12.3c0-.8-.1-1.6-.2-2.3H12v4.5h6.5c-.3 1.5-1.1 2.8-2.4 3.7l3.7 2.9c2.2-2 3.7-5 3.7-8.8z"
+                  />
+                  <path
+                    fill="#FBBC05"
+                    d="M5.6 14.8c-.2-.7-.4-1.5-.4-2.3s.2-1.6.4-2.3L1.9 7.3C.7 9.7 0 10.8 0 12.5s.7 2.8 1.9 5.2l3.7-2.9z"
+                  />
+                  <path
+                    fill="#34A853"
+                    d="M12 23c3.2 0 6-1.1 8-3l-3.7-2.9c-1.1.7-2.5 1.2-4.3 1.2-3 0-5.5-2.4-6.4-5.2L1.9 16C3.7 19.7 7.5 23 12 23z"
+                  />
+                </svg>
+                <span>{googleLoading ? 'Connecting to Google...' : 'Continue with Google'}</span>
+              </button>
             </div>
 
-            {/* Error */}
+            <div className="relative flex items-center justify-center my-6">
+              <div className="border-t border-white/10 w-full" />
+              <span className="bg-black/60 px-3 text-xs text-white/50 uppercase font-medium absolute">Or Email Passport</span>
+            </div>
+
+            {/* Error / Success Alerts */}
             {error && (
-              <div className="mb-5 px-4 py-3 rounded-lg bg-red-50 border border-red-200 text-red-700 text-sm">
-                {error}
+              <div className="mb-5 p-4 bg-red-500/10 border border-red-500/30 rounded-xl flex items-center gap-3 text-red-400 text-sm">
+                <AlertCircle className="w-5 h-5 flex-shrink-0" />
+                <span>{error}</span>
               </div>
             )}
 
-            {/* Social Logins */}
-            <div className="space-y-2.5 mb-6">
-              <button
-                type="button"
-                onClick={() => signInWithOAuth("google")}
-                className="w-full flex items-center justify-center gap-3 py-2.5 px-4 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors shadow-sm"
-              >
-                <svg className="w-4 h-4" viewBox="0 0 24 24">
-                  <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
-                  <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
-                  <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z" />
-                  <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z" />
-                </svg>
-                Continue with Google
-              </button>
-
-              <button
-                type="button"
-                onClick={() => signInWithOAuth("apple")}
-                className="w-full flex items-center justify-center gap-3 py-2.5 px-4 bg-black text-white rounded-lg text-sm font-medium hover:bg-gray-800 transition-colors shadow-sm"
-              >
-                <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24">
-                  <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M15.97 4.54c.67-.82 1.13-1.96.99-3.1-.97.04-2.17.65-2.87 1.47-.62.72-1.16 1.88-.99 3.01 1.09.08 2.21-.55 2.87-1.38z" />
-                </svg>
-                Continue with Apple
-              </button>
-            </div>
-
-            <div className="relative my-6">
-              <div className="absolute inset-0 flex items-center">
-                <div className="w-full border-t border-gray-200" />
+            {message && (
+              <div className="mb-5 p-4 bg-zru-green/20 border border-zru-green/40 rounded-xl flex items-center gap-3 text-zru-green text-sm">
+                <CheckCircle2 className="w-5 h-5 flex-shrink-0" />
+                <span>{message}</span>
               </div>
-              <div className="relative flex justify-center text-xs uppercase">
-                <span className="bg-white px-2 text-gray-400 font-medium">Or with email</span>
-              </div>
-            </div>
+            )}
 
-            {/* Form */}
-            <form onSubmit={handleSubmit} className="space-y-4">
-              {mode === "signup" && (
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1.5">
-                    Full name
-                  </label>
-                  <input
-                    type="text"
-                    value={name}
-                    onChange={(e) => {
-                      setName(e.target.value);
-                      suggestHandle(e.target.value);
-                    }}
-                    placeholder="Edward Magejo"
-                    autoComplete="name"
-                    className="w-full px-3.5 py-2.5 rounded-lg border border-gray-300 text-gray-900 placeholder:text-gray-400 text-sm focus:outline-none focus:ring-2 focus:ring-[#006747] focus:border-transparent transition-all"
-                    required
-                  />
-                </div>
-              )}
-
-              {mode === "signup" && (
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1.5">
-                    Your handle
-                    <span className="ml-1.5 text-xs font-normal text-gray-400">— how others find you</span>
-                  </label>
-                  <div className="relative">
-                    <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 text-sm font-medium select-none">@</span>
-                    <input
-                      type="text"
-                      value={handle}
-                      onChange={(e) => {
-                        const val = e.target.value.replace(/[^a-z0-9_]/g, "").slice(0, 20);
-                        setHandle(val);
-                      }}
-                      placeholder="edward4821"
-                      autoComplete="off"
-                      className={`w-full pl-7 pr-24 py-2.5 rounded-lg border text-gray-900 placeholder:text-gray-400 text-sm focus:outline-none focus:ring-2 focus:border-transparent transition-all ${
-                        handleStatus === "taken"
-                          ? "border-red-300 focus:ring-red-400"
-                          : handleStatus === "available"
-                          ? "border-green-400 focus:ring-green-400"
-                          : "border-gray-300 focus:ring-[#006747]"
-                      }`}
-                      required
-                    />
-                    <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs font-medium">
-                      {handleStatus === "checking" && <span className="text-gray-400">Checking…</span>}
-                      {handleStatus === "available" && <span className="text-green-600">✓ Available</span>}
-                      {handleStatus === "taken" && <span className="text-red-500">✗ Taken</span>}
-                    </span>
-                  </div>
-                  <p className="mt-1.5 text-xs text-gray-400">Lowercase letters, numbers and underscores only.</p>
-                </div>
-              )}
-
+            <form onSubmit={handleAuthSubmit} className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1.5">
-                  Email address
+                <label className="block text-xs font-bold text-white/80 uppercase tracking-wider mb-2">
+                  Full Name
                 </label>
                 <input
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="you@example.com"
-                  autoComplete="email"
-                  className="w-full px-3.5 py-2.5 rounded-lg border border-gray-300 text-gray-900 placeholder:text-gray-400 text-sm focus:outline-none focus:ring-2 focus:ring-[#006747] focus:border-transparent transition-all"
+                  type="text"
                   required
+                  value={fullName}
+                  onChange={(e) => setFullName(e.target.value)}
+                  placeholder="e.g. Farai Moyo"
+                  className="w-full px-4 py-3.5 bg-black/30 border border-white/10 focus:border-zru-green rounded-xl text-white placeholder-white/30 text-sm focus:outline-none transition-colors"
                 />
               </div>
 
               <div>
-                <div className="flex items-center justify-between mb-1.5">
-                  <label className="block text-sm font-medium text-gray-700">
-                    Password
-                  </label>
-                  {mode === "signin" && (
-                    <Link
-                      href="/forgot-password"
-                      className="text-xs text-[#006747] hover:text-[#004D2C] transition-colors"
-                    >
-                      Forgot password?
-                    </Link>
-                  )}
-                </div>
-                <div className="relative">
-                  <input
-                    type={showPassword ? "text" : "password"}
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    placeholder={mode === "signup" ? "Min. 8 characters" : "••••••••"}
-                    autoComplete={mode === "signup" ? "new-password" : "current-password"}
-                    className="w-full px-3.5 py-2.5 pr-10 rounded-lg border border-gray-300 text-gray-900 placeholder:text-gray-400 text-sm focus:outline-none focus:ring-2 focus:ring-[#006747] focus:border-transparent transition-all"
-                    required
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
-                    tabIndex={-1}
-                  >
-                    {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-                  </button>
-                </div>
-                {mode === "signup" && (
-                  <p className="mt-1.5 text-xs text-gray-400">
-                    Must be at least 8 characters.
-                  </p>
-                )}
+                <label className="block text-xs font-bold text-white/80 uppercase tracking-wider mb-2">
+                  Email Address
+                </label>
+                <input
+                  type="email"
+                  required
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="farai@example.co.zw"
+                  className="w-full px-4 py-3.5 bg-black/30 border border-white/10 focus:border-zru-green rounded-xl text-white placeholder-white/30 text-sm focus:outline-none transition-colors"
+                />
               </div>
 
-              {/* Submit */}
+              <div>
+                <label className="block text-xs font-bold text-white/80 uppercase tracking-wider mb-2">
+                  Favorite Rugby Team
+                </label>
+                <select
+                  value={favoriteTeam}
+                  onChange={(e) => setFavoriteTeam(e.target.value)}
+                  className="w-full px-4 py-3.5 bg-black/30 border border-white/10 focus:border-zru-green rounded-xl text-white text-sm focus:outline-none transition-colors"
+                >
+                  <option value="sables">Sables Men's XV</option>
+                  <option value="cheetahs">Cheetahs Men's 7s</option>
+                  <option value="lady-sables">Lady Sables Women's XV</option>
+                  <option value="lady-cheetahs">Lady Cheetahs Women's 7s</option>
+                  <option value="junior-sables">Junior Sables (U20)</option>
+                </select>
+              </div>
+
+              <div className="flex items-center gap-3 pt-2">
+                <input
+                  type="checkbox"
+                  id="consent"
+                  required
+                  checked={consent}
+                  onChange={(e) => setConsent(e.target.checked)}
+                  className="w-4 h-4 rounded border-white/20 text-zru-green focus:ring-zru-green bg-black/30 cursor-pointer"
+                />
+                <label htmlFor="consent" className="text-xs text-white/70 cursor-pointer">
+                  I agree to receive ZRU news & ticket alerts (CDPA 2021 Compliant).
+                </label>
+              </div>
+
               <button
                 type="submit"
-                disabled={isLoading}
-                className="w-full py-2.5 px-4 rounded-lg bg-[#006747] hover:bg-[#004D2C] text-white text-sm font-semibold transition-all disabled:opacity-60 disabled:cursor-not-allowed mt-2 shadow-sm"
+                disabled={loading}
+                className="w-full py-4 bg-zru-green hover:bg-zru-green/90 disabled:opacity-50 text-white font-bold text-sm uppercase tracking-wider rounded-xl transition-all shadow-lg hover:shadow-zru-green/20 flex items-center justify-center gap-2 mt-4"
               >
-                {isLoading
-                  ? mode === "signin"
-                    ? "Signing in…"
-                    : "Creating account…"
-                  : mode === "signin"
-                  ? "Sign in"
-                  : "Create account"}
+                <span>{loading ? 'Generating Passport...' : 'Join Fan Zone & Get VIP Pass'}</span>
+                <ArrowRight className="w-4 h-4" />
               </button>
             </form>
-
-            {/* Toggle mode */}
-            <p className="mt-6 text-center text-sm text-gray-500">
-              {mode === "signin" ? (
-                <>
-                  New to Zimbabwe Rugby?{" "}
-                  <button
-                    onClick={() => { setMode("signup"); setError(""); }}
-                    className="font-semibold text-[#006747] hover:text-[#004D2C] transition-colors"
-                  >
-                    Create account
-                  </button>
-                </>
-              ) : (
-                <>
-                  Already have an account?{" "}
-                  <button
-                    onClick={() => { setMode("signin"); setError(""); }}
-                    className="font-semibold text-[#006747] hover:text-[#004D2C] transition-colors"
-                  >
-                    Sign in
-                  </button>
-                </>
-              )}
-            </p>
-
-            {/* Terms */}
-            {mode === "signup" && (
-              <p className="mt-4 text-center text-xs text-gray-400 leading-relaxed">
-                By creating an account you agree to our{" "}
-                <Link href="/terms-of-use" className="underline hover:text-gray-600">
-                  Terms
-                </Link>{" "}
-                and{" "}
-                <Link href="/privacy-policy" className="underline hover:text-gray-600">
-                  Privacy Policy
-                </Link>
-                .
-              </p>
-            )}
           </div>
-        </div>
+        </motion.div>
       </div>
     </div>
-  );
+  )
 }
