@@ -295,12 +295,12 @@ export default function Navigation() {
         </div>
       </div>
 
-      {/* ═══ MAIN NAV ═══ */}
+      {/* ═══ MAIN NAVIGATION BAR (Translucent at Rest -> Milk-White on Scroll) ═══ */}
       <nav
         className={`w-full transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${
           showOpaqueHeader
             ? "bg-milk-white/95 backdrop-blur-md py-3 shadow-md border-b border-black/5"
-            : "bg-transparent py-5"
+            : "bg-black/20 backdrop-blur-xs py-5 border-b border-white/10"
         }`}
       >
         <div className="w-full px-4 sm:px-6 lg:px-8 flex items-center justify-between lg:justify-start gap-1.5 sm:gap-2 lg:gap-4">
