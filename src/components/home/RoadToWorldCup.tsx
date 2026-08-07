@@ -1,174 +1,180 @@
-"use client";
+'use client'
 
-import React from "react";
-import Image from "next/image";
-import { motion } from "framer-motion";
-import { AnimatedCountdown } from "@/components/ui/animated-countdown";
-import MatchdayVideoHighlights from "@/components/media/MatchdayVideoHighlights";
-import FeaturedPlayersGrid from "@/components/teams/FeaturedPlayersGrid";
-import type { FeaturedPlayer } from "@/types";
-import type { Campaign } from "@/lib/api/campaigns";
+import { useState } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
+import Image from 'next/image'
+import Link from 'next/link'
+import { Trophy, Globe, ArrowRight, ShieldCheck, ChevronRight, ChevronLeft } from 'lucide-react'
 
-interface RoadToWorldCupProps {
-  featuredPlayers: FeaturedPlayer[];
-  campaign?: Campaign | null;
-}
+const CAMPAIGN_FALLBACK_IMAGES: Record<string, string> = {
+  "road-to-australia-2027": "https://images.unsplash.com/photo-1544698310-74ea9d1c8258?auto=format&fit=crop&w=1200&q=80",
+  "africa-cup-tour-2026": "https://images.unsplash.com/photo-1519315901367-f34ff9154487?auto=format&fit=crop&w=1200&q=80",
+  "schools-festival-2026": "https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=1200&q=80",
+};
 
-export default function RoadToWorldCup({ featuredPlayers, campaign }: RoadToWorldCupProps) {
-  const targetDate = campaign?.countdown_target
-    ? new Date(campaign.countdown_target)
-    : new Date("2027-10-01T20:00:00");
+const GLOBAL_DEFAULT_IMAGE = "https://images.unsplash.com/photo-1544698310-74ea9d1c8258?auto=format&fit=crop&w=1200&q=80";
 
-  const headline = (campaign?.items as { headline?: string } | undefined)?.headline || "ROAD TO AUSTRALIA";
-  const subheadline = (campaign?.items as { subheadline?: string } | undefined)?.subheadline || "2027 RUGBY WORLD CUP";
+const defaultCampaigns = [
+  {
+    id: 'road-to-australia-2027',
+    title: 'Sables Road to Australia 2027',
+    subtitle: 'RWC 2027 Qualification Campaign',
+    description: 'Support the Zimbabwe Sables in their quest to qualify for the 2027 Rugby World Cup in Australia. Track fixtures, squad selection, and campaign progress.',
+    image: 'https://images.unsplash.com/photo-1544698310-74ea9d1c8258?auto=format&fit=crop&w=1200&q=80',
+    stats: [
+      { label: 'Ranking', value: '28th' },
+      { label: 'RWC App.', value: '2 (1987, 1991)' },
+      { label: 'Target', value: 'Top 2 Africa' },
+    ],
+    ctaText: 'Explore Australia 2027 Campaign',
+    ctaLink: '/campaigns/road-to-australia-2027',
+  },
+  {
+    id: 'africa-cup-tour-2026',
+    title: 'Rugby Africa Nations Cup 2026',
+    subtitle: 'Continental Championship Tour',
+    description: 'The Sables compete against Africa’s elite national XV teams in the pinnacle continental championship tournament.',
+    image: 'https://images.unsplash.com/photo-1519315901367-f34ff9154487?auto=format&fit=crop&w=1200&q=80',
+    stats: [
+      { label: 'Defending', value: 'Champions' },
+      { label: 'Matches', value: '5 Fixtures' },
+      { label: 'Host', value: 'Kampala / Harare' },
+    ],
+    ctaText: 'Nations Cup Tour Hub',
+    ctaLink: '/campaigns/africa-cup-tour-2026',
+  },
+  {
+    id: 'schools-festival-2026',
+    title: 'National Schools Rugby Festival 2026',
+    subtitle: 'Grassroots Talent Showcase',
+    description: 'Over 120 school teams competing in Zimbabwe’s legendary annual rugby showcase at Prince Edward & St George’s College.',
+    image: 'https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=1200&q=80',
+    stats: [
+      { label: 'Teams', value: '120+' },
+      { label: 'Players', value: '2,500+' },
+      { label: 'Venue', value: 'Harare' },
+    ],
+    ctaText: 'Schools Festival Hub',
+    ctaLink: '/campaigns/schools-festival-2026',
+  },
+]
 
-  const headlineParts = headline.split(" ");
-  const accentWord = headlineParts.pop() || "";
-  const mainHeadline = headlineParts.join(" ") || "";
+export default function RoadToWorldCup() {
+  const [activeIndex, setActiveIndex] = useState(0)
+  const current = defaultCampaigns[activeIndex]
+
+  const nextSlide = () => {
+    setActiveIndex((prev) => (prev + 1) % defaultCampaigns.length)
+  }
+
+  const prevSlide = () => {
+    setActiveIndex((prev) => (prev - 1 + defaultCampaigns.length) % defaultCampaigns.length)
+  }
 
   return (
-    <section className="relative select-none">
-      {/* ── Mobile: thin countdown strip ── */}
-      <div
-        className="md:hidden py-5 text-white border-y border-white/10 relative overflow-hidden min-h-[120px]"
-        style={{
-          background: "radial-gradient(circle at 50% 25%, #007A50 0%, #004D2C 60%, #002D1A 100%)",
-        }}
-      >
-        <div
-          className="absolute inset-0 opacity-10 pointer-events-none"
-          style={{
-            backgroundImage: "radial-gradient(circle, #ffffff 1px, transparent 1px)",
-            backgroundSize: "20px 20px",
-          }}
-        />
-        <div className="relative z-20 max-w-[1360px] mx-auto px-4 flex flex-col items-center text-center">
-          <span className="text-[11px] font-bold tracking-[0.25em] uppercase text-white/90 mb-3 font-heading block">
-            {headline}
-          </span>
-          <span className="text-[9px] font-normal tracking-[0.2em] uppercase text-white/50 mb-4 font-heading block">
-            {subheadline}
-          </span>
-          <AnimatedCountdown
-            targetDate={targetDate}
-            variant="digital"
-            size="sm"
-            containerClassName="border-transparent bg-transparent shadow-none"
-            unitClassName="border-white/20 bg-white/15 text-white"
-            numberClassName="text-white"
-            labelClassName="text-white/50"
-          />
-        </div>
-      </div>
+    <section className="bg-rich-black py-16 relative overflow-hidden border-t border-b border-white/10">
+      {/* Background Glow */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[400px] bg-zru-green/10 rounded-full blur-[140px] pointer-events-none" />
 
-      {/* ── Desktop: frame with green sides + white center tile ── */}
-      <div
-        className="hidden md:block relative mb-0 md:-mb-32"
-        style={{
-          background: "radial-gradient(ellipse at 50% 30%, #007A50 0%, #004D2C 50%, #002D1A 100%)",
-        }}
-      >
-        {/* Pitch grid overlay */}
-        <div
-          className="absolute inset-0 opacity-[0.08] pointer-events-none"
-          style={{
-            backgroundImage: "radial-gradient(circle, #ffffff 1px, transparent 1px)",
-            backgroundSize: "24px 24px",
-          }}
-        />
-
-        {/* Left player cutout with scroll reveal */}
-        <motion.div
-          initial={{ y: 80, opacity: 0 }}
-          whileInView={{ y: 0, opacity: 1 }}
-          viewport={{ once: true, margin: "-40px" }}
-          transition={{ duration: 0.8, ease: [0.25, 1, 0.5, 1] }}
-          className="absolute bottom-0 left-0 w-40 lg:w-52 h-[260px] lg:h-[320px] pointer-events-none z-[5]"
-        >
-          <Image
-            src="/images/cutouts/3.svg"
-            alt=""
-            width={280}
-            height={360}
-            className="w-full h-full object-contain object-bottom drop-shadow-[0_15px_30px_rgba(0,0,0,0.5)]"
-            unoptimized
-          />
-        </motion.div>
-
-        {/* Right player cutout with scroll reveal */}
-        <motion.div
-          initial={{ y: 80, opacity: 0 }}
-          whileInView={{ y: 0, opacity: 1 }}
-          viewport={{ once: true, margin: "-40px" }}
-          transition={{ duration: 0.8, ease: [0.25, 1, 0.5, 1], delay: 0.15 }}
-          className="absolute bottom-0 right-0 w-40 lg:w-52 h-[260px] lg:h-[320px] pointer-events-none z-[5]"
-        >
-          <Image
-            src="/images/cutouts/1.svg"
-            alt=""
-            width={280}
-            height={360}
-            className="w-full h-full object-contain object-bottom drop-shadow-[0_15px_30px_rgba(0,0,0,0.5)]"
-            unoptimized
-          />
-        </motion.div>
-
-        {/* Section heading on the green */}
-        <div className="relative z-10 max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 text-center pt-14 mb-10">
-          <h2 className="text-4xl sm:text-5xl lg:text-6xl font-heading font-black uppercase tracking-wide sm:tracking-widest text-white not-italic leading-[1.05]">
-            {mainHeadline}{" "}
-            <span className="text-accent-teal">{accentWord}</span>
-            <span className="block text-lg sm:text-xl lg:text-2xl text-white/60 font-normal tracking-[0.15em] mt-3">
-              {subheadline}
-            </span>
-          </h2>
-        </div>
-
-        {/* White center tile — sits on top of the green */}
-        <div className="relative z-20 max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="bg-[#FDFBF0] rounded-2xl shadow-[0_-8px_40px_rgba(0,0,0,0.15)] overflow-hidden">
-            {/* Countdown row */}
-            <div className="px-8 py-10 flex flex-col items-center border-b border-black/5">
-              <AnimatedCountdown
-                targetDate={targetDate}
-                variant="digital"
-                size="sm"
-                containerClassName="border-transparent bg-transparent shadow-none"
-                unitClassName="border-black/10 bg-black/5 text-rich-black"
-                numberClassName="text-rich-black"
-                labelClassName="text-rich-black/40"
-              />
+      <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        {/* Section Header */}
+        <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-10 pb-4 border-b border-white/10 gap-4">
+          <div>
+            <div className="inline-flex items-center gap-2 px-3 py-1 bg-zru-green/20 border border-zru-green/40 text-zru-green text-[10px] font-black uppercase tracking-wider rounded-md mb-2">
+              <Trophy className="w-3 h-3" />
+              <span>Flagship Campaigns & Nations Cup</span>
             </div>
+            <h2 className="text-2xl sm:text-4xl font-black text-white uppercase tracking-tight font-heading">
+              Road To Australia 2027 & Nations Cup
+            </h2>
+          </div>
 
-            {/* Video carousel */}
-            <div className="px-2 sm:px-4 py-6">
-              <MatchdayVideoHighlights
-                showChannelLink={true}
-              />
-            </div>
-
-            {/* Featured Players */}
-            <div className="px-4 sm:px-6 lg:px-8 py-10 border-t border-black/5">
-              <div className="mb-8 max-w-3xl">
-                <p className="mb-3 flex items-center gap-3 text-[10px] font-black uppercase tracking-[0.4em] text-zru-green">
-                  <span className="h-px w-8 bg-zru-green/50" aria-hidden />
-                  Squad
-                </p>
-                <h2 className="text-3xl sm:text-5xl font-heading font-black uppercase tracking-wide sm:tracking-widest text-rich-black not-italic leading-[1.05]">
-                  FEATURED{" "}
-                  <span className="text-accent-teal">PLAYERS</span>
-                </h2>
-              </div>
-              <FeaturedPlayersGrid players={featuredPlayers} />
-            </div>
+          {/* Carousel Navigation Buttons */}
+          <div className="flex items-center gap-2">
+            <button
+              onClick={prevSlide}
+              aria-label="Previous Campaign"
+              className="p-3 bg-white/5 hover:bg-zru-green/20 border border-white/10 hover:border-zru-green/50 text-white rounded-xl transition-all cursor-pointer"
+            >
+              <ChevronLeft className="w-5 h-5" />
+            </button>
+            <button
+              onClick={nextSlide}
+              aria-label="Next Campaign"
+              className="p-3 bg-white/5 hover:bg-zru-green/20 border border-white/10 hover:border-zru-green/50 text-white rounded-xl transition-all cursor-pointer"
+            >
+              <ChevronRight className="w-5 h-5" />
+            </button>
           </div>
         </div>
 
-        {/* Spacer — green extends this far below the white tile, -mb-32 pulls Grassroots behind it */}
-        <div className="h-32 relative" aria-hidden="true">
-          <div className="absolute inset-0 bg-gradient-to-b from-transparent to-[#006747]" />
-        </div>
+        {/* Campaign Hero Showcase */}
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={current.id}
+            initial={{ opacity: 0, y: 15 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -15 }}
+            transition={{ duration: 0.4 }}
+            className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center bg-black/40 border border-white/10 rounded-2xl p-6 sm:p-8 backdrop-blur-md shadow-2xl"
+          >
+            {/* Image Side */}
+            <div className="lg:col-span-7 relative aspect-[16/9] rounded-xl overflow-hidden group shadow-lg bg-black/60">
+              <Image
+                src={current.image}
+                alt={current.title}
+                fill
+                sizes="(max-width: 1024px) 100vw, 60vw"
+                className="object-cover group-hover:scale-105 transition-transform duration-700"
+                priority
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
+              <div className="absolute top-4 left-4 flex items-center gap-2">
+                <span className="px-3 py-1 bg-zru-green text-white text-[10px] font-black uppercase tracking-wider rounded-md shadow">
+                  FEATURED CAMPAIGN
+                </span>
+              </div>
+            </div>
+
+            {/* Content Side */}
+            <div className="lg:col-span-5 space-y-6">
+              <div>
+                <span className="text-zru-green text-xs font-bold uppercase tracking-wider block mb-1">
+                  {current.subtitle}
+                </span>
+                <h3 className="text-2xl sm:text-3xl font-black text-white uppercase tracking-tight leading-tight font-heading">
+                  {current.title}
+                </h3>
+              </div>
+
+              <p className="text-white/70 text-sm leading-relaxed font-light">
+                {current.description}
+              </p>
+
+              {/* Stats Grid */}
+              <div className="grid grid-cols-3 gap-3 pt-2">
+                {current.stats.map((stat, i) => (
+                  <div key={i} className="bg-white/5 border border-white/10 p-3 rounded-xl text-center">
+                    <span className="text-[10px] text-white/50 uppercase font-bold block">{stat.label}</span>
+                    <span className="text-sm font-black text-zru-green uppercase tracking-tight">{stat.value}</span>
+                  </div>
+                ))}
+              </div>
+
+              {/* CTA Button */}
+              <div className="pt-2">
+                <Link
+                  href={current.ctaLink}
+                  className="inline-flex items-center gap-3 px-6 py-3.5 bg-zru-green hover:bg-zru-green/90 text-white font-bold text-xs uppercase tracking-wider rounded-xl transition-all shadow-lg hover:shadow-zru-green/20 group"
+                >
+                  <span>{current.ctaText}</span>
+                  <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                </Link>
+              </div>
+            </div>
+          </motion.div>
+        </AnimatePresence>
       </div>
     </section>
-  );
+  )
 }

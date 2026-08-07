@@ -1,14 +1,11 @@
 'use client'
 
 import { useState } from 'react'
-import Image from 'next/image'
-import Link from 'next/link'
-import { motion, AnimatePresence } from 'framer-motion'
-import { Sparkles, ArrowRight, ShieldCheck, CheckCircle2, Lock, Mail, User, AlertCircle } from 'lucide-react'
+import { motion } from 'framer-motion'
+import { Sparkles, ArrowRight, CheckCircle2, AlertCircle } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
 
 export default function LoginPage() {
-  const [authMode, setAuthMode] = useState<'register' | 'magic_link'>('register')
   const [fullName, setFullName] = useState('')
   const [email, setEmail] = useState('')
   const [favoriteTeam, setFavoriteTeam] = useState('sables')
@@ -48,21 +45,19 @@ export default function LoginPage() {
       const supabase = createClient()
       const origin = typeof window !== 'undefined' ? window.location.origin : 'https://zimrugby.vercel.app'
 
-      if (authMode === 'register' || authMode === 'magic_link') {
-        const { error } = await supabase.auth.signInWithOtp({
-          email,
-          options: {
-            emailRedirectTo: `${origin}/auth/callback`,
-            data: {
-              full_name: fullName,
-              favorite_team: favoriteTeam,
-              cdpa_consent: consent,
-            },
+      const { error } = await supabase.auth.signInWithOtp({
+        email,
+        options: {
+          emailRedirectTo: `${origin}/auth/callback`,
+          data: {
+            full_name: fullName,
+            favorite_team: favoriteTeam,
+            cdpa_consent: consent,
           },
-        })
-        if (error) throw error
-        setMessage('Check your email! We sent you a magic login link to access your ZRU Passport.')
-      }
+        },
+      })
+      if (error) throw error
+      setMessage('Check your inbox! We sent you a secure magic login link.')
     } catch (err: any) {
       console.error('Auth Submit Error:', err)
       setError(err.message || 'Authentication failed. Please try again.')
@@ -77,7 +72,6 @@ export default function LoginPage() {
       <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-zru-green/20 rounded-full blur-[140px] pointer-events-none" />
 
       <div className="relative z-10 w-full max-w-xl mx-auto">
-        {/* Animated Card Container */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -87,17 +81,17 @@ export default function LoginPage() {
           {/* Green Badge Header */}
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 bg-zru-green/20 border border-zru-green/40 text-zru-green text-xs font-bold uppercase tracking-wider rounded-full mb-6 shadow-[0_0_15px_rgba(0,107,63,0.3)]">
             <Sparkles className="w-3.5 h-3.5" />
-            <span>Official Fan Zone Authentication</span>
+            <span>Sign In to ZRU</span>
           </div>
 
           {/* Main Title */}
           <h1 className="text-3xl sm:text-5xl font-black text-white uppercase tracking-tight mb-4 leading-tight">
-            Join The Sables Fan Zone
+            Sign In
           </h1>
 
           {/* Subheadline */}
           <p className="text-white/70 text-sm sm:text-base max-w-md mx-auto mb-8 font-light">
-            Get 10% off official merchandise, priority ticket alerts, and exclusive Sables match updates.
+            Sign in to access your account, priority ticket alerts, and Sables match updates.
           </p>
 
           {/* Form Box */}
@@ -108,7 +102,7 @@ export default function LoginPage() {
                 type="button"
                 onClick={handleGoogleSignIn}
                 disabled={googleLoading}
-                className="w-full py-3.5 px-4 bg-white/10 hover:bg-white/15 active:scale-[0.99] border border-white/20 hover:border-zru-green/60 text-white font-semibold text-sm rounded-xl transition-all flex items-center justify-center gap-3 shadow-md group"
+                className="w-full py-3.5 px-4 bg-white/10 hover:bg-white/15 active:scale-[0.99] border border-white/20 hover:border-zru-green/60 text-white font-semibold text-sm rounded-xl transition-all flex items-center justify-center gap-3 shadow-md group cursor-pointer"
               >
                 <svg className="w-5 h-5" viewBox="0 0 24 24">
                   <path
@@ -134,7 +128,7 @@ export default function LoginPage() {
 
             <div className="relative flex items-center justify-center my-6">
               <div className="border-t border-white/10 w-full" />
-              <span className="bg-black/60 px-3 text-xs text-white/50 uppercase font-medium absolute">Or Email Passport</span>
+              <span className="bg-black/60 px-3 text-xs text-white/50 uppercase font-medium absolute">Or Email Sign In</span>
             </div>
 
             {/* Error / Success Alerts */}
@@ -188,7 +182,7 @@ export default function LoginPage() {
                 <select
                   value={favoriteTeam}
                   onChange={(e) => setFavoriteTeam(e.target.value)}
-                  className="w-full px-4 py-3.5 bg-black/30 border border-white/10 focus:border-zru-green rounded-xl text-white text-sm focus:outline-none transition-colors"
+                  className="w-full px-4 py-3.5 bg-black/30 border border-white/10 focus:border-zru-green rounded-xl text-white text-sm focus:outline-none transition-colors cursor-pointer"
                 >
                   <option value="sables">Sables Men's XV</option>
                   <option value="cheetahs">Cheetahs Men's 7s</option>
@@ -208,16 +202,16 @@ export default function LoginPage() {
                   className="w-4 h-4 rounded border-white/20 text-zru-green focus:ring-zru-green bg-black/30 cursor-pointer"
                 />
                 <label htmlFor="consent" className="text-xs text-white/70 cursor-pointer">
-                  I agree to receive ZRU news & ticket alerts (CDPA 2021 Compliant).
+                  I agree to receive ZRU news & match alerts (CDPA 2021 Compliant).
                 </label>
               </div>
 
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full py-4 bg-zru-green hover:bg-zru-green/90 disabled:opacity-50 text-white font-bold text-sm uppercase tracking-wider rounded-xl transition-all shadow-lg hover:shadow-zru-green/20 flex items-center justify-center gap-2 mt-4"
+                className="w-full py-4 bg-zru-green hover:bg-zru-green/90 disabled:opacity-50 text-white font-bold text-sm uppercase tracking-wider rounded-xl transition-all shadow-lg hover:shadow-zru-green/20 flex items-center justify-center gap-2 mt-4 cursor-pointer"
               >
-                <span>{loading ? 'Generating Passport...' : 'Join Fan Zone & Get VIP Pass'}</span>
+                <span>{loading ? 'Signing In...' : 'Sign In'}</span>
                 <ArrowRight className="w-4 h-4" />
               </button>
             </form>
