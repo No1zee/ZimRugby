@@ -150,9 +150,7 @@ export default function MediaPageClient({ initialSocialPosts, cmsPage, initialNe
                       date: video.publishedAt,
                       thumbnail: video.thumbnail,
                       category: video.category,
-                      embedUrl: `https://www.youtube-nocookie.com/embed/${video.videoId || video.id}`,
                     }}
-                    onSelect={() => setSelectedVideo(video)}
                   />
                 ))}
             </div>
