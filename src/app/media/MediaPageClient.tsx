@@ -143,12 +143,16 @@ export default function MediaPageClient({ initialSocialPosts, cmsPage, initialNe
                 .map((video) => (
                   <VideoCard
                     key={video.id}
-                    title={video.title}
-                    duration="HIGHLIGHTS"
-                    date={video.publishedAt}
-                    thumbnail={video.thumbnail}
-                    category={video.category}
-                    videoId={video.videoId}
+                    video={{
+                      id: video.id,
+                      title: video.title,
+                      duration: "HIGHLIGHTS",
+                      date: video.publishedAt,
+                      thumbnail: video.thumbnail,
+                      category: video.category,
+                      embedUrl: `https://www.youtube-nocookie.com/embed/${video.videoId || video.id}`,
+                    }}
+                    onSelect={() => setSelectedVideo(video)}
                   />
                 ))}
             </div>
