@@ -127,32 +127,26 @@ export default function Navigation() {
     setSearchQuery("");
   };
 
-  const isActive = (href?: string) => {
-    if (!href) return false;
-    if (href === "/") return pathname === "/";
-    return pathname.startsWith(href);
-  };
-
   return (
     <header className="sticky top-0 z-50 w-full transition-all duration-300">
       {/* ── Top Utility Bar ── */}
       <div className="bg-[#004D2C] border-b border-white/10 text-[11px] font-bold text-white uppercase tracking-wider py-1.5 px-4 hidden md:block">
         <div className="max-w-[1440px] mx-auto flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <span className="inline-flex items-center gap-1.5 px-2 py-0.5 bg-zru-green text-white text-[9px] font-black tracking-widest rounded-sm">
-              <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
+            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-zru-green text-white text-[10px] font-black tracking-widest rounded-sm shadow-xs">
+              <span className="w-2 h-2 rounded-full bg-white animate-pulse" />
               LIVE: ZIMBABWE 30 - 20 NAMIBIA [FINAL]
             </span>
           </div>
 
-          <div className="flex items-center gap-4 text-white/80">
-            <Link href="/tickets" className="hover:text-white transition-colors flex items-center gap-1">
+          <div className="flex items-center gap-5 text-white/90 font-bold">
+            <Link href="/tickets" className="hover:text-white transition-colors flex items-center gap-1.5">
               <Ticket className="w-3.5 h-3.5 text-zru-green" />
-              <span>Tickets</span>
+              <span>TICKETS</span>
             </Link>
-            <Link href="/shop" className="hover:text-white transition-colors flex items-center gap-1">
+            <Link href="/shop" className="hover:text-white transition-colors flex items-center gap-1.5">
               <ShoppingBag className="w-3.5 h-3.5 text-zru-green" />
-              <span>Shop</span>
+              <span>SHOP</span>
             </Link>
             <span className="text-white/20">|</span>
             <button onClick={openSearch} className="hover:text-white transition-colors flex items-center gap-1 cursor-pointer">
@@ -163,26 +157,26 @@ export default function Navigation() {
               <div className="flex items-center gap-2">
                 <Link
                   href="/admin"
-                  className="px-3 py-1 bg-zru-green text-white font-black rounded-md hover:bg-zru-green/90 transition-colors flex items-center gap-1 shadow-sm"
+                  className="px-3.5 py-1 bg-zru-green text-white font-black rounded-md hover:bg-zru-green/90 transition-colors flex items-center gap-1.5 shadow-xs"
                 >
-                  <User className="w-3 h-3" />
-                  <span>Account</span>
+                  <User className="w-3.5 h-3.5" />
+                  <span>ACCOUNT</span>
                 </Link>
                 <button
                   onClick={handleSignOut}
                   className="text-white/60 hover:text-white transition-colors"
                   title="Sign Out"
                 >
-                  <LogOut className="w-3 h-3" />
+                  <LogOut className="w-3.5 h-3.5" />
                 </button>
               </div>
             ) : (
               <Link
                 href="/login"
-                className="px-3 py-1 bg-zru-green text-white font-black rounded-md hover:bg-zru-green/90 transition-colors flex items-center gap-1 shadow-sm"
+                className="px-3.5 py-1 bg-zru-green text-white font-black rounded-md hover:bg-zru-green/90 transition-colors flex items-center gap-1.5 shadow-xs"
               >
-                <User className="w-3 h-3" />
-                <span>Sign In</span>
+                <User className="w-3.5 h-3.5" />
+                <span>SIGN IN</span>
               </Link>
             )}
           </div>
@@ -204,7 +198,7 @@ export default function Navigation() {
           <Link href="/" className="flex items-center gap-3 shrink-0 group">
             <div className="relative w-10 h-10 sm:w-12 sm:h-12 flex-shrink-0 transition-transform group-hover:scale-105">
               <Image
-                src="/zru-logo.png"
+                src="/zru logo main.svg"
                 alt="Zimbabwe Rugby Union"
                 fill
                 className="object-contain"
