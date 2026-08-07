@@ -60,7 +60,7 @@ function SlideContent({
         </div>
       )}
 
-      {/* Main Headline */}
+      {/* Headline */}
       <div className="space-y-1">
         {line1 && (
           <h1 className="text-4xl sm:text-6xl lg:text-7xl font-black text-white uppercase tracking-tight font-heading leading-none drop-shadow-lg">
@@ -97,7 +97,7 @@ function SlideContent({
         )}
 
         {/* Carousel Progress & Navigation Controls Bar - Always centered between buttons */}
-        <div className="flex items-center gap-3 bg-black/50 backdrop-blur-md px-4 py-2.5 rounded-full border border-white/10 shadow-lg">
+        <div className="flex items-center gap-3 bg-black/40 backdrop-blur-md px-4 py-2.5 rounded-full border border-white/10 shadow-lg">
           <button
             onClick={onPrev}
             className="p-1 text-white/70 hover:text-white transition-colors cursor-pointer"
@@ -144,7 +144,7 @@ function SlideContent({
         {slide.secondaryCtaText && slide.secondaryCtaHref && (
           <Link
             href={slide.secondaryCtaHref}
-            className="group inline-flex items-center gap-2 px-6 py-3.5 bg-white/10 hover:bg-white/20 backdrop-blur-md text-white font-semibold text-sm tracking-wide rounded-md border border-white/20 hover:border-white/40 transition-all duration-300 hover:-translate-y-0.5"
+            className="group inline-flex items-center gap-2 px-6 py-3.5 bg-white/10 hover:bg-white/20 backdrop-blur-md text-white font-semibold text-sm tracking-wide rounded-sm border border-white/20 hover:border-white/40 transition-all duration-300 hover:-translate-y-0.5"
           >
             <span>{slide.secondaryCtaText}</span>
             <ArrowRight className="w-4 h-4 text-white/70 group-hover:text-white group-hover:translate-x-1 transition-all" />
@@ -188,6 +188,7 @@ export default function HeroCarousel({ slides = DEFAULT_SLIDES }: HeroCarouselPr
   const [currentSlide, setCurrentSlide] = useState(0)
   const [isMobile, setIsMobile] = useState(false)
   const [slideProgress, setSlideProgress] = useState(0)
+  const containerRef = useRef<HTMLDivElement>(null)
 
   const activeSlides = slides && slides.length > 0 ? slides : DEFAULT_SLIDES
   const activeSlide = activeSlides[currentSlide] || activeSlides[0]
@@ -195,7 +196,6 @@ export default function HeroCarousel({ slides = DEFAULT_SLIDES }: HeroCarouselPr
   const { isSlowConnection, saveDataEnabled, prefersReducedMotion } = useAdaptivePerformance()
   const shouldAutoPlayVideo = !isSlowConnection && !saveDataEnabled
 
-  // Hero Image resolution fallback
   const heroImageSrc =
     activeSlide.image &&
     activeSlide.image.startsWith('http') &&
@@ -234,16 +234,17 @@ export default function HeroCarousel({ slides = DEFAULT_SLIDES }: HeroCarouselPr
 
   return (
     <section 
-      className="relative w-full min-h-[600px] h-[85vh] max-h-[900px] bg-rich-black overflow-hidden select-none flex items-end pb-16 lg:pb-24"
+      ref={containerRef}
+      className="relative w-full min-h-[600px] h-[85vh] max-h-[900px] bg-rich-black overflow-hidden select-none"
     >
       <AnimatePresence mode="wait">
         <motion.div
           key={activeSlide.id || currentSlide}
-          initial={{ opacity: 0, scale: 1.03 }}
+          initial={{ opacity: 0, scale: prefersReducedMotion ? 1 : 1.04 }}
           animate={{ opacity: 1, scale: 1 }}
           exit={{ opacity: 0 }}
-          transition={{ duration: 0.8 }}
-          className="absolute inset-0 z-0"
+          transition={{ duration: prefersReducedMotion ? 0.2 : 0.8 }}
+          className="relative w-full h-full hero-bg-media will-change-transform"
         >
           {activeSlide.video && isMobile && (
             <Image
@@ -276,24 +277,25 @@ export default function HeroCarousel({ slides = DEFAULT_SLIDES }: HeroCarouselPr
               className="object-cover object-center"
             />
           )}
-          {/* Overlays */}
-          <div className="absolute inset-0 bg-gradient-to-t from-rich-black/95 via-rich-black/40 to-black/30 z-10" />
-          <div className="absolute inset-0 bg-gradient-to-r from-rich-black/80 via-transparent to-transparent z-10" />
+          {/* Overlay */}
+          <div className="absolute inset-0 bg-gradient-to-t from-rich-black/90 via-rich-black/30 to-black/30 z-10" />
         </motion.div>
       </AnimatePresence>
 
-      {/* Content Layer - GUARANTEED 100% VISIBLE */}
-      <div className="relative z-20 w-full max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
-        <SlideContent 
-          slide={activeSlide} 
-          isMobile={isMobile}
-          onPrev={handlePrev}
-          onNext={handleNext}
-          slides={activeSlides}
-          currentIndex={currentSlide}
-          onSelect={goToSlide}
-          progress={slideProgress}
-        />
+      {/* Content Layer - GUARANTEED 100% VISIBLE ON LOAD */}
+      <div className="relative z-20 w-full max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 h-full flex items-end justify-start pb-24 lg:pb-32">
+        <div className="text-left w-full mr-auto">
+          <SlideContent 
+            slide={activeSlide} 
+            isMobile={isMobile}
+            onPrev={handlePrev}
+            onNext={handleNext}
+            slides={activeSlides}
+            currentIndex={currentSlide}
+            onSelect={goToSlide}
+            progress={slideProgress}
+          />
+        </div>
       </div>
     </section>
   )
