@@ -1,287 +1,425 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo, useCallback } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { ChevronDown, Search, X, User, Ticket, ShoppingBag, LogOut } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
-import KineticNav from "./KineticNav";
-import { createClient } from "@/lib/supabase/client";
-import { mainNav } from "@/lib/navConfig";
+import { ChevronDown, Search, X, User, LogOut, ShieldCheck } from "lucide-react";
+import { motion, AnimatePresence, useScroll, useMotionValueEvent } from "framer-motion";
+import SlantedButton from "../ui/SlantedButton";
+import GlobalAnnouncementBar from "./GlobalAnnouncementBar";
+import KineticNav from "@/components/layout/KineticNav";
+import type { NavItem, NavChild } from "@/lib/navConfig";
+import { mainNav, utilityNav } from "@/lib/navConfig";
+import type { SearchEventResult } from "@/types";
+import { useAuth } from "@/context/AuthContext";
 
-interface NavChild {
-  label: string;
-  href: string;
-  badge?: string;
-  badgeType?: "live" | "new" | "popular";
-  description?: string;
-}
-
-interface NavItem {
-  label: string;
-  href?: string;
-  badge?: string;
-  isMega?: boolean;
-  children?: NavChild[];
-}
-
-const mainNavItems: NavItem[] = [
-  {
-    label: "National Teams",
-    children: [
-      { label: "Sables (Men XV)", href: "/teams/sables", badge: "World Cup 2027 Quest", description: "Senior Men XV National Team" },
-      { label: "Cheetahs (Men 7s)", href: "/teams/cheetahs", badge: "World Series", description: "Senior Men Sevens Team" },
-      { label: "Lady Sables (Women XV)", href: "/teams/lady-sables", description: "Senior Women XV National Team" },
-      { label: "Lady Cheetahs (Women 7s)", href: "/teams/lady-cheetahs", description: "Senior Women Sevens Team" },
-      { label: "Junior Sables (U20)", href: "/teams/junior-sables", badge: "Barthes Trophy", description: "Under 20 High Performance" },
-    ],
-  },
-  {
-    label: "Domestic & Match Centre",
-    children: [
-      { label: "Match Centre & Scores", href: "/match-centre", badge: "LIVE", badgeType: "live", description: "Live commentary & real-time updates" },
-      { label: "Fixtures & Results", href: "/matches", description: "Full schedule across all tiers" },
-      { label: "Super 8 League", href: "/competitions", description: "Premier domestic XVs competition" },
-      { label: "Paramount Garments League", href: "/competitions", description: "Harare & Bulawayo Metro Leagues" },
-      { label: "Registered Clubs Directory", href: "/clubs", description: "Official ZRU affiliated clubs" },
-    ],
-  },
-  {
-    label: "What's On",
-    children: [
-      { label: "Match Tickets", href: "/tickets", badge: "Buy Online", description: "Official international & league match passes" },
-      { label: "Upcoming Events & Festivals", href: "/events", description: "Tournaments, galas & community meets" },
-      { label: "Official Merchandise Store", href: "/shop", badge: "New Kit", description: "Authentic Sables kit & supporter wear" },
-    ],
-  },
-  {
-    label: "Campaigns",
-    children: [
-      { label: "Road to Australia 2027", href: "/campaigns/road-to-australia-2027", badge: "RWC 2027", description: "Sables World Cup qualification path" },
-      { label: "Rugby Africa Nations Cup 2026", href: "/campaigns/africa-cup-tour-2026", description: "Continental championship tour" },
-      { label: "National Schools Festival", href: "/campaigns/schools-festival-2026", description: "Legendary annual grassroots showcase" },
-    ],
-  },
-  {
-    label: "Media",
-    children: [
-      { label: "News & Announcements", href: "/media", description: "Official statements & match reports" },
-      { label: "Video Hub & Highlights", href: "/video-hub", description: "Match highlights & press conferences" },
-      { label: "Photo Gallery", href: "/gallery", description: "HD matchday imagery & archives" },
-    ],
-  },
-  {
-    label: "About ZRU",
-    children: [
-      { label: "Board & Leadership", href: "/about/board", description: "Executive committee & trustees" },
-      { label: "Governance & Constitution", href: "/about/governance", description: "ZRU constitution & policies" },
-      { label: "History & Tradition", href: "/about/history", description: "Rich heritage of Zimbabwean rugby" },
-      { label: "Safeguarding & Ethics", href: "/about/safeguarding", description: "Player welfare & integrity" },
-      { label: "Careers & Tenders", href: "/about/careers", description: "Join the ZRU administration" },
-    ],
-  },
-];
+/* ── Static config ── */
+const TRANSPARENT_ROUTES = ["/", "/live", "/world-cup-campaign", "/fan-zone", "/teams", "/match-centre", "/schools", "/clubs", "/about", "/events", "/media", "/volunteer", "/referees"];
+const SCROLL_THRESHOLD = 20;
 
 export default function Navigation() {
-  const [isOpen, setIsOpen] = useState(false);
-  const [isScrolled, setIsScrolled] = useState(false);
-  const [isSearchOpen, setIsSearchOpen] = useState(false);
-  const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
-  const [searchQuery, setSearchQuery] = useState("");
-  const [user, setUser] = useState<any>(null);
   const pathname = usePathname();
+  const { scrollY } = useScroll();
+  const { user, signOut: authSignOut } = useAuth();
 
+  /* ── Core UI state ── */
+  const [isScrolled, setIsScrolled] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
+  const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
+  const [dynamicNavItems, setDynamicNavItems] = useState<NavItem[]>(mainNav);
+  const [showFanMenu, setShowFanMenu] = useState(false);
+
+  /* ── Search state ── */
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [allMatches, setAllMatches] = useState<any[]>([]);
+  const [allReports, setAllReports] = useState<any[]>([]);
+
+  /* ── Derived booleans (computed once) ── */
+  const isTransparentAllowed = TRANSPARENT_ROUTES.some((route) =>
+    route === "/" ? pathname === "/" : pathname.startsWith(route)
+  );
+  const isOnHero = isTransparentAllowed && !isScrolled;
+  const showOpaqueHeader = !isOnHero;
+
+  /* ── Scroll listener (single useEffect, no framer-motion dependency for this) ── */
+  useMotionValueEvent(scrollY, "change", (latest) => {
+    const next = latest > SCROLL_THRESHOLD;
+    setIsScrolled((prev) => (prev === next ? prev : next));
+  });
+
+  /* ── Lock body scroll when mobile menu is open ── */
   useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 40);
-    };
-    window.addEventListener("scroll", handleScroll);
+    document.documentElement.style.overflow = isOpen ? "hidden" : "";
+    return () => { document.documentElement.style.overflow = ""; };
+  }, [isOpen]);
 
-    const supabase = createClient();
-    supabase.auth.getUser().then(({ data }) => setUser(data.user));
-
-    const { data: authListener } = supabase.auth.onAuthStateChange((_, session) => {
-      setUser(session?.user ?? null);
-    });
-
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-      authListener.subscription.unsubscribe();
-    };
+  /* ── Mobile menu toggle from external trigger ── */
+  useEffect(() => {
+    const handleToggle = () => setIsOpen((prev) => !prev);
+    window.addEventListener("toggleMobileMenu", handleToggle);
+    return () => window.removeEventListener("toggleMobileMenu", handleToggle);
   }, []);
 
-  const handleSignOut = async () => {
-    const supabase = createClient();
-    await supabase.auth.signOut();
-    setUser(null);
-  };
+  /* ── Escape key to close search ── */
+  useEffect(() => {
+    if (!isSearchOpen) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        setIsSearchOpen(false);
+        setSearchQuery("");
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [isSearchOpen]);
 
-  const isHomePage = pathname === "/";
-  const showOpaqueHeader = isScrolled || !isHomePage;
+  /* ── Lazy-load search data only when search overlay opens ── */
+  useEffect(() => {
+    if (!isSearchOpen) return;
+    let cancelled = false;
+    Promise.all([
+      fetch("/data/matches.json").then((r) => (r.ok ? r.json() : [])),
+      fetch("/data/reports.json").then((r) => (r.ok ? r.json() : [])),
+    ]).then(([matches, reports]) => {
+      if (!cancelled) {
+        setAllMatches(matches);
+        setAllReports(reports);
+      }
+    }).catch(() => {});
+    return () => { cancelled = true; };
+  }, [isSearchOpen]);
 
+  /* ── Load dynamic nav items once on mount ── */
+  useEffect(() => {
+    fetch("/api/navigation")
+      .then((r) => (r.ok ? r.json() : null))
+      .then((data) => {
+        if (!data) return;
+        setDynamicNavItems((prev) =>
+          prev.map((item) => {
+            if (item.label === "NATIONAL TEAMS" && data.teams) {
+              return { ...item, children: data.teams };
+            }
+            if (
+              item.label === "DOMESTIC & MATCH CENTRE" &&
+              (data.competitions || data.events)
+            ) {
+              return { ...item, children: [...(data.competitions || []), ...(data.events || [])] };
+            }
+            return item;
+          })
+        );
+      })
+      .catch(() => {});
+  }, []);
+
+  /* ── Search results (memoized) ── */
+  const searchResults = useMemo(() => {
+    if (!searchQuery.trim()) return { matches: [], reports: [], events: [] };
+    const q = searchQuery.toLowerCase();
+    return {
+      matches: allMatches
+        .filter(
+          (m) =>
+            m.homeTeam?.name?.toLowerCase().includes(q) ||
+            m.awayTeam?.name?.toLowerCase().includes(q) ||
+            m.venue?.toLowerCase().includes(q) ||
+            m.competition?.toLowerCase().includes(q)
+        )
+        .slice(0, 4),
+      reports: allReports
+        .filter(
+          (r) =>
+            r.title?.toLowerCase().includes(q) ||
+            r.excerpt?.toLowerCase().includes(q) ||
+            r.category?.toLowerCase().includes(q)
+        )
+        .slice(0, 4),
+      events: [] as SearchEventResult[],
+    };
+  }, [searchQuery, allMatches, allReports]);
+
+  /* ── Active route check (memoized per pathname) ── */
+  const isActive = useCallback(
+    (href: string, children?: NavChild[]) => {
+      if (href === "/" && pathname !== "/") return false;
+      const [hrefPath, hrefQuery] = href.split("?");
+      const pathMatches = pathname === hrefPath;
+      if (!pathMatches) return false;
+      if (children?.length) {
+        const childMatches = children.some((child) => {
+          const [childPath, childQuery] = child.href.split("?");
+          if (pathname !== childPath) return false;
+          if (!childQuery) return true;
+          if (typeof window === "undefined") return false;
+          const currentParams = new URLSearchParams(window.location.search);
+          const targetParams = new URLSearchParams(childQuery);
+          return Array.from(targetParams.entries()).every(([k, v]) => currentParams.get(k) === v);
+        });
+        if (childMatches) return false;
+      }
+      if (!hrefQuery || typeof window === "undefined") return true;
+      const currentParams = new URLSearchParams(window.location.search);
+      const targetParams = new URLSearchParams(hrefQuery);
+      return Array.from(targetParams.entries()).every(([k, v]) => currentParams.get(k) === v);
+    },
+    [pathname]
+  );
+
+  /* ── Helpers ── */
   const toggleMenu = () => setIsOpen((prev) => !prev);
-  const openSearch = () => setIsSearchOpen(true);
-  const closeSearch = () => {
-    setIsSearchOpen(false);
-    setSearchQuery("");
-  };
+  const closeSearch = () => { setIsSearchOpen(false); setSearchQuery(""); };
+
+  const isAdminRoute = pathname?.startsWith("/admin") || pathname?.startsWith("/admin-login");
+
+  const navTextClass = showOpaqueHeader ? "text-black/70 hover:text-black" : "text-white/70 hover:text-white";
+
+  if (isAdminRoute) return null;
 
   return (
-    <header className="sticky top-0 z-50 w-full transition-all duration-300">
-      {/* ── Top Utility Bar ── */}
-      <div className="bg-[#004D2C] border-b border-white/10 text-[11px] font-bold text-white uppercase tracking-wider py-1.5 px-4 hidden md:block">
-        <div className="max-w-[1440px] mx-auto flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-zru-green text-white text-[10px] font-black tracking-widest rounded-sm shadow-xs">
-              <span className="w-2 h-2 rounded-full bg-white animate-pulse" />
-              LIVE: ZIMBABWE 30 - 20 NAMIBIA [FINAL]
-            </span>
-          </div>
+    <header className="fixed top-0 left-0 w-full z-50">
+      {pathname !== "/fan-zone" && <GlobalAnnouncementBar />}
 
-          <div className="flex items-center gap-5 text-white/90 font-bold">
-            <Link href="/tickets" className="hover:text-white transition-colors flex items-center gap-1.5">
-              <Ticket className="w-3.5 h-3.5 text-zru-green" />
-              <span>TICKETS</span>
-            </Link>
-            <Link href="/shop" className="hover:text-white transition-colors flex items-center gap-1.5">
-              <ShoppingBag className="w-3.5 h-3.5 text-zru-green" />
-              <span>SHOP</span>
-            </Link>
-            <span className="text-white/20">|</span>
-            <button onClick={openSearch} className="hover:text-white transition-colors flex items-center gap-1 cursor-pointer">
+      {/* ═══ UTILITY BAR ═══ */}
+      <div
+        className={`w-full transition-all duration-500 ${
+          showOpaqueHeader
+            ? "bg-[#002D1A]/95 backdrop-blur-md border-b border-white/5"
+            : "bg-[#002D1A]/80 backdrop-blur-sm"
+        }`}
+      >
+        <div className="w-full px-4 sm:px-6 lg:px-8 flex items-center justify-end gap-1 sm:gap-2 h-9">
+          {/* Desktop utility items */}
+          <div className="hidden lg:flex items-center gap-2">
+            {/* Live Score Ticker Pill */}
+            <div className="flex items-center gap-2 bg-[#001D11] border border-emerald-500/30 px-3 py-1 rounded-full text-[10px] font-heading font-black tracking-wider text-emerald-400 shadow-[inset_0_1px_0_rgba(255,255,255,0.10),0_2px_6px_rgba(0,0,0,0.45)]">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+              <span>LIVE: ZIMBABWE 30 - 28 NAMIBIA [FINAL]</span>
+            </div>
+
+            {utilityNav.map((item) => {
+              const Icon = item.icon;
+              return (
+                <Link
+                  key={item.label}
+                  href={item.href || "#"}
+                  className="flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-heading font-black uppercase tracking-wider text-white/60 hover:text-white hover:bg-white/10 transition-all"
+                >
+                  <Icon className="w-3 h-3" />
+                  <span>{item.label}</span>
+                </Link>
+              );
+            })}
+
+            <div className="w-px h-4 bg-white/15 mx-1" />
+
+            <button
+              onClick={() => setIsSearchOpen(true)}
+              className="p-1.5 text-white/50 hover:text-white hover:bg-white/10 rounded-full transition-all cursor-pointer"
+              aria-label="Search site"
+            >
               <Search className="w-3.5 h-3.5" />
             </button>
 
             {user ? (
-              <div className="flex items-center gap-2">
-                <Link
-                  href="/admin"
-                  className="px-3.5 py-1 bg-zru-green text-white font-black rounded-md hover:bg-zru-green/90 transition-colors flex items-center gap-1.5 shadow-xs"
-                >
-                  <User className="w-3.5 h-3.5" />
-                  <span>ACCOUNT</span>
-                </Link>
+              <div className="relative">
                 <button
-                  onClick={handleSignOut}
-                  className="text-white/60 hover:text-white transition-colors"
-                  title="Sign Out"
+                  onClick={() => setShowFanMenu(!showFanMenu)}
+                  className="flex items-center gap-2 px-3.5 py-1.5 bg-[#006747] hover:bg-[#006747]/80 text-white rounded-full text-xs font-bold uppercase tracking-wider transition-all cursor-pointer shadow-[inset_0_1px_0_rgba(255,255,255,0.20),inset_0_-1px_0_rgba(0,0,0,0.25),0_2px_0_#003D20,0_4px_8px_rgba(0,0,0,0.35)]"
                 >
-                  <LogOut className="w-3.5 h-3.5" />
+                  <div className="w-5 h-5 rounded-full bg-white/20 text-white flex items-center justify-center font-bold text-[10px]">
+                    {user.name.charAt(0).toUpperCase()}
+                  </div>
+                  <span className="truncate max-w-[120px] font-sans">{user.name.split(" ")[0]}</span>
+                  <ChevronDown className="w-3 h-3 text-white/70" />
                 </button>
+
+                {showFanMenu && (
+                  <div className="absolute right-0 mt-2 w-56 bg-[#002D1A] border border-white/15 rounded-xl p-3 shadow-xl z-50 space-y-2 text-white text-xs">
+                    <div className="border-b border-white/10 pb-2">
+                      <p className="font-bold truncate text-white">{user.name}</p>
+                      <p className="text-[11px] text-white/60 truncate">{user.handle || user.email}</p>
+                    </div>
+
+                    <Link
+                      href="/fan-zone"
+                      onClick={() => setShowFanMenu(false)}
+                      className="flex items-center gap-2 px-2 py-2 hover:bg-white/10 rounded-lg text-xs font-medium text-white transition-colors"
+                    >
+                      <User className="w-3.5 h-3.5 text-white/70" />
+                      <span>My Account</span>
+                    </Link>
+
+                    <button
+                      onClick={async () => {
+                        await authSignOut();
+                        setShowFanMenu(false);
+                      }}
+                      className="w-full flex items-center gap-2 px-2 py-2 hover:bg-red-500/20 text-red-200 rounded-lg text-xs font-medium transition-colors"
+                    >
+                      <LogOut className="w-3.5 h-3.5 text-red-300" />
+                      <span>Sign Out</span>
+                    </button>
+                  </div>
+                )}
               </div>
             ) : (
               <Link
-                href="/login"
-                className="px-3.5 py-1 bg-zru-green text-white font-black rounded-md hover:bg-zru-green/90 transition-colors flex items-center gap-1.5 shadow-xs"
+                href="/fan-zone"
+                className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-[#006747] hover:bg-[#006747]/80 text-white text-[11px] font-heading font-black uppercase tracking-wider transition-all shadow-[inset_0_1px_0_rgba(255,255,255,0.20),inset_0_-1px_0_rgba(0,0,0,0.25),0_3px_0_#003D20,0_5px_10px_rgba(0,0,0,0.35)]"
               >
                 <User className="w-3.5 h-3.5" />
                 <span>SIGN IN</span>
               </Link>
             )}
           </div>
+
+          {/* Mobile utility: Search + Tickets */}
+          <div className="lg:hidden flex items-center gap-1">
+            <button
+              onClick={() => setIsSearchOpen(true)}
+              className={`p-1.5 transition-colors cursor-pointer text-white/60 hover:text-white`}
+              aria-label="Search site"
+            >
+              <Search className="w-4 h-4" />
+            </button>
+            <Link
+              href="/tickets"
+              className="flex items-center gap-1 px-2.5 py-1 rounded-full bg-[#006747] text-white text-[10px] font-heading font-black uppercase tracking-wider shadow-[inset_0_1px_0_rgba(255,255,255,0.20),inset_0_-1px_0_rgba(0,0,0,0.25),0_2px_0_#003D20,0_4px_8px_rgba(0,0,0,0.35)]"
+            >
+              TICKETS
+            </Link>
+          </div>
         </div>
       </div>
 
-      {/* ── Main Navigation Bar (Milk-White on Scroll) ── */}
+      {/* ═══ MAIN NAV ═══ */}
       <nav
-        className={`
-          w-full transition-all duration-300 border-b z-40
-          ${showOpaqueHeader
-            ? "bg-white text-black border-neutral-200 shadow-md py-3"
-            : "bg-black/40 backdrop-blur-md text-white border-white/10 py-4"
-          }
-        `}
+        className={`w-full transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+          showOpaqueHeader
+            ? "bg-milk-white/95 backdrop-blur-md py-3 shadow-md border-b border-black/5"
+            : "bg-transparent py-5"
+        }`}
       >
-        <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
-          {/* Logo */}
-          <Link href="/" className="flex items-center gap-3 shrink-0 group">
-            <div className="relative w-10 h-10 sm:w-12 sm:h-12 flex-shrink-0 transition-transform group-hover:scale-105">
+        <div className="w-full px-4 sm:px-6 lg:px-8 flex items-center justify-between lg:justify-start gap-1.5 sm:gap-2 lg:gap-4">
+
+          {/* ── Logo Brand Block ── */}
+          <Link
+            href="/"
+            className="flex items-center gap-2 sm:gap-2.5 md:gap-4 group z-50 transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] shrink-0"
+          >
+            <div
+              className={`relative transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:rotate-6 flex items-center justify-center shrink-0 ${
+                isOnHero
+                  ? "w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 lg:w-28 lg:h-28 xl:w-32 xl:h-32 drop-shadow-[0_10px_25px_rgba(0,0,0,0.5)]"
+                  : "w-8 h-8 sm:w-9 sm:h-9 md:w-10 md:h-10 lg:w-10 lg:h-10 xl:w-12 xl:h-12"
+              }`}
+            >
               <Image
                 src="/zru logo main.svg"
-                alt="Zimbabwe Rugby Union"
-                fill
-                className="object-contain"
+                alt="Zimbabwe Rugby Union Logo"
+                width={80}
+                height={80}
                 priority
+                className="w-full h-full object-contain"
               />
             </div>
-            <div className="flex flex-col">
-              <span className={`font-heading font-black text-base sm:text-lg tracking-wider leading-none uppercase ${showOpaqueHeader ? "text-black" : "text-white"}`}>
-                Zimbabwe
+
+            <div
+              className={`flex flex-col justify-center items-center transition-opacity duration-500 ${
+                isOnHero ? "opacity-0 pointer-events-none" : "opacity-100"
+              }`}
+            >
+              <span
+                className={`font-heading font-black tracking-[0.05em] leading-none transition-all duration-500 whitespace-nowrap ${
+                  isOnHero
+                    ? "text-lg sm:text-2xl md:text-3xl text-white"
+                    : `text-sm sm:text-lg md:text-xl ${showOpaqueHeader ? "text-black" : "text-white"}`
+                }`}
+              >
+                ZIMBABWE
               </span>
-              <span className="font-heading font-extrabold text-zru-green text-xs sm:text-sm tracking-widest leading-none uppercase">
-                Rugby Union
+              <span
+                className={`font-subheading font-black leading-none mt-1 whitespace-nowrap transition-all duration-500 ${
+                  isOnHero
+                    ? "text-[0.85em] sm:text-xl md:text-2xl tracking-[-0.02em]"
+                    : `text-[0.85em] sm:text-base md:text-lg tracking-[-0.05em]`
+                } ${isOnHero ? "text-white" : "text-[#006747]"}`}
+              >
+                RUGBY UNION
               </span>
             </div>
           </Link>
 
-          {/* Desktop Navigation Links */}
-          <div className="hidden lg:flex items-center gap-1 xl:gap-2">
-            {mainNavItems.map((item) => (
-              <div
-                key={item.label}
-                className="relative"
-                onMouseEnter={() => setActiveDropdown(item.label)}
-                onMouseLeave={() => setActiveDropdown(null)}
-              >
-                <button
-                  className={`flex items-center gap-1.5 px-3 py-2 text-xs font-bold uppercase tracking-wider transition-colors rounded-md ${
-                    showOpaqueHeader
-                      ? "text-neutral-800 hover:text-zru-green hover:bg-neutral-100"
-                      : "text-white/90 hover:text-white hover:bg-white/10"
-                  }`}
+          {/* ── Desktop Nav Items ── */}
+          <div className="hidden lg:flex items-center justify-center gap-2 xl:gap-5 2xl:gap-8 overflow-visible px-2 flex-1">
+            <div className="flex items-center gap-2.5 xl:gap-5 2xl:gap-8 overflow-visible">
+              {dynamicNavItems.map((item) => (
+                <div
+                  key={item.label}
+                  className="relative group/nav shrink-0 py-1"
+                  onMouseEnter={() => setActiveDropdown(item.label)}
+                  onMouseLeave={() => setActiveDropdown(null)}
                 >
-                  <span>{item.label}</span>
-                  <ChevronDown className="w-3.5 h-3.5 opacity-60" />
-                </button>
+                  <Link
+                    href={item.href}
+                    className={`
+                      flex items-center gap-1 xl:gap-1.5 py-2 font-subheading tracking-wider text-[9px] xl:text-[10px] 2xl:text-xs uppercase font-black transition-colors relative whitespace-nowrap
+                      ${isActive(item.href, item.children) ? "text-zru-green" : navTextClass}
+                    `}
+                  >
+                    {isActive(item.href, item.children) && (
+                      <motion.span
+                        layoutId="activeIndicator"
+                        className="absolute bottom-0 left-0 w-full h-[2px] bg-zru-green"
+                        transition={{ type: "spring", stiffness: 380, damping: 30 }}
+                      />
+                    )}
+                    {item.label}
+                    {item.children && (
+                      <ChevronDown className="w-3 h-3 xl:w-3.5 xl:h-3.5 transition-transform group-hover/nav:rotate-180 shrink-0" />
+                    )}
+                  </Link>
 
-                {/* Dropdown Menu */}
-                <AnimatePresence>
-                  {activeDropdown === item.label && item.children && (
-                    <motion.div
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: 5 }}
-                      transition={{ duration: 0.15 }}
-                      className="absolute top-full left-0 w-72 bg-rich-black/95 backdrop-blur-xl border border-white/10 rounded-xl shadow-2xl p-2 mt-1 z-50 text-white"
-                    >
-                      {item.children.map((child) => (
-                        <Link
-                          key={child.label}
-                          href={child.href}
-                          className="flex flex-col p-2.5 rounded-lg hover:bg-white/5 transition-colors group"
+                  {item.children && (
+                    <AnimatePresence>
+                      {activeDropdown === item.label && (
+                        <motion.div
+                          initial={{ opacity: 0, y: 8, scale: 0.96 }}
+                          animate={{ opacity: 1, y: 0, scale: 1 }}
+                          exit={{ opacity: 0, y: 8, scale: 0.96 }}
+                          transition={{ duration: 0.2, ease: "easeOut" }}
+                          className={`absolute top-full left-1/2 -translate-x-1/2 mt-1 bg-gradient-to-b from-[#005232] to-[#00452A] rounded-2xl shadow-[inset_0_1px_0_rgba(255,255,255,0.08),0_4px_6px_rgba(0,0,0,0.35),0_30px_50px_-12px_rgba(0,0,0,0.55)] py-3 overflow-hidden z-[100] ${
+                            item.isMega
+                              ? "w-[380px] xl:w-[420px] grid grid-cols-2 gap-x-2 px-3"
+                              : "min-w-[220px] px-2"
+                          }`}
                         >
-                          <div className="flex items-center justify-between">
-                            <span className="text-sm font-bold text-white group-hover:text-zru-green transition-colors">
+                          {item.children.map((child) => (
+                            <Link
+                              key={child.label}
+                              href={child.href}
+                              className={`
+                                block px-3.5 py-2.5 text-xs font-bold tracking-wide transition-all duration-200 rounded-xl hover:bg-zru-green/15 text-white hover:translate-x-[3px] hover:shadow-[0_2px_6px_rgba(0,0,0,0.25)]
+                                ${isActive(child.href) ? "text-white bg-white/20 font-black" : "text-white/90"}
+                                ${item.isMega ? "hover:pl-5" : "hover:pl-4"}
+                              `}
+                            >
                               {child.label}
-                            </span>
-                            {child.badge && (
-                              <span
-                                className={`text-[9px] font-black uppercase tracking-wider px-2 py-0.5 rounded ${
-                                  child.badgeType === "live"
-                                    ? "bg-red-500/20 text-red-400 border border-red-500/30"
-                                    : "bg-zru-green/20 text-zru-green border border-zru-green/30"
-                                }`}
-                              >
-                                {child.badge}
-                              </span>
-                            )}
-                          </div>
-                          {child.description && (
-                            <span className="text-xs text-white/50 font-normal line-clamp-1 mt-0.5">
-                              {child.description}
-                            </span>
-                          )}
-                        </Link>
-                      ))}
-                    </motion.div>
+                            </Link>
+                          ))}
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
                   )}
-                </AnimatePresence>
-              </div>
-            ))}
+                </div>
+              ))}
+            </div>
           </div>
 
-          {/* Mobile Hamburger */}
+          {/* ── Mobile: Hamburger (triggers KineticNav) ── */}
           <div className="lg:hidden shrink-0">
             <button
               onClick={toggleMenu}
@@ -298,10 +436,10 @@ export default function Navigation() {
         </div>
       </nav>
 
-      {/* Mobile Menu Overlay */}
-      <KineticNav isOpen={isOpen} onClose={toggleMenu} navItems={mainNav} pathname={pathname} />
+      {/* ── Mobile Menu Overlay ── */}
+      <KineticNav isOpen={isOpen} onClose={toggleMenu} navItems={dynamicNavItems} pathname={pathname} />
 
-      {/* Search Overlay */}
+      {/* ── Search Overlay ── */}
       <AnimatePresence>
         {isSearchOpen && (
           <motion.div
@@ -309,7 +447,7 @@ export default function Navigation() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.25 }}
-            className="fixed inset-0 bg-rich-black/98 backdrop-blur-xl z-[100] overflow-y-auto pt-16 flex flex-col items-center px-4 md:px-8 text-white"
+            className="fixed inset-0 bg-rich-black/98 backdrop-blur-xl z-[100] overflow-y-auto pt-16 flex flex-col items-center px-4 md:px-8"
           >
             <div className="w-full max-w-4xl flex justify-end py-4">
               <button
@@ -333,6 +471,97 @@ export default function Navigation() {
                   className="w-full bg-transparent text-2xl md:text-4xl font-heading tracking-wider uppercase text-white placeholder:text-white/20 focus:outline-hidden"
                 />
               </div>
+            </div>
+
+            <div className="w-full max-w-4xl mt-12 pb-24 grid grid-cols-1 md:grid-cols-3 gap-10">
+              {/* Matches */}
+              <div className="space-y-4">
+                <span className="block text-zru-green text-[10px] font-black uppercase tracking-[0.3em] border-b border-zru-green/20 pb-2">
+                  Fixtures &amp; Results
+                </span>
+                {searchQuery && searchResults.matches.length === 0 && (
+                  <p className="text-white/40 text-xs font-normal">No matching fixtures found.</p>
+                )}
+                <div className="space-y-3">
+                  {searchResults.matches.map((m) => (
+                    <Link
+                      key={m.id}
+                      href="/match-centre"
+                      onClick={closeSearch}
+                      className="block p-3 rounded-lg bg-white/5 hover:bg-zru-green/10 border border-white/5 hover:border-zru-green/20 transition-all group"
+                    >
+                      <div className="text-[10px] text-white/40 font-bold uppercase tracking-wider mb-1">
+                        {m.competition}
+                      </div>
+                      <div className="text-white group-hover:text-zru-green transition-colors text-sm font-heading tracking-wide">
+                        {m.homeTeam?.name} VS {m.awayTeam?.name}
+                      </div>
+                      <div className="text-[10px] text-white/50 font-bold uppercase tracking-wider mt-1">
+                        {m.date} &bull; {m.venue}
+                      </div>
+                    </Link>
+                  ))}
+                </div>
+              </div>
+
+              {/* News */}
+              <div className="space-y-4">
+                <span className="block text-zru-green text-[10px] font-black uppercase tracking-[0.3em] border-b border-zru-green/20 pb-2">
+                  Latest News
+                </span>
+                {searchQuery && searchResults.reports.length === 0 && (
+                  <p className="text-white/40 text-xs font-normal">No matching articles found.</p>
+                )}
+                <div className="space-y-3">
+                  {searchResults.reports.map((r) => (
+                    <Link
+                      key={r.id}
+                      href={`/media/${r.id}`}
+                      onClick={closeSearch}
+                      className="block p-3 rounded-lg bg-white/5 hover:bg-zru-green/10 border border-white/5 hover:border-zru-green/20 transition-all group"
+                    >
+                      <div className="text-[10px] text-zru-green font-bold uppercase tracking-wider mb-1">
+                        {r.category}
+                      </div>
+                      <div className="text-white group-hover:text-zru-green transition-colors text-sm font-body font-bold line-clamp-2 leading-snug">
+                        {r.title}
+                      </div>
+                      <div className="text-[9px] text-white/40 font-bold uppercase tracking-wider mt-1">
+                        {r.date}
+                      </div>
+                    </Link>
+                  ))}
+                </div>
+              </div>
+
+              {/* Events */}
+              {searchResults.events.length > 0 && (
+                <div className="space-y-4">
+                  <span className="block text-zru-green text-[10px] font-black uppercase tracking-[0.3em] border-b border-zru-green/20 pb-2">
+                    Tournaments &amp; Events
+                  </span>
+                  <div className="space-y-3">
+                    {searchResults.events.map((e) => (
+                      <Link
+                        key={e.id}
+                        href={e.href}
+                        onClick={closeSearch}
+                        className="block p-3 rounded-lg bg-white/5 hover:bg-zru-green/10 border border-white/5 hover:border-zru-green/20 transition-all group"
+                      >
+                        <div className="text-[10px] text-white/40 font-bold uppercase tracking-wider mb-1">
+                          {e.category}
+                        </div>
+                        <div className="text-white group-hover:text-zru-green transition-colors text-sm font-heading tracking-wide">
+                          {e.title}
+                        </div>
+                        <div className="text-[10px] text-white/50 font-bold uppercase tracking-wider mt-1">
+                          {e.location}
+                        </div>
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
           </motion.div>
         )}
