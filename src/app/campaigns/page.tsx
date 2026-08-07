@@ -90,7 +90,7 @@ export default async function CampaignsPage() {
                     href={campaign.cta_url || `/campaigns/${campaign.slug}`}
                     className="flex items-center justify-center gap-2 w-full py-3 bg-zru-green hover:bg-zru-green/90 text-white text-center font-bold text-xs uppercase tracking-wider rounded-xl transition-colors shadow-md group"
                   >
-                    <span>{campaign.cta_text || "Explore Campaign"}</span>
+                    <span>Explore Campaign</span>
                     <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                   </Link>
                 </div>
