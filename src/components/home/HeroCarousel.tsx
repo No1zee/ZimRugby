@@ -1,241 +1,177 @@
 'use client'
 
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import Image from 'next/image'
 import Link from 'next/link'
-import { Play, ChevronLeft, ChevronRight, ArrowRight, ShieldCheck } from 'lucide-react'
-import { useAdaptivePerformance } from '@/context/AdaptivePerformanceContext'
+import { Play, ChevronLeft, ChevronRight, ArrowRight } from 'lucide-react'
 
 export interface HeroSlideData {
   id?: string | number
   badgeText?: string
-  headline?: string | { line1?: string; line2?: string }
+  headline?: { line1?: string; line2?: string }
   subheadline?: string
   ctaText?: string
   ctaHref?: string
   secondaryCtaText?: string
   secondaryCtaHref?: string
   image?: string
-  video?: string
-}
-
-interface HeroCarouselProps {
-  slides?: HeroSlideData[]
 }
 
 const DEFAULT_SLIDES: HeroSlideData[] = [
   {
     id: '1',
-    headline: { line1: 'SABLES VICTORY', line2: 'ROAD TO AUSTRALIA 2027' },
-    subheadline: 'Zimbabwe Rugby Union launches official campaign for Australia 2027 World Cup qualification.',
-    ctaText: 'Watch Highlights',
+    headline: { line1: 'VICTORY IN', line2: 'THE ZAMBEZI' },
+    subheadline: 'Sables secure historic win against Namibia at Harare Sports Club',
+    ctaText: 'WATCH HIGHLIGHTS',
     ctaHref: '/video-hub',
-    secondaryCtaText: 'Match Centre',
+    secondaryCtaText: 'MATCH CENTRE',
     secondaryCtaHref: '/match-centre',
     image: 'https://images.unsplash.com/photo-1544698310-74ea9d1c8258?auto=format&fit=crop&w=1920&q=85',
-    badgeText: 'Featured Campaign',
   },
   {
     id: '2',
     headline: { line1: 'CHEETAHS 7S', line2: 'WORLD SERIES TOUR' },
-    subheadline: 'High-speed, high-intensity rugby as Zimbabwe Cheetahs take on international powerhouses.',
-    ctaText: 'Fixtures & Tickets',
-    ctaHref: '/tickets',
-    secondaryCtaText: 'Squad List',
-    secondaryCtaHref: '/teams/cheetahs',
+    subheadline: 'High-speed, high-intensity rugby as Zimbabwe Cheetahs take on international powerhouses',
+    ctaText: 'WATCH HIGHLIGHTS',
+    ctaHref: '/video-hub',
+    secondaryCtaText: 'MATCH CENTRE',
+    secondaryCtaHref: '/tickets',
     image: 'https://images.unsplash.com/photo-1519315901367-f34ff9154487?auto=format&fit=crop&w=1920&q=85',
-    badgeText: 'Sevens Tour',
   },
   {
     id: '3',
     headline: { line1: 'JUNIOR SABLES', line2: 'AFRICA BARTHES TROPHY' },
-    subheadline: 'Under 20 squad defends title in Harare. Experience high-octane African youth rugby.',
-    ctaText: 'Explore Festival',
+    subheadline: 'Under 20 squad defends title in Harare. Experience high-octane African youth rugby',
+    ctaText: 'WATCH HIGHLIGHTS',
     ctaHref: '/campaigns/schools-festival-2026',
-    secondaryCtaText: 'Development Hub',
+    secondaryCtaText: 'MATCH CENTRE',
     secondaryCtaHref: '/play-rugby',
     image: 'https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=1920&q=85',
-    badgeText: 'Grassroots',
   },
 ]
 
-export default function HeroCarousel({ slides }: HeroCarouselProps) {
-  const [currentSlide, setCurrentSlide] = useState(0)
-  const [isMobile, setIsMobile] = useState(false)
+export default function HeroCarousel({ slides }: { slides?: HeroSlideData[] }) {
+  const [currentIndex, setCurrentIndex] = useState(0)
 
-  // Ensure active slides always have complete, valid data
-  const rawSlides = slides && slides.length > 0 ? slides : DEFAULT_SLIDES
-  const activeSlides = rawSlides.map((s, idx) => {
-    const fallback = DEFAULT_SLIDES[idx % DEFAULT_SLIDES.length]
-    return {
-      id: s.id || fallback.id,
-      badgeText: s.badgeText || fallback.badgeText,
-      headline: s.headline || fallback.headline,
-      subheadline: s.subheadline || fallback.subheadline,
-      ctaText: s.ctaText || fallback.ctaText,
-      ctaHref: s.ctaHref || fallback.ctaHref,
-      secondaryCtaText: s.secondaryCtaText || fallback.secondaryCtaText,
-      secondaryCtaHref: s.secondaryCtaHref || fallback.secondaryCtaHref,
-      image:
-        s.image && s.image.startsWith('http') && !s.image.includes('placeholder')
-          ? s.image
-          : fallback.image,
-      video: s.video,
-    }
-  })
-
-  const activeSlide = activeSlides[currentSlide] || activeSlides[0]
-
-  const { isSlowConnection, saveDataEnabled, prefersReducedMotion } = useAdaptivePerformance()
-  const shouldAutoPlayVideo = !isSlowConnection && !saveDataEnabled
+  const activeSlides = slides && slides.length > 0 ? slides : DEFAULT_SLIDES
 
   useEffect(() => {
-    const handleResize = () => setIsMobile(window.innerWidth < 768)
-    handleResize()
-    window.addEventListener('resize', handleResize)
-    return () => window.removeEventListener('resize', handleResize)
-  }, [])
-
-  useEffect(() => {
-    if (prefersReducedMotion) return
-
-    const interval = setInterval(() => {
-      setCurrentSlide((prev) => (prev + 1) % activeSlides.length)
+    const timer = setInterval(() => {
+      setCurrentIndex((prev) => (prev + 1) % activeSlides.length)
     }, 6000)
+    return () => clearInterval(timer)
+  }, [activeSlides.length])
 
-    return () => clearInterval(interval)
-  }, [activeSlides.length, prefersReducedMotion])
+  const slide = activeSlides[currentIndex] || DEFAULT_SLIDES[0]
 
   const handlePrev = () => {
-    setCurrentSlide((prev) => (prev - 1 + activeSlides.length) % activeSlides.length)
+    setCurrentIndex((prev) => (prev - 1 + activeSlides.length) % activeSlides.length)
   }
 
   const handleNext = () => {
-    setCurrentSlide((prev) => (prev + 1) % activeSlides.length)
+    setCurrentIndex((prev) => (prev + 1) % activeSlides.length)
   }
-
-  const goToSlide = (index: number) => {
-    setCurrentSlide(index)
-  }
-
-  const line1 =
-    typeof activeSlide.headline === 'string'
-      ? activeSlide.headline
-      : activeSlide.headline?.line1 || 'SABLES VICTORY'
-  const line2 =
-    typeof activeSlide.headline === 'string'
-      ? ''
-      : activeSlide.headline?.line2 || 'ROAD TO 2027'
 
   return (
-    <section className="relative w-full min-h-[600px] h-[85vh] max-h-[900px] bg-rich-black overflow-hidden select-none flex items-end pb-16 lg:pb-24">
-      {/* Background Media */}
+    <section className="relative w-full h-[85vh] min-h-[620px] max-h-[900px] bg-rich-black overflow-hidden flex items-end pb-12 sm:pb-20 select-none">
+      {/* Background Image */}
       <AnimatePresence mode="wait">
         <motion.div
-          key={activeSlide.id || currentSlide}
-          initial={{ opacity: 0, scale: 1.03 }}
+          key={slide.id || currentIndex}
+          initial={{ opacity: 0, scale: 1.05 }}
           animate={{ opacity: 1, scale: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.8 }}
           className="absolute inset-0 z-0"
         >
-          {activeSlide.video && !isMobile && shouldAutoPlayVideo ? (
-            <video
-              src={activeSlide.video}
-              autoPlay
-              muted
-              loop
-              playsInline
-              preload="metadata"
-              poster={activeSlide.image}
-              className="absolute inset-0 w-full h-full object-cover"
-            />
-          ) : (
-            <Image
-              src={activeSlide.image!}
-              alt={`${line1} ${line2}`}
-              fill
-              priority
-              sizes="100vw"
-              className="object-cover object-center"
-            />
-          )}
-          {/* Overlays for readable text */}
-          <div className="absolute inset-0 bg-gradient-to-t from-rich-black via-rich-black/50 to-black/40 z-10" />
+          <Image
+            src={slide.image || DEFAULT_SLIDES[0].image!}
+            alt="Hero Background"
+            fill
+            priority
+            className="object-cover object-center brightness-75"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-rich-black/95 via-rich-black/40 to-black/30 z-10" />
           <div className="absolute inset-0 bg-gradient-to-r from-rich-black/90 via-transparent to-transparent z-10" />
         </motion.div>
       </AnimatePresence>
 
-      {/* Content Layer - GUARANTEED 100% VISIBLE */}
-      <div className="relative z-20 w-full max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
+      {/* Main Content Container */}
+      <div className="relative z-20 w-full max-w-[1440px] mx-auto px-6 sm:px-10 lg:px-12">
         <motion.div
-          key={currentSlide}
-          initial={{ opacity: 0, y: 20 }}
+          key={currentIndex}
+          initial={{ opacity: 0, y: 25 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -20 }}
-          transition={{ duration: 0.5, ease: 'easeOut' }}
-          className="max-w-4xl space-y-6"
+          transition={{ duration: 0.5 }}
+          className="max-w-3xl space-y-4"
         >
-          {/* Badge */}
-          {activeSlide.badgeText && (
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 bg-zru-green text-white font-bold text-xs uppercase tracking-wider rounded-md shadow-md">
-              <ShieldCheck className="w-4 h-4 text-white" />
-              <span>{activeSlide.badgeText}</span>
-            </div>
-          )}
-
-          {/* Headline */}
-          <div className="space-y-1">
-            <h1 className="text-4xl sm:text-6xl lg:text-7xl font-black text-white uppercase tracking-tight font-heading leading-none drop-shadow-lg">
-              {line1}
+          {/* Main Headline */}
+          <div className="space-y-0">
+            <h1 className="text-5xl sm:text-7xl lg:text-8xl font-black text-white uppercase tracking-tight font-heading leading-none drop-shadow-xl">
+              {slide.headline?.line1 || 'VICTORY IN'}
             </h1>
-            {line2 && (
-              <h2 className="text-3xl sm:text-5xl lg:text-6xl font-black text-zru-green uppercase tracking-tight font-heading leading-none drop-shadow-md">
-                {line2}
-              </h2>
-            )}
+            <h2 className="text-5xl sm:text-7xl lg:text-8xl font-black text-[#00E676] uppercase tracking-tight font-heading leading-none drop-shadow-xl">
+              {slide.headline?.line2 || 'THE ZAMBEZI'}
+            </h2>
           </div>
 
           {/* Subheadline */}
-          {activeSlide.subheadline && (
-            <p className="text-white/90 text-base sm:text-lg max-w-2xl font-light leading-relaxed drop-shadow">
-              {activeSlide.subheadline}
-            </p>
-          )}
+          <p className="text-white/90 text-base sm:text-xl font-normal max-w-2xl pt-2 leading-relaxed drop-shadow-md">
+            {slide.subheadline || 'Sables secure historic win against Namibia at Harare Sports Club'}
+          </p>
 
-          {/* CTA Buttons & Navigation Controls Bar */}
-          <div className="flex flex-wrap items-center gap-4 pt-4">
-            {/* Primary CTA Button */}
-            <Link
-              href={activeSlide.ctaHref || '/video-hub'}
-              className="group relative inline-flex items-center gap-3 px-8 py-4 bg-zru-green hover:bg-zru-green/90 text-white font-black text-sm uppercase tracking-wider transition-all duration-300 shadow-[0_0_25px_rgba(0,107,63,0.5)] hover:shadow-[0_0_35px_rgba(0,107,63,0.8)] overflow-hidden"
-              style={{ clipPath: 'polygon(0 0, 100% 0, 95% 100%, 0 100%)' }}
-            >
-              <div className="absolute inset-0 bg-white/20 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700 ease-out" />
-              <Play className="w-4 h-4 fill-current text-white relative z-10 transition-transform group-hover:scale-110" />
-              <span className="relative z-10">{activeSlide.ctaText || 'Watch Highlights'}</span>
-            </Link>
+          {/* CTA Buttons & Slanted Controls */}
+          <div className="pt-6 flex flex-col gap-6">
+            <div className="flex flex-wrap items-center gap-5">
+              {/* Primary White Slanted Button */}
+              <div className="relative group">
+                {/* Green Offset Shadow Slash */}
+                <div 
+                  className="absolute inset-0 bg-[#006B3F] translate-x-1.5 translate-y-1.5 transition-transform group-hover:translate-x-2 group-hover:translate-y-2"
+                  style={{ clipPath: 'polygon(8% 0, 100% 0, 92% 100%, 0 100%)' }}
+                />
+                <Link
+                  href={slide.ctaHref || '/video-hub'}
+                  className="relative flex items-center gap-3 px-8 py-4 bg-white text-black font-black text-sm sm:text-base uppercase tracking-wider transition-colors hover:bg-neutral-100 cursor-pointer"
+                  style={{ clipPath: 'polygon(8% 0, 100% 0, 92% 100%, 0 100%)' }}
+                >
+                  <Play className="w-4 h-4 fill-black text-black" />
+                  <span>{slide.ctaText || 'WATCH HIGHLIGHTS'}</span>
+                </Link>
+              </div>
 
-            {/* Carousel Navigation Bar - Centered Between Buttons */}
-            <div className="flex items-center gap-3 bg-black/50 backdrop-blur-md px-4 py-2.5 rounded-full border border-white/10 shadow-lg">
+              {/* Secondary Translucent Border Slanted Button */}
+              <Link
+                href={slide.secondaryCtaHref || '/match-centre'}
+                className="relative flex items-center gap-3 px-8 py-4 bg-black/40 hover:bg-black/60 border-y border-white/40 text-white font-black text-sm sm:text-base uppercase tracking-wider transition-all cursor-pointer backdrop-blur-xs"
+                style={{ clipPath: 'polygon(8% 0, 100% 0, 92% 100%, 0 100%)' }}
+              >
+                <ArrowRight className="w-4 h-4 text-white" />
+                <span>{slide.secondaryCtaText || 'MATCH CENTRE'}</span>
+              </Link>
+            </div>
+
+            {/* Slanted Slide Progress Controls */}
+            <div className="flex items-center gap-4 pt-2">
               <button
                 onClick={handlePrev}
-                className="p-1 text-white/70 hover:text-white transition-colors cursor-pointer"
+                className="text-white/60 hover:text-white transition-colors cursor-pointer p-1"
                 aria-label="Previous slide"
               >
-                <ChevronLeft className="w-4 h-4" />
+                <ChevronLeft className="w-5 h-5" />
               </button>
 
-              <div className="flex items-center gap-1.5">
+              <div className="flex items-center gap-2">
                 {activeSlides.map((_, idx) => {
-                  const isActive = idx === currentSlide
+                  const isActive = idx === currentIndex
                   return (
                     <button
                       key={idx}
-                      onClick={() => goToSlide(idx)}
-                      className={`relative h-2 rounded-full transition-all duration-300 cursor-pointer ${
-                        isActive ? 'w-10 bg-zru-green' : 'w-6 bg-white/30 hover:bg-white/50'
+                      onClick={() => setCurrentIndex(idx)}
+                      className={`h-2.5 transition-all duration-300 transform -skew-x-12 cursor-pointer ${
+                        isActive ? 'w-10 bg-[#00E676]' : 'w-7 bg-white/30 hover:bg-white/50'
                       }`}
                       aria-label={`Go to slide ${idx + 1}`}
                     />
@@ -245,21 +181,12 @@ export default function HeroCarousel({ slides }: HeroCarouselProps) {
 
               <button
                 onClick={handleNext}
-                className="p-1 text-white/70 hover:text-white transition-colors cursor-pointer"
+                className="text-white/60 hover:text-white transition-colors cursor-pointer p-1"
                 aria-label="Next slide"
               >
-                <ChevronRight className="w-4 h-4" />
+                <ChevronRight className="w-5 h-5" />
               </button>
             </div>
-
-            {/* Secondary CTA Button */}
-            <Link
-              href={activeSlide.secondaryCtaHref || '/match-centre'}
-              className="group inline-flex items-center gap-2 px-6 py-3.5 bg-white/10 hover:bg-white/20 backdrop-blur-md text-white font-semibold text-sm tracking-wide rounded-md border border-white/20 hover:border-white/40 transition-all duration-300 hover:-translate-y-0.5"
-            >
-              <span>{activeSlide.secondaryCtaText || 'Match Centre'}</span>
-              <ArrowRight className="w-4 h-4 text-white/70 group-hover:text-white group-hover:translate-x-1 transition-all" />
-            </Link>
           </div>
         </motion.div>
       </div>
