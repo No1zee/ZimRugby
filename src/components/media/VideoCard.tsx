@@ -12,7 +12,7 @@ export interface VideoItem {
   duration?: string
   date?: string
   thumbnail?: string
-  embedUrl: string
+  embedUrl?: string
   description?: string
   views?: string
 }
