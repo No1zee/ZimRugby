@@ -1,135 +1,147 @@
-"use client";
+'use client'
 
-import { motion, AnimatePresence } from "framer-motion";
-import { Play, X, ExternalLink } from "lucide-react";
-import Image from "next/image";
-import { useState } from "react";
+import { useState } from 'react'
+import Image from 'next/image'
+import { Play, Clock, Eye, Calendar, Sparkles } from 'lucide-react'
+import VideoPlayer from './VideoPlayer'
 
-interface VideoCardProps {
-  title: string;
-  duration: string;
-  date: string;
-  thumbnail: string;
-  category: string;
-  videoId?: string;
+export interface VideoItem {
+  id: string
+  title: string
+  category?: string
+  duration?: string
+  date?: string
+  thumbnail?: string
+  embedUrl: string
+  description?: string
+  views?: string
 }
 
-export default function VideoCard({
-  title,
-  duration,
-  date,
-  thumbnail,
-  category,
-  videoId,
-}: VideoCardProps) {
-  const [playing, setPlaying] = useState(false);
+interface VideoCardProps {
+  video: VideoItem
+  variant?: 'featured' | 'grid' | 'compact'
+  onSelect?: (video: VideoItem) => void
+}
 
-  const [minimized, setMinimized] = useState(false);
+function extractYouTubeId(url?: string): string | null {
+  if (!url) return null
+  const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/
+  const match = url.match(regExp)
+  return match && match[2].length === 11 ? match[2] : null
+}
+
+export default function VideoCard({ video, variant = 'grid', onSelect }: VideoCardProps) {
+  const [isPlaying, setIsPlaying] = useState(false)
+  const youtubeId = extractYouTubeId(video.embedUrl) || (video.id.startsWith('live-') ? video.id.replace('live-', '') : null)
+
+  // Smart high-definition thumbnail fallback sequence
+  const youtubeThumb = youtubeId ? `https://img.youtube.com/vi/${youtubeId}/hqdefault.jpg` : null
+  const defaultRugbyThumb = 'https://images.unsplash.com/photo-1544698310-74ea9d1c8258?auto=format&fit=crop&w=800&q=80'
+
+  const thumbnailSrc =
+    video.thumbnail &&
+    video.thumbnail.length > 5 &&
+    !video.thumbnail.includes('placeholder')
+      ? video.thumbnail
+      : youtubeThumb || defaultRugbyThumb
+
+  const handleClick = () => {
+    if (onSelect) {
+      onSelect(video)
+    } else {
+      setIsPlaying(true)
+    }
+  }
+
+  if (variant === 'featured') {
+    return (
+      <div className="group relative bg-black/40 border border-white/10 rounded-2xl overflow-hidden backdrop-blur-md shadow-2xl transition-all hover:border-zru-green/40">
+        {isPlaying ? (
+          <div className="aspect-video w-full">
+            <VideoPlayer embedUrl={video.embedUrl} title={video.title} autoPlay />
+          </div>
+        ) : (
+          <div className="relative aspect-video w-full cursor-pointer overflow-hidden" onClick={handleClick}>
+            <Image
+              src={thumbnailSrc}
+              alt={video.title}
+              fill
+              sizes="(max-width: 1200px) 100vw, 70vw"
+              className="object-cover group-hover:scale-105 transition-transform duration-700"
+              priority
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent" />
+
+            {/* Play Button Overlay */}
+            <div className="absolute inset-0 flex items-center justify-center">
+              <div className="w-16 h-16 sm:w-20 sm:h-20 bg-zru-green/90 group-hover:bg-zru-green text-white rounded-full flex items-center justify-center shadow-[0_0_30px_rgba(0,107,63,0.6)] group-hover:scale-110 transition-all duration-300">
+                <Play className="w-8 h-8 sm:w-10 sm:h-10 fill-current translate-x-0.5" />
+              </div>
+            </div>
+
+            {/* Overlay Metadata */}
+            <div className="absolute bottom-0 inset-x-0 p-6 space-y-2">
+              <div className="flex items-center gap-3 text-xs font-bold uppercase tracking-wider text-zru-green">
+                <span className="px-2.5 py-1 bg-zru-green/20 border border-zru-green/40 rounded-md">
+                  {video.category || 'Highlights'}
+                </span>
+                {video.duration && (
+                  <span className="flex items-center gap-1 text-white/70">
+                    <Clock className="w-3.5 h-3.5" />
+                    {video.duration}
+                  </span>
+                )}
+              </div>
+              <h3 className="text-xl sm:text-3xl font-black text-white uppercase tracking-tight font-heading leading-tight group-hover:text-zru-green transition-colors">
+                {video.title}
+              </h3>
+            </div>
+          </div>
+        )}
+      </div>
+    )
+  }
 
   return (
-    <>
-      <div
-        onClick={() => videoId && setPlaying(true)}
-        className={`group ${videoId ? 'cursor-pointer' : ''} card-green p-4 rounded-2xl border`}
-      >
-        <div className="relative aspect-video bg-white/10 rounded-xl overflow-hidden mb-4">
-          <div className="absolute inset-0 bg-gray-800">
-            <Image
-              src={thumbnail}
-              alt={title}
-              fill
-              sizes="(max-width: 768px) 100vw, 25vw"
-              className="object-cover opacity-90 group-hover:opacity-100 group-hover:brightness-110 transition-[filter,opacity] duration-700"
-            />
-          </div>
+    <div className="group relative bg-black/40 border border-white/10 rounded-xl overflow-hidden backdrop-blur-md shadow-lg hover:border-zru-green/40 transition-all flex flex-col justify-between">
+      {isPlaying ? (
+        <div className="aspect-video w-full">
+          <VideoPlayer embedUrl={video.embedUrl} title={video.title} autoPlay />
+        </div>
+      ) : (
+        <div className="relative aspect-video w-full cursor-pointer overflow-hidden" onClick={handleClick}>
+          <Image
+            src={thumbnailSrc}
+            alt={video.title}
+            fill
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+            className="object-cover group-hover:scale-105 transition-transform duration-500"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
 
-          <div className="absolute inset-0 bg-black/20 group-hover:bg-black/45 transition-colors" />
-
+          {/* Play Icon */}
           <div className="absolute inset-0 flex items-center justify-center">
-            <div className="w-14 h-14 bg-white/20 rounded-full flex items-center justify-center group-hover:bg-zru-green transition-[background-color] duration-300 shadow-lg">
-              <Play className="w-6 h-6 text-white ml-1" fill="currentColor" />
+            <div className="w-12 h-12 bg-zru-green/90 group-hover:bg-zru-green text-white rounded-full flex items-center justify-center shadow-lg group-hover:scale-110 transition-all duration-300">
+              <Play className="w-5 h-5 fill-current translate-x-0.5" />
             </div>
           </div>
 
-          <div className="absolute top-3 left-3 bg-zru-green text-white px-2 py-1 rounded text-[10px] font-bold uppercase tracking-widest">
-            {category}
-          </div>
-          <div className="absolute bottom-3 right-3 bg-black/80 px-2 py-1 rounded text-xs font-bold text-white flex items-center gap-1">
-            {duration}
-          </div>
+          {video.duration && (
+            <span className="absolute bottom-3 right-3 px-2 py-0.5 bg-black/80 text-white text-[10px] font-bold rounded">
+              {video.duration}
+            </span>
+          )}
         </div>
+      )}
 
-        <div className="flex flex-col gap-1">
-          <h3 className="text-lg font-heading text-white leading-tight group-hover:text-emerald-400 transition-colors line-clamp-2">
-            {title}
-          </h3>
-          <span className="text-zinc-300 text-xs font-bold uppercase">{date}</span>
-        </div>
+      <div className="p-4 space-y-2">
+        <span className="text-[10px] text-zru-green font-bold uppercase tracking-wider block">
+          {video.category || 'Sables Video'}
+        </span>
+        <h4 className="text-sm font-bold text-white uppercase tracking-tight line-clamp-2 group-hover:text-zru-green transition-colors">
+          {video.title}
+        </h4>
       </div>
-
-      {/* Floating Picture-in-Picture Draggable Video Player */}
-      <AnimatePresence>
-        {playing && videoId && (
-          <motion.div
-            drag
-            dragMomentum={false}
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.8 }}
-            transition={{ type: "spring", damping: 25, stiffness: 300 }}
-            className={`fixed ${
-              minimized
-                ? "bottom-6 right-6 w-80 z-[99999]"
-                : "top-[20%] left-[50%] -ml-[170px] sm:-ml-[280px] md:-ml-[320px] w-[340px] sm:w-[560px] md:w-[640px] z-[99999]"
-            } bg-black rounded-2xl overflow-hidden shadow-[0_25px_60px_-15px_rgba(0,0,0,0.7)] border-2 border-zru-green cursor-move group select-none`}
-          >
-            {/* Control Bar */}
-            <div className="bg-[#010B07] px-3.5 py-2.5 border-b border-white/10 flex items-center justify-between text-white select-none">
-              <span className="text-[10px] font-black uppercase tracking-widest text-zru-green flex items-center gap-1.5 truncate max-w-[240px]">
-                <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse shrink-0" />
-                {minimized ? title : "Playing • Drag Anywhere"}
-              </span>
-
-              <div className="flex items-center gap-1.5">
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setMinimized(!minimized);
-                  }}
-                  className="px-2 py-0.5 bg-white/10 hover:bg-white/20 rounded text-[10px] font-bold text-white transition-colors"
-                  title={minimized ? "Expand Player" : "Minimize Player"}
-                >
-                  {minimized ? "▲ Expand" : "▼ Minimize"}
-                </button>
-
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setPlaying(false);
-                    setMinimized(false);
-                  }}
-                  className="w-6 h-6 bg-white/10 hover:bg-red-600 rounded-full flex items-center justify-center text-white transition-colors"
-                  title="Close Player"
-                >
-                  <X className="w-3.5 h-3.5" />
-                </button>
-              </div>
-            </div>
-
-            {!minimized && (
-              <div className="relative aspect-video w-full bg-black">
-                <iframe
-                  src={`https://www.youtube-nocookie.com/embed/${videoId}?autoplay=1&rel=0&modestbranding=1`}
-                  title={title}
-                  className="w-full h-full border-0 pointer-events-auto"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowFullScreen
-                />
-              </div>
-            )}
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </>
-  );
+    </div>
+  )
 }

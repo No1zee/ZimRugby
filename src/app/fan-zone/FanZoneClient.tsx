@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { ShieldCheck, ArrowRight, Sparkles, CheckCircle2, QrCode, UserCheck, AlertCircle } from 'lucide-react'
+import { Sparkles, ArrowRight, CheckCircle2, AlertCircle } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
 
 interface FanZoneClientProps {
@@ -105,7 +105,7 @@ export default function FanZoneClient({ cmsPage }: FanZoneClientProps) {
                     type="button"
                     onClick={handleGoogleSignIn}
                     disabled={googleLoading}
-                    className="w-full py-3.5 px-4 bg-white/10 hover:bg-white/15 active:scale-[0.99] border border-white/20 hover:border-zru-green/60 text-white font-semibold text-sm rounded-xl transition-all flex items-center justify-center gap-3 shadow-md group"
+                    className="w-full py-3.5 px-4 bg-white/10 hover:bg-white/15 active:scale-[0.99] border border-white/20 hover:border-zru-green/60 text-white font-semibold text-sm rounded-xl transition-all flex items-center justify-center gap-3 shadow-md group cursor-pointer"
                   >
                     <svg className="w-5 h-5" viewBox="0 0 24 24">
                       <path
@@ -131,7 +131,7 @@ export default function FanZoneClient({ cmsPage }: FanZoneClientProps) {
 
                 <div className="relative flex items-center justify-center my-6">
                   <div className="border-t border-white/10 w-full" />
-                  <span className="bg-black/60 px-3 text-xs text-white/50 uppercase font-medium absolute">Or Email Passport</span>
+                  <span className="bg-black/60 px-3 text-xs text-white/50 uppercase font-medium absolute">Or Sign In with Email</span>
                 </div>
 
                 {error && (
@@ -177,7 +177,7 @@ export default function FanZoneClient({ cmsPage }: FanZoneClientProps) {
                     <select
                       value={favoriteTeam}
                       onChange={(e) => setFavoriteTeam(e.target.value)}
-                      className="w-full px-4 py-3.5 bg-black/30 border border-white/10 focus:border-zru-green rounded-xl text-white text-sm focus:outline-none transition-colors"
+                      className="w-full px-4 py-3.5 bg-black/30 border border-white/10 focus:border-zru-green rounded-xl text-white text-sm focus:outline-none transition-colors cursor-pointer"
                     >
                       <option value="sables">Sables Men's XV</option>
                       <option value="cheetahs">Cheetahs Men's 7s</option>
@@ -197,16 +197,16 @@ export default function FanZoneClient({ cmsPage }: FanZoneClientProps) {
                       className="w-4 h-4 rounded border-white/20 text-zru-green focus:ring-zru-green bg-black/30 cursor-pointer"
                     />
                     <label htmlFor="consent" className="text-xs text-white/70 cursor-pointer">
-                      I agree to receive ZRU news & ticket alerts (CDPA 2021 Compliant).
+                      I agree to receive ZRU news & match alerts (CDPA 2021 Compliant).
                     </label>
                   </div>
 
                   <button
                     type="submit"
                     disabled={loading}
-                    className="w-full py-4 bg-zru-green hover:bg-zru-green/90 disabled:opacity-50 text-white font-bold text-sm uppercase tracking-wider rounded-xl transition-all shadow-lg hover:shadow-zru-green/20 flex items-center justify-center gap-2 mt-4"
+                    className="w-full py-4 bg-zru-green hover:bg-zru-green/90 disabled:opacity-50 text-white font-bold text-sm uppercase tracking-wider rounded-xl transition-all shadow-lg hover:shadow-zru-green/20 flex items-center justify-center gap-2 mt-4 cursor-pointer"
                   >
-                    <span>{loading ? 'Generating Passport...' : 'Join Fan Zone & Get VIP Pass'}</span>
+                    <span>{loading ? 'Signing In...' : 'Sign In & Join Fan Zone'}</span>
                     <ArrowRight className="w-4 h-4" />
                   </button>
                 </form>
@@ -225,27 +225,10 @@ export default function FanZoneClient({ cmsPage }: FanZoneClientProps) {
               </div>
 
               <div>
-                <h2 className="text-2xl font-black uppercase text-white tracking-tight">Passport Issued!</h2>
+                <h2 className="text-2xl font-black uppercase text-white tracking-tight">You're Signed In!</h2>
                 <p className="text-white/70 text-sm mt-1">
-                  We sent a confirmation link to <span className="text-zru-green font-semibold">{email}</span>. Click the link in your inbox to verify your Fan Zone VIP Pass.
+                  We sent a secure sign-in link to <span className="text-zru-green font-semibold">{email}</span>. Click the link in your email to complete sign in.
                 </p>
-              </div>
-
-              <div className="bg-rich-black/80 border border-white/10 p-6 rounded-xl text-left space-y-3">
-                <div className="flex items-center justify-between border-b border-white/10 pb-3">
-                  <span className="text-xs font-bold uppercase text-white/50">Member Name</span>
-                  <span className="text-sm font-bold text-white">{fullName}</span>
-                </div>
-                <div className="flex items-center justify-between border-b border-white/10 pb-3">
-                  <span className="text-xs font-bold uppercase text-white/50">Selected Team</span>
-                  <span className="text-sm font-bold text-zru-green uppercase">{favoriteTeam}</span>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-xs font-bold uppercase text-white/50">Status</span>
-                  <span className="text-xs font-bold uppercase bg-zru-green/20 text-zru-green px-2.5 py-1 rounded-full border border-zru-green/40">
-                    VIP Member
-                  </span>
-                </div>
               </div>
             </motion.div>
           )}
