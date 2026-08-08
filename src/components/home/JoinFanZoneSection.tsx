@@ -1,121 +1,15 @@
-﻿"use client";
+"use client";
 
-import React, { useState, useEffect, useRef } from "react";
+import { useState } from "react";
+import Image from "next/image";
 import Link from "next/link";
-import {
-  ArrowRight,
-  Star,
-  Ticket,
-  ShieldCheck,
-  Zap,
-  Users,
-  Trophy,
-  Gift,
-} from "lucide-react";
+import { ArrowRight, CheckCircle } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
 import { signUpFan } from "@/lib/supabase/auth";
 
-/* ─────────────────────────────────────────────
-   Floating orb — purely decorative CSS motion
-   ───────────────────────────────────────────── */
-function Orb({ className }: { className: string }) {
-  return <div className={`absolute rounded-full pointer-events-none ${className}`} />;
-}
-
-/* ─────────────────────────────────────────────
-   Benefit pill with staggered entrance
-   ───────────────────────────────────────────── */
-const BENEFITS = [
-  { icon: Ticket,    label: "Priority Ticket Alerts",        delay: 0   },
-  { icon: Gift,      label: "10% Off Official Merchandise",  delay: 80  },
-  { icon: Trophy,    label: "Exclusive Match Reports",        delay: 160 },
-  { icon: Zap,       label: "Live Score Notifications",       delay: 240 },
-  { icon: ShieldCheck, label: "CDPA 2021 Compliant",        delay: 320 },
-  { icon: Users,     label: "ZRU Community Access",          delay: 400 },
-];
-
-function BenefitPill({
-  icon: Icon,
-  label,
-  delay,
-  visible,
-}: {
-  icon: React.ElementType;
-  label: string;
-  delay: number;
-  visible: boolean;
-}) {
-  return (
-    <div
-      className="flex items-center gap-2 bg-white/8 border border-white/12 rounded-full px-4 py-2 text-white/80 text-xs font-medium backdrop-blur-sm transition-all duration-700 hover:bg-white/15 hover:border-[#006B3F]/60 hover:text-white group"
-      style={{
-        opacity: visible ? 1 : 0,
-        transform: visible ? "translateY(0)" : "translateY(16px)",
-        transitionDelay: `${delay}ms`,
-      }}
-    >
-      <Icon className="w-3.5 h-3.5 text-[#00C46A] group-hover:scale-110 transition-transform duration-200" />
-      {label}
-    </div>
-  );
-}
-
-/* ─────────────────────────────────────────────
-   Animated stat counter
-   ───────────────────────────────────────────── */
-function StatCounter({
-  value,
-  suffix,
-  label,
-  visible,
-  delay,
-}: {
-  value: number;
-  suffix: string;
-  label: string;
-  visible: boolean;
-  delay: number;
-}) {
-  const [count, setCount] = useState(0);
-
-  useEffect(() => {
-    if (!visible) return;
-    const duration = 1400;
-    const step = value / (duration / 16);
-    let current = 0;
-    const timer = setInterval(() => {
-      current = Math.min(current + step, value);
-      setCount(Math.floor(current));
-      if (current >= value) clearInterval(timer);
-    }, 16);
-    return () => clearInterval(timer);
-  }, [visible, value]);
-
-  return (
-    <div
-      className="text-center transition-all duration-700"
-      style={{
-        opacity: visible ? 1 : 0,
-        transform: visible ? "translateY(0)" : "translateY(20px)",
-        transitionDelay: `${delay}ms`,
-      }}
-    >
-      <div className="text-3xl sm:text-4xl font-black text-white tracking-tight font-heading tabular-nums">
-        {count.toLocaleString()}
-        <span className="text-[#00C46A]">{suffix}</span>
-      </div>
-      <div className="text-[11px] uppercase tracking-widest text-white/50 mt-1 font-medium">
-        {label}
-      </div>
-    </div>
-  );
-}
-
-/* ─────────────────────────────────────────────
-   Main component
-   ───────────────────────────────────────────── */
 export default function JoinFanZoneSection() {
   const { user, isAuthenticated, signInFan } = useAuth();
+
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [favoriteTeam, setFavoriteTeam] = useState<
@@ -125,21 +19,6 @@ export default function JoinFanZoneSection() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState("");
-
-  const sectionRef = useRef<HTMLElement>(null);
-  const [visible, setVisible] = useState(false);
-
-  /* Intersection observer — trigger entrance animations */
-  useEffect(() => {
-    const el = sectionRef.current;
-    if (!el) return;
-    const obs = new IntersectionObserver(
-      ([entry]) => { if (entry.isIntersecting) { setVisible(true); obs.disconnect(); } },
-      { threshold: 0.15 }
-    );
-    obs.observe(el);
-    return () => obs.disconnect();
-  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -155,323 +34,245 @@ export default function JoinFanZoneSection() {
       const authRes = await signUpFan({ email, name, favoriteTeam });
       signInFan(authRes.profile);
       setSubmitted(true);
+      setName("");
+      setEmail("");
     } catch (err: unknown) {
-      const message = err instanceof Error ? err.message : "Registration failed. Please try again.";
-      setError(message);
+      const msg = err instanceof Error ? err.message : "Registration failed. Please try again.";
+      setError(msg);
     } finally {
       setIsSubmitting(false);
     }
   };
 
-  return (
-    <section
-      ref={sectionRef}
-      className="relative w-full overflow-hidden py-24 sm:py-32"
-      style={{ background: "linear-gradient(160deg, #001D0E 0%, #003320 45%, #001A0C 100%)" }}
-      aria-labelledby="fan-zone-heading"
-    >
-      {/* ── Ambient orbs ── */}
-      <Orb className="w-[600px] h-[600px] -top-48 -left-32 bg-[#006B3F]/20 blur-[120px] animate-[pulse_8s_ease-in-out_infinite]" />
-      <Orb className="w-[400px] h-[400px] -bottom-32 -right-24 bg-[#004D2C]/25 blur-[100px] animate-[pulse_6s_ease-in-out_infinite_2s]" />
-      <Orb className="w-[200px] h-[200px] top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-[#00C46A]/8 blur-[80px] animate-[pulse_10s_ease-in-out_infinite_1s]" />
-
-      {/* ── Grid texture overlay ── */}
-      <div
-        className="absolute inset-0 opacity-[0.04] pointer-events-none"
-        style={{
-          backgroundImage:
-            "linear-gradient(rgba(255,255,255,0.4) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.4) 1px, transparent 1px)",
-          backgroundSize: "40px 40px",
-        }}
-      />
-
-      <div className="relative z-10 max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
-        {/* ── Top label ── */}
-        <div
-          className="flex justify-center mb-6 transition-all duration-700"
-          style={{ opacity: visible ? 1 : 0, transform: visible ? "translateY(0)" : "translateY(-12px)" }}
-        >
-          <span className="inline-flex items-center gap-2 bg-[#006B3F]/30 border border-[#00C46A]/30 rounded-full px-5 py-2 text-[11px] font-black uppercase tracking-[0.3em] text-[#00C46A]">
-            <Star className="w-3 h-3 fill-current" />
-            Official Sables Fan Zone
-            <Star className="w-3 h-3 fill-current" />
-          </span>
-        </div>
-
-        {/* ── Heading ── */}
-        <div className="text-center mb-4">
-          <h2
-            id="fan-zone-heading"
-            className="text-4xl sm:text-5xl lg:text-6xl font-black uppercase tracking-tight text-white font-heading leading-none transition-all duration-700"
-            style={{
-              opacity: visible ? 1 : 0,
-              transform: visible ? "translateY(0)" : "translateY(20px)",
-              transitionDelay: "100ms",
-            }}
-          >
-            JOIN THE{" "}
-            <span
-              className="text-transparent"
-              style={{
-                WebkitTextStroke: "2px #00C46A",
-                textShadow: "0 0 40px rgba(0,196,106,0.3)",
-              }}
-            >
-              FAN ZONE
-            </span>
-          </h2>
-          <p
-            className="mt-4 text-sm sm:text-base text-white/60 max-w-xl mx-auto font-sans leading-relaxed transition-all duration-700"
-            style={{
-              opacity: visible ? 1 : 0,
-              transform: visible ? "translateY(0)" : "translateY(16px)",
-              transitionDelay: "180ms",
-            }}
-          >
-            Become part of the official Zimbabwe Rugby community. Get priority access,
-            exclusive content, and merch discounts — free forever.
-          </p>
-        </div>
-
-        {/* ── Stats row ── */}
-        <div
-          className="flex justify-center gap-12 sm:gap-20 mb-14 transition-all duration-700"
-          style={{
-            opacity: visible ? 1 : 0,
-            transitionDelay: "240ms",
-          }}
-        >
-          <StatCounter value={12400} suffix="+" label="Registered Fans"  visible={visible} delay={260} />
-          <StatCounter value={5}     suffix=" Teams" label="Teams Covered" visible={visible} delay={340} />
-          <StatCounter value={100}   suffix="% Free" label="Always Free"   visible={visible} delay={420} />
-        </div>
-
-        {/* ── Two-column layout: benefits + form ── */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-start max-w-5xl mx-auto">
-
-          {/* LEFT — benefits */}
+  /* ── Success state ── */
+  if (submitted) {
+    return (
+      <section className="w-full bg-milk-white py-10 sm:py-14 lg:py-20 relative z-20">
+        <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
           <div
-            className="transition-all duration-700 space-y-6"
+            className="rounded-3xl p-8 text-center space-y-3 border border-white/10"
             style={{
-              opacity: visible ? 1 : 0,
-              transform: visible ? "translateX(0)" : "translateX(-30px)",
-              transitionDelay: "300ms",
+              background:
+                "radial-gradient(circle at 50% 25%, #0A1C15 0%, #00331F 60%, #001A10 100%)",
             }}
           >
-            <h3 className="text-xl font-black uppercase tracking-widest text-white font-heading">
-              What You Get
-            </h3>
-            <div className="flex flex-wrap gap-2.5">
-              {BENEFITS.map((b) => (
-                <BenefitPill key={b.label} {...b} visible={visible} />
-              ))}
-            </div>
+            <CheckCircle className="w-10 h-10 text-emerald-400 mx-auto" />
+            <p className="text-lg font-black uppercase tracking-wider text-white font-heading">
+              Welcome to the Fan Zone!
+            </p>
+            <p className="text-sm text-white/50">
+              Check your inbox for your VIP pass and exclusive member benefits.
+            </p>
+            <Link
+              href="/fan-zone"
+              className="inline-flex items-center gap-2 mt-2 bg-[#006B3F] hover:bg-[#007A48] text-white font-black uppercase tracking-widest text-xs px-6 py-3 rounded-xl transition-all duration-200"
+            >
+              Visit Fan Zone <ArrowRight className="w-4 h-4" />
+            </Link>
+          </div>
+        </div>
+      </section>
+    );
+  }
 
-            {/* Decorative ZRU badge */}
-            <div className="mt-8 flex items-center gap-4 bg-white/5 border border-white/10 rounded-2xl p-5">
+  /* ── Already logged in ── */
+  if (isAuthenticated && user) {
+    return (
+      <section className="w-full bg-milk-white py-10 sm:py-14 lg:py-20 relative z-20">
+        <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
+          <div
+            className="rounded-3xl p-6 sm:p-8 flex flex-col sm:flex-row items-center justify-between gap-4 border border-white/10"
+            style={{
+              background:
+                "radial-gradient(circle at 50% 25%, #0A1C15 0%, #00331F 60%, #001A10 100%)",
+            }}
+          >
+            <div className="flex items-center gap-4">
               <div
-                className="w-14 h-14 rounded-full flex-shrink-0 flex items-center justify-center font-black text-xl text-white border-2 border-[#006B3F]"
+                className="w-14 h-14 rounded-full flex items-center justify-center font-black text-xl text-white border-2 border-[#006B3F] shrink-0"
                 style={{ background: "radial-gradient(circle, #006B3F, #003820)" }}
               >
-                ZRU
+                {user.name.charAt(0).toUpperCase()}
               </div>
               <div>
-                <div className="text-white font-bold text-sm">Official Zimbabwe Rugby Union</div>
-                <div className="text-white/50 text-xs mt-0.5">
-                  Your data is protected under CDPA 2021. Unsubscribe anytime.
-                </div>
+                <p className="text-white font-black text-base">{user.name}</p>
+                <p className="text-white/50 text-xs font-mono">{user.email}</p>
+                <span className="text-[11px] text-emerald-400 font-semibold">
+                  ✓ Active Fan Zone Member
+                </span>
               </div>
+            </div>
+            <Link
+              href="/fan-zone"
+              className="inline-flex items-center gap-2 bg-[#006B3F] hover:bg-[#007A48] text-white font-black uppercase tracking-widest text-xs px-6 py-3 rounded-xl transition-all duration-200 shadow-lg shadow-[#006B3F]/30"
+            >
+              Fan Zone Dashboard <ArrowRight className="w-4 h-4" />
+            </Link>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  /* ── Main banner (original expand mechanic) ── */
+  return (
+    <section className="w-full bg-milk-white py-10 sm:py-14 lg:py-20 relative z-20">
+      <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
+
+        {/*
+          group/fzCard — the original CSS-only expand trick.
+          On hover/focus-within the logo zooms, the text slides away,
+          and the form panel expands to fill the space.
+        */}
+        <div
+          className="group/fzCard rounded-3xl p-5 sm:p-6 flex flex-col sm:flex-row items-center justify-between gap-4 relative overflow-hidden shadow-2xl transition-shadow duration-500 ease-in-out touch-manipulation cursor-pointer border border-white/10"
+          style={{
+            background:
+              "radial-gradient(circle at 50% 25%, #0A1C15 0%, #00331F 60%, #001A10 100%)",
+          }}
+        >
+          {/* Border glow on hover */}
+          <div className="absolute inset-0 border border-white/10 group-hover/fzCard:border-[#006B3F]/60 group-focus-within/fzCard:border-[#006B3F]/60 group-hover/fzCard:shadow-[inset_0_0_60px_rgba(0,107,63,0.4)] transition-shadow duration-700 pointer-events-none rounded-3xl" />
+          {/* Green gradient sweep */}
+          <div className="absolute inset-0 opacity-0 group-hover/fzCard:opacity-20 group-focus-within/fzCard:opacity-20 pointer-events-none bg-gradient-to-r from-transparent via-[#006B3F] to-transparent transition-opacity duration-700" />
+
+          {/* LEFT: Logo + collapsed text */}
+          <div className="flex items-center justify-start group-hover/fzCard:justify-center group-focus-within/fzCard:justify-center gap-4 relative z-10 sm:w-3/5 group-hover/fzCard:w-1/3 group-focus-within/fzCard:w-1/3 transition-[width,justify-content] duration-500 shrink-0">
+
+            {/* Logo — scales up on hover */}
+            <div className="relative shrink-0 flex items-center justify-center transition-transform duration-500 group-hover/fzCard:scale-150">
+              <Image
+                src="/images/logos/zru-logo.svg"
+                alt="ZRU Emblem"
+                width={56}
+                height={56}
+                className="w-12 sm:w-14 h-12 sm:h-14 object-contain filter drop-shadow-[0_4px_30px_rgba(0,107,63,0.85)] group-hover/fzCard:drop-shadow-[0_8px_35px_rgba(52,211,153,0.6)] transition-[filter] duration-500"
+              />
+            </div>
+
+            {/* Collapsed label — slides away on hover */}
+            <div className="space-y-1.5 transition-[opacity,max-width,transform] duration-500 origin-left max-w-lg opacity-100 group-hover/fzCard:opacity-0 group-hover/fzCard:max-w-0 group-hover/fzCard:scale-95 group-hover/fzCard:overflow-hidden group-focus-within/fzCard:opacity-0 group-focus-within/fzCard:max-w-0 group-focus-within/fzCard:scale-95 group-focus-within/fzCard:overflow-hidden shrink min-w-0">
+              <h2 className="text-2xl sm:text-3xl text-white font-heading font-black uppercase tracking-tight leading-tight">
+                JOIN THE FAN ZONE
+              </h2>
+              <p className="text-xs sm:text-sm text-white/80 font-normal leading-relaxed font-body line-clamp-2">
+                Priority ticket presale, 10% merch discounts, insider squad news, and VIP
+                competitions. Free to join.
+              </p>
             </div>
           </div>
 
-          {/* RIGHT — form or logged-in state */}
-          <div
-            className="transition-all duration-700"
-            style={{
-              opacity: visible ? 1 : 0,
-              transform: visible ? "translateX(0)" : "translateX(30px)",
-              transitionDelay: "380ms",
-            }}
-          >
-            {/* Already logged in */}
-            {isAuthenticated && user ? (
-              <div className="rounded-3xl p-8 border border-[#006B3F]/40 bg-[#002D1A]/60 backdrop-blur-sm space-y-6">
-                <div className="flex items-center gap-4">
-                  <div
-                    className="w-16 h-16 rounded-full flex items-center justify-center font-black text-2xl text-white border-2 border-[#006B3F]"
-                    style={{ background: "radial-gradient(circle, #006B3F, #003820)" }}
-                  >
-                    {user.name.charAt(0).toUpperCase()}
-                  </div>
-                  <div>
-                    <h3 className="text-lg font-black text-white">{user.name}</h3>
-                    <p className="text-xs text-white/50 font-mono">{user.email}</p>
-                    <span className="inline-block mt-1 text-[11px] text-[#00C46A] font-semibold">
-                      ✓ Active Fan Zone Member
-                    </span>
-                  </div>
+          {/* RIGHT: Form panel — expands on hover/focus */}
+          <div className="relative z-10 w-full sm:w-2/5 group-hover/fzCard:w-2/3 group-focus-within/fzCard:w-2/3 flex flex-col items-center group-hover/fzCard:items-end group-focus-within/fzCard:items-end transition-[width] duration-500">
+            <div className="w-full sm:w-auto group-hover/fzCard:w-full group-focus-within/fzCard:w-full bg-white p-3 group-hover/fzCard:p-5 sm:group-hover/fzCard:p-7 group-focus-within/fzCard:p-5 sm:group-focus-within/fzCard:p-7 rounded-2xl border border-black/5 group-hover/fzCard:border-[#006B3F]/50 group-focus-within/fzCard:border-[#006B3F]/50 transition-[width,padding,border-color] duration-500 ease-in-out shadow-lg">
+
+              {/* Header — revealed on expand */}
+              <p className="text-[#003822]/70 text-xs font-black uppercase tracking-wider font-heading transition-[opacity,max-height,margin] duration-500 opacity-0 max-h-0 overflow-hidden mb-0 group-hover/fzCard:opacity-100 group-hover/fzCard:max-h-10 group-hover/fzCard:mb-3 group-hover/fzCard:text-[#006B3F] group-focus-within/fzCard:opacity-100 group-focus-within/fzCard:max-h-10 group-focus-within/fzCard:mb-3 group-focus-within/fzCard:text-[#006B3F]">
+                Join the Fan Zone — It&apos;s Free
+              </p>
+
+              {error && (
+                <p className="text-[10px] text-red-500 font-bold mb-2">{error}</p>
+              )}
+
+              {/* Name + Email row — revealed on expand */}
+              <div className="overflow-hidden opacity-0 max-h-0 transition-[opacity,max-height,margin] duration-500 group-hover/fzCard:opacity-100 group-hover/fzCard:max-h-28 group-hover/fzCard:mb-2.5 group-focus-within/fzCard:opacity-100 group-focus-within/fzCard:max-h-28 group-focus-within/fzCard:mb-2.5">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 w-full">
+                  <input
+                    type="text"
+                    required
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    placeholder="Full Name"
+                    className="w-full bg-black/5 text-[#0E0E0E] px-4 py-3 rounded-xl border border-black/10 focus:outline-none focus:border-[#006B3F] text-sm placeholder:text-[#0E0E0E]/40 transition-[border-color] duration-300"
+                  />
+                  <input
+                    type="email"
+                    required
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="name@domain.com"
+                    className="w-full bg-black/5 text-[#0E0E0E] px-4 py-3 rounded-xl border border-black/10 focus:outline-none focus:border-[#006B3F] text-sm placeholder:text-[#0E0E0E]/40 transition-[border-color] duration-300"
+                  />
                 </div>
-                <p className="text-sm text-white/60">
-                  You&apos;re all set! Check out your exclusive member benefits below.
-                </p>
-                <Link
-                  href="/fan-zone"
-                  className="inline-flex items-center gap-2 bg-[#006B3F] hover:bg-[#007A48] text-white font-black uppercase tracking-widest text-xs px-6 py-3 rounded-xl transition-all duration-200 shadow-lg shadow-[#006B3F]/30"
-                  style={{ clipPath: "polygon(0 0, calc(100% - 12px) 0, 100% 12px, 100% 100%, 12px 100%, 0 calc(100% - 12px))" }}
-                >
-                  Go to Fan Zone Dashboard
-                  <ArrowRight className="w-4 h-4" />
-                </Link>
               </div>
-            ) : submitted ? (
-              /* Success state */
-              <div className="rounded-3xl p-8 border border-[#006B3F]/50 bg-[#002D1A]/60 backdrop-blur-sm text-center space-y-4">
-                <div className="w-16 h-16 rounded-full bg-[#006B3F]/20 border-2 border-[#00C46A] flex items-center justify-center mx-auto">
-                  <Trophy className="w-7 h-7 text-[#00C46A]" />
-                </div>
-                <h3 className="text-xl font-black text-white uppercase tracking-widest font-heading">
-                  You&apos;re In!
-                </h3>
-                <p className="text-sm text-white/60">
-                  Welcome to the official Sables Fan Zone. Check your email for your VIP pass.
-                </p>
-                <Link
-                  href="/fan-zone"
-                  className="inline-flex items-center gap-2 bg-[#006B3F] hover:bg-[#007A48] text-white font-black uppercase tracking-widest text-xs px-6 py-3 rounded-xl transition-all duration-200 shadow-lg shadow-[#006B3F]/30"
-                >
-                  Visit Fan Zone <ArrowRight className="w-4 h-4" />
-                </Link>
-              </div>
-            ) : (
-              /* Registration form */
-              <div
-                className="rounded-3xl border border-white/10 overflow-hidden backdrop-blur-sm"
-                style={{ background: "radial-gradient(circle at 60% 0%, rgba(0,107,63,0.25) 0%, rgba(0,26,12,0.8) 60%)" }}
+
+              {/* Team select + submit row */}
+              <form
+                onSubmit={handleSubmit}
+                className="flex flex-col sm:flex-row gap-2 w-full items-center justify-center group-hover/fzCard:justify-end group-focus-within/fzCard:justify-end transition-[justify-content] duration-500"
               >
-                {/* Form header bar */}
-                <div className="px-7 pt-7 pb-4 border-b border-white/8">
-                  <div className="text-[10px] font-black uppercase tracking-[0.3em] text-[#00C46A] mb-1">
-                    Fan Registration
-                  </div>
-                  <h3 className="text-lg font-black text-white uppercase tracking-wider font-heading">
-                    Create Your Free Account
-                  </h3>
+                {/* Team select — revealed on expand */}
+                <div className="w-0 opacity-0 max-w-0 overflow-hidden transition-[width,opacity,max-width] duration-500 ease-in-out group-hover/fzCard:w-full group-hover/fzCard:opacity-100 group-hover/fzCard:max-w-full group-focus-within/fzCard:w-full group-focus-within/fzCard:opacity-100 group-focus-within/fzCard:max-w-full flex-1">
+                  <select
+                    value={favoriteTeam}
+                    onChange={(e) => setFavoriteTeam(e.target.value as typeof favoriteTeam)}
+                    className="w-full bg-black/5 text-[#0E0E0E] px-4 py-3.5 rounded-xl border border-black/10 focus:outline-none focus:border-[#006B3F] text-sm transition-[border-color] duration-300 min-h-[46px]"
+                  >
+                    <option value="Sables">Zimbabwe Sables (Men&apos;s XV)</option>
+                    <option value="Lady Sables">Lady Sables (Women&apos;s XV)</option>
+                    <option value="Cheetahs">Cheetahs (7s)</option>
+                    <option value="Junior Sables">Junior Sables (U20)</option>
+                    <option value="Domestic Rugby">Domestic Club League</option>
+                  </select>
                 </div>
 
-                <form onSubmit={handleSubmit} className="px-7 py-6 space-y-4" noValidate>
-                  {error && (
-                    <div className="p-3 bg-red-500/15 border border-red-500/30 rounded-xl text-red-300 text-xs">
-                      {error}
-                    </div>
-                  )}
+                {/* JOIN button — always visible */}
+                <button
+                  type="submit"
+                  disabled={isSubmitting || !cdpaConsent}
+                  id="fan-zone-join-btn"
+                  className="group/btn bg-gradient-to-b from-[#00704D] to-[#005238] hover:from-[#00855B] hover:to-[#006B3F] text-white px-8 py-3.5 rounded-xl transition-colors duration-300 flex items-center justify-center gap-2 font-black text-xs tracking-widest uppercase font-heading shrink-0 shadow-lg shadow-[#006B3F]/30 min-h-[46px] w-full sm:w-auto disabled:opacity-50"
+                >
+                  <span>{isSubmitting ? "…" : "JOIN"}</span>
+                  <ArrowRight className="w-0 opacity-0 -translate-x-2 transition-[width,opacity,transform] duration-300 ease-in-out group-hover/fzCard:w-4 group-hover/fzCard:opacity-100 group-hover/fzCard:translate-x-0 group-focus-within/fzCard:w-4 group-focus-within/fzCard:opacity-100 group-focus-within/fzCard:translate-x-0 shrink-0" />
+                </button>
+              </form>
 
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div>
-                      <label className="block text-[10px] font-black uppercase tracking-widest text-white/60 mb-1.5">
-                        Full Name
-                      </label>
-                      <input
-                        type="text"
-                        value={name}
-                        onChange={(e) => setName(e.target.value)}
-                        placeholder="Farai Moyo"
-                        required
-                        className="w-full bg-black/40 border border-white/12 rounded-xl px-4 py-3 text-white text-sm placeholder-white/30 focus:outline-none focus:border-[#006B3F] focus:ring-1 focus:ring-[#006B3F]/40 transition-all duration-200 font-sans"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-[10px] font-black uppercase tracking-widest text-white/60 mb-1.5">
-                        Email Address
-                      </label>
-                      <input
-                        type="email"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        placeholder="farai@example.co.zw"
-                        required
-                        className="w-full bg-black/40 border border-white/12 rounded-xl px-4 py-3 text-white text-sm placeholder-white/30 focus:outline-none focus:border-[#006B3F] focus:ring-1 focus:ring-[#006B3F]/40 transition-all duration-200 font-mono"
-                      />
-                    </div>
+              {/* Benefits grid — revealed on expand */}
+              <div className="grid grid-cols-2 gap-2 py-3 opacity-0 max-h-0 overflow-hidden transition-[opacity,max-height] duration-500 group-hover/fzCard:opacity-100 group-hover/fzCard:max-h-40 group-focus-within/fzCard:opacity-100 group-focus-within/fzCard:max-h-40">
+                {[
+                  "Priority ticket presale",
+                  "10% merch discount",
+                  "Insider squad newsletter",
+                  "VIP fan competitions",
+                ].map((b) => (
+                  <div key={b} className="flex items-center gap-1.5 text-[10px] text-black/60">
+                    <span className="w-1 h-1 rounded-full bg-[#006B3F] shrink-0" />
+                    <span>{b}</span>
                   </div>
-
-                  <div>
-                    <label className="block text-[10px] font-black uppercase tracking-widest text-white/60 mb-1.5">
-                      Favourite Team
-                    </label>
-                    <select
-                      value={favoriteTeam}
-                      onChange={(e) => setFavoriteTeam(e.target.value as typeof favoriteTeam)}
-                      className="w-full bg-black/40 border border-white/12 rounded-xl px-4 py-3 text-white text-sm focus:outline-none focus:border-[#006B3F] transition-all duration-200 font-sans"
-                    >
-                      <option value="Sables">Zimbabwe Sables (Men&apos;s XV)</option>
-                      <option value="Lady Sables">Lady Sables (Women&apos;s XV)</option>
-                      <option value="Cheetahs">Zimbabwe Cheetahs (7s)</option>
-                      <option value="Junior Sables">Junior Sables (U20)</option>
-                      <option value="Domestic Rugby">Domestic Club League</option>
-                    </select>
-                  </div>
-
-                  <div className="flex items-start gap-3 pt-1">
-                    <input
-                      type="checkbox"
-                      id="cdpa-fanzone"
-                      checked={cdpaConsent}
-                      onChange={(e) => setCdpaConsent(e.target.checked)}
-                      required
-                      className="mt-0.5 rounded bg-black/40 border-white/20 text-[#006B3F] focus:ring-[#006B3F] focus:ring-offset-0"
-                    />
-                    <label htmlFor="cdpa-fanzone" className="text-[11px] text-white/55 leading-relaxed cursor-pointer">
-                      I consent to receive ZRU news, fixture alerts, and exclusive fan content.
-                      Protected under{" "}
-                      <Link href="/privacy-policy" className="text-[#00C46A] underline hover:text-white transition-colors">
-                        CDPA 2021
-                      </Link>
-                      .
-                    </label>
-                  </div>
-
-                  {/* CTA button — slanted ZRU style */}
-                  <button
-                    type="submit"
-                    disabled={isSubmitting || !cdpaConsent}
-                    id="fan-zone-join-btn"
-                    className="group relative w-full py-4 text-white font-heading font-black tracking-widest uppercase text-sm overflow-hidden transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
-                    style={{
-                      background: "linear-gradient(135deg, #006B3F 0%, #008F53 50%, #006B3F 100%)",
-                      clipPath: "polygon(0 0, calc(100% - 16px) 0, 100% 16px, 100% 100%, 16px 100%, 0 calc(100% - 16px))",
-                      boxShadow: "0 8px 32px rgba(0,107,63,0.4), inset 0 1px 0 rgba(255,255,255,0.1)",
-                    }}
-                  >
-                    {/* Shimmer sweep on hover */}
-                    <span
-                      className="absolute inset-0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700"
-                      style={{ background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.12), transparent)" }}
-                    />
-                    <span className="relative flex items-center justify-center gap-2">
-                      {isSubmitting ? (
-                        <>
-                          <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                          <span>Authenticating...</span>
-                        </>
-                      ) : (
-                        <>
-                          <span>Join Fan Zone — It&apos;s Free</span>
-                          <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-200" />
-                        </>
-                      )}
-                    </span>
-                  </button>
-
-                  <p className="text-center text-[10px] text-white/35 pt-1">
-                    Already a member?{" "}
-                    <Link href="/login" className="text-[#00C46A] hover:underline">
-                      Sign in here
-                    </Link>
-                  </p>
-                </form>
+                ))}
               </div>
-            )}
+
+              {/* CDPA consent + footer — revealed on expand */}
+              <div className="opacity-0 max-h-0 overflow-hidden transition-[opacity,max-height,margin] duration-500 mt-0 group-hover/fzCard:opacity-100 group-hover/fzCard:max-h-20 group-hover/fzCard:mt-3 group-focus-within/fzCard:opacity-100 group-focus-within/fzCard:max-h-20 group-focus-within/fzCard:mt-3">
+                <div className="flex items-start gap-2 mb-2">
+                  <input
+                    type="checkbox"
+                    id="cdpa-banner"
+                    checked={cdpaConsent}
+                    onChange={(e) => setCdpaConsent(e.target.checked)}
+                    className="mt-0.5 rounded border-black/20 text-[#006B3F] focus:ring-[#006B3F] focus:ring-offset-0"
+                  />
+                  <label htmlFor="cdpa-banner" className="text-[10px] text-black/50 leading-relaxed cursor-pointer">
+                    I consent to ZRU news &amp; ticket alerts (
+                    <Link href="/privacy-policy" className="text-[#006B3F] underline hover:text-black transition-colors">
+                      CDPA 2021
+                    </Link>
+                    ).
+                  </label>
+                </div>
+                <div className="text-[10px] text-[#0E0E0E]/40 flex items-center justify-between w-full">
+                  <span>Priority tickets, discounts, and VIP access.</span>
+                  <Link className="underline hover:text-[#006B3F] transition-[color]" href="/fan-zone">
+                    Learn more
+                  </Link>
+                </div>
+              </div>
+
+            </div>
           </div>
+
         </div>
       </div>
     </section>
