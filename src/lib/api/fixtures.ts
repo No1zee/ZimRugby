@@ -102,6 +102,24 @@ export async function getFixtureTwinData(): Promise<FixtureTwinData> {
 
 interface DirectusFlatMatch {
   id: string | number;
+  title?: string;
+  // Relational joins (fetched via fields=)
+  team_id?: { id: string; name: string; crest?: string } | null;
+  opponent_id?: { id: string; name: string; short_name?: string; crest?: string } | null;
+  venue_id?: { id: string; name: string; city?: string } | null;
+  competition_id?: { id: string; name: string; short_name?: string } | null;
+  home_or_away?: string;
+  // Score & result
+  team_score?: number | null;
+  opponent_score?: number | null;
+  home_team_score?: number | null;
+  away_team_score?: number | null;
+  result_outcome?: string;
+  result_label?: string;
+  // Labels
+  round_label?: string;
+  stage_label?: string;
+  // Legacy flat fields (fallback)
   competition?: string;
   round?: string;
   date?: string;
@@ -112,10 +130,8 @@ interface DirectusFlatMatch {
   venue?: string;
   home_team_name?: string;
   home_team_logo?: string;
-  home_team_score?: number | null;
   away_team_name?: string;
   away_team_logo?: string;
-  away_team_score?: number | null;
   status: string;
   category?: string;
   is_featured?: boolean;
@@ -138,22 +154,34 @@ const staticMatches: Match[] = [
 
 function mapFlatToMatch(m: DirectusFlatMatch): Match {
   const kickoff = m.kickoff_at ? new Date(m.kickoff_at) : null;
+
+  // Resolve relational fields
+  const opponentName = m.opponent_id?.short_name || m.opponent_id?.name || m.away_team_name || "Opponent";
+  const venueName = m.venue_id ? `${m.venue_id.name}${m.venue_id.city ? `, ${m.venue_id.city}` : ''}` : m.venue || "TBA";
+  const competitionName = m.competition_id?.short_name || m.competition_id?.name || m.competition || "International Match";
+  const roundName = m.round_label || m.stage_label || m.round || "Standard";
+
+  // Home/away resolution — ZIM always shows as home team in the UI regardless
+  const isHome = m.home_or_away !== 'away';
+  const zimScore = m.team_score != null ? Number(m.team_score) : undefined;
+  const oppScore = m.opponent_score != null ? Number(m.opponent_score) : undefined;
+
   return {
     id: String(m.id),
-    competition: m.competition || "International Match",
-    round: m.round || "Standard",
+    competition: competitionName,
+    round: roundName,
     date: m.display_date_label || (kickoff ? kickoff.toLocaleDateString('en-US', { day: 'numeric', month: 'long', year: 'numeric' }) : m.date || "TBA"),
     time: m.display_time_label || (kickoff ? kickoff.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false }) : m.time || "TBA"),
-    venue: m.venue || "TBA",
+    venue: venueName,
     homeTeam: {
-      name: m.home_team_name || "Zimbabwe Sables",
-      logo: logoAssetUrl(m.home_team_logo ?? undefined),
-      score: m.home_team_score != null ? Number(m.home_team_score) : undefined,
+      name: isHome ? "Zimbabwe" : opponentName,
+      logo: isHome ? logoAssetUrl(m.home_team_logo ?? undefined) : logoAssetUrl(m.opponent_id?.crest ?? undefined),
+      score: isHome ? zimScore : oppScore,
     },
     awayTeam: {
-      name: m.away_team_name || "Opponent",
-      logo: logoAssetUrl(m.away_team_logo ?? undefined),
-      score: m.away_team_score != null ? Number(m.away_team_score) : undefined,
+      name: isHome ? opponentName : "Zimbabwe",
+      logo: isHome ? logoAssetUrl(m.opponent_id?.crest ?? undefined) : logoAssetUrl(m.home_team_logo ?? undefined),
+      score: isHome ? oppScore : zimScore,
     },
     status: (m.status === "completed" || m.status === "finished" ? "completed" : m.status === "live" ? "live" : "upcoming") as Match["status"],
     category: m.category || "Sables",
@@ -165,6 +193,13 @@ export async function getAllMatches(): Promise<Match[]> {
     if (process.env.NEXT_PUBLIC_DIRECTUS_URL) {
       const matches = await directusFetch<DirectusFlatMatch>("matches", {
         filter: { status: { _nin: ["draft", "archived"] } },
+        fields: [
+          '*',
+          'opponent_id.id', 'opponent_id.name', 'opponent_id.short_name', 'opponent_id.crest',
+          'venue_id.id', 'venue_id.name', 'venue_id.city',
+          'competition_id.id', 'competition_id.name', 'competition_id.short_name',
+          'team_id.id', 'team_id.name',
+        ],
         sort: ["-kickoff_at"],
         limit: 50,
       }, 120);
