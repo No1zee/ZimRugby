@@ -1,17 +1,30 @@
 import { directusFetch } from "@/lib/directus/fetch";
 
 export interface SiteSettings {
-  id?: number;
+  id?: string;
   site_name?: string;
   site_tagline?: string;
+  logo?: string | null;
+  // Hero / CTA
   hero_title?: string;
   hero_strapline?: string;
   primary_cta_label?: string;
   primary_cta_url?: string;
   secondary_cta_label?: string;
   secondary_cta_url?: string;
+  // External links
+  tickets_url?: string;
+  shop_url?: string;
+  sign_in_url?: string;
+  // SEO
   seo_title?: string;
   seo_description?: string;
+  // Compliance
+  compliance_label?: string;
+  privacy_policy_url?: string;
+  terms_url?: string;
+  cookie_policy_url?: string;
+  // Social
   facebook_url?: string;
   x_url?: string;
   instagram_url?: string;
@@ -28,8 +41,12 @@ const fallbackSettings: SiteSettings = {
   primary_cta_url: "/tickets",
   secondary_cta_label: "THE SQUAD",
   secondary_cta_url: "/teams",
+  tickets_url: "https://tickets.zimrugby.co.zw",
+  shop_url: "https://shop.zimrugby.co.zw",
+  sign_in_url: "/auth/signin",
   seo_title: "Zimbabwe Rugby Union | Official Home of the Sables",
   seo_description: "Official website of the Zimbabwe Rugby Union. Follow the Sables, Lady Sables, and all Zimbabwe rugby teams. Fixtures, results, news, and tickets.",
+  compliance_label: "CDPA 2021 COMPLIANT",
   facebook_url: "https://facebook.com/ZimbabweRugby",
   x_url: "https://x.com/ZimRugby",
   instagram_url: "https://instagram.com/zimrugbyunion",
@@ -41,9 +58,13 @@ export async function getSiteSettings(): Promise<SiteSettings | null> {
   try {
     if (!process.env.NEXT_PUBLIC_DIRECTUS_URL) return fallbackSettings;
 
-    const settings = await directusFetch<SiteSettings>("site_settings", { limit: 1 });
+    // Directus has `global_settings` — no `site_settings` collection exists
+    const settings = await directusFetch<SiteSettings>("global_settings", { limit: 1 });
 
-    if (settings && settings.length > 0) return settings[0];
+    if (settings && settings.length > 0) {
+      // Merge with fallback so any missing CMS fields degrade gracefully
+      return { ...fallbackSettings, ...settings[0] };
+    }
 
     return fallbackSettings;
   } catch {
