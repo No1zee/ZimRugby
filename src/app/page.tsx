@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 
 export const revalidate = 300;
 import UnifiedHubGrid from "@/components/home/UnifiedHubGrid";
-import HomeNewsletterBanner from "@/components/home/HomeNewsletterBanner";
+import JoinFanZoneSection from "@/components/home/JoinFanZoneSection";
 import CampaignCardsRow from "@/components/campaigns/CampaignCardsRow";
 import RoadToWorldCup from "@/components/home/RoadToWorldCup";
 import GrassrootsInitiativeSection from "@/components/home/GrassrootsInitiativeSection";
@@ -145,8 +145,8 @@ export default async function Home() {
             {/* 4b. Rugby Pathways & Community Development */}
             <PlayRugbyDevelopment />
 
-            {/* 5. Newsletter Banner */}
-            <HomeNewsletterBanner />
+            {/* 5. Join the Fan Zone — animated micro-interaction section */}
+            <JoinFanZoneSection />
 
             {/* Dynamic CMS Sections (non-homepage-specific) */}
             {cmsPage?.sections && cmsPage.sections.length > 0 && (
