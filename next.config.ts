@@ -24,6 +24,14 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: "https",
+        hostname: "zru.co.zw",
+      },
+      {
+        protocol: "https",
+        hostname: "www.zru.co.zw",
+      },
+      {
+        protocol: "https",
         hostname: "img.youtube.com",
       },
       {
