@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { requireAdmin } from "@/lib/admin/auth";
+import { requirePermission } from "@/lib/admin/auth";
 
 const DIRECTUS_URL = process.env.NEXT_PUBLIC_DIRECTUS_URL!;
 const DIRECTUS_TOKEN = process.env.DIRECTUS_TOKEN!;
@@ -10,7 +10,7 @@ export async function PATCH(
   { params }: { params: Promise<{ collection: string; id: string }> }
 ) {
   try {
-    await requireAdmin();
+    await requirePermission("EDIT");
     const { collection, id } = await params;
     const body = await req.json();
 
@@ -32,6 +32,9 @@ export async function PATCH(
   } catch (e: any) {
     if (e.message === "Unauthorized") {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+    if (e.message === "Forbidden") {
+      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
     return NextResponse.json({ error: e.message }, { status: 500 });
   }

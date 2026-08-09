@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { Shield, LogOut, UserCheck, Lock } from "lucide-react";
 import { onAdminTab, setAdminTab } from "@/lib/admin/tab-events";
+import { canAccessTab, type UserRole } from "@/lib/admin/iam";
 
 const NAV_SECTIONS = [
   {
@@ -41,6 +42,26 @@ interface AdminSidebarProps {
   activeTab?: string;
   onTabChange?: (tab: string) => void;
 }
+
+const role = (userInfo: { email: string; role: string } | null): UserRole | undefined =>
+  userInfo?.role && (["super_admin", "editor", "media_manager", "viewer"] as UserRole[]).includes(userInfo.role as UserRole)
+    ? (userInfo.role as UserRole)
+    : undefined;
+
+const visibleSections = (
+  sections: typeof NAV_SECTIONS,
+  userInfo: { email: string; role: string } | null
+) =>
+  sections
+    .map((section) => ({
+      ...section,
+      items: section.items.filter((item) => {
+        const userRole = role(userInfo);
+        if (!userRole) return item.id === "overview";
+        return canAccessTab(userRole, item.id);
+      }),
+    }))
+    .filter((section) => section.items.length > 0);
 
 export default function AdminSidebar({ activeTab = "overview", onTabChange }: AdminSidebarProps) {
   const [currentTab, setCurrentTab] = useState(activeTab);
@@ -105,7 +126,7 @@ export default function AdminSidebar({ activeTab = "overview", onTabChange }: Ad
             Navigation Menu
           </span>
         </div>
-        {NAV_SECTIONS.map((section) => (
+        {visibleSections(NAV_SECTIONS, userInfo).map((section) => (
           <div key={section.label} className="space-y-1">
             <div className="pt-3 pb-1 px-3">
               <span className="text-[9px] font-black uppercase tracking-[0.3em] text-white/25 block">

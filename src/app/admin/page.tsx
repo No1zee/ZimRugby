@@ -6,6 +6,7 @@ import { directusFetch, directusCount } from "@/lib/directus/fetch";
 import { getActiveCampaigns } from "@/lib/api/campaigns";
 import { getDirectusMatches, getStandings } from "@/lib/match-centre/api";
 import { requireAdmin } from "@/lib/admin/auth";
+import type { AdminSession } from "@/lib/admin/auth";
 import { listFanZoneMembers, listOnboardingSubmissions } from "@/lib/supabase/admin";
 import type { Campaign } from "@/lib/api/campaigns";
 import type { MatchCardViewModel, StandingsTableViewModel } from "@/lib/match-centre/types";
@@ -123,8 +124,9 @@ export default async function AdminDashboard() {
   // Server-side authorization gate — data is never fetched/serialized for
   // unauthenticated visitors. The client-side AdminAuthGate remains as a
   // defensive UX layer only.
+  let session: AdminSession;
   try {
-    await requireAdmin();
+    session = await requireAdmin();
   } catch {
     redirect("/admin-login");
   }
@@ -177,6 +179,7 @@ export default async function AdminDashboard() {
   return (
     <AdminAuthGate>
       <AdminContentManager
+        userRole={session.role}
         initialMatches={allMatches}
         initialStandings={standings}
         initialAnnouncements={announcements}

@@ -1,13 +1,16 @@
 import { NextRequest, NextResponse } from "next/server";
-import { requireAdmin } from "@/lib/admin/auth";
+import { requirePermission } from "@/lib/admin/auth";
 
 const DIRECTUS_URL = process.env.NEXT_PUBLIC_DIRECTUS_URL || "https://zru-directus-cms-production.up.railway.app";
 const DIRECTUS_TOKEN = process.env.DIRECTUS_TOKEN;
 
 export async function POST(request: NextRequest) {
   try {
-    await requireAdmin();
-  } catch {
+    await requirePermission("EDIT");
+  } catch (e: any) {
+    if (e.message === "Forbidden") {
+      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+    }
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
@@ -45,8 +48,11 @@ export async function POST(request: NextRequest) {
 
 export async function PATCH(request: NextRequest) {
   try {
-    await requireAdmin();
-  } catch {
+    await requirePermission("EDIT");
+  } catch (e: any) {
+    if (e.message === "Forbidden") {
+      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+    }
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
@@ -85,8 +91,11 @@ export async function PATCH(request: NextRequest) {
 
 export async function DELETE(request: NextRequest) {
   try {
-    await requireAdmin();
-  } catch {
+    await requirePermission("EDIT");
+  } catch (e: any) {
+    if (e.message === "Forbidden") {
+      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+    }
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 

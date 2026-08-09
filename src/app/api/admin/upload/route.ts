@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { requireAdmin } from "@/lib/admin/auth";
+import { requirePermission } from "@/lib/admin/auth";
 
 const DIRECTUS_URL = process.env.NEXT_PUBLIC_DIRECTUS_URL!;
 const DIRECTUS_TOKEN = process.env.DIRECTUS_TOKEN!;
@@ -7,7 +7,7 @@ const DIRECTUS_TOKEN = process.env.DIRECTUS_TOKEN!;
 // POST /api/admin/upload — upload image to Directus media library
 export async function POST(req: NextRequest) {
   try {
-    await requireAdmin();
+    await requirePermission("MEDIA");
 
     const formData = await req.formData();
     const file = formData.get("file") as File;
@@ -47,6 +47,9 @@ export async function POST(req: NextRequest) {
   } catch (e: any) {
     if (e.message === "Unauthorized") {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+    if (e.message === "Forbidden") {
+      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
     return NextResponse.json({ error: e.message }, { status: 500 });
   }

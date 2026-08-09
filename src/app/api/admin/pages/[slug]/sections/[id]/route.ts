@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { requireAdmin } from "@/lib/admin/auth";
+import { requirePermission } from "@/lib/admin/auth";
 import { directusUpdate, directusDelete } from "@/lib/directus/admin-write";
 
 // PUT /api/admin/pages/[slug]/sections/[id] — update section
@@ -8,7 +8,7 @@ export async function PUT(
   { params }: { params: Promise<{ slug: string; id: string }> }
 ) {
   try {
-    await requireAdmin();
+    await requirePermission("EDIT");
     const { id } = await params;
     const body = await req.json();
 
@@ -32,6 +32,9 @@ export async function PUT(
     if (e.message === "Unauthorized") {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
+    if (e.message === "Forbidden") {
+      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+    }
     return NextResponse.json({ error: e.message }, { status: 500 });
   }
 }
@@ -42,7 +45,7 @@ export async function DELETE(
   { params }: { params: Promise<{ slug: string; id: string }> }
 ) {
   try {
-    await requireAdmin();
+    await requirePermission("EDIT");
     const { id } = await params;
 
     await directusDelete("page_sections", id);

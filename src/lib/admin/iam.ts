@@ -95,3 +95,35 @@ export function hasPermission(role: UserRole, requiredPermission: "EDIT" | "PUBL
       return false;
   }
 }
+
+// Admin tab -> minimum permission to view/use it. "ANY" = any admin role.
+export type AdminTabId =
+  | "overview"
+  | "directus_ai"
+  | "pages"
+  | "media"
+  | "grassroots"
+  | "faq-footer"
+  | "fixtures"
+  | "campaigns"
+  | "fanzone"
+  | "onboarding";
+
+export const TAB_PERMISSIONS: Record<AdminTabId, "EDIT" | "PUBLISH" | "MEDIA" | "AUDIT" | "ANY"> = {
+  overview: "ANY",
+  directus_ai: "EDIT",
+  pages: "EDIT",
+  media: "MEDIA",
+  grassroots: "EDIT",
+  "faq-footer": "EDIT",
+  fixtures: "EDIT",
+  campaigns: "PUBLISH",
+  fanzone: "AUDIT",
+  onboarding: "AUDIT",
+};
+
+export function canAccessTab(role: UserRole, tab: string): boolean {
+  const permission = TAB_PERMISSIONS[tab as AdminTabId];
+  if (!permission) return false;
+  return permission === "ANY" || hasPermission(role, permission);
+}

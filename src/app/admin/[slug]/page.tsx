@@ -1,7 +1,7 @@
 import { notFound, redirect } from "next/navigation";
 import { directusFetch } from "@/lib/directus/fetch";
 import { assetUrl } from "@/lib/directus/assets";
-import { requireAdmin } from "@/lib/admin/auth";
+import { requirePermission } from "@/lib/admin/auth";
 import PageBuilderClient from "./PageBuilderClient";
 
 export const dynamic = "force-dynamic";
@@ -48,7 +48,7 @@ export default async function PageBuilderPage({
   const { slug } = await params;
 
   try {
-    await requireAdmin();
+    await requirePermission("EDIT");
   } catch {
     redirect("/admin-login");
   }

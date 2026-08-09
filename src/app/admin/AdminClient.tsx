@@ -8,10 +8,12 @@ import { useRouter } from "next/navigation";
 import SlantedButton from "@/components/ui/SlantedButton";
 import CollectionManager from "@/components/admin/CollectionManager";
 import { onAdminTab, setAdminTab } from "@/lib/admin/tab-events";
+import { canAccessTab, type UserRole } from "@/lib/admin/iam";
 import type { MatchCardViewModel, StandingsTableViewModel } from "@/lib/match-centre/types";
 import type { Campaign } from "@/lib/api/campaigns";
 
 interface AdminClientProps {
+  userRole: UserRole;
   initialMatches: MatchCardViewModel[];
   initialStandings: StandingsTableViewModel[];
   initialAnnouncements: Record<string, unknown>[];
@@ -75,6 +77,7 @@ interface AdminClientProps {
 }
 
 export default function AdminClient({
+  userRole,
   initialMatches,
   initialStandings,
   initialAnnouncements,
@@ -135,6 +138,13 @@ export default function AdminClient({
     },
   ];
 
+  const accessibleSections = NAV_SECTIONS
+    .map((section) => ({
+      ...section,
+      items: section.items.filter((item) => canAccessTab(userRole, item.id)),
+    }))
+    .filter((section) => section.items.length > 0);
+
   // Directus AI Assistant State
   const [aiPrompt, setAiPrompt] = useState("");
   const [aiAction, setAiAction] = useState<"general" | "match_summary" | "tags">("general");
@@ -164,6 +174,14 @@ export default function AdminClient({
     });
     return unsubscribe;
   }, []);
+
+  // Clamp activeTab to a role-accessible tab if the current one is gated off
+  // (e.g. a direct URL hit or stale sidebar state).
+  useEffect(() => {
+    if (!canAccessTab(userRole, activeTab)) {
+      setActiveTab("overview");
+    }
+  }, [userRole, activeTab]);
 
   useEffect(() => {
     setAdminTab(activeTab);
@@ -442,7 +460,7 @@ export default function AdminClient({
         {/* Navigation Tabs — grouped sections */}
         <div className="space-y-3">
           <div className="flex overflow-x-auto gap-2 no-scrollbar border-b border-black/10 pb-4">
-            {NAV_SECTIONS.map((section) => {
+            {accessibleSections.map((section) => {
               const isSectionActive = section.items.some((i) => i.id === activeTab);
               return (
                 <button
@@ -461,7 +479,7 @@ export default function AdminClient({
           </div>
 
           {/* Active section's sub-tabs */}
-          {NAV_SECTIONS.filter((s) => s.items.some((i) => i.id === activeTab)).map((section) => (
+          {accessibleSections.filter((s) => s.items.some((i) => i.id === activeTab)).map((section) => (
             <div key={section.id} className="flex overflow-x-auto gap-2 no-scrollbar">
               {section.items.map((tab) => {
                 const Icon = tab.icon;

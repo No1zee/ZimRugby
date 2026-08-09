@@ -1,10 +1,12 @@
 import { createClient } from "@/lib/supabase/server";
-import { isAdminRole, type UserRole } from "./iam";
+import { hasPermission, isAdminRole, type UserRole } from "./iam";
 
 export interface AdminSession {
   email: string;
   role: UserRole;
 }
+
+export type AdminPermission = "EDIT" | "PUBLISH" | "DELETE" | "MEDIA" | "AUDIT";
 
 /**
  * Server-side authorization gate. Validates the Supabase session cookie and
@@ -28,4 +30,17 @@ export async function requireAdmin(): Promise<AdminSession> {
   }
 
   return { email: user.email, role };
+}
+
+/**
+ * Server-side authorization gate for role-scoped actions. Requires an admin
+ * session AND the given permission. Throws "Forbidden" when the admin role
+ * lacks the permission.
+ */
+export async function requirePermission(permission: AdminPermission): Promise<AdminSession> {
+  const session = await requireAdmin();
+  if (!hasPermission(session.role, permission)) {
+    throw new Error("Forbidden");
+  }
+  return session;
 }

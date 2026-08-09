@@ -1,11 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
-import { requireAdmin } from "@/lib/admin/auth";
+import { requirePermission } from "@/lib/admin/auth";
 
 export async function POST(request: NextRequest) {
   try {
     try {
-      await requireAdmin();
-    } catch {
+      await requirePermission("EDIT");
+    } catch (e: any) {
+      if (e.message === "Forbidden") {
+        return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+      }
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 

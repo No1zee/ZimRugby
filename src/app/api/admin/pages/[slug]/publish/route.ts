@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { requireAdmin } from "@/lib/admin/auth";
+import { requirePermission } from "@/lib/admin/auth";
 import { directusFetch } from "@/lib/directus/fetch";
 import { directusUpdate } from "@/lib/directus/admin-write";
 
@@ -9,7 +9,7 @@ export async function POST(
   { params }: { params: Promise<{ slug: string }> }
 ) {
   try {
-    await requireAdmin();
+    await requirePermission("PUBLISH");
     const { slug } = await params;
 
     const pages = await directusFetch<any>("pages", {
@@ -41,6 +41,9 @@ export async function POST(
   } catch (e: any) {
     if (e.message === "Unauthorized") {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+    if (e.message === "Forbidden") {
+      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
     return NextResponse.json({ error: e.message }, { status: 500 });
   }
