@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { Plus, Pencil, Trash2, CheckCircle2, ExternalLink, Database } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 export interface FieldConfig {
   key: string;
@@ -46,6 +47,7 @@ export default function CollectionManager({
   const [formData, setFormData] = useState<Record<string, string>>({});
   const [editingId, setEditingId] = useState<string | number | null>(null);
 
+  const router = useRouter();
   const directusUrl = process.env.NEXT_PUBLIC_DIRECTUS_URL || "http://localhost:8055";
 
   function setField(key: string, value: string) {
@@ -85,10 +87,11 @@ export default function CollectionManager({
       if (res.ok) {
         setMessage(
           editingId !== null
-            ? `Item updated in "${collection}". Refreshing...`
-            : `Item created in "${collection}". Refreshing...`
+            ? `Item updated in "${collection}".`
+            : `Item created in "${collection}".`
         );
-        setTimeout(() => window.location.reload(), 1200);
+        resetForm();
+        router.refresh();
       } else {
         const err = await res.json().catch(() => null);
         setMessage(`❌ Failed to save: ${err?.error || res.statusText}`);
@@ -109,8 +112,9 @@ export default function CollectionManager({
       });
 
       if (res.ok) {
-        setMessage(`Item #${id} deleted from "${collection}". Refreshing...`);
-        setTimeout(() => window.location.reload(), 1200);
+        setMessage(`Item #${id} deleted from "${collection}".`);
+        setEditingId(null);
+        router.refresh();
       } else {
         const err = await res.json().catch(() => null);
         setMessage(`❌ Delete failed: ${err?.error || res.statusText}`);

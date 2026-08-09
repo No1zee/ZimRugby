@@ -34,8 +34,20 @@ async function readStaticJson<T>(filename: string, _revalidateSeconds: number): 
       // Server-side / Build-time: Read directly from public/data via fs to avoid localhost ECONNREFUSED during static export
       const [fs, path] = await Promise.all([import('fs'), import('path')]);
       const filePath = path.join(process.cwd(), 'public', 'data', filename);
-      const fileContent = fs.readFileSync(filePath, 'utf8');
-      return JSON.parse(fileContent);
+      try {
+        const fileContent = fs.readFileSync(filePath, 'utf8');
+        return JSON.parse(fileContent);
+      } catch (err: any) {
+        if (err.code === 'ENOENT' && process.env.VERCEL_URL) {
+          console.warn(`File not found via fs: ${filePath}, falling back to fetch via VERCEL_URL...`);
+          const res = await fetch(`https://${process.env.VERCEL_URL}/data/${filename}`, {
+            next: { revalidate: _revalidateSeconds }
+          });
+          if (!res.ok) throw new Error(`Failed to fetch ${filename} from VERCEL_URL`);
+          return await res.json();
+        }
+        throw err;
+      }
     } else {
       // Client-side: direct fetch
       const res = await fetch(`/data/${filename}`);

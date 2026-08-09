@@ -1,9 +1,12 @@
 import { Metadata } from "next";
 import Link from "next/link";
 import nextDynamic from "next/dynamic";
-import { directusFetch } from "@/lib/directus/fetch";
+import { redirect } from "next/navigation";
+import { directusFetch, directusCount } from "@/lib/directus/fetch";
 import { getActiveCampaigns } from "@/lib/api/campaigns";
 import { getDirectusMatches, getStandings } from "@/lib/match-centre/api";
+import { requireAdmin } from "@/lib/admin/auth";
+import { listFanZoneMembers, listOnboardingSubmissions } from "@/lib/supabase/admin";
 import type { Campaign } from "@/lib/api/campaigns";
 import type { MatchCardViewModel, StandingsTableViewModel } from "@/lib/match-centre/types";
 import {
@@ -57,11 +60,6 @@ interface Page {
   sort?: number;
 }
 
-interface SectionCount {
-  page_id: string;
-  count: number;
-}
-
 interface ActivityEntry {
   id: number;
   action: "create" | "update" | "delete" | "login" | "authenticate";
@@ -105,14 +103,15 @@ async function getAdminCollection<T>(collection: string): Promise<T[]> {
 
 async function getPageSectionCounts(): Promise<Record<string, number>> {
   try {
-    const sections = await directusFetch<{ id: number; page_id: string }>(
+    const rows = await directusFetch<{ count: Record<string, number>; page_id: string }>(
       "page_sections",
-      { fields: ["id", "page_id"] },
+      { aggregate: { count: "*" }, groupBy: ["page_id"] },
       0
     );
     const counts: Record<string, number> = {};
-    sections.forEach((s) => {
-      counts[s.page_id] = (counts[s.page_id] || 0) + 1;
+    rows.forEach((row) => {
+      const value = row.count && typeof row.count === "object" ? Object.values(row.count)[0] : 0;
+      counts[row.page_id] = typeof value === "number" ? value : 0;
     });
     return counts;
   } catch {
@@ -120,31 +119,32 @@ async function getPageSectionCounts(): Promise<Record<string, number>> {
   }
 }
 
-async function getCount(collection: string): Promise<number> {
-  try {
-    const items = await directusFetch<{ id: string | number }>(collection, { fields: ["id"] }, 0);
-    return items.length;
-  } catch {
-    return 0;
-  }
-}
-
 export default async function AdminDashboard() {
+  // Server-side authorization gate — data is never fetched/serialized for
+  // unauthenticated visitors. The client-side AdminAuthGate remains as a
+  // defensive UX layer only.
+  try {
+    await requireAdmin();
+  } catch {
+    redirect("/admin-login");
+  }
+
   const [
     pages, sectionCounts,
     eventCount, teamCount, playerCount, matchCount, partnerCount, announcementCount,
     campaigns, allMatches, standings, announcements,
     news, grassrootsInitiatives, programmes, faqs, footerNav,
+    fanZoneMembers, onboardingSubmissions,
     activityFeed,
   ] = await Promise.all([
     directusFetch<Page>("pages", { sort: ["sort"] }, 0),
     getPageSectionCounts(),
-    getCount("events"),
-    getCount("teams"),
-    getCount("players"),
-    getCount("matches"),
-    getCount("partners"),
-    getCount("announcements"),
+    directusCount("events"),
+    directusCount("teams"),
+    directusCount("players"),
+    directusCount("matches"),
+    directusCount("partners"),
+    directusCount("announcements"),
     getActiveCampaigns(),
     getDirectusMatches().catch(() => [] as MatchCardViewModel[]),
     getStandings().catch(() => [] as StandingsTableViewModel[]),
@@ -154,6 +154,8 @@ export default async function AdminDashboard() {
     getAdminCollection<Record<string, unknown>>("programmes"),
     getAdminCollection<Record<string, unknown>>("faqs"),
     getAdminCollection<Record<string, unknown>>("footer_navigation"),
+    listFanZoneMembers(),
+    listOnboardingSubmissions(),
     fetchActivityFeed(),
   ]);
 
@@ -178,8 +180,8 @@ export default async function AdminDashboard() {
         initialMatches={allMatches}
         initialStandings={standings}
         initialAnnouncements={announcements}
-        initialFanZoneMembers={[]}
-        initialOnboardingSubmissions={[]}
+        initialFanZoneMembers={fanZoneMembers}
+        initialOnboardingSubmissions={onboardingSubmissions}
         initialCampaigns={campaigns}
         initialNews={news}
         initialGrassroots={grassrootsInitiatives}

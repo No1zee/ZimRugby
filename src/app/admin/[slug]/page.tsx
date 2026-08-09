@@ -1,6 +1,7 @@
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { directusFetch } from "@/lib/directus/fetch";
 import { assetUrl } from "@/lib/directus/assets";
+import { requireAdmin } from "@/lib/admin/auth";
 import PageBuilderClient from "./PageBuilderClient";
 
 export const dynamic = "force-dynamic";
@@ -45,6 +46,12 @@ export default async function PageBuilderPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
+
+  try {
+    await requireAdmin();
+  } catch {
+    redirect("/admin-login");
+  }
 
   const pages = await directusFetch<PageData>("pages", {
     filter: { slug: { _eq: slug } },

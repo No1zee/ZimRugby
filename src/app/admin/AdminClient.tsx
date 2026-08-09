@@ -1,10 +1,13 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Plus, Edit2, CheckCircle2, ShieldCheck, Users, Trophy, Newspaper, Radio, Flag, CalendarDays, ImageIcon, BookOpen, Sprout, HelpCircle, LayoutDashboard, FileText, Globe, Activity, ArrowUpRight, ExternalLink, Clock } from "lucide-react";
+import { Plus, Edit2, CheckCircle2, ShieldCheck, Users, Trophy, Newspaper, Radio, Flag, CalendarDays, ImageIcon, BookOpen, Sprout, HelpCircle, LayoutDashboard, FileText, Globe, Activity, ArrowUpRight, ExternalLink, Clock, Sparkles, X } from "lucide-react";
+import type { LucideIcon } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import SlantedButton from "@/components/ui/SlantedButton";
 import CollectionManager from "@/components/admin/CollectionManager";
+import { onAdminTab, setAdminTab } from "@/lib/admin/tab-events";
 import type { MatchCardViewModel, StandingsTableViewModel } from "@/lib/match-centre/types";
 import type { Campaign } from "@/lib/api/campaigns";
 
@@ -88,7 +91,49 @@ export default function AdminClient({
   initialActivityFeed,
   stats,
 }: AdminClientProps) {
-  const [activeTab, setActiveTab] = useState<"overview" | "directus_ai" | "pages" | "media" | "news" | "fixtures" | "standings" | "campaigns" | "fanzone" | "onboarding" | "grassroots" | "faq-footer">("overview");
+  const router = useRouter();
+
+  type TabId = "overview" | "directus_ai" | "pages" | "media" | "fixtures" | "campaigns" | "fanzone" | "onboarding" | "grassroots" | "faq-footer";
+  const [activeTab, setActiveTab] = useState<TabId>("overview");
+
+  // Grouped navigation — Dashboard / Content / Matches / Fans & Signups.
+  // The sidebar + dashboard stay in sync via tab-events using the flat id.
+  const NAV_SECTIONS: { id: string; label: string; items: { id: TabId; label: string; icon: LucideIcon; count: number }[] }[] = [
+    {
+      id: "dashboard",
+      label: "Dashboard",
+      items: [
+        { id: "overview", label: "Overview", icon: LayoutDashboard, count: stats.activeCampaignCount },
+        { id: "directus_ai", label: "Directus AI", icon: Sparkles, count: 0 },
+      ],
+    },
+    {
+      id: "content",
+      label: "Content",
+      items: [
+        { id: "pages", label: "Pages & Layouts", icon: FileText, count: stats.pagesCount },
+        { id: "media", label: "News & Media", icon: BookOpen, count: initialNews.length },
+        { id: "grassroots", label: "Grassroots & Programs", icon: Sprout, count: initialGrassroots.length + initialProgrammes.length },
+        { id: "faq-footer", label: "FAQ & Footer", icon: HelpCircle, count: initialFaqs.length + initialFooterNav.length },
+      ],
+    },
+    {
+      id: "matches",
+      label: "Matches",
+      items: [
+        { id: "fixtures", label: "Match Centre & Fixtures", icon: Radio, count: initialMatches.length },
+      ],
+    },
+    {
+      id: "fans",
+      label: "Fans & Signups",
+      items: [
+        { id: "campaigns", label: "Campaigns", icon: Flag, count: stats.campaignCount },
+        { id: "fanzone", label: "Fan Zone Members", icon: Users, count: initialFanZoneMembers.length },
+        { id: "onboarding", label: "Onboarding Submissions", icon: ShieldCheck, count: initialOnboardingSubmissions.length },
+      ],
+    },
+  ];
 
   // Directus AI Assistant State
   const [aiPrompt, setAiPrompt] = useState("");
@@ -109,6 +154,20 @@ export default function AdminClient({
 
   // Batch Action Queue Selection State
   const [selectedItems, setSelectedItems] = useState<string[]>([]);
+  const [isPublishing, setIsPublishing] = useState(false);
+
+  // Keep the sidebar and dashboard tabs in sync (sidebar lives in the
+  // server layout, so we bridge through a shared window event).
+  useEffect(() => {
+    const unsubscribe = onAdminTab((tab) => {
+      setActiveTab(tab as Parameters<typeof setActiveTab>[0]);
+    });
+    return unsubscribe;
+  }, []);
+
+  useEffect(() => {
+    setAdminTab(activeTab);
+  }, [activeTab]);
 
   useEffect(() => {
     // Directus CMS Health Ping (Railway instance check)
@@ -196,9 +255,10 @@ export default function AdminClient({
       });
 
       if (res.ok) {
-        setMessage(`✅ Match '${homeTeam} vs ${awayTeam}' created successfully! Refreshing...`);
+        setMessage(`✅ Match '${homeTeam} vs ${awayTeam}' created successfully.`);
         setAwayTeam("");
-        setTimeout(() => window.location.reload(), 1500);
+        setStatus("upcoming");
+        router.refresh();
       } else {
         setMessage(`❌ Failed to create match: ${res.statusText}`);
       }
@@ -229,15 +289,115 @@ export default function AdminClient({
       });
 
       if (res.ok) {
-        setMessage(`✅ Announcement '${annTitle}' published to website! Refreshing...`);
+        setMessage(`✅ Announcement '${annTitle}' published to website.`);
         setAnnTitle("");
         setAnnBody("");
-        setTimeout(() => window.location.reload(), 1500);
+        router.refresh();
       } else {
         setMessage(`❌ Failed to publish announcement`);
       }
     } catch (err) {
       setMessage(`❌ Error: ${err}`);
+    }
+  }
+
+  const draftPages = initialPages.filter((p) => p.status !== "published");
+  const directusUrl = process.env.NEXT_PUBLIC_DIRECTUS_URL || "http://localhost:8055";
+
+  async function handleBatchPublish() {
+    if (selectedItems.length === 0) return;
+    setIsPublishing(true);
+    try {
+      for (const slug of selectedItems) {
+        const res = await fetch(`/api/admin/pages/${slug}/publish`, { method: "POST" });
+        if (!res.ok) {
+          setMessage(`❌ Failed to publish "/${slug}".`);
+          return;
+        }
+      }
+      setMessage(`✅ Published ${selectedItems.length} page(s) to the live site.`);
+      setSelectedItems([]);
+      router.refresh();
+    } catch (err) {
+      setMessage(`❌ Error: ${err}`);
+    } finally {
+      setIsPublishing(false);
+    }
+  }
+
+  async function handleQuickArticleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    setIsModalSubmitting(true);
+    try {
+      const res = await fetch("/api/admin/directus", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          collection: "announcements",
+          data: {
+            title: quickArticle.title,
+            body: quickArticle.content || quickArticle.summary,
+            category: quickArticle.category,
+            variant: "banner",
+            priority: "normal",
+            is_enabled: true,
+            status: "published",
+            start_at: new Date().toISOString(),
+          },
+        }),
+      });
+
+      if (res.ok) {
+        setMessage(`✅ '${quickArticle.title}' published to the website.`);
+        setQuickArticle({ title: "", category: "News", summary: "", content: "" });
+        setActiveModal("none");
+        router.refresh();
+      } else {
+        setMessage(`❌ Failed to publish article.`);
+      }
+    } catch (err) {
+      setMessage(`❌ Error: ${err}`);
+    } finally {
+      setIsModalSubmitting(false);
+    }
+  }
+
+  async function handleQuickFixtureSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    setIsModalSubmitting(true);
+    try {
+      const res = await fetch("/api/admin/directus", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          collection: "matches",
+          data: {
+            title: `${quickFixture.homeTeam} vs ${quickFixture.awayTeam}`,
+            team_id: 1,
+            opponent_id: null,
+            venue_id: null,
+            status: "upcoming",
+            kickoff_at: quickFixture.date
+              ? new Date(quickFixture.date).toISOString()
+              : new Date().toISOString(),
+            home_or_away: "home",
+            show_on_match_centre: true,
+          },
+        }),
+      });
+
+      if (res.ok) {
+        setMessage(`✅ Fixture '${quickFixture.homeTeam} vs ${quickFixture.awayTeam}' created.`);
+        setQuickFixture({ homeTeam: "Zimbabwe Sables", awayTeam: "", date: "", venue: "Harare Sports Club" });
+        setActiveModal("none");
+        router.refresh();
+      } else {
+        setMessage(`❌ Failed to create fixture.`);
+      }
+    } catch (err) {
+      setMessage(`❌ Error: ${err}`);
+    } finally {
+      setIsModalSubmitting(false);
     }
   }
 
@@ -279,41 +439,53 @@ export default function AdminClient({
           </div>
         )}
 
-        {/* Navigation Tabs */}
-        <div className="flex overflow-x-auto gap-2 no-scrollbar border-b border-black/10 pb-4 mb-8">
-          {[
-            { id: "overview", label: "Overview", icon: LayoutDashboard, count: stats.activeCampaignCount },
-            { id: "pages", label: "Pages & Layouts", icon: FileText, count: stats.pagesCount },
-            { id: "fixtures", label: "Match Centre & Fixtures", icon: Radio, count: initialMatches.length },
-            { id: "media", label: "News & Media", icon: BookOpen, count: initialNews.length },
-            { id: "news", label: "News & Announcements", icon: Newspaper, count: initialAnnouncements.length },
-            { id: "standings", label: "League Standings", icon: Trophy, count: initialStandings[0]?.rows.length || 0 },
-            { id: "campaigns", label: "Campaigns", icon: Flag, count: stats.campaignCount },
-            { id: "grassroots", label: "Grassroots & Programs", icon: Sprout, count: initialGrassroots.length + initialProgrammes.length },
-            { id: "faq-footer", label: "FAQ & Footer", icon: HelpCircle, count: initialFaqs.length + initialFooterNav.length },
-            { id: "fanzone", label: "Fan Zone Members", icon: Users, count: initialFanZoneMembers.length },
-            { id: "onboarding", label: "Onboarding Submissions", icon: ShieldCheck, count: initialOnboardingSubmissions.length },
-          ].map((tab) => {
-            const Icon = tab.icon;
-            const isActive = activeTab === tab.id;
-            return (
-              <button
-                key={tab.id}
-                onClick={() => setActiveTab(tab.id as any)}
-                className={`flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs font-black uppercase tracking-wider transition-all whitespace-nowrap ${
-                  isActive
-                    ? "bg-zru-green text-white shadow-lg"
-                    : "bg-black/5 text-black/70 hover:bg-black/10"
-                }`}
-              >
-                <Icon className="w-4 h-4" />
-                <span>{tab.label}</span>
-                <span className={`px-2 py-0.5 rounded-full text-[10px] ${isActive ? "bg-white/20 text-white" : "bg-black/10 text-black/70"}`}>
-                  {tab.count}
-                </span>
-              </button>
-            );
-          })}
+        {/* Navigation Tabs — grouped sections */}
+        <div className="space-y-3">
+          <div className="flex overflow-x-auto gap-2 no-scrollbar border-b border-black/10 pb-4">
+            {NAV_SECTIONS.map((section) => {
+              const isSectionActive = section.items.some((i) => i.id === activeTab);
+              return (
+                <button
+                  key={section.id}
+                  onClick={() => setActiveTab(section.items[0].id)}
+                  className={`flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs font-black uppercase tracking-wider transition-all whitespace-nowrap ${
+                    isSectionActive
+                      ? "bg-zru-green text-white shadow-lg"
+                      : "bg-black/5 text-black/70 hover:bg-black/10"
+                  }`}
+                >
+                  <span>{section.label}</span>
+                </button>
+              );
+            })}
+          </div>
+
+          {/* Active section's sub-tabs */}
+          {NAV_SECTIONS.filter((s) => s.items.some((i) => i.id === activeTab)).map((section) => (
+            <div key={section.id} className="flex overflow-x-auto gap-2 no-scrollbar">
+              {section.items.map((tab) => {
+                const Icon = tab.icon;
+                const isActive = activeTab === tab.id;
+                return (
+                  <button
+                    key={tab.id}
+                    onClick={() => setActiveTab(tab.id)}
+                    className={`flex items-center gap-2 px-4 py-2 rounded-xl text-[11px] font-bold uppercase tracking-wider transition-all whitespace-nowrap ${
+                      isActive
+                        ? "bg-black text-white"
+                        : "bg-black/5 text-black/70 hover:bg-black/10"
+                    }`}
+                  >
+                    <Icon className="w-4 h-4" />
+                    <span>{tab.label}</span>
+                    <span className={`px-2 py-0.5 rounded-full text-[10px] ${isActive ? "bg-white/20 text-white" : "bg-black/10 text-black/70"}`}>
+                      {tab.count}
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
+          ))}
         </div>
 
         {/* Tab 0: Overview */}
@@ -508,18 +680,16 @@ export default function AdminClient({
                   <h3 className="text-base font-bold text-white flex items-center gap-2">
                     <span>📋 CMS Quick Queue & Batch Actions</span>
                   </h3>
-                  <p className="text-xs text-zinc-400">Multi-select draft entries for instant batch publishing.</p>
+                  <p className="text-xs text-zinc-400">Select draft pages to publish them to the live site.</p>
                 </div>
                 {selectedItems.length > 0 && (
                   <div className="flex items-center gap-2 animate-in fade-in">
                     <button
-                      onClick={() => {
-                        setMessage(`Successfully published ${selectedItems.length} selected items to Directus CMS!`);
-                        setSelectedItems([]);
-                      }}
-                      className="px-3 py-1.5 rounded-lg bg-[#006B3F] hover:bg-emerald-600 text-white font-bold text-xs shadow-md shadow-[#006B3F]/20 transition-all"
+                      onClick={handleBatchPublish}
+                      disabled={isPublishing}
+                      className="px-3 py-1.5 rounded-lg bg-[#006B3F] hover:bg-emerald-600 text-white font-bold text-xs shadow-md shadow-[#006B3F]/20 transition-all disabled:opacity-50"
                     >
-                      Publish Selected ({selectedItems.length})
+                      {isPublishing ? "Publishing..." : `Publish Selected (${selectedItems.length})`}
                     </button>
                     <button
                       onClick={() => setSelectedItems([])}
@@ -531,39 +701,45 @@ export default function AdminClient({
                 )}
               </div>
 
-              {/* Sample Draft Queue Table */}
-              <div className="divide-y divide-zinc-800/60 rounded-xl border border-zinc-800/60 bg-zinc-950/40 overflow-hidden">
-                {[
-                  { id: "draft-1", title: "ZRU Sables Squad Announcement vs Namibia", category: "News", date: "Today" },
-                  { id: "draft-2", title: "Cheetahs 7s Training Camp Roster", category: "Squad", date: "Yesterday" },
-                  { id: "draft-3", title: "Harare Sports Club Pitch Maintenance Report", category: "Media", date: "3 days ago" },
-                ].map((item) => {
-                  const isChecked = selectedItems.includes(item.id);
-                  return (
-                    <div key={item.id} className="p-3.5 flex items-center justify-between hover:bg-zinc-800/30 transition-colors">
-                      <div className="flex items-center gap-3">
-                        <input
-                          type="checkbox"
-                          checked={isChecked}
-                          onChange={(e) => {
-                            if (e.target.checked) {
-                              setSelectedItems([...selectedItems, item.id]);
-                            } else {
-                              setSelectedItems(selectedItems.filter((i) => i !== item.id));
-                            }
-                          }}
-                          className="w-4 h-4 rounded bg-zinc-900 border-zinc-700 text-[#006B3F] focus:ring-[#006B3F]"
-                        />
-                        <span className="text-xs font-semibold text-zinc-200">{item.title}</span>
+              {draftPages.length === 0 ? (
+                <div className="rounded-xl border border-dashed border-zinc-700 bg-zinc-950/40 p-8 text-center">
+                  <span className="text-xs text-zinc-500 font-bold uppercase tracking-wider">
+                    No draft pages pending publication
+                  </span>
+                </div>
+              ) : (
+                <div className="divide-y divide-zinc-800/60 rounded-xl border border-zinc-800/60 bg-zinc-950/40 overflow-hidden">
+                  {draftPages.map((item) => {
+                    const isChecked = selectedItems.includes(item.slug);
+                    return (
+                      <div key={item.id} className="p-3.5 flex items-center justify-between hover:bg-zinc-800/30 transition-colors">
+                        <div className="flex items-center gap-3">
+                          <input
+                            type="checkbox"
+                            checked={isChecked}
+                            onChange={(e) => {
+                              if (e.target.checked) {
+                                setSelectedItems([...selectedItems, item.slug]);
+                              } else {
+                                setSelectedItems(selectedItems.filter((i) => i !== item.slug));
+                              }
+                            }}
+                            className="w-4 h-4 rounded bg-zinc-900 border-zinc-700 text-[#006B3F] focus:ring-[#006B3F]"
+                          />
+                          <div className="min-w-0">
+                            <span className="text-xs font-semibold text-zinc-200 block truncate">{item.title}</span>
+                            <span className="text-[10px] text-zinc-500 font-mono">/{item.slug}</span>
+                          </div>
+                        </div>
+                        <div className="flex items-center gap-3 shrink-0">
+                          <span className="px-2 py-0.5 rounded text-[10px] font-bold uppercase bg-zinc-800 text-zinc-400">{item.status}</span>
+                          <span className="text-[11px] text-zinc-500">{item.updated_at ? new Date(item.updated_at).toLocaleDateString("en-GB") : "—"}</span>
+                        </div>
                       </div>
-                      <div className="flex items-center gap-3">
-                        <span className="px-2 py-0.5 rounded text-[10px] font-bold uppercase bg-zinc-800 text-zinc-400">{item.category}</span>
-                        <span className="text-[11px] text-zinc-500">{item.date}</span>
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
+                    );
+                  })}
+                </div>
+              )}
             </div>
             <div>
               <h2 className="text-xs font-black text-black/40 uppercase tracking-[0.3em] mb-4 font-subheading">
@@ -634,7 +810,7 @@ export default function AdminClient({
                 </div>
 
                 <div 
-                  onClick={() => setActiveTab("news")}
+                  onClick={() => setActiveTab("media")}
                   className="bg-white border border-black/10 rounded-2xl p-5 hover:border-zru-green/40 hover:shadow-md transition-all cursor-pointer group relative overflow-hidden"
                 >
                   <div className="flex items-start justify-between">
@@ -978,11 +1154,48 @@ export default function AdminClient({
                 ))}
               </div>
             </div>
+
+            {/* League Standings (merged into Match Centre) */}
+            <div className="bg-white border border-black/10 rounded-2xl p-6 shadow-sm">
+              <h2 className="font-heading text-xl font-black uppercase text-rich-black mb-4 flex items-center gap-2">
+                <Trophy className="w-5 h-5 text-zru-green" /> Rugby Africa Cup Standings Table
+              </h2>
+              <div className="overflow-x-auto">
+                <table className="w-full text-left border-collapse">
+                  <thead>
+                    <tr className="border-b border-black/10 text-xs font-black uppercase text-black/50">
+                      <th className="py-2">Pos</th>
+                      <th className="py-2">Team</th>
+                      <th className="py-2">P</th>
+                      <th className="py-2">W</th>
+                      <th className="py-2">D</th>
+                      <th className="py-2">L</th>
+                      <th className="py-2">Pts</th>
+                      <th className="py-2">Form</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-black/5 text-sm font-bold">
+                    {initialStandings[0]?.rows.map((row) => (
+                      <tr key={row.team}>
+                        <td className="py-3 font-heading font-black text-zru-green">{row.position}</td>
+                        <td className="py-3 text-rich-black uppercase">{row.team}</td>
+                        <td className="py-3">{row.played}</td>
+                        <td className="py-3">{row.won}</td>
+                        <td className="py-3">{row.drawn}</td>
+                        <td className="py-3">{row.lost}</td>
+                        <td className="py-3 font-heading font-black text-zru-green">{row.points}</td>
+                        <td className="py-3 font-mono text-xs">{row.form.join("")}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
           </div>
         )}
 
-        {/* Tab 2: News Manager */}
-        {activeTab === "news" && (
+        {/* Tab 2: News Manager (announcements merged into News & Media) */}
+        {activeTab === "media" && (
           <div className="space-y-8">
             <form onSubmit={handleAddAnnouncement} className="bg-white border border-black/10 rounded-2xl p-6 shadow-sm">
               <h2 className="font-heading text-xl font-black uppercase text-rich-black mb-4 flex items-center gap-2">
@@ -1045,45 +1258,26 @@ export default function AdminClient({
                 ))}
               </div>
             </div>
-          </div>
-        )}
 
-        {/* Tab 3: Standings */}
-        {activeTab === "standings" && (
-          <div className="bg-white border border-black/10 rounded-2xl p-6 shadow-sm">
-            <h2 className="font-heading text-xl font-black uppercase text-rich-black mb-4">
-              Rugby Africa Cup Standings Table
-            </h2>
-            <div className="overflow-x-auto">
-              <table className="w-full text-left border-collapse">
-                <thead>
-                  <tr className="border-b border-black/10 text-xs font-black uppercase text-black/50">
-                    <th className="py-2">Pos</th>
-                    <th className="py-2">Team</th>
-                    <th className="py-2">P</th>
-                    <th className="py-2">W</th>
-                    <th className="py-2">D</th>
-                    <th className="py-2">L</th>
-                    <th className="py-2">Pts</th>
-                    <th className="py-2">Form</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-black/5 text-sm font-bold">
-                  {initialStandings[0]?.rows.map((row) => (
-                    <tr key={row.team}>
-                      <td className="py-3 font-heading font-black text-zru-green">{row.position}</td>
-                      <td className="py-3 text-rich-black uppercase">{row.team}</td>
-                      <td className="py-3">{row.played}</td>
-                      <td className="py-3">{row.won}</td>
-                      <td className="py-3">{row.drawn}</td>
-                      <td className="py-3">{row.lost}</td>
-                      <td className="py-3 font-heading font-black text-zru-green">{row.points}</td>
-                      <td className="py-3 font-mono text-xs">{row.form.join("")}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+            <CollectionManager
+              collection="news"
+              title="News & Media Articles"
+              description="Articles published here appear in the homepage LATEST NEWS panel and the /media archive."
+              fields={[
+                { key: "title", label: "Headline / Title", type: "text", placeholder: "e.g. Sables Squad Named for Rugby Africa Cup", required: true },
+                { key: "slug", label: "Slug (URL)", type: "text", placeholder: "e.g. sables-squad-named-for-rugby-africa-cup" },
+                { key: "excerpt", label: "Excerpt", type: "textarea", placeholder: "Short summary shown on cards" },
+                { key: "body", label: "Full Article Body", type: "textarea", placeholder: "Full article content" },
+                { key: "category", label: "Category / Tag", type: "text", placeholder: "e.g. Sables, Youth Rugby, Women's Rugby" },
+                { key: "date", label: "Publish Date", type: "text", placeholder: "e.g. 2026-07-31T10:00:00Z" },
+                { key: "image", label: "Image (Directus asset UUID or URL)", type: "text", placeholder: "e.g. 9f0e8b6c-... or https://..." },
+                { key: "status", label: "Status", type: "select", options: ["published", "draft"] },
+              ]}
+              items={initialNews}
+              displayField="title"
+              subtitleField="date"
+              badgeField="category"
+            />
           </div>
         )}
 
@@ -1094,7 +1288,7 @@ export default function AdminClient({
               <h2 className="font-heading text-xl font-black uppercase text-rich-black">
                 Campaigns ({initialCampaigns.length})
               </h2>
-              <SlantedButton href="http://localhost:8055/admin/content/campaigns" variant="secondary" size="sm">
+              <SlantedButton href={`${directusUrl}/admin/content/campaigns`} variant="secondary" size="sm">
                 MANAGE IN DIRECTUS
               </SlantedButton>
             </div>
@@ -1147,7 +1341,7 @@ export default function AdminClient({
                             <Link href={`/campaigns/${campaign.slug}`} target="_blank" className="flex items-center gap-1 px-2.5 py-1.5 bg-zru-green/10 text-zru-green rounded-lg text-[10px] font-black uppercase tracking-wider hover:bg-zru-green/20 transition-colors">
                               View <Edit2 className="w-3 h-3" />
                             </Link>
-                            <Link href={`http://localhost:8055/admin/content/campaigns/${campaign.id}`} target="_blank" className="flex items-center gap-1 px-2.5 py-1.5 bg-black/5 text-black/50 rounded-lg text-[10px] font-black uppercase tracking-wider hover:bg-black/10 transition-colors">
+                            <Link href={`${directusUrl}/admin/content/campaigns/${campaign.id}`} target="_blank" className="flex items-center gap-1 px-2.5 py-1.5 bg-black/5 text-black/50 rounded-lg text-[10px] font-black uppercase tracking-wider hover:bg-black/10 transition-colors">
                               Directus <Edit2 className="w-3 h-3" />
                             </Link>
                           </div>
@@ -1159,29 +1353,6 @@ export default function AdminClient({
               </div>
             )}
           </div>
-        )}
-
-        {/* Tab: News & Media (news collection) */}
-        {activeTab === "media" && (
-          <CollectionManager
-            collection="news"
-            title="News & Media Articles"
-            description="Articles published here appear in the homepage LATEST NEWS panel and the /media archive."
-            fields={[
-              { key: "title", label: "Headline / Title", type: "text", placeholder: "e.g. Sables Squad Named for Rugby Africa Cup", required: true },
-              { key: "slug", label: "Slug (URL)", type: "text", placeholder: "e.g. sables-squad-named-for-rugby-africa-cup" },
-              { key: "excerpt", label: "Excerpt", type: "textarea", placeholder: "Short summary shown on cards" },
-              { key: "body", label: "Full Article Body", type: "textarea", placeholder: "Full article content" },
-              { key: "category", label: "Category / Tag", type: "text", placeholder: "e.g. Sables, Youth Rugby, Women's Rugby" },
-              { key: "date", label: "Publish Date", type: "text", placeholder: "e.g. 2026-07-31T10:00:00Z" },
-              { key: "image", label: "Image (Directus asset UUID or URL)", type: "text", placeholder: "e.g. 9f0e8b6c-... or https://..." },
-              { key: "status", label: "Status", type: "select", options: ["published", "draft"] },
-            ]}
-            items={initialNews}
-            displayField="title"
-            subtitleField="date"
-            badgeField="category"
-          />
         )}
 
         {/* Tab: Grassroots & Programs */}
@@ -1286,7 +1457,7 @@ export default function AdminClient({
                       <td className="py-3 text-black/70">{member.email}</td>
                       <td className="py-3 font-bold text-zru-green">{member.favorite_team || "Sables"}</td>
                       <td className="py-3 font-mono text-xs">{member.vip_code}</td>
-                      <td className="py-3 font-bold text-green-600">✅ Granted</td>
+                      <td className="py-3 font-bold text-green-600">{member.cdpa_consent ? "✅ Granted" : "❌ Not granted"}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -1324,6 +1495,143 @@ export default function AdminClient({
                   ))}
                 </tbody>
               </table>
+            </div>
+          </div>
+        )}
+
+        {/* Quick Action Modals */}
+        {activeModal !== "none" && (
+          <div
+            className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4"
+            onClick={() => setActiveModal("none")}
+          >
+            <div
+              className="bg-white border border-black/10 rounded-2xl shadow-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="flex items-center justify-between border-b border-black/10 px-6 py-4">
+                <h2 className="font-heading text-lg font-black uppercase text-rich-black flex items-center gap-2">
+                  {activeModal === "article" ? (
+                    <>
+                      <Plus className="w-5 h-5 text-zru-green" /> Publish News
+                    </>
+                  ) : (
+                    <>
+                      <Plus className="w-5 h-5 text-zru-green" /> Schedule Fixture
+                    </>
+                  )}
+                </h2>
+                <button
+                  onClick={() => setActiveModal("none")}
+                  className="w-8 h-8 flex items-center justify-center rounded-lg bg-black/5 hover:bg-black/10 text-black/60 transition-colors"
+                  aria-label="Close"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
+
+              {activeModal === "article" ? (
+                <form onSubmit={handleQuickArticleSubmit} className="p-6 space-y-4">
+                  <div>
+                    <label className="block text-xs font-bold uppercase text-black/60 mb-1">Headline / Title</label>
+                    <input
+                      type="text"
+                      value={quickArticle.title}
+                      onChange={(e) => setQuickArticle({ ...quickArticle, title: e.target.value })}
+                      placeholder="e.g. Sables Squad Named for Rugby Africa Cup"
+                      required
+                      className="w-full bg-black/5 border border-black/10 rounded-lg p-2.5 text-sm font-bold"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-bold uppercase text-black/60 mb-1">Category / Tag</label>
+                    <input
+                      type="text"
+                      value={quickArticle.category}
+                      onChange={(e) => setQuickArticle({ ...quickArticle, category: e.target.value })}
+                      className="w-full bg-black/5 border border-black/10 rounded-lg p-2.5 text-sm font-bold"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-bold uppercase text-black/60 mb-1">Summary / Excerpt</label>
+                    <textarea
+                      rows={2}
+                      value={quickArticle.summary}
+                      onChange={(e) => setQuickArticle({ ...quickArticle, summary: e.target.value })}
+                      placeholder="Short summary shown on cards"
+                      className="w-full bg-black/5 border border-black/10 rounded-lg p-2.5 text-sm"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-bold uppercase text-black/60 mb-1">Article Body</label>
+                    <textarea
+                      rows={4}
+                      value={quickArticle.content}
+                      onChange={(e) => setQuickArticle({ ...quickArticle, content: e.target.value })}
+                      placeholder="Type article content..."
+                      className="w-full bg-black/5 border border-black/10 rounded-lg p-2.5 text-sm"
+                    />
+                  </div>
+                  <button
+                    type="submit"
+                    disabled={isModalSubmitting}
+                    className="w-full px-6 py-3 bg-zru-green text-white font-heading font-black text-xs uppercase tracking-wider rounded-xl hover:bg-green-800 transition-colors disabled:opacity-50"
+                  >
+                    {isModalSubmitting ? "PUBLISHING..." : "PUBLISH TO WEBSITE"}
+                  </button>
+                </form>
+              ) : (
+                <form onSubmit={handleQuickFixtureSubmit} className="p-6 space-y-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-xs font-bold uppercase text-black/60 mb-1">Home Team</label>
+                      <input
+                        type="text"
+                        value={quickFixture.homeTeam}
+                        onChange={(e) => setQuickFixture({ ...quickFixture, homeTeam: e.target.value })}
+                        required
+                        className="w-full bg-black/5 border border-black/10 rounded-lg p-2.5 text-sm font-bold"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-bold uppercase text-black/60 mb-1">Away Team / Opponent</label>
+                      <input
+                        type="text"
+                        value={quickFixture.awayTeam}
+                        onChange={(e) => setQuickFixture({ ...quickFixture, awayTeam: e.target.value })}
+                        placeholder="e.g. Kenya Simbas"
+                        required
+                        className="w-full bg-black/5 border border-black/10 rounded-lg p-2.5 text-sm font-bold"
+                      />
+                    </div>
+                  </div>
+                  <div>
+                    <label className="block text-xs font-bold uppercase text-black/60 mb-1">Venue</label>
+                    <input
+                      type="text"
+                      value={quickFixture.venue}
+                      onChange={(e) => setQuickFixture({ ...quickFixture, venue: e.target.value })}
+                      className="w-full bg-black/5 border border-black/10 rounded-lg p-2.5 text-sm font-bold"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-bold uppercase text-black/60 mb-1">Date & Kick-off</label>
+                    <input
+                      type="datetime-local"
+                      value={quickFixture.date}
+                      onChange={(e) => setQuickFixture({ ...quickFixture, date: e.target.value })}
+                      className="w-full bg-black/5 border border-black/10 rounded-lg p-2.5 text-sm font-bold"
+                    />
+                  </div>
+                  <button
+                    type="submit"
+                    disabled={isModalSubmitting}
+                    className="w-full px-6 py-3 bg-zru-green text-white font-heading font-black text-xs uppercase tracking-wider rounded-xl hover:bg-green-800 transition-colors disabled:opacity-50"
+                  >
+                    {isModalSubmitting ? "SAVING..." : "SAVE FIXTURE TO DIRECTUS"}
+                  </button>
+                </form>
+              )}
             </div>
           </div>
         )}

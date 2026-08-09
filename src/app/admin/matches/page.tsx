@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import type { Match } from "@/lib/data-fetcher";
 import { Save, RefreshCw, AlertCircle } from "lucide-react";
+import AdminAuthGate from "../AdminAuthGate";
 
 export default function AdminMatchesPage() {
   const [matches, setMatches] = useState<Match[]>([]);
@@ -50,6 +51,7 @@ export default function AdminMatchesPage() {
   if (loading) return <div className="p-20 text-white">Loading fixtures…</div>;
 
   return (
+    <AdminAuthGate>
     <div className="min-h-screen bg-rich-black p-8 md:p-20">
       <div className="max-w-6xl mx-auto space-y-12">
         
@@ -137,5 +139,6 @@ export default function AdminMatchesPage() {
         </div>
       </div>
     </div>
+    </AdminAuthGate>
   );
 }

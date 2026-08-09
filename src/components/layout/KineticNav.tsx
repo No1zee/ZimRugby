@@ -6,6 +6,7 @@ import Image from "next/image";
 import { ChevronRight, Ticket, Users, ShoppingBag, ShieldCheck, ArrowUpRight, User } from "lucide-react";
 import gsap from "gsap";
 import type { NavItem, NavChild } from "@/lib/navConfig";
+import { useAdaptivePerformance } from "@/context/AdaptivePerformanceContext";
 
 interface KineticNavProps {
   isOpen: boolean;
@@ -17,6 +18,9 @@ interface KineticNavProps {
 export default function KineticNav({ isOpen, onClose, navItems, pathname }: KineticNavProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [expandedItems, setExpandedItems] = useState<string[]>([]);
+  const { isLowEndDevice, isSlowConnection, prefersReducedMotion } = useAdaptivePerformance();
+  const disableParticles = isLowEndDevice || isSlowConnection || prefersReducedMotion;
+
 
   const toggleExpand = (label: string) => {
     setExpandedItems((prev) =>
@@ -121,9 +125,13 @@ export default function KineticNav({ isOpen, onClose, navItems, pathname }: Kine
             {/* Ambient background — CSS-only blurred orbs, no SVGs */}
             <div className="k-menu-bg">
               <div className="k-backdrop" />
-              <div className="k-orb k-orb-1" />
-              <div className="k-orb k-orb-2" />
-              <div className="k-orb k-orb-3" />
+              {!disableParticles && (
+                <>
+                  <div className="k-orb k-orb-1" />
+                  <div className="k-orb k-orb-2" />
+                  <div className="k-orb k-orb-3" />
+                </>
+              )}
             </div>
 
             <div className="k-content-wrapper">

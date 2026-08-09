@@ -10,6 +10,8 @@ interface FetchParams {
   limit?: number;
   page?: number;
   search?: string;
+  aggregate?: Record<string, unknown>;
+  groupBy?: string[];
 }
 
 export async function directusFetch<T>(
@@ -45,6 +47,12 @@ export async function directusFetch<T>(
   if (params.search) {
     url.searchParams.append("search", params.search);
   }
+  if (params.aggregate) {
+    url.searchParams.append("aggregate", JSON.stringify(params.aggregate));
+  }
+  if (params.groupBy?.length) {
+    url.searchParams.append("groupBy", params.groupBy.join(","));
+  }
 
   try {
     const controller = new AbortController();
@@ -73,6 +81,46 @@ export async function directusFetch<T>(
   } catch (error) {
     console.error(`Failed to fetch from Directus collection "${collection}":`, error);
     return [] as T[];
+  }
+}
+
+/**
+ * Count total items in a Directus collection using the aggregate endpoint.
+ * Unaffected by the item limit cap — returns the real total.
+ */
+export async function directusCount(
+  collection: string,
+  filter?: Record<string, unknown>,
+  revalidateSeconds: number = 0
+): Promise<number> {
+  const baseUrl = process.env.NEXT_PUBLIC_DIRECTUS_URL;
+  const token = process.env.DIRECTUS_TOKEN;
+
+  if (!baseUrl) {
+    return 0;
+  }
+
+  const url = new URL(`${baseUrl}/items/${collection}`);
+  url.searchParams.append("aggregate", JSON.stringify({ count: "*" }));
+  if (filter) {
+    url.searchParams.append("filter", JSON.stringify(filter));
+  }
+
+  try {
+    const res = await fetch(url.toString(), {
+      next: { revalidate: revalidateSeconds },
+      headers: { ...(token ? { Authorization: `Bearer ${token}` } : {}) },
+    });
+    if (!res.ok) return 0;
+    const json = await res.json();
+    const row = json?.data?.[0]?.count;
+    if (row && typeof row === "object") {
+      const value = Object.values(row)[0];
+      return typeof value === "number" ? value : 0;
+    }
+    return 0;
+  } catch {
+    return 0;
   }
 }
 

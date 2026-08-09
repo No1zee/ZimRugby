@@ -1,21 +1,40 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { FileText, LayoutDashboard, LogOut, Shield, UserCheck, ShieldAlert, Lock } from "lucide-react";
+import { Shield, LogOut, UserCheck, Lock } from "lucide-react";
+import { onAdminTab, setAdminTab } from "@/lib/admin/tab-events";
 
-const NAV_ITEMS = [
-  { id: "overview", label: "Quick Dashboard", icon: "⚡" },
-  { id: "directus_ai", label: "Directus AI Assistant", icon: "🤖" },
-  { id: "articles", label: "News & Articles", icon: "📰" },
-  { id: "announcements", label: "Announcements", icon: "📢" },
-  { id: "fixtures", label: "Match Fixtures", icon: "🏉" },
-  { id: "gallery", label: "Media Gallery", icon: "📸" },
-  { id: "videos", label: "Video Hub", icon: "🎥" },
-  { id: "tickets", label: "Ticketing & Sales", icon: "🎟️" },
-  { id: "fan_zone", label: "Fan Zone & Polls", icon: "💬" },
-  { id: "pages", label: "Visual Page Builder", icon: "🖥️" },
+const NAV_SECTIONS = [
+  {
+    label: "Dashboard",
+    items: [
+      { id: "overview", label: "Quick Dashboard", icon: "⚡" },
+      { id: "directus_ai", label: "Directus AI Assistant", icon: "🤖" },
+    ],
+  },
+  {
+    label: "Content",
+    items: [
+      { id: "pages", label: "Pages & Layouts", icon: "🖥️" },
+      { id: "media", label: "News & Media", icon: "📰" },
+      { id: "grassroots", label: "Grassroots & Programs", icon: "🌱" },
+      { id: "faq-footer", label: "FAQ & Footer", icon: "❓" },
+    ],
+  },
+  {
+    label: "Matches",
+    items: [
+      { id: "fixtures", label: "Match Centre & Fixtures", icon: "🏉" },
+    ],
+  },
+  {
+    label: "Fans & Signups",
+    items: [
+      { id: "campaigns", label: "Campaigns", icon: "🚩" },
+      { id: "fanzone", label: "Fan Zone Members", icon: "👥" },
+      { id: "onboarding", label: "Onboarding Submissions", icon: "🛡️" },
+    ],
+  },
 ];
 
 interface AdminSidebarProps {
@@ -24,14 +43,23 @@ interface AdminSidebarProps {
 }
 
 export default function AdminSidebar({ activeTab = "overview", onTabChange }: AdminSidebarProps) {
-  const pathname = usePathname();
+  const [currentTab, setCurrentTab] = useState(activeTab);
   const [userInfo, setUserInfo] = useState<{ email: string; role: string } | null>(null);
 
   useEffect(() => {
-    fetch("/api/admin/auth/me")
-      .then((res) => res.json())
+    setCurrentTab(activeTab);
+  }, [activeTab]);
+
+  useEffect(() => {
+    const unsubscribe = onAdminTab((tab) => setCurrentTab(tab));
+    return unsubscribe;
+  }, []);
+
+  useEffect(() => {
+    fetch("/api/admin/auth/check")
+      .then((res) => (res.ok ? res.json() : null))
       .then((data) => {
-        if (data.user) {
+        if (data?.user) {
           setUserInfo({ email: data.user.email, role: data.user.role });
         }
       })
@@ -39,8 +67,18 @@ export default function AdminSidebar({ activeTab = "overview", onTabChange }: Ad
   }, []);
 
   const handleLogout = async () => {
-    await fetch("/api/admin/auth/logout", { method: "POST" });
+    try {
+      await fetch("/api/admin/auth", { method: "DELETE" });
+    } catch {
+      // Cookie clearing happens on redirect regardless; if it failed the
+      // server route is unreachable and a fresh load will still 401.
+    }
     window.location.href = "/admin-login";
+  };
+
+  const handleTabClick = (id: string) => {
+    setAdminTab(id);
+    if (onTabChange) onTabChange(id);
   };
 
   return (
@@ -67,31 +105,36 @@ export default function AdminSidebar({ activeTab = "overview", onTabChange }: Ad
             Navigation Menu
           </span>
         </div>
-        <div className="space-y-1">
-          {NAV_ITEMS.map((item) => {
-            const isActive = activeTab === item.id || (activeTab === "" && item.id === "overview");
+        {NAV_SECTIONS.map((section) => (
+          <div key={section.label} className="space-y-1">
+            <div className="pt-3 pb-1 px-3">
+              <span className="text-[9px] font-black uppercase tracking-[0.3em] text-white/25 block">
+                {section.label}
+              </span>
+            </div>
+            {section.items.map((item) => {
+              const isActive = currentTab === item.id;
 
-            return (
-              <button
-                key={item.id}
-                onClick={() => {
-                  if (onTabChange) onTabChange(item.id);
-                }}
-                className={`w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-xs font-semibold transition-all ${
-                  isActive
-                    ? "bg-[#006B3F] text-white shadow-md shadow-[#006B3F]/20"
-                    : "text-zinc-400 hover:text-zinc-100 hover:bg-zinc-800/60"
-                }`}
-              >
-                <div className="flex items-center gap-2.5">
-                  <span className="text-base">{item.icon}</span>
-                  <span>{item.label}</span>
-                </div>
-                {isActive && <div className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />}
-              </button>
-            );
-          })}
-        </div>
+              return (
+                <button
+                  key={item.id}
+                  onClick={() => handleTabClick(item.id)}
+                  className={`w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-xs font-semibold transition-all ${
+                    isActive
+                      ? "bg-[#006B3F] text-white shadow-md shadow-[#006B3F]/20"
+                      : "text-zinc-400 hover:text-zinc-100 hover:bg-zinc-800/60"
+                  }`}
+                >
+                  <div className="flex items-center gap-2.5">
+                    <span className="text-base">{item.icon}</span>
+                    <span>{item.label}</span>
+                  </div>
+                  {isActive && <div className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />}
+                </button>
+              );
+            })}
+          </div>
+        ))}
       </nav>
 
       {/* Security Status & Logout */}

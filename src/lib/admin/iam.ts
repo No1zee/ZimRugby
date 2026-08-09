@@ -4,7 +4,6 @@ export interface IAMUser {
   email: string;
   name: string;
   role: UserRole;
-  passwordHash: string; // Plain/SHA for demo verification
 }
 
 export interface AuditLogEntry {
@@ -18,33 +17,71 @@ export interface AuditLogEntry {
   ipAddress?: string;
 }
 
-// NIST SP 800-53 / ISO 27001 Pre-configured IAM Users
-const IAM_USERS: Record<string, IAMUser> = {
-  "admin@zimrugby.co.zw": {
-    email: "admin@zimrugby.co.zw",
-    name: "Ed Magejo (Super Admin)",
-    role: "super_admin",
-    passwordHash: "ZimRugbyUnion2027!",
+/**
+ * IAM users are configured exclusively through environment variables —
+ * no credentials are stored in source code.
+ *
+ *   ADMIN_PASSWORD   -> admin@zimrugby.co.zw (super_admin)
+ *   EDITOR_PASSWORD  -> editor@zimrugby.co.zw (editor)
+ *   MEDIA_PASSWORD   -> media@zimrugby.co.zw (media_manager)
+ *   AUDITOR_PASSWORD -> auditor@zimrugby.co.zw (viewer)
+ *
+ * A role is only available when its password env var is set (fail closed).
+ */
+const ROLE_BY_ENV: Array<{ envVar: string; user: IAMUser }> = [
+  {
+    envVar: "ADMIN_PASSWORD",
+    user: { email: "admin@zimrugby.co.zw", name: "Super Admin", role: "super_admin" },
   },
-  "editor@zimrugby.co.zw": {
-    email: "editor@zimrugby.co.zw",
-    name: "Content Editor",
-    role: "editor",
-    passwordHash: "EditorPass2026!",
+  {
+    envVar: "EDITOR_PASSWORD",
+    user: { email: "editor@zimrugby.co.zw", name: "Content Editor", role: "editor" },
   },
-  "media@zimrugby.co.zw": {
-    email: "media@zimrugby.co.zw",
-    name: "Media Manager",
-    role: "media_manager",
-    passwordHash: "MediaPass2026!",
+  {
+    envVar: "MEDIA_PASSWORD",
+    user: { email: "media@zimrugby.co.zw", name: "Media Manager", role: "media_manager" },
   },
-  "auditor@zimrugby.co.zw": {
-    email: "auditor@zimrugby.co.zw",
-    name: "Security Compliance Officer",
-    role: "viewer",
-    passwordHash: "AuditPass2026!",
+  {
+    envVar: "AUDITOR_PASSWORD",
+    user: { email: "auditor@zimrugby.co.zw", name: "Security Compliance Officer", role: "viewer" },
   },
-};
+];
+
+function passwordFor(email: string): string | undefined {
+  const normalized = email.trim().toLowerCase();
+  const entry = ROLE_BY_ENV.find((e) => e.user.email === normalized);
+  return entry ? process.env[entry.envVar] : undefined;
+}
+
+export function findUserByEmail(email: string): IAMUser | null {
+  const normalized = email.trim().toLowerCase();
+  const entry = ROLE_BY_ENV.find((e) => e.user.email === normalized);
+  if (!entry) return null;
+  // Only expose the user if their password is configured.
+  return process.env[entry.envVar] ? entry.user : null;
+}
+
+function timingSafeEqual(a: string, b: string): boolean {
+  const aBuf = Buffer.from(a);
+  const bBuf = Buffer.from(b);
+  if (aBuf.length !== bBuf.length) return false;
+  let diff = 0;
+  for (let i = 0; i < aBuf.length; i++) {
+    diff |= aBuf[i] ^ bBuf[i];
+  }
+  return diff === 0;
+}
+
+export function validateCredentials(email: string, password: string): IAMUser | null {
+  const user = findUserByEmail(email);
+  if (!user) return null;
+
+  const expected = passwordFor(user.email);
+  if (!expected) return null;
+  if (typeof password !== "string" || password.length === 0) return null;
+
+  return timingSafeEqual(password, expected) ? user : null;
+}
 
 // Global Audit Log Memory Store (Accountability)
 const AUDIT_LOGS: AuditLogEntry[] = [
@@ -55,15 +92,10 @@ const AUDIT_LOGS: AuditLogEntry[] = [
     actorRole: "super_admin",
     action: "LOGIN_SUCCESS",
     resource: "/admin-login",
-    details: "NIST/ISO Security System Initialized",
+    details: "Security System Initialized",
     ipAddress: "127.0.0.1",
   },
 ];
-
-export function findUserByEmail(email: string): IAMUser | null {
-  const normalized = email.trim().toLowerCase();
-  return IAM_USERS[normalized] || null;
-}
 
 export function logAuditEvent(entry: Omit<AuditLogEntry, "id" | "timestamp">): AuditLogEntry {
   const newEntry: AuditLogEntry = {

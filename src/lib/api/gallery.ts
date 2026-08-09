@@ -7,7 +7,13 @@ import manifestData from "../../../public/data/media-manifest.json";
 
 export async function getPhotos(): Promise<Photo[]> {
   try {
-    const galleryAssets = manifestData.assets.filter((a: any) => a.category === 'gallery');
+    // Defensive read: older manifests exposed an `assets` array; the current
+    // regenerated manifest is a flat filename->asset map without categories.
+    // If the old shape is absent, fall through to the Directus/mock path.
+    const legacyAssets = (manifestData as unknown as { assets?: unknown[] }).assets;
+    const galleryAssets = Array.isArray(legacyAssets)
+      ? (legacyAssets as any[]).filter((a: any) => a.category === 'gallery')
+      : [];
     
     if (galleryAssets.length > 0) {
       return galleryAssets.map((asset: any) => {

@@ -1,10 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
-import { findUserByEmail, logAuditEvent, UserRole } from "@/lib/admin/iam";
+import { validateCredentials, logAuditEvent } from "@/lib/admin/iam";
+import { signAdminToken } from "@/lib/admin/auth";
 
 const COOKIE_NAME = "zru_admin_auth";
 const COOKIE_MAX_AGE = 60 * 60 * 24; // 24 hours
 
 // Rate Limiter Memory Store (NIST AC-7 / ISO 27001)
+// NOTE: in-memory — resets on server restart / scales per instance on serverless.
 const FAILED_ATTEMPTS: Record<string, { count: number; lockUntil: number }> = {};
 
 function checkRateLimit(ip: string): { allowed: boolean; remaining: number; retryAfter?: number } {
@@ -42,22 +44,6 @@ function clearFailedAttempts(ip: string) {
   delete FAILED_ATTEMPTS[ip];
 }
 
-async function createSignedToken(payload: { email: string; role: UserRole }): Promise<string> {
-  const encoder = new TextEncoder();
-  const secretKey = process.env.ADMIN_PASSWORD || "zru-admin-secret-2027";
-  const keyData = encoder.encode(secretKey + "_salt_zru");
-  const data = encoder.encode(JSON.stringify(payload));
-
-  const key = await crypto.subtle.importKey(
-    "raw", keyData, { name: "HMAC", hash: "SHA-256" }, false, ["sign"]
-  );
-  const signature = await crypto.subtle.sign("HMAC", key, data);
-  const sigHex = Buffer.from(signature).toString("hex");
-
-  const payloadB64 = Buffer.from(JSON.stringify(payload)).toString("base64url");
-  return `${payloadB64}.${sigHex}`;
-}
-
 // POST /api/admin/auth — Sign In
 export async function POST(req: NextRequest) {
   const ip = req.headers.get("x-forwarded-for") || "127.0.0.1";
@@ -78,18 +64,23 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  const body = await req.json();
-  const email = body.email || "admin@zimrugby.co.zw";
-  const password = body.password;
-
-  let authenticatedUser = findUserByEmail(email);
-
-  // Fallback for single password attempt
-  if (!authenticatedUser && password === (process.env.ADMIN_PASSWORD || "ZimRugbyUnion2027!")) {
-    authenticatedUser = findUserByEmail("admin@zimrugby.co.zw");
+  let body: { email?: string; password?: string };
+  try {
+    body = await req.json();
+  } catch {
+    return NextResponse.json({ error: "Invalid request body" }, { status: 400 });
   }
 
-  if (!authenticatedUser || authenticatedUser.passwordHash !== password) {
+  const email = body?.email;
+  const password = body?.password;
+
+  if (typeof email !== "string" || typeof password !== "string" || !password) {
+    return NextResponse.json({ error: "Invalid credentials. Please check email and password." }, { status: 401 });
+  }
+
+  const authenticatedUser = validateCredentials(email, password);
+
+  if (!authenticatedUser) {
     registerFailedAttempt(ip);
     logAuditEvent({
       actorEmail: email,
@@ -107,11 +98,18 @@ export async function POST(req: NextRequest) {
 
   clearFailedAttempts(ip);
 
-  const tokenPayload = {
-    email: authenticatedUser.email,
-    role: authenticatedUser.role,
-  };
-  const token = await createSignedToken(tokenPayload);
+  let token: string;
+  try {
+    token = await signAdminToken({
+      email: authenticatedUser.email,
+      role: authenticatedUser.role,
+    });
+  } catch (err) {
+    return NextResponse.json(
+      { error: "Authentication service is not configured correctly." },
+      { status: 500 }
+    );
+  }
 
   logAuditEvent({
     actorEmail: authenticatedUser.email,
@@ -145,7 +143,7 @@ export async function POST(req: NextRequest) {
 // DELETE /api/admin/auth — Sign Out
 export async function DELETE(req: NextRequest) {
   const ip = req.headers.get("x-forwarded-for") || "127.0.0.1";
-  
+
   logAuditEvent({
     actorEmail: "session",
     actorRole: "editor",

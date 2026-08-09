@@ -1,9 +1,16 @@
 import { NextRequest, NextResponse } from "next/server";
+import { requireAdmin } from "@/lib/admin/auth";
 
 const DIRECTUS_URL = process.env.NEXT_PUBLIC_DIRECTUS_URL || "https://zru-directus-cms-production.up.railway.app";
-const DIRECTUS_TOKEN = process.env.DIRECTUS_TOKEN || "zru-directus-admin-8afea6eb598749eb88e651ac";
+const DIRECTUS_TOKEN = process.env.DIRECTUS_TOKEN;
 
 export async function POST(request: NextRequest) {
+  try {
+    await requireAdmin();
+  } catch {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
   if (!DIRECTUS_URL || !DIRECTUS_TOKEN) {
     return NextResponse.json({ error: "Directus not configured" }, { status: 500 });
   }
@@ -37,6 +44,12 @@ export async function POST(request: NextRequest) {
 }
 
 export async function PATCH(request: NextRequest) {
+  try {
+    await requireAdmin();
+  } catch {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
   if (!DIRECTUS_URL || !DIRECTUS_TOKEN) {
     return NextResponse.json({ error: "Directus not configured" }, { status: 500 });
   }
@@ -71,6 +84,12 @@ export async function PATCH(request: NextRequest) {
 }
 
 export async function DELETE(request: NextRequest) {
+  try {
+    await requireAdmin();
+  } catch {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
   if (!DIRECTUS_URL || !DIRECTUS_TOKEN) {
     return NextResponse.json({ error: "Directus not configured" }, { status: 500 });
   }
