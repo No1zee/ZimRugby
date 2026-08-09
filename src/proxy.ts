@@ -23,5 +23,6 @@ export const config = {
     '/portal/:path*', 
     '/dashboard/:path*',
     '/onboarding/:path*',
+    '/admin/:path*',
   ],
 };

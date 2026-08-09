@@ -35,28 +35,31 @@ export async function updateSession(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser()
 
-  // Protect /dashboard and /admin routes — redirect to login if not authenticated
-  if (
-    !user &&
-    (request.nextUrl.pathname.startsWith('/dashboard') ||
-     request.nextUrl.pathname.startsWith('/admin'))
-  ) {
-    // Allow /admin/login through without auth
-    if (!request.nextUrl.pathname.startsWith('/admin/login')) {
+  const path = request.nextUrl.pathname
+
+  // /dashboard, /portal → /login ; /admin pages → /admin-login
+  const isAdminRoute = path.startsWith('/admin/') || path === '/admin'
+  const isUserRoute = path.startsWith('/dashboard') || path.startsWith('/portal')
+
+  // Redirect unauthenticated visitors to the appropriate login
+  if (!user) {
+    if (isAdminRoute) {
       const url = request.nextUrl.clone()
-      url.pathname = request.nextUrl.pathname.startsWith('/admin')
-        ? '/admin/login'
-        : '/login'
+      url.pathname = '/admin-login'
+      return NextResponse.redirect(url)
+    }
+    if (isUserRoute) {
+      const url = request.nextUrl.clone()
+      url.pathname = '/login'
       return NextResponse.redirect(url)
     }
   }
 
-  // Redirect authenticated but unverified accounts to verification notice if trying to access protected routes
+  // Redirect authenticated but unverified accounts to verification notice
   if (
     user &&
     !user.email_confirmed_at &&
-    (request.nextUrl.pathname.startsWith('/dashboard') ||
-     request.nextUrl.pathname.startsWith('/admin'))
+    (isAdminRoute || isUserRoute)
   ) {
     const url = request.nextUrl.clone()
     url.pathname = '/verify-email'
@@ -66,4 +69,3 @@ export async function updateSession(request: NextRequest) {
 
   return supabaseResponse
 }
-

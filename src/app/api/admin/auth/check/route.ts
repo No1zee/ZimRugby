@@ -1,28 +1,29 @@
-import { NextRequest, NextResponse } from "next/server";
-import { verifyAdminToken } from "@/lib/admin/auth";
-
-const COOKIE_NAME = "zru_admin_auth";
+import { NextResponse } from "next/server";
+import { createClient } from "@/lib/supabase/server";
+import { isAdminRole } from "@/lib/admin/iam";
 
 // GET /api/admin/auth/check — check if user is authenticated & return role
-export async function GET(req: NextRequest) {
-  const rawCookie = req.headers.get("cookie") || "";
-  const match = rawCookie.match(new RegExp(`${COOKIE_NAME}=([^;]+)`));
-  const value = match?.[1];
+export async function GET() {
+  const supabase = await createClient();
+  const {
+    data: { user },
+    error,
+  } = await supabase.auth.getUser();
 
-  if (!value) {
+  if (error || !user) {
     return NextResponse.json({ authenticated: false }, { status: 401 });
   }
 
-  const session = await verifyAdminToken(value);
-  if (!session) {
+  const role = user.app_metadata?.role;
+  if (!isAdminRole(role)) {
     return NextResponse.json({ authenticated: false }, { status: 401 });
   }
 
   return NextResponse.json({
     authenticated: true,
     user: {
-      email: session.email,
-      role: session.role,
+      email: user.email,
+      role,
     },
   });
 }

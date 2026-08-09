@@ -18,69 +18,35 @@ export interface AuditLogEntry {
 }
 
 /**
- * IAM users are configured exclusively through environment variables —
- * no credentials are stored in source code.
+ * Roles are assigned in Supabase Auth (`app_metadata.role`) — no credentials
+ * are stored in source code.
  *
- *   ADMIN_PASSWORD   -> admin@zimrugby.co.zw (super_admin)
- *   EDITOR_PASSWORD  -> editor@zimrugby.co.zw (editor)
- *   MEDIA_PASSWORD   -> media@zimrugby.co.zw (media_manager)
- *   AUDITOR_PASSWORD -> auditor@zimrugby.co.zw (viewer)
+ *   admin@zimrugby.co.zw   -> super_admin
+ *   editor@zimrugby.co.zw  -> editor
+ *   media@zimrugby.co.zw   -> media_manager
+ *   auditor@zimrugby.co.zw -> viewer
  *
- * A role is only available when its password env var is set (fail closed).
+ * A role is only honored if it exists in the allowlist (fail closed).
  */
-const ROLE_BY_ENV: Array<{ envVar: string; user: IAMUser }> = [
-  {
-    envVar: "ADMIN_PASSWORD",
-    user: { email: "admin@zimrugby.co.zw", name: "Super Admin", role: "super_admin" },
-  },
-  {
-    envVar: "EDITOR_PASSWORD",
-    user: { email: "editor@zimrugby.co.zw", name: "Content Editor", role: "editor" },
-  },
-  {
-    envVar: "MEDIA_PASSWORD",
-    user: { email: "media@zimrugby.co.zw", name: "Media Manager", role: "media_manager" },
-  },
-  {
-    envVar: "AUDITOR_PASSWORD",
-    user: { email: "auditor@zimrugby.co.zw", name: "Security Compliance Officer", role: "viewer" },
-  },
-];
+const ALLOWED_ROLES: UserRole[] = ["super_admin", "editor", "media_manager", "viewer"];
 
-function passwordFor(email: string): string | undefined {
-  const normalized = email.trim().toLowerCase();
-  const entry = ROLE_BY_ENV.find((e) => e.user.email === normalized);
-  return entry ? process.env[entry.envVar] : undefined;
+export function isAdminRole(role: unknown): role is UserRole {
+  return typeof role === "string" && (ALLOWED_ROLES as string[]).includes(role);
 }
 
-export function findUserByEmail(email: string): IAMUser | null {
-  const normalized = email.trim().toLowerCase();
-  const entry = ROLE_BY_ENV.find((e) => e.user.email === normalized);
-  if (!entry) return null;
-  // Only expose the user if their password is configured.
-  return process.env[entry.envVar] ? entry.user : null;
-}
-
-function timingSafeEqual(a: string, b: string): boolean {
-  const aBuf = Buffer.from(a);
-  const bBuf = Buffer.from(b);
-  if (aBuf.length !== bBuf.length) return false;
-  let diff = 0;
-  for (let i = 0; i < aBuf.length; i++) {
-    diff |= aBuf[i] ^ bBuf[i];
+export function roleToName(role: UserRole): string {
+  switch (role) {
+    case "super_admin":
+      return "Super Admin";
+    case "editor":
+      return "Content Editor";
+    case "media_manager":
+      return "Media Manager";
+    case "viewer":
+      return "Security Compliance Officer";
+    default:
+      return "Administrator";
   }
-  return diff === 0;
-}
-
-export function validateCredentials(email: string, password: string): IAMUser | null {
-  const user = findUserByEmail(email);
-  if (!user) return null;
-
-  const expected = passwordFor(user.email);
-  if (!expected) return null;
-  if (typeof password !== "string" || password.length === 0) return null;
-
-  return timingSafeEqual(password, expected) ? user : null;
 }
 
 // Global Audit Log Memory Store (Accountability)
