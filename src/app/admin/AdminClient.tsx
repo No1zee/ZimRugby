@@ -88,7 +88,35 @@ export default function AdminClient({
   initialActivityFeed,
   stats,
 }: AdminClientProps) {
-  const [activeTab, setActiveTab] = useState<"overview" | "pages" | "media" | "news" | "fixtures" | "standings" | "campaigns" | "fanzone" | "onboarding" | "grassroots" | "faq-footer">("overview");
+  const [activeTab, setActiveTab] = useState<"overview" | "directus_ai" | "pages" | "media" | "news" | "fixtures" | "standings" | "campaigns" | "fanzone" | "onboarding" | "grassroots" | "faq-footer">("overview");
+
+  // Directus AI Assistant State
+  const [aiPrompt, setAiPrompt] = useState("");
+  const [aiAction, setAiAction] = useState<"general" | "match_summary" | "tags">("general");
+  const [aiOutput, setAiOutput] = useState("");
+  const [isAiLoading, setIsAiLoading] = useState(false);
+
+  const handleRunDirectusAI = async (action = aiAction, prompt = aiPrompt) => {
+    if (!prompt.trim()) return;
+    setIsAiLoading(true);
+    try {
+      const res = await fetch("/api/admin/ai", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ prompt, action }),
+      });
+      const data = await res.json();
+      if (data.result) {
+        setAiOutput(data.result);
+      } else if (data.error) {
+        setAiOutput(`Error: ${data.error}`);
+      }
+    } catch (err) {
+      setAiOutput(`Failed to contact Directus AI Assistant: ${String(err)}`);
+    } finally {
+      setIsAiLoading(false);
+    }
+  };
   const [message, setMessage] = useState<string | null>(null);
   const [timeStrings, setTimeStrings] = useState<Record<number, string>>({});
 
@@ -260,6 +288,105 @@ export default function AdminClient({
         </div>
 
         {/* Tab 0: Overview */}
+        {activeTab === "directus_ai" && (
+          <div className="space-y-6 animate-in fade-in duration-300 bg-zinc-900 border border-zinc-800 p-6 rounded-2xl shadow-xl">
+            <div className="flex items-center justify-between border-b border-zinc-800 pb-4">
+              <div>
+                <h2 className="text-xl font-black text-white flex items-center gap-2">
+                  <span>🤖 Directus AI Content Assistant</span>
+                </h2>
+                <p className="text-xs text-zinc-400 mt-1">
+                  Generate official ZRU press releases, match recaps, or SEO metadata directly into Directus CMS.
+                </p>
+              </div>
+              <span className="px-3 py-1 text-xs font-bold text-emerald-400 bg-[#006B3F]/20 border border-[#006B3F]/40 rounded-full">
+                Directus AI Online
+              </span>
+            </div>
+
+            {/* Action selector */}
+            <div className="flex flex-wrap gap-3">
+              <button
+                onClick={() => setAiAction("general")}
+                className={`px-4 py-2 rounded-xl text-xs font-bold transition-all ${
+                  aiAction === "general"
+                    ? "bg-[#006B3F] text-white shadow-md shadow-[#006B3F]/20"
+                    : "bg-zinc-800 text-zinc-400 hover:text-white"
+                }`}
+              >
+                📰 Press Release Draft
+              </button>
+              <button
+                onClick={() => setAiAction("match_summary")}
+                className={`px-4 py-2 rounded-xl text-xs font-bold transition-all ${
+                  aiAction === "match_summary"
+                    ? "bg-[#006B3F] text-white shadow-md shadow-[#006B3F]/20"
+                    : "bg-zinc-800 text-zinc-400 hover:text-white"
+                }`}
+              >
+                🏉 Match Recap Synthesizer
+              </button>
+              <button
+                onClick={() => setAiAction("tags")}
+                className={`px-4 py-2 rounded-xl text-xs font-bold transition-all ${
+                  aiAction === "tags"
+                    ? "bg-[#006B3F] text-white shadow-md shadow-[#006B3F]/20"
+                    : "bg-zinc-800 text-zinc-400 hover:text-white"
+                }`}
+              >
+                🏷️ SEO Tags Generator
+              </button>
+            </div>
+
+            {/* Prompt input */}
+            <div className="space-y-2">
+              <label className="text-xs font-semibold text-zinc-300 block">Prompt / Bullet Points:</label>
+              <textarea
+                value={aiPrompt}
+                onChange={(e) => setAiPrompt(e.target.value)}
+                placeholder="e.g., Sables win 32-15 against Namibia in Harare Sports Club. Brilliant performance by midfield duo..."
+                rows={4}
+                className="w-full p-4 rounded-xl bg-zinc-950 border border-zinc-800 text-white text-xs placeholder:text-zinc-600 focus:outline-none focus:border-[#006B3F] transition-colors"
+              />
+            </div>
+
+            <button
+              onClick={() => handleRunDirectusAI()}
+              disabled={isAiLoading || !aiPrompt.trim()}
+              className="px-6 py-3 rounded-xl bg-[#006B3F] hover:bg-emerald-600 disabled:opacity-50 text-white font-bold text-xs tracking-wider transition-all shadow-md shadow-[#006B3F]/20 flex items-center gap-2"
+            >
+              {isAiLoading ? (
+                <>
+                  <span className="w-4 h-4 border-2 border-white/20 border-t-white rounded-full animate-spin" />
+                  <span>Synthesizing via Directus AI...</span>
+                </>
+              ) : (
+                <>
+                  <span>✨ Generate Draft</span>
+                </>
+              )}
+            </button>
+
+            {/* AI Output Window */}
+            {aiOutput && (
+              <div className="space-y-3 pt-4 border-t border-zinc-800">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-bold text-zinc-300">Generated Directus CMS Draft:</span>
+                  <button
+                    onClick={() => navigator.clipboard.writeText(aiOutput)}
+                    className="text-xs text-emerald-400 hover:underline font-semibold"
+                  >
+                    Copy Draft
+                  </button>
+                </div>
+                <div className="p-4 rounded-xl bg-zinc-950 border border-zinc-800 text-xs text-zinc-200 whitespace-pre-wrap font-mono leading-relaxed">
+                  {aiOutput}
+                </div>
+              </div>
+            )}
+          </div>
+        )}
+
         {activeTab === "overview" && (
           <div className="space-y-8">
             {/* Stats Grid */}
