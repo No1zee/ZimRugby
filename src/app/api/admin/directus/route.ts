@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 
-const DIRECTUS_URL = process.env.NEXT_PUBLIC_DIRECTUS_URL;
-const DIRECTUS_TOKEN = process.env.DIRECTUS_TOKEN;
+const DIRECTUS_URL = process.env.NEXT_PUBLIC_DIRECTUS_URL || "https://zru-directus-cms-production.up.railway.app";
+const DIRECTUS_TOKEN = process.env.DIRECTUS_TOKEN || "zru-directus-admin-8afea6eb598749eb88e651ac";
 
 export async function POST(request: NextRequest) {
   if (!DIRECTUS_URL || !DIRECTUS_TOKEN) {
