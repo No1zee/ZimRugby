@@ -20,7 +20,7 @@ export async function directusFetch<T>(
   revalidateSeconds: number = 60
 ): Promise<T[]> {
   const baseUrl = process.env.NEXT_PUBLIC_DIRECTUS_URL;
-  const token = process.env.DIRECTUS_TOKEN;
+  const token = process.env.DIRECTUS_READ_TOKEN || process.env.DIRECTUS_TOKEN;
 
   if (!baseUrl) {
     console.error(`[directusFetch] NEXT_PUBLIC_DIRECTUS_URL is not set`);
@@ -94,7 +94,7 @@ export async function directusCount(
   revalidateSeconds: number = 0
 ): Promise<number> {
   const baseUrl = process.env.NEXT_PUBLIC_DIRECTUS_URL;
-  const token = process.env.DIRECTUS_TOKEN;
+  const token = process.env.DIRECTUS_READ_TOKEN || process.env.DIRECTUS_TOKEN;
 
   if (!baseUrl) {
     return 0;
