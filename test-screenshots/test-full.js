@@ -49,7 +49,7 @@ const { chromium } = require('playwright');
   await page.waitForTimeout(2000);
   await page.screenshot({ path: 'test-screenshots/04-admin-login.png' });
   
-  await page.fill('input[type="password"]', 'zru-admin-2026');
+  await page.fill('input[type="password"]', 'zru-admin-password-***REMOVED***');
   await page.click('button[type="submit"]');
   await page.waitForTimeout(3000);
   console.log(`  Login redirect: ${page.url()}`);

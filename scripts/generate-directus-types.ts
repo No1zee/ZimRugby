@@ -2,7 +2,7 @@ import * as fs from "fs";
 import * as path from "path";
 
 const DIRECTUS_URL = process.env.NEXT_PUBLIC_DIRECTUS_URL || "http://localhost:8055";
-const DIRECTUS_TOKEN = process.env.DIRECTUS_TOKEN || "zru-directus-admin-8afea6eb598749eb88e651ac";
+const DIRECTUS_TOKEN = process.env.DIRECTUS_TOKEN || "zru-directus-token-***REMOVED***";
 const OUTPUT_PATH = path.join(process.cwd(), "src/types/directus-generated.ts");
 
 interface DirectusField {

@@ -4,7 +4,7 @@ import { randomUUID } from 'crypto';
 
 const DIRECTUS_URL = 'http://127.0.0.1:8055';
 const EMAIL = 'admin@zimrugby.co.zw';
-const PASSWORD = 'ZimRugbyUnion2027!';
+const PASSWORD = 'admin-password-***REMOVED***';
 
 // Helper to extract mock array from a TS file using matching brackets
 function extractMockArray(filePath: string, varName: string): any[] {

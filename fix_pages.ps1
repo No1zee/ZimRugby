@@ -1,4 +1,4 @@
-$loginResponse = Invoke-RestMethod -Uri "http://localhost:8055/auth/login" -Method Post -Body '{"email":"admin@zimrugby.co.zw","password":"ZimRugbyUnion2027!"}' -ContentType "application/json"
+$loginResponse = Invoke-RestMethod -Uri "http://localhost:8055/auth/login" -Method Post -Body '{"email":"admin@zimrugby.co.zw","password":"admin-password-***REMOVED***"}' -ContentType "application/json"
 $token = $loginResponse.data.access_token
 $headers = @{Authorization = "Bearer $token"; "Content-Type" = "application/json"}
 

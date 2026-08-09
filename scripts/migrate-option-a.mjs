@@ -5,7 +5,7 @@ import { fileURLToPath } from 'url';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const DIRECTUS_URL = 'http://127.0.0.1:8055';
 const EMAIL = 'admin@zimrugby.co.zw';
-const PASSWORD = 'ZimRugbyUnion2027!';
+const PASSWORD = 'admin-password-***REMOVED***';
 
 const MONTHS = { JAN: 0, FEB: 1, MAR: 2, APR: 3, MAY: 4, JUN: 5, JUL: 6, AUG: 7, SEP: 8, OCT: 9, NOV: 10, DEC: 11 };
 

@@ -15,7 +15,7 @@ const { chromium } = require('playwright');
     // Login first
     await page.goto('http://localhost:3000/admin-login', { waitUntil: 'load', timeout: 30000 });
     await page.waitForTimeout(2000);
-    await page.fill('input[type="password"]', 'zru-admin-2026');
+    await page.fill('input[type="password"]', 'zru-admin-password-***REMOVED***');
     await page.click('button[type="submit"]');
     await page.waitForTimeout(3000);
     console.log(`After login URL: ${page.url()}`);

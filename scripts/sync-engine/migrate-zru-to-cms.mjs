@@ -7,7 +7,7 @@ const __dirname = path.dirname(__filename);
 
 const DIRECTUS_URL = 'http://localhost:8055';
 const EMAIL = 'admin@zimrugby.co.zw';
-const PASSWORD = 'ZimRugbyUnion2027!';
+const PASSWORD = 'admin-password-***REMOVED***';
 
 const DATA_DIR = path.resolve(__dirname, '../../public/data');
 
