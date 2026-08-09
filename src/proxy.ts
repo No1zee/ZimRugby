@@ -22,7 +22,6 @@ export const config = {
   matcher: [
     '/portal/:path*', 
     '/dashboard/:path*',
-    '/admin/:path*',
     '/onboarding/:path*',
   ],
 };
