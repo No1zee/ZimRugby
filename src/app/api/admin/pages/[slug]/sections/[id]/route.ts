@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { requirePermission } from "@/lib/admin/auth";
+import { requireCollectionAction } from "@/lib/admin/auth";
 import { directusUpdate, directusDelete } from "@/lib/directus/admin-write";
 
 // PUT /api/admin/pages/[slug]/sections/[id] — update section
@@ -8,7 +8,7 @@ export async function PUT(
   { params }: { params: Promise<{ slug: string; id: string }> }
 ) {
   try {
-    await requirePermission("EDIT");
+    await requireCollectionAction("page_sections", "update");
     const { id } = await params;
     const body = await req.json();
 
@@ -45,7 +45,7 @@ export async function DELETE(
   { params }: { params: Promise<{ slug: string; id: string }> }
 ) {
   try {
-    await requirePermission("EDIT");
+    await requireCollectionAction("page_sections", "delete");
     const { id } = await params;
 
     await directusDelete("page_sections", id);

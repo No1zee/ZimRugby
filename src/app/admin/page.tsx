@@ -6,7 +6,7 @@ import { directusFetch, directusCount } from "@/lib/directus/fetch";
 import { getActiveCampaigns } from "@/lib/api/campaigns";
 import { getDirectusMatches, getStandings } from "@/lib/match-centre/api";
 import { requireAdmin } from "@/lib/admin/auth";
-import { hasPermission } from "@/lib/admin/iam";
+import { canUseFeature } from "@/lib/admin/iam";
 import type { AdminSession } from "@/lib/admin/auth";
 import { listFanZoneMembers, listOnboardingSubmissions } from "@/lib/supabase/admin";
 import type { Campaign } from "@/lib/api/campaigns";
@@ -157,8 +157,8 @@ export default async function AdminDashboard() {
     getAdminCollection<Record<string, unknown>>("programmes"),
     getAdminCollection<Record<string, unknown>>("faqs"),
     getAdminCollection<Record<string, unknown>>("footer_navigation"),
-    hasPermission(session.role, "AUDIT") ? listFanZoneMembers() : Promise.resolve([] as Awaited<ReturnType<typeof listFanZoneMembers>>),
-    hasPermission(session.role, "AUDIT") ? listOnboardingSubmissions() : Promise.resolve([] as Awaited<ReturnType<typeof listOnboardingSubmissions>>),
+    canUseFeature(session.permissions, "fanzone_pii") ? listFanZoneMembers() : Promise.resolve([] as Awaited<ReturnType<typeof listFanZoneMembers>>),
+    canUseFeature(session.permissions, "fanzone_pii") ? listOnboardingSubmissions() : Promise.resolve([] as Awaited<ReturnType<typeof listOnboardingSubmissions>>),
     fetchActivityFeed(),
   ]);
 
@@ -180,7 +180,7 @@ export default async function AdminDashboard() {
   return (
     <AdminAuthGate>
       <AdminContentManager
-        userRole={session.role}
+        permissions={session.permissions}
         initialMatches={allMatches}
         initialStandings={standings}
         initialAnnouncements={announcements}

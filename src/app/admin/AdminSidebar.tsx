@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { Shield, LogOut, UserCheck, Lock } from "lucide-react";
 import { onAdminTab, setAdminTab } from "@/lib/admin/tab-events";
-import { canAccessTab, type UserRole } from "@/lib/admin/iam";
+import { canAccessTab, type RolePermissions } from "@/lib/admin/iam";
 
 const NAV_SECTIONS = [
   {
@@ -36,6 +36,12 @@ const NAV_SECTIONS = [
       { id: "onboarding", label: "Onboarding Submissions", icon: "🛡️" },
     ],
   },
+  {
+    label: "Admin",
+    items: [
+      { id: "roles", label: "Roles & Permissions", icon: "🔐" },
+    ],
+  },
 ];
 
 interface AdminSidebarProps {
@@ -43,29 +49,29 @@ interface AdminSidebarProps {
   onTabChange?: (tab: string) => void;
 }
 
-const role = (userInfo: { email: string; role: string } | null): UserRole | undefined =>
-  userInfo?.role && (["super_admin", "editor", "media_manager", "viewer"] as UserRole[]).includes(userInfo.role as UserRole)
-    ? (userInfo.role as UserRole)
-    : undefined;
+interface SidebarUserInfo {
+  email: string;
+  role: string;
+  permissions: RolePermissions;
+}
 
 const visibleSections = (
   sections: typeof NAV_SECTIONS,
-  userInfo: { email: string; role: string } | null
+  userInfo: SidebarUserInfo | null
 ) =>
   sections
     .map((section) => ({
       ...section,
       items: section.items.filter((item) => {
-        const userRole = role(userInfo);
-        if (!userRole) return item.id === "overview";
-        return canAccessTab(userRole, item.id);
+        if (!userInfo) return item.id === "overview";
+        return canAccessTab(userInfo.permissions, item.id);
       }),
     }))
     .filter((section) => section.items.length > 0);
 
 export default function AdminSidebar({ activeTab = "overview", onTabChange }: AdminSidebarProps) {
   const [currentTab, setCurrentTab] = useState(activeTab);
-  const [userInfo, setUserInfo] = useState<{ email: string; role: string } | null>(null);
+  const [userInfo, setUserInfo] = useState<SidebarUserInfo | null>(null);
 
   useEffect(() => {
     setCurrentTab(activeTab);
@@ -80,8 +86,12 @@ export default function AdminSidebar({ activeTab = "overview", onTabChange }: Ad
     fetch("/api/admin/auth/check")
       .then((res) => (res.ok ? res.json() : null))
       .then((data) => {
-        if (data?.user) {
-          setUserInfo({ email: data.user.email, role: data.user.role });
+        if (data?.user?.permissions) {
+          setUserInfo({
+            email: data.user.email,
+            role: data.user.role,
+            permissions: data.user.permissions,
+          });
         }
       })
       .catch(() => {});

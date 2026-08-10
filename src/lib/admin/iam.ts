@@ -1,4 +1,26 @@
-export type UserRole = "super_admin" | "editor" | "media_manager" | "viewer";
+export type UserRole = string;
+
+export interface CollectionGrant {
+  create?: boolean;
+  read?: boolean;
+  update?: boolean;
+  delete?: boolean;
+}
+
+/**
+ * Data-driven actor permissions (stored in Supabase `admin_roles.permissions`).
+ * `all: true` = full access (super_admin). Everything else is additive and
+ * enforced server-side against this object.
+ */
+export interface RolePermissions {
+  all?: boolean;
+  tabs?: string[];
+  collections?: Record<string, CollectionGrant>;
+  pages_builder?: boolean;
+  ai_assistant?: boolean;
+  media_upload?: boolean;
+  fanzone_pii?: boolean;
+}
 
 export interface IAMUser {
   email: string;
@@ -11,27 +33,10 @@ export interface AuditLogEntry {
   timestamp: string;
   actorEmail: string;
   actorRole: UserRole;
-  action: "LOGIN_SUCCESS" | "LOGIN_FAILED" | "LOGOUT" | "PAGE_UPDATE" | "PAGE_PUBLISH" | "MEDIA_UPLOAD" | "SECTION_REORDER";
+  action: "LOGIN_SUCCESS" | "LOGIN_FAILED" | "LOGOUT" | "PAGE_UPDATE" | "PAGE_PUBLISH" | "MEDIA_UPLOAD" | "SECTION_REORDER" | "ROLE_UPDATE" | "USER_INVITE";
   resource: string;
   details?: string;
   ipAddress?: string;
-}
-
-/**
- * Roles are assigned in Supabase Auth (`app_metadata.role`) — no credentials
- * are stored in source code.
- *
- *   admin@zimrugby.co.zw   -> super_admin
- *   editor@zimrugby.co.zw  -> editor
- *   media@zimrugby.co.zw   -> media_manager
- *   auditor@zimrugby.co.zw -> viewer
- *
- * A role is only honored if it exists in the allowlist (fail closed).
- */
-const ALLOWED_ROLES: UserRole[] = ["super_admin", "editor", "media_manager", "viewer"];
-
-export function isAdminRole(role: unknown): role is UserRole {
-  return typeof role === "string" && (ALLOWED_ROLES as string[]).includes(role);
 }
 
 export function roleToName(role: UserRole): string {
@@ -45,7 +50,9 @@ export function roleToName(role: UserRole): string {
     case "viewer":
       return "Security Compliance Officer";
     default:
-      return "Administrator";
+      return role
+        .replace(/_/g, " ")
+        .replace(/\b\w/g, (c) => c.toUpperCase());
   }
 }
 
@@ -81,22 +88,67 @@ export function getAuditLogs(limit: number = 50): AuditLogEntry[] {
 }
 
 // Role Permission Checker (Authorization / AuthZ - NIST AC-3)
-export function hasPermission(role: UserRole, requiredPermission: "EDIT" | "PUBLISH" | "DELETE" | "MEDIA" | "AUDIT"): boolean {
-  switch (role) {
-    case "super_admin":
-      return true;
-    case "editor":
-      return requiredPermission === "EDIT" || requiredPermission === "PUBLISH" || requiredPermission === "MEDIA";
-    case "media_manager":
-      return requiredPermission === "MEDIA";
-    case "viewer":
-      return requiredPermission === "AUDIT";
+// Operates on the resolved RolePermissions object — pure, client-safe.
+export type AdminPermission = "EDIT" | "PUBLISH" | "DELETE" | "MEDIA" | "AUDIT";
+
+export function hasPermission(
+  perms: RolePermissions | null | undefined,
+  requiredPermission: AdminPermission
+): boolean {
+  if (!perms) return false;
+  if (perms.all) return true;
+  switch (requiredPermission) {
+    case "EDIT":
+    case "PUBLISH":
+      return (
+        perms.pages_builder === true ||
+        Object.values(perms.collections || {}).some(
+          (c) => c.create === true || c.update === true
+        )
+      );
+    case "DELETE":
+      return Object.values(perms.collections || {}).some((c) => c.delete === true);
+    case "MEDIA":
+      return perms.media_upload === true;
+    case "AUDIT":
+      return perms.fanzone_pii === true;
     default:
       return false;
   }
 }
 
-// Admin tab -> minimum permission to view/use it. "ANY" = any admin role.
+// Per-collection grant checks (MM-4: canEditCollection, canCreateCollection, ...)
+export type CollectionAction = "create" | "read" | "update" | "delete";
+
+export function canOnCollection(
+  perms: RolePermissions | null | undefined,
+  collection: string,
+  action: CollectionAction
+): boolean {
+  if (!perms) return false;
+  if (perms.all) return true;
+  return perms.collections?.[collection]?.[action] === true;
+}
+
+export function canEditCollection(perms: RolePermissions | null | undefined, collection: string): boolean {
+  return canOnCollection(perms, collection, "update");
+}
+
+export function canCreateCollection(perms: RolePermissions | null | undefined, collection: string): boolean {
+  return canOnCollection(perms, collection, "create");
+}
+
+// Feature-flag gate for the advanced surfaces (Pages builder / AI assistant)
+export function canUseFeature(
+  perms: RolePermissions | null | undefined,
+  feature: "pages_builder" | "ai_assistant" | "media_upload" | "fanzone_pii"
+): boolean {
+  if (!perms) return false;
+  if (perms.all) return true;
+  return perms[feature] === true;
+}
+
+// Admin tab -> visible iff the resolved permissions list it (or full access).
 export type AdminTabId =
   | "overview"
   | "directus_ai"
@@ -107,23 +159,18 @@ export type AdminTabId =
   | "fixtures"
   | "campaigns"
   | "fanzone"
-  | "onboarding";
+  | "onboarding"
+  | "roles";
 
-export const TAB_PERMISSIONS: Record<AdminTabId, "EDIT" | "PUBLISH" | "MEDIA" | "AUDIT" | "ANY"> = {
-  overview: "ANY",
-  directus_ai: "EDIT",
-  pages: "EDIT",
-  media: "MEDIA",
-  grassroots: "EDIT",
-  "faq-footer": "EDIT",
-  fixtures: "EDIT",
-  campaigns: "PUBLISH",
-  fanzone: "AUDIT",
-  onboarding: "AUDIT",
-};
+export function canAccessTab(
+  perms: RolePermissions | null | undefined,
+  tab: string
+): boolean {
+  if (!perms) return false;
+  if (perms.all) return true;
+  return Array.isArray(perms.tabs) && perms.tabs.includes(tab);
+}
 
-export function canAccessTab(role: UserRole, tab: string): boolean {
-  const permission = TAB_PERMISSIONS[tab as AdminTabId];
-  if (!permission) return false;
-  return permission === "ANY" || hasPermission(role, permission);
+export function isSuperAdmin(perms: RolePermissions | null | undefined): boolean {
+  return perms?.all === true;
 }

@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
-import { isAdminRole, logAuditEvent, roleToName, type UserRole } from "@/lib/admin/iam";
+import { logAuditEvent, roleToName, type UserRole } from "@/lib/admin/iam";
+import { resolveRolePermissions } from "@/lib/supabase/admin";
+import { isLegacyRole, LEGACY_ROLE_DEFAULTS } from "@/lib/admin/legacy-roles";
 
 // Rate Limiter Memory Store (NIST AC-7 / ISO 27001)
 // NOTE: in-memory — resets on server restart / scales per instance on serverless.
@@ -109,8 +111,13 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  const role = data.user.app_metadata?.role;
-  if (!isAdminRole(role)) {
+  const role = data.user.app_metadata?.role as UserRole | undefined;
+  const hasAdminRole =
+    typeof role === "string" &&
+    !!role &&
+    ((await resolveRolePermissions(role)) || (isLegacyRole(role) ? LEGACY_ROLE_DEFAULTS[role] : null)) !== null;
+
+  if (!hasAdminRole) {
     registerFailedAttempt(ip);
     logAuditEvent({
       actorEmail: email,

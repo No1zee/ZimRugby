@@ -1,10 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
-import { requirePermission } from "@/lib/admin/auth";
+import { requireFeature } from "@/lib/admin/auth";
 
 export async function POST(request: NextRequest) {
   try {
     try {
-      await requirePermission("EDIT");
+      await requireFeature("ai_assistant");
     } catch (e: any) {
       if (e.message === "Forbidden") {
         return NextResponse.json({ error: "Forbidden" }, { status: 403 });

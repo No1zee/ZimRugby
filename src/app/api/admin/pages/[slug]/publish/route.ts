@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { requirePermission } from "@/lib/admin/auth";
+import { requireFeature } from "@/lib/admin/auth";
 import { directusFetch } from "@/lib/directus/fetch";
 import { directusUpdate } from "@/lib/directus/admin-write";
 
@@ -9,7 +9,7 @@ export async function POST(
   { params }: { params: Promise<{ slug: string }> }
 ) {
   try {
-    await requirePermission("PUBLISH");
+    await requireFeature("pages_builder");
     const { slug } = await params;
 
     const pages = await directusFetch<any>("pages", {

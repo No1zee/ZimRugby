@@ -1,9 +1,10 @@
 import { createClient as createSupabaseClient } from "@supabase/supabase-js";
+import type { RolePermissions } from "@/lib/admin/iam";
 
 const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
-function getAdminClient() {
+export function getAdminClient() {
   if (!url || !serviceKey) return null;
   return createSupabaseClient(url, serviceKey, {
     auth: { persistSession: false, autoRefreshToken: false },
@@ -74,5 +75,202 @@ export async function listOnboardingSubmissions(limit = 100): Promise<AdminOnboa
     }));
   } catch {
     return [];
+  }
+}
+
+export interface AdminRoleRow {
+  id: string;
+  name: string;
+  permissions: RolePermissions;
+  created_at?: string;
+}
+
+// ---- admin_roles CRUD (data-driven actors) ----
+
+export async function listAdminRoles(): Promise<AdminRoleRow[]> {
+  const client = getAdminClient();
+  if (!client) return [];
+
+  try {
+    const { data, error } = await client
+      .from("admin_roles")
+      .select("id, name, permissions, created_at")
+      .order("name", { ascending: true });
+    if (error) return [];
+    return (data || []) as AdminRoleRow[];
+  } catch {
+    return [];
+  }
+}
+
+export async function getAdminRole(name: string): Promise<AdminRoleRow | null> {
+  const client = getAdminClient();
+  if (!client) return null;
+
+  try {
+    const { data, error } = await client
+      .from("admin_roles")
+      .select("id, name, permissions, created_at")
+      .eq("name", name)
+      .maybeSingle();
+    if (error || !data) return null;
+    return data as AdminRoleRow;
+  } catch {
+    return null;
+  }
+}
+
+export async function createAdminRole(name: string, permissions: RolePermissions): Promise<AdminRoleRow | null> {
+  const client = getAdminClient();
+  if (!client) return null;
+
+  try {
+    const { data, error } = await client
+      .from("admin_roles")
+      .insert({ name, permissions })
+      .select("id, name, permissions, created_at")
+      .single();
+    if (error) return null;
+    return data as AdminRoleRow;
+  } catch {
+    return null;
+  }
+}
+
+export async function updateAdminRole(
+  id: string,
+  patch: { name?: string; permissions?: RolePermissions }
+): Promise<AdminRoleRow | null> {
+  const client = getAdminClient();
+  if (!client) return null;
+
+  try {
+    const { data, error } = await client
+      .from("admin_roles")
+      .update(patch)
+      .eq("id", id)
+      .select("id, name, permissions, created_at")
+      .single();
+    if (error) return null;
+    return data as AdminRoleRow;
+  } catch {
+    return null;
+  }
+}
+
+export async function deleteAdminRole(id: string): Promise<boolean> {
+  const client = getAdminClient();
+  if (!client) return false;
+
+  try {
+    const { error } = await client.from("admin_roles").delete().eq("id", id);
+    return !error;
+  } catch {
+    return false;
+  }
+}
+
+// ---- Supabase Auth user management (Roles & Permissions screen) ----
+
+export interface AdminUserRecord {
+  id: string;
+  email: string;
+  role?: string;
+  createdAt?: string;
+  lastSignInAt?: string;
+}
+
+export async function listAdminUsers(): Promise<AdminUserRecord[]> {
+  const client = getAdminClient();
+  if (!client) return [];
+
+  try {
+    const { data, error } = await client.auth.admin.listUsers();
+    if (error) return [];
+
+    return (data?.users || []).map((u) => ({
+      id: u.id,
+      email: u.email ?? "",
+      role: (u.app_metadata?.role as string) || undefined,
+      createdAt: u.created_at,
+      lastSignInAt: u.last_sign_in_at || undefined,
+    }));
+  } catch {
+    return [];
+  }
+}
+
+export async function createAdminUser(
+  email: string,
+  password: string,
+  role: string
+): Promise<AdminUserRecord | null> {
+  const client = getAdminClient();
+  if (!client) return null;
+
+  try {
+    const { data, error } = await client.auth.admin.createUser({
+      email,
+      password,
+      email_confirm: true,
+      app_metadata: { role },
+    });
+    if (error) return null;
+    const u = data.user;
+    return { id: u.id, email: u.email ?? "", role: (u.app_metadata?.role as string) || role };
+  } catch {
+    return null;
+  }
+}
+
+export async function setAdminUserRole(userId: string, role: string): Promise<boolean> {
+  const client = getAdminClient();
+  if (!client) return false;
+
+  try {
+    const { error } = await client.auth.admin.updateUserById(userId, {
+      app_metadata: { role },
+    });
+    return !error;
+  } catch {
+    return false;
+  }
+}
+
+// ---- role -> permissions resolution (server-only, cached briefly) ----
+
+const roleCache = new Map<string, { perms: RolePermissions | null; at: number }>();
+const CACHE_TTL_MS = 30_000;
+
+export async function resolveRolePermissions(role: string): Promise<RolePermissions | null> {
+  const cached = roleCache.get(role);
+  if (cached && Date.now() - cached.at < CACHE_TTL_MS) {
+    return cached.perms;
+  }
+
+  const client = getAdminClient();
+  if (!client) return null;
+
+  let perms: RolePermissions | null = null;
+  try {
+    const { data, error } = await client
+      .from("admin_roles")
+      .select("permissions")
+      .eq("name", role)
+      .maybeSingle();
+    if (!error && data) perms = (data.permissions as RolePermissions) || null;
+  } catch {
+    perms = null;
+  }
+
+  roleCache.set(role, { perms, at: Date.now() });
+  return perms;
+}
+
+export function clearRoleCache(role?: string) {
+  if (role) {
+    roleCache.delete(role);
+  } else {
+    roleCache.clear();
   }
 }

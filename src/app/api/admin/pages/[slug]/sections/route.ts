@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { requireAdmin, requirePermission } from "@/lib/admin/auth";
+import { requireAdmin, requireCollectionAction } from "@/lib/admin/auth";
 import { directusFetch } from "@/lib/directus/fetch";
 import { directusCreate, directusUpdate } from "@/lib/directus/admin-write";
 
@@ -41,7 +41,7 @@ export async function POST(
   { params }: { params: Promise<{ slug: string }> }
 ) {
   try {
-    await requirePermission("EDIT");
+    await requireCollectionAction("page_sections", "create");
     const { slug } = await params;
     const body = await req.json();
 
@@ -93,7 +93,7 @@ export async function PUT(
   { params }: { params: Promise<{ slug: string }> }
 ) {
   try {
-    await requirePermission("EDIT");
+    await requireCollectionAction("page_sections", "update");
     const { slug } = await params;
     const { sectionIds } = await req.json();
 

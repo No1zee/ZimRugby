@@ -8,12 +8,13 @@ import { useRouter } from "next/navigation";
 import SlantedButton from "@/components/ui/SlantedButton";
 import CollectionManager from "@/components/admin/CollectionManager";
 import { onAdminTab, setAdminTab } from "@/lib/admin/tab-events";
-import { canAccessTab, type UserRole } from "@/lib/admin/iam";
+import { canAccessTab, type RolePermissions } from "@/lib/admin/iam";
+import RolesPanel from "./roles/RolesPanel";
 import type { MatchCardViewModel, StandingsTableViewModel } from "@/lib/match-centre/types";
 import type { Campaign } from "@/lib/api/campaigns";
 
 interface AdminClientProps {
-  userRole: UserRole;
+  permissions: RolePermissions;
   initialMatches: MatchCardViewModel[];
   initialStandings: StandingsTableViewModel[];
   initialAnnouncements: Record<string, unknown>[];
@@ -77,7 +78,7 @@ interface AdminClientProps {
 }
 
 export default function AdminClient({
-  userRole,
+  permissions,
   initialMatches,
   initialStandings,
   initialAnnouncements,
@@ -96,7 +97,7 @@ export default function AdminClient({
 }: AdminClientProps) {
   const router = useRouter();
 
-  type TabId = "overview" | "directus_ai" | "pages" | "media" | "fixtures" | "campaigns" | "fanzone" | "onboarding" | "grassroots" | "faq-footer";
+  type TabId = "overview" | "directus_ai" | "pages" | "media" | "fixtures" | "campaigns" | "fanzone" | "onboarding" | "grassroots" | "faq-footer" | "roles";
   const [activeTab, setActiveTab] = useState<TabId>("overview");
 
   // Grouped navigation — Dashboard / Content / Matches / Fans & Signups.
@@ -136,12 +137,19 @@ export default function AdminClient({
         { id: "onboarding", label: "Onboarding Submissions", icon: ShieldCheck, count: initialOnboardingSubmissions.length },
       ],
     },
+    {
+      id: "admin",
+      label: "Admin",
+      items: [
+        { id: "roles", label: "Roles & Permissions", icon: ShieldCheck, count: 0 },
+      ],
+    },
   ];
 
   const accessibleSections = NAV_SECTIONS
     .map((section) => ({
       ...section,
-      items: section.items.filter((item) => canAccessTab(userRole, item.id)),
+      items: section.items.filter((item) => canAccessTab(permissions, item.id)),
     }))
     .filter((section) => section.items.length > 0);
 
@@ -178,10 +186,10 @@ export default function AdminClient({
   // Clamp activeTab to a role-accessible tab if the current one is gated off
   // (e.g. a direct URL hit or stale sidebar state).
   useEffect(() => {
-    if (!canAccessTab(userRole, activeTab)) {
+    if (!canAccessTab(permissions, activeTab)) {
       setActiveTab("overview");
     }
-  }, [userRole, activeTab]);
+  }, [permissions, activeTab]);
 
   useEffect(() => {
     setAdminTab(activeTab);
@@ -1516,6 +1524,9 @@ export default function AdminClient({
             </div>
           </div>
         )}
+
+        {/* Tab: Roles & Permissions */}
+        {activeTab === "roles" && <RolesPanel />}
 
         {/* Quick Action Modals */}
         {activeModal !== "none" && (

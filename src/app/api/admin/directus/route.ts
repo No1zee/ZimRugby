@@ -1,12 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
-import { requirePermission } from "@/lib/admin/auth";
+import { requireCollectionAction } from "@/lib/admin/auth";
 
 const DIRECTUS_URL = process.env.NEXT_PUBLIC_DIRECTUS_URL || "https://zru-directus-cms-production.up.railway.app";
 const DIRECTUS_TOKEN = process.env.DIRECTUS_TOKEN;
 
 export async function POST(request: NextRequest) {
+  const { collection, data } = await request.json();
+
   try {
-    await requirePermission("EDIT");
+    await requireCollectionAction(collection, "create");
   } catch (e: any) {
     if (e.message === "Forbidden") {
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
@@ -17,8 +19,6 @@ export async function POST(request: NextRequest) {
   if (!DIRECTUS_URL || !DIRECTUS_TOKEN) {
     return NextResponse.json({ error: "Directus not configured" }, { status: 500 });
   }
-
-  const { collection, data } = await request.json();
 
   if (!collection || !data) {
     return NextResponse.json({ error: "Missing collection or data" }, { status: 400 });
@@ -47,8 +47,10 @@ export async function POST(request: NextRequest) {
 }
 
 export async function PATCH(request: NextRequest) {
+  const { collection, id, data } = await request.json();
+
   try {
-    await requirePermission("EDIT");
+    await requireCollectionAction(collection, "update");
   } catch (e: any) {
     if (e.message === "Forbidden") {
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
@@ -59,8 +61,6 @@ export async function PATCH(request: NextRequest) {
   if (!DIRECTUS_URL || !DIRECTUS_TOKEN) {
     return NextResponse.json({ error: "Directus not configured" }, { status: 500 });
   }
-
-  const { collection, id, data } = await request.json();
 
   if (!collection || !id || !data) {
     return NextResponse.json({ error: "Missing collection, id or data" }, { status: 400 });
@@ -90,8 +90,10 @@ export async function PATCH(request: NextRequest) {
 }
 
 export async function DELETE(request: NextRequest) {
+  const { collection, id } = await request.json();
+
   try {
-    await requirePermission("EDIT");
+    await requireCollectionAction(collection, "delete");
   } catch (e: any) {
     if (e.message === "Forbidden") {
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
@@ -102,8 +104,6 @@ export async function DELETE(request: NextRequest) {
   if (!DIRECTUS_URL || !DIRECTUS_TOKEN) {
     return NextResponse.json({ error: "Directus not configured" }, { status: 500 });
   }
-
-  const { collection, id } = await request.json();
 
   if (!collection || !id) {
     return NextResponse.json({ error: "Missing collection or id" }, { status: 400 });

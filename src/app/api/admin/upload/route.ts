@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { requirePermission } from "@/lib/admin/auth";
+import { requireFeature } from "@/lib/admin/auth";
 
 const DIRECTUS_URL = process.env.NEXT_PUBLIC_DIRECTUS_URL!;
 const DIRECTUS_TOKEN = process.env.DIRECTUS_TOKEN!;
@@ -7,7 +7,7 @@ const DIRECTUS_TOKEN = process.env.DIRECTUS_TOKEN!;
 // POST /api/admin/upload — upload image to Directus media library
 export async function POST(req: NextRequest) {
   try {
-    await requirePermission("MEDIA");
+    await requireFeature("media_upload");
 
     const formData = await req.formData();
     const file = formData.get("file") as File;

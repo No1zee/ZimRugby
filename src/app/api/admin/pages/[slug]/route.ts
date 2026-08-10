@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { requireAdmin, requirePermission } from "@/lib/admin/auth";
+import { requireAdmin, requireFeature } from "@/lib/admin/auth";
 import { directusFetch } from "@/lib/directus/fetch";
 import { directusUpdate } from "@/lib/directus/admin-write";
 
@@ -43,7 +43,7 @@ export async function PUT(
   { params }: { params: Promise<{ slug: string }> }
 ) {
   try {
-    await requirePermission("EDIT");
+    await requireFeature("pages_builder");
     const { slug } = await params;
     const body = await req.json();
 
