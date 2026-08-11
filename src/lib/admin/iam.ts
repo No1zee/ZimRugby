@@ -158,6 +158,7 @@ export type AdminTabId =
   | "grassroots"
   | "faq-footer"
   | "fixtures"
+  | "teams"
   | "campaigns"
   | "fanzone"
   | "onboarding"

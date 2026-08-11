@@ -77,17 +77,21 @@ async function getAdminAnnouncements(): Promise<Record<string, unknown>[]> {
 
 async function getAdminCollection<T>(collection: string): Promise<T[]> {
   try {
-    return await directusFetch<T>(collection, { fields: ["*"], limit: 100 }, 60);
+    return await directusFetch<T>(collection, { fields: ["*"], limit: 500 }, 60);
   } catch {
     return [];
   }
 }
 
 async function getLookups(): Promise<{
-  teams: Array<{ id: string | number; name: string }>;
-  opponents: Array<{ id: string | number; name: string }>;
-  competitions: Array<{ id: string | number; name: string }>;
-  venues: Array<{ id: string | number; name: string }>;
+  teams: Record<string, unknown>[];
+  opponents: Record<string, unknown>[];
+  competitions: Record<string, unknown>[];
+  venues: Record<string, unknown>[];
+  teamOptions: Array<{ id: string | number; name: string }>;
+  opponentOptions: Array<{ id: string | number; name: string }>;
+  competitionOptions: Array<{ id: string | number; name: string }>;
+  venueOptions: Array<{ id: string | number; name: string }>;
 }> {
   const map = (rows: Array<{ id?: string | number; name?: string }>) =>
     rows
@@ -95,16 +99,20 @@ async function getLookups(): Promise<{
       .map((r) => ({ id: r.id as string | number, name: r.name as string }))
       .sort((a, b) => a.name.localeCompare(b.name));
   const [teams, opponents, competitions, venues] = await Promise.all([
-    directusFetch<{ id?: string | number; name?: string }>("teams", { fields: ["id", "name"], limit: 200 }, 60).catch(() => []),
-    directusFetch<{ id?: string | number; name?: string }>("opponents", { fields: ["id", "name"], limit: 200 }, 60).catch(() => []),
-    directusFetch<{ id?: string | number; name?: string }>("competitions", { fields: ["id", "name"], limit: 200 }, 60).catch(() => []),
-    directusFetch<{ id?: string | number; name?: string }>("venues", { fields: ["id", "name"], limit: 200 }, 60).catch(() => []),
+    directusFetch<Record<string, unknown>>("teams", { fields: ["*"], limit: 200 }, 60).catch(() => []),
+    directusFetch<Record<string, unknown>>("opponents", { fields: ["*"], limit: 200 }, 60).catch(() => []),
+    directusFetch<Record<string, unknown>>("competitions", { fields: ["*"], limit: 200 }, 60).catch(() => []),
+    directusFetch<Record<string, unknown>>("venues", { fields: ["*"], limit: 200 }, 60).catch(() => []),
   ]);
   return {
-    teams: map(teams),
-    opponents: map(opponents),
-    competitions: map(competitions),
-    venues: map(venues),
+    teams,
+    opponents,
+    competitions,
+    venues,
+    teamOptions: map(teams as Array<{ id?: string | number; name?: string }>),
+    opponentOptions: map(opponents as Array<{ id?: string | number; name?: string }>),
+    competitionOptions: map(competitions as Array<{ id?: string | number; name?: string }>),
+    venueOptions: map(venues as Array<{ id?: string | number; name?: string }>),
   };
 }
 
@@ -204,10 +212,14 @@ export default async function AdminDashboard() {
         initialPages={pages}
         initialSectionCounts={sectionCounts}
         initialActivityFeed={activityFeed}
-        teams={lookups.teams}
-        opponents={lookups.opponents}
-        competitions={lookups.competitions}
-        venues={lookups.venues}
+        teams={lookups.teamOptions}
+        opponents={lookups.opponentOptions}
+        competitions={lookups.competitionOptions}
+        venues={lookups.venueOptions}
+        initialTeams={lookups.teams}
+        initialOpponents={lookups.opponents}
+        initialCompetitions={lookups.competitions}
+        initialVenues={lookups.venues}
         stats={stats}
       />
     </AdminAuthGate>

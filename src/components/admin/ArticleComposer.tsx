@@ -1,10 +1,12 @@
-"use client";
+﻿"use client";
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { CheckCircle2, XCircle, Newspaper, Send } from "lucide-react";
+import { Newspaper, Send } from "lucide-react";
 import ImagePicker from "./ui/ImagePicker";
 import RichTextEditor from "./ui/RichTextEditor";
+import CollapsibleSection from "./ui/CollapsibleSection";
+import { useToast } from "./ui/ToastProvider";
 
 const CATEGORIES = ["NEWS", "PRESS RELEASE", "SABLES", "LADY SABLES", "JUNIORS", "CLUB RUGBY", "ANNOUNCEMENT", "SPONSORSHIP"];
 
@@ -17,8 +19,9 @@ function slugify(title: string): string {
     .replace(/-+/g, "-");
 }
 
-export default function ArticleComposer() {
+export default function ArticleComposer({ onDirtyChange }: { onDirtyChange?: (dirty: boolean) => void }) {
   const router = useRouter();
+  const { toast } = useToast();
   const [title, setTitle] = useState("");
   const [excerpt, setExcerpt] = useState("");
   const [body, setBody] = useState("");
@@ -27,8 +30,9 @@ export default function ArticleComposer() {
   const [status, setStatus] = useState("draft");
   const [slug, setSlug] = useState("");
   const [slugTouched, setSlugTouched] = useState(false);
-  const [message, setMessage] = useState<{ text: string; ok: boolean } | null>(null);
   const [saving, setSaving] = useState(false);
+
+  const hasInput = title.trim() !== "" || excerpt.trim() !== "" || body.trim() !== "" || slug.trim() !== "";
 
   function onTitleChange(v: string) {
     setTitle(v);
@@ -38,7 +42,6 @@ export default function ArticleComposer() {
   async function handleSubmit(e: React.FormEvent, saveStatus: string) {
     e.preventDefault();
     setSaving(true);
-    setMessage(null);
     try {
       const res = await fetch("/api/admin/directus", {
         method: "POST",
@@ -58,47 +61,31 @@ export default function ArticleComposer() {
         }),
       });
       if (res.ok) {
-        setMessage({
-          text: saveStatus === "published" ? `'${title}' is now live on the website.` : `'${title}' saved as a draft.`,
-          ok: true,
-        });
+        toast(saveStatus === "published" ? `'${title}' is now live on the website.` : `'${title}' saved as a draft.`);
         setTitle(""); setExcerpt(""); setBody(""); setImage(""); setSlug("");
         setSlugTouched(false); setStatus("draft");
         router.refresh();
       } else {
         const err = await res.json().catch(() => null);
-        setMessage({ text: `Failed to save: ${err?.error || res.statusText}`, ok: false });
+        toast(`Failed to save: ${err?.error || res.statusText}`, "error");
       }
     } catch (err) {
-      setMessage({ text: `Error: ${err instanceof Error ? err.message : err}`, ok: false });
+      toast(`Error: ${err instanceof Error ? err.message : err}`, "error");
     } finally {
       setSaving(false);
     }
   }
 
   return (
-    <div className="rounded-2xl border border-black/10 bg-white p-6 shadow-sm">
-      <h2 className="flex items-center gap-2 font-heading text-xl font-black uppercase text-rich-black">
-        <Newspaper className="h-5 w-5 text-zru-green" /> Write a news article
-      </h2>
-      <p className="mt-1 text-xs text-black/50">
-        Articles appear in the homepage Latest News panel and the media archive. Add a hero image and write the body — formatting is done for you.
-      </p>
-
-      {message && (
-        <div
-          className={`mt-4 flex items-center gap-2 rounded-xl border p-3 text-xs font-bold ${
-            message.ok
-              ? "border-zru-green/40 bg-zru-green/10 text-zru-green"
-              : "border-red-400 bg-red-50 text-red-700"
-          }`}
-        >
-          {message.ok ? <CheckCircle2 className="h-4 w-4 shrink-0" /> : <XCircle className="h-4 w-4 shrink-0" />}
-          <span>{message.text}</span>
-        </div>
-      )}
-
-      <form onSubmit={(e) => handleSubmit(e, status)} className="mt-4 space-y-4">
+    <CollapsibleSection
+      title="Write a news article"
+      icon={<Newspaper className="h-5 w-5" />}
+      description="Articles appear in the homepage Latest News panel and the media archive. Add a hero image and write the body."
+      defaultOpen={false}
+      onDirtyChange={onDirtyChange}
+      dirty={hasInput}
+    >
+      <form onSubmit={(e) => handleSubmit(e, status)} className="space-y-4">
         <div>
           <label className="mb-1 block text-[10px] font-bold uppercase tracking-wider text-black/60">Headline</label>
           <input
@@ -124,7 +111,7 @@ export default function ArticleComposer() {
 
         <div>
           <label className="mb-1 block text-[10px] font-bold uppercase tracking-wider text-black/60">Article body</label>
-          <RichTextEditor value={body} onChange={setBody} placeholder="Write your article here — bold, headings, lists and links supported." />
+          <RichTextEditor value={body} onChange={setBody} placeholder="Write your article here â€” bold, headings, lists and links supported." />
         </div>
 
         <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
@@ -149,7 +136,7 @@ export default function ArticleComposer() {
               placeholder="auto-generated from headline"
               className="w-full rounded-lg border border-black/10 bg-white p-2.5 text-sm"
             />
-            <p className="mt-0.5 text-[10px] text-black/40">Leave blank to auto-generate. Live link: /media/{slug || slugify(title) || "…"}</p>
+            <p className="mt-0.5 text-[10px] text-black/40">Leave blank to auto-generate. Live link: /media/{slug || slugify(title) || "â€¦"}</p>
           </div>
           <div>
             <label className="mb-1 block text-[10px] font-bold uppercase tracking-wider text-black/60">Status</label>
@@ -175,7 +162,7 @@ export default function ArticleComposer() {
             className="inline-flex items-center gap-2 rounded-lg bg-zru-green px-6 py-2.5 font-heading text-xs font-black uppercase tracking-wider text-white transition-colors hover:bg-green-800 disabled:opacity-50"
           >
             <Send className="h-3.5 w-3.5" />
-            {saving ? "Saving…" : status === "published" ? "Publish article" : "Save as draft"}
+            {saving ? "Savingâ€¦" : status === "published" ? "Publish article" : "Save as draft"}
           </button>
           {status === "draft" && (
             <button
@@ -189,6 +176,6 @@ export default function ArticleComposer() {
           )}
         </div>
       </form>
-    </div>
+    </CollapsibleSection>
   );
 }

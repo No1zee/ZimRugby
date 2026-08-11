@@ -1,11 +1,13 @@
-"use client";
+﻿"use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { CalendarDays, ChevronLeft, ChevronRight, List, MapPin, Pencil, Plus, Trash2, CalendarPlus } from "lucide-react";
 import ImagePicker from "./ui/ImagePicker";
 import { EmptyState } from "./ui/StatusChip";
 import { deriveEventStatus } from "@/lib/events/status";
+import { useToast } from "./ui/ToastProvider";
+import { useConfirm } from "./ui/ConfirmProvider";
 
 export interface AdminEventRow {
   id: number;
@@ -29,6 +31,7 @@ export interface AdminEventRow {
 
 interface EventsPanelProps {
   initialEvents: AdminEventRow[];
+  onDirtyChange?: (dirty: boolean) => void;
 }
 
 type ViewMode = "month" | "list";
@@ -92,8 +95,10 @@ function statusTone(status: "upcoming" | "ongoing" | "completed"): string {
   }
 }
 
-export default function EventsPanel({ initialEvents }: EventsPanelProps) {
+export default function EventsPanel({ initialEvents, onDirtyChange }: EventsPanelProps) {
   const router = useRouter();
+  const { toast } = useToast();
+  const confirm = useConfirm();
   const [viewMode, setViewMode] = useState<ViewMode>("month");
   const [cursor, setCursor] = useState(() => {
     const now = new Date();
@@ -102,7 +107,15 @@ export default function EventsPanel({ initialEvents }: EventsPanelProps) {
   const [form, setForm] = useState<FormState | null>(null);
   const [editingId, setEditingId] = useState<number | null>(null);
   const [saving, setSaving] = useState(false);
-  const [message, setMessage] = useState<{ text: string; ok: boolean } | null>(null);
+  const dirtyRef = useRef(false);
+
+  useEffect(() => {
+    const dirty = form !== null;
+    if (dirty !== dirtyRef.current) {
+      dirtyRef.current = dirty;
+      onDirtyChange?.(dirty);
+    }
+  }, [form, onDirtyChange]);
 
   const byDate = useMemo(() => {
     const map = new Map<string, AdminEventRow[]>();
@@ -140,7 +153,6 @@ export default function EventsPanel({ initialEvents }: EventsPanelProps) {
   function openCreate(dateStr?: string) {
     setEditingId(null);
     setForm({ ...EMPTY_FORM, date: dateStr || "" });
-    setMessage(null);
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
 
@@ -161,21 +173,18 @@ export default function EventsPanel({ initialEvents }: EventsPanelProps) {
       sort: ev.sort != null ? String(ev.sort) : "",
       status: ev.status || "published",
     });
-    setMessage(null);
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
 
   function cancelForm() {
     setForm(null);
     setEditingId(null);
-    setMessage(null);
   }
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (!form) return;
     setSaving(true);
-    setMessage(null);
     try {
       const payload: Record<string, unknown> = {
         title: form.title || null,
@@ -205,19 +214,25 @@ export default function EventsPanel({ initialEvents }: EventsPanelProps) {
         const err = await res.json().catch(() => null);
         throw new Error(err?.error || res.statusText);
       }
-      setMessage({ text: editingId !== null ? "Event saved." : "Event created.", ok: true });
+      toast(editingId !== null ? "Event saved." : "Event created.");
       setForm(null);
       setEditingId(null);
       router.refresh();
     } catch (err) {
-      setMessage({ text: `Failed to save: ${err instanceof Error ? err.message : err}`, ok: false });
+      toast(`Failed to save: ${err instanceof Error ? err.message : err}`, "error");
     } finally {
       setSaving(false);
     }
   }
 
   async function handleDelete(ev: AdminEventRow) {
-    if (!window.confirm(`Delete "${ev.title || "this event"}"? This cannot be undone.`)) return;
+    const ok = await confirm({
+      title: "Delete event?",
+      message: `"${ev.title || "this event"}" will be permanently removed. This cannot be undone.`,
+      confirmLabel: "Delete event",
+      danger: true,
+    });
+    if (!ok) return;
     try {
       const res = await fetch("/api/admin/directus", {
         method: "DELETE",
@@ -232,9 +247,10 @@ export default function EventsPanel({ initialEvents }: EventsPanelProps) {
         setForm(null);
         setEditingId(null);
       }
+      toast("Event deleted.");
       router.refresh();
     } catch (err) {
-      setMessage({ text: `Delete failed: ${err instanceof Error ? err.message : err}`, ok: false });
+      toast(`Delete failed: ${err instanceof Error ? err.message : err}`, "error");
     }
   }
 
@@ -260,12 +276,6 @@ export default function EventsPanel({ initialEvents }: EventsPanelProps) {
             </div>
           </div>
 
-          {message && (
-            <div className={`mb-4 rounded-xl border p-3 text-xs font-bold ${message.ok ? "border-zru-green/40 bg-zru-green/10 text-zru-green" : "border-red-400 bg-red-50 text-red-700"}`}>
-              {message.text}
-            </div>
-          )}
-
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
             <div className="md:col-span-2">
               <label className="mb-1 block text-[10px] font-bold uppercase tracking-wider text-black/60">Title *</label>
@@ -274,7 +284,7 @@ export default function EventsPanel({ initialEvents }: EventsPanelProps) {
                 value={form.title}
                 onChange={(e) => setForm({ ...form, title: e.target.value })}
                 required
-                placeholder="e.g. Rugby Africa Gold Cup — Sables vs Namibia"
+                placeholder="e.g. Rugby Africa Gold Cup â€” Sables vs Namibia"
                 className="w-full rounded-lg border border-black/10 bg-white p-2.5 text-sm font-bold"
               />
             </div>
@@ -385,7 +395,7 @@ export default function EventsPanel({ initialEvents }: EventsPanelProps) {
                 type="text"
                 value={form.ticket_url}
                 onChange={(e) => setForm({ ...form, ticket_url: e.target.value })}
-                placeholder="https://…"
+                placeholder="https://â€¦"
                 className="w-full rounded-lg border border-black/10 bg-white p-2.5 text-sm"
               />
             </div>
@@ -401,7 +411,7 @@ export default function EventsPanel({ initialEvents }: EventsPanelProps) {
               disabled={saving}
               className="rounded-lg bg-zru-green px-6 py-2.5 font-heading text-xs font-black uppercase tracking-wider text-white transition-colors hover:bg-green-800 disabled:opacity-50"
             >
-              {saving ? "Saving…" : editingId !== null ? "Save changes" : "Create event"}
+              {saving ? "Savingâ€¦" : editingId !== null ? "Save changes" : "Create event"}
             </button>
             <button
               type="button"
@@ -421,7 +431,7 @@ export default function EventsPanel({ initialEvents }: EventsPanelProps) {
             <CalendarDays className="h-5 w-5 text-zru-green" /> Events calendar
           </h2>
           <p className="mt-1 text-xs text-black/50">
-            {initialEvents.length} event{initialEvents.length === 1 ? "" : "s"} — status updates automatically as dates pass.
+            {initialEvents.length} event{initialEvents.length === 1 ? "" : "s"} â€” status updates automatically as dates pass.
           </p>
         </div>
         <div className="flex items-center gap-2">
@@ -447,12 +457,6 @@ export default function EventsPanel({ initialEvents }: EventsPanelProps) {
           </button>
         </div>
       </div>
-
-      {message && (
-        <div className={`rounded-xl border p-3 text-xs font-bold ${message.ok ? "border-zru-green/40 bg-zru-green/10 text-zru-green" : "border-red-400 bg-red-50 text-red-700"}`}>
-          {message.text}
-        </div>
-      )}
 
       {viewMode === "month" ? (
         <div className="rounded-2xl border border-black/10 bg-white p-6 shadow-sm">
@@ -542,7 +546,7 @@ export default function EventsPanel({ initialEvents }: EventsPanelProps) {
             <EmptyState
               icon={<CalendarDays className="h-8 w-8" />}
               title="No events yet"
-              hint="Click “New event” to add the first one — it will appear here and on the public /events page."
+              hint="Click â€œNew eventâ€ to add the first one â€” it will appear here and on the public /events page."
             />
           ) : (
             <div className="overflow-x-auto rounded-xl border border-black/5">
@@ -563,8 +567,8 @@ export default function EventsPanel({ initialEvents }: EventsPanelProps) {
                     return (
                       <tr key={ev.id} className="border-b border-black/5 last:border-0">
                         <td className="whitespace-nowrap px-4 py-2.5 font-bold">
-                          {ev.date ? new Date(toDateStr(ev.date) + "T00:00:00").toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" }) : "—"}
-                          {ev.time ? <span className="ml-1.5 text-black/40">· {ev.time}</span> : null}
+                          {ev.date ? new Date(toDateStr(ev.date) + "T00:00:00").toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" }) : "â€”"}
+                          {ev.time ? <span className="ml-1.5 text-black/40">Â· {ev.time}</span> : null}
                         </td>
                         <td className="px-4 py-2.5">
                           <div className="font-bold">{ev.title || "Untitled"}</div>
@@ -580,7 +584,7 @@ export default function EventsPanel({ initialEvents }: EventsPanelProps) {
                             <span className="flex items-center gap-1">
                               <MapPin className="h-3.5 w-3.5 text-zru-green" /> {ev.location}
                             </span>
-                          ) : "—"}
+                          ) : "â€”"}
                         </td>
                         <td className="px-4 py-2.5">
                           <div className="flex flex-wrap items-center gap-1.5">

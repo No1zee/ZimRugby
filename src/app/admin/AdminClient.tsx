@@ -1,7 +1,7 @@
-"use client";
+﻿"use client";
 
-import { useEffect, useState } from "react";
-import { BookOpen, ExternalLink, FileText, Flag, HelpCircle, LayoutDashboard, Radio, ShieldCheck, Sparkles, Sprout, Users, CalendarDays } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import { BookOpen, ExternalLink, FileText, Flag, HelpCircle, LayoutDashboard, Radio, ShieldCheck, Sparkles, Sprout, Users, CalendarDays, Trophy } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import CollectionManager from "@/components/admin/CollectionManager";
 import ArticleComposer from "@/components/admin/ArticleComposer";
@@ -9,6 +9,9 @@ import MatchCentrePanel from "@/components/admin/MatchCentrePanel";
 import SignupsPanel from "@/components/admin/SignupsPanel";
 import TodayOverview from "@/components/admin/TodayOverview";
 import EventsPanel, { type AdminEventRow } from "@/components/admin/EventsPanel";
+import CollapsibleSection from "@/components/admin/ui/CollapsibleSection";
+import { ToastProvider } from "@/components/admin/ui/ToastProvider";
+import { ConfirmProvider, useConfirm } from "@/components/admin/ui/ConfirmProvider";
 import { onAdminTab, setAdminTab } from "@/lib/admin/tab-events";
 import { canAccessTab, type RolePermissions } from "@/lib/admin/iam";
 import RolesPanel from "./roles/RolesPanel";
@@ -76,6 +79,10 @@ interface AdminClientProps {
   opponents: LookupOption[];
   competitions: LookupOption[];
   venues: LookupOption[];
+  initialTeams: Record<string, unknown>[];
+  initialOpponents: Record<string, unknown>[];
+  initialCompetitions: Record<string, unknown>[];
+  initialVenues: Record<string, unknown>[];
   stats: {
     pagesCount: number;
     publishedPages: number;
@@ -100,6 +107,7 @@ type TabId =
   | "grassroots"
   | "faq-footer"
   | "fixtures"
+  | "teams"
   | "events"
   | "campaigns"
   | "fanzone"
@@ -113,7 +121,7 @@ interface NavItem {
   count: number;
 }
 
-export default function AdminClient(props: AdminClientProps) {
+function AdminClientInner(props: AdminClientProps) {
   const {
     permissions,
     initialMatches,
@@ -130,14 +138,30 @@ export default function AdminClient(props: AdminClientProps) {
     initialFooterNav,
     initialPages,
     initialSectionCounts,
+    initialActivityFeed,
     teams,
     opponents,
     competitions,
     venues,
+    initialTeams,
+    initialOpponents,
+    initialCompetitions,
+    initialVenues,
     stats,
   } = props;
 
+  const confirm = useConfirm();
   const [activeTab, setActiveTab] = useState<TabId>("overview");
+  const [panelDirty, setPanelDirty] = useState<Record<string, boolean>>({});
+  const [teamsRemountKey, setTeamsRemountKey] = useState(0);
+
+  const dirty = Object.values(panelDirty).some(Boolean);
+
+  const registerDirty = (panel: string) => (d: boolean) => {
+    setPanelDirty((prev) => (prev[panel] === d ? prev : { ...prev, [panel]: d }));
+  };
+
+  const teamsCount = initialTeams.length + initialOpponents.length + initialCompetitions.length + initialVenues.length;
 
   const NAV_SECTIONS: { id: string; label: string; items: NavItem[] }[] = [
     {
@@ -164,6 +188,7 @@ export default function AdminClient(props: AdminClientProps) {
       label: "Matches",
       items: [
         { id: "fixtures", label: "Fixtures & Scores", icon: Radio, count: initialMatches.length },
+        { id: "teams", label: "Teams & Squads", icon: Trophy, count: teamsCount },
       ],
     },
     {
@@ -206,7 +231,33 @@ export default function AdminClient(props: AdminClientProps) {
     setAdminTab(activeTab);
   }, [activeTab]);
 
-  function navigate(tab: TabId) {
+  useEffect(() => {
+    const handler = (e: BeforeUnloadEvent) => {
+      if (dirty) {
+        e.preventDefault();
+        e.returnValue = "";
+      }
+    };
+    window.addEventListener("beforeunload", handler);
+    return () => window.removeEventListener("beforeunload", handler);
+  }, [dirty]);
+
+  async function navigate(tab: TabId) {
+    if (tab === activeTab) {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      return;
+    }
+    if (dirty) {
+      const ok = await confirm({
+        title: "Discard unsaved changes?",
+        message: "You have unsaved changes in a form. Leaving this tab will lose them.",
+        confirmLabel: "Discard changes",
+        danger: true,
+      });
+      if (!ok) return;
+      setPanelDirty({});
+      setTeamsRemountKey((k) => k + 1);
+    }
     setActiveTab(tab);
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
@@ -289,6 +340,7 @@ export default function AdminClient(props: AdminClientProps) {
             initialMatches={initialMatches}
             fanZoneCount={initialFanZoneMembers.length}
             onboardingCount={initialOnboardingSubmissions.length}
+            initialActivityFeed={initialActivityFeed}
             onNavigate={(tab) => navigate(tab as TabId)}
           />
         )}
@@ -297,7 +349,7 @@ export default function AdminClient(props: AdminClientProps) {
 
         {activeTab === "media" && (
           <div className="space-y-8">
-            <ArticleComposer />
+            <ArticleComposer onDirtyChange={registerDirty("composer")} />
             <CollectionManager
               collection="news"
               title="News articles"
@@ -319,6 +371,7 @@ export default function AdminClient(props: AdminClientProps) {
               statusField="status"
               searchable={["title", "excerpt", "category"]}
               singularLabel="article"
+              onDirtyChange={registerDirty("news")}
             />
             <CollectionManager
               collection="announcements"
@@ -338,6 +391,7 @@ export default function AdminClient(props: AdminClientProps) {
               statusField="is_enabled"
               searchable={["title", "body"]}
               singularLabel="announcement"
+              onDirtyChange={registerDirty("announcements")}
             />
           </div>
         )}
@@ -346,7 +400,7 @@ export default function AdminClient(props: AdminClientProps) {
           <PagesGrid initialPages={initialPages} initialSectionCounts={initialSectionCounts} />
         )}
 
-        {activeTab === "events" && <EventsPanel initialEvents={initialEvents} />}
+        {activeTab === "events" && <EventsPanel initialEvents={initialEvents} onDirtyChange={registerDirty("events")} />}
 
         {activeTab === "grassroots" && (
           <div className="space-y-8">
@@ -434,7 +488,157 @@ export default function AdminClient(props: AdminClientProps) {
             opponents={opponents}
             competitions={competitions}
             venues={venues}
+            onDirtyChange={registerDirty("fixtures")}
           />
+        )}
+
+        {activeTab === "teams" && (
+          <div className="space-y-6">
+            <CollapsibleSection
+              key={`teams-${teamsRemountKey}`}
+              title="National teams"
+              icon={<Trophy className="h-5 w-5" />}
+              description="Senior and age-grade national squads (Sables, Lady Sables, U20â€¦)."
+              defaultOpen={true}
+            >
+              <CollectionManager
+                collection="teams"
+                title="Teams"
+                description="National squads shown across the site."
+                fields={[
+                  { key: "name", label: "Name", type: "text", placeholder: "e.g. Zimbabwe Sables", required: true },
+                  { key: "short_name", label: "Short name", type: "text", placeholder: "e.g. Sables" },
+                  { key: "code", label: "Code", type: "text", placeholder: "e.g. ZIM" },
+                  { key: "slug", label: "Slug", type: "text", placeholder: "e.g. sables" },
+                  { key: "team_type", label: "Team type", type: "select", options: ["mens_15s", "womens_15s", "mens_7s", "womens_7s", "age_grade", "club"] },
+                  { key: "gender", label: "Gender", type: "select", options: ["men", "women"] },
+                  { key: "age_grade", label: "Age grade", type: "text", placeholder: "e.g. U20" },
+                  { key: "filter_label", label: "Filter label", type: "text", placeholder: "e.g. Sables" },
+                  { key: "display_name", label: "Display name", type: "text", placeholder: "e.g. Zimbabwe Rugby Union Men's National Team" },
+                  { key: "crest", label: "Crest image", type: "image" },
+                  { key: "primary_color", label: "Primary colour", type: "text", placeholder: "e.g. #006B3F" },
+                  { key: "secondary_color", label: "Secondary colour", type: "text", placeholder: "e.g. #F5B800" },
+                  { key: "is_national_team", label: "National team", type: "boolean" },
+                  { key: "is_active", label: "Active (shown in filters)", type: "boolean" },
+                  { key: "display_order", label: "Display order", type: "number" },
+                  { key: "status", label: "Status", type: "select", options: ["published", "draft"] },
+                ]}
+                items={initialTeams}
+                displayField="name"
+                subtitleField="team_type"
+                badgeField="code"
+                statusField="is_active"
+                searchable={["name", "short_name", "code", "filter_label"]}
+                singularLabel="team"
+                onDirtyChange={registerDirty("teams")}
+              />
+            </CollapsibleSection>
+
+            <CollapsibleSection
+              key={`opponents-${teamsRemountKey}`}
+              title="Opponents"
+              icon={<Trophy className="h-5 w-5" />}
+              description="International and club sides Zimbabwe plays against."
+              defaultOpen={false}
+            >
+              <CollectionManager
+                collection="opponents"
+                title="Opponents"
+                description="Sides used in the fixtures dropdown."
+                fields={[
+                  { key: "name", label: "Name", type: "text", placeholder: "e.g. Namibia", required: true },
+                  { key: "short_name", label: "Short name", type: "text", placeholder: "e.g. NAM" },
+                  { key: "code", label: "Code", type: "text", placeholder: "e.g. NAM" },
+                  { key: "slug", label: "Slug", type: "text", placeholder: "e.g. namibia" },
+                  { key: "country", label: "Country", type: "text", placeholder: "e.g. Namibia" },
+                  { key: "team_type", label: "Team type", type: "select", options: ["international", "club", "province", "tour"] },
+                  { key: "crest", label: "Crest image", type: "image" },
+                  { key: "notes", label: "Notes", type: "textarea", colSpan: "full" },
+                  { key: "status", label: "Status", type: "select", options: ["published", "draft"] },
+                ]}
+                items={initialOpponents}
+                displayField="name"
+                subtitleField="country"
+                badgeField="code"
+                statusField="status"
+                searchable={["name", "short_name", "country"]}
+                singularLabel="opponent"
+                onDirtyChange={registerDirty("opponents")}
+              />
+            </CollapsibleSection>
+
+            <CollapsibleSection
+              key={`competitions-${teamsRemountKey}`}
+              title="Competitions"
+              icon={<Trophy className="h-5 w-5" />}
+              description="Tournaments and leagues (Rugby Africa Cup, Gold Cupâ€¦)."
+              defaultOpen={false}
+            >
+              <CollectionManager
+                collection="competitions"
+                title="Competitions"
+                description="Competitions used in the fixtures dropdown."
+                fields={[
+                  { key: "name", label: "Name", type: "text", placeholder: "e.g. Rugby Africa Cup", required: true },
+                  { key: "short_name", label: "Short name", type: "text", placeholder: "e.g. RAC" },
+                  { key: "slug", label: "Slug", type: "text", placeholder: "e.g. rugby-africa-cup" },
+                  { key: "competition_type", label: "Competition type", type: "select", options: ["international", "domestic", "club", "schools"] },
+                  { key: "season_label", label: "Season label", type: "text", placeholder: "e.g. 2026" },
+                  { key: "governing_body", label: "Governing body", type: "text", placeholder: "e.g. Rugby Africa" },
+                  { key: "logo", label: "Logo image", type: "image" },
+                  { key: "description", label: "Description", type: "textarea", colSpan: "full" },
+                  { key: "is_standings_enabled", label: "Standings enabled", type: "boolean" },
+                  { key: "sort", label: "Sort order", type: "number" },
+                  { key: "status", label: "Status", type: "select", options: ["published", "draft"] },
+                ]}
+                items={initialCompetitions}
+                displayField="name"
+                subtitleField="season_label"
+                badgeField="competition_type"
+                statusField="status"
+                searchable={["name", "short_name", "governing_body"]}
+                singularLabel="competition"
+                onDirtyChange={registerDirty("competitions")}
+              />
+            </CollapsibleSection>
+
+            <CollapsibleSection
+              key={`venues-${teamsRemountKey}`}
+              title="Venues"
+              icon={<Trophy className="h-5 w-5" />}
+              description="Stadiums and grounds used for fixtures."
+                defaultOpen={false}
+                dirty={panelDirty["venues"]}
+                onDirtyChange={registerDirty("venues")}
+            >
+              <CollectionManager
+                collection="venues"
+                title="Venues"
+                description="Venues used in the fixtures dropdown."
+                fields={[
+                  { key: "name", label: "Name", type: "text", placeholder: "e.g. Hartsfield Grounds", required: true },
+                  { key: "slug", label: "Slug", type: "text", placeholder: "e.g. hartsfield-grounds" },
+                  { key: "city", label: "City", type: "text", placeholder: "e.g. Bulawayo" },
+                  { key: "region", label: "Region", type: "text", placeholder: "e.g. Matabeleland North" },
+                  { key: "country", label: "Country", type: "text", placeholder: "e.g. Zimbabwe" },
+                  { key: "full_label", label: "Full label", type: "text", placeholder: "e.g. Hartsfield Grounds, Bulawayo" },
+                  { key: "address", label: "Address", type: "text", placeholder: "e.g. 12 Park Road" },
+                  { key: "google_maps_url", label: "Google Maps URL", type: "text", placeholder: "https://maps.google.com/â€¦" },
+                  { key: "timezone", label: "Timezone", type: "text", placeholder: "e.g. Africa/Harare" },
+                  { key: "capacity", label: "Capacity", type: "number" },
+                  { key: "status", label: "Status", type: "select", options: ["published", "draft"] },
+                ]}
+                items={initialVenues}
+                displayField="name"
+                subtitleField="city"
+                badgeField="country"
+                statusField="status"
+                searchable={["name", "city", "region", "full_label"]}
+                singularLabel="venue"
+                onDirtyChange={registerDirty("venues")}
+              />
+            </CollapsibleSection>
+          </div>
         )}
 
         {activeTab === "campaigns" && <CampaignsPanel initialCampaigns={initialCampaigns} />}
@@ -458,5 +662,15 @@ export default function AdminClient(props: AdminClientProps) {
         {activeTab === "roles" && <RolesPanel />}
       </div>
     </main>
+  );
+}
+
+export default function AdminClient(props: AdminClientProps) {
+  return (
+    <ToastProvider>
+      <ConfirmProvider>
+        <AdminClientInner {...props} />
+      </ConfirmProvider>
+    </ToastProvider>
   );
 }

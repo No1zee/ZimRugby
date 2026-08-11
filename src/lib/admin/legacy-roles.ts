@@ -11,11 +11,15 @@ import type { RolePermissions } from "./iam";
 export const LEGACY_ROLE_DEFAULTS: Record<string, RolePermissions> = {
   super_admin: { all: true },
   editor: {
-    tabs: ["overview", "media", "fixtures"],
+    tabs: ["overview", "media", "fixtures", "teams"],
     collections: {
       news: { create: true, read: true, update: true },
       matches: { create: true, read: true, update: true },
       matches_results: { create: false, read: true, update: true },
+      teams: { create: true, read: true, update: true },
+      opponents: { create: true, read: true, update: true },
+      competitions: { create: true, read: true, update: true },
+      venues: { create: true, read: true, update: true },
     },
     pages_builder: false,
     ai_assistant: false,

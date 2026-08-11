@@ -1,15 +1,25 @@
 "use client";
 
 import { useMemo } from "react";
-import { Newspaper, Trophy, Users, CheckCircle2 } from "lucide-react";
+import { Activity, Newspaper, Trophy, Users, CheckCircle2 } from "lucide-react";
 import StatusChip from "./ui/StatusChip";
 import type { MatchCardViewModel } from "@/lib/match-centre/types";
+
+interface ActivityEntry {
+  id: number;
+  action: "create" | "update" | "delete" | "login" | "authenticate";
+  collection: string;
+  item: string | number;
+  timestamp: string;
+  user?: string;
+}
 
 interface TodayOverviewProps {
   initialNews: Record<string, unknown>[];
   initialMatches: MatchCardViewModel[];
   fanZoneCount: number;
   onboardingCount: number;
+  initialActivityFeed?: ActivityEntry[];
   onNavigate: (tab: string) => void;
 }
 
@@ -20,7 +30,48 @@ function fmtDate(iso?: string): string {
   return d.toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" });
 }
 
-export default function TodayOverview({ initialNews, initialMatches, fanZoneCount, onboardingCount, onNavigate }: TodayOverviewProps) {
+function fmtTime(iso?: string): string {
+  if (!iso) return "";
+  const d = new Date(iso);
+  if (isNaN(d.getTime())) return "";
+  return d.toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit" });
+}
+
+const ACTION_LABELS: Record<string, string> = {
+  create: "created",
+  update: "updated",
+  delete: "deleted",
+  login: "signed in",
+  authenticate: "signed in",
+};
+
+const COLLECTION_LABELS: Record<string, string> = {
+  news: "article",
+  events: "event",
+  matches: "fixture",
+  teams: "team",
+  opponents: "opponent",
+  competitions: "competition",
+  venues: "venue",
+  announcements: "announcement",
+  campaigns: "campaign",
+  pages: "page",
+  players: "player",
+  partners: "partner",
+  programmes: "programme",
+  grassroots_initiatives: "initiative",
+  faqs: "FAQ",
+  footer_navigation: "footer link",
+};
+
+export default function TodayOverview({
+  initialNews,
+  initialMatches,
+  fanZoneCount,
+  onboardingCount,
+  initialActivityFeed = [],
+  onNavigate,
+}: TodayOverviewProps) {
   const drafts = useMemo(
     () => initialNews.filter((n) => String(n.status ?? "").toLowerCase() === "draft").slice(0, 5),
     [initialNews]
@@ -193,6 +244,33 @@ export default function TodayOverview({ initialNews, initialMatches, fanZoneCoun
             View sign-ups
           </button>
         </div>
+      </section>
+
+      {/* Recent activity */}
+      <section className="rounded-2xl border border-black/10 bg-white p-6 shadow-sm">
+        <h3 className="flex items-center gap-2 font-heading text-sm font-black uppercase tracking-wider text-rich-black">
+          <Activity className="h-4 w-4 text-zru-green" /> Recent activity
+        </h3>
+        {initialActivityFeed.length === 0 ? (
+          <p className="mt-3 text-xs text-black/50">No recent activity to show.</p>
+        ) : (
+          <div className="mt-3 divide-y divide-black/5">
+            {initialActivityFeed.map((a) => (
+              <div key={a.id} className="flex items-center justify-between gap-3 py-2.5">
+                <p className="min-w-0 truncate text-xs text-black/70">
+                  <span className="font-bold text-rich-black">
+                    {ACTION_LABELS[a.action] || a.action}
+                  </span>{" "}
+                  {COLLECTION_LABELS[a.collection] || a.collection.replace(/_/g, " ")}{" "}
+                  <span className="font-bold text-zru-green">#{String(a.item)}</span>
+                </p>
+                <p className="shrink-0 text-[11px] text-black/40">
+                  {fmtDate(a.timestamp)} {fmtTime(a.timestamp)}
+                </p>
+              </div>
+            ))}
+          </div>
+        )}
       </section>
     </div>
   );

@@ -1,10 +1,13 @@
-"use client";
+﻿"use client";
 
 import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
-import { CheckCircle2, XCircle, Plus, Trophy, Pencil } from "lucide-react";
+import { Plus, Trophy, Pencil } from "lucide-react";
 import StatusChip, { EmptyState } from "./ui/StatusChip";
 import { Pagination } from "./ui/ListTools";
+import CollapsibleSection from "./ui/CollapsibleSection";
+import { useToast } from "./ui/ToastProvider";
+import { useConfirm } from "./ui/ConfirmProvider";
 import type { MatchCardViewModel, StandingsTableViewModel } from "@/lib/match-centre/types";
 
 interface LookupOption {
@@ -19,6 +22,7 @@ interface MatchCentrePanelProps {
   opponents: LookupOption[];
   competitions: LookupOption[];
   venues: LookupOption[];
+  onDirtyChange?: (dirty: boolean) => void;
 }
 
 const MATCH_STATUSES = ["upcoming", "live", "final", "cancelled"];
@@ -30,9 +34,11 @@ export default function MatchCentrePanel({
   opponents,
   competitions,
   venues,
+  onDirtyChange,
 }: MatchCentrePanelProps) {
   const router = useRouter();
-  const [message, setMessage] = useState<{ text: string; ok: boolean } | null>(null);
+  const { toast } = useToast();
+  const confirm = useConfirm();
 
   // Create form
   const [teamId, setTeamId] = useState("");
@@ -52,15 +58,17 @@ export default function MatchCentrePanel({
   const [page, setPage] = useState(1);
   const PAGE_SIZE = 10;
 
+  const formDirty =
+    teamId !== "" || opponentId !== "" || competitionId !== "" || venueId !== "" || kickoff !== "" || roundLabel !== "" || status !== "upcoming" || homeOrAway !== "home";
+
   async function createFixture(e: React.FormEvent) {
     e.preventDefault();
-    setMessage(null);
     if (!teamId || !opponentId) {
-      setMessage({ text: "Pick both a home team and an opponent.", ok: false });
+      toast("Pick both a home team and an opponent.", "error");
       return;
     }
     if (!kickoff) {
-      setMessage({ text: "Pick a kickoff date and time — fixtures need one.", ok: false });
+      toast("Pick a kickoff date and time â€” fixtures need one.", "error");
       return;
     }
     const homeName = teams.find((t) => String(t.id) === teamId)?.name || "Zimbabwe";
@@ -92,22 +100,21 @@ export default function MatchCentrePanel({
         }),
       });
       if (res.ok) {
-        setMessage({ text: `Fixture '${homeName} vs ${awayName}' created.`, ok: true });
+        toast(`Fixture '${homeName} vs ${awayName}' created.`);
         setTeamId(""); setOpponentId(""); setCompetitionId(""); setVenueId("");
         setKickoff(""); setRoundLabel(""); setStatus("upcoming"); setHomeOrAway("home");
         router.refresh();
       } else {
         const err = await res.json().catch(() => null);
-        setMessage({ text: `Failed to create fixture: ${err?.error || res.statusText}`, ok: false });
+        toast(`Failed to create fixture: ${err?.error || res.statusText}`, "error");
       }
     } catch (err) {
-      setMessage({ text: `Error: ${err instanceof Error ? err.message : err}`, ok: false });
+      toast(`Error: ${err instanceof Error ? err.message : err}`, "error");
     }
   }
 
   async function saveScore(id: string) {
     setSavingId(id);
-    setMessage(null);
     const edit = scoreEdits[id];
     const teamScore = edit?.team_score !== undefined && edit?.team_score !== "" ? Number(edit.team_score) : null;
     const opponentScore = edit?.opponent_score !== undefined && edit?.opponent_score !== "" ? Number(edit.opponent_score) : null;
@@ -126,47 +133,52 @@ export default function MatchCentrePanel({
         body: JSON.stringify({ collection: "matches", id, data }),
       });
       if (res.ok) {
-        setMessage({ text: "Score saved.", ok: true });
+        toast("Score saved.");
         setScoreEdits((prev) => { const next = { ...prev }; delete next[id]; return next; });
         router.refresh();
       } else {
         const err = await res.json().catch(() => null);
-        setMessage({ text: `Failed to save score: ${err?.error || res.statusText}`, ok: false });
+        toast(`Failed to save score: ${err?.error || res.statusText}`, "error");
       }
     } catch (err) {
-      setMessage({ text: `Error: ${err instanceof Error ? err.message : err}`, ok: false });
+      toast(`Error: ${err instanceof Error ? err.message : err}`, "error");
     } finally {
       setSavingId(null);
     }
   }
 
   async function changeStatus(id: string, next: string) {
-    setMessage(null);
     const res = await fetch("/api/admin/directus", {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ collection: "matches", id, data: { status: next } }),
     });
     if (res.ok) {
-      setMessage({ text: "Fixture status updated.", ok: true });
+      toast(`Fixture marked ${next}.`);
       router.refresh();
     } else {
-      setMessage({ text: "Could not update status.", ok: false });
+      toast("Could not update status.", "error");
     }
   }
 
   async function deleteFixture(id: string, label: string) {
-    if (!window.confirm(`Delete fixture '${label}'? This cannot be undone.`)) return;
+    const ok = await confirm({
+      title: "Delete fixture?",
+      message: `'${label}' will be permanently removed. This cannot be undone.`,
+      confirmLabel: "Delete fixture",
+      danger: true,
+    });
+    if (!ok) return;
     const res = await fetch("/api/admin/directus", {
       method: "DELETE",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ collection: "matches", id }),
     });
     if (res.ok) {
-      setMessage({ text: "Fixture deleted.", ok: true });
+      toast("Fixture deleted.");
       router.refresh();
     } else {
-      setMessage({ text: "Could not delete fixture.", ok: false });
+      toast("Could not delete fixture.", "error");
     }
   }
 
@@ -188,30 +200,20 @@ export default function MatchCentrePanel({
 
   return (
     <div className="space-y-6">
-      {message && (
-        <div
-          className={`flex items-center gap-2 rounded-xl border p-3 text-xs font-bold ${
-            message.ok
-              ? "border-zru-green/40 bg-zru-green/10 text-zru-green"
-              : "border-red-400 bg-red-50 text-red-700"
-          }`}
-        >
-          {message.ok ? <CheckCircle2 className="h-4 w-4 shrink-0" /> : <XCircle className="h-4 w-4 shrink-0" />}
-          <span>{message.text}</span>
-        </div>
-      )}
-
       {/* Create fixture */}
-      <section className="rounded-2xl border border-black/10 bg-white p-6 shadow-sm">
-        <h2 className="flex items-center gap-2 font-heading text-xl font-black uppercase text-rich-black">
-          <Plus className="h-5 w-5 text-zru-green" /> Add a fixture
-        </h2>
-        <p className="mt-1 text-xs text-black/50">Create a new match. Pick real teams, competition and venue — no typing names by hand.</p>
-        <form onSubmit={createFixture} className="mt-4 grid grid-cols-1 gap-4 md:grid-cols-2">
+      <CollapsibleSection
+        title="Add a fixture"
+        icon={<Plus className="h-5 w-5" />}
+        description="Create a new match. Pick real teams, competition and venue â€” no typing names by hand."
+        defaultOpen={false}
+        dirty={formDirty}
+        onDirtyChange={onDirtyChange}
+      >
+        <form onSubmit={createFixture} className="grid grid-cols-1 gap-4 md:grid-cols-2">
           <div>
             <label className="mb-1 block text-[10px] font-bold uppercase tracking-wider text-black/60">Home team</label>
             <select value={teamId} onChange={(e) => setTeamId(e.target.value)} className="w-full rounded-lg border border-black/10 bg-white p-2.5 text-sm font-bold">
-              <option value="">— Select —</option>
+              <option value="">â€” Select â€”</option>
               {teams.map((t) => (
                 <option key={t.id} value={t.id}>{t.name}</option>
               ))}
@@ -220,7 +222,7 @@ export default function MatchCentrePanel({
           <div>
             <label className="mb-1 block text-[10px] font-bold uppercase tracking-wider text-black/60">Opponent</label>
             <select value={opponentId} onChange={(e) => setOpponentId(e.target.value)} className="w-full rounded-lg border border-black/10 bg-white p-2.5 text-sm font-bold">
-              <option value="">— Select —</option>
+              <option value="">â€” Select â€”</option>
               {opponents.map((o) => (
                 <option key={o.id} value={o.id}>{o.name}</option>
               ))}
@@ -229,7 +231,7 @@ export default function MatchCentrePanel({
           <div>
             <label className="mb-1 block text-[10px] font-bold uppercase tracking-wider text-black/60">Competition</label>
             <select value={competitionId} onChange={(e) => setCompetitionId(e.target.value)} className="w-full rounded-lg border border-black/10 bg-white p-2.5 text-sm font-bold">
-              <option value="">— Select —</option>
+              <option value="">â€” Select â€”</option>
               {competitions.map((c) => (
                 <option key={c.id} value={c.id}>{c.name}</option>
               ))}
@@ -238,7 +240,7 @@ export default function MatchCentrePanel({
           <div>
             <label className="mb-1 block text-[10px] font-bold uppercase tracking-wider text-black/60">Venue</label>
             <select value={venueId} onChange={(e) => setVenueId(e.target.value)} className="w-full rounded-lg border border-black/10 bg-white p-2.5 text-sm font-bold">
-              <option value="">— Select —</option>
+              <option value="">â€” Select â€”</option>
               {venues.map((v) => (
                 <option key={v.id} value={v.id}>{v.name}</option>
               ))}
@@ -285,7 +287,7 @@ export default function MatchCentrePanel({
             </button>
           </div>
         </form>
-      </section>
+      </CollapsibleSection>
 
       {/* Fixtures list */}
       <section className="rounded-2xl border border-black/10 bg-white p-6 shadow-sm">
@@ -297,7 +299,7 @@ export default function MatchCentrePanel({
             type="text"
             value={query}
             onChange={(e) => { setQuery(e.target.value); setPage(1); }}
-            placeholder="Search fixtures…"
+            placeholder="Search fixturesâ€¦"
             className="w-full rounded-lg border border-black/10 bg-white px-3 py-2 text-sm placeholder:text-black/40 focus:border-teal-500 focus:outline-none focus:ring-2 focus:ring-teal-500/20"
           />
         </div>
@@ -319,7 +321,7 @@ export default function MatchCentrePanel({
                       <StatusChip status={m.status} />
                     </div>
                     <p className="mt-0.5 truncate text-xs text-black/50">
-                      {m.dateIso ? new Date(m.dateIso).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" }) : ""} · {m.time || ""} · {m.venue} · {m.competition}{m.round ? ` · ${m.round}` : ""}
+                      {m.dateIso ? new Date(m.dateIso).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" }) : ""} Â· {m.time || ""} Â· {m.venue} Â· {m.competition}{m.round ? ` Â· ${m.round}` : ""}
                     </p>
                   </div>
 
@@ -337,7 +339,7 @@ export default function MatchCentrePanel({
                           onChange={(e) => setScoreEdits((prev) => ({ ...prev, [m.id]: { team_score: e.target.value, opponent_score: prev[m.id]?.opponent_score ?? "" } }))}
                           className="w-14 rounded border border-black/10 bg-white p-1 text-center text-sm"
                         />
-                        <span className="text-xs text-black/40">–</span>
+                        <span className="text-xs text-black/40">â€“</span>
                         <input
                           type="number"
                           placeholder="Opp"
@@ -351,7 +353,7 @@ export default function MatchCentrePanel({
                           disabled={savingId === m.id}
                           className="rounded-md bg-zru-green px-2 py-1 text-[10px] font-black uppercase tracking-wider text-white hover:bg-green-800 disabled:opacity-50"
                         >
-                          {savingId === m.id ? "Saving…" : "Save score"}
+                          {savingId === m.id ? "Savingâ€¦" : "Save score"}
                         </button>
                       </div>
                     )}
@@ -396,7 +398,7 @@ export default function MatchCentrePanel({
           initialStandings.map((table) => (
             <div key={table.id} className="mt-4 overflow-x-auto rounded-xl border border-black/5">
               <h3 className="bg-black/[0.03] px-4 py-3 font-heading text-sm font-black uppercase text-rich-black">
-                {table.title} · {table.seasonYear}
+                {table.title} Â· {table.seasonYear}
               </h3>
               <table className="w-full text-sm">
                 <thead>
