@@ -78,7 +78,7 @@ export default function AdminSidebar({ activeTab = "overview", onTabChange }: Ad
   }, [activeTab]);
 
   useEffect(() => {
-    const unsubscribe = onAdminTab((tab) => setCurrentTab(tab));
+    const unsubscribe = onAdminTab((intent) => setCurrentTab(intent.tab));
     return unsubscribe;
   }, []);
 

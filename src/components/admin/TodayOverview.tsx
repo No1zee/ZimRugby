@@ -3,6 +3,7 @@
 import { useMemo } from "react";
 import { Activity, Newspaper, Trophy, Users, CheckCircle2 } from "lucide-react";
 import StatusChip from "./ui/StatusChip";
+import { setAdminTab } from "@/lib/admin/tab-events";
 import type { MatchCardViewModel } from "@/lib/match-centre/types";
 
 interface ActivityEntry {
@@ -190,7 +191,7 @@ export default function TodayOverview({
                     <p className="text-xs text-black/50">{fmtDate(String(d.date ?? ""))}</p>
                   </div>
                   <button
-                    onClick={() => onNavigate("media")}
+                    onClick={() => setAdminTab("media", d.id as string | number)}
                     className="shrink-0 rounded-lg bg-black/5 px-3 py-1.5 text-[10px] font-black uppercase tracking-wider text-black/60 hover:bg-black/10"
                   >
                     Review

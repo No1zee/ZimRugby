@@ -64,7 +64,7 @@ export async function POST(request: NextRequest) {
 }
 
 export async function PATCH(request: NextRequest) {
-  const { collection, id, data } = await request.json();
+  const { collection, id, ids, data } = await request.json();
 
   try {
     await requireCollectionAction(collection, "update");
@@ -79,11 +79,36 @@ export async function PATCH(request: NextRequest) {
     return NextResponse.json({ error: "Directus not configured" }, { status: 500 });
   }
 
-  if (!collection || !id || !data) {
-    return NextResponse.json({ error: "Missing collection, id or data" }, { status: 400 });
+  if (!collection || !data) {
+    return NextResponse.json({ error: "Missing collection or data" }, { status: 400 });
   }
 
   try {
+    // Bulk update: PATCH /items/{collection} with { keys, data }
+    if (ids && Array.isArray(ids) && ids.length > 0) {
+      const res = await fetch(`${DIRECTUS_URL}/items/${collection}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${DIRECTUS_TOKEN}`,
+        },
+        body: JSON.stringify({ keys: ids, data }),
+      });
+
+      if (!res.ok) {
+        const errBody = await res.text();
+        return NextResponse.json({ error: errBody }, { status: res.status });
+      }
+
+      const text = await res.text();
+      const json = text ? JSON.parse(text) : { success: true };
+      return NextResponse.json(json);
+    }
+
+    if (!id) {
+      return NextResponse.json({ error: "Missing id or ids" }, { status: 400 });
+    }
+
     const res = await fetch(`${DIRECTUS_URL}/items/${collection}/${id}`, {
       method: "PATCH",
       headers: {
@@ -107,7 +132,7 @@ export async function PATCH(request: NextRequest) {
 }
 
 export async function DELETE(request: NextRequest) {
-  const { collection, id } = await request.json();
+  const { collection, id, ids } = await request.json();
 
   try {
     await requireCollectionAction(collection, "delete");
@@ -122,11 +147,30 @@ export async function DELETE(request: NextRequest) {
     return NextResponse.json({ error: "Directus not configured" }, { status: 500 });
   }
 
-  if (!collection || !id) {
+  if (!collection || (!id && !(ids && Array.isArray(ids) && ids.length > 0))) {
     return NextResponse.json({ error: "Missing collection or id" }, { status: 400 });
   }
 
   try {
+    // Bulk delete: DELETE /items/{collection} with { keys }
+    if (ids && Array.isArray(ids) && ids.length > 0) {
+      const res = await fetch(`${DIRECTUS_URL}/items/${collection}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${DIRECTUS_TOKEN}`,
+        },
+        body: JSON.stringify({ keys: ids }),
+      });
+
+      if (!res.ok) {
+        const errBody = await res.text();
+        return NextResponse.json({ error: errBody }, { status: res.status });
+      }
+
+      return NextResponse.json({ success: true });
+    }
+
     const res = await fetch(`${DIRECTUS_URL}/items/${collection}/${id}`, {
       method: "DELETE",
       headers: {

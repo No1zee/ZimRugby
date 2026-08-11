@@ -1,6 +1,6 @@
 ﻿"use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { BookOpen, ExternalLink, FileText, Flag, HelpCircle, LayoutDashboard, Radio, ShieldCheck, Sparkles, Sprout, Users, CalendarDays, Trophy } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import CollectionManager from "@/components/admin/CollectionManager";
@@ -154,6 +154,7 @@ function AdminClientInner(props: AdminClientProps) {
   const [activeTab, setActiveTab] = useState<TabId>("overview");
   const [panelDirty, setPanelDirty] = useState<Record<string, boolean>>({});
   const [teamsRemountKey, setTeamsRemountKey] = useState(0);
+  const [focusItem, setFocusItem] = useState<{ id: string | number } | null>(null);
 
   const dirty = Object.values(panelDirty).some(Boolean);
 
@@ -215,8 +216,9 @@ function AdminClientInner(props: AdminClientProps) {
   })).filter((section) => section.items.length > 0);
 
   useEffect(() => {
-    const unsubscribe = onAdminTab((tab) => {
-      setActiveTab(tab as Parameters<typeof setActiveTab>[0]);
+    const unsubscribe = onAdminTab((intent) => {
+      setActiveTab(intent.tab as Parameters<typeof setActiveTab>[0]);
+      if (intent.openItem !== undefined) setFocusItem({ id: intent.openItem });
     });
     return unsubscribe;
   }, []);
@@ -259,6 +261,7 @@ function AdminClientInner(props: AdminClientProps) {
       setTeamsRemountKey((k) => k + 1);
     }
     setActiveTab(tab);
+    setFocusItem(null);
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
 
@@ -372,6 +375,8 @@ function AdminClientInner(props: AdminClientProps) {
               searchable={["title", "excerpt", "category"]}
               singularLabel="article"
               onDirtyChange={registerDirty("news")}
+              focusId={activeTab === "media" ? focusItem?.id : null}
+              onFocusHandled={() => setFocusItem(null)}
             />
             <CollectionManager
               collection="announcements"

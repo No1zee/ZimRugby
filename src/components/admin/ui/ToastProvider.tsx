@@ -5,14 +5,20 @@ import { CheckCircle2, XCircle, Info } from "lucide-react";
 
 type ToastType = "success" | "error" | "info";
 
+export interface ToastAction {
+  label: string;
+  onClick: () => void;
+}
+
 interface ToastItem {
   id: number;
   type: ToastType;
   text: string;
+  action?: ToastAction;
 }
 
 interface ToastContextValue {
-  toast: (text: string, type?: ToastType) => void;
+  toast: (text: string, type?: ToastType, action?: ToastAction) => void;
 }
 
 const ToastContext = createContext<ToastContextValue>({ toast: () => {} });
@@ -37,12 +43,12 @@ export function ToastProvider({ children }: { children: ReactNode }) {
   const [items, setItems] = useState<ToastItem[]>([]);
   const nextId = useRef(1);
 
-  const toast = useCallback((text: string, type: ToastType = "success") => {
+  const toast = useCallback((text: string, type: ToastType = "success", action?: ToastAction) => {
     const id = nextId.current++;
-    setItems((prev) => [...prev.slice(-3), { id, type, text }]);
+    setItems((prev) => [...prev.slice(-3), { id, type, text, action }]);
     setTimeout(() => {
       setItems((prev) => prev.filter((t) => t.id !== id));
-    }, 4000);
+    }, action ? 10000 : 4000);
   }, []);
 
   return (
@@ -56,7 +62,15 @@ export function ToastProvider({ children }: { children: ReactNode }) {
             role="status"
           >
             {ICONS[t.type]}
-            <span>{t.text}</span>
+            <span className="min-w-0 flex-1">{t.text}</span>
+            {t.action && (
+              <button
+                onClick={t.action.onClick}
+                className="shrink-0 rounded-md border border-white/40 px-2.5 py-1 text-[10px] font-black uppercase tracking-wider text-white transition-colors hover:bg-white/20"
+              >
+                {t.action.label}
+              </button>
+            )}
           </div>
         ))}
       </div>
