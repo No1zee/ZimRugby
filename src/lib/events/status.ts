@@ -35,11 +35,10 @@ export function deriveEventStatus(
   const start = new Date(year, month - 1, day, hour, minute);
   if (isNaN(start.getTime())) return "upcoming";
 
-  const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-  const eventEnd = new Date(start);
   // Treat the event as "ongoing" for the whole day it starts on — we only
-  // have a start date/time, no duration.
-  eventEnd.setDate(start.getDate() + 1);
+  // have a start date/time, no duration. An event with a start time must
+  // still expire at the end of its own day, not 24h after kickoff.
+  const eventEnd = new Date(start.getFullYear(), start.getMonth(), start.getDate() + 1);
 
   if (now < start) return "upcoming";
   if (now < eventEnd) return "ongoing";

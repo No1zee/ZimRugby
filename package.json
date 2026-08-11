@@ -7,6 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
+    "test": "vitest run",
+    "smoke": "node scripts/smoke-test.mjs",
     "audit:rsc": "node scripts/check-rsc-boundaries.js",
     "sync:facebook": "node scripts/update-social.js",
     "cms:types": "ts-node scripts/generate-directus-types.ts"
@@ -49,6 +51,7 @@
     "puppeteer-extra-plugin-stealth": "^2.11.2",
     "tailwindcss": "^4",
     "ts-node": "^10.9.2",
-    "typescript": "^5.9.3"
+    "typescript": "^5.9.3",
+    "vitest": "^4.1.10"
   }
 }
