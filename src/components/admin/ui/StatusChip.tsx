@@ -13,12 +13,19 @@ const TONES: Record<Tone, string> = {
 
 function toneFor(status: string): Tone {
   const s = (status || "").toLowerCase();
-  if (["published", "active", "live", "complete", "completed", "enabled", "featured", "winner"].includes(s)) return "green";
-  if (["draft", "pending", "review", "onboarding", "disabled"].includes(s)) return "amber";
+  if (["published", "active", "live", "complete", "completed", "enabled", "featured", "winner", "true", "1", "on"].includes(s)) return "green";
+  if (["draft", "pending", "review", "onboarding", "disabled", "false", "0", "off"].includes(s)) return "amber";
   if (["scheduled", "upcoming", "future"].includes(s)) return "blue";
   if (["final", "full_time", "closed", "cancelled"].includes(s)) return "red";
   if (["fixture", "open", "archived"].includes(s)) return "teal";
   return "grey";
+}
+
+function displayStatus(status: string): string {
+  const s = (status || "").toLowerCase();
+  if (s === "true" || s === "1") return "On";
+  if (s === "false" || s === "0") return "Off";
+  return status;
 }
 
 export default function StatusChip({ status, label }: { status: string; label?: string }) {
@@ -28,7 +35,7 @@ export default function StatusChip({ status, label }: { status: string; label?: 
       className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-0.5 text-xs font-medium ring-1 ring-inset ${TONES[tone]}`}
     >
       <span className="h-1.5 w-1.5 rounded-full bg-current opacity-70" />
-      {label ?? status ?? "—"}
+      {label ?? displayStatus(status) ?? "—"}
     </span>
   );
 }

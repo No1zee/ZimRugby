@@ -4,6 +4,18 @@ import { requireCollectionAction } from "@/lib/admin/auth";
 const DIRECTUS_URL = process.env.NEXT_PUBLIC_DIRECTUS_URL || "https://zru-directus-cms-production.up.railway.app";
 const DIRECTUS_TOKEN = process.env.DIRECTUS_TOKEN;
 
+// Collections whose primary key is a text/uuid field without a DB default —
+// Directus will not auto-generate an id for these, so creates must supply one.
+const TEXT_ID_COLLECTIONS = new Set([
+  "announcements",
+  "matches",
+  "pages",
+  "teams",
+  "opponents",
+  "competitions",
+  "venues",
+]);
+
 export async function POST(request: NextRequest) {
   const { collection, data } = await request.json();
 
@@ -24,6 +36,11 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: "Missing collection or data" }, { status: 400 });
   }
 
+  const payload = { ...data };
+  if (!payload.id && TEXT_ID_COLLECTIONS.has(collection)) {
+    payload.id = crypto.randomUUID();
+  }
+
   try {
     const res = await fetch(`${DIRECTUS_URL}/items/${collection}`, {
       method: "POST",
@@ -31,7 +48,7 @@ export async function POST(request: NextRequest) {
         "Content-Type": "application/json",
         Authorization: `Bearer ${DIRECTUS_TOKEN}`,
       },
-      body: JSON.stringify(data),
+      body: JSON.stringify(payload),
     });
 
     if (!res.ok) {

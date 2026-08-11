@@ -59,8 +59,16 @@ export default function MatchCentrePanel({
       setMessage({ text: "Pick both a home team and an opponent.", ok: false });
       return;
     }
+    if (!kickoff) {
+      setMessage({ text: "Pick a kickoff date and time — fixtures need one.", ok: false });
+      return;
+    }
     const homeName = teams.find((t) => String(t.id) === teamId)?.name || "Zimbabwe";
     const awayName = opponents.find((o) => String(o.id) === opponentId)?.name || "Opponent";
+    const slug = `${homeName} vs ${awayName}`
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/^-+|-+$/g, "");
     try {
       const res = await fetch("/api/admin/directus", {
         method: "POST",
@@ -69,12 +77,14 @@ export default function MatchCentrePanel({
           collection: "matches",
           data: {
             title: `${homeName} vs ${awayName}`,
+            slug,
             team_id: teamId,
             opponent_id: opponentId,
             competition_id: competitionId || null,
             venue_id: venueId || null,
             status,
-            kickoff_at: kickoff ? new Date(kickoff).toISOString() : null,
+            match_type: "international",
+            kickoff_at: new Date(kickoff).toISOString(),
             round_label: roundLabel || null,
             home_or_away: homeOrAway,
             show_on_match_centre: true,
@@ -84,7 +94,7 @@ export default function MatchCentrePanel({
       if (res.ok) {
         setMessage({ text: `Fixture '${homeName} vs ${awayName}' created.`, ok: true });
         setTeamId(""); setOpponentId(""); setCompetitionId(""); setVenueId("");
-        setKickoff(""); setRoundLabel("");
+        setKickoff(""); setRoundLabel(""); setStatus("upcoming"); setHomeOrAway("home");
         router.refresh();
       } else {
         const err = await res.json().catch(() => null);

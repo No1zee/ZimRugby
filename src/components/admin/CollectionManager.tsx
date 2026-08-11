@@ -46,6 +46,10 @@ function isDateFieldType(type?: string): boolean {
   return type === "date";
 }
 
+function isBooleanValue(v: unknown): boolean {
+  return typeof v === "boolean" || v === "true" || v === "false" || v === "1" || v === "0";
+}
+
 export default function CollectionManager({
   collection,
   title,
@@ -178,6 +182,22 @@ export default function CollectionManager({
   }
 
   async function toggleStatus(item: Record<string, unknown>, statusFieldName: string) {
+    const raw = item[statusFieldName];
+    if (typeof raw === "boolean" || raw === "true" || raw === "1" || raw === "false" || raw === "0") {
+      const next = !(raw === true || raw === "true" || raw === "1");
+      const res = await fetch("/api/admin/directus", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ collection, id: item.id, data: { [statusFieldName]: next } }),
+      });
+      if (res.ok) {
+        setMessage({ text: next ? "Turned on." : "Turned off.", ok: true });
+        router.refresh();
+      } else {
+        setMessage({ text: "Could not update.", ok: false });
+      }
+      return;
+    }
     const current = term(item[statusFieldName]);
     const next = current === "published" || current === "active" ? "draft" : "published";
     const res = await fetch("/api/admin/directus", {
@@ -387,7 +407,13 @@ export default function CollectionManager({
                       onClick={() => toggleStatus(item, statusField)}
                       className="flex items-center gap-1 rounded-lg bg-black/5 px-3 py-1.5 text-[10px] font-black uppercase tracking-wider text-black/60 transition-colors hover:bg-black/10"
                     >
-                      {term(item[statusField]) === "published" ? "Unpublish" : "Publish"}
+                      {isBooleanValue(item[statusField])
+                        ? term(item[statusField]) === "true" || term(item[statusField]) === "1"
+                          ? "Hide"
+                          : "Show"
+                        : term(item[statusField]) === "published"
+                          ? "Unpublish"
+                          : "Publish"}
                     </button>
                   )}
                   <button
