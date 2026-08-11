@@ -14,7 +14,7 @@ interface Competition extends EventItem {
   level: string;
   dateRange: string;
   teamCount: string;
-  status: string;
+  status: NonNullable<EventItem["status"]>;
   category: string;
 }
 
@@ -29,7 +29,7 @@ function mapToCompetition(e: EventItem): Competition {
     level: e.subtitle || "",
     dateRange: e.date,
     teamCount: e.tags?.[0] || "",
-    status: "UPCOMING",
+    status: e.status || "upcoming",
     category: e.subtitle || ""
   };
 }
@@ -38,9 +38,16 @@ function mapToGeneralEvent(e: EventItem): GeneralEvent {
   return {
     ...e,
     time: "",
+    status: e.status || "upcoming",
     category: e.tags?.[0] || "EVENT"
   };
 }
+
+const STATUS_LABEL: Record<string, string> = {
+  upcoming: "UPCOMING",
+  ongoing: "ONGOING",
+  completed: "COMPLETED"
+};
 
 const levels = [
   { name: "National Teams", icon: Shield, tag: "National" },
@@ -183,8 +190,8 @@ export default function EventsClient({ cmsPage, competitions: apiCompetitions = 
                           {comp.level}
                         </span>
                         <span className="flex items-center gap-1.5 text-[9px] font-black tracking-wider uppercase text-black/50">
-                          <span className={`w-1.5 h-1.5 rounded-full ${comp.status === "ONGOING" ? "bg-zru-green" : "bg-neutral-300"}`} />
-                          {comp.status}
+                          <span className={`w-1.5 h-1.5 rounded-full ${comp.status === "ongoing" ? "bg-zru-green" : "bg-neutral-300"}`} />
+                          {STATUS_LABEL[comp.status] || comp.status}
                         </span>
                       </div>
 
@@ -236,9 +243,23 @@ export default function EventsClient({ cmsPage, competitions: apiCompetitions = 
                           <CalendarIcon className="w-4 h-4 text-zru-green" />
                           <span>{event.date}</span>
                         </div>
-                        <span className={`text-[9px] font-black px-2 py-1 rounded text-rich-black bg-white border border-black/10 tracking-widest`}>
-                          {event.category}
-                        </span>
+                        <div className="flex items-center gap-2">
+                          <span className={`flex items-center gap-1.5 text-[9px] font-black px-2 py-1 rounded tracking-widest ${
+                            event.status === "ongoing"
+                              ? "text-zru-green bg-zru-green/10 border border-zru-green/20"
+                              : event.status === "completed"
+                              ? "text-black/40 bg-black/5 border border-black/10"
+                              : "text-rich-black bg-white border border-black/10"
+                          }`}>
+                            <span className={`w-1.5 h-1.5 rounded-full ${
+                              event.status === "ongoing" ? "bg-zru-green" : event.status === "completed" ? "bg-neutral-400" : "bg-neutral-300"
+                            }`} />
+                            {STATUS_LABEL[event.status || "upcoming"] || "UPCOMING"}
+                          </span>
+                          <span className={`text-[9px] font-black px-2 py-1 rounded text-rich-black bg-white border border-black/10 tracking-widest`}>
+                            {event.category}
+                          </span>
+                        </div>
                       </div>
 
                       <h3 className="text-xl font-heading text-rich-black mb-4 group-hover:text-zru-green transition-colors leading-tight">

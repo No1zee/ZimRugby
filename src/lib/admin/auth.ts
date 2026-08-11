@@ -8,7 +8,7 @@ import {
   type RolePermissions,
   type UserRole,
 } from "./iam";
-import { resolveRolePermissions } from "@/lib/supabase/admin";
+import { getAdminClient, resolveRolePermissions } from "@/lib/supabase/admin";
 import { isLegacyRole, LEGACY_ROLE_DEFAULTS } from "./legacy-roles";
 
 export interface AdminSession {
@@ -18,22 +18,47 @@ export interface AdminSession {
 }
 
 /**
- * Resolve an actor's permissions from the DB. Falls back to the legacy default
- * matrix ONLY when the Supabase service-role client is unavailable (local dev
- * without SUPABASE_SERVICE_ROLE_KEY). Unknown/missing roles always resolve to
- * null (fail closed).
+ * Resolve an actor's permissions from the DB. The legacy default matrix is used
+ * ONLY when the service-role client is unavailable (local dev without
+ * SUPABASE_SERVICE_ROLE_KEY). In production the DB is the single source of
+ * truth: a DB error or unknown role resolves to null (fail closed) — we never
+ * widen permissions because of a lookup failure.
  */
-async function resolvePermissions(role: UserRole): Promise<RolePermissions | null> {
-  const dbPerms = await resolveRolePermissions(role);
-  if (dbPerms) return dbPerms;
-  if (isLegacyRole(role)) return LEGACY_ROLE_DEFAULTS[role];
-  return null;
+export async function resolvePermissionsForRole(
+  role: string
+): Promise<RolePermissions | null> {
+  if (!getAdminClient()) {
+    // Local dev — no service key. Fall back to the default actor matrix.
+    return isLegacyRole(role) ? LEGACY_ROLE_DEFAULTS[role] : null;
+  }
+  // Production — DB-backed only.
+  return await resolveRolePermissions(role);
+}
+
+/**
+ * Throws "MfaRequired" when the current session is not AAL2 but the user has a
+ * verified TOTP factor enrolled (i.e. they must finish the 2-step login).
+ * Users without any verified TOTP factor are never blocked here.
+ */
+export async function assertMfaSatisfied(
+  supabase: Awaited<ReturnType<typeof createClient>>
+): Promise<void> {
+  const aal = await supabase.auth.mfa.getAuthenticatorAssuranceLevel();
+  const factors = await supabase.auth.mfa.listFactors();
+
+  const hasVerifiedTotp = (factors.data?.all || []).some(
+    (f) => f.factor_type === "totp" && f.status === "verified"
+  );
+  if (hasVerifiedTotp && aal.data?.currentLevel !== "aal2") {
+    throw new Error("MfaRequired");
+  }
 }
 
 /**
  * Server-side authorization gate. Validates the Supabase session cookie and
  * requires an admin role in `app_metadata.role` that resolves to a permission
- * set. Throws when unauthenticated or when the role is unknown.
+ * set. Users with a verified TOTP factor must be authenticated at AAL2.
+ * Throws when unauthenticated, MFA-incomplete, or when the role is unknown.
  */
 export async function requireAdmin(): Promise<AdminSession> {
   const supabase = await createClient();
@@ -51,7 +76,9 @@ export async function requireAdmin(): Promise<AdminSession> {
     throw new Error("Forbidden");
   }
 
-  const permissions = await resolvePermissions(role);
+  await assertMfaSatisfied(supabase);
+
+  const permissions = await resolvePermissionsForRole(role);
   if (!permissions) {
     throw new Error("Forbidden");
   }

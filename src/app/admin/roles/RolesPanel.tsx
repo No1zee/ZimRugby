@@ -60,6 +60,86 @@ export default function RolesPanel() {
   const [error, setError] = useState<string | null>(null);
   const [notice, setNotice] = useState<string | null>(null);
 
+  // Account Security (MFA) state
+  const [mfaStatus, setMfaStatus] = useState<{ enabled: boolean; factorId?: string } | null>(null);
+  const [mfaStep, setMfaStep] = useState<"idle" | "enroll">("idle");
+  const [mfaQr, setMfaQr] = useState("");
+  const [mfaSecret, setMfaSecret] = useState("");
+  const [mfaEnrollFactorId, setMfaEnrollFactorId] = useState("");
+  const [mfaCode, setMfaCode] = useState("");
+  const [mfaBusy, setMfaBusy] = useState(false);
+  const [mfaMsg, setMfaMsg] = useState<string | null>(null);
+
+  useEffect(() => {
+    fetch("/api/admin/auth/mfa/status", { cache: "no-store" })
+      .then((r) => r.json())
+      .then((d) => setMfaStatus({ enabled: Boolean(d.enabled), factorId: d.factorId }))
+      .catch(() => setMfaStatus(null));
+  }, []);
+
+  const startEnroll = async () => {
+    setMfaBusy(true);
+    setMfaMsg(null);
+    try {
+      const res = await fetch("/api/admin/auth/mfa/enroll", { method: "POST" });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Enrollment failed");
+      setMfaQr(data.qr_code || "");
+      setMfaSecret(data.secret || "");
+      setMfaEnrollFactorId(data.factorId);
+      setMfaStep("enroll");
+    } catch (e: any) {
+      setMfaMsg(e?.message || "Could not start enrollment.");
+    } finally {
+      setMfaBusy(false);
+    }
+  };
+
+  const activateMfa = async () => {
+    setMfaBusy(true);
+    setMfaMsg(null);
+    try {
+      const res = await fetch("/api/admin/auth/mfa/activate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ factorId: mfaEnrollFactorId, code: mfaCode }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Activation failed");
+      setMfaStatus({ enabled: true });
+      setMfaStep("idle");
+      setMfaCode("");
+      setMfaQr("");
+      setMfaSecret("");
+      setMfaMsg("Two-step verification is now enabled. You'll be asked for a code at your next sign-in.");
+    } catch (e: any) {
+      setMfaMsg(e?.message || "Could not activate. Check the code.");
+    } finally {
+      setMfaBusy(false);
+    }
+  };
+
+  const disableMfa = async () => {
+    if (!window.confirm("Disable two-step verification? Your account will then be protected only by your password.")) return;
+    setMfaBusy(true);
+    setMfaMsg(null);
+    try {
+      const res = await fetch("/api/admin/auth/mfa/unenroll", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ factorId: mfaStatus?.factorId }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Could not disable MFA");
+      setMfaStatus({ enabled: false });
+      setMfaMsg("Two-step verification disabled.");
+    } catch (e: any) {
+      setMfaMsg(e?.message || "Could not disable MFA.");
+    } finally {
+      setMfaBusy(false);
+    }
+  };
+
   // Actor editor state
   const [editingRole, setEditingRole] = useState<RoleRow | null>(null);
   const [editingName, setEditingName] = useState("");
@@ -261,6 +341,97 @@ export default function RolesPanel() {
           <button onClick={() => setNotice(null)} aria-label="Dismiss"><X className="w-4 h-4" /></button>
         </div>
       )}
+
+      {/* ── Account Security (MFA) ────────────────────────────── */}
+      <div className="bg-white border border-black/10 rounded-2xl p-6 shadow-sm">
+        <div className="flex items-center justify-between mb-1">
+          <h2 className="font-heading text-xl font-black uppercase text-rich-black flex items-center gap-2">
+            <KeyRound className="w-5 h-5 text-zru-green" /> Account Security
+          </h2>
+          {mfaStatus?.enabled ? (
+            <span className="px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-700 text-[10px] font-black uppercase tracking-wider">
+              Two-Step ON
+            </span>
+          ) : (
+            <span className="px-2.5 py-1 rounded-full bg-black/5 text-black/40 text-[10px] font-black uppercase tracking-wider">
+              Not Enabled
+            </span>
+          )}
+        </div>
+        <p className="text-xs text-black/50 mb-4">
+          Protect your admin account with a time-based one-time password (TOTP) from Google
+          Authenticator, Authy, or 1Password.
+        </p>
+
+        {mfaMsg && (
+          <div className="mb-4 bg-emerald-50 border border-emerald-200 text-emerald-700 text-xs rounded-xl px-4 py-3">
+            {mfaMsg}
+          </div>
+        )}
+
+        {mfaStep === "enroll" ? (
+          <div className="space-y-4">
+            <p className="text-xs text-black/60">
+              Scan the QR code with your authenticator app, or enter the secret manually, then enter the 6-digit code to activate.
+            </p>
+            {mfaQr && (
+              <img src={mfaQr} alt="TOTP QR code" className="w-44 h-44 border border-black/10 rounded-xl bg-white" />
+            )}
+            {mfaSecret && (
+              <p className="text-xs text-black/60">
+                Secret:{" "}
+                <code className="font-mono text-sm font-bold text-rich-black bg-black/5 px-2 py-0.5 rounded break-all">{mfaSecret}</code>
+              </p>
+            )}
+            <div className="flex flex-wrap items-center gap-3">
+              <input
+                type="text"
+                inputMode="numeric"
+                pattern="[0-9]*"
+                maxLength={6}
+                value={mfaCode}
+                onChange={(e) => setMfaCode(e.target.value.replace(/[^0-9]/g, ""))}
+                placeholder="6-digit code"
+                className="px-3 py-2 rounded-lg border border-black/10 text-sm font-mono tracking-[0.3em] text-center w-40"
+              />
+              <button
+                onClick={activateMfa}
+                disabled={mfaBusy || mfaCode.length !== 6}
+                className="px-4 py-2 rounded-lg bg-[#006B3F] text-white text-xs font-bold hover:bg-[#005a34] transition-colors disabled:opacity-50"
+              >
+                {mfaBusy ? "Activating…" : "Activate"}
+              </button>
+              <button
+                onClick={() => { setMfaStep("idle"); setMfaQr(""); setMfaSecret(""); setMfaCode(""); }}
+                className="px-3 py-2 rounded-lg bg-black/5 text-black/60 text-xs font-bold"
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        ) : mfaStatus?.enabled ? (
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <p className="text-xs text-emerald-700 font-bold">
+              This account is protected by two-step verification.
+            </p>
+            <button
+              onClick={disableMfa}
+              disabled={mfaBusy}
+              className="px-4 py-2 rounded-lg border border-red-200 text-red-600 text-xs font-bold hover:bg-red-50 transition-colors disabled:opacity-50"
+            >
+              {mfaBusy ? "Disabling…" : "Disable MFA"}
+            </button>
+          </div>
+        ) : (
+          <button
+            onClick={startEnroll}
+            disabled={mfaBusy}
+            className="px-4 py-2 rounded-lg bg-[#006B3F] text-white text-xs font-bold hover:bg-[#005a34] transition-colors disabled:opacity-50"
+          >
+            {mfaBusy ? "Preparing…" : "Enable Two-Step Verification"}
+          </button>
+        )}
+      </div>
 
       {/* ── Actors ─────────────────────────────────────────────── */}
       <div className="bg-white border border-black/10 rounded-2xl p-6 shadow-sm">

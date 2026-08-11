@@ -45,6 +45,12 @@ export default async function ReportPage({ params }: PageProps) {
     .filter(r => r.id !== report.id)
     .slice(0, 3);
 
+  const body = report.content ?? "";
+  const looksLikeHtml = /<[a-z][^>]*>/i.test(body);
+  const contentHtml = looksLikeHtml
+    ? body
+    : body.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+
   return (
     <main className="min-h-screen bg-rich-black text-white selection:bg-zru-green selection:text-black">
       
@@ -117,9 +123,9 @@ export default async function ReportPage({ params }: PageProps) {
               {report.excerpt}
             </p>
             
-            <div className="prose prose-invert prose-2xl max-w-none text-white/70 leading-[1.8] font-normal tracking-tight whitespace-pre-wrap">
-              {report.content}
-            </div>
+            <div className="prose prose-invert prose-2xl max-w-none text-white/70 leading-[1.8] font-normal tracking-tight whitespace-pre-wrap"
+              dangerouslySetInnerHTML={{ __html: contentHtml }}
+            />
             
             {/* Call to action for the jersey */}
             {report.id === 'heritage-1991' && (

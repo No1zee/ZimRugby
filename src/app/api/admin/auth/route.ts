@@ -1,47 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { logAuditEvent, roleToName, type UserRole } from "@/lib/admin/iam";
-import { resolveRolePermissions } from "@/lib/supabase/admin";
-import { isLegacyRole, LEGACY_ROLE_DEFAULTS } from "@/lib/admin/legacy-roles";
-
-// Rate Limiter Memory Store (NIST AC-7 / ISO 27001)
-// NOTE: in-memory — resets on server restart / scales per instance on serverless.
-const FAILED_ATTEMPTS: Record<string, { count: number; lockUntil: number }> = {};
-
-function checkRateLimit(ip: string): { allowed: boolean; remaining: number; retryAfter?: number } {
-  const now = Date.now();
-  const record = FAILED_ATTEMPTS[ip];
-
-  if (!record) {
-    return { allowed: true, remaining: 5 };
-  }
-
-  if (record.lockUntil > now) {
-    const retryAfter = Math.ceil((record.lockUntil - now) / 1000);
-    return { allowed: false, remaining: 0, retryAfter };
-  }
-
-  if (record.lockUntil <= now && record.count >= 5) {
-    delete FAILED_ATTEMPTS[ip];
-    return { allowed: true, remaining: 5 };
-  }
-
-  return { allowed: true, remaining: 5 - record.count };
-}
-
-function registerFailedAttempt(ip: string) {
-  const now = Date.now();
-  const record = FAILED_ATTEMPTS[ip] || { count: 0, lockUntil: 0 };
-  record.count += 1;
-  if (record.count >= 5) {
-    record.lockUntil = now + 15 * 60 * 1000; // 15 min lock
-  }
-  FAILED_ATTEMPTS[ip] = record;
-}
-
-function clearFailedAttempts(ip: string) {
-  delete FAILED_ATTEMPTS[ip];
-}
+import { resolvePermissionsForRole } from "@/lib/admin/auth";
+import {
+  checkRateLimit,
+  registerFailedAttempt,
+  clearFailedAttempts,
+} from "@/lib/admin/rate-limit";
 
 // POST /api/admin/auth — Sign In (via Supabase Auth)
 export async function POST(req: NextRequest) {
@@ -112,12 +77,9 @@ export async function POST(req: NextRequest) {
   }
 
   const role = data.user.app_metadata?.role as UserRole | undefined;
-  const hasAdminRole =
-    typeof role === "string" &&
-    !!role &&
-    ((await resolveRolePermissions(role)) || (isLegacyRole(role) ? LEGACY_ROLE_DEFAULTS[role] : null)) !== null;
+  const permissions = typeof role === "string" && !!role ? await resolvePermissionsForRole(role) : null;
 
-  if (!hasAdminRole) {
+  if (!permissions) {
     registerFailedAttempt(ip);
     logAuditEvent({
       actorEmail: email,
@@ -131,6 +93,19 @@ export async function POST(req: NextRequest) {
       { error: "This account is not authorized for the ZRU admin portal." },
       { status: 403 }
     );
+  }
+
+  // If the account has a verified TOTP factor, the session is only AAL1 after
+  // the password step — return mfaRequired so the client can complete the
+  // second factor before granting admin access.
+  const aal = await supabase.auth.mfa.getAuthenticatorAssuranceLevel();
+  const mfaFactors = await supabase.auth.mfa.listFactors();
+  const needsMfa = (mfaFactors.data?.all || []).some(
+    (f) => f.factor_type === "totp" && f.status === "verified"
+  ) && aal.data?.currentLevel !== "aal2";
+
+  if (needsMfa) {
+    return NextResponse.json({ mfaRequired: true, email }, { status: 200 });
   }
 
   clearFailedAttempts(ip);

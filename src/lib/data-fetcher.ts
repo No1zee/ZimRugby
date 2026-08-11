@@ -159,15 +159,15 @@ export async function getReportById(id: string): Promise<Report | undefined> {
       const parsed = item.date ? new Date(item.date) : null;
       const hasDate = parsed && !isNaN(parsed.getTime());
       const image = item.image || "";
-      const plainBody = (item.body || item.excerpt || "")
+      const plainExcerpt = (item.excerpt || (item.body || ""))
         .replace(/<[^>]+>/g, " ")
         .replace(/\s+/g, " ")
         .trim();
       return {
         id: `news-${item.id}`,
         title: item.title || "",
-        excerpt: item.excerpt || "",
-        content: plainBody,
+        excerpt: item.excerpt || plainExcerpt.slice(0, 200),
+        content: (item.body || item.excerpt || ""),
         date: hasDate
           ? parsed.toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" }).toUpperCase()
           : "",

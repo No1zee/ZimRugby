@@ -1,5 +1,6 @@
 import { directusFetch } from "@/lib/directus/fetch";
 import { photoAssetUrl } from "@/lib/directus/assets";
+import { deriveEventStatus } from "@/lib/events/status";
 import type { EventItem } from "@/types";
 
 export type { EventItem };
@@ -49,7 +50,8 @@ function mapEvent(item: DirectusEvent): EventItem {
     tags: parseTags(item.tags),
     image: (item.image ? photoAssetUrl(item.image) : null) || (item.image_url || "/images/events/super-league.jpg"),
     content: item.content || "",
-    ticketUrl: item.ticket_url || "/tickets"
+    ticketUrl: item.ticket_url || "/tickets",
+    status: deriveEventStatus(item.date, item.time)
   };
 }
 

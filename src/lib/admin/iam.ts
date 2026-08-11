@@ -153,6 +153,7 @@ export type AdminTabId =
   | "overview"
   | "directus_ai"
   | "pages"
+  | "events"
   | "media"
   | "grassroots"
   | "faq-footer"

@@ -190,6 +190,8 @@ export interface EventItem {
   image: string;
   content?: string;
   ticketUrl?: string;
+  /** Derived from date/time at render time: "upcoming" | "ongoing" | "completed" */
+  status?: "upcoming" | "ongoing" | "completed";
 }
 
 // 10. Hero Slides (CMS)

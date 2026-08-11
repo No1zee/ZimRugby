@@ -1,5 +1,4 @@
 import { Metadata } from "next";
-import Link from "next/link";
 import nextDynamic from "next/dynamic";
 import { redirect } from "next/navigation";
 import { directusFetch, directusCount } from "@/lib/directus/fetch";
@@ -9,27 +8,8 @@ import { requireAdmin } from "@/lib/admin/auth";
 import { canUseFeature } from "@/lib/admin/iam";
 import type { AdminSession } from "@/lib/admin/auth";
 import { listFanZoneMembers, listOnboardingSubmissions } from "@/lib/supabase/admin";
-import type { Campaign } from "@/lib/api/campaigns";
 import type { MatchCardViewModel, StandingsTableViewModel } from "@/lib/match-centre/types";
-import {
-  FileText,
-  ArrowRight,
-  ArrowUpRight,
-  Layers,
-  Globe,
-  Eye,
-  TrendingUp,
-  Clock,
-  ExternalLink,
-  Pencil,
-  Flag,
-  Radio,
-  Activity,
-  CalendarDays,
-  MapPin,
-  Users,
-  Image,
-} from "lucide-react";
+import type { AdminEventRow } from "@/components/admin/EventsPanel";
 import AdminAuthGate from "./AdminAuthGate";
 
 const AdminContentManager = nextDynamic(() => import("./AdminClient"), {
@@ -103,6 +83,31 @@ async function getAdminCollection<T>(collection: string): Promise<T[]> {
   }
 }
 
+async function getLookups(): Promise<{
+  teams: Array<{ id: string | number; name: string }>;
+  opponents: Array<{ id: string | number; name: string }>;
+  competitions: Array<{ id: string | number; name: string }>;
+  venues: Array<{ id: string | number; name: string }>;
+}> {
+  const map = (rows: Array<{ id?: string | number; name?: string }>) =>
+    rows
+      .filter((r) => r.id != null && r.name)
+      .map((r) => ({ id: r.id as string | number, name: r.name as string }))
+      .sort((a, b) => a.name.localeCompare(b.name));
+  const [teams, opponents, competitions, venues] = await Promise.all([
+    directusFetch<{ id?: string | number; name?: string }>("teams", { fields: ["id", "name"], limit: 200 }, 60).catch(() => []),
+    directusFetch<{ id?: string | number; name?: string }>("opponents", { fields: ["id", "name"], limit: 200 }, 60).catch(() => []),
+    directusFetch<{ id?: string | number; name?: string }>("competitions", { fields: ["id", "name"], limit: 200 }, 60).catch(() => []),
+    directusFetch<{ id?: string | number; name?: string }>("venues", { fields: ["id", "name"], limit: 200 }, 60).catch(() => []),
+  ]);
+  return {
+    teams: map(teams),
+    opponents: map(opponents),
+    competitions: map(competitions),
+    venues: map(venues),
+  };
+}
+
 async function getPageSectionCounts(): Promise<Record<string, number>> {
   try {
     const rows = await directusFetch<{ count: Record<string, number>; page_id: string }>(
@@ -136,9 +141,10 @@ export default async function AdminDashboard() {
     pages, sectionCounts,
     eventCount, teamCount, playerCount, matchCount, partnerCount, announcementCount,
     campaigns, allMatches, standings, announcements,
-    news, grassrootsInitiatives, programmes, faqs, footerNav,
+    news, events, grassrootsInitiatives, programmes, faqs, footerNav,
     fanZoneMembers, onboardingSubmissions,
     activityFeed,
+    lookups,
   ] = await Promise.all([
     directusFetch<Page>("pages", { sort: ["sort"] }, 0),
     getPageSectionCounts(),
@@ -153,6 +159,7 @@ export default async function AdminDashboard() {
     getStandings().catch(() => [] as StandingsTableViewModel[]),
     getAdminAnnouncements(),
     getAdminCollection<Record<string, unknown>>("news"),
+    getAdminCollection<Record<string, unknown>>("events"),
     getAdminCollection<Record<string, unknown>>("grassroots_initiatives"),
     getAdminCollection<Record<string, unknown>>("programmes"),
     getAdminCollection<Record<string, unknown>>("faqs"),
@@ -160,6 +167,7 @@ export default async function AdminDashboard() {
     canUseFeature(session.permissions, "fanzone_pii") ? listFanZoneMembers() : Promise.resolve([] as Awaited<ReturnType<typeof listFanZoneMembers>>),
     canUseFeature(session.permissions, "fanzone_pii") ? listOnboardingSubmissions() : Promise.resolve([] as Awaited<ReturnType<typeof listOnboardingSubmissions>>),
     fetchActivityFeed(),
+    getLookups(),
   ]);
 
   const stats = {
@@ -188,6 +196,7 @@ export default async function AdminDashboard() {
         initialOnboardingSubmissions={onboardingSubmissions}
         initialCampaigns={campaigns}
         initialNews={news}
+        initialEvents={events as unknown as AdminEventRow[]}
         initialGrassroots={grassrootsInitiatives}
         initialProgrammes={programmes}
         initialFaqs={faqs}
@@ -195,6 +204,10 @@ export default async function AdminDashboard() {
         initialPages={pages}
         initialSectionCounts={sectionCounts}
         initialActivityFeed={activityFeed}
+        teams={lookups.teams}
+        opponents={lookups.opponents}
+        competitions={lookups.competitions}
+        venues={lookups.venues}
         stats={stats}
       />
     </AdminAuthGate>

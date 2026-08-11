@@ -9,31 +9,31 @@ const NAV_SECTIONS = [
   {
     label: "Dashboard",
     items: [
-      { id: "overview", label: "Quick Dashboard", icon: "⚡" },
-      { id: "directus_ai", label: "Directus AI Assistant", icon: "🤖" },
+      { id: "overview", label: "Today", icon: "⚡" },
+      { id: "directus_ai", label: "AI Writer", icon: "🤖" },
     ],
   },
   {
     label: "Content",
     items: [
-      { id: "pages", label: "Pages & Layouts", icon: "🖥️" },
-      { id: "media", label: "News & Media", icon: "📰" },
-      { id: "grassroots", label: "Grassroots & Programs", icon: "🌱" },
+      { id: "media", label: "News & Articles", icon: "📰" },
+      { id: "pages", label: "Pages", icon: "🖥️" },
+      { id: "grassroots", label: "Grassroots & Programmes", icon: "🌱" },
       { id: "faq-footer", label: "FAQ & Footer", icon: "❓" },
     ],
   },
   {
     label: "Matches",
     items: [
-      { id: "fixtures", label: "Match Centre & Fixtures", icon: "🏉" },
+      { id: "fixtures", label: "Fixtures & Scores", icon: "🏉" },
     ],
   },
   {
-    label: "Fans & Signups",
+    label: "Fans",
     items: [
       { id: "campaigns", label: "Campaigns", icon: "🚩" },
-      { id: "fanzone", label: "Fan Zone Members", icon: "👥" },
-      { id: "onboarding", label: "Onboarding Submissions", icon: "🛡️" },
+      { id: "fanzone", label: "Fan Zone", icon: "👥" },
+      { id: "onboarding", label: "Enquiries", icon: "🛡️" },
     ],
   },
   {
@@ -123,7 +123,7 @@ export default function AdminSidebar({ activeTab = "overview", onTabChange }: Ad
           <div>
             <h2 className="text-sm font-bold text-white tracking-wider">ZRU ADMIN</h2>
             <p className="text-[10px] text-accent-teal font-mono uppercase tracking-widest">
-              Directus Engine
+              Content Manager
             </p>
           </div>
         </div>

@@ -9,8 +9,8 @@ export default async function AdminLayout({
 }) {
   try {
     await requireAdmin();
-  } catch {
-    redirect("/admin-login");
+  } catch (e: any) {
+    redirect(e?.message === "MfaRequired" ? "/admin-login?step=mfa" : "/admin-login");
   }
 
   return (
