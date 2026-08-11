@@ -102,8 +102,7 @@ async function main() {
   // 5. Role drift (optional)
   const editorEmail = env("EDITOR_EMAIL");
   const editorPassword = env("EDITOR_PASSWORD");
-  if (editorEmail && editorPassword) {
-    const loginRes = await fetch(`${SITE}/api/admin/auth`, {
+  if (editorEmail && editorPassword) {    const loginRes = await fetch(`${SITE}/api/admin/auth`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email: editorEmail, password: editorPassword }),
@@ -122,6 +121,83 @@ async function main() {
     }
   } else {
     console.log("SKIP  editor role drift check (set EDITOR_EMAIL/EDITOR_PASSWORD to enable)");
+  }
+
+  // 6. Admin bulk API round-trip (optional): login as site admin and exercise
+  //    the bulk PATCH/DELETE endpoints added for the CollectionManager toolbar.
+  const adminPassword = env("ADMIN_PASSWORD");
+  if (adminPassword) {
+    const loginRes = await fetch(`${SITE}/api/admin/auth`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email: "admin@zimrugby.co.zw", password: adminPassword }),
+    });
+    const login = await loginRes.json().catch(() => null);
+    if (!login?.success) {
+      record("admin bulk API round-trip", false, `login failed: ${login?.error || loginRes.status}`);
+    } else {
+      const cookie = (loginRes.headers.getSetCookie?.() ?? []).map((c) => c.split(";")[0]).join("; ");
+      const tag = randomUUID().slice(0, 8);
+      const ids = [];
+      for (const n of [1, 2]) {
+        const r = await fetch(`${SITE}/api/admin/directus`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json", Cookie: cookie },
+          body: JSON.stringify({
+            collection: "news",
+            data: { title: `Smoke Bulk ${tag} ${n}`, excerpt: "temp", status: "draft", category: "TEST" },
+          }),
+        });
+        const j = await r.json().catch(() => null);
+        if (j?.data?.id) ids.push(j.data.id);
+      }
+      let ok = ids.length === 2;
+      let detail = `created ${ids.length}/2`;
+      if (ok) {
+        const bp = await fetch(`${SITE}/api/admin/directus`, {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json", Cookie: cookie },
+          body: JSON.stringify({ collection: "news", ids, data: { status: "published" } }),
+        });
+        ok = bp.status === 200;
+        detail = ok ? "bulk publish OK" : `bulk publish ${bp.status}`;
+      }
+      if (ok) {
+        const filter = encodeURIComponent(JSON.stringify({ id: { _in: ids } }));
+        const read = await fetch(`${CMS}/items/news?filter=${filter}&fields=id,status`, {
+          headers: { Authorization: `Bearer ${TOKEN}` },
+        }).then((r) => r.json());
+        ok = (read?.data?.length ?? 0) === 2 && read.data.every((d) => d.status === "published");
+        detail = ok ? "both published in CMS" : `verify: ${JSON.stringify(read?.data)}`;
+      }
+      if (ok) {
+        const bd = await fetch(`${SITE}/api/admin/directus`, {
+          method: "DELETE",
+          headers: { "Content-Type": "application/json", Cookie: cookie },
+          body: JSON.stringify({ collection: "news", ids }),
+        });
+        ok = bd.status === 200;
+        detail = ok ? "bulk delete OK" : `bulk delete ${bd.status}`;
+      }
+      if (ok) {
+        const filter = encodeURIComponent(JSON.stringify({ id: { _in: ids } }));
+        const after = await fetch(`${CMS}/items/news?filter=${filter}&fields=id`, {
+          headers: { Authorization: `Bearer ${TOKEN}` },
+        }).then((r) => r.json());
+        ok = (after?.data?.length ?? 0) === 0;
+        detail = ok ? "removed from CMS" : `leftover: ${JSON.stringify(after?.data)}`;
+      }
+      record("admin bulk API round-trip", ok, detail);
+      for (const id of ids) {
+        await fetch(`${SITE}/api/admin/directus`, {
+          method: "DELETE",
+          headers: { "Content-Type": "application/json", Cookie: cookie },
+          body: JSON.stringify({ collection: "news", id }),
+        }).catch(() => {});
+      }
+    }
+  } else {
+    console.log("SKIP  admin bulk API round-trip (set ADMIN_PASSWORD to enable)");
   }
 
   const failed = results.filter((r) => !r.ok);
