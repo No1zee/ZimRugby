@@ -64,7 +64,7 @@ export async function directusFetch<T>(
     };
 
     const res = await fetch(url.toString(), {
-      next: { revalidate: revalidateSeconds },
+      next: { revalidate: revalidateSeconds, tags: [`directus:${collection}`] },
       headers,
       signal: controller.signal,
     });
@@ -108,7 +108,7 @@ export async function directusCount(
 
   try {
     const res = await fetch(url.toString(), {
-      next: { revalidate: revalidateSeconds },
+      next: { revalidate: revalidateSeconds, tags: [`directus:${collection}`] },
       headers: { ...(token ? { Authorization: `Bearer ${token}` } : {}) },
     });
     if (!res.ok) return 0;
