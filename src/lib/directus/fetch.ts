@@ -1,7 +1,17 @@
 /**
  * Reusable plain-REST fetch helper to interact with Directus collections.
  * Uses native fetch with ISR revalidation for server-cached reads.
+ * Serves from the persistent KV cache (last-known-good) when Directus fails.
  */
+
+import { createHash } from "node:crypto";
+import { kvGet, kvSet } from "@/lib/cache";
+
+const KV_TTL_SECONDS = 3600;
+
+function cacheKey(collection: string, params: FetchParams): string {
+  return `directus:${collection}:${createHash("sha1").update(JSON.stringify(params)).digest("hex")}`;
+}
 
 interface FetchParams {
   fields?: string[];
@@ -19,7 +29,7 @@ export async function directusFetch<T>(
   params: FetchParams = {},
   revalidateSeconds: number = 60
 ): Promise<T[]> {
-  const baseUrl = process.env.NEXT_PUBLIC_DIRECTUS_URL;
+  const baseUrl = process.env.DIRECTUS_API_URL || process.env.NEXT_PUBLIC_DIRECTUS_URL;
   const token = process.env.DIRECTUS_READ_TOKEN || process.env.DIRECTUS_TOKEN;
 
   if (!baseUrl) {
@@ -54,6 +64,8 @@ export async function directusFetch<T>(
     url.searchParams.append("groupBy", params.groupBy.join(","));
   }
 
+  const key = cacheKey(collection, params);
+
   try {
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), 5000);
@@ -72,14 +84,26 @@ export async function directusFetch<T>(
 
     if (!res.ok) {
       const errText = await res.text();
+      const cached = await kvGet<T[]>(key);
+      if (cached) {
+        console.warn(`[directusFetch] Directus returned status ${res.status} for collection "${collection}". Serving ${cached.length} items from KV cache.`);
+        return cached;
+      }
       console.warn(`[directusFetch] Directus returned status ${res.status} for collection "${collection}". URL: ${url.toString()}. Body: ${errText}. Falling back to local data.`);
       return [] as T[];
     }
 
     const json = await res.json();
-    return (json.data || []) as T[];
+    const data = (json.data || []) as T[];
+    await kvSet(key, data, KV_TTL_SECONDS);
+    return data;
   } catch (error) {
     console.error(`Failed to fetch from Directus collection "${collection}":`, error);
+    const cached = await kvGet<T[]>(key);
+    if (cached) {
+      console.warn(`[directusFetch] Serving ${cached.length} cached items for "${collection}" from KV cache.`);
+      return cached;
+    }
     return [] as T[];
   }
 }
@@ -93,7 +117,7 @@ export async function directusCount(
   filter?: Record<string, unknown>,
   revalidateSeconds: number = 0
 ): Promise<number> {
-  const baseUrl = process.env.NEXT_PUBLIC_DIRECTUS_URL;
+  const baseUrl = process.env.DIRECTUS_API_URL || process.env.NEXT_PUBLIC_DIRECTUS_URL;
   const token = process.env.DIRECTUS_READ_TOKEN || process.env.DIRECTUS_TOKEN;
 
   if (!baseUrl) {
@@ -106,20 +130,30 @@ export async function directusCount(
     url.searchParams.append("filter", JSON.stringify(filter));
   }
 
+  const key = `directus:${collection}:count:${createHash("sha1").update(JSON.stringify({ filter })).digest("hex")}`;
+
   try {
     const res = await fetch(url.toString(), {
       next: { revalidate: revalidateSeconds, tags: [`directus:${collection}`] },
       headers: { ...(token ? { Authorization: `Bearer ${token}` } : {}) },
     });
-    if (!res.ok) return 0;
+    if (!res.ok) {
+      const cached = await kvGet<number>(key);
+      if (cached !== null) return cached;
+      return 0;
+    }
     const json = await res.json();
     const row = json?.data?.[0]?.count;
     if (row && typeof row === "object") {
       const value = Object.values(row)[0];
-      return typeof value === "number" ? value : 0;
+      const count = typeof value === "number" ? value : 0;
+      await kvSet(key, count, KV_TTL_SECONDS);
+      return count;
     }
     return 0;
   } catch {
+    const cached = await kvGet<number>(key);
+    if (cached !== null) return cached;
     return 0;
   }
 }
