@@ -52,6 +52,7 @@ export async function getLiveMatches(): Promise<Match[]> {
 }
 
 import { directusFetch } from './directus/fetch';
+import { newsItemToReport, type DirectusNewsItem } from './api/news';
 
 interface DirectusAnnouncement {
   id: number;
@@ -78,14 +79,26 @@ function announcementToReport(da: DirectusAnnouncement): Report {
 }
 
 export async function getLatestReports(): Promise<Report[]> {
-  const [staticReports, directusAnnouncements] = await Promise.allSettled([
-    readStaticJson<Report>('reports.json', 300),
+  const [newsItems, staticReports, directusAnnouncements] = await Promise.allSettled([
+    directusFetch<DirectusNewsItem>("news", { filter: { status: { _eq: "published" } }, sort: ["-date"] }, 60),
+    readStaticJson<Report>("reports.json", 300),
     directusFetch<DirectusAnnouncement>("announcements", {}, 60)
   ]);
 
-  const cmsAnnouncements = directusAnnouncements.status === 'fulfilled' 
-    ? directusAnnouncements.value.map(announcementToReport) 
+  const cmsAnnouncements = directusAnnouncements.status === 'fulfilled'
+    ? directusAnnouncements.value.map(announcementToReport)
     : [];
+
+  // News collection is the source of truth. If Directus is up, show the
+  // full live list; if it fails, fall back to the build-time bundled copy
+  // (stale > empty). Same id scheme as getNewsArticles so hub dedupe works.
+  const cmsNews = newsItems.status === 'fulfilled' && newsItems.value.length > 0
+    ? newsItems.value.map(newsItemToReport)
+    : [];
+
+  if (cmsNews.length > 0) {
+    return [...cmsAnnouncements, ...cmsNews];
+  }
 
   const reports = staticReports.status === 'fulfilled' ? staticReports.value : [];
   return [...cmsAnnouncements, ...reports];
