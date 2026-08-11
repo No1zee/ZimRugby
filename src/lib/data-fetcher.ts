@@ -24,36 +24,22 @@ export interface Report {
   type?: 'news' | 'video';
 }
 
+import { staticData } from './static-data';
+
 /**
- * Fetch static JSON from public/data with ISR revalidation.
- * Uses fetch() with next.revalidate so Next.js caches and revalidates automatically.
+ * Read the static fallback JSON (matches/reports/social).
+ * Files are bundled at build time (see static-data.ts), so this always
+ * works on every runtime — including Vercel serverless, where fs reads of
+ * public/ fail and VERCEL_URL fetches can return the HTML index page.
  */
 async function readStaticJson<T>(filename: string, _revalidateSeconds: number): Promise<T[]> {
   try {
-    if (typeof window === 'undefined') {
-      // Server-side / Build-time: Read directly from public/data via fs to avoid localhost ECONNREFUSED during static export
-      const [fs, path] = await Promise.all([import('fs'), import('path')]);
-      const filePath = path.join(process.cwd(), 'public', 'data', filename);
-      try {
-        const fileContent = fs.readFileSync(filePath, 'utf8');
-        return JSON.parse(fileContent);
-      } catch (err: any) {
-        if (err.code === 'ENOENT' && process.env.VERCEL_URL) {
-          console.warn(`File not found via fs: ${filePath}, falling back to fetch via VERCEL_URL...`);
-          const res = await fetch(`https://${process.env.VERCEL_URL}/data/${filename}`, {
-            next: { revalidate: _revalidateSeconds }
-          });
-          if (!res.ok) throw new Error(`Failed to fetch ${filename} from VERCEL_URL`);
-          return await res.json();
-        }
-        throw err;
-      }
-    } else {
-      // Client-side: direct fetch
-      const res = await fetch(`/data/${filename}`);
-      if (!res.ok) throw new Error(`Failed to fetch ${filename}`);
-      return await res.json();
+    const data = staticData[filename];
+    if (!data) {
+      console.error(`No static fallback registered for ${filename}`);
+      return [];
     }
+    return data as T[];
   } catch (error) {
     console.error(`Error loading ${filename}:`, error);
     return [];
