@@ -5,7 +5,7 @@ out/
 build/
 .vercel/
 .headroom/
-Gallery/
+/Gallery/
 scratch/
 .git/
 *.zip

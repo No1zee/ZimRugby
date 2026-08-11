@@ -1,8 +1,8 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
 # Large source asset directories (served via Vercel direct upload, not git)
-Gallery/
-!src/components/gallery/
+/Gallery/
+!src/components//Gallery/
 scratch/
 public/images/cutouts/
 
