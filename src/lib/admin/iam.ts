@@ -80,6 +80,14 @@ export function logAuditEvent(entry: Omit<AuditLogEntry, "id" | "timestamp">): A
   if (AUDIT_LOGS.length > 500) {
     AUDIT_LOGS.pop();
   }
+
+  // Fire-and-forget background DB persistence to avoid blocking main thread
+  import("@/lib/supabase/admin")
+    .then(({ persistAuditEvent }) => {
+      persistAuditEvent(entry).catch(() => {});
+    })
+    .catch(() => {});
+
   return newEntry;
 }
 

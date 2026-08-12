@@ -20,7 +20,7 @@ import ProductCarousel from "@/components/shop/ProductCarousel";
 import CampaignSection from "@/components/shop/CampaignSection";
 import ClubhouseBanner from "@/components/shop/ClubhouseBanner";
 import StorySection from "@/components/shop/StorySection";
-import JournalStrip from "@/components/home/JournalStrip";
+
 import FixtureRibbon from "@/components/shop/FixtureRibbon";
 import PageAnnouncements from "@/components/ui/PageAnnouncements";
 import ClubhouseNavBridge from "@/components/shop/ClubhouseNavBridge";
@@ -61,9 +61,6 @@ export default function ClubhousePage() {
         
         {/* Narrative Section 6: Membership & Conversion */}
         <ClubhouseBanner />
-        
-        {/* Narrative Section 7: Editorial Digest (Unified) */}
-        <JournalStrip />
       </div>
     </main>
   );

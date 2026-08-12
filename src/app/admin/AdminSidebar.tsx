@@ -41,7 +41,7 @@ const NAV_SECTIONS = [
   {
     label: "Admin",
     items: [
-      { id: "roles", label: "Roles & Permissions", icon: "🔐" },
+      { id: "roles", label: "Roles & Permissions", icon: "🔑" },
     ],
   },
 ];

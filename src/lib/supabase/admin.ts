@@ -289,3 +289,56 @@ export function clearRoleCache(role?: string) {
     roleCache.clear();
   }
 }
+
+export async function persistAuditEvent(entry: {
+  actorEmail: string;
+  actorRole: string;
+  action: string;
+  resource: string;
+  details?: string;
+  ipAddress?: string;
+}): Promise<boolean> {
+  const client = getAdminClient();
+  if (!client) return false;
+
+  try {
+    const { error } = await client.from("audit_logs").insert({
+      actor_email: entry.actorEmail,
+      actor_role: entry.actorRole,
+      action: entry.action,
+      resource: entry.resource,
+      details: entry.details,
+      ip_address: entry.ipAddress,
+    });
+    return !error;
+  } catch {
+    return false;
+  }
+}
+
+export async function fetchAuditLogs(limit = 100): Promise<any[]> {
+  const client = getAdminClient();
+  if (!client) return [];
+
+  try {
+    const { data, error } = await client
+      .from("audit_logs")
+      .select("*")
+      .order("timestamp", { ascending: false })
+      .limit(limit);
+
+    if (error || !data) return [];
+    return data.map((d: any) => ({
+      id: d.id,
+      timestamp: d.timestamp,
+      actorEmail: d.actor_email,
+      actorRole: d.actor_role,
+      action: d.action,
+      resource: d.resource,
+      details: d.details,
+      ipAddress: d.ip_address,
+    }));
+  } catch {
+    return [];
+  }
+}

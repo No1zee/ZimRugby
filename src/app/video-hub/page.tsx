@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useMemo } from "react";
+import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import { Play, Search, X, Clock, Calendar, Film } from "lucide-react";
@@ -15,8 +16,10 @@ export default function VideoHubPage() {
   const [activeCategory, setActiveCategory] = useState<string>("All");
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [activeVideo, setActiveVideo] = useState<Video | null>(null);
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
+    setMounted(true);
     getVideos().then(setVideos);
   }, []);
 
@@ -197,69 +200,72 @@ export default function VideoHubPage() {
         )}
       </section>
 
-      {/* 4. Interactive Video Player Modal (Lightroom embed with strict sandbox) */}
-      <AnimatePresence>
-        {activeVideo && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 bg-black/95 flex items-center justify-center p-4 md:p-10"
-          >
-            {/* Click outside to close */}
-            <div className="absolute inset-0" onClick={() => setActiveVideo(null)} />
-
-            {/* Modal Body */}
+      {/* 4. Interactive Video Player Modal (Lightroom embed with secure sandbox & React Portal for absolute viewport centering) */}
+      {mounted && typeof document !== "undefined" && createPortal(
+        <AnimatePresence>
+          {activeVideo && (
             <motion.div
-              initial={{ scale: 0.95, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.95, opacity: 0 }}
-              transition={{ type: "spring", duration: 0.5 }}
-              className="relative w-full max-w-5xl card-green border rounded-2xl overflow-hidden shadow-2xl z-10 flex flex-col"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 z-50 bg-black/95 flex items-center justify-center p-4 md:p-10"
             >
-              {/* Header */}
-              <div className="flex justify-between items-center px-6 py-4 bg-black/40 border-b border-white/10">
-                <div>
-                  <span className="text-[9px] font-black uppercase tracking-widest text-zru-green block">{activeVideo.category}</span>
-                  <h2 className="text-base md:text-lg font-black uppercase tracking-tight text-white line-clamp-1 mt-0.5">{activeVideo.title}</h2>
+              {/* Click outside to close */}
+              <div className="absolute inset-0" onClick={() => setActiveVideo(null)} />
+
+              {/* Modal Body */}
+              <motion.div
+                initial={{ scale: 0.95, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                exit={{ scale: 0.95, opacity: 0 }}
+                transition={{ type: "spring", duration: 0.5 }}
+                className="relative w-full max-w-5xl card-green border rounded-2xl overflow-hidden shadow-2xl z-10 flex flex-col"
+              >
+                {/* Header */}
+                <div className="flex justify-between items-center px-6 py-4 bg-black/40 border-b border-white/10">
+                  <div>
+                    <span className="text-[9px] font-black uppercase tracking-widest text-zru-green block">{activeVideo.category}</span>
+                    <h2 className="text-base md:text-lg font-black uppercase tracking-tight text-white line-clamp-1 mt-0.5">{activeVideo.title}</h2>
+                  </div>
+                  <button
+                    onClick={() => setActiveVideo(null)}
+                    className="p-1 rounded-full hover:bg-white/10 text-white/60 hover:text-white transition-colors"
+                    aria-label="Close Video"
+                    title="Close Video"
+                  >
+                    <X className="w-6 h-6" />
+                  </button>
                 </div>
-                <button
-                  onClick={() => setActiveVideo(null)}
-                  className="p-1 rounded-full hover:bg-white/10 text-white/60 hover:text-white transition-colors"
-                  aria-label="Close Video"
-                  title="Close Video"
-                >
-                  <X className="w-6 h-6" />
-                </button>
-              </div>
 
-              {/* Secure Sandboxed Video Player */}
-              <div className="relative aspect-video w-full bg-black">
-                <iframe
-                  src={activeVideo.embedUrl}
-                  title={activeVideo.title}
-                  className="w-full h-full"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowFullScreen
-                  sandbox="allow-scripts allow-same-origin allow-presentation"
-                />
-              </div>
-
-              {/* Footer / Description */}
-              <div className="p-6 md:p-8 bg-black/20 space-y-4">
-                <p className="text-white/80 text-sm md:text-base leading-relaxed">
-                  {activeVideo.description}
-                </p>
-                <div className="flex justify-between items-center text-[10px] text-white/40 font-bold uppercase border-t border-white/5 pt-4">
-                  <span>DUR: {activeVideo.duration}</span>
-                  <span>PUBLISHED: {activeVideo.date}</span>
+                {/* Secure Sandboxed Video Player */}
+                <div className="relative aspect-video w-full bg-black">
+                  <iframe
+                    src={activeVideo.embedUrl}
+                    title={activeVideo.title}
+                    className="w-full h-full"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                    sandbox="allow-scripts allow-same-origin allow-presentation allow-popups allow-forms"
+                  />
                 </div>
-              </div>
 
+                {/* Footer / Description */}
+                <div className="p-6 md:p-8 bg-black/20 space-y-4">
+                  <p className="text-white/80 text-sm md:text-base leading-relaxed">
+                    {activeVideo.description}
+                  </p>
+                  <div className="flex justify-between items-center text-[10px] text-white/40 font-bold uppercase border-t border-white/5 pt-4">
+                    <span>DUR: {activeVideo.duration}</span>
+                    <span>PUBLISHED: {activeVideo.date}</span>
+                  </div>
+                </div>
+
+              </motion.div>
             </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+          )}
+        </AnimatePresence>,
+        document.body
+      )}
 
       <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-12">
           <FanZoneSignup />

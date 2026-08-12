@@ -6,9 +6,11 @@ import { fetchZimbabweVideos } from "@/lib/api/youtube-feeds";
 
 export const revalidate = 300;
 
-function youtubeIdFromEmbed(url: string): string {
-  const match = url.match(/\/([\w-]{11})(?:\?|$)/);
-  return match ? match[1] : "";
+function getYoutubeId(url: string): string {
+  if (!url) return "";
+  const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+  const match = url.match(regExp);
+  return (match && match[2].length === 11) ? match[2] : "";
 }
 
 function liveToVideo(v: { videoId?: string; title?: string; category?: string; publishedAt?: string; thumbnail?: string; channelName?: string }): Video {
@@ -45,7 +47,7 @@ export async function GET() {
             timeZone: "UTC",
           }).toUpperCase(),
         thumbnail: thumbnailAssetUrl(video.thumbnail) || video.thumbnail_url,
-        embedUrl: video.embed_url || "",
+        embedUrl: video.embed_url ? `https://www.youtube-nocookie.com/embed/${getYoutubeId(video.embed_url)}?rel=0&modestbranding=1` : "",
         description: video.description || "",
       }));
     }
@@ -63,10 +65,10 @@ export async function GET() {
   }
 
   // 3. Merge — curated first, then live videos not already present
-  const directusIds = new Set(directusVideos.map((v) => youtubeIdFromEmbed(v.embedUrl)).filter(Boolean));
+  const directusIds = new Set(directusVideos.map((v) => getYoutubeId(v.embedUrl)).filter(Boolean));
   const merged = [...directusVideos];
   for (const v of liveVideos) {
-    const vid = youtubeIdFromEmbed(v.embedUrl);
+    const vid = getYoutubeId(v.embedUrl);
     if (vid && !directusIds.has(vid)) {
       merged.push(v);
       directusIds.add(vid);
