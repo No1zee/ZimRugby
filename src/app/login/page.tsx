@@ -151,8 +151,8 @@ export default function LoginPage() {
             setIsLoading(false);
             return;
           }
-          // Admin account detected: redirect straight to Admin Portal!
-          window.location.href = "/admin";
+          // Admin account detected: hard redirect to Admin Portal so cookies refresh
+          window.location.assign("/admin");
           return;
         }
 
@@ -160,11 +160,10 @@ export default function LoginPage() {
         const fanRes = await signInFanWithPassword({ email, password });
         if (fanRes.success) {
           signInFan(fanRes.profile);
-          // If this is edwardmagejo@gmail.com or requested /admin redirect, launch /admin
           if (email.toLowerCase() === "edwardmagejo@gmail.com" || redirect.startsWith("/admin")) {
-            window.location.href = "/admin";
+            window.location.assign("/admin");
           } else {
-            window.location.href = "/fan-zone";
+            window.location.assign("/fan-zone");
           }
         } else {
           setError("Incorrect email or password.");
