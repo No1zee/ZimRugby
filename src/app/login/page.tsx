@@ -60,9 +60,9 @@ export default function LoginPage() {
     return () => clearTimeout(t);
   }, [handle]);
 
-  // Redirect if already authenticated
+  // Redirect if already authenticated as Fan (ignore if target is /admin so admin check can evaluate)
   useEffect(() => {
-    if (isAuthenticated) {
+    if (isAuthenticated && !redirect.startsWith("/admin")) {
       router.replace(redirect);
     }
   }, [isAuthenticated, redirect, router]);
@@ -157,7 +157,7 @@ export default function LoginPage() {
         const fanRes = await signInFanWithPassword({ email, password });
         if (fanRes.success) {
           signInFan(fanRes.profile);
-          router.replace(redirect);
+          window.location.href = redirect.startsWith("/admin") ? redirect : redirect;
         } else {
           setError("Incorrect email or password.");
         }
