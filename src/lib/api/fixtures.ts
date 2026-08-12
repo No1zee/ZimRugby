@@ -157,7 +157,7 @@ function mapFlatToMatch(m: DirectusFlatMatch): Match {
 
   // Resolve relational fields
   const opponentName = m.opponent_id?.short_name || m.opponent_id?.name || m.away_team_name || "Opponent";
-  const venueName = m.venue_id ? `${m.venue_id.name}${m.venue_id.city ? `, ${m.venue_id.city}` : ''}` : m.venue || "TBA";
+  const venueName = m.venue_id ? `${m.venue_id.name}${m.venue_id.city ? `, ${m.venue_id.city}` : ''}` : (m.venue || "");
   const competitionName = m.competition_id?.short_name || m.competition_id?.name || m.competition || "International Match";
   const roundName = m.round_label || m.stage_label || m.round || "Standard";
 
