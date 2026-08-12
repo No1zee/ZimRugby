@@ -34,11 +34,6 @@ export default function Navigation() {
   const [isAdminUser, setIsAdminUser] = useState(false);
 
   useEffect(() => {
-    // Only query admin check when user is logged in
-    if (!user) {
-      setIsAdminUser(false);
-      return;
-    }
     fetch("/api/admin/auth/check")
       .then((res) => {
         if (res.ok) {
