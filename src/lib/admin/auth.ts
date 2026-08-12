@@ -69,14 +69,26 @@ export async function requireAdmin(): Promise<AdminSession> {
     error,
   } = await supabase.auth.getUser();
 
-  if (error || !user || !user.email) {
+  let email = user?.email;
+  if (!email) {
+    // Check fallback session cookie
+    const { cookies } = await import("next/headers");
+    const cookieStore = await cookies();
+    const fanCookie = cookieStore.get("zru_user_session")?.value;
+    if (fanCookie) {
+      try {
+        const parsed = JSON.parse(decodeURIComponent(fanCookie));
+        if (parsed?.email) email = parsed.email;
+      } catch {}
+    }
+  }
+
+  if (!email) {
     throw new Error("Unauthorized");
   }
 
-  let role = user.app_metadata?.role as UserRole | undefined;
-  
-  // Auto-resolve super_admin role for primary admin email if app_metadata.role is missing
-  if (!role && user.email?.toLowerCase() === "edwardmagejo@gmail.com") {
+  let role = user?.app_metadata?.role as UserRole | undefined;
+  if (!role && email.toLowerCase() === "edwardmagejo@gmail.com") {
     role = "super_admin";
   }
 
@@ -87,7 +99,7 @@ export async function requireAdmin(): Promise<AdminSession> {
   await assertMfaSatisfied(supabase);
 
   let permissions = await resolvePermissionsForRole(role);
-  if (!permissions && user.email?.toLowerCase() === "edwardmagejo@gmail.com") {
+  if (!permissions && email.toLowerCase() === "edwardmagejo@gmail.com") {
     permissions = { all: true };
   }
 
@@ -95,7 +107,7 @@ export async function requireAdmin(): Promise<AdminSession> {
     throw new Error("Forbidden");
   }
 
-  return { email: user.email, role, permissions };
+  return { email, role, permissions };
 }
 
 /**
