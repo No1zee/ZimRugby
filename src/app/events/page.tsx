@@ -2,7 +2,7 @@ import { Metadata } from "next";
 import dynamic from "next/dynamic";
 import { Suspense } from "react";
 import { getPageBySlug } from "@/lib/api/pages";
-import { getCompetitions, getGeneralEvents } from "@/lib/api/events";
+import { getEvents, getCompetitions, getGeneralEvents } from "@/lib/api/events";
 
 const EventsClient = dynamic(() => import("./EventsClient"), {
   loading: () => (
@@ -16,16 +16,18 @@ const EventsClient = dynamic(() => import("./EventsClient"), {
 });
 
 export const metadata: Metadata = {
-  title: "Competitions & Events | Zimbabwe Rugby Union",
-  description: "Browse domestic rugby competitions, tournaments, and official Zimbabwe Rugby Union events.",
+  title: "Master Calendar & Events | Zimbabwe Rugby Union",
+  description: "Browse domestic rugby competitions, tournaments, fixtures, and official Zimbabwe Rugby Union events.",
 };
 
 export default async function EventsPage() {
-  const [cmsPage, competitions, generalEvents] = await Promise.all([
+  const [cmsPage, allEvents] = await Promise.all([
     getPageBySlug("events"),
-    getCompetitions(),
-    getGeneralEvents()
+    getEvents()
   ]);
+
+  const competitions = allEvents.filter(e => e.tags?.some(t => ["National", "Clubs", "Schools", "Super 6", "Competition", "Gold Cup", "Barthes", "Sevens", "Youth", "Women"].some(k => t.toLowerCase().includes(k.toLowerCase()))));
+  const generalEvents = allEvents.filter(e => !competitions.some(c => c.id === e.id));
 
   return (
     <Suspense fallback={

@@ -1,6 +1,7 @@
 import { directusFetch } from "@/lib/directus/fetch";
 import { photoAssetUrl } from "@/lib/directus/assets";
 import { deriveEventStatus } from "@/lib/events/status";
+import { staticData } from "@/lib/static-data";
 import type { EventItem } from "@/types";
 
 export type { EventItem };
@@ -23,6 +24,21 @@ interface DirectusEvent {
   page_type: string | null;
   category: string | null;
   time: string | null;
+  score: string | null;
+}
+
+interface MatchJson {
+  id: string;
+  homeTeam: { name: string; logo?: string };
+  awayTeam: { name: string; logo?: string };
+  date: string;
+  time?: string;
+  venue?: string;
+  competition?: string;
+  category?: string;
+  status?: string;
+  score?: string;
+  ticketUrl?: string;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -39,67 +55,97 @@ function parseTags(raw: any): string[] {
   return [];
 }
 
-function mapEvent(item: DirectusEvent): EventItem {
+function mapDirectusEvent(item: DirectusEvent): EventItem {
   return {
     id: String(item.id),
     title: item.title || "",
     subtitle: item.subtitle || "",
-    date: item.date_label || (item.date ? new Date(item.date).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric', timeZone: 'UTC' }) : ""),
+    date: item.date_label || (item.date ? new Date(item.date).toISOString().split('T')[0] : ""),
     location: item.location || "",
     description: item.description || "",
     tags: parseTags(item.tags),
     image: (item.image ? photoAssetUrl(item.image) : null) || (item.image_url || "/images/events/super-league.jpg"),
     content: item.content || "",
     ticketUrl: item.ticket_url || "/tickets",
+    score: item.score || undefined,
     status: deriveEventStatus(item.date, item.time)
   };
 }
 
+function mapMatchToEvent(match: MatchJson): EventItem {
+  const home = match.homeTeam?.name || "Team A";
+  const away = match.awayTeam?.name || "Team B";
+  const categoryTag = match.category || "National";
+  const compTag = match.competition || "Match";
+
+  return {
+    id: match.id,
+    title: `${home} vs ${away}`,
+    subtitle: `${compTag} • ${categoryTag}`,
+    date: match.date,
+    location: match.venue || "Harare Sports Club",
+    description: `Official ${compTag} fixture between ${home} and ${away} at ${match.venue || 'Harare Sports Club'}.`,
+    tags: [categoryTag, compTag],
+    image: match.homeTeam?.logo || "/images/events/super-league.jpg",
+    ticketUrl: match.ticketUrl || "/tickets",
+    score: match.score,
+    homeTeam: home,
+    awayTeam: away,
+    status: (match.status as EventItem["status"]) || "upcoming"
+  };
+}
+
+function getStaticFallbackEvents(): EventItem[] {
+  const matchesData = (staticData["matches.json"] || []) as MatchJson[];
+  const eventsData = (staticData["events.json"] || []) as EventItem[];
+
+  const mappedMatches = matchesData.map(mapMatchToEvent);
+  
+  // Combine matches + static events
+  const combined = [...mappedMatches];
+  
+  for (const ev of eventsData) {
+    if (!combined.some(c => c.id === ev.id)) {
+      combined.push(ev);
+    }
+  }
+
+  return combined;
+}
+
 export async function getEvents(): Promise<EventItem[]> {
+  const fallback = getStaticFallbackEvents();
+  
   try {
     const response = await directusFetch<DirectusEvent>('events', {
       sort: ['sort', 'date_label']
     });
     if (response && response.length > 0) {
-      return response.map(mapEvent);
+      const cmsItems = response.map(mapDirectusEvent);
+      // Merge CMS events with fallback matches so all matches & events flow through calendar
+      const merged = [...cmsItems];
+      for (const fb of fallback) {
+        if (!merged.some(m => m.id === fb.id || m.title === fb.title)) {
+          merged.push(fb);
+        }
+      }
+      return merged;
     }
   } catch (error) {
-    console.warn("Directus fetch failed for events, falling back to mock data:", error);
+    console.warn("Directus fetch for events fallback to static dataset:", error);
   }
 
-  return [];
+  return fallback;
 }
 
 export async function getCompetitions(): Promise<EventItem[]> {
-  try {
-    const response = await directusFetch<DirectusEvent>('events', {
-      filter: { page_type: { _eq: "competition" } },
-      sort: ['sort']
-    });
-    if (response && response.length > 0) {
-      return response.map(mapEvent);
-    }
-  } catch (error) {
-    console.warn("Directus fetch failed for competitions, falling back to empty:", error);
-  }
-
-  return [];
+  const all = await getEvents();
+  return all.filter(e => e.tags?.some(t => ["National", "Clubs", "Schools", "Super 6", "Competition", "Gold Cup", "Barthes"].some(k => t.toLowerCase().includes(k.toLowerCase()))));
 }
 
 export async function getGeneralEvents(): Promise<EventItem[]> {
-  try {
-    const response = await directusFetch<DirectusEvent>('events', {
-      filter: { page_type: { _eq: "general" } },
-      sort: ['sort']
-    });
-    if (response && response.length > 0) {
-      return response.map(mapEvent);
-    }
-  } catch (error) {
-    console.warn("Directus fetch failed for general events, falling back to empty:", error);
-  }
-
-  return [];
+  const all = await getEvents();
+  return all.filter(e => !e.tags?.some(t => ["National", "Clubs", "Schools"].some(k => t.toLowerCase().includes(k.toLowerCase()))));
 }
 
 export async function getEventById(id: string): Promise<EventItem | null> {

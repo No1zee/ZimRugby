@@ -1,66 +1,120 @@
 [
   {
-    "id": "zru-fixture-0",
-    "homeTeam": {
-      "name": "Sable 1st",
-      "logo": "https://r2.thesportsdb.com/images/media/team/badge/6iaf541773658274.png"
-    },
-    "awayTeam": {
-      "name": "Sable U20",
-      "logo": "https://r2.thesportsdb.com/images/media/team/badge/6iaf541773658274.png"
-    },
-    "date": "FEB 14, 2026",
+    "id": "zru-fixture-100",
+    "homeTeam": { "name": "Zimbabwe Sables", "logo": "/images/teams/sables-logo.png" },
+    "awayTeam": { "name": "Namibia", "logo": "/images/teams/namibia-logo.png" },
+    "date": "2026-08-22",
+    "time": "15:30",
+    "venue": "Harare Sports Club, Harare",
+    "competition": "Rugby Africa Gold Cup Final",
+    "category": "National",
+    "status": "upcoming",
+    "ticketUrl": "/tickets"
+  },
+  {
+    "id": "zru-fixture-101",
+    "homeTeam": { "name": "Zimbabwe Sables", "logo": "/images/teams/sables-logo.png" },
+    "awayTeam": { "name": "Uganda", "logo": "/images/teams/uganda-logo.png" },
+    "date": "2026-08-15",
+    "time": "15:00",
+    "venue": "Harare Sports Club, Harare",
+    "competition": "Rugby Africa Gold Cup Semi-Final",
+    "category": "National",
+    "status": "upcoming",
+    "ticketUrl": "/tickets"
+  },
+  {
+    "id": "zru-fixture-102",
+    "homeTeam": { "name": "Harare Sports Club", "logo": "/images/teams/hsc-logo.png" },
+    "awayTeam": { "name": "Old Georgians", "logo": "/images/teams/og-logo.png" },
+    "date": "2026-08-08",
+    "time": "16:00",
+    "venue": "Harare Sports Club, Harare",
+    "competition": "Paramount Garments Super 6 Final",
+    "category": "Clubs",
+    "status": "upcoming"
+  },
+  {
+    "id": "zru-fixture-103",
+    "homeTeam": { "name": "St. George's College", "logo": "/images/teams/st-georges.png" },
+    "awayTeam": { "name": "Prince Edward School", "logo": "/images/teams/pe.png" },
+    "date": "2026-08-01",
+    "time": "14:00",
+    "venue": "Jubilee Field, St. George's College",
+    "competition": "ATS Schools Championship Derby",
+    "category": "Schools",
+    "status": "upcoming"
+  },
+  {
+    "id": "zru-fixture-104",
+    "homeTeam": { "name": "Zimbabwe Sables", "logo": "/images/teams/sables-logo.png" },
+    "awayTeam": { "name": "Kenya", "logo": "/images/teams/kenya-logo.png" },
+    "date": "2026-07-25",
+    "time": "15:00",
+    "venue": "Hartsfield Rugby Stadium, Bulawayo",
+    "competition": "Rugby Africa Cup Quarter-Final",
+    "category": "National",
+    "status": "completed",
+    "score": "ZIM 32 - 10 KEN"
+  },
+  {
+    "id": "zru-fixture-105",
+    "homeTeam": { "name": "Zimbabwe Lady Sables", "logo": "/images/teams/sables-logo.png" },
+    "awayTeam": { "name": "Zambia Women", "logo": "/images/teams/zambia-logo.png" },
+    "date": "2026-07-18",
+    "time": "13:30",
+    "venue": "Police Grounds, Harare",
+    "competition": "Women's Rugby International",
+    "category": "Women",
+    "status": "completed",
+    "score": "ZIM 24 - 12 ZAM"
+  },
+  {
+    "id": "zru-fixture-106",
+    "homeTeam": { "name": "Peterhouse Boys", "logo": "/images/teams/peterhouse.png" },
+    "awayTeam": { "name": "St. John's College", "logo": "/images/teams/st-johns.png" },
+    "date": "2026-07-11",
+    "time": "14:30",
+    "venue": "Peterhouse, Marondera",
+    "competition": "Schools Super 8 League",
+    "category": "Schools",
+    "status": "completed",
+    "score": "PET 19 - 15 STJ"
+  },
+  {
+    "id": "zru-fixture-107",
+    "homeTeam": { "name": "Old Hararians", "logo": "/images/teams/oh.png" },
+    "awayTeam": { "name": "Pitbulls Rugby", "logo": "/images/teams/pitbulls.png" },
+    "date": "2026-06-27",
+    "time": "15:00",
+    "venue": "Old Hararians Sports Club",
+    "competition": "Super 6 League Round 10",
+    "category": "Clubs",
+    "status": "completed",
+    "score": "OH 28 - 21 PIT"
+  },
+  {
+    "id": "zru-fixture-108",
+    "homeTeam": { "name": "Zimbabwe Cheetahs 7s", "logo": "/images/teams/cheetahs.png" },
+    "awayTeam": { "name": "International Sevens Pool A", "logo": "/images/teams/7s.png" },
+    "date": "2026-06-13",
+    "time": "09:00",
+    "venue": "Harare Sports Club",
+    "competition": "ZRU International Sevens Series",
+    "category": "Sevens",
+    "status": "completed",
+    "score": "CHET 26 - 07 IVC"
+  },
+  {
+    "id": "zru-fixture-109",
+    "homeTeam": { "name": "Junior Sables (U20)", "logo": "/images/teams/sables-u20.png" },
+    "awayTeam": { "name": "Kenya U20", "logo": "/images/teams/kenya.png" },
+    "date": "2026-05-16",
     "time": "15:00",
     "venue": "Harare Sports Club",
-    "competition": "Friendly",
-    "category": "Sables",
-    "status": "upcoming"
-  },
-  {
-    "id": "zru-fixture-1",
-    "homeTeam": {
-      "name": "Sable Green",
-      "logo": "https://r2.thesportsdb.com/images/media/team/badge/6iaf541773658274.png"
-    },
-    "awayTeam": {
-      "name": "Sable Red",
-      "logo": "https://r2.thesportsdb.com/images/media/team/badge/6iaf541773658274.png"
-    },
-    "date": "FEB 28, 2026",
-    "time": "15:00",
-    "venue": "Harare Sports Club",
-    "competition": "Friendly",
-    "category": "Sables",
-    "status": "upcoming"
-  },
-  {
-    "id": "zru-fixture-2",
-    "homeTeam": {
-      "name": "Louis Trichart Team 1"
-    },
-    "awayTeam": {
-      "name": "TBD"
-    },
-    "date": "MAR 24, 2026",
-    "time": "15:00",
-    "venue": "South Africa",
-    "competition": "Preparation",
-    "category": "Sables",
-    "status": "upcoming"
-  },
-  {
-    "id": "zru-fixture-3",
-    "homeTeam": {
-      "name": "Louis Trichart Team 2"
-    },
-    "awayTeam": {
-      "name": "TBD"
-    },
-    "date": "MAR 28, 2026",
-    "time": "15:00",
-    "venue": "South Africa",
-    "competition": "Preparation",
-    "category": "Sables",
-    "status": "upcoming"
+    "competition": "U20 Barthes Trophy Final",
+    "category": "Youth",
+    "status": "completed",
+    "score": "ZIM U20 28 - 20 KEN U20"
   }
 ]

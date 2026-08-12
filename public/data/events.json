@@ -1,14 +1,46 @@
 [
   {
-    "id": "zru-event-0",
-    "date": "08 MAR",
-    "title": "ATS Schools Annual General Meeting",
-    "description": ""
+    "id": "zru-event-201",
+    "date": "2026-08-28",
+    "title": "ZRU National Rugby Stakeholders Gala & Awards Night",
+    "subtitle": "Celebrating Zimbabwe Rugby Excellence & Sables Milestones",
+    "location": "Meikles Hotel, Harare",
+    "description": "Annual gala dinner, awards ceremony, and corporate partner showcase for Zimbabwean rugby.",
+    "category": "National Team",
+    "tags": ["National", "Gala", "Official"],
+    "status": "upcoming"
   },
   {
-    "id": "zru-event-1",
-    "date": "11 MAR",
-    "title": "Provincial Heads workshop",
-    "description": ""
+    "id": "zru-event-202",
+    "date": "2026-08-10",
+    "title": "World Rugby Level 2 Coaching & Referee Seminar",
+    "subtitle": "Provincial Match Official Certification Workshop",
+    "location": "Police Grounds, Harare",
+    "description": "Mandatory workshop for all accredited club and schools rugby coaches and referees.",
+    "category": "Youth Pathways",
+    "tags": ["Youth", "Referees", "Coaching"],
+    "status": "upcoming"
+  },
+  {
+    "id": "zru-event-203",
+    "date": "2026-07-04",
+    "title": "ATS Schools Provincial High-Performance Training Camp",
+    "subtitle": "National Schools U18 Talent Identification Weekend",
+    "location": "Prince Edward School Fields, Harare",
+    "description": "Scouting and conditioning camp for national schoolboy elite squads ahead of international tours.",
+    "category": "Schools Rugby",
+    "tags": ["Schools", "Youth"],
+    "status": "completed"
+  },
+  {
+    "id": "zru-event-204",
+    "date": "2026-05-02",
+    "title": "ZRU Annual General Meeting & Constitutional Congress",
+    "subtitle": "Union Leadership & Provincial Executive Review",
+    "location": "ZRU Headquarters, Harare Sports Club",
+    "description": "Official annual meeting of the Zimbabwe Rugby Union Executive Board and Affiliate Unions.",
+    "category": "National Team",
+    "tags": ["Official", "National"],
+    "status": "completed"
   }
 ]

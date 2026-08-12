@@ -248,15 +248,11 @@ export default function EventsClient({ cmsPage, competitions: apiCompetitions = 
             </button>
           </div>
 
-          {/* Sync to Phone (.ics) Utility Button */}
-          <a
-            href="/api/calendar.ics"
-            download="zimrugby-calendar.ics"
-            className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-rich-black text-white text-xs font-heading font-black tracking-widest uppercase hover:bg-black transition-colors shadow-sm"
-          >
-            <Download className="w-4 h-4 text-zru-green" />
-            Sync to Phone (.ICS)
-          </a>
+          <div className="text-right">
+            <span className="text-xs text-black/50 font-bold uppercase tracking-widest">
+              {selectedLevel ? `Filtering by: ${selectedLevel}` : "Showing All Union Events & Fixtures"}
+            </span>
+          </div>
         </div>
 
         {/* MASTER CALENDAR MONTH GRID VIEW */}
