@@ -80,10 +80,21 @@ export default async function CampaignPage({ params }: Props) {
     getDirectusMatches().catch(() => []),
   ]);
 
-  const roster = (campaign.players || []).map((cp) => {
+  const rawRoster = (campaign.players || []).map((cp) => {
     const player = players.find((p) => String(p.id) === String(cp.player_id));
     return { ...cp, player };
   }).sort((a, b) => (a.is_featured === b.is_featured ? 0 : a.is_featured ? -1 : 1));
+
+  // Fallback: If campaign has no dedicated roster specified, populate with Sables national squad players
+  const roster = rawRoster.length > 0 
+    ? rawRoster 
+    : players.map((p) => ({
+        id: String(p.id),
+        player_id: p.id,
+        role: p.position || "player",
+        is_featured: p.featured || false,
+        player: p,
+      }));
 
   const campaignMatchIds = new Set((campaign.matches || []).map((m) => m.match_id));
   const campaignMatches: Match[] = allMatches
