@@ -88,12 +88,14 @@ export default function UnifiedHubGrid({ news = [], nextMatch, customTitle }: Pr
                 {nextMatch?.dateIso ? new Date(nextMatch.dateIso).toLocaleDateString("en-GB", { weekday: "short", day: "2-digit", month: "short", year: "numeric" }).toUpperCase() : "SAT, 24 MAY 2026"}
               </span>
             </div>
-            <div className="flex items-center gap-3 text-rich-black">
-              <MapPin size={18} className="text-zru-green" />
-              <span className="font-body font-bold text-xs uppercase tracking-wide truncate">
-                {nextMatch?.venue?.toUpperCase() || "HARARE SPORTS CLUB"}
-              </span>
-            </div>
+            {nextMatch?.venue && (
+              <div className="flex items-center gap-3 text-rich-black">
+                <MapPin size={18} className="text-zru-green" />
+                <span className="font-body font-bold text-xs uppercase tracking-wide truncate">
+                  {nextMatch.venue.toUpperCase()}
+                </span>
+              </div>
+            )}
             <div className="flex items-center gap-3 text-rich-black">
               <Clock size={18} className="text-zru-green" />
               <span className="font-body font-bold text-xs uppercase tracking-wide">

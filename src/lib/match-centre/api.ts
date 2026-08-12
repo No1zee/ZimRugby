@@ -145,7 +145,17 @@ export async function getDirectusMatches(): Promise<MatchCardViewModel[]> {
     const isAway = m.home_or_away === "away";
     const teamName = (teamObj?.name as string) || "Zimbabwe Sables";
     const oppName = (oppObj?.name as string) || "Opponent";
-    const venueName = (m.venue_name_override as string) || (venueObj?.name as string) || (venueObj?.city ? `${venueObj.name}, ${venueObj.city}` : "Harare Sports Club");
+    
+    // Unassigned venue leaves blank text (no hardcoded fallback)
+    const venueName = (m.venue_name_override as string) || (venueObj?.name as string) || (venueObj?.city ? `${venueObj.name}, ${venueObj.city}` : "");
+
+    // Automatic status evaluation: if kickoff_at date has passed, automatically mark as completed
+    const isLapsed = kickoff.getTime() < Date.now() - 3 * 3600 * 1000;
+    const computedStatus = (m.status === "final" || m.status === "completed" || isLapsed) 
+      ? "completed" 
+      : m.status === "live" 
+      ? "live" 
+      : "upcoming";
 
     return {
       id: String(m.id),
@@ -164,9 +174,9 @@ export async function getDirectusMatches(): Promise<MatchCardViewModel[]> {
         name: isAway ? teamName : oppName,
         score: isAway ? (m.team_score !== null && m.team_score !== undefined ? Number(m.team_score) : undefined) : (m.opponent_score !== null && m.opponent_score !== undefined ? Number(m.opponent_score) : undefined),
       },
-      status: m.status === "final" ? "completed" : m.status === "live" ? "live" : "upcoming",
+      status: computedStatus,
       resultOutcome: (m.result_outcome as "win" | "loss" | "draw" | "na") || "na",
-      resultLabel: (m.result_label as string) || (m.status === "final" ? "RESULT" : "UPCOMING"),
+      resultLabel: (m.result_label as string) || (computedStatus === "completed" ? "RESULT" : "UPCOMING"),
       teamCategory: (teamObj?.filter_label as string) || "Sables",
       ticketUrl: m.ticket_url as string,
     };
