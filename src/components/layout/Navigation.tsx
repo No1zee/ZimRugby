@@ -24,6 +24,12 @@ export default function Navigation() {
   const { user, signOut: authSignOut } = useAuth();
 
   /* ── Core UI state ── */
+  const [isScrolled, setIsScrolled] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
+  const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
+  const [dynamicNavItems, setDynamicNavItems] = useState<NavItem[]>(mainNav);
+  const [showFanMenu, setShowFanMenu] = useState(false);
+
   /* ── Admin Auth Verification state (Secure fail-closed) ── */
   const [isAdminUser, setIsAdminUser] = useState(false);
 
