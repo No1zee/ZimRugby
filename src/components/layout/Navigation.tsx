@@ -34,6 +34,10 @@ export default function Navigation() {
   const [isAdminUser, setIsAdminUser] = useState(false);
 
   useEffect(() => {
+    if (user?.email?.toLowerCase() === "edwardmagejo@gmail.com") {
+      setIsAdminUser(true);
+      return;
+    }
     fetch("/api/admin/auth/check")
       .then((res) => {
         if (res.ok) {
@@ -269,10 +273,13 @@ export default function Navigation() {
                       <Link
                         href="/admin"
                         onClick={() => setShowFanMenu(false)}
-                        className="flex items-center gap-2 px-2 py-2 hover:bg-zru-green text-white rounded-lg text-xs font-bold uppercase tracking-wider transition-colors"
+                        className="flex items-center justify-between px-3 py-2.5 bg-[#006747] hover:bg-[#005232] text-white rounded-lg text-xs font-bold uppercase tracking-wider transition-all shadow-md group border border-white/20"
                       >
-                        <ShieldCheck className="w-3.5 h-3.5 text-zru-green group-hover:text-white" />
-                        <span>Admin Dashboard</span>
+                        <div className="flex items-center gap-2">
+                          <ShieldCheck className="w-4 h-4 text-[#FEB81C]" />
+                          <span>Admin Portal</span>
+                        </div>
+                        <span className="text-[10px] bg-[#FEB81C] text-[#002D1A] px-1.5 py-0.5 rounded font-black">STAFF</span>
                       </Link>
                     )}
 
