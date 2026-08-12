@@ -32,7 +32,7 @@ export async function signup(formData: FormData) {
     email,
     password,
     options: {
-      emailRedirectTo: `${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/auth/callback`,
+      emailRedirectTo: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://zimrugby.vercel.app'}/auth/callback`,
     },
   })
 
@@ -49,7 +49,7 @@ export async function resendVerification(email: string) {
     type: 'signup',
     email,
     options: {
-      emailRedirectTo: `${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/auth/callback`,
+      emailRedirectTo: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://zimrugby.vercel.app'}/auth/callback`,
     },
   })
 
