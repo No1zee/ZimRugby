@@ -1,5 +1,5 @@
-import { NextResponse } from 'next/server'
 import { createServerClient } from '@supabase/ssr'
+import { NextResponse, type NextRequest } from 'next/server'
 import { createClient as createSupabaseClient } from '@supabase/supabase-js'
 
 function getAdminClient() {
@@ -11,17 +11,13 @@ function getAdminClient() {
   })
 }
 
-export async function GET(request: Request) {
+export async function GET(request: NextRequest) {
   const { searchParams, origin } = new URL(request.url)
   const code = searchParams.get('code')
   let next = searchParams.get('next') ?? '/fan-zone'
 
   if (code) {
-    const cookieBuffer: Array<{
-      name: string
-      value: string
-      options: any
-    }> = []
+    const cookieQueue: Array<{ name: string; value: string; options: any }> = []
 
     const supabase = createServerClient(
       process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -29,22 +25,10 @@ export async function GET(request: Request) {
       {
         cookies: {
           getAll() {
-            const raw = request.headers.get('cookie') ?? ''
-            return raw
-              .split(';')
-              .filter(Boolean)
-              .map((c) => {
-                const eq = c.indexOf('=')
-                return {
-                  name: c.slice(0, eq).trim(),
-                  value: c.slice(eq + 1).trim(),
-                }
-              })
+            return request.cookies.getAll()
           },
           setAll(cookiesToSet) {
-            for (const { name, value, options } of cookiesToSet) {
-              cookieBuffer.push({ name, value, options: options ?? {} })
-            }
+            cookiesToSet.forEach((cookie) => cookieQueue.push(cookie))
           },
         },
       }
@@ -54,7 +38,7 @@ export async function GET(request: Request) {
 
     if (!error && data.user) {
       const email = data.user.email?.toLowerCase() ?? ''
-      const meta = data.user.app_metadata as Record<string, any>
+      const meta = (data.user.app_metadata || {}) as Record<string, any>
       let role = meta?.role as string | undefined
 
       if (!role && email === 'edwardmagejo@gmail.com') {
@@ -75,16 +59,14 @@ export async function GET(request: Request) {
         next = '/fan-zone'
       }
 
-      const redirectRes = NextResponse.redirect(origin + next)
+      const response = NextResponse.redirect(`${origin}${next}`)
 
-      for (const { name, value, options } of cookieBuffer) {
-        redirectRes.cookies.set({ name, value, ...options })
-      }
+      cookieQueue.forEach(({ name, value, options }) => {
+        response.cookies.set(name, value, options)
+      })
 
-      const userMeta = data.user.user_metadata as Record<string, any>
-      const baseName =
-        userMeta?.full_name ?? userMeta?.name ?? email.split('@')[0] ?? 'User'
-
+      const userMeta = (data.user.user_metadata || {}) as Record<string, any>
+      const baseName = userMeta?.full_name ?? userMeta?.name ?? email.split('@')[0] ?? 'User'
       const handleStr = '@' + baseName.toLowerCase().split(' ')[0].replace(/[^a-z0-9]/g, '')
       const profile = {
         email,
@@ -93,17 +75,15 @@ export async function GET(request: Request) {
         favoriteTeam: 'Sables',
       }
 
-      redirectRes.cookies.set(
+      response.cookies.set(
         'zru_user_session',
         encodeURIComponent(JSON.stringify(profile)),
         { path: '/', maxAge: 60 * 60 * 24 * 30, sameSite: 'lax' }
       )
 
-      return redirectRes
+      return response
     }
   }
 
-  return NextResponse.redirect(
-    origin + '/login?message=Could+not+authenticate+user'
-  )
+  return NextResponse.redirect(`${origin}/login?message=Could+not+authenticate+user`)
 }
