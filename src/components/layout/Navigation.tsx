@@ -24,11 +24,25 @@ export default function Navigation() {
   const { user, signOut: authSignOut } = useAuth();
 
   /* ── Core UI state ── */
-  const [isScrolled, setIsScrolled] = useState(false);
-  const [isOpen, setIsOpen] = useState(false);
-  const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
-  const [dynamicNavItems, setDynamicNavItems] = useState<NavItem[]>(mainNav);
-  const [showFanMenu, setShowFanMenu] = useState(false);
+  /* ── Admin Auth Verification state (Secure fail-closed) ── */
+  const [isAdminUser, setIsAdminUser] = useState(false);
+
+  useEffect(() => {
+    // Only query admin check when user is logged in
+    if (!user) {
+      setIsAdminUser(false);
+      return;
+    }
+    fetch("/api/admin/auth/check")
+      .then((res) => {
+        if (res.ok) {
+          setIsAdminUser(true);
+        } else {
+          setIsAdminUser(false);
+        }
+      })
+      .catch(() => setIsAdminUser(false));
+  }, [user]);
 
   /* ── Search state ── */
   const [isSearchOpen, setIsSearchOpen] = useState(false);
@@ -213,15 +227,17 @@ export default function Navigation() {
               );
             })}
 
-            {/* Admin Portal Direct Link (#1) */}
-            <Link
-              href="/admin"
-              className="flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-heading font-black uppercase tracking-wider text-zru-green bg-white/10 hover:bg-zru-green hover:text-white transition-all shadow-sm"
-              title="Launch Admin Portal"
-            >
-              <ShieldCheck className="w-3.5 h-3.5" />
-              <span>ADMIN PORTAL</span>
-            </Link>
+            {/* Admin Portal Direct Link — Only rendered for verified logged-in Admin/Staff users */}
+            {isAdminUser && (
+              <Link
+                href="/admin"
+                className="flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-heading font-black uppercase tracking-wider text-zru-green bg-white/10 hover:bg-zru-green hover:text-white transition-all shadow-sm"
+                title="Launch Admin Portal"
+              >
+                <ShieldCheck className="w-3.5 h-3.5" />
+                <span>ADMIN PORTAL</span>
+              </Link>
+            )}
 
             <div className="w-px h-4 bg-white/15 mx-1" />
 
@@ -254,14 +270,16 @@ export default function Navigation() {
                       <p className="text-[11px] text-white/60 truncate">{user.handle || user.email}</p>
                     </div>
 
-                    <Link
-                      href="/admin"
-                      onClick={() => setShowFanMenu(false)}
-                      className="flex items-center gap-2 px-2 py-2 hover:bg-zru-green text-white rounded-lg text-xs font-bold uppercase tracking-wider transition-colors"
-                    >
-                      <ShieldCheck className="w-3.5 h-3.5 text-zru-green group-hover:text-white" />
-                      <span>Admin Dashboard</span>
-                    </Link>
+                    {isAdminUser && (
+                      <Link
+                        href="/admin"
+                        onClick={() => setShowFanMenu(false)}
+                        className="flex items-center gap-2 px-2 py-2 hover:bg-zru-green text-white rounded-lg text-xs font-bold uppercase tracking-wider transition-colors"
+                      >
+                        <ShieldCheck className="w-3.5 h-3.5 text-zru-green group-hover:text-white" />
+                        <span>Admin Dashboard</span>
+                      </Link>
+                    )}
 
                     <Link
                       href="/fan-zone"
