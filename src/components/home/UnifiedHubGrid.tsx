@@ -17,10 +17,6 @@ export default function UnifiedHubGrid({ news = [], nextMatch, customTitle }: Pr
     <section className="py-12 md:py-16 px-4 sm:px-6 lg:px-8 max-w-[1440px] mx-auto">
       {/* Section Title */}
       <div className="mb-8 max-w-3xl">
-        <p className="mb-3 flex items-center gap-3 text-[10px] font-black uppercase tracking-[0.4em] text-zru-green">
-          <span className="h-px w-8 bg-zru-green/50" aria-hidden />
-          The Hub
-        </p>
         <h2 className="heading-plate text-3xl sm:text-5xl font-heading font-black uppercase tracking-wide sm:tracking-widest text-rich-black not-italic leading-[1.05]">
           {customTitle ? (
             customTitle

@@ -120,10 +120,6 @@ export default function GrassrootsInitiativeSection({ initiatives: apiInitiative
           transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
           className="max-w-3xl"
         >
-          <p className="mb-3 flex items-center gap-3 text-[10px] font-black uppercase tracking-[0.4em] text-accent-teal">
-            <span className="h-px w-8 bg-accent-teal/40" aria-hidden />
-            Community
-          </p>
           <h2 className="text-3xl sm:text-5xl font-heading font-black uppercase tracking-wide sm:tracking-widest text-white not-italic leading-[1.05]">
             GROWING THE GAME IN <span className="text-accent-teal">ZIMBABWE</span>
           </h2>

@@ -150,10 +150,6 @@ export default function RoadToWorldCup({ featuredPlayers, campaign }: RoadToWorl
             {/* Featured Players */}
             <div className="px-4 sm:px-6 lg:px-8 py-10 border-t border-black/5">
               <div className="mb-8 max-w-3xl">
-                <p className="mb-3 flex items-center gap-3 text-[10px] font-black uppercase tracking-[0.4em] text-zru-green">
-                  <span className="h-px w-8 bg-zru-green/50" aria-hidden />
-                  Squad
-                </p>
                 <h2 className="text-3xl sm:text-5xl font-heading font-black uppercase tracking-wide sm:tracking-widest text-rich-black not-italic leading-[1.05]">
                   FEATURED{" "}
                   <span className="text-accent-teal">PLAYERS</span>
