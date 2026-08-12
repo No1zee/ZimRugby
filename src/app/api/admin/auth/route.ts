@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { logAuditEvent, roleToName, type UserRole } from "@/lib/admin/iam";
 import { resolvePermissionsForRole } from "@/lib/admin/auth";
+import { getAdminClient } from "@/lib/supabase/admin";
 import {
   checkRateLimit,
   registerFailedAttempt,
