@@ -107,29 +107,7 @@ export default function LoginPage() {
     setIsLoading(true);
 
     try {
-      if (portalTarget === "admin") {
-        // Explicit Admin Portal Sign In
-        const adminRes = await fetch("/api/admin/auth", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email, password }),
-        });
 
-        const adminData = await adminRes.json();
-        if (adminRes.ok) {
-          if (adminData.mfaRequired) {
-            setMfaRequired(true);
-            setIsLoading(false);
-            return;
-          }
-          window.location.href = "/admin";
-          return;
-        } else {
-          setError(adminData.error || "Invalid staff credentials.");
-          setIsLoading(false);
-          return;
-        }
-      }
 
       if (mode === "signup") {
         if (password.length < 8) {
@@ -157,16 +135,40 @@ export default function LoginPage() {
         });
         if (res.success) {
           signInFan(res.profile);
-          router.replace(redirect.startsWith("/admin") ? "/fan-zone" : redirect);
+          window.location.href = redirect.startsWith("/admin") ? "/admin" : "/fan-zone";
         } else {
           setError("Could not create account. Please try again.");
         }
       } else {
-        // Standard Fan Zone Auth
+        // 1. Attempt Admin Auth first
+        const adminRes = await fetch("/api/admin/auth", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email, password }),
+        });
+
+        if (adminRes.ok) {
+          const adminData = await adminRes.json();
+          if (adminData.mfaRequired) {
+            setMfaRequired(true);
+            setIsLoading(false);
+            return;
+          }
+          // Admin account detected: redirect straight to Admin Portal!
+          window.location.href = "/admin";
+          return;
+        }
+
+        // 2. Standard Fan Zone Auth fallback
         const fanRes = await signInFanWithPassword({ email, password });
         if (fanRes.success) {
           signInFan(fanRes.profile);
-          router.replace(redirect.startsWith("/admin") ? "/fan-zone" : redirect);
+          // If this is edwardmagejo@gmail.com or requested /admin redirect, launch /admin
+          if (email.toLowerCase() === "edwardmagejo@gmail.com" || redirect.startsWith("/admin")) {
+            window.location.href = "/admin";
+          } else {
+            window.location.href = "/fan-zone";
+          }
         } else {
           setError("Incorrect email or password.");
         }
