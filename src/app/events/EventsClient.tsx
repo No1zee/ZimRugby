@@ -3,7 +3,7 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { 
   Calendar as CalendarIcon, MapPin, Clock, Award, Users, Layers, Shield, Trophy, Activity, CheckCircle,
-  ChevronLeft, ChevronRight, CalendarDays, Download, Filter, List, Sparkles, Ticket
+  ChevronLeft, ChevronRight, CalendarDays, Download, Filter, List, Sparkles, Ticket, FileText, Megaphone, Landmark
 } from "lucide-react";
 import SlantedButton from "@/components/ui/SlantedButton";
 import { useState, useEffect, useMemo } from "react";
@@ -51,9 +51,12 @@ const levels = [
   { name: "National Teams", icon: Shield, tag: "National", code: "NAT" },
   { name: "Club Rugby", icon: Trophy, tag: "Clubs", code: "CLB" },
   { name: "Schools Rugby", icon: Users, tag: "Schools", code: "SCH" },
-  { name: "Women's Rugby", icon: Activity, tag: "Women", code: "WMN" },
-  { name: "Youth Pathways", icon: Layers, tag: "Youth", code: "YTH" },
-  { name: "Sevens Rugby", icon: Award, tag: "Sevens", code: "7S" }
+  { name: "Squad Drops", icon: FileText, tag: "Squad", code: "SQD" },
+  { name: "Campaigns", icon: Megaphone, tag: "Campaign", code: "CMPG" },
+  { name: "Clinics & Refs", icon: Award, tag: "Clinic", code: "CLN" },
+  { name: "Governance", icon: Landmark, tag: "Governance", code: "GOV" },
+  { name: "Camps & Youth", icon: Layers, tag: "Youth", code: "CMP" },
+  { name: "Sponsor Events", icon: Sparkles, tag: "Sponsor", code: "SPN" }
 ];
 
 const WEEKDAYS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
@@ -79,6 +82,24 @@ function dayKey(d: Date): string {
 
 function getTagBadge(tags: string[] = []): { label: string; bg: string; text: string } {
   const tagStr = tags.join(" ").toLowerCase();
+  if (tagStr.includes("squad")) {
+    return { label: "[ SQD ]", bg: "bg-blue-600 text-white", text: "Squad Drop" };
+  }
+  if (tagStr.includes("campaign")) {
+    return { label: "[ CMPG ]", bg: "bg-rose-600 text-white", text: "Campaign" };
+  }
+  if (tagStr.includes("clinic") || tagStr.includes("ref") || tagStr.includes("coach")) {
+    return { label: "[ CLN ]", bg: "bg-teal-600 text-white", text: "Clinic / Seminar" };
+  }
+  if (tagStr.includes("gov") || tagStr.includes("agm") || tagStr.includes("board")) {
+    return { label: "[ GOV ]", bg: "bg-indigo-700 text-white", text: "Governance" };
+  }
+  if (tagStr.includes("camp")) {
+    return { label: "[ CMP ]", bg: "bg-orange-600 text-white", text: "Youth Camp" };
+  }
+  if (tagStr.includes("sponsor") || tagStr.includes("brand")) {
+    return { label: "[ SPN ]", bg: "bg-amber-500 text-white", text: "Sponsor Event" };
+  }
   if (tagStr.includes("national") || tagStr.includes("sables")) {
     return { label: "[ NAT ]", bg: "bg-zru-green text-white", text: "National Team" };
   }

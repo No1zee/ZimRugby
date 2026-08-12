@@ -38,7 +38,7 @@ interface EventsPanelProps {
 type ViewMode = "month" | "list";
 
 interface FormState {
-  entry_kind: "event" | "news";
+  entry_kind: "event" | "news" | "campaign";
   title: string;
   subtitle: string;
   page_type: string;
@@ -89,8 +89,13 @@ const CATEGORY_PRESETS = [
   "National Team",
   "Club Rugby",
   "Schools Rugby",
+  "Squad Drop",
+  "Campaign",
+  "Coaching / Ref Clinic",
+  "Union Governance",
+  "Youth Camp",
+  "Sponsor Activation",
   "Women's Rugby",
-  "Youth Pathways",
   "Sevens Rugby",
 ];
 
@@ -258,12 +263,39 @@ export default function EventsPanel({ initialEvents, onDirtyChange }: EventsPane
           throw new Error(err?.error || res.statusText);
         }
         toast(`Scheduled news article '${form.title}' for ${form.date}.`);
+      } else if (form.entry_kind === "campaign") {
+        const campaignPayload = {
+          title: form.title,
+          subtitle: form.subtitle || "Official ZRU Campaign",
+          page_type: "general",
+          category: "Campaign",
+          tags: ["Campaign"],
+          date: form.date || null,
+          time: form.time || null,
+          location: form.location || "National Digital & Stadium",
+          description: form.description || null,
+          content: form.content || null,
+          image: form.image || null,
+          ticket_url: form.ticket_url || null,
+          status: form.status || "published",
+        };
+        const res = await fetch("/api/admin/directus", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ collection: "events", data: campaignPayload }),
+        });
+        if (!res.ok) {
+          const err = await res.json().catch(() => null);
+          throw new Error(err?.error || res.statusText);
+        }
+        toast(`Scheduled campaign '${form.title}' on the Master Calendar for ${form.date}.`);
       } else {
         const payload: Record<string, unknown> = {
           title: form.title || null,
           subtitle: form.subtitle || null,
           page_type: form.page_type || "general",
-          category: form.category || null,
+          category: form.category || "National Team",
+          tags: [form.category || "National Team"],
           date: form.date || null,
           time: form.time || null,
           location: form.location || null,
@@ -343,10 +375,20 @@ export default function EventsPanel({ initialEvents, onDirtyChange }: EventsPane
             <div>
               <h2 className="flex items-center gap-2 font-heading text-xl font-black uppercase text-rich-black">
                 <CalendarPlus className="h-5 w-5 text-zru-green" />
-                {editingId !== null ? "Edit event" : form.entry_kind === "news" ? "Schedule News Article" : "New Rugby Event / Fixture"}
+                {editingId !== null 
+                  ? "Edit Event" 
+                  : form.entry_kind === "news" 
+                  ? "Schedule News Article" 
+                  : form.entry_kind === "campaign"
+                  ? "Schedule Campaign Drop"
+                  : "New Event / Fixture / Clinic"}
               </h2>
               <p className="mt-1 text-xs text-black/50">
-                {form.entry_kind === "news" ? "Schedule a news post to publish on the chosen date." : "Events & fixtures appear on the Master Calendar."}
+                {form.entry_kind === "news" 
+                  ? "Schedule a news post to publish on the chosen date." 
+                  : form.entry_kind === "campaign"
+                  ? "Schedule a supporters or sponsor campaign on the Master Calendar."
+                  : "Events, matches, squad drops, clinics, and meetings appear on the Master Calendar."}
               </p>
             </div>
 
@@ -356,7 +398,7 @@ export default function EventsPanel({ initialEvents, onDirtyChange }: EventsPane
                 <button
                   type="button"
                   onClick={() => setForm({ ...form, entry_kind: "event" })}
-                  className={`px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-wider transition-all ${
+                  className={`px-3 py-2 rounded-lg text-xs font-bold uppercase tracking-wider transition-all ${
                     form.entry_kind === "event" ? "bg-zru-green text-white shadow font-black" : "text-black/60 hover:text-black"
                   }`}
                 >
@@ -365,11 +407,20 @@ export default function EventsPanel({ initialEvents, onDirtyChange }: EventsPane
                 <button
                   type="button"
                   onClick={() => setForm({ ...form, entry_kind: "news" })}
-                  className={`px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-wider transition-all ${
+                  className={`px-3 py-2 rounded-lg text-xs font-bold uppercase tracking-wider transition-all ${
                     form.entry_kind === "news" ? "bg-rich-black text-white shadow font-black" : "text-black/60 hover:text-black"
                   }`}
                 >
-                  📰 Schedule News Post
+                  📰 News Post
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setForm({ ...form, entry_kind: "campaign" })}
+                  className={`px-3 py-2 rounded-lg text-xs font-bold uppercase tracking-wider transition-all ${
+                    form.entry_kind === "campaign" ? "bg-rose-600 text-white shadow font-black" : "text-black/60 hover:text-black"
+                  }`}
+                >
+                  🚀 Campaign
                 </button>
               </div>
             )}
