@@ -13,9 +13,6 @@ export default function LoginPage() {
   const searchParams = useSearchParams();
   const redirect = searchParams.get("redirect") || "/fan-zone";
 
-  const [portalTarget, setPortalTarget] = useState<"fan" | "admin">(() => {
-    return redirect.startsWith("/admin") ? "admin" : "fan";
-  });
   const [mode, setMode] = useState<"signin" | "signup">("signin");
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -65,10 +62,10 @@ export default function LoginPage() {
 
   // Redirect if already authenticated as Fan (ignore if target is /admin so admin check can evaluate)
   useEffect(() => {
-    if (isAuthenticated && !redirect.startsWith("/admin") && portalTarget !== "admin") {
+    if (isAuthenticated && !redirect.startsWith("/admin")) {
       router.replace(redirect);
     }
-  }, [isAuthenticated, redirect, router, portalTarget]);
+  }, [isAuthenticated, redirect, router]);
 
   const handleAdminMfa = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -233,44 +230,13 @@ export default function LoginPage() {
         {/* Centered form */}
         <div className="flex-1 flex items-center justify-center px-8 py-12">
           <div className="w-full max-w-[360px]">
-            {/* Heading & Portal Mode Selector */}
-            <div className="mb-6">
-              <div className="flex border-b border-gray-200 mb-6">
-                <button
-                  type="button"
-                  onClick={() => { setPortalTarget("fan"); setError(""); }}
-                  className={`flex-1 pb-3 text-xs font-heading font-black uppercase tracking-wider text-center border-b-2 transition-all cursor-pointer ${
-                    portalTarget === "fan"
-                      ? "border-[#006747] text-[#006747]"
-                      : "border-transparent text-gray-400 hover:text-gray-600"
-                  }`}
-                >
-                  Supporter Fan Zone
-                </button>
-                <button
-                  type="button"
-                  onClick={() => { setPortalTarget("admin"); setError(""); }}
-                  className={`flex-1 pb-3 text-xs font-heading font-black uppercase tracking-wider text-center border-b-2 transition-all cursor-pointer ${
-                    portalTarget === "admin"
-                      ? "border-[#006747] text-[#006747]"
-                      : "border-transparent text-gray-400 hover:text-gray-600"
-                  }`}
-                >
-                  ZRU Staff & Admin
-                </button>
-              </div>
-
+            {/* Clean Simple Heading */}
+            <div className="mb-8">
               <h2 className="text-2xl font-bold text-gray-900 tracking-tight">
-                {portalTarget === "admin"
-                  ? "Staff Admin Access"
-                  : mode === "signin"
-                  ? "Sign in"
-                  : "Create account"}
+                {mode === "signin" ? "Sign in" : "Create account"}
               </h2>
               <p className="mt-1.5 text-sm text-gray-500">
-                {portalTarget === "admin"
-                  ? "Enter your authorized ZRU staff email & password."
-                  : mode === "signin"
+                {mode === "signin"
                   ? "Welcome back to Zimbabwe Rugby."
                   : "Join the Sables supporters network."}
               </p>
