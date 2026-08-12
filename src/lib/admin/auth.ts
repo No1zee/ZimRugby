@@ -28,11 +28,13 @@ export async function resolvePermissionsForRole(
   role: string
 ): Promise<RolePermissions | null> {
   if (!getAdminClient()) {
-    // Local dev — no service key. Fall back to the default actor matrix.
+    // Local dev — no service key. Fall back to default actor matrix.
     return isLegacyRole(role) ? LEGACY_ROLE_DEFAULTS[role] : null;
   }
-  // Production — DB-backed only.
-  return await resolveRolePermissions(role);
+  // Production — DB-backed with legacy role fallback
+  const dbPerms = await resolveRolePermissions(role);
+  if (dbPerms) return dbPerms;
+  return isLegacyRole(role) ? LEGACY_ROLE_DEFAULTS[role] : null;
 }
 
 /**
