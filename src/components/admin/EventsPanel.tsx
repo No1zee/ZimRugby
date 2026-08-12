@@ -38,6 +38,7 @@ interface EventsPanelProps {
 type ViewMode = "month" | "list";
 
 interface FormState {
+  entry_kind: "event" | "news";
   title: string;
   subtitle: string;
   page_type: string;
@@ -55,6 +56,7 @@ interface FormState {
 }
 
 const EMPTY_FORM: FormState = {
+  entry_kind: "event",
   title: "",
   subtitle: "",
   page_type: "general",
@@ -197,6 +199,7 @@ export default function EventsPanel({ initialEvents, onDirtyChange }: EventsPane
   function openEdit(ev: AdminEventRow) {
     setEditingId(ev.id);
     setForm({
+      entry_kind: "event",
       title: ev.title || "",
       subtitle: ev.subtitle || "",
       page_type: ev.page_type || "general",
@@ -220,41 +223,73 @@ export default function EventsPanel({ initialEvents, onDirtyChange }: EventsPane
     setEditingId(null);
   }
 
+  function slugify(title: string): string {
+    return title
+      .toLowerCase()
+      .replace(/[^a-z0-9\s-]/g, "")
+      .trim()
+      .replace(/\s+/g, "-")
+      .replace(/-+/g, "-");
+  }
+
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (!form) return;
     setSaving(true);
     try {
-      const payload: Record<string, unknown> = {
-        title: form.title || null,
-        subtitle: form.subtitle || null,
-        page_type: form.page_type || "general",
-        category: form.category || null,
-        date: form.date || null,
-        time: form.time || null,
-        location: form.location || null,
-        description: form.description || null,
-        content: form.content || null,
-        image: form.image || null,
-        ticket_url: form.ticket_url || null,
-        sort: form.sort === "" ? null : Number(form.sort),
-        status: form.status || "published",
-        score: form.score || null,
-      };
-      const res = await fetch("/api/admin/directus", {
-        method: editingId !== null ? "PATCH" : "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(
-          editingId !== null
-            ? { collection: "events", id: editingId, data: payload }
-            : { collection: "events", data: payload }
-        ),
-      });
-      if (!res.ok) {
-        const err = await res.json().catch(() => null);
-        throw new Error(err?.error || res.statusText);
+      if (form.entry_kind === "news") {
+        const newsPayload = {
+          title: form.title,
+          slug: form.subtitle ? slugify(form.subtitle) : slugify(form.title),
+          excerpt: form.description,
+          body: form.content,
+          category: form.category || "NEWS",
+          image: form.image || null,
+          status: form.status || "published",
+          date: form.date ? `${form.date}T${form.time || '10:00'}:00.000Z` : new Date().toISOString(),
+        };
+        const res = await fetch("/api/admin/directus", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ collection: "news", data: newsPayload }),
+        });
+        if (!res.ok) {
+          const err = await res.json().catch(() => null);
+          throw new Error(err?.error || res.statusText);
+        }
+        toast(`Scheduled news article '${form.title}' for ${form.date}.`);
+      } else {
+        const payload: Record<string, unknown> = {
+          title: form.title || null,
+          subtitle: form.subtitle || null,
+          page_type: form.page_type || "general",
+          category: form.category || null,
+          date: form.date || null,
+          time: form.time || null,
+          location: form.location || null,
+          description: form.description || null,
+          content: form.content || null,
+          image: form.image || null,
+          ticket_url: form.ticket_url || null,
+          sort: form.sort === "" ? null : Number(form.sort),
+          status: form.status || "published",
+          score: form.score || null,
+        };
+        const res = await fetch("/api/admin/directus", {
+          method: editingId !== null ? "PATCH" : "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(
+            editingId !== null
+              ? { collection: "events", id: editingId, data: payload }
+              : { collection: "events", data: payload }
+          ),
+        });
+        if (!res.ok) {
+          const err = await res.json().catch(() => null);
+          throw new Error(err?.error || res.statusText);
+        }
+        toast(editingId !== null ? "Event saved." : "Event created.");
       }
-      toast(editingId !== null ? "Event saved." : "Event created.");
       setForm(null);
       setEditingId(null);
       router.refresh();
@@ -304,16 +339,40 @@ export default function EventsPanel({ initialEvents, onDirtyChange }: EventsPane
           onSubmit={handleSubmit}
           className="rounded-2xl border border-black/10 bg-white p-6 shadow-sm"
         >
-          <div className="mb-4 flex items-start justify-between gap-4">
+          <div className="mb-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-black/5 pb-4">
             <div>
               <h2 className="flex items-center gap-2 font-heading text-xl font-black uppercase text-rich-black">
                 <CalendarPlus className="h-5 w-5 text-zru-green" />
-                {editingId !== null ? "Edit event" : "New event"}
+                {editingId !== null ? "Edit event" : form.entry_kind === "news" ? "Schedule News Article" : "New Rugby Event / Fixture"}
               </h2>
               <p className="mt-1 text-xs text-black/50">
-                Events appear on the public /events page. Pick from preset dropdowns or type custom text.
+                {form.entry_kind === "news" ? "Schedule a news post to publish on the chosen date." : "Events & fixtures appear on the Master Calendar."}
               </p>
             </div>
+
+            {/* Entry Kind Switcher */}
+            {editingId === null && (
+              <div className="flex p-1 bg-black/5 rounded-xl border border-black/10">
+                <button
+                  type="button"
+                  onClick={() => setForm({ ...form, entry_kind: "event" })}
+                  className={`px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-wider transition-all ${
+                    form.entry_kind === "event" ? "bg-zru-green text-white shadow font-black" : "text-black/60 hover:text-black"
+                  }`}
+                >
+                  🏉 Match / Event
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setForm({ ...form, entry_kind: "news" })}
+                  className={`px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-wider transition-all ${
+                    form.entry_kind === "news" ? "bg-rich-black text-white shadow font-black" : "text-black/60 hover:text-black"
+                  }`}
+                >
+                  📰 Schedule News Post
+                </button>
+              </div>
+            )}
           </div>
 
           {/* Datalists for quick dropdown selection or custom typing */}
