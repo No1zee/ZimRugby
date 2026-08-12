@@ -142,7 +142,7 @@ export default function JoinFanZoneSection() {
             {/* Logo — scales up on hover */}
             <div className="relative shrink-0 flex items-center justify-center transition-transform duration-500 group-hover/fzCard:scale-150">
               <Image
-                src="/images/logos/zru-logo.svg"
+                src="/images/logos/zru-logo-white-text.svg"
                 alt="ZRU Emblem"
                 width={56}
                 height={56}

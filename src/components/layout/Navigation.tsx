@@ -320,7 +320,7 @@ export default function Navigation() {
               }`}
             >
               <Image
-                src="/zru logo main.svg"
+                src={isOnHero ? "/images/logos/zru-logo-white-text.svg" : "/zru logo main.svg"}
                 alt="Zimbabwe Rugby Union Logo"
                 width={80}
                 height={80}
