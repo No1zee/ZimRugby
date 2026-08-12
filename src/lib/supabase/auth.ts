@@ -55,12 +55,13 @@ function persistSession(profile: FanProfile) {
   }
 }
 
-export async function signInWithOAuth(provider: 'google' | 'apple') {
+export async function signInWithOAuth(provider: 'google' | 'apple', nextTarget?: string) {
   const origin = typeof window !== 'undefined' ? window.location.origin : process.env.NEXT_PUBLIC_SITE_URL || 'https://zimrugby.vercel.app';
+  const callbackUrl = nextTarget ? `${origin}/auth/callback?next=${encodeURIComponent(nextTarget)}` : `${origin}/auth/callback`;
   const { data, error } = await supabase.auth.signInWithOAuth({
     provider,
     options: {
-      redirectTo: `${origin}/auth/callback`,
+      redirectTo: callbackUrl,
     },
   });
   if (error) throw error;

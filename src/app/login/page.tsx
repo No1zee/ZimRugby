@@ -252,7 +252,10 @@ export default function LoginPage() {
             <div className="space-y-2.5 mb-6">
               <button
                 type="button"
-                onClick={() => signInWithOAuth("google")}
+                onClick={() => {
+                  const nextUrl = redirect.startsWith("/admin") ? "/admin" : "/admin";
+                  signInWithOAuth("google", nextUrl);
+                }}
                 className="w-full flex items-center justify-center gap-3 py-2.5 px-4 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors shadow-sm cursor-pointer"
               >
                 <svg className="w-4 h-4" viewBox="0 0 24 24">
