@@ -9,7 +9,7 @@ export interface CategoryFilterItem {
   icon: any;
 }
 
-export font_levels = [
+export const font_levels = [
   { id: "National", name: "National Teams", code: "NAT", icon: Shield },
   { id: "Clubs", name: "Club Rugby", code: "CLB", icon: Trophy },
   { id: "Schools", name: "Schools Rugby", code: "SCH", icon: Users },
