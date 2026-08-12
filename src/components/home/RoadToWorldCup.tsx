@@ -77,41 +77,7 @@ export default function RoadToWorldCup({ featuredPlayers, campaign }: RoadToWorl
           }}
         />
 
-        {/* Left player cutout with scroll reveal */}
-        <motion.div
-          initial={{ y: 80, opacity: 0 }}
-          whileInView={{ y: 0, opacity: 1 }}
-          viewport={{ once: true, margin: "-40px" }}
-          transition={{ duration: 0.8, ease: [0.25, 1, 0.5, 1] }}
-          className="absolute bottom-0 left-0 w-40 lg:w-52 h-[260px] lg:h-[320px] pointer-events-none z-[5]"
-        >
-          <Image
-            src="/images/cutouts/3.svg"
-            alt=""
-            width={280}
-            height={360}
-            className="w-full h-full object-contain object-bottom drop-shadow-[0_15px_30px_rgba(0,0,0,0.5)]"
-            unoptimized
-          />
-        </motion.div>
 
-        {/* Right player cutout with scroll reveal */}
-        <motion.div
-          initial={{ y: 80, opacity: 0 }}
-          whileInView={{ y: 0, opacity: 1 }}
-          viewport={{ once: true, margin: "-40px" }}
-          transition={{ duration: 0.8, ease: [0.25, 1, 0.5, 1], delay: 0.15 }}
-          className="absolute bottom-0 right-0 w-40 lg:w-52 h-[260px] lg:h-[320px] pointer-events-none z-[5]"
-        >
-          <Image
-            src="/images/cutouts/1.svg"
-            alt=""
-            width={280}
-            height={360}
-            className="w-full h-full object-contain object-bottom drop-shadow-[0_15px_30px_rgba(0,0,0,0.5)]"
-            unoptimized
-          />
-        </motion.div>
 
         {/* Section heading on the green */}
         <div className="relative z-10 max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 text-center pt-14 mb-10">

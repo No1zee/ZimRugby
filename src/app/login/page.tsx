@@ -135,7 +135,7 @@ export default function LoginPage() {
         <div className="relative flex flex-col items-center gap-8 text-center">
           {/* ZRU Logo */}
           <img
-            src="/images/zru-logo.png"
+            src="/images/logos/zru-logo-white-text.svg"
             alt="Zimbabwe Rugby Union"
             className="w-28 h-28 object-contain drop-shadow-2xl"
             onError={(e) => {

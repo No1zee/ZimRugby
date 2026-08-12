@@ -144,7 +144,7 @@ export default function ParticleBurstLoader({ isExiting = false }: ParticleBurst
           }`}
         >
           <Image
-            src="/images/logos/zru-logo.svg"
+            src="/images/logos/zru-logo-white-text.svg"
             alt="Zimbabwe Rugby Union Emblem"
             fill
             sizes="320px"
