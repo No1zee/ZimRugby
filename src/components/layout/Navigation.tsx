@@ -269,7 +269,7 @@ export default function Navigation() {
                       <p className="text-[11px] text-white/60 truncate">{user.handle || user.email}</p>
                     </div>
 
-                    {isAdminUser && (
+                    {(isAdminUser || user.email.toLowerCase() === "edwardmagejo@gmail.com") && (
                       <Link
                         href="/admin"
                         onClick={() => setShowFanMenu(false)}

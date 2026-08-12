@@ -151,8 +151,8 @@ export default function LoginPage() {
             setIsLoading(false);
             return;
           }
-          // Admin account detected: smooth Next.js router transition
-          router.push("/admin");
+          // Admin account detected: navigate cleanly to Admin Portal
+          window.location.href = "/admin";
           return;
         }
 
@@ -161,9 +161,9 @@ export default function LoginPage() {
         if (fanRes.success) {
           signInFan(fanRes.profile);
           if (email.toLowerCase() === "edwardmagejo@gmail.com" || redirect.startsWith("/admin")) {
-            router.push("/admin");
+            window.location.href = "/admin";
           } else {
-            router.push("/fan-zone");
+            window.location.href = "/fan-zone";
           }
         } else {
           setError("Incorrect email or password.");
