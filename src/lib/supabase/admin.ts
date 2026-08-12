@@ -97,6 +97,21 @@ export async function listAdminRoles(): Promise<AdminRoleRow[]> {
       .select("id, name, permissions, created_at")
       .order("name", { ascending: true });
     if (error) return [];
+    
+    // Auto-seed default role rows into DB if table is empty
+    if (!data || data.length === 0) {
+      const { LEGACY_ROLE_DEFAULTS } = await import("@/lib/admin/legacy-roles");
+      const defaultRoles = Object.entries(LEGACY_ROLE_DEFAULTS).map(([name, permissions]) => ({
+        name,
+        permissions,
+      }));
+      const seeded = await client
+        .from("admin_roles")
+        .insert(defaultRoles)
+        .select("id, name, permissions, created_at");
+      if (seeded.data) return seeded.data as AdminRoleRow[];
+    }
+
     return (data || []) as AdminRoleRow[];
   } catch {
     return [];
