@@ -1,7 +1,7 @@
 import { Metadata } from "next";
 import { Suspense } from "react";
 import TeamBentoGrid from "@/components/teams/TeamBentoGrid";
-import FanZoneSignup from "@/components/fanzone/FanZoneSignup";
+import HomeNewsletterBanner from "@/components/home/HomeNewsletterBanner";
 import { getPageBySlug } from "@/lib/api/pages";
 import { getTeamsList } from "@/lib/api/teams";
 import { draftMode } from "next/headers";
@@ -31,10 +31,8 @@ export default async function TeamsPage() {
         </Suspense>
       </div>
 
-      {/* Fan Zone Signup */}
-      <section className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <FanZoneSignup />
-      </section>
+      {/* Fan Zone Signup — Centralized single point of truth */}
+      <HomeNewsletterBanner />
 
       {/* CMS sections after the bento grid (e.g. development_pathways) */}
       {cmsPage?.sections && cmsPage.sections.length > 0 && (

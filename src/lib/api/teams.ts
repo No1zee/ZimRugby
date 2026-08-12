@@ -334,7 +334,7 @@ const BENTO_TEAMS: BentoTeam[] = [
     ranking: "WR Challenger Series", rankingValue: "Challenger", worldRankingTier: "Sevens Circuit",
     keyHonour: "Africa 7s Podium", recentRecord: ["W", "W", "L", "W", "L"],
     pathway: "Crossover from Sables", squadSize: 18,
-    heroImage: "/images/hero/cheetahs-hero.webp",
+    heroImage: "/images/teams/cheetahs.jpg",
     featuredImage: "/images/teams/cheetahs.jpg", featuredPlayer: "Shane Makombe",
     stats: [{ label: "Circuit", value: "WR 7s" }, { label: "Speed Tier", value: "Elite" }, { label: "Squad Roster", value: "18" }],
     href: "/teams/cheetahs"
@@ -348,7 +348,7 @@ const BENTO_TEAMS: BentoTeam[] = [
     ranking: "Africa U20 #1", rankingValue: "#1 Africa", worldRankingTier: "U20 Continental Elite",
     keyHonour: "Barthes Trophy Champions", recentRecord: ["W", "W", "W", "W", "W"],
     pathway: "Feeds Senior Sables", squadSize: 32,
-    heroImage: "/images/hero/junior-sables-hero.webp",
+    heroImage: "/images/hero/zim-u20s.webp",
     featuredImage: "/images/hero/zim-u20s.webp", featuredPlayer: "Tendai Mawara",
     stats: [{ label: "Barthes Cup", value: "1st" }, { label: "World Trophy", value: "Finalists" }, { label: "U20 Roster", value: "32" }],
     href: "/teams/junior-sables"

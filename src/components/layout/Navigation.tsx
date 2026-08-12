@@ -288,10 +288,10 @@ export default function Navigation() {
               <Search className="w-4 h-4" />
             </button>
             <Link
-              href="/tickets"
-              className="flex items-center gap-1 px-2.5 py-1 rounded-full bg-[#006747] text-white text-[10px] font-heading font-black uppercase tracking-wider shadow-[inset_0_1px_0_rgba(255,255,255,0.20),inset_0_-1px_0_rgba(0,0,0,0.25),0_2px_0_#003D20,0_4px_8px_rgba(0,0,0,0.35)]"
+              href="/login"
+              className="flex items-center gap-1 px-2.5 py-1 rounded-full bg-[#006747] text-white text-[10px] font-heading font-black uppercase tracking-wider shadow-[inset_0_1px_0_rgba(255,255,255,0.20),inset_0_-1px_0_rgba(0,0,0,0.25),0_2px_0_#003D20,0_4px_8px_rgba(0,0,0,0.35)] hover:bg-black transition-colors"
             >
-              TICKETS
+              SIGN IN
             </Link>
           </div>
         </div>
