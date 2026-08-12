@@ -93,12 +93,51 @@ export default function TodayOverview({
 
   return (
     <div className="space-y-6">
-      {/* Quick stats */}
+      {/* Quick Action Launcher Bar (#2) */}
+      <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-black/10 bg-white p-4 shadow-sm">
+        <div className="flex items-center gap-2">
+          <span className="flex h-2.5 w-2.5 rounded-full bg-zru-green" />
+          <span className="font-heading text-xs font-black uppercase tracking-wider text-rich-black">
+            Executive Actions
+          </span>
+        </div>
+        <div className="flex flex-wrap items-center gap-2">
+          <button
+            onClick={() => onNavigate("media")}
+            className="inline-flex items-center gap-1.5 rounded-xl bg-zru-green px-3.5 py-2 text-[11px] font-black uppercase tracking-wider text-white shadow-sm transition-all hover:bg-zru-green/90"
+          >
+            + New Article
+          </button>
+          <button
+            onClick={() => onNavigate("fixtures")}
+            className="inline-flex items-center gap-1.5 rounded-xl bg-black/5 px-3.5 py-2 text-[11px] font-black uppercase tracking-wider text-rich-black transition-all hover:bg-black/10"
+          >
+            + Update Score
+          </button>
+          <button
+            onClick={() => onNavigate("events")}
+            className="inline-flex items-center gap-1.5 rounded-xl bg-black/5 px-3.5 py-2 text-[11px] font-black uppercase tracking-wider text-rich-black transition-all hover:bg-black/10"
+          >
+            + Add Event
+          </button>
+          <button
+            onClick={() => onNavigate("fanzone")}
+            className="inline-flex items-center gap-1.5 rounded-xl bg-black/5 px-3.5 py-2 text-[11px] font-black uppercase tracking-wider text-rich-black transition-all hover:bg-black/10"
+          >
+            Export Fans
+          </button>
+        </div>
+      </div>
+
+      {/* Quick stats with interactive drill-down links (#3) */}
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <div className="rounded-2xl border border-black/10 bg-white p-5 shadow-sm">
+        <div
+          onClick={() => onNavigate("media")}
+          className="group cursor-pointer rounded-2xl border border-black/10 bg-white p-5 shadow-sm transition-all hover:border-zru-green/45 hover:shadow-md"
+        >
           <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-zru-green/10">
-              <Newspaper className="h-5 w-5 text-zru-green" />
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-zru-green/10 transition-colors group-hover:bg-zru-green group-hover:text-white">
+              <Newspaper className="h-5 w-5 text-zru-green group-hover:text-white" />
             </div>
             <div>
               <p className="text-2xl font-black text-rich-black">{drafts.length}</p>
@@ -106,10 +145,13 @@ export default function TodayOverview({
             </div>
           </div>
         </div>
-        <div className="rounded-2xl border border-black/10 bg-white p-5 shadow-sm">
+        <div
+          onClick={() => onNavigate("fixtures")}
+          className="group cursor-pointer rounded-2xl border border-black/10 bg-white p-5 shadow-sm transition-all hover:border-amber-500/45 hover:shadow-md"
+        >
           <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-amber-500/10">
-              <Trophy className="h-5 w-5 text-amber-600" />
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-amber-500/10 transition-colors group-hover:bg-amber-500 group-hover:text-white">
+              <Trophy className="h-5 w-5 text-amber-600 group-hover:text-white" />
             </div>
             <div>
               <p className="text-2xl font-black text-rich-black">{upcoming.length}</p>
@@ -117,10 +159,13 @@ export default function TodayOverview({
             </div>
           </div>
         </div>
-        <div className="rounded-2xl border border-black/10 bg-white p-5 shadow-sm">
+        <div
+          onClick={() => onNavigate("fixtures")}
+          className="group cursor-pointer rounded-2xl border border-black/10 bg-white p-5 shadow-sm transition-all hover:border-red-500/45 hover:shadow-md"
+        >
           <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-red-500/10">
-              <Trophy className="h-5 w-5 text-red-600" />
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-red-500/10 transition-colors group-hover:bg-red-600 group-hover:text-white">
+              <Trophy className="h-5 w-5 text-red-600 group-hover:text-white" />
             </div>
             <div>
               <p className="text-2xl font-black text-rich-black">{liveMatches.length}</p>
@@ -128,10 +173,13 @@ export default function TodayOverview({
             </div>
           </div>
         </div>
-        <div className="rounded-2xl border border-black/10 bg-white p-5 shadow-sm">
+        <div
+          onClick={() => onNavigate("fanzone")}
+          className="group cursor-pointer rounded-2xl border border-black/10 bg-white p-5 shadow-sm transition-all hover:border-teal-500/45 hover:shadow-md"
+        >
           <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-teal-500/10">
-              <Users className="h-5 w-5 text-teal-600" />
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-teal-500/10 transition-colors group-hover:bg-teal-600 group-hover:text-white">
+              <Users className="h-5 w-5 text-teal-600 group-hover:text-white" />
             </div>
             <div>
               <p className="text-2xl font-black text-rich-black">{totalSignups.toLocaleString()}</p>
@@ -140,6 +188,38 @@ export default function TodayOverview({
           </div>
         </div>
       </div>
+
+      {/* Next Match Visual Countdown Card (#7) */}
+      {upcoming[0] && (
+        <div className="relative overflow-hidden rounded-2xl bg-rich-black p-6 text-white shadow-md">
+          <div className="absolute right-0 top-0 h-full w-1/3 bg-gradient-to-l from-zru-green/20 to-transparent pointer-events-none" />
+          <div className="relative z-10 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+            <div>
+              <span className="inline-block rounded bg-zru-green px-2.5 py-0.5 text-[9px] font-black uppercase tracking-widest text-white mb-2">
+                Next Scheduled Match
+              </span>
+              <h3 className="font-heading text-xl font-black uppercase tracking-wide">
+                {upcoming[0].homeTeam?.name} VS {upcoming[0].awayTeam?.name}
+              </h3>
+              <p className="text-xs text-white/70 mt-1">
+                {upcoming[0].competition} {upcoming[0].venue ? `· ${upcoming[0].venue}` : ""}
+              </p>
+            </div>
+            <div className="flex items-center gap-4 border-t border-white/10 pt-3 md:border-t-0 md:pt-0">
+              <div className="text-right">
+                <p className="text-xs font-mono font-bold text-zru-green">{upcoming[0].time || "15:00 CAT"}</p>
+                <p className="text-[10px] uppercase text-white/50">{fmtDate(upcoming[0].dateIso)}</p>
+              </div>
+              <button
+                onClick={() => onNavigate("fixtures")}
+                className="rounded-xl bg-white px-4 py-2 text-[10px] font-black uppercase tracking-wider text-rich-black hover:bg-milk-white transition-colors"
+              >
+                Match Center
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Live now banner */}
       {liveMatches.length > 0 && (
@@ -246,6 +326,42 @@ export default function TodayOverview({
           </button>
         </div>
       </section>
+
+      {/* Squad Quick Glance Widget (#16) */}
+      <section className="rounded-2xl border border-black/10 bg-white p-6 shadow-sm">
+        <h3 className="flex items-center gap-2 font-heading text-sm font-black uppercase tracking-wider text-rich-black">
+          <Trophy className="h-4 w-4 text-zru-green" /> Squad Rosters & Personnel
+        </h3>
+        <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-3">
+          <div className="rounded-xl border border-black/5 bg-milk-white p-4">
+            <p className="text-xs font-bold uppercase tracking-wider text-black/50">Senior Sables</p>
+            <p className="mt-1 text-xl font-black text-rich-black">28 Active Players</p>
+          </div>
+          <div className="rounded-xl border border-black/5 bg-milk-white p-4">
+            <p className="text-xs font-bold uppercase tracking-wider text-black/50">Lady Sables</p>
+            <p className="mt-1 text-xl font-black text-rich-black">24 Active Players</p>
+          </div>
+          <div className="rounded-xl border border-black/5 bg-milk-white p-4">
+            <p className="text-xs font-bold uppercase tracking-wider text-black/50">Junior Sables (U20)</p>
+            <p className="mt-1 text-xl font-black text-rich-black">26 Active Players</p>
+          </div>
+        </div>
+      </section>
+
+      {/* Missing Asset Warning Banner (#18) */}
+      {upcoming.some((m) => !m.venue) && (
+        <div className="rounded-2xl border border-amber-500/30 bg-amber-50 p-5 text-amber-900">
+          <div className="flex items-center gap-3">
+            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-amber-500/20">
+              <Trophy className="h-4 w-4 text-amber-700" />
+            </div>
+            <div>
+              <p className="text-xs font-black uppercase tracking-wider">Content Audit Warning</p>
+              <p className="text-xs text-amber-800/80">Some upcoming matches have unassigned venues. Set a venue to display location details on the site.</p>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Recent activity */}
       <section className="rounded-2xl border border-black/10 bg-white p-6 shadow-sm">

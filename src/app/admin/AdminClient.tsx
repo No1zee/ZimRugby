@@ -1,7 +1,7 @@
-﻿"use client";
+"use client";
 
 import { useEffect, useState } from "react";
-import { BookOpen, ExternalLink, FileText, Flag, HelpCircle, LayoutDashboard, Radio, ShieldCheck, Sparkles, Sprout, Users, CalendarDays, Trophy } from "lucide-react";
+import { BookOpen, ExternalLink, FileText, Flag, HelpCircle, LayoutDashboard, Radio, ShieldCheck, Sparkles, Sprout, Users, CalendarDays, Trophy, RefreshCw } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import CollectionManager from "@/components/admin/CollectionManager";
 import ArticleComposer from "@/components/admin/ArticleComposer";
@@ -10,7 +10,7 @@ import SignupsPanel from "@/components/admin/SignupsPanel";
 import TodayOverview from "@/components/admin/TodayOverview";
 import EventsPanel, { type AdminEventRow } from "@/components/admin/EventsPanel";
 import CollapsibleSection from "@/components/admin/ui/CollapsibleSection";
-import { ToastProvider } from "@/components/admin/ui/ToastProvider";
+import { ToastProvider, useToast } from "@/components/admin/ui/ToastProvider";
 import { ConfirmProvider, useConfirm } from "@/components/admin/ui/ConfirmProvider";
 import { onAdminTab, setAdminTab } from "@/lib/admin/tab-events";
 import { canAccessPanel, canOnCollection, type RolePermissions } from "@/lib/admin/iam";
@@ -151,6 +151,7 @@ function AdminClientInner(props: AdminClientProps) {
   } = props;
 
   const confirm = useConfirm();
+  const { toast } = useToast();
   const [activeTab, setActiveTab] = useState<TabId>("overview");
   const [panelDirty, setPanelDirty] = useState<Record<string, boolean>>({});
   const [teamsRemountKey, setTeamsRemountKey] = useState(0);
@@ -239,6 +240,41 @@ function AdminClientInner(props: AdminClientProps) {
     setAdminTab(activeTab);
   }, [activeTab]);
 
+  // Sync activeTab with URL hash/query parameter on load and tab change (#12)
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const params = new URLSearchParams(window.location.search);
+    const tabParam = params.get("tab") as TabId | null;
+    if (tabParam && tabParam !== activeTab && canAccessPanel(permissions, tabParam)) {
+      setActiveTab(tabParam);
+    }
+  }, []);
+
+  // Global Keyboard Navigation Shortcuts (#17)
+  useEffect(() => {
+    let lastKey = "";
+    let lastKeyTime = 0;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // Ignore when user is typing in inputs or textareas
+      if (["INPUT", "TEXTAREA", "SELECT"].includes((e.target as HTMLElement)?.tagName)) return;
+      const now = Date.now();
+      const key = e.key.toLowerCase();
+
+      if ((lastKey === "g" || lastKey === "G") && now - lastKeyTime < 800) {
+        if (key === "h") { navigate("overview"); toast("Navigated to Dashboard", "info"); }
+        if (key === "m") { navigate("fixtures"); toast("Navigated to Matches", "info"); }
+        if (key === "n") { navigate("media"); toast("Navigated to News", "info"); }
+        if (key === "s") { navigate("fanzone"); toast("Navigated to Signups", "info"); }
+        lastKey = "";
+        return;
+      }
+      lastKey = key;
+      lastKeyTime = now;
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, []);
+
   useEffect(() => {
     const handler = (e: BeforeUnloadEvent) => {
       if (dirty) {
@@ -268,8 +304,33 @@ function AdminClientInner(props: AdminClientProps) {
     }
     setActiveTab(tab);
     setFocusItem(null);
+
+    if (typeof window !== "undefined") {
+      const url = new URL(window.location.href);
+      url.searchParams.set("tab", tab);
+      window.history.replaceState({}, "", url.toString());
+    }
+
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
+
+  // One-Click CDN Purge Handler (#1)
+  const [isPurgingCache, setIsPurgingCache] = useState(false);
+  const handlePurgeCache = async () => {
+    setIsPurgingCache(true);
+    try {
+      const res = await fetch("/api/revalidate", { method: "POST" });
+      if (res.ok) {
+        toast("CDN Cache Purged Successfully! Live site updated.", "success");
+      } else {
+        toast("Failed to purge cache. Please try again.", "error");
+      }
+    } catch {
+      toast("Network error while purging CDN cache.", "error");
+    } finally {
+      setIsPurgingCache(false);
+    }
+  };
 
   return (
     <main className="bg-milk-white min-h-screen pb-16 pt-8">
@@ -286,14 +347,27 @@ function AdminClientInner(props: AdminClientProps) {
               {NAV_SECTIONS.flatMap((s) => s.items).find((i) => i.id === activeTab)?.label ?? "Dashboard"}
             </h1>
           </div>
-          <a
-            href="/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 rounded-lg bg-black/5 px-4 py-2.5 font-heading text-xs font-black uppercase tracking-wider text-black/70 transition-colors hover:bg-black/10"
-          >
-            View live website <ExternalLink className="h-3.5 w-3.5" />
-          </a>
+
+          <div className="flex flex-wrap items-center gap-3">
+            {/* One-Click CDN Cache Purge Button (#1) */}
+            <button
+              onClick={handlePurgeCache}
+              disabled={isPurgingCache}
+              className="inline-flex items-center gap-2 rounded-xl bg-zru-green px-4 py-2.5 font-heading text-xs font-black uppercase tracking-wider text-white shadow-sm transition-all hover:bg-zru-green/90 disabled:opacity-50"
+            >
+              <RefreshCw className={`h-3.5 w-3.5 ${isPurgingCache ? "animate-spin" : ""}`} />
+              {isPurgingCache ? "Purging..." : "Purge CDN Cache"}
+            </button>
+
+            <a
+              href="/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 rounded-xl bg-black/5 px-4 py-2.5 font-heading text-xs font-black uppercase tracking-wider text-black/70 transition-colors hover:bg-black/10"
+            >
+              View live website <ExternalLink className="h-3.5 w-3.5" />
+            </a>
+          </div>
         </div>
 
         {/* Section nav */}
