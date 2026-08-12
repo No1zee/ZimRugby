@@ -190,6 +190,9 @@ export interface EventItem {
   image: string;
   content?: string;
   ticketUrl?: string;
+  score?: string;
+  homeTeam?: string;
+  awayTeam?: string;
   /** Derived from date/time at render time: "upcoming" | "ongoing" | "completed" */
   status?: "upcoming" | "ongoing" | "completed";
 }

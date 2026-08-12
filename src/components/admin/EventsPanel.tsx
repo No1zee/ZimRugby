@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
@@ -27,6 +27,7 @@ export interface AdminEventRow {
   page_type?: string;
   category?: string;
   tags?: string[] | string | null;
+  score?: string;
 }
 
 interface EventsPanelProps {
@@ -50,6 +51,7 @@ interface FormState {
   ticket_url: string;
   sort: string;
   status: string;
+  score: string;
 }
 
 const EMPTY_FORM: FormState = {
@@ -66,7 +68,43 @@ const EMPTY_FORM: FormState = {
   ticket_url: "",
   sort: "",
   status: "published",
+  score: "",
 };
+
+const LOCATION_PRESETS = [
+  "Harare Sports Club, Harare",
+  "Hartsfield Rugby Stadium, Bulawayo",
+  "Police Grounds, Harare",
+  "Old Georgians Sports Club, Harare",
+  "Prince Edward School Fields, Harare",
+  "Jubilee Field, St. George's College, Harare",
+  "Peterhouse Boys, Marondera",
+  "National Sports Stadium, Harare",
+  "Mutare Sports Club, Mutare",
+];
+
+const CATEGORY_PRESETS = [
+  "National Team",
+  "Club Rugby",
+  "Schools Rugby",
+  "Women's Rugby",
+  "Youth Pathways",
+  "Sevens Rugby",
+];
+
+const TITLE_PRESETS = [
+  "Zimbabwe Sables vs Namibia",
+  "Zimbabwe Sables vs Kenya",
+  "Zimbabwe Sables vs Uganda",
+  "Zimbabwe Lady Sables vs Zambia",
+  "Zimbabwe Cheetahs 7s Tournament",
+  "Junior Sables (U20) vs Kenya U20",
+  "Harare Sports Club vs Old Georgians",
+  "Old Hararians vs Pitbulls",
+  "Prince Edward vs St. George's College",
+  "Peterhouse vs St. John's College",
+  "ZRU Annual General Meeting",
+];
 
 const WEEKDAYS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
@@ -172,6 +210,7 @@ export default function EventsPanel({ initialEvents, onDirtyChange }: EventsPane
       ticket_url: ev.ticket_url || "",
       sort: ev.sort != null ? String(ev.sort) : "",
       status: ev.status || "published",
+      score: ev.score || "",
     });
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
@@ -200,6 +239,7 @@ export default function EventsPanel({ initialEvents, onDirtyChange }: EventsPane
         ticket_url: form.ticket_url || null,
         sort: form.sort === "" ? null : Number(form.sort),
         status: form.status || "published",
+        score: form.score || null,
       };
       const res = await fetch("/api/admin/directus", {
         method: editingId !== null ? "PATCH" : "POST",
@@ -271,20 +311,40 @@ export default function EventsPanel({ initialEvents, onDirtyChange }: EventsPane
                 {editingId !== null ? "Edit event" : "New event"}
               </h2>
               <p className="mt-1 text-xs text-black/50">
-                Events appear on the public /events page. Status (Upcoming / Today / Completed) is calculated automatically from the date and time.
+                Events appear on the public /events page. Pick from preset dropdowns or type custom text.
               </p>
             </div>
           </div>
 
+          {/* Datalists for quick dropdown selection or custom typing */}
+          <datalist id="title-presets">
+            {TITLE_PRESETS.map((t) => (
+              <option key={t} value={t} />
+            ))}
+          </datalist>
+          <datalist id="category-presets">
+            {CATEGORY_PRESETS.map((c) => (
+              <option key={c} value={c} />
+            ))}
+          </datalist>
+          <datalist id="location-presets">
+            {LOCATION_PRESETS.map((l) => (
+              <option key={l} value={l} />
+            ))}
+          </datalist>
+
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
             <div className="md:col-span-2">
-              <label className="mb-1 block text-[10px] font-bold uppercase tracking-wider text-black/60">Title *</label>
+              <label className="mb-1 block text-[10px] font-bold uppercase tracking-wider text-black/60">
+                Title * (Select preset or type custom)
+              </label>
               <input
                 type="text"
+                list="title-presets"
                 value={form.title}
                 onChange={(e) => setForm({ ...form, title: e.target.value })}
                 required
-                placeholder="e.g. Rugby Africa Gold Cup â€” Sables vs Namibia"
+                placeholder="Select preset or type e.g. Sables vs Namibia"
                 className="w-full rounded-lg border border-black/10 bg-white p-2.5 text-sm font-bold"
               />
             </div>
@@ -294,17 +354,20 @@ export default function EventsPanel({ initialEvents, onDirtyChange }: EventsPane
                 type="text"
                 value={form.subtitle}
                 onChange={(e) => setForm({ ...form, subtitle: e.target.value })}
-                placeholder="e.g. Round 3 of the continental championship"
+                placeholder="e.g. Round 3 of continental championship"
                 className="w-full rounded-lg border border-black/10 bg-white p-2.5 text-sm"
               />
             </div>
             <div>
-              <label className="mb-1 block text-[10px] font-bold uppercase tracking-wider text-black/60">Category</label>
+              <label className="mb-1 block text-[10px] font-bold uppercase tracking-wider text-black/60">
+                Category (Select dropdown or type)
+              </label>
               <input
                 type="text"
+                list="category-presets"
                 value={form.category}
                 onChange={(e) => setForm({ ...form, category: e.target.value })}
-                placeholder="e.g. National Team, Schools"
+                placeholder="e.g. National Team, Schools Rugby"
                 className="w-full rounded-lg border border-black/10 bg-white p-2.5 text-sm"
               />
             </div>
@@ -350,13 +413,28 @@ export default function EventsPanel({ initialEvents, onDirtyChange }: EventsPane
               />
             </div>
             <div>
-              <label className="mb-1 block text-[10px] font-bold uppercase tracking-wider text-black/60">Location</label>
+              <label className="mb-1 block text-[10px] font-bold uppercase tracking-wider text-black/60">
+                Location (Select dropdown or type)
+              </label>
               <input
                 type="text"
+                list="location-presets"
                 value={form.location}
                 onChange={(e) => setForm({ ...form, location: e.target.value })}
-                placeholder="e.g. Hartsfield Grounds, Harare"
+                placeholder="e.g. Harare Sports Club, Harare"
                 className="w-full rounded-lg border border-black/10 bg-white p-2.5 text-sm"
+              />
+            </div>
+            <div>
+              <label className="mb-1 block text-[10px] font-bold uppercase tracking-wider text-black/60">
+                Score (For completed events)
+              </label>
+              <input
+                type="text"
+                value={form.score}
+                onChange={(e) => setForm({ ...form, score: e.target.value })}
+                placeholder="e.g. ZIM 32 - 10 KEN"
+                className="w-full rounded-lg border border-black/10 bg-white p-2.5 text-sm font-bold"
               />
             </div>
             <div>
