@@ -5,10 +5,10 @@
 /* eslint-disable-next-line */
 /* Note: @theme is standard Tailwind v4 syntax. Ignore "Unknown at rule" warnings. */
 @theme {
-  --font-heading: "Unison Pro", "Unison", "Bricolage Grotesque", "Anton", sans-serif;
-  --font-subheading: "The Future", "Geist", "Switzer", system-ui, sans-serif;
-  --font-body: "The Future", "Geist", "Switzer", system-ui, sans-serif;
-  --font-serif: var(--font-serif);
+  --font-heading: var(--font-bebas-neue), "Bricolage Grotesque", "Anton", sans-serif;
+  --font-subheading: var(--font-montserrat), "Geist", "Switzer", system-ui, sans-serif;
+  --font-body: var(--font-inter), "Geist", "Switzer", system-ui, sans-serif;
+  --font-serif: Georgia, Cambria, "Times New Roman", Times, serif;
 
   /* Unified Brand Colors from Audit Spec */
   --color-green-primary: #006747; /* Pantone 349 C */

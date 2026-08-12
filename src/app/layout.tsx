@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from "next";
+import { Montserrat, Bebas_Neue, Inter } from "next/font/google";
 import "./globals.css";
 import Navigation from "@/components/layout/Navigation";
 import Footer from "@/components/layout/Footer";
@@ -8,6 +9,22 @@ import CampaignAnnouncementBar from "@/components/campaigns/CampaignAnnouncement
 import { AdaptivePerformanceProvider } from "@/components/providers/AdaptivePerformanceProvider";
 import { DraftAdminBar } from "@/components/admin/DraftAdminBar";
 import EditModeShell from "@/components/admin/EditModeShell";
+
+const montserrat = Montserrat({
+  subsets: ["latin"],
+  variable: "--font-montserrat",
+});
+
+const bebasNeue = Bebas_Neue({
+  weight: "400",
+  subsets: ["latin"],
+  variable: "--font-bebas-neue",
+});
+
+const inter = Inter({
+  subsets: ["latin"],
+  variable: "--font-inter",
+});
 
 export const viewport: Viewport = {
   themeColor: [
@@ -61,7 +78,7 @@ export default function RootLayout({
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
         <meta name="apple-mobile-web-app-title" content="ZimRugby" />
       </head>
-        <body className="antialiased min-h-dvh flex flex-col justify-between">
+        <body className={`${montserrat.variable} ${bebasNeue.variable} ${inter.variable} antialiased min-h-dvh flex flex-col justify-between`}>
         <DraftAdminBar />
         <a
           href="#main-content"

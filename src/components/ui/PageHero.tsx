@@ -78,14 +78,6 @@ export default function PageHero({
                   )}
                 </React.Fragment>
               ))}
-            {tag && (
-              <>
-                <ChevronRight className="w-3 h-3 text-white/20" />
-                <span className="bg-zru-green/15 text-zru-green px-2 py-0.5 rounded-sm border border-zru-green/20">
-                  {tag}
-                </span>
-              </>
-            )}
           </div>
 
           {/* Heading */}
