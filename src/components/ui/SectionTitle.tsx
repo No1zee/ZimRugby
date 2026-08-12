@@ -69,7 +69,7 @@ export default function SectionTitle({
         </span>
       )}
 
-      <div className={plateClass}>
+      <div className={`${plateClass} min-w-fit`}>
         <h2 className={`${sizeClass} font-heading font-black uppercase tracking-wide sm:tracking-widest ${headingTextColor} not-italic leading-[1.05]`}>
           {title ? (
             title

@@ -436,7 +436,7 @@ function HeaderStrip({
     <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
       <SectionTitle
         title={title}
-        text={typeof title === "string" ? title : undefined}
+        text={!title ? "NATIONS" : typeof title === "string" ? title : undefined}
         accent={!title ? "CUP" : undefined}
         variant="dark"
         size="md"
