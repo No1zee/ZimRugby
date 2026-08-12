@@ -35,6 +35,14 @@ export default function LoginPage() {
     }
   };
 
+  // Check MFA step from URL params
+  const [mfaRequired, setMfaRequired] = useState(() => {
+    if (typeof window === "undefined") return false;
+    return new URLSearchParams(window.location.search).get("step") === "mfa";
+  });
+  const [mfaCode, setMfaCode] = useState("");
+  const [mfaError, setMfaError] = useState("");
+
   // Debounced handle uniqueness check
   useEffect(() => {
     if (!handle || handle.length < 3) { setHandleStatus("idle"); return; }
@@ -46,7 +54,7 @@ export default function LoginPage() {
         );
         setHandleStatus(data ? "taken" : "available");
       } catch {
-        setHandleStatus("available"); // optimistic if table not yet set up
+        setHandleStatus("available");
       }
     }, 500);
     return () => clearTimeout(t);
@@ -59,6 +67,31 @@ export default function LoginPage() {
     }
   }, [isAuthenticated, redirect, router]);
 
+  const handleAdminMfa = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsLoading(true);
+    setMfaError("");
+
+    try {
+      const res = await fetch("/api/admin/auth/mfa", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ code: mfaCode }),
+      });
+
+      const data = await res.json();
+      if (!res.ok) {
+        setMfaError(data.error || "Invalid verification code");
+        setIsLoading(false);
+        return;
+      }
+      window.location.href = redirect.startsWith("/admin") ? redirect : "/admin";
+    } catch {
+      setMfaError("Connection error during verification.");
+      setIsLoading(false);
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
@@ -67,27 +100,27 @@ export default function LoginPage() {
       setError("Please fill in all fields.");
       return;
     }
-    if (password.length < 8) {
-      setError("Password must be at least 8 characters.");
-      return;
-    }
-    if (mode === "signup" && !name.trim()) {
-      setError("Please enter your name.");
-      return;
-    }
-    if (mode === "signup" && handle.length < 3) {
-      setError("Handle must be at least 3 characters.");
-      return;
-    }
-    if (mode === "signup" && handleStatus === "taken") {
-      setError("That handle is already taken. Please choose another.");
-      return;
-    }
 
     setIsLoading(true);
 
     try {
       if (mode === "signup") {
+        if (password.length < 8) {
+          setError("Password must be at least 8 characters.");
+          setIsLoading(false);
+          return;
+        }
+        if (!name.trim()) {
+          setError("Please enter your name.");
+          setIsLoading(false);
+          return;
+        }
+        if (handle.length < 3 || handleStatus === "taken") {
+          setError("Please choose a valid unique handle.");
+          setIsLoading(false);
+          return;
+        }
+
         const res = await signUpFan({
           email,
           password,
@@ -102,20 +135,35 @@ export default function LoginPage() {
           setError("Could not create account. Please try again.");
         }
       } else {
-        const res = await signInFanWithPassword({ email, password });
-        if (res.success) {
-          signInFan(res.profile);
+        // Attempt Admin/Staff Auth route first
+        const adminRes = await fetch("/api/admin/auth", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email, password }),
+        });
+
+        if (adminRes.ok) {
+          const adminData = await adminRes.json();
+          if (adminData.mfaRequired) {
+            setMfaRequired(true);
+            setIsLoading(false);
+            return;
+          }
+          window.location.href = redirect.startsWith("/admin") ? redirect : "/admin";
+          return;
+        }
+
+        // Fallback to Fan Zone Auth
+        const fanRes = await signInFanWithPassword({ email, password });
+        if (fanRes.success) {
+          signInFan(fanRes.profile);
           router.replace(redirect);
         } else {
           setError("Incorrect email or password.");
         }
       }
     } catch {
-      setError(
-        mode === "signup"
-          ? "Could not create account. Please try again."
-          : "Incorrect email or password."
-      );
+      setError("Authentication failed. Please check your credentials.");
     } finally {
       setIsLoading(false);
     }
