@@ -5,6 +5,7 @@ import Image from "next/image";
 import { Play, ExternalLink, X, CircleDot, LayoutGrid, MoveHorizontal } from "lucide-react";
 import { motion, AnimatePresence, useDragControls } from "framer-motion";
 import { VideoPlayer } from "./VideoPlayer";
+import SectionTitle from "@/components/ui/SectionTitle";
 
 export interface YouTubeVideoItem {
   id: string;
@@ -433,11 +434,13 @@ function HeaderStrip({
 }) {
   return (
     <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
-      <div>
-        <h2 className="text-3xl sm:text-5xl font-heading font-black uppercase tracking-tight text-rich-black not-italic">
-          {title ?? <>NATIONS <span className="text-accent-teal">CUP</span></>}
-        </h2>
-      </div>
+      <SectionTitle
+        title={title}
+        text={typeof title === "string" ? title : undefined}
+        accent={!title ? "CUP" : undefined}
+        variant="dark"
+        size="md"
+      />
 
       <div className="flex items-center gap-3">
         <div className="flex items-center bg-black/5 p-1 rounded-xl border border-black/10 shadow-xs">

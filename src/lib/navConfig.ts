@@ -86,16 +86,17 @@ export const mainNav: NavItem[] = [
 
 /* ── Utility bar: Tickets (highlighted), Shop ── */
 export const utilityNav: UtilityNavItem[] = [
-  {
-    label: "TICKETS",
-    href: "/tickets",
-    icon: Ticket,
-  },
-  {
-    label: "SHOP",
-    href: "/shop",
-    icon: ShoppingBag,
-  },
+  // Hidden per user request:
+  // {
+  //   label: "TICKETS",
+  //   href: "/tickets",
+  //   icon: Ticket,
+  // },
+  // {
+  //   label: "SHOP",
+  //   href: "/shop",
+  //   icon: ShoppingBag,
+  // },
 ];
 
 /* ── Legacy export for backward compatibility ── */
