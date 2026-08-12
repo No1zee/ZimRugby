@@ -173,6 +173,31 @@ export function canAccessTab(
   return Array.isArray(perms.tabs) && perms.tabs.includes(tab);
 }
 
+/**
+ * Full nav gate: tab listed AND feature flag (defense in depth). A tab is
+ * only rendered when BOTH the tab list and the matching feature flag allow
+ * it, so a DB row that grants a tab but forgets the flag still can't see it.
+ */
+const TAB_FEATURE: Partial<Record<string, "pages_builder" | "ai_assistant" | "fanzone_pii" | "media_upload">> = {
+  directus_ai: "ai_assistant",
+  pages: "pages_builder",
+  fanzone: "fanzone_pii",
+  onboarding: "fanzone_pii",
+};
+
+export function canAccessPanel(
+  perms: RolePermissions | null | undefined,
+  tab: string
+): boolean {
+  if (!canAccessTab(perms, tab)) return false;
+  if (perms && perms.all) return true;
+  const feature = TAB_FEATURE[tab];
+  if (feature) {
+    return canUseFeature(perms, feature);
+  }
+  return true;
+}
+
 export function isSuperAdmin(perms: RolePermissions | null | undefined): boolean {
   return perms?.all === true;
 }

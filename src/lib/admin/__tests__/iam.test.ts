@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import {
+  canAccessPanel,
   canAccessTab,
   canCreateCollection,
   canEditCollection,
@@ -69,6 +70,53 @@ describe("canUseFeature", () => {
 
   it("super admin gets all features", () => {
     expect(canUseFeature({ all: true }, "ai_assistant")).toBe(true);
+  });
+});
+
+describe("canAccessPanel (tab + feature-flag gate)", () => {
+  it("passes when tab listed and no feature flag applies", () => {
+    expect(canAccessPanel(EDITOR, "teams")).toBe(true);
+    expect(canAccessPanel(EDITOR, "fixtures")).toBe(true);
+    expect(canAccessPanel(EDITOR, "overview")).toBe(true);
+  });
+
+  it("denies when the feature flag is off even if the tab is listed", () => {
+    const editorWithPagesTab = { ...EDITOR, tabs: [...EDITOR.tabs, "pages", "directus_ai"] };
+    expect(canAccessPanel(editorWithPagesTab, "pages")).toBe(false);
+    expect(canAccessPanel(editorWithPagesTab, "directus_ai")).toBe(false);
+  });
+
+  it("allows when tab listed AND feature flag on", () => {
+    const mediaPlus = {
+      ...EDITOR,
+      tabs: [...EDITOR.tabs, "pages"],
+      pages_builder: true,
+    };
+    expect(canAccessPanel(mediaPlus, "pages")).toBe(true);
+  });
+
+  it("fanzone/onboarding require fanzone_pii", () => {
+    const viewer = { ...EDITOR, tabs: ["overview", "fanzone", "onboarding"], fanzone_pii: true };
+    expect(canAccessPanel(viewer, "fanzone")).toBe(true);
+    expect(canAccessPanel(viewer, "onboarding")).toBe(true);
+    const noPii = { ...EDITOR, tabs: ["overview", "fanzone", "onboarding"], fanzone_pii: false };
+    expect(canAccessPanel(noPii, "fanzone")).toBe(false);
+  });
+
+  it("super admin passes every panel", () => {
+    expect(canAccessPanel({ all: true }, "directus_ai")).toBe(true);
+    expect(canAccessPanel({ all: true }, "pages")).toBe(true);
+    expect(canAccessPanel({ all: true }, "roles")).toBe(true);
+  });
+
+  it("denies tabs not in the list regardless of flag", () => {
+    const withAiFlag = { ...EDITOR, ai_assistant: true };
+    expect(canAccessPanel(withAiFlag, "directus_ai")).toBe(false);
+  });
+
+  it("denies null/undefined", () => {
+    expect(canAccessPanel(null, "overview")).toBe(false);
+    expect(canAccessPanel(undefined, "overview")).toBe(false);
   });
 });
 

@@ -49,8 +49,16 @@ export default async function PageBuilderPage({
 
   try {
     await requireFeature("pages_builder");
-  } catch {
-    redirect("/admin-login");
+  } catch (e: any) {
+    // Authenticated but lacking pages_builder -> the main dashboard; only
+    // unauthenticated visitors (or MFA-incomplete) go to the login screen.
+    if (e?.message === "MfaRequired") {
+      redirect("/admin-login?step=mfa");
+    } else if (e?.message === "Forbidden") {
+      redirect("/admin");
+    } else {
+      redirect("/admin-login");
+    }
   }
 
   const pages = await directusFetch<PageData>("pages", {

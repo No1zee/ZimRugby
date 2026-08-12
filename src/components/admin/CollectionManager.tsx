@@ -37,6 +37,8 @@ interface CollectionManagerProps {
   /** External request to open the editor for a specific item id. */
   focusId?: string | number | null;
   onFocusHandled?: () => void;
+  /** Per-action grants (role-gated UI). Absent = full access (all allowed). */
+  grants?: { create?: boolean; update?: boolean; delete?: boolean };
 }
 
 function formatDisplay(value: unknown): string {
@@ -86,7 +88,11 @@ export default function CollectionManager({
   onDirtyChange,
   focusId,
   onFocusHandled,
+  grants,
 }: CollectionManagerProps) {
+  const canCreate = grants?.create !== false;
+  const canUpdate = grants?.update !== false;
+  const canDelete = grants?.delete !== false;
   const [formData, setFormData] = useState<Record<string, string>>({});
   const [editingId, setEditingId] = useState<string | number | null>(null);
   const [formOpen, setFormOpen] = useState(false);
@@ -489,7 +495,7 @@ export default function CollectionManager({
               <option value="oldest">Oldest first</option>
             </select>
           </label>
-          {!formOpen && (
+          {!formOpen && canCreate && (
             <button
               onClick={openCreate}
               className="flex items-center gap-1.5 rounded-lg bg-zru-green px-4 py-2 font-heading text-xs font-black uppercase tracking-wider text-white transition-colors hover:bg-green-800"
@@ -673,7 +679,7 @@ export default function CollectionManager({
               {selectedIds.size} selected
             </span>
             <div className="ml-auto flex flex-wrap items-center gap-2">
-              {statusField && !statusIsBoolean && (
+              {statusField && !statusIsBoolean && canUpdate && (
                 <>
                   <button
                     onClick={() => bulkSetStatus(true)}
@@ -691,13 +697,15 @@ export default function CollectionManager({
                   </button>
                 </>
               )}
-              <button
-                onClick={bulkDelete}
-                disabled={bulkBusy}
-                className="flex items-center gap-1 rounded-lg bg-red-500 px-3 py-1.5 text-[10px] font-black uppercase tracking-wider text-white transition-colors hover:bg-red-600 disabled:opacity-60"
-              >
-                <Trash2 className="h-3 w-3" /> Delete
-              </button>
+              {canDelete && (
+                <button
+                  onClick={bulkDelete}
+                  disabled={bulkBusy}
+                  className="flex items-center gap-1 rounded-lg bg-red-500 px-3 py-1.5 text-[10px] font-black uppercase tracking-wider text-white transition-colors hover:bg-red-600 disabled:opacity-60"
+                >
+                  <Trash2 className="h-3 w-3" /> Delete
+                </button>
+              )}
               <button
                 onClick={() => setSelected(new Set())}
                 className="rounded-lg bg-white/10 px-3 py-1.5 text-[10px] font-black uppercase tracking-wider text-white/70 transition-colors hover:bg-white/20"
@@ -772,7 +780,7 @@ export default function CollectionManager({
                     </div>
                   </div>
                   <div className="flex shrink-0 flex-wrap items-center gap-2">
-                    {statusField && (
+                    {statusField && canUpdate && (
                       <button
                         onClick={() => toggleStatus(item, statusField)}
                         className="flex items-center gap-1 rounded-lg bg-black/5 px-3 py-1.5 text-[10px] font-black uppercase tracking-wider text-black/60 transition-colors hover:bg-black/10"
@@ -786,25 +794,31 @@ export default function CollectionManager({
                             : "Publish"}
                       </button>
                     )}
-                    <button
-                      onClick={() => startEdit(item)}
-                      className="flex items-center gap-1 rounded-lg bg-zru-green/10 px-3 py-1.5 text-[10px] font-black uppercase tracking-wider text-zru-green transition-colors hover:bg-zru-green/20"
-                    >
-                      <Pencil className="h-3 w-3" /> Edit
-                    </button>
-                    <button
-                      onClick={() => startEdit(item, true)}
-                      title="Duplicate this item"
-                      className="flex items-center gap-1 rounded-lg bg-black/5 px-3 py-1.5 text-[10px] font-black uppercase tracking-wider text-black/60 transition-colors hover:bg-black/10"
-                    >
-                      <Copy className="h-3 w-3" /> Duplicate
-                    </button>
-                    <button
-                      onClick={() => handleDelete(String(item.id))}
-                      className="flex items-center gap-1 rounded-lg bg-red-500/10 px-3 py-1.5 text-[10px] font-black uppercase tracking-wider text-red-600 transition-colors hover:bg-red-500/20"
-                    >
-                      <Trash2 className="h-3 w-3" /> Delete
-                    </button>
+                    {canUpdate && (
+                      <button
+                        onClick={() => startEdit(item)}
+                        className="flex items-center gap-1 rounded-lg bg-zru-green/10 px-3 py-1.5 text-[10px] font-black uppercase tracking-wider text-zru-green transition-colors hover:bg-zru-green/20"
+                      >
+                        <Pencil className="h-3 w-3" /> Edit
+                      </button>
+                    )}
+                    {canCreate && (
+                      <button
+                        onClick={() => startEdit(item, true)}
+                        title="Duplicate this item"
+                        className="flex items-center gap-1 rounded-lg bg-black/5 px-3 py-1.5 text-[10px] font-black uppercase tracking-wider text-black/60 transition-colors hover:bg-black/10"
+                      >
+                        <Copy className="h-3 w-3" /> Duplicate
+                      </button>
+                    )}
+                    {canDelete && (
+                      <button
+                        onClick={() => handleDelete(String(item.id))}
+                        className="flex items-center gap-1 rounded-lg bg-red-500/10 px-3 py-1.5 text-[10px] font-black uppercase tracking-wider text-red-600 transition-colors hover:bg-red-500/20"
+                      >
+                        <Trash2 className="h-3 w-3" /> Delete
+                      </button>
+                    )}
                   </div>
                 </div>
               );

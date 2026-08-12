@@ -51,7 +51,7 @@ export default function AdminMatchesPage() {
   if (loading) return <div className="p-20 text-white">Loading fixtures…</div>;
 
   return (
-    <AdminAuthGate>
+    <AdminAuthGate requiredTab="fixtures">
     <div className="min-h-screen bg-rich-black p-8 md:p-20">
       <div className="max-w-6xl mx-auto space-y-12">
         

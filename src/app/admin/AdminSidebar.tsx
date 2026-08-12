@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { Shield, LogOut, UserCheck, Lock } from "lucide-react";
 import { onAdminTab, setAdminTab } from "@/lib/admin/tab-events";
-import { canAccessTab, type RolePermissions } from "@/lib/admin/iam";
+import { canAccessPanel, type RolePermissions } from "@/lib/admin/iam";
 
 const NAV_SECTIONS = [
   {
@@ -18,6 +18,7 @@ const NAV_SECTIONS = [
     items: [
       { id: "media", label: "News & Articles", icon: "📰" },
       { id: "pages", label: "Pages", icon: "🖥️" },
+      { id: "events", label: "Events", icon: "📅" },
       { id: "grassroots", label: "Grassroots & Programmes", icon: "🌱" },
       { id: "faq-footer", label: "FAQ & Footer", icon: "❓" },
     ],
@@ -26,6 +27,7 @@ const NAV_SECTIONS = [
     label: "Matches",
     items: [
       { id: "fixtures", label: "Fixtures & Scores", icon: "🏉" },
+      { id: "teams", label: "Teams & Squads", icon: "🏆" },
     ],
   },
   {
@@ -64,7 +66,7 @@ const visibleSections = (
       ...section,
       items: section.items.filter((item) => {
         if (!userInfo) return item.id === "overview";
-        return canAccessTab(userInfo.permissions, item.id);
+        return canAccessPanel(userInfo.permissions, item.id);
       }),
     }))
     .filter((section) => section.items.length > 0);

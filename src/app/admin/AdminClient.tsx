@@ -13,7 +13,7 @@ import CollapsibleSection from "@/components/admin/ui/CollapsibleSection";
 import { ToastProvider } from "@/components/admin/ui/ToastProvider";
 import { ConfirmProvider, useConfirm } from "@/components/admin/ui/ConfirmProvider";
 import { onAdminTab, setAdminTab } from "@/lib/admin/tab-events";
-import { canAccessTab, type RolePermissions } from "@/lib/admin/iam";
+import { canAccessPanel, canOnCollection, type RolePermissions } from "@/lib/admin/iam";
 import RolesPanel from "./roles/RolesPanel";
 import PagesGrid from "./PagesGrid";
 import CampaignsPanel from "./CampaignsPanel";
@@ -164,6 +164,12 @@ function AdminClientInner(props: AdminClientProps) {
 
   const teamsCount = initialTeams.length + initialOpponents.length + initialCompetitions.length + initialVenues.length;
 
+  const grantsFor = (collection: string) => ({
+    create: canOnCollection(permissions, collection, "create"),
+    update: canOnCollection(permissions, collection, "update"),
+    delete: canOnCollection(permissions, collection, "delete"),
+  });
+
   const NAV_SECTIONS: { id: string; label: string; items: NavItem[] }[] = [
     {
       id: "dashboard",
@@ -212,7 +218,7 @@ function AdminClientInner(props: AdminClientProps) {
 
   const accessibleSections = NAV_SECTIONS.map((section) => ({
     ...section,
-    items: section.items.filter((item) => canAccessTab(permissions, item.id)),
+    items: section.items.filter((item) => canAccessPanel(permissions, item.id)),
   })).filter((section) => section.items.length > 0);
 
   useEffect(() => {
@@ -224,7 +230,7 @@ function AdminClientInner(props: AdminClientProps) {
   }, []);
 
   useEffect(() => {
-    if (!canAccessTab(permissions, activeTab)) {
+    if (!canAccessPanel(permissions, activeTab)) {
       setActiveTab("overview");
     }
   }, [permissions, activeTab]);
@@ -357,6 +363,7 @@ function AdminClientInner(props: AdminClientProps) {
               collection="news"
               title="News articles"
               description="Articles here appear in the homepage Latest News panel and the media archive."
+              grants={grantsFor("news")}
               fields={[
                 { key: "title", label: "Headline", type: "text", placeholder: "e.g. Sables squad named for Rugby Africa Cup", required: true, colSpan: "full" },
                 { key: "slug", label: "Web address (slug)", type: "text", placeholder: "auto-generated", colSpan: "full" },
@@ -382,6 +389,7 @@ function AdminClientInner(props: AdminClientProps) {
               collection="announcements"
               title="Banners & announcements"
               description="Short alert banners shown on the site (e.g. ticket on-sale notices)."
+              grants={grantsFor("announcements")}
               fields={[
                 { key: "title", label: "Title", type: "text", placeholder: "e.g. Tickets on sale now", required: true, colSpan: "full" },
                 { key: "body", label: "Message", type: "textarea", colSpan: "full" },
@@ -413,6 +421,7 @@ function AdminClientInner(props: AdminClientProps) {
               collection="grassroots_initiatives"
               title="Grassroots initiatives"
               description="Cards shown in the homepage Grassroots & Youth Rugby section."
+              grants={grantsFor("grassroots_initiatives")}
               fields={[
                 { key: "title", label: "Title", type: "text", placeholder: "e.g. Schoolboy & Schoolgirl Leagues", required: true },
                 { key: "badge", label: "Badge", type: "text", placeholder: "e.g. YOUTH PATHWAYS" },
@@ -434,6 +443,7 @@ function AdminClientInner(props: AdminClientProps) {
               collection="programmes"
               title="Programmes (Play Rugby)"
               description="Programmes displayed on the Play Rugby page."
+              grants={grantsFor("programmes")}
               fields={[
                 { key: "title", label: "Title", type: "text", placeholder: "e.g. Get Into Rugby", required: true },
                 { key: "description", label: "Description", type: "textarea" },
@@ -458,6 +468,7 @@ function AdminClientInner(props: AdminClientProps) {
               collection="faqs"
               title="Frequently asked questions"
               description="FAQs displayed on the Tickets page."
+              grants={grantsFor("faqs")}
               fields={[
                 { key: "question", label: "Question", type: "text", placeholder: "e.g. How do I buy tickets?", required: true, colSpan: "full" },
                 { key: "answer", label: "Answer", type: "richtext", colSpan: "full" },
@@ -473,6 +484,7 @@ function AdminClientInner(props: AdminClientProps) {
               collection="footer_navigation"
               title="Footer navigation"
               description="Link columns shown in the website footer."
+              grants={grantsFor("footer_navigation")}
               fields={[
                 { key: "column_title", label: "Column title", type: "text", placeholder: "e.g. About ZRU", required: true },
                 { key: "links", label: "Links (JSON array)", type: "textarea", colSpan: "full", placeholder: '[{"label":"Governance","url":"/about/governance"}]' },
@@ -510,6 +522,7 @@ function AdminClientInner(props: AdminClientProps) {
                 collection="teams"
                 title="Teams"
                 description="National squads shown across the site."
+                grants={grantsFor("teams")}
                 fields={[
                   { key: "name", label: "Name", type: "text", placeholder: "e.g. Zimbabwe Sables", required: true },
                   { key: "short_name", label: "Short name", type: "text", placeholder: "e.g. Sables" },
@@ -550,6 +563,7 @@ function AdminClientInner(props: AdminClientProps) {
                 collection="opponents"
                 title="Opponents"
                 description="Sides used in the fixtures dropdown."
+                grants={grantsFor("opponents")}
                 fields={[
                   { key: "name", label: "Name", type: "text", placeholder: "e.g. Namibia", required: true },
                   { key: "short_name", label: "Short name", type: "text", placeholder: "e.g. NAM" },
@@ -583,6 +597,7 @@ function AdminClientInner(props: AdminClientProps) {
                 collection="competitions"
                 title="Competitions"
                 description="Competitions used in the fixtures dropdown."
+                grants={grantsFor("competitions")}
                 fields={[
                   { key: "name", label: "Name", type: "text", placeholder: "e.g. Rugby Africa Cup", required: true },
                   { key: "short_name", label: "Short name", type: "text", placeholder: "e.g. RAC" },
@@ -620,6 +635,7 @@ function AdminClientInner(props: AdminClientProps) {
                 collection="venues"
                 title="Venues"
                 description="Venues used in the fixtures dropdown."
+                grants={grantsFor("venues")}
                 fields={[
                   { key: "name", label: "Name", type: "text", placeholder: "e.g. Hartsfield Grounds", required: true },
                   { key: "slug", label: "Slug", type: "text", placeholder: "e.g. hartsfield-grounds" },
