@@ -208,10 +208,12 @@ export default function Navigation() {
         <div className="w-full px-4 sm:px-6 lg:px-8 flex items-center justify-end gap-1 sm:gap-2 h-9">
           {/* Desktop utility items */}
           <div className="hidden lg:flex items-center gap-2">
-            {/* Live Score Ticker Pill */}
-            <div className="flex items-center gap-2 bg-[#001D11] border border-emerald-500/30 px-3 py-1 rounded-full text-[10px] font-heading font-black tracking-wider text-emerald-400 shadow-[inset_0_1px_0_rgba(255,255,255,0.10),0_2px_6px_rgba(0,0,0,0.45)]">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-              <span>LIVE: ZIMBABWE 30 - 28 NAMIBIA [FINAL]</span>
+            {/* Live Score Ticker Pill — High Contrast & High Legibility */}
+            <div className="flex items-center gap-2 bg-[#00140B] border border-emerald-400/60 px-3 py-1 rounded-full text-[10px] font-heading font-black tracking-wider text-emerald-300 shadow-[0_0_12px_rgba(16,185,129,0.25)]">
+              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shadow-[0_0_8px_#34d399]" />
+              <span className="text-white font-extrabold">LIVE:</span>
+              <span className="text-emerald-300 font-black">ZIMBABWE 30 - 28 NAMIBIA</span>
+              <span className="text-amber-400 font-bold bg-amber-400/10 border border-amber-400/30 px-1.5 py-0.5 rounded text-[9px]">FT</span>
             </div>
 
             {utilityNav.map((item) => {
