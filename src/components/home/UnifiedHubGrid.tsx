@@ -45,9 +45,11 @@ export default function UnifiedHubGrid({ news = [], nextMatch, customTitle }: Pr
             <div className="flex flex-col items-center group/team w-[100px]">
               <div className="relative w-20 h-20 flex items-center justify-center p-2 mb-3">
                 {nextMatch?.homeTeam.logo ? (
-                  <Image src={nextMatch.homeTeam.logo} alt={nextMatch.homeTeam.name || "Zimbabwe"} fill className="object-contain drop-shadow-md" />
+                  <Image src={nextMatch.homeTeam.logo} alt={nextMatch.homeTeam.name || "Home Team"} fill className="object-contain drop-shadow-md" />
                 ) : (
-                  <span className="text-xl font-heading font-black text-rich-black">ZIM</span>
+                  <span className="text-xl font-heading font-black text-rich-black">
+                    {nextMatch?.homeTeam.code || "ZIM"}
+                  </span>
                 )}
               </div>
               <span className="font-heading font-black text-xs leading-[1.1] text-center text-rich-black uppercase">
@@ -71,7 +73,9 @@ export default function UnifiedHubGrid({ news = [], nextMatch, customTitle }: Pr
                 {nextMatch?.awayTeam.logo ? (
                   <Image src={nextMatch.awayTeam.logo} alt={nextMatch.awayTeam.name || "Opponent"} fill className="object-contain drop-shadow-md" />
                 ) : (
-                  <span className="text-xl font-heading font-black text-rich-black">TBA</span>
+                  <span className="text-xl font-heading font-black text-rich-black">
+                    {nextMatch?.awayTeam.code || "TBA"}
+                  </span>
                 )}
               </div>
               <span className="font-heading font-black text-xs leading-[1.1] text-center text-rich-black uppercase">

@@ -58,8 +58,8 @@ export interface MatchCardViewModel {
   dateIso: string;
   time: string;
   venue: string;
-  homeTeam: { name: string; score?: number; logo?: string };
-  awayTeam: { name: string; score?: number; logo?: string };
+  homeTeam: { name: string; code?: string; score?: number; logo?: string };
+  awayTeam: { name: string; code?: string; score?: number; logo?: string };
   status: "upcoming" | "live" | "completed";
   resultOutcome?: "win" | "loss" | "draw" | "na";
   resultLabel?: string;

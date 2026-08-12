@@ -145,6 +145,8 @@ export async function getDirectusMatches(): Promise<MatchCardViewModel[]> {
     const isAway = m.home_or_away === "away";
     const teamName = (teamObj?.name as string) || "Zimbabwe Sables";
     const oppName = (oppObj?.name as string) || "Opponent";
+    const teamCode = (teamObj?.code as string) || (teamObj?.short_name as string) || "ZIM";
+    const oppCode = (oppObj?.code as string) || (oppObj?.short_name as string) || oppName.slice(0, 3).toUpperCase();
     
     // Unassigned venue leaves blank text (no hardcoded fallback)
     const venueName = (m.venue_name_override as string) || (venueObj?.name as string) || (venueObj?.city ? `${venueObj.name}, ${venueObj.city}` : "");
@@ -168,10 +170,12 @@ export async function getDirectusMatches(): Promise<MatchCardViewModel[]> {
       venue: venueName,
       homeTeam: {
         name: isAway ? oppName : teamName,
+        code: isAway ? oppCode : teamCode,
         score: isAway ? (m.opponent_score !== null && m.opponent_score !== undefined ? Number(m.opponent_score) : undefined) : (m.team_score !== null && m.team_score !== undefined ? Number(m.team_score) : undefined),
       },
       awayTeam: {
         name: isAway ? teamName : oppName,
+        code: isAway ? teamCode : oppCode,
         score: isAway ? (m.team_score !== null && m.team_score !== undefined ? Number(m.team_score) : undefined) : (m.opponent_score !== null && m.opponent_score !== undefined ? Number(m.opponent_score) : undefined),
       },
       status: computedStatus,
