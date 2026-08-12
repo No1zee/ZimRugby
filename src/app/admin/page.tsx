@@ -142,7 +142,7 @@ export default async function AdminDashboard() {
   try {
     session = await requireAdmin();
   } catch {
-    redirect("/admin-login");
+    redirect("/login?redirect=/admin");
   }
 
   const [

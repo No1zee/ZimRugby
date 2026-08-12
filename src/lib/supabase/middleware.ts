@@ -41,11 +41,12 @@ export async function updateSession(request: NextRequest) {
   const isAdminRoute = path.startsWith('/admin/') || path === '/admin'
   const isUserRoute = path.startsWith('/dashboard') || path.startsWith('/portal')
 
-  // Redirect unauthenticated visitors to the appropriate login
+  // Redirect unauthenticated visitors to the unified login
   if (!user) {
     if (isAdminRoute) {
       const url = request.nextUrl.clone()
-      url.pathname = '/admin-login'
+      url.pathname = '/login'
+      url.searchParams.set('redirect', '/admin')
       return NextResponse.redirect(url)
     }
     if (isUserRoute) {

@@ -16,7 +16,7 @@ export default function AdminAuthGate({ children, requiredTab }: AdminAuthGatePr
     fetch("/api/admin/auth/check")
       .then(async (res) => {
         if (!res.ok) {
-          window.location.href = "/admin-login";
+          window.location.href = "/login?redirect=/admin";
           return;
         }
         if (requiredTab) {
@@ -29,7 +29,7 @@ export default function AdminAuthGate({ children, requiredTab }: AdminAuthGatePr
         }
         setAuthorized(true);
       })
-      .catch(() => window.location.href = "/admin-login");
+      .catch(() => window.location.href = "/login?redirect=/admin");
   }, [requiredTab]);
 
   if (authorized === null) {
