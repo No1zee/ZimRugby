@@ -267,8 +267,64 @@ export default function LoginPage() {
               </div>
             </div>
 
-            {/* Form */}
-            <form onSubmit={handleSubmit} className="space-y-4">
+            {/* MFA Verification Form */}
+            {mfaRequired ? (
+              <form onSubmit={handleAdminMfa} className="space-y-4">
+                <div className="p-4 bg-emerald-50 border border-emerald-200 rounded-xl space-y-1">
+                  <p className="text-xs font-bold text-emerald-900 uppercase tracking-wider">
+                    Two-Factor Verification Required
+                  </p>
+                  <p className="text-xs text-emerald-700 leading-relaxed">
+                    Enter the 6-digit verification code from your authenticator app to access the ZRU Admin Portal.
+                  </p>
+                </div>
+
+                {mfaError && (
+                  <div className="px-4 py-3 rounded-lg bg-red-50 border border-red-200 text-red-700 text-sm">
+                    {mfaError}
+                  </div>
+                )}
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1.5">
+                    6-Digit Authenticator Code
+                  </label>
+                  <input
+                    type="text"
+                    inputMode="numeric"
+                    pattern="[0-9]*"
+                    maxLength={6}
+                    value={mfaCode}
+                    onChange={(e) => setMfaCode(e.target.value.replace(/[^0-9]/g, ""))}
+                    placeholder="••••••"
+                    autoFocus
+                    className="w-full px-3.5 py-2.5 rounded-lg border border-gray-300 text-gray-900 placeholder:text-gray-400 text-base font-mono tracking-[0.5em] text-center focus:outline-none focus:ring-2 focus:ring-[#006747] focus:border-transparent transition-all"
+                    required
+                  />
+                </div>
+
+                <button
+                  type="submit"
+                  disabled={isLoading || mfaCode.length !== 6}
+                  className="w-full py-2.5 px-4 rounded-lg bg-[#006747] hover:bg-[#004D2C] text-white text-sm font-semibold transition-all disabled:opacity-60 disabled:cursor-not-allowed shadow-sm"
+                >
+                  {isLoading ? "Verifying Code…" : "Verify & Launch Portal"}
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => {
+                    setMfaRequired(false);
+                    setMfaCode("");
+                    setMfaError("");
+                  }}
+                  className="w-full text-center text-xs text-gray-500 hover:text-gray-700 transition-colors pt-2"
+                >
+                  ← Back to standard login
+                </button>
+              </form>
+            ) : (
+              <form onSubmit={handleSubmit} className="space-y-4">
               {mode === "signup" && (
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1.5">
@@ -394,7 +450,8 @@ export default function LoginPage() {
                   ? "Sign in"
                   : "Create account"}
               </button>
-            </form>
+              </form>
+            )}
 
             {/* Toggle mode */}
             <p className="mt-6 text-center text-sm text-gray-500">
