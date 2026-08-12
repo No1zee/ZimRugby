@@ -393,54 +393,134 @@ export default function EventsPanel({ initialEvents, onDirtyChange }: EventsPane
           </datalist>
 
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-            <div className="md:col-span-2">
-              <label className="mb-1 block text-[10px] font-bold uppercase tracking-wider text-black/60">
-                Title * (Select preset or type custom)
-              </label>
-              <input
-                type="text"
-                list="title-presets"
-                value={form.title}
-                onChange={(e) => setForm({ ...form, title: e.target.value })}
-                required
-                placeholder="Select preset or type e.g. Sables vs Namibia"
-                className="w-full rounded-lg border border-black/10 bg-white p-2.5 text-sm font-bold"
-              />
-            </div>
-            <div>
-              <label className="mb-1 block text-[10px] font-bold uppercase tracking-wider text-black/60">Subtitle</label>
-              <input
-                type="text"
-                value={form.subtitle}
-                onChange={(e) => setForm({ ...form, subtitle: e.target.value })}
-                placeholder="e.g. Round 3 of continental championship"
-                className="w-full rounded-lg border border-black/10 bg-white p-2.5 text-sm"
-              />
-            </div>
-            <div>
-              <label className="mb-1 block text-[10px] font-bold uppercase tracking-wider text-black/60">
-                Category (Select dropdown or type)
-              </label>
-              <input
-                type="text"
-                list="category-presets"
-                value={form.category}
-                onChange={(e) => setForm({ ...form, category: e.target.value })}
-                placeholder="e.g. National Team, Schools Rugby"
-                className="w-full rounded-lg border border-black/10 bg-white p-2.5 text-sm"
-              />
-            </div>
-            <div>
-              <label className="mb-1 block text-[10px] font-bold uppercase tracking-wider text-black/60">Type</label>
-              <select
-                value={form.page_type}
-                onChange={(e) => setForm({ ...form, page_type: e.target.value })}
-                className="w-full rounded-lg border border-black/10 bg-white p-2.5 text-sm font-bold"
-              >
-                <option value="general">General event</option>
-                <option value="competition">Competition / League</option>
-              </select>
-            </div>
+            {form.entry_kind === "event" ? (
+              <>
+                <div className="md:col-span-2">
+                  <label className="mb-1 block text-[10px] font-bold uppercase tracking-wider text-black/60">
+                    Match / Event Title * (Select dropdown preset or type custom)
+                  </label>
+                  <input
+                    type="text"
+                    list="title-presets"
+                    value={form.title}
+                    onChange={(e) => setForm({ ...form, title: e.target.value })}
+                    required
+                    placeholder="e.g. Sables vs Namibia"
+                    className="w-full rounded-lg border border-black/10 bg-white p-2.5 text-sm font-bold"
+                  />
+                </div>
+                <div>
+                  <label className="mb-1 block text-[10px] font-bold uppercase tracking-wider text-black/60">Subtitle / Competition Round</label>
+                  <input
+                    type="text"
+                    value={form.subtitle}
+                    onChange={(e) => setForm({ ...form, subtitle: e.target.value })}
+                    placeholder="e.g. Rugby Africa Gold Cup Round 3"
+                    className="w-full rounded-lg border border-black/10 bg-white p-2.5 text-sm"
+                  />
+                </div>
+                <div>
+                  <label className="mb-1 block text-[10px] font-bold uppercase tracking-wider text-black/60">
+                    Level / Category (Select dropdown or type)
+                  </label>
+                  <input
+                    type="text"
+                    list="category-presets"
+                    value={form.category}
+                    onChange={(e) => setForm({ ...form, category: e.target.value })}
+                    placeholder="e.g. National Team, Schools Rugby"
+                    className="w-full rounded-lg border border-black/10 bg-white p-2.5 text-sm"
+                  />
+                </div>
+                <div>
+                  <label className="mb-1 block text-[10px] font-bold uppercase tracking-wider text-black/60">Event Date *</label>
+                  <input
+                    type="date"
+                    value={form.date}
+                    onChange={(e) => setForm({ ...form, date: e.target.value })}
+                    required
+                    className="w-full rounded-lg border border-black/10 bg-white p-2.5 text-sm font-bold"
+                  />
+                </div>
+                <div>
+                  <label className="mb-1 block text-[10px] font-bold uppercase tracking-wider text-black/60">Kickoff / Start Time</label>
+                  <input
+                    type="time"
+                    value={form.time}
+                    onChange={(e) => setForm({ ...form, time: e.target.value })}
+                    className="w-full rounded-lg border border-black/10 bg-white p-2.5 text-sm font-bold"
+                  />
+                </div>
+                <div>
+                  <label className="mb-1 block text-[10px] font-bold uppercase tracking-wider text-black/60">
+                    Venue / Location (Select dropdown or type)
+                  </label>
+                  <input
+                    type="text"
+                    list="location-presets"
+                    value={form.location}
+                    onChange={(e) => setForm({ ...form, location: e.target.value })}
+                    placeholder="e.g. Harare Sports Club, Harare"
+                    className="w-full rounded-lg border border-black/10 bg-white p-2.5 text-sm"
+                  />
+                </div>
+                <div>
+                  <label className="mb-1 block text-[10px] font-bold uppercase tracking-wider text-black/60">
+                    Score (For completed matches e.g. ZIM 32 - 10 KEN)
+                  </label>
+                  <input
+                    type="text"
+                    value={form.score}
+                    onChange={(e) => setForm({ ...form, score: e.target.value })}
+                    placeholder="e.g. ZIM 32 - 10 KEN"
+                    className="w-full rounded-lg border border-black/10 bg-white p-2.5 text-sm font-bold"
+                  />
+                </div>
+              </>
+            ) : (
+              <>
+                <div className="md:col-span-2">
+                  <label className="mb-1 block text-[10px] font-bold uppercase tracking-wider text-black/60">
+                    Article Headline *
+                  </label>
+                  <input
+                    type="text"
+                    value={form.title}
+                    onChange={(e) => setForm({ ...form, title: e.target.value })}
+                    required
+                    placeholder="e.g. Sables Squad Announced for Africa Cup Finals"
+                    className="w-full rounded-lg border border-black/10 bg-white p-2.5 text-sm font-bold"
+                  />
+                </div>
+                <div>
+                  <label className="mb-1 block text-[10px] font-bold uppercase tracking-wider text-black/60">
+                    News Category
+                  </label>
+                  <select
+                    value={form.category || "NEWS"}
+                    onChange={(e) => setForm({ ...form, category: e.target.value })}
+                    className="w-full rounded-lg border border-black/10 bg-white p-2.5 text-sm font-bold"
+                  >
+                    {["NEWS", "PRESS RELEASE", "SABLES", "LADY SABLES", "JUNIORS", "CLUB RUGBY", "ANNOUNCEMENT", "SPONSORSHIP"].map((c) => (
+                      <option key={c} value={c}>{c}</option>
+                    ))}
+                  </select>
+                </div>
+                <div>
+                  <label className="mb-1 block text-[10px] font-bold uppercase tracking-wider text-black/60">
+                    Scheduled Publish Date *
+                  </label>
+                  <input
+                    type="date"
+                    value={form.date}
+                    onChange={(e) => setForm({ ...form, date: e.target.value })}
+                    required
+                    className="w-full rounded-lg border border-black/10 bg-white p-2.5 text-sm font-bold"
+                  />
+                </div>
+              </>
+            )}
+
             <div>
               <label className="mb-1 block text-[10px] font-bold uppercase tracking-wider text-black/60">Status</label>
               <select
@@ -448,97 +528,38 @@ export default function EventsPanel({ initialEvents, onDirtyChange }: EventsPane
                 onChange={(e) => setForm({ ...form, status: e.target.value })}
                 className="w-full rounded-lg border border-black/10 bg-white p-2.5 text-sm font-bold"
               >
-                <option value="published">Published (visible)</option>
-                <option value="draft">Draft (hidden)</option>
+                <option value="published">Published (Visible)</option>
+                <option value="draft">Draft (Hidden)</option>
               </select>
             </div>
-            <div>
-              <label className="mb-1 block text-[10px] font-bold uppercase tracking-wider text-black/60">Date *</label>
-              <input
-                type="date"
-                value={form.date}
-                onChange={(e) => setForm({ ...form, date: e.target.value })}
-                required
-                className="w-full rounded-lg border border-black/10 bg-white p-2.5 text-sm"
-              />
-            </div>
-            <div>
-              <label className="mb-1 block text-[10px] font-bold uppercase tracking-wider text-black/60">Start time</label>
-              <input
-                type="time"
-                value={form.time}
-                onChange={(e) => setForm({ ...form, time: e.target.value })}
-                className="w-full rounded-lg border border-black/10 bg-white p-2.5 text-sm"
-              />
-            </div>
-            <div>
-              <label className="mb-1 block text-[10px] font-bold uppercase tracking-wider text-black/60">
-                Location (Select dropdown or type)
-              </label>
-              <input
-                type="text"
-                list="location-presets"
-                value={form.location}
-                onChange={(e) => setForm({ ...form, location: e.target.value })}
-                placeholder="e.g. Harare Sports Club, Harare"
-                className="w-full rounded-lg border border-black/10 bg-white p-2.5 text-sm"
-              />
-            </div>
-            <div>
-              <label className="mb-1 block text-[10px] font-bold uppercase tracking-wider text-black/60">
-                Score (For completed events)
-              </label>
-              <input
-                type="text"
-                value={form.score}
-                onChange={(e) => setForm({ ...form, score: e.target.value })}
-                placeholder="e.g. ZIM 32 - 10 KEN"
-                className="w-full rounded-lg border border-black/10 bg-white p-2.5 text-sm font-bold"
-              />
-            </div>
-            <div>
-              <label className="mb-1 block text-[10px] font-bold uppercase tracking-wider text-black/60">Sort order</label>
-              <input
-                type="number"
-                value={form.sort}
-                onChange={(e) => setForm({ ...form, sort: e.target.value })}
-                placeholder="Lower shows first"
-                className="w-full rounded-lg border border-black/10 bg-white p-2.5 text-sm"
-              />
-            </div>
+
             <div className="md:col-span-2">
-              <label className="mb-1 block text-[10px] font-bold uppercase tracking-wider text-black/60">Short description</label>
+              <label className="mb-1 block text-[10px] font-bold uppercase tracking-wider text-black/60">
+                {form.entry_kind === "news" ? "Article Hook / Summary" : "Short Description"}
+              </label>
               <textarea
-                rows={3}
+                rows={2}
                 value={form.description}
                 onChange={(e) => setForm({ ...form, description: e.target.value })}
-                placeholder="One or two lines shown on the event card."
+                placeholder={form.entry_kind === "news" ? "One or two sentences to hook readers." : "One or two lines shown on calendar card."}
                 className="w-full rounded-lg border border-black/10 bg-white p-2.5 text-sm"
               />
             </div>
             <div className="md:col-span-2">
-              <label className="mb-1 block text-[10px] font-bold uppercase tracking-wider text-black/60">Full description</label>
+              <label className="mb-1 block text-[10px] font-bold uppercase tracking-wider text-black/60">
+                {form.entry_kind === "news" ? "Full Article Content (Rich HTML / Text)" : "Full Details"}
+              </label>
               <textarea
                 rows={5}
                 value={form.content}
                 onChange={(e) => setForm({ ...form, content: e.target.value })}
-                placeholder="Full event details."
+                placeholder={form.entry_kind === "news" ? "Write or paste article text here..." : "Full match / event details."}
                 className="w-full rounded-lg border border-black/10 bg-white p-2.5 text-sm"
               />
             </div>
             <div>
-              <label className="mb-1 block text-[10px] font-bold uppercase tracking-wider text-black/60">Ticket link</label>
-              <input
-                type="text"
-                value={form.ticket_url}
-                onChange={(e) => setForm({ ...form, ticket_url: e.target.value })}
-                placeholder="https://â€¦"
-                className="w-full rounded-lg border border-black/10 bg-white p-2.5 text-sm"
-              />
-            </div>
-            <div>
-              <label className="mb-1 block text-[10px] font-bold uppercase tracking-wider text-black/60">Image</label>
-              <ImagePicker value={form.image} onChange={(id) => setForm({ ...form, image: id })} hint="Upload or reuse an image." />
+              <label className="mb-1 block text-[10px] font-bold uppercase tracking-wider text-black/60">Hero Image</label>
+              <ImagePicker value={form.image} onChange={(id) => setForm({ ...form, image: id })} hint="Upload or select photo." />
             </div>
           </div>
 
