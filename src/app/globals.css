@@ -131,16 +131,17 @@ body::after {
   position: relative;
   display: inline-block;
   isolation: isolate;
+  padding: 0.1em 0.8em 0.1em 0.4em;
 }
 .heading-plate::before {
   content: "";
   position: absolute;
-  left: -14px;
-  right: -14px;
-  bottom: 3px;
-  height: 0.5em;
-  clip-path: polygon(10px 0, calc(100% - 4px) 0, calc(100% - 10px) 100%, 4px 100%);
-  background: rgba(0, 103, 71, 0.10);
+  top: 0;
+  bottom: 0;
+  left: -8px;
+  right: -8px;
+  clip-path: polygon(14px 0%, 100% 0%, calc(100% - 14px) 100%, 0% 100%);
+  background: rgba(0, 103, 71, 0.12);
   z-index: -1;
   pointer-events: none;
 }
@@ -149,7 +150,7 @@ body::after {
   z-index: 1;
 }
 .heading-plate-light::before {
-  background: rgba(0, 200, 140, 0.14);
+  background: rgba(255, 255, 255, 0.18);
 }
 
 /* Sponsor logo plaque — offset plate revealed on hover */

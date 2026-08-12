@@ -120,9 +120,11 @@ export default function GrassrootsInitiativeSection({ initiatives: apiInitiative
           transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
           className="max-w-3xl"
         >
-          <h2 className="text-3xl sm:text-5xl font-heading font-black uppercase tracking-wide sm:tracking-widest text-white not-italic leading-[1.05]">
-            GROWING THE GAME IN <span className="text-accent-teal">ZIMBABWE</span>
-          </h2>
+          <div className="heading-plate heading-plate-light">
+            <h2 className="text-3xl sm:text-5xl font-heading font-black uppercase tracking-wide sm:tracking-widest text-white not-italic leading-[1.05]">
+              GROWING THE GAME IN <span className="text-accent-teal">ZIMBABWE</span>
+            </h2>
+          </div>
         </motion.div>
 
         {/* 3-Column Asymmetric Grid — Card 1 wide (50%), Cards 2-3 narrow (25% each) */}
