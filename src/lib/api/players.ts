@@ -18,7 +18,14 @@ export interface Player {
 }
 
 function resolvePhoto(player: Player): string {
-  return headshotAssetUrl(player.photo) || player.photo || "";
+  if (player.photo) {
+    const asset = headshotAssetUrl(player.photo);
+    if (asset && asset !== '/zru-placeholder-hero.webp') return asset;
+  }
+  if (player.name) {
+    return `/images/teams/headshots/${player.name}.jpg`;
+  }
+  return '/zru-placeholder-hero.webp';
 }
 
 function mapPlayer(p: Player): Player {
