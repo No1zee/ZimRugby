@@ -53,7 +53,7 @@ export default function Footer() {
   if (pathname?.startsWith('/clubhouse') || pathname?.startsWith('/admin')) return null;
 
   return (
-    <footer className="bg-[#FDFBF0] text-[#003822] border-t border-black/10 pb-24 relative overflow-hidden pt-12 lg:pt-16">
+    <footer className="bg-[#FDFBF0] text-[#003822] border-t border-black/10 pb-12 relative overflow-hidden pt-4 lg:pt-6">
       
       {/* Schema.org Sports Organization Metadata */}
       <script
@@ -79,38 +79,39 @@ export default function Footer() {
       <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 relative z-10 space-y-0">
         
         {/* Header: Emblem 1/3 + Text/CTA 2/3 — always 3-col, never stacks */}
-        <div className="grid grid-cols-3 items-center pb-8">
+        <div className="grid grid-cols-3 items-center pb-3">
           {/* Left Column — Emblem (1/3) */}
-          <div className="flex items-center justify-center px-[8%] py-4">
+          <div className="flex items-center justify-center px-[8%] py-1">
             <Image
               src="/zru logo main.svg"
               alt="Zimbabwe Rugby Union Logo"
-              width={300}
-              height={300}
-              className="w-full h-auto object-contain"
+              width={220}
+              height={220}
+              className="w-full max-w-[200px] sm:max-w-[240px] h-auto object-contain"
             />
           </div>
 
           {/* Right Column — Heading, Tagline, Location, CTA (2/3) */}
-          <div className="col-span-2 flex flex-col items-center justify-center text-center px-[4%] gap-4">            <div>
+          <div className="col-span-2 flex flex-col items-center justify-center text-center px-[4%] gap-2">
+            <div>
               <span className="block font-heading font-black text-[1.8rem] sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl uppercase text-[#003822] not-italic leading-[0.85] select-none tracking-[0.02em] sm:tracking-[0.15em]">
                 Zimbabwe
               </span>
               <span className="block font-subheading font-black text-[1.4rem] sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl uppercase text-[#006747] not-italic leading-[0.85] select-none tracking-[0.02em] sm:tracking-[0.3em]">
                 Rugby Union
               </span>
-              <p className="text-[#003822]/70 text-[10px] sm:text-xs font-bold uppercase tracking-widest mt-2 sm:mt-3">
+              <p className="text-[#003822]/70 text-[10px] sm:text-xs font-bold uppercase tracking-widest mt-1 sm:mt-2">
                 Official Governing Body of Rugby Union in Zimbabwe • Est. 1895
               </p>
             </div>
-            <div className="mt-3">
+            <div className="mt-1">
               <SocialCard />
             </div>
           </div>
         </div>
 
         {/* Compact 4-Column Navigation Links */}
-        <div className="bg-[#006747] -mx-4 sm:-mx-6 lg:-mx-8 px-4 sm:px-6 lg:px-8 py-8 rounded-lg">
+        <div className="bg-[#006747] -mx-4 sm:-mx-6 lg:-mx-8 px-4 sm:px-6 lg:px-8 py-6 rounded-lg">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 lg:gap-12">
             {footerColumns.map((col) => (
               <nav key={col.title} aria-label={col.title} className="space-y-3">
