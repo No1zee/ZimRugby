@@ -6,7 +6,7 @@ import { Play, Search, Facebook, ArrowRight, Calendar } from "lucide-react";
 import Button from "@/components/common/Button";
 import VideoCard from "@/components/media/VideoCard";
 import { useState, useEffect } from "react";
-import JournalStrip from "@/components/home/JournalStrip";
+
 import CmsHero from "@/components/cms/CmsHero";
 import PageAnnouncements from "@/components/ui/PageAnnouncements";
 import MatchdayVideoHighlights from "@/components/media/MatchdayVideoHighlights";
@@ -314,86 +314,99 @@ export default function MediaPageClient({ initialSocialPosts, cmsPage, initialNe
         )}
       </div>
 
-      {/* Article Detail Full-Screen Immersive Modal Popup */}
+      {/* Article Detail Full-Screen Immersive Kindle-Style Modal Popup */}
       {selectedArticle && (
         <div
           onClick={() => setSelectedArticle(null)}
-          className="fixed inset-0 z-[99999] bg-black/85 backdrop-blur-xl flex items-center justify-center p-3 sm:p-6 md:p-10 overflow-hidden"
+          className="fixed inset-0 z-[99999] bg-black/80 backdrop-blur-md flex items-center justify-center p-3 sm:p-6 md:p-8 overflow-hidden"
         >
           <motion.div
-            initial={{ scale: 0.95, opacity: 0, y: 15 }}
+            initial={{ scale: 0.96, opacity: 0, y: 10 }}
             animate={{ scale: 1, opacity: 1, y: 0 }}
-            exit={{ scale: 0.95, opacity: 0, y: 15 }}
-            transition={{ type: "spring", damping: 28, stiffness: 320 }}
+            exit={{ scale: 0.96, opacity: 0, y: 10 }}
+            transition={{ type: "spring", damping: 26, stiffness: 300 }}
             onClick={(e) => e.stopPropagation()}
-            className="bg-white border border-white/20 rounded-3xl overflow-hidden max-w-4xl w-full max-h-[88vh] flex flex-col shadow-2xl relative"
+            className="bg-[#FBF9F5] text-[#222222] border border-[#E5E0D5] rounded-2xl overflow-hidden max-w-3xl w-full max-h-[90vh] flex flex-col shadow-2xl relative font-sans"
           >
-            {/* Header Image Banner */}
-            {selectedArticle.image && (
-              <div className="relative h-52 sm:h-72 md:h-80 w-full shrink-0">
-                <Image
-                  src={selectedArticle.image}
-                  alt={selectedArticle.title}
-                  fill
-                  className="object-cover"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent" />
-                
-                <button
-                  onClick={() => setSelectedArticle(null)}
-                  className="absolute top-4 right-4 bg-black/70 hover:bg-black text-white w-10 h-10 rounded-full flex items-center justify-center transition-transform hover:scale-110 text-sm font-bold shadow-lg z-10"
-                >
-                  ✕
-                </button>
+            {/* Kindle Header Toolbar */}
+            <div className="bg-[#F3EFE6] border-b border-[#E3DCD0] px-6 py-4 flex items-center justify-between shrink-0">
+              <div className="flex items-center gap-3">
+                <span className="text-[10px] font-black tracking-[0.2em] uppercase bg-[#006747] text-white px-3 py-1 rounded shadow-sm">
+                  {selectedArticle.category || 'OFFICIAL PRESS'}
+                </span>
+                <span className="text-xs text-[#666053] font-bold uppercase tracking-wider">
+                  {selectedArticle.date}
+                </span>
+              </div>
 
-                <div className="absolute bottom-5 left-5 right-5 text-white max-w-3xl">
-                  <span className="text-[10px] font-black tracking-[0.2em] uppercase bg-zru-green text-white px-3 py-1 rounded-md mb-2 inline-block shadow-md">
-                    {selectedArticle.category || 'OFFICIAL PRESS'}
-                  </span>
-                  <h2 className="text-xl sm:text-2xl md:text-3xl font-heading font-black leading-tight text-white drop-shadow-md">
-                    {selectedArticle.title}
-                  </h2>
+              <button
+                onClick={() => setSelectedArticle(null)}
+                className="bg-[#E5DFD3] hover:bg-[#D9D1C3] text-[#443E33] w-9 h-9 rounded-full flex items-center justify-center transition-colors text-sm font-bold shadow-xs cursor-pointer"
+                aria-label="Close article modal"
+              >
+                ✕
+              </button>
+            </div>
+
+            {/* Modal Body Container (Kindle Reader Canvas) */}
+            <div className="p-6 sm:p-10 md:p-12 overflow-y-auto space-y-6 flex-1 bg-[#FBF9F5] selection:bg-[#006747]/20">
+              {/* Article Headline */}
+              <h1 className="text-2xl sm:text-3xl md:text-4xl font-heading font-black leading-tight text-[#1A1A1A] tracking-tight">
+                {selectedArticle.title}
+              </h1>
+
+              {/* Optional Lead Image */}
+              {selectedArticle.image && (
+                <div className="relative aspect-video w-full rounded-xl overflow-hidden bg-[#EFEAE1] border border-[#E3DCD0] my-4 shadow-xs">
+                  <Image
+                    src={selectedArticle.image}
+                    alt={selectedArticle.title}
+                    fill
+                    sizes="(max-width: 768px) 100vw, 800px"
+                    className="object-cover"
+                  />
                 </div>
-              </div>
-            )}
+              )}
 
-            {/* Modal Body Content */}
-            <div className="p-5 sm:p-8 overflow-y-auto space-y-5 text-rich-black flex-1">
-              <div className="flex items-center justify-between text-black/50 text-xs font-bold uppercase border-b border-black/10 pb-3">
-                <div className="flex items-center gap-2">
-                  <Calendar className="w-4 h-4 text-zru-green" />
-                  <span>Published {selectedArticle.date}</span>
-                </div>
-                <span className="text-zru-green font-black tracking-wider">Zimbabwe Rugby Union Press</span>
+              {/* Byline */}
+              <div className="flex items-center justify-between text-[#777063] text-xs font-semibold pb-4 border-b border-[#E5E0D5]">
+                <span className="text-[#006747] font-black tracking-wider uppercase">Zimbabwe Rugby Union Official Media</span>
+                <span>• Read In Place</span>
               </div>
 
-              <div className="text-black/85 text-base leading-relaxed font-medium space-y-4">
-                {(selectedArticle.content || selectedArticle.excerpt || '')
-                  .replace(/<[^>]*>?/gm, '')
-                  .replace(/\[Harare,\s*Zimbabwe\]\s*–\s*\[[^\]]*\]/gi, '')
-                  .replace(/\[Source:[^\]]*\]\s*–/gi, '')
-                  .replace(/\[…\]|\[\.\.\.\]/gi, '')
-                  .trim()}
+              {/* Full Kindle Reader Text Formatting */}
+              <div className="text-[#2C2925] text-base sm:text-lg leading-[1.8] font-normal space-y-5 tracking-[0.01em]">
+                {selectedArticle.content ? (
+                  selectedArticle.content.startsWith('<') ? (
+                    <div
+                      className="prose max-w-none text-[#2C2925] leading-relaxed space-y-4"
+                      dangerouslySetInnerHTML={{ __html: selectedArticle.content }}
+                    />
+                  ) : (
+                    selectedArticle.content.split('\n\n').map((paragraph, idx) => (
+                      <p key={idx} className="leading-relaxed">
+                        {paragraph.trim()}
+                      </p>
+                    ))
+                  )
+                ) : (
+                  <p className="leading-relaxed italic">
+                    {selectedArticle.excerpt}
+                  </p>
+                )}
               </div>
+            </div>
 
-              <div className="pt-4 flex items-center justify-between border-t border-black/10">
-                <a
-                  href={selectedArticle.url || '#'}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2.5 bg-zru-green hover:bg-zru-green/90 text-white text-xs sm:text-sm font-black uppercase tracking-widest px-6 py-3 rounded-xl shadow-lg transition-[background-color,transform] hover:scale-[1.02]"
-                >
-                  View Original Source
-                  <ArrowRight className="w-4 h-4" />
-                </a>
+            {/* Kindle Footer */}
+            <div className="bg-[#F3EFE6] border-t border-[#E3DCD0] px-6 py-4 flex items-center justify-between shrink-0">
+              <span className="text-xs text-[#777063] font-bold">End of Article</span>
 
-                <button
-                  onClick={() => setSelectedArticle(null)}
-                  className="text-xs font-black text-black/50 hover:text-black uppercase tracking-widest px-4 py-2 rounded-lg hover:bg-black/5 transition-colors"
-                >
-                  Close Window
-                </button>
-              </div>
+              <button
+                onClick={() => setSelectedArticle(null)}
+                className="bg-[#006747] hover:bg-[#005238] text-white text-xs font-black uppercase tracking-widest px-6 py-2.5 rounded-lg shadow-sm transition-colors cursor-pointer"
+              >
+                Finished Reading
+              </button>
             </div>
           </motion.div>
         </div>
@@ -402,10 +415,6 @@ export default function MediaPageClient({ initialSocialPosts, cmsPage, initialNe
       <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-12">
           <FanZoneSignup />
       </div>
-
-      <section className="mt-12 border-t border-black/5 pt-12 md:pt-16">
-        <JournalStrip />
-      </section>
     </main>
   );
 }

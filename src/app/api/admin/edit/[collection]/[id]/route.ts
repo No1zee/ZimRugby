@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { requireCollectionAction } from "@/lib/admin/auth";
+import { revalidateTag } from "next/cache";
 
 const DIRECTUS_URL = process.env.NEXT_PUBLIC_DIRECTUS_URL!;
 const DIRECTUS_TOKEN = process.env.DIRECTUS_TOKEN!;
@@ -27,6 +28,10 @@ export async function PATCH(
       const err = await res.text();
       throw new Error(`Directus update failed (${res.status}): ${err}`);
     }
+
+    try {
+      revalidateTag(`directus:${collection}`, "minutes");
+    } catch {}
 
     return NextResponse.json({ success: true });
   } catch (e: any) {

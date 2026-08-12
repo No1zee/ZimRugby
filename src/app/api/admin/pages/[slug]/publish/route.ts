@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { requireFeature } from "@/lib/admin/auth";
 import { directusFetch } from "@/lib/directus/fetch";
 import { directusUpdate } from "@/lib/directus/admin-write";
+import { revalidateTag } from "next/cache";
 
 // POST /api/admin/pages/[slug]/publish — publish page + all sections
 export async function POST(
@@ -36,6 +37,11 @@ export async function POST(
         directusUpdate("page_sections", s.id, { status: "published" })
       )
     );
+
+    try {
+      revalidateTag("directus:pages", "minutes");
+      revalidateTag("directus:page_sections", "minutes");
+    } catch {}
 
     return NextResponse.json({ success: true, published: sections.length + 1 });
   } catch (e: any) {
