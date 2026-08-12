@@ -142,6 +142,10 @@ export async function getDirectusMatches(): Promise<MatchCardViewModel[]> {
     const venueObj = venueMap.get(String(m.venue_id));
 
     const kickoff = m.kickoff_at ? new Date(m.kickoff_at as string) : new Date();
+    const isAway = m.home_or_away === "away";
+    const teamName = (teamObj?.name as string) || "Zimbabwe Sables";
+    const oppName = (oppObj?.name as string) || "Opponent";
+    const venueName = (m.venue_name_override as string) || (venueObj?.name as string) || (venueObj?.city ? `${venueObj.name}, ${venueObj.city}` : "Harare Sports Club");
 
     return {
       id: String(m.id),
@@ -150,15 +154,15 @@ export async function getDirectusMatches(): Promise<MatchCardViewModel[]> {
       competition: (compObj?.name as string) || "Rugby Africa Cup",
       round: (m.round_label as string) || (teamObj?.filter_label as string) || "Sables",
       dateIso: kickoff.toISOString(),
-      time: kickoff.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
-      venue: (venueObj?.name as string) || "Harare Sports Club",
+      time: (m.display_time_label as string) || kickoff.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+      venue: venueName,
       homeTeam: {
-        name: (teamObj?.name as string) || "Zimbabwe Sables",
-        score: m.team_score !== undefined && m.team_score !== null ? Number(m.team_score) : undefined,
+        name: isAway ? oppName : teamName,
+        score: isAway ? (m.opponent_score !== null && m.opponent_score !== undefined ? Number(m.opponent_score) : undefined) : (m.team_score !== null && m.team_score !== undefined ? Number(m.team_score) : undefined),
       },
       awayTeam: {
-        name: (oppObj?.name as string) || "Opponent",
-        score: m.opponent_score !== undefined && m.opponent_score !== null ? Number(m.opponent_score) : undefined,
+        name: isAway ? teamName : oppName,
+        score: isAway ? (m.team_score !== null && m.team_score !== undefined ? Number(m.team_score) : undefined) : (m.opponent_score !== null && m.opponent_score !== undefined ? Number(m.opponent_score) : undefined),
       },
       status: m.status === "final" ? "completed" : m.status === "live" ? "live" : "upcoming",
       resultOutcome: (m.result_outcome as "win" | "loss" | "draw" | "na") || "na",
