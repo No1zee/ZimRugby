@@ -258,7 +258,13 @@ export default function EventsClient({ cmsPage, competitions: apiCompetitions = 
     <div className="bg-milk-white min-h-screen pb-24">
       {/* CMS Top Hero */}
       {cmsPage ? (
-        <CmsHero page={cmsPage} />
+        <CmsHero
+          kicker={cmsPage.kicker}
+          title={cmsPage.title}
+          intro={cmsPage.intro}
+          image={cmsPage.image}
+          pageId={cmsPage.id}
+        />
       ) : (
         <div className="bg-rich-black text-white pt-32 pb-16 px-4 sm:px-6 lg:px-8 border-b border-zru-green/20">
           <div className="max-w-7xl mx-auto text-center space-y-4">
@@ -278,7 +284,7 @@ export default function EventsClient({ cmsPage, competitions: apiCompetitions = 
 
       {/* Main Container */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8">
-        <PageAnnouncements page="events" />
+        <PageAnnouncements scope="events" />
 
         {/* 1. Featured Fixture Hero Strip */}
         <FeaturedFixtureHero event={featuredEvent} />
@@ -346,7 +352,7 @@ export default function EventsClient({ cmsPage, competitions: apiCompetitions = 
       <DayTimelineDrawer
         isOpen={isDrawerOpen}
         onClose={() => setIsDrawerOpen(false)}
-        dateStr={selectedDateStr}
+        dateStr={selectedDateStr || ""}
         events={selectedDateEvents}
       />
     </div>
