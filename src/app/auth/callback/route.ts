@@ -1,4 +1,4 @@
-import { NextResponse } from 'next/server'
+﻿import { NextResponse } from 'next/server'
 import { createServerClient } from '@supabase/ssr'
 import { getAdminClient } from '@/lib/supabase/admin'
 
@@ -8,13 +8,10 @@ export async function GET(request: Request) {
   let next = searchParams.get('next') ?? '/fan-zone'
 
   if (code) {
-    // Build the redirect response first so we can wire the Supabase client
-    // directly to it. This is required in Route Handlers because next/headers
-    // cookies() is read-only — any setAll() call on the shared cookie store is
-    // silently swallowed, meaning the session never actually lands on the
-    // browser. By pointing the client at the response object we ensure the
-    // Supabase auth cookies are written on the same response the browser follows.
-    const redirectRes = NextResponse.redirect(`${origin}/fan-zone`) // temp target, overwritten below
+    // Buffer the Supabase auth cookies - we can't write them until we have
+    // the final redirect response, and we can't create that until we know
+    // the destination. Buffer first, apply after.
+    let bufferedCookies: { name: string; value: string; options: any }[] = []
 
     const supabase = createServerClient(
       process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -32,11 +29,8 @@ export async function GET(request: Request) {
                 }) ?? []
             )
           },
-          setAll(cookiesToSet) {
-            // Write every Supabase auth cookie onto the outbound redirect response
-            cookiesToSet.forEach(({ name, value, options }) =>
-              redirectRes.cookies.set(name, value, options)
-            )
+          setAll(cookies) {
+            bufferedCookies = cookies
           },
         },
       }
@@ -48,7 +42,6 @@ export async function GET(request: Request) {
       const email = data.user.email?.toLowerCase() ?? ''
       let role = data.user.app_metadata?.role as string | undefined
 
-      // Super-admin bootstrap: if no role is stored yet, stamp it now
       if (!role && email === 'edwardmagejo@gmail.com') {
         role = 'super_admin'
         const adminClient = getAdminClient()
@@ -61,18 +54,20 @@ export async function GET(request: Request) {
         }
       }
 
-      // Determine where to send the user
       if (email === 'edwardmagejo@gmail.com' || role === 'super_admin') {
         next = '/admin'
       } else if (!next || next === '/fan-zone') {
         next = '/fan-zone'
       }
 
-      // Set the correct destination on the redirect response
-      redirectRes.headers.set('Location', `${origin}${next}`)
+      // Create redirect with the CORRECT destination from the start
+      const redirectRes = NextResponse.redirect(${origin})
 
-      // Also write a lightweight zru_user_session cookie so the AuthContext
-      // can hydrate the user's display name / handle on the client side
+      // Apply buffered Supabase auth cookies onto the redirect response
+      bufferedCookies.forEach(({ name, value, options }) =>
+        redirectRes.cookies.set(name, value, options)
+      )
+
       const baseName =
         data.user.user_metadata?.full_name ??
         data.user.user_metadata?.name ??
@@ -82,7 +77,7 @@ export async function GET(request: Request) {
       const profile = {
         email,
         name: baseName,
-        handle: `@${baseName.toLowerCase().split(' ')[0].replace(/[^a-z0-9]/g, '')}`,
+        handle: @,
         favoriteTeam: 'Sables',
       }
 
@@ -100,6 +95,5 @@ export async function GET(request: Request) {
     }
   }
 
-  // Fallback — exchange failed or no code present
-  return NextResponse.redirect(`${origin}/login?message=Could+not+authenticate+user`)
+  return NextResponse.redirect(${origin}/login?message=Could+not+authenticate+user)
 }
