@@ -80,8 +80,12 @@ export default async function Home() {
   const hubNews = [...cmsNews, ...socialPosts, ...reports]
     .filter((r, i, arr) => arr.findIndex(x => x.id === r.id) === i)
     .slice(0, 4);
-  const hubNextMatch = allMatches.filter(m => m.status === "upcoming" || m.status === "live")
-    .sort((a, b) => new Date(a.dateIso).getTime() - new Date(b.dateIso).getTime())[0] || null;
+  const hubNextMatch = allMatches
+    .filter(m => m.status === "upcoming" || m.status === "live")
+    .filter(m => new Date(m.dateIso).getTime() >= Date.now() - 24 * 3600 * 1000)
+    .sort((a, b) => new Date(a.dateIso).getTime() - new Date(b.dateIso).getTime())[0] || 
+    allMatches.filter(m => new Date(m.dateIso).getTime() >= Date.now())[0] ||
+    null;
 
   const mappedFeaturedPlayers = featuredPlayers.map(p => ({
     name: p.name,
