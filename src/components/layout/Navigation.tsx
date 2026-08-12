@@ -316,21 +316,43 @@ export default function Navigation() {
             )}
           </div>
 
-          {/* Mobile utility: Search + Tickets */}
-          <div className="lg:hidden flex items-center gap-1">
+          {/* Mobile utility: Search + Admin Portal / User Profile / Sign In */}
+          <div className="lg:hidden flex items-center gap-1.5">
             <button
               onClick={() => setIsSearchOpen(true)}
-              className={`p-1.5 transition-colors cursor-pointer text-white/60 hover:text-white`}
+              className="p-1.5 transition-colors cursor-pointer text-white/60 hover:text-white"
               aria-label="Search site"
             >
               <Search className="w-4 h-4" />
             </button>
-            <Link
-              href="/login"
-              className="flex items-center gap-1 px-2.5 py-1 rounded-full bg-[#006747] text-white text-[10px] font-heading font-black uppercase tracking-wider shadow-[inset_0_1px_0_rgba(255,255,255,0.20),inset_0_-1px_0_rgba(0,0,0,0.25),0_2px_0_#003D20,0_4px_8px_rgba(0,0,0,0.35)] hover:bg-black transition-colors"
-            >
-              SIGN IN
-            </Link>
+
+            {isAdminUser && (
+              <Link
+                href="/admin"
+                className="flex items-center gap-1 px-2.5 py-1 rounded-full bg-[#006747] text-white text-[10px] font-heading font-black uppercase tracking-wider shadow-[0_2px_6px_rgba(0,0,0,0.3)] hover:bg-[#004D2C] transition-colors"
+                title="Admin Dashboard"
+              >
+                <ShieldCheck className="w-3.5 h-3.5 text-emerald-300" />
+                <span>ADMIN</span>
+              </Link>
+            )}
+
+            {user ? (
+              <Link
+                href="/fan-zone"
+                className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-white/10 border border-white/20 text-white text-[10px] font-heading font-black uppercase tracking-wider hover:bg-white/20 transition-colors"
+              >
+                <User className="w-3.5 h-3.5 text-emerald-400" />
+                <span className="truncate max-w-[80px]">{user.name.split(" ")[0]}</span>
+              </Link>
+            ) : (
+              <Link
+                href="/login"
+                className="flex items-center gap-1 px-2.5 py-1 rounded-full bg-[#006747] text-white text-[10px] font-heading font-black uppercase tracking-wider shadow-[inset_0_1px_0_rgba(255,255,255,0.20),inset_0_-1px_0_rgba(0,0,0,0.25),0_2px_0_#003D20,0_4px_8px_rgba(0,0,0,0.35)] hover:bg-black transition-colors"
+              >
+                SIGN IN
+              </Link>
+            )}
           </div>
         </div>
       </div>
