@@ -73,7 +73,13 @@ export async function requireAdmin(): Promise<AdminSession> {
     throw new Error("Unauthorized");
   }
 
-  const role = user.app_metadata?.role as UserRole | undefined;
+  let role = user.app_metadata?.role as UserRole | undefined;
+  
+  // Auto-resolve super_admin role for primary admin email if app_metadata.role is missing
+  if (!role && user.email?.toLowerCase() === "edwardmagejo@gmail.com") {
+    role = "super_admin";
+  }
+
   if (typeof role !== "string" || !role) {
     throw new Error("Forbidden");
   }
