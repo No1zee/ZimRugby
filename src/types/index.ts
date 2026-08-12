@@ -193,6 +193,12 @@ export interface EventItem {
   score?: string;
   homeTeam?: string;
   awayTeam?: string;
+  teams?: string[];
+  city?: string;
+  competition?: string;
+  featured?: boolean;
+  slug?: string;
+  time?: string;
   /** Derived from date/time at render time: "upcoming" | "ongoing" | "completed" */
   status?: "upcoming" | "ongoing" | "completed";
 }

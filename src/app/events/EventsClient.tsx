@@ -1,65 +1,21 @@
 "use client";
 
-import { motion, AnimatePresence } from "framer-motion";
-import { 
-  Calendar as CalendarIcon, MapPin, Clock, Award, Users, Layers, Shield, Trophy, Activity, CheckCircle,
-  ChevronLeft, ChevronRight, CalendarDays, Download, Filter, List, Sparkles, Ticket, FileText, Megaphone, Landmark
-} from "lucide-react";
-import SlantedButton from "@/components/ui/SlantedButton";
 import { useState, useEffect, useMemo } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
+import { motion, AnimatePresence } from "framer-motion";
+import { Calendar as CalendarIcon, MapPin, Clock, Award, Users, Layers, Shield, Trophy, Activity, CheckCircle, Sparkles } from "lucide-react";
 import PageAnnouncements from "@/components/ui/PageAnnouncements";
-
 import CmsHero from "@/components/cms/CmsHero";
 import DayTimelineDrawer from "@/components/events/DayTimelineDrawer";
+
+import FeaturedFixtureHero from "@/components/events/FeaturedFixtureHero";
+import CalendarToolbar from "@/components/events/CalendarToolbar";
+import CalendarFilters from "@/components/events/CalendarFilters";
+import CalendarMonthGrid from "@/components/events/CalendarMonthGrid";
+import SelectedDatePanel from "@/components/events/SelectedDatePanel";
+import CalendarAgendaList from "@/components/events/CalendarAgendaList";
+
 import type { EventItem } from "@/types";
-
-interface Competition extends EventItem {
-  level: string;
-  dateRange: string;
-  teamCount: string;
-  status: NonNullable<EventItem["status"]>;
-  category: string;
-}
-
-interface GeneralEvent extends EventItem {
-  time: string;
-  category: string;
-}
-
-function mapToCompetition(e: EventItem): Competition {
-  return {
-    ...e,
-    level: e.subtitle || "",
-    dateRange: e.date,
-    teamCount: e.tags?.[0] || "",
-    status: e.status || "upcoming",
-    category: e.subtitle || ""
-  };
-}
-
-function mapToGeneralEvent(e: EventItem): GeneralEvent {
-  return {
-    ...e,
-    time: "",
-    status: e.status || "upcoming",
-    category: e.tags?.[0] || "EVENT"
-  };
-}
-
-const levels = [
-  { name: "National Teams", icon: Shield, tag: "National", code: "NAT" },
-  { name: "Club Rugby", icon: Trophy, tag: "Clubs", code: "CLB" },
-  { name: "Schools Rugby", icon: Users, tag: "Schools", code: "SCH" },
-  { name: "Squad Drops", icon: FileText, tag: "Squad", code: "SQD" },
-  { name: "Campaigns", icon: Megaphone, tag: "Campaign", code: "CMPG" },
-  { name: "Clinics & Refs", icon: Award, tag: "Clinic", code: "CLN" },
-  { name: "Governance", icon: Landmark, tag: "Governance", code: "GOV" },
-  { name: "Camps & Youth", icon: Layers, tag: "Youth", code: "CMP" },
-  { name: "Sponsor Events", icon: Sparkles, tag: "Sponsor", code: "SPN" }
-];
-
-const WEEKDAYS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
 function toDateStr(iso?: string): string {
   if (!iso) return "";
@@ -70,14 +26,6 @@ function toDateStr(iso?: string): string {
     return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
   }
   return "";
-}
-
-function monthLabel(d: Date): string {
-  return d.toLocaleDateString("en-GB", { month: "long", year: "numeric" });
-}
-
-function dayKey(d: Date): string {
-  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
 }
 
 function getTagBadge(tags: string[] = []): { label: string; bg: string; text: string } {
@@ -127,358 +75,280 @@ interface EventsClientProps {
 export default function EventsClient({ cmsPage, competitions: apiCompetitions = [], generalEvents: apiGeneralEvents = [] }: EventsClientProps) {
   const searchParams = useSearchParams();
   const router = useRouter();
-  
-  const [viewMode, setViewMode] = useState<"calendar" | "grid">("calendar");
-  const [selectedLevel, setSelectedLevel] = useState<string | null>(null);
-  
-  // Calendar Navigation Cursor
-  const [cursor, setCursor] = useState(() => {
-    const now = new Date();
-    return new Date(now.getFullYear(), now.getMonth(), 1);
-  });
 
-  // Drawer state for selected date
-  const [selectedDateKey, setSelectedDateKey] = useState<string | null>(null);
-  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-
+  // Combine all API events
   const allEvents = useMemo(() => {
-    const combined = [...apiCompetitions, ...apiGeneralEvents];
-    return combined;
+    return [...apiCompetitions, ...apiGeneralEvents];
   }, [apiCompetitions, apiGeneralEvents]);
 
-  const competitions = apiCompetitions.map(mapToCompetition);
-  const generalEvents = apiGeneralEvents.map(mapToGeneralEvent);
-
-  // Group all events by date string YYYY-MM-DD
-  const eventsByDate = useMemo(() => {
-    const map = new Map<string, EventItem[]>();
-    for (const ev of allEvents) {
-      const key = toDateStr(ev.date);
-      if (!key) continue;
-      const list = map.get(key) || [];
-      list.push(ev);
-      map.set(key, list);
-    }
-    return map;
+  // Featured Event: First national/sables event or highest priority upcoming
+  const featuredEvent = useMemo(() => {
+    return (
+      allEvents.find((e) => e.tags?.some((t) => /national|sables|campaign/i.test(t))) ||
+      allEvents[0]
+    );
   }, [allEvents]);
 
-  // Calendar cells generation
-  const calendarCells = useMemo(() => {
-    const year = cursor.getFullYear();
-    const month = cursor.getMonth();
-    const firstDay = new Date(year, month, 1);
-    const startOffset = firstDay.getDay();
-    const daysInMonth = new Date(year, month + 1, 0).getDate();
-    const cells: (Date | null)[] = [];
-    for (let i = 0; i < startOffset; i++) cells.push(null);
-    for (let d = 1; d <= daysInMonth; d++) cells.push(new Date(year, month, d));
-    while (cells.length % 7 !== 0) cells.push(null);
-    return cells;
-  }, [cursor]);
+  // UI States
+  const [viewMode, setViewMode] = useState<"calendar" | "agenda">("calendar");
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
+  const [activeShortcut, setActiveShortcut] = useState<string | null>(null);
+  const [selectedDateStr, setSelectedDateStr] = useState<string | null>(null);
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
-  const todayKey = dayKey(new Date());
+  // Month navigation cursor
+  const [cursorMonth, setCursorMonth] = useState(() => new Date(2026, 7, 1)); // Default August 2026
 
-  const handleCellClick = (date: Date) => {
-    const key = dayKey(date);
-    setSelectedDateKey(key);
-    setIsDrawerOpen(true);
+  // Default to Agenda on mobile screens on initial mount
+  useEffect(() => {
+    if (typeof window !== "undefined" && window.innerWidth < 768) {
+      setViewMode("agenda");
+    }
+  }, []);
+
+  // Sync state from URL params
+  useEffect(() => {
+    const v = searchParams.get("view");
+    if (v === "calendar" || v === "agenda") setViewMode(v);
+
+    const q = searchParams.get("q");
+    if (q !== null) setSearchQuery(q);
+
+    const cats = searchParams.get("cats");
+    if (cats) setSelectedCategories(cats.split(","));
+
+    const date = searchParams.get("date");
+    if (date) setSelectedDateStr(date);
+  }, [searchParams]);
+
+  // Update URL params on state changes
+  const updateUrlParams = (newParams: Record<string, string | null>) => {
+    const params = new URLSearchParams(searchParams.toString());
+    for (const [key, val] of Object.entries(newParams)) {
+      if (val === null || val === "") {
+        params.delete(key);
+      } else {
+        params.set(key, val);
+      }
+    }
+    router.replace(`/events?${params.toString()}`, { scroll: false });
   };
 
-  const selectedDateEvents = useMemo(() => {
-    if (!selectedDateKey) return [];
-    return eventsByDate.get(selectedDateKey) || [];
-  }, [selectedDateKey, eventsByDate]);
+  // Toggle Category
+  const handleToggleCategory = (catId: string) => {
+    const updated = selectedCategories.includes(catId)
+      ? selectedCategories.filter((c) => c !== catId)
+      : [...selectedCategories, catId];
+    setSelectedCategories(updated);
+    updateUrlParams({ cats: updated.length > 0 ? updated.join(",") : null });
+  };
 
-  const selectedDateFormatted = useMemo(() => {
-    if (!selectedDateKey) return "";
-    const [y, m, d] = selectedDateKey.split("-").map(Number);
-    const date = new Date(y, m - 1, d);
-    return date.toLocaleDateString("en-GB", { weekday: "short", day: "numeric", month: "long", year: "numeric" });
-  }, [selectedDateKey]);
+  const handleClearCategories = () => {
+    setSelectedCategories([]);
+    updateUrlParams({ cats: null });
+  };
+
+  // Handle Search Input Change
+  const handleSearchChange = (q: string) => {
+    setSearchQuery(q);
+    updateUrlParams({ q: q || null });
+  };
+
+  // Handle View Mode Change
+  const handleViewModeChange = (mode: "calendar" | "agenda") => {
+    setViewMode(mode);
+    updateUrlParams({ view: mode });
+  };
+
+  // Handle Date Shortcut Clicks
+  const handleShortcutClick = (shortcut: string | null) => {
+    setActiveShortcut(shortcut);
+    const today = new Date();
+    const todayStr = toDateStr(today.toISOString());
+
+    if (shortcut === "today") {
+      setSelectedDateStr(todayStr);
+      updateUrlParams({ date: todayStr });
+    } else if (shortcut === "this-week" || shortcut === "this-month") {
+      setSelectedDateStr(null);
+      setCursorMonth(new Date(today.getFullYear(), today.getMonth(), 1));
+      updateUrlParams({ date: null });
+    } else if (shortcut === "sables-window") {
+      setSelectedCategories(["National"]);
+      updateUrlParams({ cats: "National" });
+    } else if (shortcut === "schools-season") {
+      setSelectedCategories(["Schools"]);
+      updateUrlParams({ cats: "Schools" });
+    } else {
+      setSelectedDateStr(null);
+      updateUrlParams({ date: null });
+    }
+  };
+
+  const handleResetAll = () => {
+    setSearchQuery("");
+    setSelectedCategories([]);
+    setActiveShortcut(null);
+    setSelectedDateStr(null);
+    updateUrlParams({ q: null, cats: null, date: null });
+  };
+
+  // Filter events based on Search Query & Selected Categories
+  const filteredEvents = useMemo(() => {
+    return allEvents.filter((ev) => {
+      // 1. Category Filter
+      if (selectedCategories.length > 0) {
+        const evTags = (ev.tags || []).map((t) => t.toLowerCase());
+        const hasCategory = selectedCategories.some((cat) => {
+          const cLower = cat.toLowerCase();
+          return evTags.some((t) => t.includes(cLower)) || (ev.subtitle || "").toLowerCase().includes(cLower);
+        });
+        if (!hasCategory) return false;
+      }
+
+      // 2. Search Query Filter
+      if (searchQuery.trim()) {
+        const q = searchQuery.toLowerCase();
+        const titleMatch = ev.title.toLowerCase().includes(q);
+        const subMatch = (ev.subtitle || "").toLowerCase().includes(q);
+        const locMatch = (ev.location || "").toLowerCase().includes(q);
+        const descMatch = (ev.description || "").toLowerCase().includes(q);
+        if (!titleMatch && !subMatch && !locMatch && !descMatch) return false;
+      }
+
+      return true;
+    });
+  }, [allEvents, selectedCategories, searchQuery]);
+
+  // Group filtered events by YYYY-MM-DD for Month Grid
+  const eventsByDayMap = useMemo(() => {
+    const map = new Map<string, EventItem[]>();
+    for (const ev of filteredEvents) {
+      const k = toDateStr(ev.date);
+      if (!k) continue;
+      const list = map.get(k) || [];
+      list.push(ev);
+      map.set(k, list);
+    }
+    return map;
+  }, [filteredEvents]);
+
+  // Selected date events for right-hand panel & drawer
+  const selectedDateEvents = useMemo(() => {
+    if (!selectedDateStr) {
+      // Default: Show upcoming fixtures if no date selected
+      return filteredEvents.slice(0, 5);
+    }
+    return eventsByDayMap.get(selectedDateStr) || [];
+  }, [selectedDateStr, eventsByDayMap, filteredEvents]);
+
+  const handleSelectDateCell = (dateStr: string) => {
+    setSelectedDateStr(dateStr);
+    updateUrlParams({ date: dateStr });
+    // On small screens, open drawer
+    if (typeof window !== "undefined" && window.innerWidth < 1024) {
+      setIsDrawerOpen(true);
+    }
+  };
+
+  const hasActiveFilters = selectedCategories.length > 0 || searchQuery !== "" || activeShortcut !== null;
 
   return (
-    <main className="bg-milk-white min-h-screen pb-16 relative overflow-hidden text-rich-black">
-      
-      <CmsHero
-        kicker={cmsPage?.hero_kicker || "Master Rugby Calendar"}
-        title={cmsPage?.hero_title || "Official Fixtures & Events"}
-        intro={cmsPage?.hero_intro || "The single source of truth for Zimbabwe Rugby. Track past results, upcoming Sables test matches, club leagues, and school fixtures."}
-        image={cmsPage?.hero_image || "/images/gallery/zimbabwe-sables-0350.webp"}
-        breadcrumb={[{ label: "Calendar & Events", href: "/events" }]}
-        pageId={cmsPage?.id}
-      />
-
-      <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 pt-8 relative z-10">
-
-        <PageAnnouncements scope="events" className="mb-8" />
-
-        {/* Level Filters */}
-        <div className="mb-8">
-          <span className="text-black/45 text-[9px] font-black uppercase tracking-[0.4em] block mb-4 font-subheading">
-            Filter Master Calendar
-          </span>
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
-            {levels.map((level) => {
-              const Icon = level.icon;
-              const isSelected = selectedLevel === level.tag;
-              return (
-                <button
-                  key={level.name}
-                  onClick={() => setSelectedLevel(isSelected ? null : level.tag)}
-                  className={`flex items-center justify-between p-3.5 border rounded-xl transition-all duration-300 group relative overflow-hidden ${
-                    isSelected 
-                      ? "bg-zru-green text-white border-zru-green shadow-md" 
-                      : "bg-white border-black/5 text-black/70 hover:text-black hover:border-black/20 shadow-sm"
-                  }`}
-                >
-                  <div className="flex items-center gap-2.5">
-                    <Icon className={`w-4 h-4 ${isSelected ? "text-white" : "text-zru-green"}`} />
-                    <span className="text-[11px] font-heading font-bold uppercase tracking-wider">{level.name}</span>
-                  </div>
-                  <span className={`text-[9px] font-black font-mono px-1.5 py-0.5 rounded ${isSelected ? "bg-white/20 text-white" : "bg-black/5 text-black/50"}`}>
-                    {level.code}
-                  </span>
-                </button>
-              );
-            })}
-          </div>
-        </div>
-
-        {/* Action Bar: View Switcher + Sync to Phone */}
-        <div className="flex flex-col md:flex-row justify-between items-center gap-4 mb-8 bg-white p-3 rounded-2xl border border-black/5 shadow-sm">
-          
-          {/* Calendar View vs Grid View Toggle */}
-          <div className="flex p-1 bg-black/5 rounded-xl border border-black/10">
-            <button
-              onClick={() => setViewMode("calendar")}
-              className={`flex items-center gap-2 px-6 py-2.5 rounded-lg text-xs font-bold tracking-widest uppercase transition-all duration-200 ${
-                viewMode === "calendar" ? "bg-zru-green text-white shadow" : "text-black/60 hover:text-black"
-              }`}
-            >
-              <CalendarDays className="w-4 h-4" />
-              Master Calendar
-            </button>
-            <button
-              onClick={() => setViewMode("grid")}
-              className={`flex items-center gap-2 px-6 py-2.5 rounded-lg text-xs font-bold tracking-widest uppercase transition-all duration-200 ${
-                viewMode === "grid" ? "bg-zru-green text-white shadow" : "text-black/60 hover:text-black"
-              }`}
-            >
-              <List className="w-4 h-4" />
-              Card View
-            </button>
-          </div>
-
-          <div className="text-right">
-            <span className="text-xs text-black/50 font-bold uppercase tracking-widest">
-              {selectedLevel ? `Filtering by: ${selectedLevel}` : "Showing All Union Events & Fixtures"}
+    <div className="bg-milk-white min-h-screen pb-24">
+      {/* CMS Top Hero */}
+      {cmsPage ? (
+        <CmsHero page={cmsPage} />
+      ) : (
+        <div className="bg-rich-black text-white pt-32 pb-16 px-4 sm:px-6 lg:px-8 border-b border-zru-green/20">
+          <div className="max-w-7xl mx-auto text-center space-y-4">
+            <span className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full text-xs font-mono font-black uppercase tracking-widest bg-zru-green text-white">
+              <CalendarIcon className="w-3.5 h-3.5" />
+              OFFICIAL FIXTURE & EVENT UTILITY
             </span>
+            <h1 className="text-4xl sm:text-5xl md:text-6xl font-heading font-black tracking-tight uppercase">
+              MASTER <span className="text-zru-green">CALENDAR</span>
+            </h1>
+            <p className="text-white/70 max-w-2xl mx-auto text-sm sm:text-base">
+              The single source of truth for Zimbabwe Rugby. Track test fixtures, club championships, school leagues, squad announcements, and union clinics.
+            </p>
           </div>
         </div>
+      )}
 
-        {/* MASTER CALENDAR MONTH GRID VIEW */}
+      {/* Main Container */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8">
+        <PageAnnouncements page="events" />
+
+        {/* 1. Featured Fixture Hero Strip */}
+        <FeaturedFixtureHero event={featuredEvent} />
+
+        {/* 2. Control Toolbar (Search, Date Shortcuts, View Switcher) */}
+        <CalendarToolbar
+          searchQuery={searchQuery}
+          onSearchChange={handleSearchChange}
+          viewMode={viewMode}
+          onViewModeChange={handleViewModeChange}
+          activeShortcut={activeShortcut}
+          onShortcutClick={handleShortcutClick}
+          onResetAll={handleResetAll}
+          hasActiveFilters={hasActiveFilters}
+        />
+
+        {/* 3. Faceted Multi-Select Filters */}
+        <CalendarFilters
+          selectedCategories={selectedCategories}
+          onToggleCategory={handleToggleCategory}
+          onClearCategories={handleClearCategories}
+        />
+
+        {/* 4. Main Body Layout */}
         {viewMode === "calendar" ? (
-          <div className="rounded-2xl border border-black/10 bg-white p-6 shadow-sm">
-            
-            {/* Month Header Navigation */}
-            <div className="mb-6 flex flex-col sm:flex-row items-center justify-between gap-4 border-b border-black/5 pb-4">
-              <div>
-                <span className="text-[9px] font-black uppercase tracking-[0.3em] text-zru-green block">Single Source of Truth</span>
-                <h3 className="font-heading text-2xl font-black uppercase text-rich-black">{monthLabel(cursor)}</h3>
-              </div>
-
-              <div className="flex items-center gap-2">
-                <button
-                  onClick={() => setCursor(new Date(cursor.getFullYear(), cursor.getMonth() - 1, 1))}
-                  className="rounded-xl border border-black/10 bg-white p-2.5 text-black/70 hover:bg-black/5 transition-colors"
-                  aria-label="Previous month"
-                >
-                  <ChevronLeft className="h-4 w-4" />
-                </button>
-                <button
-                  onClick={() => {
-                    const now = new Date();
-                    setCursor(new Date(now.getFullYear(), now.getMonth(), 1));
-                  }}
-                  className="rounded-xl border border-black/10 bg-white px-4 py-2 text-[11px] font-heading font-black uppercase tracking-wider text-black/70 hover:bg-black/5 transition-colors"
-                >
-                  Today
-                </button>
-                <button
-                  onClick={() => setCursor(new Date(cursor.getFullYear(), cursor.getMonth() + 1, 1))}
-                  className="rounded-xl border border-black/10 bg-white p-2.5 text-black/70 hover:bg-black/5 transition-colors"
-                  aria-label="Next month"
-                >
-                  <ChevronRight className="h-4 w-4" />
-                </button>
-              </div>
+          /* Desktop 2-Column Dashboard Layout */
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+            {/* Left 60% Column: Month Calendar Grid */}
+            <div className="lg:col-span-7 xl:col-span-8">
+              <CalendarMonthGrid
+                currentMonth={cursorMonth}
+                onPrevMonth={() => setCursorMonth(new Date(cursorMonth.getFullYear(), cursorMonth.getMonth() - 1, 1))}
+                onNextMonth={() => setCursorMonth(new Date(cursorMonth.getFullYear(), cursorMonth.getMonth() + 1, 1))}
+                eventsByDay={eventsByDayMap}
+                selectedDateStr={selectedDateStr}
+                onSelectDate={handleSelectDateCell}
+                getTagBadge={getTagBadge}
+              />
             </div>
 
-            {/* Calendar Grid Header (Sun-Sat) */}
-            <div className="grid grid-cols-7 gap-px overflow-hidden rounded-2xl border border-black/10 bg-black/5">
-              {WEEKDAYS.map((d) => (
-                <div key={d} className="bg-black/[0.03] px-3 py-3 text-center text-[10px] font-black uppercase tracking-widest text-black/60 font-subheading">
-                  {d}
-                </div>
-              ))}
-
-              {/* Day Cells */}
-              {calendarCells.map((date, i) => {
-                if (!date) return <div key={`empty-${i}`} className="min-h-[130px] bg-white/50" />;
-                const key = dayKey(date);
-                const dayEvents = eventsByDate.get(key) || [];
-                
-                // Filter by level if selected
-                const filteredDayEvents = selectedLevel
-                  ? dayEvents.filter(ev => ev.tags?.some(t => t.toLowerCase().includes(selectedLevel.toLowerCase())))
-                  : dayEvents;
-
-                const isToday = key === todayKey;
-                const isPast = date < new Date(new Date().setHours(0,0,0,0));
-
-                return (
-                  <div
-                    key={key}
-                    onClick={() => handleCellClick(date)}
-                    className={`min-h-[130px] bg-white p-2.5 relative group cursor-pointer transition-all duration-200 hover:bg-zru-green/[0.04] border-t border-black/5 ${
-                      isToday ? "bg-zru-green/[0.08] ring-2 ring-zru-green/50 ring-inset" : ""
-                    }`}
-                  >
-                    {/* Day Number Header */}
-                    <div className="mb-2 flex items-center justify-between">
-                      <span
-                        className={`flex h-7 w-7 items-center justify-center rounded-full text-xs font-black font-mono ${
-                          isToday ? "bg-zru-green text-white shadow" : "text-black/70"
-                        }`}
-                      >
-                        {date.getDate()}
-                      </span>
-                      {filteredDayEvents.length > 0 && (
-                        <span className="text-[9px] font-black uppercase tracking-widest text-zru-green bg-zru-green/10 border border-zru-green/20 px-1.5 py-0.5 rounded">
-                          {filteredDayEvents.length} {filteredDayEvents.length === 1 ? "Event" : "Events"}
-                        </span>
-                      )}
-                    </div>
-
-                    {/* Events list in the day cell */}
-                    <div className="space-y-1.5">
-                      {filteredDayEvents.slice(0, 2).map((ev) => {
-                        const badge = getTagBadge(ev.tags);
-                        return (
-                          <div
-                            key={ev.id}
-                            title={`${ev.title} - ${ev.location}`}
-                            className="relative overflow-hidden rounded-lg border border-black/10 bg-milk-white p-1.5 transition-all group-hover:border-zru-green/40 shadow-2xs"
-                          >
-                            {/* Slanted Diagonal Sash Accent on top-right (NO DOTS!) */}
-                            <div className="flex items-center justify-between gap-1 mb-1">
-                              <span className={`text-[8px] font-black font-mono px-1 py-0.2 rounded ${badge.bg}`}>
-                                {badge.label}
-                              </span>
-                              {ev.status === "completed" && (
-                                <span className="text-[8px] font-black uppercase text-black/40">DONE</span>
-                              )}
-                            </div>
-
-                            {/* Title */}
-                            <p className="text-[10px] font-heading font-black text-rich-black truncate leading-tight">
-                              {ev.title}
-                            </p>
-
-                            {/* Score Injection for completed/past events */}
-                            {ev.score ? (
-                              <div className="mt-1 bg-rich-black text-white px-1.5 py-0.5 rounded text-[9px] font-mono font-black text-center tracking-wider uppercase">
-                                {ev.score}
-                              </div>
-                            ) : (
-                              ev.location && (
-                                <p className="text-[8px] text-black/50 truncate font-body">
-                                  {ev.location}
-                                </p>
-                              )
-                            )}
-                          </div>
-                        );
-                      })}
-
-                      {filteredDayEvents.length > 2 && (
-                        <span className="block text-center text-[9px] font-black text-zru-green tracking-wider uppercase bg-zru-green/5 py-1 rounded border border-zru-green/10">
-                          +{filteredDayEvents.length - 2} More
-                        </span>
-                      )}
-                    </div>
-                  </div>
-                );
-              })}
+            {/* Right 40% Column: Selected Date / Upcoming Schedule Panel */}
+            <div className="hidden lg:block lg:col-span-5 xl:col-span-4">
+              <SelectedDatePanel
+                selectedDateStr={selectedDateStr}
+                events={selectedDateEvents}
+                getTagBadge={getTagBadge}
+              />
             </div>
           </div>
         ) : (
-          /* CARD GRID VIEW */
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 min-h-[400px]">
-            {competitions.length > 0 ? (
-              competitions.map((comp) => (
-                <div 
-                  key={comp.id}
-                  className="bg-white border border-black/5 group flex flex-col justify-between p-6 rounded-2xl shadow-sm hover:shadow-lg transition-all duration-300"
-                >
-                  <div>
-                    <div className="flex justify-between items-center mb-4">
-                      <span className="text-[10px] font-black tracking-widest text-zru-green uppercase bg-zru-green/10 border border-zru-green/20 px-3 py-1 rounded-sm">
-                        {comp.level || comp.category || "Tournament"}
-                      </span>
-                      <span className="flex items-center gap-1.5 text-[9px] font-black tracking-wider uppercase text-black/50">
-                        {comp.status}
-                      </span>
-                    </div>
-
-                    <h3 className="text-xl font-heading font-black text-rich-black mb-3 group-hover:text-zru-green transition-colors">
-                      {comp.title}
-                    </h3>
-                    
-                    {comp.score && (
-                      <div className="bg-rich-black text-white px-3 py-1.5 rounded-lg font-mono font-black text-sm text-center mb-3">
-                        FINAL: {comp.score}
-                      </div>
-                    )}
-
-                    <p className="text-black/60 text-xs leading-relaxed mb-6 font-body line-clamp-3">
-                      {comp.description}
-                    </p>
-                  </div>
-
-                  <div className="border-t border-black/5 pt-4 flex items-center justify-between text-xs font-bold text-black/70">
-                    <span className="flex items-center gap-1.5"><CalendarIcon className="w-3.5 h-3.5 text-zru-green" /> {comp.dateRange}</span>
-                    <SlantedButton href={`/contact`} variant="outline" size="sm">DETAILS</SlantedButton>
-                  </div>
-                </div>
-              ))
-            ) : (
-              <div className="col-span-3 text-center py-20 border border-dashed border-black/10 rounded-2xl bg-black/5">
-                <p className="text-black/45 font-bold uppercase tracking-widest">No Events matching filter.</p>
-              </div>
-            )}
+          /* Mobile-First Agenda / Chronological List View */
+          <div className="max-w-4xl mx-auto">
+            <CalendarAgendaList
+              events={filteredEvents}
+              getTagBadge={getTagBadge}
+              onSelectEvent={(ev) => {
+                if (ev.date) handleSelectDateCell(ev.date);
+              }}
+            />
           </div>
         )}
-
-        <div className="mt-16 border-t border-black/5 pt-8 flex flex-col sm:flex-row justify-between items-center gap-4 text-black/45 text-[10px] font-bold uppercase tracking-widest">
-          <div className="flex items-center gap-2">
-            <CheckCircle className="w-4 h-4 text-zru-green" />
-            <span>Official Zimbabwe Rugby Union Master Calendar</span>
-          </div>
-          <div>
-            <span>Verified Source &bull; Single Source of Truth</span>
-          </div>
-        </div>
-
       </div>
 
-      {/* Slide-over Timeline Drawer when a date is clicked */}
+      {/* Mobile Drawer for Selected Date */}
       <DayTimelineDrawer
         isOpen={isDrawerOpen}
         onClose={() => setIsDrawerOpen(false)}
-        dateStr={selectedDateFormatted}
+        dateStr={selectedDateStr}
         events={selectedDateEvents}
       />
-    </main>
+    </div>
   );
 }
