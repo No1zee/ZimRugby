@@ -79,6 +79,13 @@ export async function POST(req: NextRequest) {
   let role = data.user.app_metadata?.role as UserRole | undefined;
   if (!role && data.user.email?.toLowerCase() === "edwardmagejo@gmail.com") {
     role = "super_admin";
+    // Persist super_admin role into Supabase Auth app_metadata permanently
+    const adminClient = getAdminClient();
+    if (adminClient) {
+      await adminClient.auth.admin.updateUserById(data.user.id, {
+        app_metadata: { ...data.user.app_metadata, role: "super_admin" },
+      }).catch(() => {});
+    }
   }
 
   const permissions = typeof role === "string" && !!role ? await resolvePermissionsForRole(role) : null;
@@ -123,16 +130,17 @@ export async function POST(req: NextRequest) {
     ipAddress: ip,
   });
 
-  // Supabase session cookie is set by the SSR server client; the client
-  // redirects to /admin where requireAdmin() re-validates the session.
-  return NextResponse.json({
-    success: true,
-    user: {
-      email: data.user.email,
-      name: roleToName(role as UserRole),
-      role,
+  return NextResponse.json(
+    {
+      success: true,
+      user: {
+        email: data.user.email,
+        name: roleToName(role as UserRole),
+        role,
+      },
     },
-  });
+    { status: 200 }
+  );
 }
 
 // DELETE /api/admin/auth — Sign Out (clears Supabase session)
