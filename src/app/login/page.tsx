@@ -13,6 +13,9 @@ export default function LoginPage() {
   const searchParams = useSearchParams();
   const redirect = searchParams.get("redirect") || "/fan-zone";
 
+  const [portalTarget, setPortalTarget] = useState<"fan" | "admin">(() => {
+    return redirect.startsWith("/admin") ? "admin" : "fan";
+  });
   const [mode, setMode] = useState<"signin" | "signup">("signin");
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -62,10 +65,10 @@ export default function LoginPage() {
 
   // Redirect if already authenticated as Fan (ignore if target is /admin so admin check can evaluate)
   useEffect(() => {
-    if (isAuthenticated && !redirect.startsWith("/admin")) {
+    if (isAuthenticated && !redirect.startsWith("/admin") && portalTarget !== "admin") {
       router.replace(redirect);
     }
-  }, [isAuthenticated, redirect, router]);
+  }, [isAuthenticated, redirect, router, portalTarget]);
 
   const handleAdminMfa = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -85,7 +88,7 @@ export default function LoginPage() {
         setIsLoading(false);
         return;
       }
-      window.location.href = redirect.startsWith("/admin") ? redirect : "/admin";
+      window.location.href = "/admin";
     } catch {
       setMfaError("Connection error during verification.");
       setIsLoading(false);
@@ -104,6 +107,30 @@ export default function LoginPage() {
     setIsLoading(true);
 
     try {
+      if (portalTarget === "admin") {
+        // Explicit Admin Portal Sign In
+        const adminRes = await fetch("/api/admin/auth", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email, password }),
+        });
+
+        const adminData = await adminRes.json();
+        if (adminRes.ok) {
+          if (adminData.mfaRequired) {
+            setMfaRequired(true);
+            setIsLoading(false);
+            return;
+          }
+          window.location.href = "/admin";
+          return;
+        } else {
+          setError(adminData.error || "Invalid staff credentials.");
+          setIsLoading(false);
+          return;
+        }
+      }
+
       if (mode === "signup") {
         if (password.length < 8) {
           setError("Password must be at least 8 characters.");
@@ -130,34 +157,16 @@ export default function LoginPage() {
         });
         if (res.success) {
           signInFan(res.profile);
-          router.replace(redirect);
+          router.replace(redirect.startsWith("/admin") ? "/fan-zone" : redirect);
         } else {
           setError("Could not create account. Please try again.");
         }
       } else {
-        // Attempt Admin/Staff Auth route first
-        const adminRes = await fetch("/api/admin/auth", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email, password }),
-        });
-
-        if (adminRes.ok) {
-          const adminData = await adminRes.json();
-          if (adminData.mfaRequired) {
-            setMfaRequired(true);
-            setIsLoading(false);
-            return;
-          }
-          window.location.href = redirect.startsWith("/admin") ? redirect : "/admin";
-          return;
-        }
-
-        // Fallback to Fan Zone Auth
+        // Standard Fan Zone Auth
         const fanRes = await signInFanWithPassword({ email, password });
         if (fanRes.success) {
           signInFan(fanRes.profile);
-          window.location.href = redirect.startsWith("/admin") ? redirect : redirect;
+          router.replace(redirect.startsWith("/admin") ? "/fan-zone" : redirect);
         } else {
           setError("Incorrect email or password.");
         }
@@ -222,13 +231,44 @@ export default function LoginPage() {
         {/* Centered form */}
         <div className="flex-1 flex items-center justify-center px-8 py-12">
           <div className="w-full max-w-[360px]">
-            {/* Heading */}
-            <div className="mb-8">
+            {/* Heading & Portal Mode Selector */}
+            <div className="mb-6">
+              <div className="flex border-b border-gray-200 mb-6">
+                <button
+                  type="button"
+                  onClick={() => { setPortalTarget("fan"); setError(""); }}
+                  className={`flex-1 pb-3 text-xs font-heading font-black uppercase tracking-wider text-center border-b-2 transition-all cursor-pointer ${
+                    portalTarget === "fan"
+                      ? "border-[#006747] text-[#006747]"
+                      : "border-transparent text-gray-400 hover:text-gray-600"
+                  }`}
+                >
+                  Supporter Fan Zone
+                </button>
+                <button
+                  type="button"
+                  onClick={() => { setPortalTarget("admin"); setError(""); }}
+                  className={`flex-1 pb-3 text-xs font-heading font-black uppercase tracking-wider text-center border-b-2 transition-all cursor-pointer ${
+                    portalTarget === "admin"
+                      ? "border-[#006747] text-[#006747]"
+                      : "border-transparent text-gray-400 hover:text-gray-600"
+                  }`}
+                >
+                  ZRU Staff & Admin
+                </button>
+              </div>
+
               <h2 className="text-2xl font-bold text-gray-900 tracking-tight">
-                {mode === "signin" ? "Sign in" : "Create account"}
+                {portalTarget === "admin"
+                  ? "Staff Admin Access"
+                  : mode === "signin"
+                  ? "Sign in"
+                  : "Create account"}
               </h2>
               <p className="mt-1.5 text-sm text-gray-500">
-                {mode === "signin"
+                {portalTarget === "admin"
+                  ? "Enter your authorized ZRU staff email & password."
+                  : mode === "signin"
                   ? "Welcome back to Zimbabwe Rugby."
                   : "Join the Sables supporters network."}
               </p>
