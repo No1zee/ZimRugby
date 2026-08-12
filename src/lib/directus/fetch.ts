@@ -4,7 +4,7 @@
  * Serves from the persistent KV cache (last-known-good) when Directus fails.
  */
 
-import { createHash } from "node:crypto";
+import { createHash } from "crypto";
 import { kvGet, kvSet } from "@/lib/cache";
 
 const KV_TTL_SECONDS = 3600;
