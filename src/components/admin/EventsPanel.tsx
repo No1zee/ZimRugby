@@ -28,6 +28,7 @@ export interface AdminEventRow {
   category?: string;
   tags?: string[] | string | null;
   score?: string;
+  is_match?: boolean;
 }
 
 interface EventsPanelProps {
@@ -731,11 +732,17 @@ export default function EventsPanel({ initialEvents, onDirtyChange }: EventsPane
                     {dayEvents.slice(0, 3).map((ev) => (
                       <button
                         key={ev.id}
-                        onClick={() => openEdit(ev)}
-                        title={ev.title}
-                        className={`block w-full truncate rounded-md px-1.5 py-1 text-left text-[10px] font-bold leading-tight transition-opacity hover:opacity-80 ${statusTone(derivedStatus(ev))}`}
+                        onClick={() => {
+                          if (ev.is_match) {
+                            toast("Matches must be managed in the Match Centre panel.", "info");
+                          } else {
+                            openEdit(ev);
+                          }
+                        }}
+                        title={ev.is_match ? `[MATCH] ${ev.title}` : ev.title}
+                        className={`block w-full truncate rounded-md px-1.5 py-1 text-left text-[10px] font-bold leading-tight transition-opacity hover:opacity-80 ${ev.is_match ? "bg-green-100 text-green-800 border border-green-200/50" : statusTone(derivedStatus(ev))}`}
                       >
-                        {ev.title}
+                        {ev.is_match ? `🏉 ${ev.title}` : ev.title}
                       </button>
                     ))}
                     {dayEvents.length > 3 && (
@@ -809,20 +816,28 @@ export default function EventsPanel({ initialEvents, onDirtyChange }: EventsPane
                         </td>
                         <td className="px-4 py-2.5">
                           <div className="flex items-center justify-end gap-1">
-                            <button
-                              onClick={() => openEdit(ev)}
-                              className="rounded-lg p-2 text-black/50 transition-colors hover:bg-zru-green/10 hover:text-zru-green"
-                              aria-label={`Edit ${ev.title}`}
-                            >
-                              <Pencil className="h-4 w-4" />
-                            </button>
-                            <button
-                              onClick={() => handleDelete(ev)}
-                              className="rounded-lg p-2 text-black/50 transition-colors hover:bg-red-50 hover:text-red-600"
-                              aria-label={`Delete ${ev.title}`}
-                            >
-                              <Trash2 className="h-4 w-4" />
-                            </button>
+                            {ev.is_match ? (
+                              <span className="text-[10px] font-bold text-zru-green/70 bg-zru-green/5 px-2.5 py-0.5 rounded uppercase tracking-wider">
+                                Match Centre
+                              </span>
+                            ) : (
+                              <>
+                                <button
+                                  onClick={() => openEdit(ev)}
+                                  className="rounded-lg p-2 text-black/50 transition-colors hover:bg-zru-green/10 hover:text-zru-green"
+                                  aria-label={`Edit ${ev.title}`}
+                                >
+                                  <Pencil className="h-4 w-4" />
+                                </button>
+                                <button
+                                  onClick={() => handleDelete(ev)}
+                                  className="rounded-lg p-2 text-black/50 transition-colors hover:bg-red-50 hover:text-red-600"
+                                  aria-label={`Delete ${ev.title}`}
+                                >
+                                  <Trash2 className="h-4 w-4" />
+                                </button>
+                              </>
+                            )}
                           </div>
                         </td>
                       </tr>

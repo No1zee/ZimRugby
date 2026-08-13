@@ -504,7 +504,30 @@ function AdminClientInner(props: AdminClientProps) {
           <PagesGrid initialPages={initialPages} initialSectionCounts={initialSectionCounts} />
         )}
 
-        {activeTab === "events" && <EventsPanel initialEvents={initialEvents} onDirtyChange={registerDirty("events")} />}
+        {activeTab === "events" && (
+          <EventsPanel
+            initialEvents={[
+              ...initialEvents.map((e) => ({ ...e, is_match: false })),
+              ...initialMatches.map((m) => {
+                const home = m.homeTeam?.name || "Team A";
+                const away = m.awayTeam?.name || "Team B";
+                return {
+                  id: Number(m.id.replace(/\D/g, "")) || Math.floor(Math.random() * 100000),
+                  title: `${home} vs ${away}`,
+                  subtitle: `${m.competition} • ${m.teamCategory}`,
+                  date: m.dateIso ? m.dateIso.split("T")[0] : "",
+                  time: m.time,
+                  location: m.venue,
+                  is_match: true,
+                  status: "published",
+                  page_type: "competition",
+                  category: m.competition,
+                };
+              }),
+            ]}
+            onDirtyChange={registerDirty("events")}
+          />
+        )}
 
         {activeTab === "grassroots" && (
           <div className="space-y-8">
