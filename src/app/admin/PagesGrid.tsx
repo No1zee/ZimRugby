@@ -69,7 +69,12 @@ export default function PagesGrid({
             const count = initialSectionCounts[page.id] || 0;
             const isToggling = togglingId === page.id;
             return (
-              <div key={page.id} className="group flex flex-col rounded-2xl border border-black/10 bg-white p-6 transition-all hover:border-zru-green/45 hover:shadow-md">
+              <div
+                key={page.id}
+                className={`group flex flex-col rounded-2xl border border-black/10 bg-white p-6 transition-[border-color,box-shadow] duration-200 hover:border-zru-green/45 hover:shadow-md ${
+                  page.slug === "home" ? "md:col-span-2" : ""
+                }`}
+              >
                 <div className="mb-4 flex items-start justify-between">
                   <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-zru-green/10">
                     <FileText className="h-5 w-5 text-zru-green" />
@@ -77,7 +82,7 @@ export default function PagesGrid({
                   <button
                     onClick={() => handleToggleStatus(page)}
                     disabled={isToggling}
-                    className={`inline-flex items-center gap-1 rounded border px-2.5 py-1 text-[8px] font-black uppercase tracking-[0.2em] transition-all hover:scale-105 disabled:opacity-50 ${
+                    className={`inline-flex items-center gap-1 rounded border px-2.5 py-1 text-[8px] font-black uppercase tracking-[0.2em] transition-[background-color,border-color,color] duration-200 disabled:opacity-50 ${
                       page.status === "published"
                         ? "border-zru-green/20 bg-zru-green/15 text-zru-green hover:bg-zru-green/25"
                         : "border-amber-500/20 bg-amber-500/15 text-amber-600 hover:bg-amber-500/25"
@@ -105,14 +110,14 @@ export default function PagesGrid({
                   <div className="grid grid-cols-2 gap-2">
                     <Link
                       href={`/admin/${page.slug}`}
-                      className="flex items-center justify-center gap-1.5 rounded-xl bg-zru-green py-2.5 text-center text-[10px] font-bold uppercase tracking-wider text-white shadow-sm transition-all hover:bg-zru-green/90"
+                      className="flex items-center justify-center gap-1.5 rounded-xl bg-zru-green py-2.5 text-center text-[10px] font-bold uppercase tracking-wider text-white shadow-sm transition-[background-color] duration-200 hover:bg-zru-green/90"
                     >
                       <Edit2 className="h-3.5 w-3.5" /> Edit layout
                     </Link>
                     <Link
                       href={`/${page.slug === "home" ? "" : page.slug}`}
                       target="_blank"
-                      className="flex items-center justify-center gap-1.5 rounded-xl bg-black/5 py-2.5 text-center text-[10px] font-bold uppercase tracking-wider text-rich-black transition-all hover:bg-black/10"
+                      className="flex items-center justify-center gap-1.5 rounded-xl bg-black/5 py-2.5 text-center text-[10px] font-bold uppercase tracking-wider text-rich-black transition-[background-color] duration-200 hover:bg-black/10"
                     >
                       Preview live <ArrowUpRight className="h-3.5 w-3.5" />
                     </Link>

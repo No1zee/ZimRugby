@@ -7,6 +7,11 @@ import {
   ShieldCheck,
   ArrowRight,
   AlertCircle,
+  Ticket,
+  Percent,
+  Trophy,
+  LogOut,
+  ExternalLink,
 } from "lucide-react";
 import { saveSubmission } from "@/lib/mockStorage";
 import Image from "next/image";
@@ -100,49 +105,123 @@ export default function FanZonePage({ cmsPage }: FanZoneClientProps) {
 
         {/* Authenticated Member Passport View */}
         {isAuthenticated && user ? (
-          <div className="max-w-2xl mx-auto">
-            <div className="bg-[#004D2C] text-white rounded-3xl p-8 shadow-2xl relative overflow-hidden border border-white/10">
+          <div className="max-w-5xl mx-auto space-y-12">
+            {/* Premium Welcome Hero Card */}
+            <div className="bg-[#004D2C] text-white rounded-3xl p-8 md:p-10 shadow-2xl relative overflow-hidden border border-white/10">
               <div className="absolute -right-12 -top-12 w-64 h-64 bg-white/5 rounded-full blur-2xl pointer-events-none" />
               
-              <div className="flex items-center justify-between border-b border-white/15 pb-6 mb-6">
-                <div className="flex items-center gap-4">
-                  <div className="w-14 h-14 rounded-2xl bg-white/10 border border-white/20 flex items-center justify-center text-2xl font-black font-heading text-white">
-                    {user.name.charAt(0).toUpperCase()}
+              <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
+                <div>
+                  <div className="bg-emerald-500/20 border border-emerald-400/30 text-emerald-300 text-[10px] font-black uppercase tracking-[0.2em] px-3.5 py-1.5 rounded-full inline-flex items-center gap-1.5 mb-4">
+                    <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
+                    <span>Official Supporter</span>
                   </div>
-                  <div>
-                    <h3 className="text-xl font-bold font-heading tracking-wide text-white">{user.name}</h3>
-                    <p className="text-sm text-emerald-300 font-mono font-medium">{user.handle || "@supporter"}</p>
-                  </div>
+                  <h2 className="text-3xl sm:text-4xl font-heading font-black text-white uppercase tracking-tight">
+                    Welcome to the Inner Circle, {user.name}
+                  </h2>
+                  <p className="mt-2 text-sm text-emerald-100 max-w-2xl font-normal leading-relaxed">
+                    You have successfully authenticated your Sables supporters club profile. Enjoy priority privileges, discounts, and inner-circle updates.
+                  </p>
                 </div>
-                <div className="bg-emerald-500/20 border border-emerald-400/30 text-emerald-300 text-xs font-semibold px-3 py-1.5 rounded-full flex items-center gap-1.5">
-                  <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
-                  <span>Official Supporter</span>
+                
+                <div className="flex flex-col gap-2.5 shrink-0 bg-black/20 rounded-2xl p-5 border border-white/5 text-xs min-w-[220px]">
+                  <div className="flex items-center gap-3">
+                    <div className="w-9 h-9 rounded-xl bg-white/10 flex items-center justify-center text-sm font-black text-white">
+                      {user.name.charAt(0).toUpperCase()}
+                    </div>
+                    <div>
+                      <p className="text-white font-bold">{user.handle || "@supporter"}</p>
+                      <p className="text-white/45 text-[10px] truncate max-w-[140px]">{user.email}</p>
+                    </div>
+                  </div>
+                  <div className="border-t border-white/10 pt-3 mt-1 flex items-center justify-between">
+                    <span className="text-white/45 text-[10px] uppercase tracking-wider font-mono">Status</span>
+                    <span className="text-emerald-400 font-bold uppercase tracking-wider text-[10px]">Active Member</span>
+                  </div>
                 </div>
               </div>
+            </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8 text-xs">
-                <div className="bg-black/20 rounded-xl p-4 border border-white/5">
-                  <span className="text-white/50 font-medium block mb-1 uppercase tracking-wider text-[10px]">Email Address</span>
-                  <span className="text-white font-medium text-sm truncate block">{user.email}</span>
-                </div>
-                <div className="bg-black/20 rounded-xl p-4 border border-white/5">
-                  <span className="text-white/50 font-medium block mb-1 uppercase tracking-wider text-[10px]">Favorite Squad</span>
-                  <span className="text-white font-medium text-sm block">{user.favoriteTeam || "Zimbabwe Sables"}</span>
-                </div>
+            {/* Exclusive Benefits Grid */}
+            <div className="space-y-6">
+              <div className="border-b border-black/10 pb-4">
+                <h3 className="font-heading text-xl font-black text-rich-black uppercase tracking-tight">
+                  Your Supporter Privileges
+                </h3>
+                <p className="text-xs text-black/60">Here is exactly what you get as an active supporters club member.</p>
               </div>
 
-              <div className="border-t border-white/15 pt-6 flex flex-wrap items-center justify-between gap-4">
-                <div className="flex items-center gap-2 text-xs text-white/70">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-400" />
-                  <span>Authenticated via Supabase Session</span>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
+                <div className="bg-white border border-black/10 rounded-2xl p-6 shadow-sm transition-[border-color,box-shadow] duration-200 hover:border-zru-green/45 hover:shadow-md">
+                  <div className="w-12 h-12 rounded-xl bg-zru-green/10 flex items-center justify-center text-zru-green mb-4">
+                    <Ticket className="w-5 h-5" />
+                  </div>
+                  <span className="text-[9px] font-black uppercase tracking-widest text-zru-green block mb-1.5">Matchday Perk</span>
+                  <h4 className="text-sm font-black uppercase tracking-tight text-rich-black mb-2">Priority Tickets Presale</h4>
+                  <p className="text-xs text-black/60 font-normal leading-relaxed">
+                    Get exclusive access to major Sables test match tickets 48 hours before general public release. Keep an eye on your inbox for presale passwords.
+                  </p>
                 </div>
-                <button
-                  onClick={() => signOut()}
-                  className="text-xs text-white/60 hover:text-white underline transition-colors"
+
+                <div className="bg-white border border-black/10 rounded-2xl p-6 shadow-sm transition-[border-color,box-shadow] duration-200 hover:border-zru-green/45 hover:shadow-md">
+                  <div className="w-12 h-12 rounded-xl bg-zru-green/10 flex items-center justify-center text-zru-green mb-4">
+                    <Percent className="w-5 h-5" />
+                  </div>
+                  <span className="text-[9px] font-black uppercase tracking-widest text-zru-green block mb-1.5">Clubhouse Store</span>
+                  <h4 className="text-sm font-black uppercase tracking-tight text-rich-black mb-2">Exclusive Merch Discounts</h4>
+                  <p className="text-xs text-black/60 font-normal leading-relaxed">
+                    Enjoy 10% off all official Zimbabwe Rugby jerseys and gear at the ZRU Clubhouse store. Show your authenticated member badge in-store to claim.
+                  </p>
+                </div>
+
+                <div className="bg-white border border-black/10 rounded-2xl p-6 shadow-sm transition-[border-color,box-shadow] duration-200 hover:border-zru-green/45 hover:shadow-md">
+                  <div className="w-12 h-12 rounded-xl bg-zru-green/10 flex items-center justify-center text-zru-green mb-4">
+                    <Mail className="w-5 h-5" />
+                  </div>
+                  <span className="text-[9px] font-black uppercase tracking-widest text-zru-green block mb-1.5">Direct Pressroom</span>
+                  <h4 className="text-sm font-black uppercase tracking-tight text-rich-black mb-2">Insider Squad Newsletter</h4>
+                  <p className="text-xs text-black/60 font-normal leading-relaxed">
+                    Receive official Sables team announcements, matchday lineups, and injury updates directly to your inbox before the general media.
+                  </p>
+                </div>
+
+                <div className="bg-white border border-black/10 rounded-2xl p-6 shadow-sm transition-[border-color,box-shadow] duration-200 hover:border-zru-green/45 hover:shadow-md">
+                  <div className="w-12 h-12 rounded-xl bg-zru-green/10 flex items-center justify-center text-zru-green mb-4">
+                    <Trophy className="w-5 h-5" />
+                  </div>
+                  <span className="text-[9px] font-black uppercase tracking-widest text-zru-green block mb-1.5">Supporters Draw</span>
+                  <h4 className="text-sm font-black uppercase tracking-tight text-rich-black mb-2">VIP Fan Competitions</h4>
+                  <p className="text-xs text-black/60 font-normal leading-relaxed">
+                    Enter monthly draws to win signed match balls, player jerseys, and VIP matchday hospitality passes for local Zimbabwe test matches.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Quick Actions & Logout */}
+            <div className="flex flex-col sm:flex-row items-center justify-between border-t border-black/10 pt-8 gap-4">
+              <div className="flex flex-wrap items-center gap-3">
+                <Link
+                  href="/match-centre"
+                  className="inline-flex items-center gap-2 rounded-xl bg-[#006747] px-5 py-2.5 font-heading text-xs font-black uppercase tracking-wider text-white shadow-sm transition-[background-color] duration-200 hover:bg-[#004D2C]"
                 >
-                  Sign Out
-                </button>
+                  Explore Fixtures <ExternalLink className="w-3.5 h-3.5" />
+                </Link>
+                <Link
+                  href="/tickets"
+                  className="inline-flex items-center gap-2 rounded-xl bg-black/5 px-5 py-2.5 font-heading text-xs font-black uppercase tracking-wider text-rich-black transition-[background-color] duration-200 hover:bg-black/10"
+                >
+                  Buy Match Tickets
+                </Link>
               </div>
+
+              <button
+                onClick={() => signOut()}
+                className="inline-flex items-center gap-2 rounded-xl border border-red-500/20 bg-red-500/5 px-5 py-2.5 font-heading text-xs font-black uppercase tracking-wider text-red-500 transition-[background-color,color] duration-200 hover:bg-red-500/10 hover:text-red-600"
+              >
+                <LogOut className="w-3.5 h-3.5" />
+                <span>Sign Out</span>
+              </button>
             </div>
           </div>
         ) : (

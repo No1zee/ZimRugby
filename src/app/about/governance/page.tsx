@@ -19,17 +19,17 @@ export default function GovernancePage() {
       
       {/* Overview header */}
       <div className="border-l-4 border-zru-green pl-4">
-        <h2 className="text-2xl font-black uppercase tracking-wider text-white">GOVERNANCE & COMPLIANCE</h2>
-        <p className="text-sm text-white/50 mt-1">Official constitution, transparency reports, and administrative files.</p>
+        <h2 className="text-2xl font-black uppercase tracking-wider text-rich-black">GOVERNANCE & COMPLIANCE</h2>
+        <p className="text-sm text-rich-black/50 mt-1">Official constitution, transparency reports, and administrative files.</p>
       </div>
 
-      <p className="text-white/80 leading-relaxed text-sm font-normal">
+      <p className="text-rich-black/80 leading-relaxed text-sm font-normal">
         The Zimbabwe Rugby Union is committed to the highest standards of transparency, integrity, and ethical governance. We operate in alignment with the guidelines established by World Rugby, Rugby Africa, and the Sports and Recreation Commission (SRC) of Zimbabwe.
       </p>
 
       {/* Constitution downloads */}
-      <div className="pt-6 border-t border-white/5 space-y-6">
-        <h3 className="text-lg font-black uppercase tracking-wide text-white flex items-center gap-2">
+      <div className="pt-6 border-t border-black/5 space-y-6">
+        <h3 className="text-lg font-black uppercase tracking-wide text-rich-black flex items-center gap-2">
           <Landmark className="w-5 h-5 text-zru-green" />
           <span>OFFICIAL CONSTITUTIONAL DOCUMENTS</span>
         </h3>
@@ -38,20 +38,20 @@ export default function GovernancePage() {
           {documents.map((doc, idx) => (
             <div 
               key={idx} 
-              className="card-green border rounded-xl p-5 flex items-center justify-between group transition-colors duration-300"
+              className="bg-milk-white border border-black/5 rounded-xl p-5 flex items-center justify-between group transition-[border-color,box-shadow] duration-300 hover:border-zru-green/30 hover:shadow-md"
             >
               <div className="flex items-center gap-4">
                 <div className="w-10 h-10 bg-zru-green/10 rounded-lg flex items-center justify-center shrink-0 border border-zru-green/10">
                   <FileText className="w-5 h-5 text-zru-green" />
                 </div>
                 <div>
-                  <h4 className="font-black text-sm text-white uppercase tracking-tight">{doc.title}</h4>
-                  <span className="text-[10px] text-white/40 font-bold uppercase block mt-0.5">{doc.type} • {doc.size}</span>
+                  <h4 className="font-black text-sm text-rich-black uppercase tracking-tight">{doc.title}</h4>
+                  <span className="text-[10px] text-rich-black/45 font-bold uppercase block mt-0.5">{doc.type} • {doc.size}</span>
                 </div>
               </div>
               
               <button 
-                className="p-2.5 rounded-full bg-white/10 border border-white/10 hover:bg-zru-green hover:text-rich-black transition-all group-hover:scale-105"
+                className="p-2.5 rounded-full bg-black/5 border border-black/5 hover:bg-zru-green hover:text-white transition-all group-hover:scale-105"
                 title="Download Document"
               >
                 <Download className="w-4 h-4" />

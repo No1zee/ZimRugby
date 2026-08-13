@@ -32,13 +32,15 @@ export function deriveEventStatus(
     }
   }
 
-  const start = new Date(year, month - 1, day, hour, minute);
+  // Construct start date/time in the target CAT (UTC+2) timezone
+  const pad = (num: number) => String(num).padStart(2, "0");
+  const startStr = `${year}-${pad(month)}-${pad(day)}T${pad(hour)}:${pad(minute)}:00+02:00`;
+  const start = new Date(startStr);
   if (isNaN(start.getTime())) return "upcoming";
 
-  // Treat the event as "ongoing" for the whole day it starts on — we only
-  // have a start date/time, no duration. An event with a start time must
-  // still expire at the end of its own day, not 24h after kickoff.
-  const eventEnd = new Date(start.getFullYear(), start.getMonth(), start.getDate() + 1);
+  // Treat the event as ongoing until the end of its starting day in CAT (+02:00)
+  const endStr = `${year}-${pad(month)}-${pad(day)}T23:59:59+02:00`;
+  const eventEnd = new Date(endStr);
 
   if (now < start) return "upcoming";
   if (now < eventEnd) return "ongoing";

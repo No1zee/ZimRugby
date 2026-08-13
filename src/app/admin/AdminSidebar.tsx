@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { Shield, LogOut, UserCheck, Lock } from "lucide-react";
+import { Shield, LogOut, UserCheck, Lock, LayoutDashboard, Sparkles, BookOpen, FileText, CalendarDays, Sprout, HelpCircle, Radio, Trophy, Flag, Users, ShieldAlert, KeyRound } from "lucide-react";
 import { onAdminTab, setAdminTab } from "@/lib/admin/tab-events";
 import { canAccessPanel, type RolePermissions } from "@/lib/admin/iam";
 
@@ -9,39 +9,40 @@ const NAV_SECTIONS = [
   {
     label: "Dashboard",
     items: [
-      { id: "overview", label: "Today", icon: "⚡" },
-      { id: "directus_ai", label: "AI Writer", icon: "🤖" },
+      { id: "overview", label: "Today", icon: LayoutDashboard },
+      { id: "directus_ai", label: "AI Writer", icon: Sparkles },
     ],
   },
   {
     label: "Content",
     items: [
-      { id: "media", label: "News & Articles", icon: "📰" },
-      { id: "pages", label: "Pages", icon: "🖥️" },
-      { id: "events", label: "Events", icon: "📅" },
-      { id: "grassroots", label: "Grassroots & Programmes", icon: "🌱" },
-      { id: "faq-footer", label: "FAQ & Footer", icon: "❓" },
+      { id: "media", label: "News & Articles", icon: BookOpen },
+      { id: "pages", label: "Pages", icon: FileText },
+      { id: "events", label: "Events", icon: CalendarDays },
+      { id: "grassroots", label: "Grassroots & Programmes", icon: Sprout },
+      { id: "faq-footer", label: "FAQ & Footer", icon: HelpCircle },
     ],
   },
   {
     label: "Matches",
     items: [
-      { id: "fixtures", label: "Fixtures & Scores", icon: "🏉" },
-      { id: "teams", label: "Teams & Squads", icon: "🏆" },
+      { id: "fixtures", label: "Fixtures & Scores", icon: Radio },
+      { id: "teams", label: "Teams & Squads", icon: Trophy },
     ],
   },
   {
     label: "Fans",
     items: [
-      { id: "campaigns", label: "Campaigns", icon: "🚩" },
-      { id: "fanzone", label: "Fan Zone", icon: "👥" },
-      { id: "onboarding", label: "Enquiries", icon: "🛡️" },
+      { id: "campaigns", label: "Campaigns", icon: Flag },
+      { id: "fanzone", label: "Fan Zone", icon: Users },
+      { id: "onboarding", label: "Enquiries", icon: ShieldAlert },
     ],
   },
   {
     label: "Admin",
     items: [
-      { id: "roles", label: "Roles & Permissions", icon: "🔑" },
+      { id: "roles", label: "Roles & Permissions", icon: KeyRound },
+      { id: "audit_logs", label: "Security Logs", icon: ShieldAlert },
     ],
   },
 ];
@@ -74,6 +75,7 @@ const visibleSections = (
 export default function AdminSidebar({ activeTab = "overview", onTabChange }: AdminSidebarProps) {
   const [currentTab, setCurrentTab] = useState(activeTab);
   const [userInfo, setUserInfo] = useState<SidebarUserInfo | null>(null);
+  const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
     setCurrentTab(activeTab);
@@ -111,11 +113,45 @@ export default function AdminSidebar({ activeTab = "overview", onTabChange }: Ad
 
   const handleTabClick = (id: string) => {
     setAdminTab(id);
+    setIsOpen(false);
     if (onTabChange) onTabChange(id);
   };
 
   return (
-    <aside className="w-64 bg-[#0d131a] border-r border-white/10 flex flex-col h-screen sticky top-0">
+    <>
+      {/* Mobile Top Header */}
+      <div className="md:hidden bg-[#0d131a] border-b border-white/10 px-4 py-3.5 flex items-center justify-between fixed top-0 left-0 right-0 z-40 h-14">
+        <div className="flex items-center gap-2.5">
+          <div className="w-7.5 h-7.5 rounded-lg bg-[#006B3F] flex items-center justify-center text-white font-bold">
+            <Shield className="w-4.5 h-4.5 text-accent-teal" />
+          </div>
+          <div>
+            <h2 className="text-xs font-bold text-white tracking-wider">ZRU ADMIN</h2>
+          </div>
+        </div>
+        <button
+          onClick={() => setIsOpen(!isOpen)}
+          className="text-white hover:text-accent-teal p-1 text-lg font-bold leading-none cursor-pointer"
+          aria-label="Toggle Navigation Menu"
+        >
+          ☰
+        </button>
+      </div>
+
+      {/* Mobile Sidebar Overlay */}
+      {isOpen && (
+        <div
+          className="md:hidden fixed inset-0 bg-black/70 z-45 transition-opacity duration-300"
+          onClick={() => setIsOpen(false)}
+        />
+      )}
+
+      {/* Sidebar aside panel */}
+      <aside
+        className={`w-64 bg-[#0d131a] border-r border-white/10 flex flex-col h-screen fixed md:sticky top-0 left-0 z-50 transform md:transform-none transition-transform duration-300 ${
+          isOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"
+        }`}
+      >
       {/* Brand Header */}
       <div className="p-6 border-b border-white/10 flex items-center justify-between">
         <div className="flex items-center gap-3">
@@ -147,22 +183,22 @@ export default function AdminSidebar({ activeTab = "overview", onTabChange }: Ad
             </div>
             {section.items.map((item) => {
               const isActive = currentTab === item.id;
+              const Icon = item.icon;
 
               return (
                 <button
                   key={item.id}
                   onClick={() => handleTabClick(item.id)}
-                  className={`w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-xs font-semibold transition-all ${
+                  className={`w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-xs font-semibold transition-[background-color,color,box-shadow] duration-200 ${
                     isActive
                       ? "bg-[#006B3F] text-white shadow-md shadow-[#006B3F]/20"
                       : "text-zinc-400 hover:text-zinc-100 hover:bg-zinc-800/60"
                   }`}
                 >
                   <div className="flex items-center gap-2.5">
-                    <span className="text-base">{item.icon}</span>
+                    <Icon className={`w-4 h-4 transition-colors ${isActive ? "text-white" : "text-zinc-400"}`} />
                     <span>{item.label}</span>
                   </div>
-                  {isActive && <div className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />}
                 </button>
               );
             })}
@@ -191,12 +227,13 @@ export default function AdminSidebar({ activeTab = "overview", onTabChange }: Ad
 
         <button
           onClick={handleLogout}
-          className="w-full flex items-center justify-center gap-2 px-3 py-2 rounded-xl text-xs font-bold text-red-400 hover:text-red-300 hover:bg-red-500/10 border border-red-500/20 transition-all"
+          className="w-full flex items-center justify-center gap-2 px-3 py-2 rounded-xl text-xs font-bold text-red-400 hover:text-red-300 hover:bg-red-500/10 border border-red-500/20 transition-[color,background-color,border-color] duration-200"
         >
           <LogOut className="w-3.5 h-3.5" />
           <span>Sign Out</span>
         </button>
       </div>
     </aside>
+    </>
   );
 }

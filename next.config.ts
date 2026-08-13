@@ -36,7 +36,7 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: "https",
-        hostname: "i.ytimg.com",
+        hostname: "*.ytimg.com",
       },
     ],
   },
@@ -45,10 +45,10 @@ const nextConfig: NextConfig = {
       default-src 'self';
       script-src 'self' 'unsafe-inline' 'unsafe-eval';
       style-src 'self' 'unsafe-inline';
-      img-src 'self' data: blob: https://images.unsplash.com https://zru-directus-cms-production.up.railway.app https://zru.co.zw https://www.zru.co.zw https://img.youtube.com https://i.ytimg.com;
-      media-src 'self' https://*.youtube.com;
+      img-src 'self' data: blob: https://images.unsplash.com https://zru-directus-cms-production.up.railway.app https://zru.co.zw https://www.zru.co.zw https://img.youtube.com https://*.ytimg.com;
+      media-src 'self' https://*.youtube.com https://*.youtube-nocookie.com;
       connect-src 'self' https://*.supabase.co wss://*.supabase.co https://*.upstash.io https://*.qstash.io https://zru-directus-cms-production.up.railway.app;
-      frame-src 'self' https://www.youtube.com https://youtube.com;
+      frame-src 'self' https://www.youtube.com https://youtube.com https://www.youtube-nocookie.com https://youtube-nocookie.com;
       font-src 'self' data:;
       object-src 'none';
       base-uri 'self';

@@ -18,6 +18,7 @@ import RolesPanel from "./roles/RolesPanel";
 import PagesGrid from "./PagesGrid";
 import CampaignsPanel from "./CampaignsPanel";
 import AiAssistantPanel from "./AiAssistantPanel";
+import AuditLogsPanel from "@/components/admin/AuditLogsPanel";
 import type { MatchCardViewModel, StandingsTableViewModel } from "@/lib/match-centre/types";
 import type { Campaign } from "@/lib/api/campaigns";
 
@@ -112,7 +113,8 @@ type TabId =
   | "campaigns"
   | "fanzone"
   | "onboarding"
-  | "roles";
+  | "roles"
+  | "audit_logs";
 
 interface NavItem {
   id: TabId;
@@ -755,6 +757,7 @@ function AdminClientInner(props: AdminClientProps) {
         )}
 
         {activeTab === "roles" && <RolesPanel />}
+        {activeTab === "audit_logs" && <AuditLogsPanel />}
       </div>
     </main>
   );

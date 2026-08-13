@@ -141,12 +141,23 @@ interface DirectusFlatMatch {
 }
 
 const staticMatches: Match[] = [
+  // 2024 Season
+  { id: "2024-rac-01", competition: "Rugby Africa Cup 2024", round: "Quarter-final", date: "20 July 2024", time: "15:00", venue: "Mandela National Stadium, Kampala", homeTeam: { name: "Uganda", score: 20 }, awayTeam: { name: "Zimbabwe", score: 22 }, status: "completed", category: "Sables" },
+  { id: "2024-rac-02", competition: "Rugby Africa Cup 2024", round: "Semi-final", date: "24 July 2024", time: "15:00", venue: "Mandela National Stadium, Kampala", homeTeam: { name: "Zimbabwe", score: 32 }, awayTeam: { name: "Namibia", score: 10 }, status: "completed", category: "Sables" },
+  { id: "2024-rac-03", competition: "Rugby Africa Cup 2024", round: "Final", date: "28 July 2024", time: "15:00", venue: "Mandela National Stadium, Kampala", homeTeam: { name: "Zimbabwe", score: 29 }, awayTeam: { name: "Algeria", score: 3 }, status: "completed", category: "Sables" },
+  
+  // 2025 Season
+  { id: "2025-rac-01", competition: "Rugby Africa Cup 2025", round: "Quarter-final", date: "8 July 2025", time: "15:00", venue: "Mandela National Stadium, Kampala", homeTeam: { name: "Morocco", score: 8 }, awayTeam: { name: "Zimbabwe", score: 43 }, status: "completed", category: "Sables" },
+  { id: "2025-rac-02", competition: "Rugby Africa Cup 2025", round: "Semi-final", date: "13 July 2025", time: "15:00", venue: "Mandela National Stadium, Kampala", homeTeam: { name: "Kenya", score: 23 }, awayTeam: { name: "Zimbabwe", score: 29 }, status: "completed", category: "Sables" },
+  { id: "2025-rac-03", competition: "Rugby Africa Cup 2025", round: "Final", date: "19 July 2025", time: "15:00", venue: "Mandela National Stadium, Kampala", homeTeam: { name: "Zimbabwe", score: 30 }, awayTeam: { name: "Namibia", score: 28 }, status: "completed", category: "Sables" },
+
+  // 2026 Season
   { id: "2026-fixture-01", competition: "Battle of the Zambezi", round: "Round 1", date: "25 April 2026", time: "15:00", venue: "Harare Sports Club", homeTeam: { name: "Zimbabwe", score: 28 }, awayTeam: { name: "Zambia", score: 14 }, status: "completed", category: "Sables" },
   { id: "2026-fixture-02", competition: "Victoria Cup", round: "Round 3", date: "30 May 2026", time: "15:30", venue: "Kyadondo Stadium, Kampala", homeTeam: { name: "Uganda", score: 19 }, awayTeam: { name: "Zimbabwe", score: 25 }, status: "completed", category: "Sables" },
   { id: "2026-fixture-03", competition: "Rugby Africa Cup 2026", round: "Pool B", date: "20 June 2026", time: "16:00", venue: "Harare Sports Club", homeTeam: { name: "Zimbabwe", score: 29 }, awayTeam: { name: "Algeria", score: 7 }, status: "completed", category: "Sables" },
-  { id: "2026-fixture-04", competition: "Nations Cup", round: "Pool A", date: "4 July 2026", time: "15:00", venue: "Infinity Park, Denver", homeTeam: { name: "Tonga", score: 15 }, awayTeam: { name: "Zimbabwe", score: 22 }, status: "completed", category: "Sables" },
-  { id: "2026-fixture-05", competition: "Nations Cup", round: "Pool A", date: "11 July 2026", time: "14:00", venue: "American Legion Memorial", homeTeam: { name: "USA", score: 31 }, awayTeam: { name: "Zimbabwe", score: 15 }, status: "completed", category: "Sables" },
-  { id: "2026-fixture-06", competition: "Nations Cup", round: "Pool A", date: "18 July 2026", time: "15:00", venue: "Princess Auto Stadium, Winnipeg", homeTeam: { name: "Canada", score: 23 }, awayTeam: { name: "Zimbabwe", score: 19 }, status: "completed", category: "Sables" },
+  { id: "2026-fixture-04", competition: "World Rugby Nations Cup 2026", round: "Pool", date: "4 July 2026", time: "15:00", venue: "Dick’s Sporting Goods Park, Denver", homeTeam: { name: "Tonga", score: 36 }, awayTeam: { name: "Zimbabwe", score: 26 }, status: "completed", category: "Sables" },
+  { id: "2026-fixture-05", competition: "World Rugby Nations Cup 2026", round: "Pool", date: "11 July 2026", time: "14:00", venue: "American Legion Memorial Stadium, Charlotte", homeTeam: { name: "USA", score: 31 }, awayTeam: { name: "Zimbabwe", score: 15 }, status: "completed", category: "Sables" },
+  { id: "2026-fixture-06", competition: "World Rugby Nations Cup 2026", round: "Pool", date: "19 July 2026", time: "15:00", venue: "Princess Auto Stadium, Winnipeg", homeTeam: { name: "Canada", score: 23 }, awayTeam: { name: "Zimbabwe", score: 19 }, status: "completed", category: "Sables" },
   { id: "2026-fixture-07", competition: "Rugby Africa Cup 2026", round: "Semi-Final", date: "16 August 2026", time: "14:30", venue: "Harare Sports Club", homeTeam: { name: "Zimbabwe" }, awayTeam: { name: "Namibia" }, status: "upcoming", category: "Sables" },
   { id: "2026-fixture-08", competition: "Rugby Africa Cup 2026", round: "Final", date: "30 August 2026", time: "15:00", venue: "Prince Edward Grounds", homeTeam: { name: "Zimbabwe" }, awayTeam: { name: "Kenya" }, status: "upcoming", category: "Sables" },
   { id: "2026-fixture-09", competition: "Friendly International", round: "Friendly", date: "12 September 2026", time: "16:00", venue: "Harare Sports Club", homeTeam: { name: "Zimbabwe" }, awayTeam: { name: "Uganda" }, status: "upcoming", category: "Sables" },

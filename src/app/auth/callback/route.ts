@@ -14,7 +14,7 @@ function getAdminClient() {
 export async function GET(request: NextRequest) {
   const { searchParams, origin } = new URL(request.url)
   const code = searchParams.get('code')
-  let next = searchParams.get('next') ?? '/fan-zone'
+  let next = searchParams.get('next') ?? '/'
 
   if (code) {
     const cookieQueue: Array<{ name: string; value: string; options: any }> = []
@@ -55,8 +55,8 @@ export async function GET(request: NextRequest) {
 
       if (email === 'edwardmagejo@gmail.com' || role === 'super_admin') {
         next = '/admin'
-      } else if (!next || next === '/fan-zone') {
-        next = '/fan-zone'
+      } else {
+        next = '/'
       }
 
       const response = NextResponse.redirect(`${origin}${next}`)

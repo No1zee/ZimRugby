@@ -11,7 +11,7 @@ export default function LoginPage() {
   const { signInFan, isAuthenticated } = useAuth();
   const router = useRouter();
   const searchParams = useSearchParams();
-  const redirect = searchParams.get("redirect") || "/fan-zone";
+  const redirect = searchParams.get("redirect") || "/";
 
   const [mode, setMode] = useState<"signin" | "signup">("signin");
   const [showPassword, setShowPassword] = useState(false);
@@ -63,7 +63,7 @@ export default function LoginPage() {
   // Redirect if already authenticated as Fan (ignore if target is /admin so admin check can evaluate)
   useEffect(() => {
     if (isAuthenticated && !redirect.startsWith("/admin")) {
-      router.replace(redirect);
+      router.replace("/");
     }
   }, [isAuthenticated, redirect, router]);
 
@@ -132,7 +132,7 @@ export default function LoginPage() {
         });
         if (res.success) {
           signInFan(res.profile);
-          window.location.href = redirect.startsWith("/admin") ? "/admin" : "/fan-zone";
+          window.location.href = redirect.startsWith("/admin") ? "/admin" : "/";
         } else {
           setError("Could not create account. Please try again.");
         }
@@ -163,7 +163,7 @@ export default function LoginPage() {
           if (email.toLowerCase() === "edwardmagejo@gmail.com" || redirect.startsWith("/admin")) {
             window.location.href = "/admin";
           } else {
-            window.location.href = "/fan-zone";
+            window.location.href = "/";
           }
         } else {
           setError("Incorrect email or password.");
@@ -253,7 +253,7 @@ export default function LoginPage() {
               <button
                 type="button"
                 onClick={() => {
-                  const nextUrl = redirect.startsWith("/admin") ? "/admin" : "/admin";
+                  const nextUrl = redirect.startsWith("/admin") ? "/admin" : "/";
                   signInWithOAuth("google", nextUrl);
                 }}
                 className="w-full flex items-center justify-center gap-3 py-2.5 px-4 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors shadow-sm cursor-pointer"

@@ -338,7 +338,7 @@ export default function HeroCarousel({ slides = [] }: { slides: HeroSlideData[] 
                     alt={`${activeSlide.headline.line1} ${activeSlide.headline.line2}`}
                     fill
                     priority={currentSlide === 0}
-                    loading={currentSlide === 0 ? "eager" : "lazy"}
+                    loading={currentSlide === 0 ? undefined : "lazy"}
                     sizes="(max-width: 768px) 100vw, 100vw"
                     quality={60}
                     className="object-cover"

@@ -166,7 +166,7 @@ export async function getDirectusMatches(): Promise<MatchCardViewModel[]> {
       competition: (compObj?.name as string) || "Rugby Africa Cup",
       round: (m.round_label as string) || (teamObj?.filter_label as string) || "Sables",
       dateIso: kickoff.toISOString(),
-      time: (m.display_time_label as string) || kickoff.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+      time: (m.display_time_label as string) || kickoff.toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit", timeZone: "Africa/Harare" }),
       venue: venueName,
       homeTeam: {
         name: isAway ? oppName : teamName,

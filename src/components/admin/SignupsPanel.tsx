@@ -69,14 +69,58 @@ export default function SignupsPanel({ initialFanZoneMembers, initialOnboardingS
   const fanVisible = fanFiltered.slice((fanPageSafe - 1) * PAGE_SIZE, fanPageSafe * PAGE_SIZE);
   const onbVisible = onbFiltered.slice((onbPageSafe - 1) * PAGE_SIZE, onbPageSafe * PAGE_SIZE);
 
+  const downloadCSV = (data: any[], filename: string, headers: string[], rowMapper: (item: any) => string[]) => {
+    const csvContent = [
+      headers.join(","),
+      ...data.map((item) => rowMapper(item).map((val) => `"${String(val ?? "").replace(/"/g, '""')}"`).join(","))
+    ].join("\n");
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.setAttribute("href", url);
+    link.setAttribute("download", filename);
+    link.style.visibility = "hidden";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
+  const exportFansToCSV = () => {
+    downloadCSV(
+      fanFiltered,
+      "zru-fanzone-members.csv",
+      ["Name", "Email", "Favorite Team", "VIP Code", "CDPA Consent", "Registered At"],
+      (m) => [m.name, m.email, m.favorite_team || "", m.vip_code || "", m.cdpa_consent ? "Given" : "None", m.registered_at || ""]
+    );
+  };
+
+  const exportOnboardingToCSV = () => {
+    downloadCSV(
+      onbFiltered,
+      "zru-onboarding-enquiries.csv",
+      ["Name", "Email", "Phone", "Requested Role", "Organization", "Submitted At"],
+      (m) => [m.full_name, m.email, m.phone || "", m.role || "", m.organization || "", m.submitted_at || ""]
+    );
+  };
+
   return (
     <div className="space-y-6">
       {/* Fan Zone */}
       {mode !== "onboarding" && (
       <section className="rounded-2xl border border-black/10 bg-white p-6 shadow-sm">
-        <h2 className="flex items-center gap-2 font-heading text-xl font-black uppercase text-rich-black">
-          <Users className="h-5 w-5 text-zru-green" /> Fan Zone sign-ups
-        </h2>
+        <div className="flex justify-between items-center">
+          <h2 className="flex items-center gap-2 font-heading text-xl font-black uppercase text-rich-black">
+            <Users className="h-5 w-5 text-zru-green" /> Fan Zone sign-ups
+          </h2>
+          {fanFiltered.length > 0 && (
+            <button
+              onClick={exportFansToCSV}
+              className="text-xs font-black uppercase tracking-wider text-zru-green border border-zru-green/20 hover:border-zru-green/50 bg-zru-green/5 hover:bg-zru-green/10 px-3 py-1.5 rounded-lg transition-colors cursor-pointer"
+            >
+              Export CSV ({fanFiltered.length})
+            </button>
+          )}
+        </div>
         <p className="mt-1 text-xs text-black/50">Fans who registered their details for the Fan Zone. This data is consent-managed (CDPA).</p>
 
         <div className="mt-4">
@@ -128,9 +172,19 @@ export default function SignupsPanel({ initialFanZoneMembers, initialOnboardingS
       {/* Onboarding */}
       {mode !== "fanzone" && (
       <section className="rounded-2xl border border-black/10 bg-white p-6 shadow-sm">
-        <h2 className="flex items-center gap-2 font-heading text-xl font-black uppercase text-rich-black">
-          <ClipboardList className="h-5 w-5 text-zru-green" /> Onboarding enquiries
-        </h2>
+        <div className="flex justify-between items-center">
+          <h2 className="flex items-center gap-2 font-heading text-xl font-black uppercase text-rich-black">
+            <ClipboardList className="h-5 w-5 text-zru-green" /> Onboarding enquiries
+          </h2>
+          {onbFiltered.length > 0 && (
+            <button
+              onClick={exportOnboardingToCSV}
+              className="text-xs font-black uppercase tracking-wider text-zru-green border border-zru-green/20 hover:border-zru-green/50 bg-zru-green/5 hover:bg-zru-green/10 px-3 py-1.5 rounded-lg transition-colors cursor-pointer"
+            >
+              Export CSV ({onbFiltered.length})
+            </button>
+          )}
+        </div>
         <p className="mt-1 text-xs text-black/50">People who asked to get involved — volunteers, sponsors, partners.</p>
 
         <div className="mt-4">

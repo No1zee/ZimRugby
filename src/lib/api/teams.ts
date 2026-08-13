@@ -50,9 +50,26 @@ const MOCK_TEAMS: Record<string, Team> = {
         { name: "Trevor Gurwe", position: "Flanker", club: "Old Georgians", caps: 7, image: "/images/teams/headshots/Trevor Gurwe copy.jpg" }
       ],
       matches: [
-        { opponent: "Algeria", opponentLogo: "https://flagcdn.com/w160/dz.png", date: "27 July 2025", venue: "Tunis", score: "29 - 3", status: "completed" },
-        { opponent: "Zambia", opponentLogo: "https://flagcdn.com/w160/zm.png", date: "25 April 2026", venue: "Harare Sports Club", status: "upcoming" },
-        { opponent: "USA", opponentLogo: "https://flagcdn.com/w160/us.png", date: "4 July 2026", venue: "Denver, Colorado", status: "upcoming" }
+        // 2024
+        { opponent: "Uganda", opponentLogo: "https://flagcdn.com/w160/ug.png", date: "20 July 2024", venue: "Mandela National Stadium, Kampala", score: "22 - 20", status: "completed" },
+        { opponent: "Namibia", opponentLogo: "https://flagcdn.com/w160/na.png", date: "24 July 2024", venue: "Mandela National Stadium, Kampala", score: "32 - 10", status: "completed" },
+        { opponent: "Algeria", opponentLogo: "https://flagcdn.com/w160/dz.png", date: "28 July 2024", venue: "Mandela National Stadium, Kampala", score: "29 - 3", status: "completed" },
+        
+        // 2025
+        { opponent: "Morocco", opponentLogo: "https://flagcdn.com/w160/ma.png", date: "8 July 2025", venue: "Mandela National Stadium, Kampala", score: "43 - 8", status: "completed" },
+        { opponent: "Kenya", opponentLogo: "https://flagcdn.com/w160/ke.png", date: "13 July 2025", venue: "Mandela National Stadium, Kampala", score: "29 - 23", status: "completed" },
+        { opponent: "Namibia", opponentLogo: "https://flagcdn.com/w160/na.png", date: "19 July 2025", venue: "Mandela National Stadium, Kampala", score: "30 - 28", status: "completed" },
+        
+        // 2026
+        { opponent: "Zambia", opponentLogo: "https://flagcdn.com/w160/zm.png", date: "25 April 2026", venue: "Harare Sports Club", score: "28 - 14", status: "completed" },
+        { opponent: "Uganda", opponentLogo: "https://flagcdn.com/w160/ug.png", date: "30 May 2026", venue: "Kyadondo Stadium, Kampala", score: "25 - 19", status: "completed" },
+        { opponent: "Algeria", opponentLogo: "https://flagcdn.com/w160/dz.png", date: "20 June 2026", venue: "Harare Sports Club", score: "29 - 7", status: "completed" },
+        { opponent: "Tonga", opponentLogo: "https://flagcdn.com/w160/to.png", date: "4 July 2026", venue: "Dick’s Sporting Goods Park, Denver", score: "26 - 36", status: "completed" },
+        { opponent: "USA", opponentLogo: "https://flagcdn.com/w160/us.png", date: "11 July 2026", venue: "American Legion Memorial Stadium, Charlotte", score: "15 - 31", status: "completed" },
+        { opponent: "Canada", opponentLogo: "https://flagcdn.com/w160/ca.png", date: "19 July 2026", venue: "Princess Auto Stadium, Winnipeg", score: "19 - 23", status: "completed" },
+        { opponent: "Namibia", opponentLogo: "https://flagcdn.com/w160/na.png", date: "16 August 2026", venue: "Harare Sports Club", status: "upcoming" },
+        { opponent: "Kenya", opponentLogo: "https://flagcdn.com/w160/ke.png", date: "30 August 2026", venue: "Prince Edward Grounds", status: "upcoming" },
+        { opponent: "Uganda", opponentLogo: "https://flagcdn.com/w160/ug.png", date: "12 September 2026", venue: "Harare Sports Club", status: "upcoming" }
       ],
       gallery: [
         "/images/media/vid1.jpg",

@@ -167,8 +167,8 @@ export default function JoinFanZoneSection() {
             <div className="w-full sm:w-auto group-hover/fzCard:w-full group-focus-within/fzCard:w-full bg-white p-3 group-hover/fzCard:p-5 sm:group-hover/fzCard:p-7 group-focus-within/fzCard:p-5 sm:group-focus-within/fzCard:p-7 rounded-2xl border border-black/5 group-hover/fzCard:border-[#006B3F]/50 group-focus-within/fzCard:border-[#006B3F]/50 transition-[width,padding,border-color] duration-500 ease-in-out shadow-lg">
 
               {/* Header — revealed on expand */}
-              <p className="text-[#003822]/70 text-xs font-black uppercase tracking-wider font-heading transition-[opacity,max-height,margin] duration-500 opacity-0 max-h-0 overflow-hidden mb-0 group-hover/fzCard:opacity-100 group-hover/fzCard:max-h-10 group-hover/fzCard:mb-3 group-hover/fzCard:text-[#006B3F] group-focus-within/fzCard:opacity-100 group-focus-within/fzCard:max-h-10 group-focus-within/fzCard:mb-3 group-focus-within/fzCard:text-[#006B3F]">
-                Join the Fan Zone — It&apos;s Free
+              <p className="text-[#003822]/70 text-xs font-black uppercase tracking-wider font-heading transition-[opacity,max-height,margin] duration-500 opacity-0 max-h-0 overflow-hidden mb-0 group-hover/fzCard:opacity-100 group-hover/fzCard:max-h-10 group-hover/fzCard:mb-3 group-hover/fzCard:text-[#002D1A] group-focus-within/fzCard:opacity-100 group-focus-within/fzCard:max-h-10 group-focus-within/fzCard:mb-3 group-focus-within/fzCard:text-[#002D1A]">
+                Join the Fan Zone &mdash; It&apos;s Free
               </p>
 
               {error && (

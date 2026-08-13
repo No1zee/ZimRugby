@@ -90,6 +90,12 @@ export async function requireAdmin(): Promise<AdminSession> {
   let role = user?.app_metadata?.role as UserRole | undefined;
   if (!role && email.toLowerCase() === "edwardmagejo@gmail.com") {
     role = "super_admin";
+    if (user?.id) {
+      // Bootstrap role to Supabase metadata in background so subsequent checks are metadata-driven
+      import("@/lib/supabase/admin")
+        .then(({ setAdminUserRole }) => setAdminUserRole(user.id, "super_admin"))
+        .catch(() => {});
+    }
   }
 
   if (typeof role !== "string" || !role) {
@@ -99,9 +105,6 @@ export async function requireAdmin(): Promise<AdminSession> {
   await assertMfaSatisfied(supabase);
 
   let permissions = await resolvePermissionsForRole(role);
-  if (!permissions && email.toLowerCase() === "edwardmagejo@gmail.com") {
-    permissions = { all: true };
-  }
 
   if (!permissions) {
     throw new Error("Forbidden");
