@@ -1,15 +1,14 @@
 import { Metadata } from "next";
 import { getPageBySlug } from "@/lib/api/pages";
 import AboutClient from "./AboutClient";
+import { buildPageMetadata } from "@/lib/api/metadata";
 
 export async function generateMetadata(): Promise<Metadata> {
-  const page = await getPageBySlug("about");
-  return {
-    title: page?.seo_title || page?.hero_title || "About | Zimbabwe Rugby Union",
-    description:
-      page?.seo_description ||
-      "Learn about the Zimbabwe Rugby Union — our mission, history, and commitment to growing rugby across Zimbabwe.",
-  };
+  return buildPageMetadata(
+    "about",
+    "About | Zimbabwe Rugby Union",
+    "Learn about the Zimbabwe Rugby Union — our mission, history, and commitment to growing rugby across Zimbabwe."
+  );
 }
 
 export const dynamic = "force-dynamic";

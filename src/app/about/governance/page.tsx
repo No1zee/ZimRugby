@@ -3,12 +3,14 @@ import { Landmark, FileText, Download } from "lucide-react";
 import { directusFetch } from "@/lib/directus/fetch";
 import { getPageBySlug } from "@/lib/api/pages";
 
+import { buildPageMetadata } from "@/lib/api/metadata";
+
 export async function generateMetadata(): Promise<Metadata> {
-  const page = await getPageBySlug("about-governance");
-  return {
-    title: page?.seo_title || "Governance & Compliance | Zimbabwe Rugby Union",
-    description: page?.seo_description || "ZRU governance structure, constitution, annual reports, and compliance documentation.",
-  };
+  return buildPageMetadata(
+    "about-governance",
+    "Governance & Compliance | Zimbabwe Rugby Union",
+    "ZRU governance structure, constitution, annual reports, and compliance documentation."
+  );
 }
 
 const DEFAULT_DOCUMENTS = [
