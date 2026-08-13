@@ -1,6 +1,7 @@
 import matchesJson from "../../public/data/matches.json";
 import reportsJson from "../../public/data/reports.json";
 import socialJson from "../../public/data/social.json";
+import eventsJson from "../../public/data/events.json";
 
 /**
  * Build-time bundled copies of the static fallback JSON in public/data.
@@ -13,4 +14,5 @@ export const staticData: Record<string, unknown[]> = {
   "matches.json": matchesJson as unknown[],
   "reports.json": reportsJson as unknown[],
   "social.json": socialJson as unknown[],
+  "events.json": eventsJson as unknown[],
 };

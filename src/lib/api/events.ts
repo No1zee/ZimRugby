@@ -3,6 +3,8 @@ import { photoAssetUrl } from "@/lib/directus/assets";
 import { deriveEventStatus } from "@/lib/events/status";
 import { staticData } from "@/lib/static-data";
 import type { EventItem } from "@/types";
+import { getDirectusMatches } from "@/lib/match-centre/api";
+import type { MatchCardViewModel } from "@/lib/match-centre/types";
 
 export type { EventItem };
 
@@ -95,6 +97,32 @@ function mapMatchToEvent(match: MatchJson): EventItem {
   };
 }
 
+function mapDirectusMatchToEvent(match: MatchCardViewModel): EventItem {
+  const home = match.homeTeam?.name || "Team A";
+  const away = match.awayTeam?.name || "Team B";
+  const categoryTag = match.teamCategory || "National";
+  const compTag = match.competition || "Match";
+  const dateStr = match.dateIso ? match.dateIso.split("T")[0] : "";
+
+  return {
+    id: match.id,
+    title: `${home} vs ${away}`,
+    subtitle: `${compTag} • ${categoryTag}`,
+    date: dateStr,
+    location: match.venue || "Harare Sports Club",
+    description: `Official ${compTag} fixture between ${home} and ${away} at ${match.venue || 'Harare Sports Club'}.`,
+    tags: [categoryTag, compTag],
+    image: match.homeTeam?.logo || "/images/events/super-league.jpg",
+    ticketUrl: match.ticketUrl || "/tickets",
+    score: match.homeTeam?.score !== undefined && match.awayTeam?.score !== undefined
+      ? `${match.homeTeam.score} - ${match.awayTeam.score}`
+      : undefined,
+    homeTeam: home,
+    awayTeam: away,
+    status: match.status === "live" ? "ongoing" : (match.status === "completed" ? "completed" : "upcoming")
+  };
+}
+
 function getStaticFallbackEvents(): EventItem[] {
   const matchesData = (staticData["matches.json"] || []) as MatchJson[];
   const eventsData = (staticData["events.json"] || []) as EventItem[];
@@ -117,20 +145,25 @@ export async function getEvents(): Promise<EventItem[]> {
   const fallback = getStaticFallbackEvents();
   
   try {
-    const response = await directusFetch<DirectusEvent>('events', {
-      sort: ['sort', 'date_label']
-    });
-    if (response && response.length > 0) {
-      const cmsItems = response.map(mapDirectusEvent);
-      // Merge CMS events with fallback matches so all matches & events flow through calendar
-      const merged = [...cmsItems];
-      for (const fb of fallback) {
-        if (!merged.some(m => m.id === fb.id || m.title === fb.title)) {
-          merged.push(fb);
-        }
+    const [response, matches] = await Promise.all([
+      directusFetch<DirectusEvent>('events', {
+        sort: ['sort', 'date_label']
+      }).catch(() => [] as DirectusEvent[]),
+      getDirectusMatches().catch(() => [] as MatchCardViewModel[])
+    ]);
+
+    const cmsItems = response.map(mapDirectusEvent);
+    const cmsMatches = matches.map(mapDirectusMatchToEvent);
+    const merged = [...cmsItems, ...cmsMatches];
+
+    // Merge static fallback elements (only if they aren't already represented in cms data)
+    for (const fb of fallback) {
+      if (!merged.some(m => m.id === fb.id || m.title === fb.title)) {
+        merged.push(fb);
       }
-      return merged;
     }
+    
+    return merged;
   } catch (error) {
     console.warn("Directus fetch for events fallback to static dataset:", error);
   }
