@@ -153,6 +153,7 @@ export default async function AdminDashboard() {
     fanZoneMembers, onboardingSubmissions,
     activityFeed,
     lookups,
+    heroSlides, sponsors, resources,
   ] = await Promise.all([
     directusFetch<Page>("pages", { sort: ["sort"] }, 0),
     getPageSectionCounts(),
@@ -176,6 +177,9 @@ export default async function AdminDashboard() {
     canUseFeature(session.permissions, "fanzone_pii") ? listOnboardingSubmissions() : Promise.resolve([] as Awaited<ReturnType<typeof listOnboardingSubmissions>>),
     fetchActivityFeed(),
     getLookups(),
+    getAdminCollection<Record<string, unknown>>("hero_slides"),
+    getAdminCollection<Record<string, unknown>>("partners"),
+    getAdminCollection<Record<string, unknown>>("referee_resources"),
   ]);
 
   const stats = {
@@ -220,6 +224,9 @@ export default async function AdminDashboard() {
         initialOpponents={lookups.opponents}
         initialCompetitions={lookups.competitions}
         initialVenues={lookups.venues}
+        initialHeroSlides={heroSlides}
+        initialSponsors={sponsors}
+        initialResources={resources}
         stats={stats}
       />
     </AdminAuthGate>

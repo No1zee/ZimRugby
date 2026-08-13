@@ -8,11 +8,15 @@ import { draftMode } from "next/headers";
 import TeamsClient from "./TeamsClient";
 import type { Team } from "@/types/team";
 
-export const metadata: Metadata = {
-  title: "National Teams | Zimbabwe Rugby Union",
-  description:
-    "Official representative teams of the Zimbabwe Rugby Union. Sables, Lady Sables, Cheetahs 7s, and Junior Sables.",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const page = await getPageBySlug("teams");
+  return {
+    title: page?.seo_title || page?.hero_title || "National Teams | Zimbabwe Rugby Union",
+    description:
+      page?.seo_description ||
+      "Official representative teams of the Zimbabwe Rugby Union. Sables, Lady Sables, Cheetahs 7s, and Junior Sables.",
+  };
+}
 
 export default async function TeamsPage() {
   const [cmsPage, teams] = await Promise.all([

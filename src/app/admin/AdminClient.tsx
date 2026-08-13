@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { BookOpen, ExternalLink, FileText, Flag, HelpCircle, LayoutDashboard, Radio, ShieldCheck, Sparkles, Sprout, Users, CalendarDays, Trophy, RefreshCw } from "lucide-react";
+import { BookOpen, ExternalLink, FileText, Flag, HelpCircle, LayoutDashboard, Radio, ShieldCheck, Sparkles, Sprout, Users, CalendarDays, Trophy, RefreshCw, Layers, Handshake, FolderOpen } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import CollectionManager from "@/components/admin/CollectionManager";
 import ArticleComposer from "@/components/admin/ArticleComposer";
@@ -19,6 +19,9 @@ import PagesGrid from "./PagesGrid";
 import CampaignsPanel from "./CampaignsPanel";
 import AiAssistantPanel from "./AiAssistantPanel";
 import AuditLogsPanel from "@/components/admin/AuditLogsPanel";
+import HeroLayoutPanel from "@/components/admin/HeroLayoutPanel";
+import SponsorsPanel from "@/components/admin/SponsorsPanel";
+import ResourcesPanel from "@/components/admin/ResourcesPanel";
 import type { MatchCardViewModel, StandingsTableViewModel } from "@/lib/match-centre/types";
 import type { Campaign } from "@/lib/api/campaigns";
 
@@ -84,6 +87,9 @@ interface AdminClientProps {
   initialOpponents: Record<string, unknown>[];
   initialCompetitions: Record<string, unknown>[];
   initialVenues: Record<string, unknown>[];
+  initialHeroSlides: Record<string, unknown>[];
+  initialSponsors: Record<string, unknown>[];
+  initialResources: Record<string, unknown>[];
   stats: {
     pagesCount: number;
     publishedPages: number;
@@ -103,13 +109,16 @@ interface AdminClientProps {
 type TabId =
   | "overview"
   | "directus_ai"
+  | "hero_layout"
   | "pages"
   | "media"
+  | "events"
+  | "resources"
+  | "sponsors"
   | "grassroots"
   | "faq-footer"
   | "fixtures"
   | "teams"
-  | "events"
   | "campaigns"
   | "fanzone"
   | "onboarding"
@@ -149,6 +158,9 @@ function AdminClientInner(props: AdminClientProps) {
     initialOpponents,
     initialCompetitions,
     initialVenues,
+    initialHeroSlides,
+    initialSponsors,
+    initialResources,
     stats,
   } = props;
 
@@ -186,9 +198,12 @@ function AdminClientInner(props: AdminClientProps) {
       id: "content",
       label: "Content",
       items: [
+        { id: "hero_layout", label: "Hero & Layout", icon: Layers, count: 0 },
         { id: "media", label: "News & Articles", icon: BookOpen, count: initialNews.length },
         { id: "pages", label: "Pages", icon: FileText, count: stats.pagesCount },
         { id: "events", label: "Events", icon: CalendarDays, count: stats.eventCount },
+        { id: "resources", label: "Resource Vault", icon: FolderOpen, count: 0 },
+        { id: "sponsors", label: "Sponsors & Partners", icon: Handshake, count: 0 },
         { id: "grassroots", label: "Grassroots & Programmes", icon: Sprout, count: initialGrassroots.length + initialProgrammes.length },
         { id: "faq-footer", label: "FAQ & Footer", icon: HelpCircle, count: initialFaqs.length + initialFooterNav.length },
       ],
@@ -737,6 +752,10 @@ function AdminClientInner(props: AdminClientProps) {
             </CollapsibleSection>
           </div>
         )}
+
+        {activeTab === "hero_layout" && <HeroLayoutPanel initialSlides={initialHeroSlides as any[]} />}
+        {activeTab === "sponsors" && <SponsorsPanel initialSponsors={initialSponsors as any[]} />}
+        {activeTab === "resources" && <ResourcesPanel initialResources={initialResources as any[]} />}
 
         {activeTab === "campaigns" && <CampaignsPanel initialCampaigns={initialCampaigns} />}
 

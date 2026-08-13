@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { Shield, LogOut, UserCheck, Lock, LayoutDashboard, Sparkles, BookOpen, FileText, CalendarDays, Sprout, HelpCircle, Radio, Trophy, Flag, Users, ShieldAlert, KeyRound } from "lucide-react";
+import { Shield, LogOut, UserCheck, Lock, LayoutDashboard, Sparkles, BookOpen, FileText, CalendarDays, Sprout, HelpCircle, Radio, Trophy, Flag, Users, ShieldAlert, KeyRound, Layers, Handshake, FolderOpen } from "lucide-react";
 import { onAdminTab, setAdminTab } from "@/lib/admin/tab-events";
 import { canAccessPanel, type RolePermissions } from "@/lib/admin/iam";
 
@@ -16,9 +16,12 @@ const NAV_SECTIONS = [
   {
     label: "Content",
     items: [
+      { id: "hero_layout", label: "Hero & Layout", icon: Layers },
       { id: "media", label: "News & Articles", icon: BookOpen },
       { id: "pages", label: "Pages", icon: FileText },
       { id: "events", label: "Events", icon: CalendarDays },
+      { id: "resources", label: "Resource Vault", icon: FolderOpen },
+      { id: "sponsors", label: "Sponsors & Partners", icon: Handshake },
       { id: "grassroots", label: "Grassroots & Programmes", icon: Sprout },
       { id: "faq-footer", label: "FAQ & Footer", icon: HelpCircle },
     ],

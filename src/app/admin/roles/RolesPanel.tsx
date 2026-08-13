@@ -22,8 +22,11 @@ interface UserRow {
 const TAB_OPTIONS: { id: string; label: string }[] = [
   { id: "overview", label: "Overview" },
   { id: "directus_ai", label: "Directus AI" },
+  { id: "hero_layout", label: "Hero & Layout Manager" },
   { id: "pages", label: "Pages & Layouts" },
   { id: "media", label: "News & Media" },
+  { id: "resources", label: "Resource Vault" },
+  { id: "sponsors", label: "Sponsors & Partners" },
   { id: "grassroots", label: "Grassroots & Programs" },
   { id: "faq-footer", label: "FAQ & Footer" },
   { id: "fixtures", label: "Match Centre & Fixtures" },

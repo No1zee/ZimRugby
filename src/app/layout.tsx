@@ -5,6 +5,7 @@ import Navigation from "@/components/layout/Navigation";
 import Footer from "@/components/layout/Footer";
 import ClientLayoutShell from "@/components/layout/ClientLayoutShell";
 import PageTransitionLoader from "@/components/common/PageTransitionLoader";
+import { directusFetch } from "@/lib/directus/fetch";
 import CampaignAnnouncementBar from "@/components/campaigns/CampaignAnnouncementBar";
 import { AdaptivePerformanceProvider } from "@/components/providers/AdaptivePerformanceProvider";
 import { DraftAdminBar } from "@/components/admin/DraftAdminBar";
@@ -73,11 +74,15 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const footerNav = await directusFetch<any>("footer_navigation", {
+    sort: ["sort"],
+  }).catch(() => []);
+
   return (
     <html lang="en" className="min-h-dvh">
       <head>
@@ -108,7 +113,7 @@ export default function RootLayout({
               <main id="main-content" className="relative min-h-screen bg-milk-white">
                 {children}
               </main>
-              <Footer />
+              <Footer initialColumns={footerNav} />
             </ClientLayoutShell>
           </EditModeShell>
         </AdaptivePerformanceProvider>

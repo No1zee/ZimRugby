@@ -47,10 +47,26 @@ const footerColumns = [
   },
 ];
 
-export default function Footer() {
+interface FooterProps {
+  initialColumns?: any[];
+}
+
+export default function Footer({ initialColumns }: FooterProps) {
   const pathname = usePathname();
 
   if (pathname?.startsWith('/clubhouse') || pathname?.startsWith('/admin')) return null;
+
+  const columns: { title: string; links: { label: string; href: string }[] }[] = initialColumns && initialColumns.length > 0
+    ? initialColumns.map((col: any) => ({
+        title: col.column_title || "",
+        links: (Array.isArray(col.links)
+          ? col.links
+          : JSON.parse(col.links || "[]")).map((l: any) => ({
+              label: l.label || "",
+              href: l.href || "#"
+            })),
+      }))
+    : footerColumns;
 
   return (
     <footer className="bg-[#FDFBF0] text-[#003822] border-t border-black/10 pb-12 relative overflow-hidden pt-4 lg:pt-6">
@@ -113,7 +129,7 @@ export default function Footer() {
         {/* Compact 4-Column Navigation Links */}
         <div className="bg-[#006747] -mx-4 sm:-mx-6 lg:-mx-8 px-4 sm:px-6 lg:px-8 py-6 rounded-lg">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 lg:gap-12">
-            {footerColumns.map((col) => (
+            {columns.map((col) => (
               <nav key={col.title} aria-label={col.title} className="space-y-3">
                 <span className="block font-heading font-black text-xs sm:text-sm uppercase tracking-wider text-white border-b border-white/20 pb-2">
                   {col.title}

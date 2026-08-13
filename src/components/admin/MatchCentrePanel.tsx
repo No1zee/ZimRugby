@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
@@ -357,17 +357,16 @@ export default function MatchCentrePanel({
                         </button>
                       </div>
                     )}
-                    {m.status === "upcoming" && (
-                      <select
-                        value={m.status}
-                        onChange={(e) => changeStatus(m.id, e.target.value)}
-                        className="rounded-lg border border-black/10 bg-white px-2 py-1.5 text-xs"
-                      >
-                        <option value="upcoming">Upcoming</option>
-                        <option value="live">Live</option>
-                        <option value="cancelled">Cancelled</option>
-                      </select>
-                    )}
+                    <select
+                      value={m.status}
+                      onChange={(e) => changeStatus(m.id, e.target.value)}
+                      className="rounded-lg border border-black/10 bg-white px-2 py-1.5 text-xs font-bold"
+                    >
+                      <option value="upcoming">Upcoming</option>
+                      <option value="live">Live</option>
+                      <option value="final">Final</option>
+                      <option value="cancelled">Cancelled</option>
+                    </select>
                     <button
                       onClick={() => deleteFixture(m.id, matchLabel(m))}
                       className="rounded-lg bg-red-500/10 px-3 py-1.5 text-[10px] font-black uppercase tracking-wider text-red-600 transition-colors hover:bg-red-500/20"
