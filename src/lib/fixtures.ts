@@ -85,22 +85,14 @@ function directusMatchToFixture(m: DirectusMatch): Fixture {
 }
 
 export async function getAllFixtures(): Promise<Fixture[]> {
-  const [worldRugbyResults, tmResults, teamResults, staticMatches, directusResults] = await Promise.allSettled([
+  const [worldRugbyResults, tmResults, teamResults, staticMatches] = await Promise.allSettled([
     getWorldRugbyFixtures(),
     getTicketmasterFixtures(),
     getAllTeamFixtures(),
-    getLiveMatches(),
-    directusFetch<DirectusMatch>("matches", {
-      fields: ["id", "title", "team_id", "opponent_id", "competition_id", "venue_id", "status", "home_or_away", "kickoff_at", "display_date_label", "display_time_label", "round_label", "team_score", "opponent_score", "result_outcome", "is_featured", "is_next_match", "show_on_match_centre", "show_on_homepage", "hero_image"],
-      sort: ["kickoff_at"],
-      limit: 100,
-    }, 60)
+    getLiveMatches()
   ]);
 
-  const cmsFixtures = directusResults.status === 'fulfilled' ? directusResults.value.map(directusMatchToFixture) : [];
-
   const allFixtures: Fixture[] = [
-    ...cmsFixtures,
     ...(worldRugbyResults.status === 'fulfilled' ? worldRugbyResults.value.map(f => ({ ...f, teamCategory: "Sables" })) : []),
     ...(tmResults.status === 'fulfilled' ? tmResults.value.map(f => ({ ...f, teamCategory: "Sables" })) : []),
     ...getVerifiedStaticFixtures().map(f => ({ ...f, teamCategory: "Sables" })),

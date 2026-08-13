@@ -659,6 +659,14 @@ export default function EventsPanel({ initialEvents, onDirtyChange }: EventsPane
               <List className="h-4 w-4" /> List
             </button>
           </div>
+          <a
+            href="/api/calendar"
+            target="_blank"
+            className="flex items-center gap-2 rounded-lg bg-black/5 px-4 py-2.5 font-heading text-xs font-black uppercase tracking-wider text-black/70 transition-colors hover:bg-black/10"
+            title="Download or subscribe to the .ics calendar feed"
+          >
+            <CalendarPlus className="h-4 w-4" /> Subscribe ICS
+          </a>
           <button
             onClick={() => openCreate()}
             className="flex items-center gap-2 rounded-lg bg-zru-green px-4 py-2.5 font-heading text-xs font-black uppercase tracking-wider text-white transition-colors hover:bg-green-800"

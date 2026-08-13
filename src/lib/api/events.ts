@@ -142,33 +142,23 @@ function getStaticFallbackEvents(): EventItem[] {
 }
 
 export async function getEvents(): Promise<EventItem[]> {
-  const fallback = getStaticFallbackEvents();
-  
   try {
     const [response, matches] = await Promise.all([
       directusFetch<DirectusEvent>('events', {
         sort: ['sort', 'date_label']
-      }).catch(() => [] as DirectusEvent[]),
-      getDirectusMatches().catch(() => [] as MatchCardViewModel[])
+      }),
+      getDirectusMatches()
     ]);
 
     const cmsItems = response.map(mapDirectusEvent);
     const cmsMatches = matches.map(mapDirectusMatchToEvent);
-    const merged = [...cmsItems, ...cmsMatches];
-
-    // Merge static fallback elements (only if they aren't already represented in cms data)
-    for (const fb of fallback) {
-      if (!merged.some(m => m.id === fb.id || m.title === fb.title)) {
-        merged.push(fb);
-      }
-    }
     
-    return merged;
+    // Directus is the absolute source of truth. We only return CMS items here.
+    return [...cmsItems, ...cmsMatches];
   } catch (error) {
-    console.warn("Directus fetch for events fallback to static dataset:", error);
+    console.warn("Directus fetch for events failed, falling back to static dataset:", error);
+    return getStaticFallbackEvents();
   }
-
-  return fallback;
 }
 
 export async function getCompetitions(): Promise<EventItem[]> {

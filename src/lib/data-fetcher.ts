@@ -46,7 +46,29 @@ async function readStaticJson<T>(filename: string, _revalidateSeconds: number): 
   }
 }
 
+import { getDirectusMatches } from './match-centre/api';
+
 export async function getLiveMatches(): Promise<Match[]> {
+  try {
+    const directusMatches = await getDirectusMatches();
+    if (directusMatches && directusMatches.length > 0) {
+      return directusMatches.map(m => ({
+        id: String(m.id),
+        homeTeam: { name: m.homeTeam.name, logo: m.homeTeam.logo },
+        awayTeam: { name: m.awayTeam.name, logo: m.awayTeam.logo },
+        date: m.dateIso ? new Date(m.dateIso).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric', timeZone: 'UTC' }) : '',
+        time: m.time,
+        venue: m.venue,
+        competition: m.competition,
+        category: m.teamCategory,
+        status: m.status === 'completed' ? 'finished' : (m.status as 'upcoming' | 'live' | 'finished'),
+        score: (m.homeTeam.score !== undefined && m.awayTeam.score !== undefined) ? { home: m.homeTeam.score, away: m.awayTeam.score } : undefined
+      }));
+    }
+  } catch (error) {
+    console.warn("Directus fetch failed for live matches, falling back to static:", error);
+  }
+
   const data = await readStaticJson<Match>('matches.json', 60);
   return data.filter((m: Match) => m.homeTeam?.name !== 'Date');
 }
