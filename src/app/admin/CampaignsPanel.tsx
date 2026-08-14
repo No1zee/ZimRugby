@@ -1,9 +1,42 @@
 "use client";
 
+import { useState } from "react";
+import { Flag, Plus } from "lucide-react";
 import CollectionManager from "@/components/admin/CollectionManager";
 import type { Campaign } from "@/lib/api/campaigns";
 
 export default function CampaignsPanel({ initialCampaigns }: { initialCampaigns: Campaign[] }) {
+  const [createRequest, setCreateRequest] = useState(0);
+  const [creating, setCreating] = useState(false);
+  const isEmpty = initialCampaigns.length === 0;
+
+  if (isEmpty && !creating) {
+    return (
+      <div className="rounded-2xl border border-black/10 bg-white shadow-sm">
+        <div className="flex flex-col items-center justify-center px-6 py-20 text-center">
+          <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-zru-green/10">
+            <Flag className="h-7 w-7 text-zru-green" strokeWidth={1.75} />
+          </div>
+          <h2 className="mt-5 font-heading text-xl font-black uppercase tracking-wide text-rich-black">
+            No active campaigns
+          </h2>
+          <p className="mt-2 max-w-sm text-sm text-black/50">
+            Campaigns drive the homepage hero and campaign pages. Create your first one to get started.
+          </p>
+          <button
+            onClick={() => {
+              setCreating(true);
+              setCreateRequest((n) => n + 1);
+            }}
+            className="mt-6 flex items-center gap-2 rounded-lg bg-zru-green px-5 py-2.5 font-heading text-xs font-black uppercase tracking-wider text-white transition-colors hover:bg-green-800"
+          >
+            <Plus className="h-4 w-4" /> Create New Campaign
+          </button>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <CollectionManager
       collection="campaigns"
@@ -32,6 +65,7 @@ export default function CampaignsPanel({ initialCampaigns }: { initialCampaigns:
       statusField="status"
       searchable={["name", "subtitle", "slug"]}
       singularLabel="campaign"
+      createRequest={createRequest}
     />
   );
 }

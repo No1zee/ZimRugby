@@ -122,22 +122,28 @@ const fallbackCampaigns: Campaign[] = [
 ];
 
 export async function getActiveCampaigns(): Promise<Campaign[]> {
+  const fields = ["id", "name", "slug", "subtitle", "description", "start_date", "end_date", "auto_archive", "priority", "hero_image", "cta_label", "cta_url", "status", "sort", "players.*", "matches.*", "media.*"];
+
+  // No Directus configured → use the bundled fallback data (offline path).
+  if (!process.env.NEXT_PUBLIC_DIRECTUS_URL) {
+    return fallbackCampaigns.filter((c) => c.status === "active" || c.status === "published");
+  }
+
   try {
-    if (!process.env.NEXT_PUBLIC_DIRECTUS_URL) return fallbackCampaigns.filter(c => c.status === "active" || c.status === "published");
-
-    const fields = ["id", "name", "slug", "subtitle", "description", "start_date", "end_date", "auto_archive", "priority", "hero_image", "cta_label", "cta_url", "status", "sort", "players.*", "matches.*", "media.*"];
-
     const campaigns = await directusFetch<Campaign>("campaigns", {
       fields,
       sort: ["-priority", "sort"],
       limit: 10,
     });
 
+    // A successful Directus response is authoritative — preserve an intentional
+    // empty state (`[]`) instead of respawning the fallback campaigns.
     if (Array.isArray(campaigns)) return campaigns;
     return [];
   } catch {
+    // Request failed (network error / Directus unreachable) → fall back.
     console.warn("Failed to fetch campaigns from Directus, using fallback");
-    return fallbackCampaigns;
+    return fallbackCampaigns.filter((c) => c.status === "active" || c.status === "published");
   }
 }
 
@@ -147,25 +153,26 @@ export async function getPrimaryCampaign(): Promise<Campaign | null> {
 }
 
 export async function getCampaignBySlug(slug: string): Promise<Campaign | null> {
-  try {
-    if (process.env.NEXT_PUBLIC_DIRECTUS_URL) {
-      const fields = ["id", "name", "slug", "subtitle", "description", "start_date", "end_date", "auto_archive", "priority", "hero_image", "cta_label", "cta_url", "status", "sort", "players.*", "matches.*", "media.*"];
+  const fields = ["id", "name", "slug", "subtitle", "description", "start_date", "end_date", "auto_archive", "priority", "hero_image", "cta_label", "cta_url", "status", "sort", "players.*", "matches.*", "media.*"];
 
+  if (process.env.NEXT_PUBLIC_DIRECTUS_URL) {
+    try {
       const campaigns = await directusFetch<Campaign>("campaigns", {
         fields,
         filter: { slug: { _eq: slug } },
         limit: 1,
       });
 
-      if (campaigns && campaigns.length > 0) return campaigns[0];
+      // A successful Directus response is authoritative — return `null` for an
+      // intentional empty result rather than respawning a fallback campaign.
+      if (Array.isArray(campaigns)) return campaigns[0] || null;
+    } catch {
+      console.warn("Failed to fetch campaign by slug from Directus, using fallback");
     }
-
-    const match = fallbackCampaigns.find(c => c.slug === slug);
-    return match || null;
-  } catch {
-    console.warn("Failed to fetch campaign by slug from Directus, using fallback");
-    return fallbackCampaigns.find(c => c.slug === slug) || null;
   }
+
+  const match = fallbackCampaigns.find((c) => c.slug === slug);
+  return match || null;
 }
 
 export async function getCampaignByMatchId(matchId: string): Promise<Campaign | null> {

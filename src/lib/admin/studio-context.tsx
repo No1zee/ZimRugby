@@ -5,7 +5,7 @@ import type { MatchCardViewModel } from "@/lib/match-centre/types";
 import type { Campaign } from "@/lib/api/campaigns";
 
 export type StudioViewport = "desktop" | "tablet" | "mobile";
-export type StudioSection = "hero" | "ticker" | "fixtures" | "news" | "sponsors" | "campaigns" | null;
+export type StudioSection = "hero" | "ticker" | "fixtures" | "news" | "sponsors" | "campaigns" | "tickets" | "squads" | null;
 export type StudioPage = "home" | "matches" | "news" | "tickets" | "squads";
 
 export interface HeroSlideItem {

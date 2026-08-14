@@ -56,6 +56,10 @@ const FEATURES: { key: keyof RolePermissions; label: string }[] = [
 
 const EMPTY_PERMS: RolePermissions = { tabs: [], collections: {} };
 
+// Roles with actual administrative access shown in the Admin Users card.
+// Fan/member/user accounts are managed in the Fan Zone tab instead.
+const ADMIN_ROLE_IDS = ["super_admin", "editor", "match_official", "staff"];
+
 export default function RolesPanel() {
   const [roles, setRoles] = useState<RoleRow[]>([]);
   const [users, setUsers] = useState<UserRow[]>([]);
@@ -181,6 +185,15 @@ export default function RolesPanel() {
   useEffect(() => {
     load();
   }, [load]);
+
+  // Only accounts with actual administrative roles (or roles defined in the
+  // actors list) belong in the Admin Users card. Fans/members are fan-zone accounts.
+  const adminUsers = users.filter((u) => {
+    const r = (u.role || "").toLowerCase();
+    if (r === "fan" || r === "member" || r === "user" || r === "supporter") return false;
+    if (ADMIN_ROLE_IDS.includes(r)) return true;
+    return roles.some((role) => role.name.toLowerCase() === r);
+  });
 
   const openEditor = (role: RoleRow) => {
     setEditingRole(role);
@@ -501,7 +514,7 @@ export default function RolesPanel() {
               <Users className="w-5 h-5 text-zru-green" /> Admin Users
             </h2>
             <p className="text-xs text-black/50 mt-0.5">
-              Showing privileged staff and officials. Fan accounts are managed in the <span className="font-bold text-zru-green">Fan Zone</span> section.
+              Showing {adminUsers.length} active admin staff (fans managed in Fan Zone).
             </p>
           </div>
           {!showNewUser ? (
@@ -544,12 +557,7 @@ export default function RolesPanel() {
               </tr>
             </thead>
             <tbody className="divide-y divide-black/5 text-sm">
-              {users
-                .filter((u) => {
-                  const r = (u.role || "").toLowerCase();
-                  return r !== "fan" && r !== "member" && r !== "user" && r !== "supporter";
-                })
-                .map((user) => (
+              {adminUsers.map((user) => (
                   <tr key={user.id}>
                     <td className="py-3 font-bold text-rich-black">{user.email}</td>
                     <td className="py-3">

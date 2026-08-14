@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Download, Upload, ShieldCheck, Database, RefreshCw, AlertTriangle, CheckCircle2, FileJson, History, RotateCcw, Bookmark, Clock, Activity, Zap, Check, AlertCircle } from "lucide-react";
 import { useToast } from "./ui/ToastProvider";
 import { useConfirm } from "./ui/ConfirmProvider";
@@ -15,6 +15,9 @@ interface SnapshotMetadata {
 
 const COLLECTIONS = ["matches", "teams", "opponents", "competitions", "venues", "hero_slides", "news", "sponsors", "resources", "campaigns", "announcements"];
 
+const AUTO_SNAPSHOT_INTERVAL_MS = 15 * 60 * 1000;
+const AUTO_SNAPSHOT_STORAGE_KEY = "zru_auto_snapshots";
+
 export default function BackupsPanel() {
   const { toast } = useToast();
   const confirm = useConfirm();
@@ -23,6 +26,8 @@ export default function BackupsPanel() {
   const [sessionRollingBack, setSessionRollingBack] = useState(false);
   const [sessionCheckpoint, setSessionCheckpoint] = useState<SnapshotMetadata | null>(null);
   const [previewSnapshot, setPreviewSnapshot] = useState<SnapshotMetadata | null>(null);
+  const [autoSnapshots, setAutoSnapshots] = useState<SnapshotMetadata[]>([]);
+  const lastAutoSnapshotAt = useRef<number>(0);
 
   // Schema Drift Check State (ISO 27001 A.8.9)
   const [driftChecking, setDriftChecking] = useState(false);
@@ -49,6 +54,61 @@ export default function BackupsPanel() {
         setSessionCheckpoint(snap);
       }
     });
+  }, []);
+
+  // Automatic 15-minute background snapshots (sessionStorage-backed)
+  useEffect(() => {
+    let cancelled = false;
+
+    const persistAutoSnapshot = (snap: SnapshotMetadata) => {
+      setAutoSnapshots((prev) => {
+        const next = [snap, ...prev.filter((s) => s.timestamp !== snap.timestamp)].slice(0, 20);
+        try {
+          sessionStorage.setItem(AUTO_SNAPSHOT_STORAGE_KEY, JSON.stringify(next));
+        } catch {}
+        return next;
+      });
+    };
+
+    const takeAutoSnapshot = async (label: string) => {
+      const snap = await captureCurrentState(label);
+      if (!cancelled && snap) {
+        lastAutoSnapshotAt.current = Date.now();
+        persistAutoSnapshot(snap);
+      }
+    };
+
+    // Restore previously taken auto-snapshots from this browser session
+    let hasStored = false;
+    try {
+      const stored = sessionStorage.getItem(AUTO_SNAPSHOT_STORAGE_KEY);
+      if (stored) {
+        const parsed = JSON.parse(stored);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          hasStored = true;
+          setAutoSnapshots(parsed);
+          lastAutoSnapshotAt.current = parsed[0]?.timestamp
+            ? new Date(parsed[0].timestamp).getTime()
+            : Date.now();
+        }
+      }
+    } catch {}
+
+    // Pre-populate the table with an initial system baseline so it's never empty
+    if (!hasStored) {
+      takeAutoSnapshot("System Baseline");
+    }
+
+    // Run automatically every 15 minutes (skip if a snapshot was taken recently)
+    const intervalId = setInterval(() => {
+      if (Date.now() - lastAutoSnapshotAt.current < AUTO_SNAPSHOT_INTERVAL_MS) return;
+      takeAutoSnapshot("Automatic 15-min Snapshot");
+    }, AUTO_SNAPSHOT_INTERVAL_MS);
+
+    return () => {
+      cancelled = true;
+      clearInterval(intervalId);
+    };
   }, []);
 
   // Fetch current state across all collections
@@ -342,6 +402,63 @@ export default function BackupsPanel() {
         ) : (
           <p className="text-xs text-white/40 italic">Capturing baseline state in background...</p>
         )}
+      </section>
+
+      {/* 📸 AUTOMATIC 15-MINUTE BACKGROUND SNAPSHOTS */}
+      <section className="bg-white border border-black/10 rounded-2xl p-6 shadow-sm">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-black/5 pb-4 mb-4">
+          <div className="flex items-start gap-3">
+            <div className="w-10 h-10 rounded-xl bg-[#006B3F]/10 flex items-center justify-center shrink-0">
+              <History className="w-5 h-5 text-[#006B3F]" />
+            </div>
+            <div>
+              <h3 className="text-sm font-black font-heading uppercase tracking-wider text-rich-black">
+                Automatic Background Snapshots
+              </h3>
+              <p className="text-xs text-black/50 mt-0.5">
+                A system baseline is captured on load, then a fresh snapshot every 15 minutes while this tab is open. Snapshots are kept in this browser session only.
+              </p>
+            </div>
+          </div>
+          <span className="text-[11px] font-mono text-black/40 shrink-0">
+            {autoSnapshots.length > 0
+              ? `Last snapshot ${new Date(autoSnapshots[0].timestamp).toLocaleTimeString()}`
+              : "Capturing baseline…"}
+          </span>
+        </div>
+
+        <div className="overflow-x-auto">
+          <table className="w-full text-left border-collapse">
+            <thead>
+              <tr className="border-b border-black/10 text-[11px] font-black uppercase text-black/50">
+                <th className="py-2 pr-3">Captured At</th>
+                <th className="py-2 pr-3">Label</th>
+                <th className="py-2 pr-3 text-right">Records</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-black/5 text-sm">
+              {autoSnapshots.map((snap) => {
+                const total = Object.values(snap.counts || {}).reduce((sum, n) => sum + Number(n || 0), 0);
+                return (
+                  <tr key={snap.timestamp}>
+                    <td className="py-2.5 pr-3 font-mono text-xs text-black/60">
+                      {new Date(snap.timestamp).toLocaleString()}
+                    </td>
+                    <td className="py-2.5 pr-3 text-xs font-bold text-rich-black">{snap.author}</td>
+                    <td className="py-2.5 pr-3 text-right font-mono text-xs text-black/60">{total} records</td>
+                  </tr>
+                );
+              })}
+              {autoSnapshots.length === 0 && (
+                <tr>
+                  <td colSpan={3} className="py-6 text-center text-xs text-black/40 italic">
+                    Capturing initial system baseline…
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
       </section>
 
       {/* 🔬 ISO 27001 SCHEMA DRIFT & CHAOS DRILL TOOLS */}

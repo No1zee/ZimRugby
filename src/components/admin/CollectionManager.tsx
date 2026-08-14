@@ -37,6 +37,8 @@ interface CollectionManagerProps {
   /** External request to open the editor for a specific item id. */
   focusId?: string | number | null;
   onFocusHandled?: () => void;
+  /** External request to open the create form. Increment the counter to trigger. */
+  createRequest?: number;
   /** Per-action grants (role-gated UI). Absent = full access (all allowed). */
   grants?: { create?: boolean; update?: boolean; delete?: boolean };
 }
@@ -88,6 +90,7 @@ export default function CollectionManager({
   onDirtyChange,
   focusId,
   onFocusHandled,
+  createRequest,
   grants,
 }: CollectionManagerProps) {
   const canCreate = grants?.create !== false;
@@ -135,6 +138,17 @@ export default function CollectionManager({
     // openedFocus ref already guards against re-opening the same item.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [focusId, items]);
+
+  // External request: open the create form when the counter increments.
+  const lastCreateRequest = useRef(0);
+  useEffect(() => {
+    if (createRequest === undefined || createRequest === lastCreateRequest.current) return;
+    lastCreateRequest.current = createRequest;
+    openCreate();
+    // openCreate is intentionally omitted: the counter ref guards against
+    // re-opening and it changes identity every render.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [createRequest]);
 
   const statusOptions = useMemo(() => {
     if (!statusField) return [] as string[];

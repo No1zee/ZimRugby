@@ -7,6 +7,8 @@ import TickerCanvasPreview from "./preview/TickerCanvasPreview";
 import MatchesCanvasPreview from "./preview/MatchesCanvasPreview";
 import NewsCanvasPreview from "./preview/NewsCanvasPreview";
 import SponsorsCanvasPreview from "./preview/SponsorsCanvasPreview";
+import TicketsCanvasPreview from "./preview/TicketsCanvasPreview";
+import SquadsCanvasPreview from "./preview/SquadsCanvasPreview";
 
 export default function StudioVisualCanvas() {
   const { viewport, zoom, activePage } = useStudioLive();
@@ -42,8 +44,13 @@ export default function StudioVisualCanvas() {
       {/* Device Frame */}
       <div
         style={scaleStyle}
-        className={`w-full ${viewportWidthClass} transition-all duration-300 rounded-[28px] border border-white/15 bg-[#03070A] shadow-2xl p-4 sm:p-6 space-y-6`}
+        className={`w-full ${viewportWidthClass} transition-all duration-300 rounded-[28px] border border-white/15 bg-[#03070A] shadow-2xl p-4 sm:p-6 space-y-6 relative`}
       >
+        {/* Mobile Camera Notch Simulation when in Mobile View */}
+        {viewport === "mobile" && (
+          <div className="w-24 h-4 bg-black rounded-full mx-auto mb-2 border border-white/10" />
+        )}
+
         {/* Render sections according to activePage */}
         {activePage === "home" && (
           <>
@@ -51,6 +58,8 @@ export default function StudioVisualCanvas() {
             <TickerCanvasPreview />
             <MatchesCanvasPreview />
             <NewsCanvasPreview />
+            <TicketsCanvasPreview />
+            <SquadsCanvasPreview />
             <SponsorsCanvasPreview />
           </>
         )}
@@ -59,6 +68,7 @@ export default function StudioVisualCanvas() {
           <>
             <TickerCanvasPreview />
             <MatchesCanvasPreview />
+            <SquadsCanvasPreview />
           </>
         )}
 
@@ -70,14 +80,15 @@ export default function StudioVisualCanvas() {
 
         {activePage === "tickets" && (
           <>
+            <TicketsCanvasPreview />
             <MatchesCanvasPreview />
-            <TickerCanvasPreview />
           </>
         )}
 
         {activePage === "squads" && (
           <>
             <HeroCanvasPreview />
+            <SquadsCanvasPreview />
             <MatchesCanvasPreview />
           </>
         )}

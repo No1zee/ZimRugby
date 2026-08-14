@@ -1,9 +1,9 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import { 
   Sliders, X, Sparkles, Send, Megaphone, Trophy, Newspaper, Award, 
-  CheckCircle2, Plus, Minus, Hash, Image as ImageIcon, ExternalLink, Flame
+  CheckCircle2, Plus, Minus, Hash, Image as ImageIcon, ExternalLink, Ticket, Users
 } from "lucide-react";
 import { useStudioLive } from "@/lib/admin/studio-context";
 import { useToast } from "../ui/ToastProvider";
@@ -50,7 +50,7 @@ export default function StudioInspector() {
       <div className="flex items-center gap-1 px-4 py-2 bg-[#090D12] border-b border-white/10 overflow-x-auto text-[11px] font-mono">
         <button
           onClick={() => setSelectedSection("hero")}
-          className={`px-3 py-1 rounded-lg uppercase font-bold shrink-0 transition-colors ${
+          className={`px-3 py-1 rounded-lg uppercase font-bold shrink-0 transition-colors cursor-pointer ${
             selectedSection === "hero" ? "bg-[#C5A059] text-black" : "text-white/60 hover:text-white"
           }`}
         >
@@ -58,7 +58,7 @@ export default function StudioInspector() {
         </button>
         <button
           onClick={() => setSelectedSection("ticker")}
-          className={`px-3 py-1 rounded-lg uppercase font-bold shrink-0 transition-colors ${
+          className={`px-3 py-1 rounded-lg uppercase font-bold shrink-0 transition-colors cursor-pointer ${
             selectedSection === "ticker" ? "bg-[#C5A059] text-black" : "text-white/60 hover:text-white"
           }`}
         >
@@ -66,7 +66,7 @@ export default function StudioInspector() {
         </button>
         <button
           onClick={() => setSelectedSection("fixtures")}
-          className={`px-3 py-1 rounded-lg uppercase font-bold shrink-0 transition-colors ${
+          className={`px-3 py-1 rounded-lg uppercase font-bold shrink-0 transition-colors cursor-pointer ${
             selectedSection === "fixtures" ? "bg-[#C5A059] text-black" : "text-white/60 hover:text-white"
           }`}
         >
@@ -74,19 +74,35 @@ export default function StudioInspector() {
         </button>
         <button
           onClick={() => setSelectedSection("news")}
-          className={`px-3 py-1 rounded-lg uppercase font-bold shrink-0 transition-colors ${
+          className={`px-3 py-1 rounded-lg uppercase font-bold shrink-0 transition-colors cursor-pointer ${
             selectedSection === "news" ? "bg-[#C5A059] text-black" : "text-white/60 hover:text-white"
           }`}
         >
           04 News
         </button>
         <button
+          onClick={() => setSelectedSection("tickets")}
+          className={`px-3 py-1 rounded-lg uppercase font-bold shrink-0 transition-colors cursor-pointer ${
+            selectedSection === "tickets" ? "bg-[#C5A059] text-black" : "text-white/60 hover:text-white"
+          }`}
+        >
+          06 Tickets
+        </button>
+        <button
+          onClick={() => setSelectedSection("squads")}
+          className={`px-3 py-1 rounded-lg uppercase font-bold shrink-0 transition-colors cursor-pointer ${
+            selectedSection === "squads" ? "bg-[#C5A059] text-black" : "text-white/60 hover:text-white"
+          }`}
+        >
+          07 Squads
+        </button>
+        <button
           onClick={() => setSelectedSection("sponsors")}
-          className={`px-3 py-1 rounded-lg uppercase font-bold shrink-0 transition-colors ${
+          className={`px-3 py-1 rounded-lg uppercase font-bold shrink-0 transition-colors cursor-pointer ${
             selectedSection === "sponsors" ? "bg-[#C5A059] text-black" : "text-white/60 hover:text-white"
           }`}
         >
-          05 Partners
+          Partners
         </button>
       </div>
 
@@ -212,19 +228,19 @@ export default function StudioInspector() {
               <div className="flex items-center gap-1.5">
                 <button
                   onClick={() => updateMatch(currentMatch.id, { homeTeam: { ...currentMatch.homeTeam, score: (currentMatch.homeTeam.score ?? 0) + 3 } })}
-                  className="flex-1 py-1 rounded-lg bg-white/10 hover:bg-white/20 font-mono text-[10px] font-bold text-white"
+                  className="flex-1 py-1 rounded-lg bg-white/10 hover:bg-white/20 font-mono text-[10px] font-bold text-white cursor-pointer"
                 >
                   +3 Pen
                 </button>
                 <button
                   onClick={() => updateMatch(currentMatch.id, { homeTeam: { ...currentMatch.homeTeam, score: (currentMatch.homeTeam.score ?? 0) + 5 } })}
-                  className="flex-1 py-1 rounded-lg bg-white/10 hover:bg-white/20 font-mono text-[10px] font-bold text-white"
+                  className="flex-1 py-1 rounded-lg bg-white/10 hover:bg-white/20 font-mono text-[10px] font-bold text-white cursor-pointer"
                 >
                   +5 Try
                 </button>
                 <button
                   onClick={() => updateMatch(currentMatch.id, { homeTeam: { ...currentMatch.homeTeam, score: (currentMatch.homeTeam.score ?? 0) + 2 } })}
-                  className="flex-1 py-1 rounded-lg bg-white/10 hover:bg-white/20 font-mono text-[10px] font-bold text-white"
+                  className="flex-1 py-1 rounded-lg bg-white/10 hover:bg-white/20 font-mono text-[10px] font-bold text-white cursor-pointer"
                 >
                   +2 Con
                 </button>
@@ -237,19 +253,19 @@ export default function StudioInspector() {
               <div className="flex items-center gap-1.5">
                 <button
                   onClick={() => updateMatch(currentMatch.id, { awayTeam: { ...currentMatch.awayTeam, score: (currentMatch.awayTeam.score ?? 0) + 3 } })}
-                  className="flex-1 py-1 rounded-lg bg-white/10 hover:bg-white/20 font-mono text-[10px] font-bold text-white"
+                  className="flex-1 py-1 rounded-lg bg-white/10 hover:bg-white/20 font-mono text-[10px] font-bold text-white cursor-pointer"
                 >
                   +3 Pen
                 </button>
                 <button
                   onClick={() => updateMatch(currentMatch.id, { awayTeam: { ...currentMatch.awayTeam, score: (currentMatch.awayTeam.score ?? 0) + 5 } })}
-                  className="flex-1 py-1 rounded-lg bg-white/10 hover:bg-white/20 font-mono text-[10px] font-bold text-white"
+                  className="flex-1 py-1 rounded-lg bg-white/10 hover:bg-white/20 font-mono text-[10px] font-bold text-white cursor-pointer"
                 >
                   +5 Try
                 </button>
                 <button
                   onClick={() => updateMatch(currentMatch.id, { awayTeam: { ...currentMatch.awayTeam, score: (currentMatch.awayTeam.score ?? 0) + 2 } })}
-                  className="flex-1 py-1 rounded-lg bg-white/10 hover:bg-white/20 font-mono text-[10px] font-bold text-white"
+                  className="flex-1 py-1 rounded-lg bg-white/10 hover:bg-white/20 font-mono text-[10px] font-bold text-white cursor-pointer"
                 >
                   +2 Con
                 </button>
@@ -268,6 +284,55 @@ export default function StudioInspector() {
                 <option value="completed">Completed</option>
               </select>
             </div>
+          </div>
+        )}
+
+        {/* === 06 TICKETS === */}
+        {selectedSection === "tickets" && (
+          <div className="space-y-4">
+            <div className="flex items-center gap-2 text-[#C5A059] font-mono font-bold uppercase text-[10px]">
+              <Ticket className="w-3.5 h-3.5" />
+              Ticket Pass & Pricing Allocations
+            </div>
+            <div className="p-3.5 rounded-xl bg-[#161B22] border border-white/10 space-y-3">
+              <div className="space-y-1.5">
+                <label className="text-[11px] font-bold text-white/70">VIP Suite Price ($USD)</label>
+                <input
+                  type="text"
+                  defaultValue="$50"
+                  className="w-full bg-black/20 border border-white/15 rounded-lg px-3 py-1.5 text-xs text-white font-mono font-bold"
+                />
+              </div>
+              <div className="space-y-1.5">
+                <label className="text-[11px] font-bold text-white/70">Grandstand Price ($USD)</label>
+                <input
+                  type="text"
+                  defaultValue="$15"
+                  className="w-full bg-black/20 border border-white/15 rounded-lg px-3 py-1.5 text-xs text-white font-mono font-bold"
+                />
+              </div>
+              <div className="space-y-1.5">
+                <label className="text-[11px] font-bold text-white/70">Embankment General Admission</label>
+                <input
+                  type="text"
+                  defaultValue="$5"
+                  className="w-full bg-black/20 border border-white/15 rounded-lg px-3 py-1.5 text-xs text-white font-mono font-bold"
+                />
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* === 07 SQUADS === */}
+        {selectedSection === "squads" && (
+          <div className="space-y-4">
+            <div className="flex items-center gap-2 text-[#C5A059] font-mono font-bold uppercase text-[10px]">
+              <Users className="w-3.5 h-3.5" />
+              Matchday 23 Roster Selector
+            </div>
+            <p className="text-[11px] text-white/70">
+              Select or swap player positions directly on the matchday pitch canvas. Changes sync live with team announcement media releases.
+            </p>
           </div>
         )}
 
@@ -301,7 +366,7 @@ export default function StudioInspector() {
           </div>
         )}
 
-        {/* === 05 SPONSORS === */}
+        {/* === PARTNERS === */}
         {selectedSection === "sponsors" && (
           <div className="space-y-4">
             <div className="flex items-center gap-2 text-[#C5A059] font-mono font-bold uppercase text-[10px]">
