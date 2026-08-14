@@ -25,6 +25,8 @@ import ResourcesPanel from "@/components/admin/ResourcesPanel";
 import BackupsPanel from "@/components/admin/BackupsPanel";
 import AdminInactivityLock from "@/components/admin/ui/AdminInactivityLock";
 import SamariaSplashLoader from "@/components/admin/ui/SamariaSplashLoader";
+import StudioWorkspace from "@/components/admin/studio/StudioWorkspace";
+import { StudioLiveProvider } from "@/lib/admin/studio-context";
 import type { MatchCardViewModel, StandingsTableViewModel } from "@/lib/match-centre/types";
 import type { Campaign } from "@/lib/api/campaigns";
 
@@ -353,6 +355,12 @@ function AdminClientInner(props: AdminClientProps) {
     }
   };
 
+  const [workspaceMode, setWorkspaceMode] = useState<"studio" | "data">("studio");
+
+  if (workspaceMode === "studio") {
+    return <StudioWorkspace onSwitchToDataMode={() => setWorkspaceMode("data")} />;
+  }
+
   return (
     <main className="bg-milk-white min-h-screen pb-16 pt-8">
       <div className="mx-auto max-w-[1400px] px-4 sm:px-6 lg:px-8">
@@ -371,11 +379,20 @@ function AdminClientInner(props: AdminClientProps) {
           </div>
 
           <div className="flex flex-wrap items-center gap-3">
+            {/* Visual Studio Switcher */}
+            <button
+              onClick={() => setWorkspaceMode("studio")}
+              className="inline-flex items-center gap-2 rounded-xl bg-[#090D12] hover:bg-[#141A22] border border-[#C5A059]/50 px-4 py-2.5 font-heading text-xs font-black uppercase tracking-wider text-[#C5A059] shadow-md transition-all cursor-pointer"
+            >
+              <Sparkles className="h-3.5 w-3.5 text-[#C5A059]" />
+              Visual Studio Canvas
+            </button>
+
             {/* One-Click CDN Cache Purge Button (#1) */}
             <button
               onClick={handlePurgeCache}
               disabled={isPurgingCache}
-              className="inline-flex items-center gap-2 rounded-xl bg-zru-green px-4 py-2.5 font-heading text-xs font-black uppercase tracking-wider text-white shadow-sm transition-all hover:bg-zru-green/90 disabled:opacity-50"
+              className="inline-flex items-center gap-2 rounded-xl bg-zru-green px-4 py-2.5 font-heading text-xs font-black uppercase tracking-wider text-white shadow-sm transition-all hover:bg-zru-green/90 disabled:opacity-50 cursor-pointer"
             >
               <RefreshCw className={`h-3.5 w-3.5 ${isPurgingCache ? "animate-spin" : ""}`} />
               {isPurgingCache ? "Purging..." : "Purge CDN Cache"}
@@ -871,7 +888,16 @@ export default function AdminClient(props: AdminClientProps) {
       <ConfirmProvider>
         <SamariaSplashLoader />
         <AdminInactivityLock />
-        <AdminClientInner {...props} />
+        <StudioLiveProvider
+          initialHeroSlides={props.initialHeroSlides}
+          initialAnnouncements={props.initialAnnouncements}
+          initialMatches={props.initialMatches}
+          initialNews={props.initialNews}
+          initialSponsors={props.initialSponsors}
+          initialCampaigns={props.initialCampaigns}
+        >
+          <AdminClientInner {...props} />
+        </StudioLiveProvider>
       </ConfirmProvider>
     </ToastProvider>
   );
