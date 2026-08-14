@@ -24,6 +24,7 @@ import SponsorsPanel from "@/components/admin/SponsorsPanel";
 import ResourcesPanel from "@/components/admin/ResourcesPanel";
 import BackupsPanel from "@/components/admin/BackupsPanel";
 import AdminInactivityLock from "@/components/admin/ui/AdminInactivityLock";
+import SamariaSplashLoader from "@/components/admin/ui/SamariaSplashLoader";
 import type { MatchCardViewModel, StandingsTableViewModel } from "@/lib/match-centre/types";
 import type { Campaign } from "@/lib/api/campaigns";
 
@@ -359,8 +360,8 @@ function AdminClientInner(props: AdminClientProps) {
         <div className="mb-6 flex flex-col gap-4 border-b border-black/10 pb-6 md:flex-row md:items-center md:justify-between">
           <div>
             <div className="mb-1 flex items-center gap-2">
-              <span className="rounded bg-zru-green px-2.5 py-1 text-[10px] font-black uppercase tracking-widest text-white">
-                ZRU Content Manager
+              <span className="rounded-md bg-[#080B0E] border border-white/10 px-2.5 py-1 text-[10px] font-mono tracking-widest text-[#00a862] uppercase font-bold shadow-sm">
+                SAMARIA OS · ZRU STUDIO
               </span>
             </div>
             <h1 className="font-heading text-3xl font-black uppercase text-rich-black">
@@ -828,6 +829,20 @@ function AdminClientInner(props: AdminClientProps) {
         {activeTab === "roles" && <RolesPanel />}
         {activeTab === "audit_logs" && <AuditLogsPanel />}
         {activeTab === "backups" && <BackupsPanel />}
+
+        {/* Samaria Studio Product Footer */}
+        <div className="mt-16 border-t border-black/10 pt-8 pb-4 text-center">
+          <div className="flex flex-wrap items-center justify-center gap-3 text-xs font-mono text-neutral-400">
+            <span className="font-bold text-rich-black uppercase tracking-wider">SAMARIA.STUDIO</span>
+            <span>·</span>
+            <span>Enterprise Content Experience Engine v4.2</span>
+            <span>·</span>
+            <span className="text-[#006B3F] font-semibold">Zimbabwe Rugby Union</span>
+          </div>
+          <p className="mt-1 text-[10px] text-neutral-400 font-mono">
+            Designed &amp; Engineered by Samaria Technologies · ISO 27001 &amp; SOC 2 Ready
+          </p>
+        </div>
       </div>
     </main>
   );
@@ -837,6 +852,7 @@ export default function AdminClient(props: AdminClientProps) {
   return (
     <ToastProvider>
       <ConfirmProvider>
+        <SamariaSplashLoader />
         <AdminInactivityLock />
         <AdminClientInner {...props} />
       </ConfirmProvider>
