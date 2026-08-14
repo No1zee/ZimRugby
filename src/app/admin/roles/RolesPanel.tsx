@@ -495,19 +495,24 @@ export default function RolesPanel() {
 
       {/* ── Users ──────────────────────────────────────────────── */}
       <div className="bg-white border border-black/10 rounded-2xl p-6 shadow-sm">
-        <div className="flex items-center justify-between mb-4">
-          <h2 className="font-heading text-xl font-black uppercase text-rich-black flex items-center gap-2">
-            <Users className="w-5 h-5 text-zru-green" /> Admin Users
-          </h2>
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
+          <div>
+            <h2 className="font-heading text-xl font-black uppercase text-rich-black flex items-center gap-2">
+              <Users className="w-5 h-5 text-zru-green" /> Admin Users
+            </h2>
+            <p className="text-xs text-black/50 mt-0.5">
+              Showing privileged staff and officials. Fan accounts are managed in the <span className="font-bold text-zru-green">Fan Zone</span> section.
+            </p>
+          </div>
           {!showNewUser ? (
             <button
               onClick={() => setShowNewUser(true)}
-              className="flex items-center gap-2 px-3 py-2 rounded-xl bg-[#006B3F] text-white text-xs font-bold hover:bg-[#005a34] transition-colors"
+              className="flex items-center gap-2 px-3 py-2 rounded-xl bg-[#006B3F] text-white text-xs font-bold hover:bg-[#005a34] transition-colors self-start sm:self-auto cursor-pointer"
             >
               <UserPlus className="w-4 h-4" /> New Admin User
             </button>
           ) : (
-            <button onClick={() => setShowNewUser(false)} className="flex items-center gap-1 px-2 py-2 rounded-lg bg-black/5 text-black/60 text-xs font-bold">
+            <button onClick={() => setShowNewUser(false)} className="flex items-center gap-1 px-2 py-2 rounded-lg bg-black/5 text-black/60 text-xs font-bold cursor-pointer">
               <X className="w-4 h-4" /> Cancel
             </button>
           )}
@@ -523,7 +528,7 @@ export default function RolesPanel() {
               </select>
             </div>
             <button onClick={createUser} disabled={isSaving}
-              className="px-4 py-2 rounded-lg bg-zru-green text-white text-xs font-bold disabled:opacity-50 flex items-center gap-2">
+              className="px-4 py-2 rounded-lg bg-zru-green text-white text-xs font-bold disabled:opacity-50 flex items-center gap-2 cursor-pointer">
               <KeyRound className="w-4 h-4" /> Create &amp; Confirm Email
             </button>
           </div>
@@ -534,29 +539,34 @@ export default function RolesPanel() {
             <thead>
               <tr className="border-b border-black/10 text-xs font-black uppercase text-black/50">
                 <th className="py-2">Email</th>
-                <th className="py-2">Actor</th>
+                <th className="py-2">Actor Role</th>
                 <th className="py-2">Last Sign In</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-black/5 text-sm">
-              {users.map((user) => (
-                <tr key={user.id}>
-                  <td className="py-3 font-bold text-rich-black">{user.email}</td>
-                  <td className="py-3">
-                    <select
-                      value={user.role || ""}
-                      onChange={(e) => assignUserRole(user.id, e.target.value)}
-                      className="px-2 py-1.5 rounded-lg border border-black/10 text-xs font-mono bg-white"
-                    >
-                      <option value="">— no access —</option>
-                      {roles.map((r) => <option key={r.id} value={r.name}>{r.name}</option>)}
-                    </select>
-                  </td>
-                  <td className="py-3 text-black/50 text-xs">
-                    {user.lastSignInAt ? new Date(user.lastSignInAt).toLocaleDateString() : "Never"}
-                  </td>
-                </tr>
-              ))}
+              {users
+                .filter((u) => {
+                  const r = (u.role || "").toLowerCase();
+                  return r !== "fan" && r !== "member" && r !== "user" && r !== "supporter";
+                })
+                .map((user) => (
+                  <tr key={user.id}>
+                    <td className="py-3 font-bold text-rich-black">{user.email}</td>
+                    <td className="py-3">
+                      <select
+                        value={user.role || ""}
+                        onChange={(e) => assignUserRole(user.id, e.target.value)}
+                        className="px-2 py-1.5 rounded-lg border border-black/10 text-xs font-mono bg-white"
+                      >
+                        <option value="">— no access —</option>
+                        {roles.map((r) => <option key={r.id} value={r.name}>{r.name}</option>)}
+                      </select>
+                    </td>
+                    <td className="py-3 text-black/50 text-xs">
+                      {user.lastSignInAt ? new Date(user.lastSignInAt).toLocaleDateString() : "Never"}
+                    </td>
+                  </tr>
+                ))}
             </tbody>
           </table>
         </div>

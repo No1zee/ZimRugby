@@ -142,11 +142,11 @@ export default function AdminSidebar({ activeTab = "overview", onTabChange }: Ad
       {/* Mobile Top Header */}
       <div className="md:hidden bg-[#0d131a] border-b border-white/10 px-4 py-3.5 flex items-center justify-between fixed top-0 left-0 right-0 z-40 h-14">
         <div className="flex items-center gap-2.5">
-          <div className="w-7.5 h-7.5 rounded-lg bg-[#006B3F] flex items-center justify-center text-white font-bold shadow-md shadow-[#006B3F]/30">
-            <Shield className="w-4.5 h-4.5 text-white" />
+          <div className="w-7.5 h-7.5 rounded-lg bg-gradient-to-br from-[#1A1A1B] to-[#031812] border border-[#C5A059]/60 flex items-center justify-center text-[#C5A059] font-bold shadow-md">
+            <Shield className="w-4 h-4 text-[#C5A059]" />
           </div>
           <div>
-            <h2 className="text-xs font-bold text-white tracking-wider">ZRU ADMIN</h2>
+            <h2 className="text-xs font-bold text-white tracking-wider font-heading">SAMARIA CMS</h2>
           </div>
         </div>
         <div className="flex items-center gap-2">
@@ -159,7 +159,7 @@ export default function AdminSidebar({ activeTab = "overview", onTabChange }: Ad
           </button>
           <button
             onClick={() => setIsOpen(!isOpen)}
-            className="text-white hover:text-[#006B3F] p-1 text-lg font-bold leading-none cursor-pointer"
+            className="text-white hover:text-[#C5A059] p-1 text-lg font-bold leading-none cursor-pointer"
             aria-label="Toggle Navigation Menu"
           >
             ☰
@@ -185,13 +185,17 @@ export default function AdminSidebar({ activeTab = "overview", onTabChange }: Ad
         <div className="p-5 border-b border-white/10 flex flex-col gap-3">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="w-8 h-8 rounded-lg bg-[#006B3F] flex items-center justify-center text-white font-bold shadow-md shadow-[#006B3F]/30">
-                <Shield className="w-5 h-5 text-white" />
+              <div className="w-9 h-9 rounded-xl bg-gradient-to-b from-[#1A1A1B] to-[#031812] border border-[#C5A059]/60 flex items-center justify-center text-[#C5A059] font-bold shadow-md shadow-black/50">
+                <svg viewBox="0 0 24 24" className="w-5 h-5 text-[#C5A059]" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M3 21h18M5 21V7l7-4 7 4v14M9 21v-6h6v6M9 9h.01M15 9h.01M9 13h.01M15 13h.01" />
+                </svg>
               </div>
               <div>
-                <h2 className="text-sm font-bold text-white tracking-wider">ZRU STUDIO</h2>
-                <p className="text-[10px] text-[#006B3F] font-mono uppercase tracking-widest font-semibold">
-                  Directus Control Plane
+                <h2 className="text-sm font-black text-white tracking-widest font-heading uppercase">
+                  SAMARIA CMS
+                </h2>
+                <p className="text-[9px] text-[#C5A059] font-mono uppercase tracking-widest font-bold">
+                  Digital Ivory Palace
                 </p>
               </div>
             </div>

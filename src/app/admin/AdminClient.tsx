@@ -360,8 +360,9 @@ function AdminClientInner(props: AdminClientProps) {
         <div className="mb-6 flex flex-col gap-4 border-b border-black/10 pb-6 md:flex-row md:items-center md:justify-between">
           <div>
             <div className="mb-1 flex items-center gap-2">
-              <span className="rounded-md bg-[#080B0E] border border-white/10 px-2.5 py-1 text-[10px] font-mono tracking-widest text-[#00a862] uppercase font-bold shadow-sm">
-                SAMARIA OS · ZRU STUDIO
+              <span className="rounded-lg bg-gradient-to-r from-[#1A1A1B] to-[#031812] border border-[#C5A059]/50 px-3 py-1 text-[10px] font-mono tracking-widest text-[#C5A059] uppercase font-bold shadow-sm flex items-center gap-1.5">
+                <span className="w-1.5 h-1.5 rounded-full bg-[#C5A059]" />
+                SAMARIA CMS &bull; THE DIGITAL IVORY PALACE
               </span>
             </div>
             <h1 className="font-heading text-3xl font-black uppercase text-rich-black">
@@ -609,7 +610,7 @@ function AdminClientInner(props: AdminClientProps) {
             <CollectionManager
               collection="faqs"
               title="Frequently asked questions"
-              description="FAQs displayed on the Tickets page."
+              description="FAQs displayed on the Tickets & Matchday page."
               grants={grantsFor("faqs")}
               fields={[
                 { key: "question", label: "Question", type: "text", placeholder: "e.g. How do I buy tickets?", required: true, colSpan: "full" },
@@ -617,7 +618,15 @@ function AdminClientInner(props: AdminClientProps) {
                 { key: "category", label: "Category", type: "text", placeholder: "e.g. Tickets" },
                 { key: "status", label: "Status", type: "select", options: ["published", "draft"] },
               ]}
-              items={initialFaqs}
+              items={
+                initialFaqs && initialFaqs.length > 0
+                  ? initialFaqs
+                  : [
+                      { id: 1, question: "How do I purchase matchday tickets for Zimbabwe Sables fixtures?", answer: "Tickets are available online via the Zimbabwe Rugby Union Match Centre or at the Harare Sports Club gates on matchday.", category: "Tickets", status: "published" },
+                      { id: 2, question: "Where can I watch live broadcasts of Rugby Africa Cup matches?", answer: "All national team matches are broadcast on ZBC TV, SuperSport, and streamed live via the official ZRU portal.", category: "Broadcast", status: "published" },
+                      { id: 3, question: "How can schools or clubs register for the Cottco Rugby Festival?", answer: "Visit the Grassroots & Programs section or download the registration form from the Resource Vault.", category: "Grassroots", status: "published" },
+                    ]
+              }
               displayField="question"
               subtitleField="category"
               statusField="status"
@@ -632,7 +641,15 @@ function AdminClientInner(props: AdminClientProps) {
                 { key: "links", label: "Links (JSON array)", type: "textarea", colSpan: "full", placeholder: '[{"label":"Governance","url":"/about/governance"}]' },
                 { key: "status", label: "Status", type: "select", options: ["published", "draft"] },
               ]}
-              items={initialFooterNav}
+              items={
+                initialFooterNav && initialFooterNav.length > 0
+                  ? initialFooterNav
+                  : [
+                      { id: 1, column_title: "Teams & Tournaments", links: JSON.stringify([{ label: "Zimbabwe Sables", url: "/teams/sables" }, { label: "Lady Sables", url: "/teams/lady-sables" }, { label: "Junior Sables (U20)", url: "/teams/junior-sables" }, { label: "Fixtures & Results", url: "/matches" }]), status: "published" },
+                      { id: 2, column_title: "Union & Governance", links: JSON.stringify([{ label: "About ZRU", url: "/about" }, { label: "Executive Committee", url: "/about/governance" }, { label: "Constitution & Bylaws", url: "/resources" }, { label: "Media Centre", url: "/media" }]), status: "published" },
+                      { id: 3, column_title: "Commercial & Partners", links: JSON.stringify([{ label: "Official Sponsors", url: "/partners" }, { label: "Sponsorship Deck", url: "/resources" }, { label: "Fan Zone VIP", url: "/fan-zone" }, { label: "Contact Union", url: "/contact" }]), status: "published" },
+                    ]
+              }
               displayField="column_title"
               statusField="status"
             />

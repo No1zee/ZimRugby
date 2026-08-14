@@ -133,8 +133,8 @@ export async function getActiveCampaigns(): Promise<Campaign[]> {
       limit: 10,
     });
 
-    if (campaigns && campaigns.length > 0) return campaigns;
-    return fallbackCampaigns;
+    if (Array.isArray(campaigns)) return campaigns;
+    return [];
   } catch {
     console.warn("Failed to fetch campaigns from Directus, using fallback");
     return fallbackCampaigns;
