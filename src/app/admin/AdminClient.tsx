@@ -25,8 +25,6 @@ import ResourcesPanel from "@/components/admin/ResourcesPanel";
 import BackupsPanel from "@/components/admin/BackupsPanel";
 import AdminInactivityLock from "@/components/admin/ui/AdminInactivityLock";
 import SamariaSplashLoader from "@/components/admin/ui/SamariaSplashLoader";
-import StudioWorkspace from "@/components/admin/studio/StudioWorkspace";
-import { StudioLiveProvider } from "@/lib/admin/studio-context";
 import type { MatchCardViewModel, StandingsTableViewModel } from "@/lib/match-centre/types";
 import type { Campaign } from "@/lib/api/campaigns";
 
@@ -355,12 +353,6 @@ function AdminClientInner(props: AdminClientProps) {
     }
   };
 
-  const [workspaceMode, setWorkspaceMode] = useState<"studio" | "data">("studio");
-
-  if (workspaceMode === "studio") {
-    return <StudioWorkspace onSwitchToDataMode={() => setWorkspaceMode("data")} />;
-  }
-
   return (
     <main className="bg-milk-white min-h-screen pb-16 pt-8">
       <div className="mx-auto max-w-[1400px] px-4 sm:px-6 lg:px-8">
@@ -368,34 +360,28 @@ function AdminClientInner(props: AdminClientProps) {
         <div className="mb-6 flex flex-col gap-4 border-b border-black/10 pb-6 md:flex-row md:items-center md:justify-between">
           <div>
             <div className="mb-1 flex items-center gap-2">
-              <span className="rounded-lg bg-gradient-to-r from-[#1A1A1B] to-[#031812] border border-[#C5A059]/50 px-3 py-1 text-[10px] font-mono tracking-widest text-[#C5A059] uppercase font-bold shadow-sm flex items-center gap-1.5">
-                <span className="w-1.5 h-1.5 rounded-full bg-[#C5A059]" />
-                SAMARIA CMS &bull; THE DIGITAL IVORY PALACE
+              <span className="rounded-md bg-[#0D1117] border border-white/10 px-2.5 py-0.5 text-[10px] font-mono tracking-wider text-[#C5A059] uppercase font-bold">
+                SAMARIA CMS
+              </span>
+              <span className="text-xs text-black/40 font-mono">/</span>
+              <span className="text-xs text-black/60 font-medium">
+                {NAV_SECTIONS.flatMap((s) => s.items).find((i) => i.id === activeTab)?.label ?? "Dashboard"}
               </span>
             </div>
-            <h1 className="font-heading text-3xl font-black uppercase text-rich-black">
+            <h1 className="font-heading text-3xl font-black uppercase text-rich-black tracking-tight">
               {NAV_SECTIONS.flatMap((s) => s.items).find((i) => i.id === activeTab)?.label ?? "Dashboard"}
             </h1>
           </div>
 
-          <div className="flex flex-wrap items-center gap-3">
-            {/* Visual Studio Switcher */}
-            <button
-              onClick={() => setWorkspaceMode("studio")}
-              className="inline-flex items-center gap-2 rounded-xl bg-[#090D12] hover:bg-[#141A22] border border-[#C5A059]/50 px-4 py-2.5 font-heading text-xs font-black uppercase tracking-wider text-[#C5A059] shadow-md transition-all cursor-pointer"
-            >
-              <Sparkles className="h-3.5 w-3.5 text-[#C5A059]" />
-              Visual Studio Canvas
-            </button>
-
-            {/* One-Click CDN Cache Purge Button (#1) */}
+          <div className="flex flex-wrap items-center gap-2.5">
+            {/* One-Click CDN Cache Purge Button */}
             <button
               onClick={handlePurgeCache}
               disabled={isPurgingCache}
-              className="inline-flex items-center gap-2 rounded-xl bg-zru-green px-4 py-2.5 font-heading text-xs font-black uppercase tracking-wider text-white shadow-sm transition-all hover:bg-zru-green/90 disabled:opacity-50 cursor-pointer"
+              className="inline-flex items-center gap-2 rounded-xl bg-zru-green px-3.5 py-2 font-heading text-xs font-bold uppercase tracking-wider text-white shadow-sm transition-all hover:bg-green-700 disabled:opacity-50 cursor-pointer"
             >
               <RefreshCw className={`h-3.5 w-3.5 ${isPurgingCache ? "animate-spin" : ""}`} />
-              {isPurgingCache ? "Purging..." : "Purge CDN Cache"}
+              {isPurgingCache ? "Purging..." : "Purge Cache"}
             </button>
 
             <a
@@ -888,16 +874,7 @@ export default function AdminClient(props: AdminClientProps) {
       <ConfirmProvider>
         <SamariaSplashLoader />
         <AdminInactivityLock />
-        <StudioLiveProvider
-          initialHeroSlides={props.initialHeroSlides}
-          initialAnnouncements={props.initialAnnouncements}
-          initialMatches={props.initialMatches}
-          initialNews={props.initialNews}
-          initialSponsors={props.initialSponsors}
-          initialCampaigns={props.initialCampaigns}
-        >
-          <AdminClientInner {...props} />
-        </StudioLiveProvider>
+        <AdminClientInner {...props} />
       </ConfirmProvider>
     </ToastProvider>
   );
