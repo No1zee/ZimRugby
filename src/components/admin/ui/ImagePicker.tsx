@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useRef, useState } from "react";
-import { ImagePlus, Loader2, X } from "lucide-react";
+import { ImagePlus, Loader2, X, UploadCloud } from "lucide-react";
 
 export function toAssetUrl(idOrUrl: string): string {
   if (!idOrUrl) return "";
@@ -22,8 +22,13 @@ export default function ImagePicker({
   const inputRef = useRef<HTMLInputElement>(null);
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [isDragOver, setIsDragOver] = useState(false);
 
   const upload = useCallback(async (file: File) => {
+    if (!file.type.startsWith("image/")) {
+      setError("Please select a valid image file (JPEG, PNG, WebP).");
+      return;
+    }
     setUploading(true);
     setError(null);
     try {
@@ -32,7 +37,7 @@ export default function ImagePicker({
       const res = await fetch("/api/admin/upload", { method: "POST", body: form });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Upload failed");
-      onChange(data.id);
+      onChange(data.id || data.url);
     } catch (e) {
       setError(e instanceof Error ? e.message : "Upload failed");
     } finally {
@@ -41,23 +46,53 @@ export default function ImagePicker({
     }
   }, [onChange]);
 
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragOver(true);
+  };
+
+  const handleDragLeave = () => {
+    setIsDragOver(false);
+  };
+
+  const handleDrop = (e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragOver(false);
+    const file = e.dataTransfer.files?.[0];
+    if (file) upload(file);
+  };
+
   const preview = toAssetUrl(value);
 
   return (
     <div>
       {label ? (
-        <span className="mb-1.5 block text-sm font-medium text-neutral-700">{label}</span>
+        <span className="mb-1.5 block text-xs font-bold uppercase tracking-wider text-black/60">{label}</span>
       ) : null}
-      <div className="flex items-start gap-3">
-        <div className="flex h-24 w-36 shrink-0 items-center justify-center overflow-hidden rounded-lg border border-neutral-200 bg-neutral-50">
+      
+      <div 
+        onDragOver={handleDragOver}
+        onDragLeave={handleDragLeave}
+        onDrop={handleDrop}
+        className={`relative flex items-center gap-3 p-2.5 rounded-xl border-2 transition-all ${
+          isDragOver 
+            ? "border-[#006B3F] bg-[#006B3F]/5 ring-2 ring-[#006B3F]/20" 
+            : "border-dashed border-black/15 bg-black/[0.02] hover:border-black/30"
+        }`}
+      >
+        <div className="flex h-20 w-32 shrink-0 items-center justify-center overflow-hidden rounded-lg border border-black/10 bg-white shadow-sm">
           {preview ? (
             // eslint-disable-next-line @next/next/no-img-element
-            <img src={preview} alt="" className="h-full w-full object-cover" />
+            <img src={preview} alt="Asset Preview" className="h-full w-full object-cover" />
           ) : (
-            <span className="text-xs text-neutral-400">No image</span>
+            <div className="flex flex-col items-center gap-1 text-black/30 text-[10px]">
+              <UploadCloud className="w-5 h-5" />
+              <span>Drop file</span>
+            </div>
           )}
         </div>
-        <div className="flex flex-col gap-1.5">
+
+        <div className="flex flex-col gap-1.5 flex-1 min-w-0">
           <input
             ref={inputRef}
             type="file"
@@ -68,26 +103,33 @@ export default function ImagePicker({
               if (file) upload(file);
             }}
           />
-          <button
-            type="button"
-            onClick={() => inputRef.current?.click()}
-            disabled={uploading}
-            className="inline-flex items-center gap-1.5 rounded-md border border-neutral-300 bg-white px-3 py-1.5 text-xs font-medium text-neutral-700 hover:bg-neutral-50 disabled:opacity-50"
-          >
-            {uploading ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <ImagePlus className="h-3.5 w-3.5" />}
-            {uploading ? "Uploading…" : "Upload image"}
-          </button>
-          {value ? (
+          
+          <div className="flex items-center gap-2">
             <button
               type="button"
-              onClick={() => onChange("")}
-              className="inline-flex items-center gap-1.5 text-xs text-neutral-500 hover:text-red-600"
+              onClick={() => inputRef.current?.click()}
+              disabled={uploading}
+              className="inline-flex items-center gap-1.5 rounded-lg bg-[#006B3F] px-3 py-1.5 text-xs font-bold uppercase tracking-wider text-white hover:bg-green-800 transition-colors shadow-sm disabled:opacity-50 cursor-pointer"
             >
-              <X className="h-3.5 w-3.5" /> Remove
+              {uploading ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <ImagePlus className="h-3.5 w-3.5" />}
+              {uploading ? "Uploading..." : "Browse / Drop"}
             </button>
-          ) : null}
-          {hint ? <p className="max-w-[220px] text-xs text-neutral-500">{hint}</p> : null}
-          {error ? <p className="text-xs text-red-600">{error}</p> : null}
+
+            {value ? (
+              <button
+                type="button"
+                onClick={() => onChange("")}
+                className="inline-flex items-center gap-1 text-xs text-red-500 hover:text-red-700 font-semibold px-2 py-1 rounded hover:bg-red-50 cursor-pointer"
+              >
+                <X className="h-3.5 w-3.5" /> Remove
+              </button>
+            ) : null}
+          </div>
+
+          <p className="text-[11px] text-black/50 truncate">
+            {hint || "Drag & drop image here or browse from device (Directus Asset)"}
+          </p>
+          {error ? <p className="text-xs text-red-600 font-medium">{error}</p> : null}
         </div>
       </div>
     </div>

@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Plus, Trophy, Pencil } from "lucide-react";
+import { Plus, Trophy, Pencil, Radio, Shield, Zap, CheckCircle2, ChevronRight, Activity } from "lucide-react";
 import StatusChip, { EmptyState } from "./ui/StatusChip";
 import { Pagination } from "./ui/ListTools";
 import CollapsibleSection from "./ui/CollapsibleSection";
@@ -40,7 +40,7 @@ export default function MatchCentrePanel({
   const { toast } = useToast();
   const confirm = useConfirm();
 
-  // Create form
+  // Create form state
   const [teamId, setTeamId] = useState("");
   const [opponentId, setOpponentId] = useState("");
   const [competitionId, setCompetitionId] = useState("");
@@ -50,9 +50,10 @@ export default function MatchCentrePanel({
   const [status, setStatus] = useState("upcoming");
   const [homeOrAway, setHomeOrAway] = useState("home");
 
-  // Inline score editing
+  // Inline score editing & Live Matchday Operator
   const [scoreEdits, setScoreEdits] = useState<Record<string, { team_score: string; opponent_score: string }>>({});
   const [savingId, setSavingId] = useState<string | null>(null);
+  const [activeOperatorMatchId, setActiveOperatorMatchId] = useState<string | null>(null);
 
   const [query, setQuery] = useState("");
   const [page, setPage] = useState(1);
@@ -61,6 +62,11 @@ export default function MatchCentrePanel({
   const formDirty =
     teamId !== "" || opponentId !== "" || competitionId !== "" || venueId !== "" || kickoff !== "" || roundLabel !== "" || status !== "upcoming" || homeOrAway !== "home";
 
+  const activeOperatorMatch = useMemo(() => {
+    if (!activeOperatorMatchId) return null;
+    return initialMatches.find(m => m.id === activeOperatorMatchId) || null;
+  }, [activeOperatorMatchId, initialMatches]);
+
   async function createFixture(e: React.FormEvent) {
     e.preventDefault();
     if (!teamId || !opponentId) {
@@ -68,7 +74,7 @@ export default function MatchCentrePanel({
       return;
     }
     if (!kickoff) {
-      toast("Pick a kickoff date and time â€” fixtures need one.", "error");
+      toast("Pick a kickoff date and time — fixtures need one.", "error");
       return;
     }
     const homeName = teams.find((t) => String(t.id) === teamId)?.name || "Zimbabwe";
@@ -113,27 +119,40 @@ export default function MatchCentrePanel({
     }
   }
 
-  async function saveScore(id: string) {
+  async function saveScore(id: string, customScores?: { team_score: number; opponent_score: number; status?: string }) {
     setSavingId(id);
-    const edit = scoreEdits[id];
-    const teamScore = edit?.team_score !== undefined && edit?.team_score !== "" ? Number(edit.team_score) : null;
-    const opponentScore = edit?.opponent_score !== undefined && edit?.opponent_score !== "" ? Number(edit.opponent_score) : null;
+    let teamScore: number | null = null;
+    let opponentScore: number | null = null;
+    let newStatus: string | undefined = undefined;
+
+    if (customScores) {
+      teamScore = customScores.team_score;
+      opponentScore = customScores.opponent_score;
+      newStatus = customScores.status;
+    } else {
+      const edit = scoreEdits[id];
+      teamScore = edit?.team_score !== undefined && edit?.team_score !== "" ? Number(edit.team_score) : null;
+      opponentScore = edit?.opponent_score !== undefined && edit?.opponent_score !== "" ? Number(edit.opponent_score) : null;
+    }
+
     try {
       const data: Record<string, unknown> = {
         team_score: teamScore,
         opponent_score: opponentScore,
       };
-      if (teamScore !== null && opponentScore !== null) {
+      if (newStatus) {
+        data.status = newStatus;
+      } else if (teamScore !== null && opponentScore !== null) {
         data.result_outcome = teamScore > opponentScore ? "win" : teamScore < opponentScore ? "loss" : "draw";
-        data.status = "final";
       }
+
       const res = await fetch("/api/admin/directus", {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ collection: "matches", id, data }),
       });
       if (res.ok) {
-        toast("Score saved.");
+        toast("Live match score broadcasted!");
         setScoreEdits((prev) => { const next = { ...prev }; delete next[id]; return next; });
         router.refresh();
       } else {
@@ -145,6 +164,22 @@ export default function MatchCentrePanel({
     } finally {
       setSavingId(null);
     }
+  }
+
+  // Rugby Quick Increment Helper (+5 Try, +2 Conv, +3 Pen)
+  function adjustRugbyScore(isHome: boolean, points: number) {
+    if (!activeOperatorMatch) return;
+    const currentHome = activeOperatorMatch.homeTeam?.score ?? 0;
+    const currentAway = activeOperatorMatch.awayTeam?.score ?? 0;
+
+    const newHome = isHome ? Math.max(0, currentHome + points) : currentHome;
+    const newAway = !isHome ? Math.max(0, currentAway + points) : currentAway;
+
+    saveScore(activeOperatorMatch.id, {
+      team_score: newHome,
+      opponent_score: newAway,
+      status: "live"
+    });
   }
 
   async function changeStatus(id: string, next: string) {
@@ -196,15 +231,137 @@ export default function MatchCentrePanel({
   const safePage = Math.min(page, pageCount);
   const visible = filtered.slice((safePage - 1) * PAGE_SIZE, safePage * PAGE_SIZE);
 
-  const matchLabel = (m: MatchCardViewModel) => `${m.homeTeam?.name || "?"} vs ${m.awayTeam?.name || "?"}`;
+  const matchLabel = (m: MatchCardViewModel) => `${m.homeTeam?.name || "Zimbabwe"} vs ${m.awayTeam?.name || "Opponent"}`;
 
   return (
     <div className="space-y-6">
+      {/* 🏉 RUGBY LIVE SCORE OPERATOR WIDGET */}
+      {activeOperatorMatch && (
+        <section className="rounded-2xl border-2 border-[#006B3F] bg-[#090d16] text-white p-6 shadow-2xl animate-in fade-in duration-200">
+          <div className="flex items-center justify-between border-b border-white/10 pb-4 mb-4">
+            <div className="flex items-center gap-3">
+              <span className="flex h-3 w-3 relative">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-3 w-3 bg-red-500"></span>
+              </span>
+              <div>
+                <h3 className="font-heading text-base font-black uppercase tracking-wider text-white flex items-center gap-2">
+                  <span>LIVE RUGBY OPERATOR:</span>
+                  <span className="text-[#006B3F]">{activeOperatorMatch.homeTeam?.name} vs {activeOperatorMatch.awayTeam?.name}</span>
+                </h3>
+                <p className="text-xs text-white/50">{activeOperatorMatch.competition} · {activeOperatorMatch.venue}</p>
+              </div>
+            </div>
+            <button
+              onClick={() => setActiveOperatorMatchId(null)}
+              className="text-xs font-mono text-white/50 hover:text-white px-2.5 py-1 rounded-lg bg-white/5 border border-white/10"
+            >
+              Close Operator ✕
+            </button>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
+            {/* Home Team Controls */}
+            <div className="bg-white/[0.03] border border-white/10 rounded-xl p-4 flex flex-col items-center">
+              <div className="font-heading text-sm font-black uppercase text-white/80 mb-2">
+                {activeOperatorMatch.homeTeam?.name || "Zimbabwe Sables"}
+              </div>
+              <div className="text-5xl font-mono font-black text-white my-2">
+                {activeOperatorMatch.homeTeam?.score ?? 0}
+              </div>
+              <div className="flex flex-wrap items-center justify-center gap-2 mt-3">
+                <button
+                  type="button"
+                  onClick={() => adjustRugbyScore(true, 5)}
+                  className="px-3 py-1.5 rounded-lg bg-[#006B3F] hover:bg-green-700 text-white text-xs font-bold font-mono transition-all cursor-pointer"
+                >
+                  +5 Try
+                </button>
+                <button
+                  type="button"
+                  onClick={() => adjustRugbyScore(true, 2)}
+                  className="px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-white text-xs font-bold font-mono transition-all cursor-pointer"
+                >
+                  +2 Conv
+                </button>
+                <button
+                  type="button"
+                  onClick={() => adjustRugbyScore(true, 3)}
+                  className="px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-white text-xs font-bold font-mono transition-all cursor-pointer"
+                >
+                  +3 Pen/Drop
+                </button>
+                <button
+                  type="button"
+                  onClick={() => adjustRugbyScore(true, -1)}
+                  className="px-2 py-1.5 rounded-lg bg-red-500/20 hover:bg-red-500/40 text-red-300 text-xs font-bold font-mono transition-all cursor-pointer"
+                >
+                  -1
+                </button>
+              </div>
+            </div>
+
+            {/* Away Team Controls */}
+            <div className="bg-white/[0.03] border border-white/10 rounded-xl p-4 flex flex-col items-center">
+              <div className="font-heading text-sm font-black uppercase text-white/80 mb-2">
+                {activeOperatorMatch.awayTeam?.name || "Opponent"}
+              </div>
+              <div className="text-5xl font-mono font-black text-white my-2">
+                {activeOperatorMatch.awayTeam?.score ?? 0}
+              </div>
+              <div className="flex flex-wrap items-center justify-center gap-2 mt-3">
+                <button
+                  type="button"
+                  onClick={() => adjustRugbyScore(false, 5)}
+                  className="px-3 py-1.5 rounded-lg bg-[#006B3F] hover:bg-green-700 text-white text-xs font-bold font-mono transition-all cursor-pointer"
+                >
+                  +5 Try
+                </button>
+                <button
+                  type="button"
+                  onClick={() => adjustRugbyScore(false, 2)}
+                  className="px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-white text-xs font-bold font-mono transition-all cursor-pointer"
+                >
+                  +2 Conv
+                </button>
+                <button
+                  type="button"
+                  onClick={() => adjustRugbyScore(false, 3)}
+                  className="px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-white text-xs font-bold font-mono transition-all cursor-pointer"
+                >
+                  +3 Pen/Drop
+                </button>
+                <button
+                  type="button"
+                  onClick={() => adjustRugbyScore(false, -1)}
+                  className="px-2 py-1.5 rounded-lg bg-red-500/20 hover:bg-red-500/40 text-red-300 text-xs font-bold font-mono transition-all cursor-pointer"
+                >
+                  -1
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div className="mt-4 pt-3 border-t border-white/10 flex items-center justify-between">
+            <span className="text-xs text-white/50">Broadcasting live score delta via Edge ISR (60s)...</span>
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                onClick={() => changeStatus(activeOperatorMatch.id, "final")}
+                className="px-3 py-1.5 rounded-lg bg-amber-500/20 text-amber-300 hover:bg-amber-500/30 text-xs font-bold uppercase tracking-wider"
+              >
+                Mark Full Time (Final)
+              </button>
+            </div>
+          </div>
+        </section>
+      )}
+
       {/* Create fixture */}
       <CollapsibleSection
         title="Add a fixture"
         icon={<Plus className="h-5 w-5" />}
-        description="Create a new match. Pick real teams, competition and venue â€” no typing names by hand."
+        description="Create a new match. Pick real teams, competition and venue — no typing names by hand."
         defaultOpen={false}
         dirty={formDirty}
         onDirtyChange={onDirtyChange}
@@ -213,7 +370,7 @@ export default function MatchCentrePanel({
           <div>
             <label className="mb-1 block text-[10px] font-bold uppercase tracking-wider text-black/60">Home team</label>
             <select value={teamId} onChange={(e) => setTeamId(e.target.value)} className="w-full rounded-lg border border-black/10 bg-white p-2.5 text-sm font-bold">
-              <option value="">â€” Select â€”</option>
+              <option value="">— Select —</option>
               {teams.map((t) => (
                 <option key={t.id} value={t.id}>{t.name}</option>
               ))}
@@ -222,7 +379,7 @@ export default function MatchCentrePanel({
           <div>
             <label className="mb-1 block text-[10px] font-bold uppercase tracking-wider text-black/60">Opponent</label>
             <select value={opponentId} onChange={(e) => setOpponentId(e.target.value)} className="w-full rounded-lg border border-black/10 bg-white p-2.5 text-sm font-bold">
-              <option value="">â€” Select â€”</option>
+              <option value="">— Select —</option>
               {opponents.map((o) => (
                 <option key={o.id} value={o.id}>{o.name}</option>
               ))}
@@ -231,7 +388,7 @@ export default function MatchCentrePanel({
           <div>
             <label className="mb-1 block text-[10px] font-bold uppercase tracking-wider text-black/60">Competition</label>
             <select value={competitionId} onChange={(e) => setCompetitionId(e.target.value)} className="w-full rounded-lg border border-black/10 bg-white p-2.5 text-sm font-bold">
-              <option value="">â€” Select â€”</option>
+              <option value="">— Select —</option>
               {competitions.map((c) => (
                 <option key={c.id} value={c.id}>{c.name}</option>
               ))}
@@ -240,7 +397,7 @@ export default function MatchCentrePanel({
           <div>
             <label className="mb-1 block text-[10px] font-bold uppercase tracking-wider text-black/60">Venue</label>
             <select value={venueId} onChange={(e) => setVenueId(e.target.value)} className="w-full rounded-lg border border-black/10 bg-white p-2.5 text-sm font-bold">
-              <option value="">â€” Select â€”</option>
+              <option value="">— Select —</option>
               {venues.map((v) => (
                 <option key={v.id} value={v.id}>{v.name}</option>
               ))}
@@ -252,7 +409,7 @@ export default function MatchCentrePanel({
               type="datetime-local"
               value={kickoff}
               onChange={(e) => setKickoff(e.target.value)}
-              className="w-full rounded-lg border border-black/10 bg-white p-2.5 text-sm"
+              className="w-full rounded-lg border border-black/10 bg-white p-2.5 text-sm font-bold"
             />
           </div>
           <div>
@@ -261,7 +418,7 @@ export default function MatchCentrePanel({
               type="text"
               value={roundLabel}
               onChange={(e) => setRoundLabel(e.target.value)}
-              placeholder="e.g. Round 3"
+              placeholder="e.g. Semifinal / Round 3"
               className="w-full rounded-lg border border-black/10 bg-white p-2.5 text-sm"
             />
           </div>
@@ -276,13 +433,13 @@ export default function MatchCentrePanel({
           <div>
             <label className="mb-1 block text-[10px] font-bold uppercase tracking-wider text-black/60">Home or away</label>
             <select value={homeOrAway} onChange={(e) => setHomeOrAway(e.target.value)} className="w-full rounded-lg border border-black/10 bg-white p-2.5 text-sm font-bold">
-              <option value="home">Home</option>
+              <option value="home">Home (Harare / Bulawayo)</option>
               <option value="away">Away</option>
               <option value="neutral">Neutral</option>
             </select>
           </div>
           <div className="md:col-span-2">
-            <button type="submit" className="rounded-lg bg-zru-green px-6 py-2.5 font-heading text-xs font-black uppercase tracking-wider text-white transition-colors hover:bg-green-800">
+            <button type="submit" className="rounded-lg bg-zru-green px-6 py-2.5 font-heading text-xs font-black uppercase tracking-wider text-white transition-colors hover:bg-green-800 cursor-pointer shadow-sm">
               Add fixture
             </button>
           </div>
@@ -291,15 +448,19 @@ export default function MatchCentrePanel({
 
       {/* Fixtures list */}
       <section className="rounded-2xl border border-black/10 bg-white p-6 shadow-sm">
-        <h2 className="flex items-center gap-2 font-heading text-xl font-black uppercase text-rich-black">
-          <Trophy className="h-5 w-5 text-zru-green" /> Fixtures & results
-        </h2>
+        <div className="flex items-center justify-between">
+          <h2 className="flex items-center gap-2 font-heading text-xl font-black uppercase text-rich-black">
+            <Trophy className="h-5 w-5 text-zru-green" /> Fixtures & results
+          </h2>
+          <span className="text-xs font-mono text-black/40">{filtered.length} Total Fixtures</span>
+        </div>
+
         <div className="mt-3">
           <input
             type="text"
             value={query}
             onChange={(e) => { setQuery(e.target.value); setPage(1); }}
-            placeholder="Search fixturesâ€¦"
+            placeholder="Search fixtures by team, venue, competition..."
             className="w-full rounded-lg border border-black/10 bg-white px-3 py-2 text-sm placeholder:text-black/40 focus:border-teal-500 focus:outline-none focus:ring-2 focus:ring-teal-500/20"
           />
         </div>
@@ -313,15 +474,17 @@ export default function MatchCentrePanel({
             {visible.map((m) => {
               const edit = scoreEdits[m.id] || {};
               const score = `${m.homeTeam?.score ?? ""}:${m.awayTeam?.score ?? ""}`;
+              const isSelectedForOperator = activeOperatorMatchId === m.id;
+
               return (
-                <div key={m.id} className="flex flex-col gap-3 px-4 py-4 lg:flex-row lg:items-center lg:justify-between">
+                <div key={m.id} className={`flex flex-col gap-3 px-4 py-4 lg:flex-row lg:items-center lg:justify-between transition-colors ${isSelectedForOperator ? "bg-green-50/50" : ""}`}>
                   <div className="min-w-0">
                     <div className="flex flex-wrap items-center gap-2">
                       <h4 className="truncate font-heading text-sm font-black uppercase text-rich-black">{matchLabel(m)}</h4>
                       <StatusChip status={m.status} />
                     </div>
                     <p className="mt-0.5 truncate text-xs text-black/50">
-                      {m.dateIso ? new Date(m.dateIso).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" }) : ""} Â· {m.time || ""} Â· {m.venue} Â· {m.competition}{m.round ? ` Â· ${m.round}` : ""}
+                      {m.dateIso ? new Date(m.dateIso).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" }) : ""} · {m.time || ""} · {m.venue} · {m.competition}{m.round ? ` · ${m.round}` : ""}
                     </p>
                   </div>
 
@@ -330,33 +493,20 @@ export default function MatchCentrePanel({
                   ) : null}
 
                   <div className="flex shrink-0 flex-wrap items-center gap-2">
-                    {(m.status === "upcoming" || m.status === "live") && (
-                      <div className="flex items-center gap-1 rounded-lg bg-black/5 p-1">
-                        <input
-                          type="number"
-                          placeholder="ZR"
-                          value={edit.team_score ?? (m.homeTeam?.score !== undefined ? m.homeTeam.score : "")}
-                          onChange={(e) => setScoreEdits((prev) => ({ ...prev, [m.id]: { team_score: e.target.value, opponent_score: prev[m.id]?.opponent_score ?? "" } }))}
-                          className="w-14 rounded border border-black/10 bg-white p-1 text-center text-sm"
-                        />
-                        <span className="text-xs text-black/40">â€“</span>
-                        <input
-                          type="number"
-                          placeholder="Opp"
-                          value={edit.opponent_score ?? (m.awayTeam?.score !== undefined ? m.awayTeam.score : "")}
-                          onChange={(e) => setScoreEdits((prev) => ({ ...prev, [m.id]: { team_score: prev[m.id]?.team_score ?? "", opponent_score: e.target.value } }))}
-                          className="w-14 rounded border border-black/10 bg-white p-1 text-center text-sm"
-                        />
-                        <button
-                          type="button"
-                          onClick={() => saveScore(m.id)}
-                          disabled={savingId === m.id}
-                          className="rounded-md bg-zru-green px-2 py-1 text-[10px] font-black uppercase tracking-wider text-white hover:bg-green-800 disabled:opacity-50"
-                        >
-                          {savingId === m.id ? "Savingâ€¦" : "Save score"}
-                        </button>
-                      </div>
-                    )}
+                    {/* Live Operator Toggle Button */}
+                    <button
+                      type="button"
+                      onClick={() => setActiveOperatorMatchId(m.id)}
+                      className={`rounded-lg px-3 py-1.5 text-xs font-black uppercase tracking-wider transition-all cursor-pointer flex items-center gap-1.5 ${
+                        isSelectedForOperator
+                          ? "bg-zru-green text-white shadow-sm"
+                          : "bg-black/5 text-black/70 hover:bg-black/10 hover:text-black"
+                      }`}
+                    >
+                      <Radio className="w-3.5 h-3.5" />
+                      <span>Live Operator</span>
+                    </button>
+
                     <select
                       value={m.status}
                       onChange={(e) => changeStatus(m.id, e.target.value)}
@@ -367,9 +517,10 @@ export default function MatchCentrePanel({
                       <option value="final">Final</option>
                       <option value="cancelled">Cancelled</option>
                     </select>
+
                     <button
                       onClick={() => deleteFixture(m.id, matchLabel(m))}
-                      className="rounded-lg bg-red-500/10 px-3 py-1.5 text-[10px] font-black uppercase tracking-wider text-red-600 transition-colors hover:bg-red-500/20"
+                      className="rounded-lg bg-red-500/10 px-3 py-1.5 text-[10px] font-black uppercase tracking-wider text-red-600 transition-colors hover:bg-red-500/20 cursor-pointer"
                     >
                       Delete
                     </button>
@@ -385,19 +536,19 @@ export default function MatchCentrePanel({
         </div>
       </section>
 
-      {/* Standings (read-only) */}
+      {/* Standings Table */}
       <section className="rounded-2xl border border-black/10 bg-white p-6 shadow-sm">
         <h2 className="flex items-center gap-2 font-heading text-xl font-black uppercase text-rich-black">
-          <Pencil className="h-5 w-5 text-zru-green" /> Standings
+          <Pencil className="h-5 w-5 text-zru-green" /> Standings & Leaderboards
         </h2>
-        <p className="mt-1 text-xs text-black/50">Standings are maintained in the CMS data model and shown here read-only.</p>
+        <p className="mt-1 text-xs text-black/50">Directus-synced competition standings across Africa Cup, Super 6, and Junior Barthes Trophy.</p>
         {initialStandings.length === 0 ? (
           <div className="mt-4"><EmptyState title="No standings tables" /></div>
         ) : (
           initialStandings.map((table) => (
             <div key={table.id} className="mt-4 overflow-x-auto rounded-xl border border-black/5">
               <h3 className="bg-black/[0.03] px-4 py-3 font-heading text-sm font-black uppercase text-rich-black">
-                {table.title} Â· {table.seasonYear}
+                {table.title} · {table.seasonYear}
               </h3>
               <table className="w-full text-sm">
                 <thead>

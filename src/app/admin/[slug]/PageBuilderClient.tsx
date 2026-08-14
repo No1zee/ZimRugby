@@ -28,6 +28,14 @@ const PAGE_ROUTES: Record<string, string> = {
   "play-rugby": "/play-rugby",
   "media": "/media",
   "match-centre": "/match-centre",
+  "clubs": "/clubs",
+  "schools": "/schools",
+  "referees": "/referees",
+  "resources": "/resources",
+  "partners": "/partners",
+  "volunteer": "/volunteer",
+  "world-cup-campaign": "/world-cup-campaign",
+  "faqs": "/faqs",
 };
 
 interface Section {

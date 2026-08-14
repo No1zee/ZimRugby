@@ -22,6 +22,8 @@ import AuditLogsPanel from "@/components/admin/AuditLogsPanel";
 import HeroLayoutPanel from "@/components/admin/HeroLayoutPanel";
 import SponsorsPanel from "@/components/admin/SponsorsPanel";
 import ResourcesPanel from "@/components/admin/ResourcesPanel";
+import BackupsPanel from "@/components/admin/BackupsPanel";
+import AdminInactivityLock from "@/components/admin/ui/AdminInactivityLock";
 import type { MatchCardViewModel, StandingsTableViewModel } from "@/lib/match-centre/types";
 import type { Campaign } from "@/lib/api/campaigns";
 
@@ -123,7 +125,8 @@ type TabId =
   | "fanzone"
   | "onboarding"
   | "roles"
-  | "audit_logs";
+  | "audit_logs"
+  | "backups";
 
 interface NavItem {
   id: TabId;
@@ -377,12 +380,36 @@ function AdminClientInner(props: AdminClientProps) {
             </button>
 
             <a
-              href="/"
+              href={
+                (activeTab === "fixtures"
+                  ? "/matches"
+                  : activeTab === "media"
+                  ? "/media"
+                  : activeTab === "events"
+                  ? "/events"
+                  : activeTab === "teams"
+                  ? "/teams"
+                  : activeTab === "sponsors"
+                  ? "/partners"
+                  : activeTab === "resources"
+                  ? "/resources"
+                  : activeTab === "campaigns"
+                  ? "/campaigns"
+                  : activeTab === "fanzone"
+                  ? "/fan-zone"
+                  : activeTab === "onboarding"
+                  ? "/onboarding"
+                  : activeTab === "grassroots"
+                  ? "/schools"
+                  : activeTab === "faq-footer"
+                  ? "/faqs"
+                  : "/")
+              }
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2 rounded-xl bg-black/5 px-4 py-2.5 font-heading text-xs font-black uppercase tracking-wider text-black/70 transition-colors hover:bg-black/10"
             >
-              View live website <ExternalLink className="h-3.5 w-3.5" />
+              View live page <ExternalLink className="h-3.5 w-3.5 text-[#006B3F]" />
             </a>
           </div>
         </div>
@@ -800,6 +827,7 @@ function AdminClientInner(props: AdminClientProps) {
 
         {activeTab === "roles" && <RolesPanel />}
         {activeTab === "audit_logs" && <AuditLogsPanel />}
+        {activeTab === "backups" && <BackupsPanel />}
       </div>
     </main>
   );
@@ -809,6 +837,7 @@ export default function AdminClient(props: AdminClientProps) {
   return (
     <ToastProvider>
       <ConfirmProvider>
+        <AdminInactivityLock />
         <AdminClientInner {...props} />
       </ConfirmProvider>
     </ToastProvider>

@@ -33,7 +33,7 @@ export interface AuditLogEntry {
   timestamp: string;
   actorEmail: string;
   actorRole: UserRole;
-  action: "LOGIN_SUCCESS" | "LOGIN_FAILED" | "LOGOUT" | "PAGE_UPDATE" | "PAGE_PUBLISH" | "MEDIA_UPLOAD" | "SECTION_REORDER" | "ROLE_UPDATE" | "USER_INVITE";
+  action: "LOGIN_SUCCESS" | "LOGIN_FAILED" | "LOGOUT" | "PAGE_UPDATE" | "PAGE_PUBLISH" | "MEDIA_UPLOAD" | "SECTION_REORDER" | "ROLE_UPDATE" | "USER_INVITE" | "PII_UNMASK" | "DATA_EXPORT";
   resource: string;
   details?: string;
   ipAddress?: string;
@@ -160,9 +160,12 @@ export function canUseFeature(
 export type AdminTabId =
   | "overview"
   | "directus_ai"
+  | "hero_layout"
   | "pages"
   | "events"
   | "media"
+  | "resources"
+  | "sponsors"
   | "grassroots"
   | "faq-footer"
   | "fixtures"
@@ -170,7 +173,9 @@ export type AdminTabId =
   | "campaigns"
   | "fanzone"
   | "onboarding"
-  | "roles";
+  | "roles"
+  | "audit_logs"
+  | "backups";
 
 export function canAccessTab(
   perms: RolePermissions | null | undefined,

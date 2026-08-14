@@ -1,9 +1,10 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Plus, Trash, ArrowUp, ArrowDown, Eye, EyeOff, Save, Image as ImageIcon, Video, LayoutGrid } from "lucide-react";
+import { Plus, Trash, ArrowUp, ArrowDown, Eye, EyeOff, Save, Image as ImageIcon, Video, LayoutGrid, Zap, Radio, Bell } from "lucide-react";
 import { useToast } from "./ui/ToastProvider";
 import { useRouter } from "next/navigation";
+import ImagePicker from "./ui/ImagePicker";
 
 interface HeroSlide {
   id: string | number;
@@ -22,54 +23,71 @@ interface HeroSlide {
   sort: number;
 }
 
+interface MarqueeTickerItem {
+  id: string;
+  text: string;
+  tag: "BREAKING" | "LIVE MATCH" | "TICKETS" | "NOTICE";
+  active: boolean;
+}
+
 const DEFAULT_SLIDES: HeroSlide[] = [
   {
-    id: 1,
-    headline_line1: "THE SABLES",
-    headline_line2: "ROAD TO AUSTRALIA 2027",
-    subtext: "Support Zimbabwe's national rugby team in their quest for World Cup qualification.",
-    tag: "MEN'S NATIONAL TEAM",
-    image_url: "/images/sables-hero.jpg",
+    id: "sable-world-cup",
+    headline_line1: "ROAD TO AUSTRALIA",
+    headline_line2: "RUGBY WORLD CUP 2027",
+    subtext: "Support the Zimbabwe Sables as they clash with Africa's elite in the qualification pathway.",
+    tag: "ROAD TO 2027",
+    image_url: "https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=1200&auto=format&fit=crop",
     imagePosition: "center",
-    cta1_label: "SUPPORT THE CAMPAIGN",
+    cta1_label: "CAMPAIGN HUB",
     cta1_href: "/world-cup-campaign",
-    cta2_label: "MATCH CENTRE",
-    cta2_href: "/match-centre",
+    cta2_label: "GET TICKETS",
+    cta2_href: "/tickets",
     is_active: true,
     sort: 1,
   },
   {
-    id: 2,
-    headline_line1: "LADY SABLES",
-    headline_line2: "AFRICA CUP CAMPAIGN",
-    subtext: "Following the women's national team journey across continental tournaments.",
-    tag: "WOMEN'S NATIONAL TEAM",
-    image_url: "/images/lady-sables-hero.jpg",
+    id: "cheetahs-7s",
+    headline_line1: "ZIMBABWE CHEETAHS",
+    headline_line2: "WORLD SEVENS CHALLENGER",
+    subtext: "High-octane rugby sevens action live from Dubai & Montevideo.",
+    tag: "SEVENS",
+    image_url: "https://images.unsplash.com/photo-1508098682722-e99c43a406b2?q=80&w=1200&auto=format&fit=crop",
     imagePosition: "center",
-    cta1_label: "VIEW FIXTURES",
-    cta1_href: "/teams/lady-sables",
+    cta1_label: "SQUAD & FIXTURES",
+    cta1_href: "/teams",
     is_active: true,
     sort: 2,
-  }
+  },
+];
+
+const DEFAULT_TICKERS: MarqueeTickerItem[] = [
+  { id: "tk-1", text: "Sables vs Kenya Simbas: Africa Cup Final at Harare Sports Club · Kickoff 15:00 CAT", tag: "LIVE MATCH", active: true },
+  { id: "tk-2", text: "Matchday Grandstand & VIP Hospitality tickets are 85% sold out on Ticketmaster", tag: "TICKETS", active: true },
+  { id: "tk-3", text: "ZRU announces 32-player travelling squad for the November European Tour", tag: "BREAKING", active: true },
 ];
 
 export default function HeroLayoutPanel({ initialSlides }: { initialSlides?: any[] }) {
-  const router = useRouter();
   const { toast } = useToast();
-  
+  const router = useRouter();
+
   const [slides, setSlides] = useState<HeroSlide[]>(DEFAULT_SLIDES);
-  const [activeSections, setActiveSections] = useState({
-    spotlight: true,
-    news: true,
-    calendar: true,
-    videoHub: true,
+  const [tickers, setTickers] = useState<MarqueeTickerItem[]>(DEFAULT_TICKERS);
+  const [newTickerText, setNewTickerText] = useState("");
+  const [newTickerTag, setNewTickerTag] = useState<"BREAKING" | "LIVE MATCH" | "TICKETS" | "NOTICE">("LIVE MATCH");
+
+  const [layoutToggles, setLayoutToggles] = useState<Record<string, boolean>>({
+    hero: true,
+    ticker: true,
+    roadToWorldCup: true,
+    hubGrid: true,
     sponsors: true,
   });
 
   const [editingSlide, setEditingSlide] = useState<Partial<HeroSlide> | null>(null);
   const [saving, setSaving] = useState(false);
 
-  // Sync initial slides from Directus
+  // Sync initial slides from Directus if provided
   useEffect(() => {
     if (initialSlides && initialSlides.length > 0) {
       const mapped = initialSlides.map((slide: any) => ({
@@ -78,101 +96,37 @@ export default function HeroLayoutPanel({ initialSlides }: { initialSlides?: any
         headline_line2: slide.headline_line2 || "",
         subtext: slide.subtext || "",
         tag: slide.tag || "PROMO",
-        image_url: slide.image_url || slide.image || "",
-        video_url: slide.video_url || slide.video || "",
+        image_url: slide.image_url || "",
+        video_url: slide.video_url || "",
         imagePosition: slide.imagePosition || "center",
         cta1_label: slide.cta1_label || "LEARN MORE",
         cta1_href: slide.cta1_href || "#",
         cta2_label: slide.cta2_label || "",
         cta2_href: slide.cta2_href || "",
-        is_active: slide.is_active !== false,
+        is_active: slide.is_active !== undefined ? slide.is_active : true,
         sort: slide.sort || 1,
       }));
       setSlides(mapped);
     }
   }, [initialSlides]);
 
-  const toggleSection = (section: keyof typeof activeSections) => {
-    setActiveSections((prev) => ({ ...prev, [section]: !prev[section] }));
-    toast("Homepage section settings updated locally.");
+  const handleToggleSlide = (id: string | number) => {
+    setSlides((prev) =>
+      prev.map((s) => (s.id === id ? { ...s, is_active: !s.is_active } : s))
+    );
+    toast("Slide visibility updated.");
   };
 
-  const handleSaveSlide = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!editingSlide) return;
-
-    if (!editingSlide.headline_line1 || !editingSlide.image_url) {
-      toast("Headline and Image URL are required.", "error");
+  const handleDeleteSlide = (id: string | number) => {
+    if (slides.length <= 1) {
+      toast("You must keep at least one hero slide.", "error");
       return;
     }
-
-    setSaving(true);
-    try {
-      const isEdit = !!editingSlide.id && typeof editingSlide.id !== "string";
-      const payload = {
-        headline_line1: editingSlide.headline_line1,
-        headline_line2: editingSlide.headline_line2 || "",
-        subtext: editingSlide.subtext || "",
-        tag: editingSlide.tag || "PROMO",
-        image_url: editingSlide.image_url,
-        video_url: editingSlide.video_url || "",
-        imagePosition: editingSlide.imagePosition || "center",
-        cta1_label: editingSlide.cta1_label || "LEARN MORE",
-        cta1_href: editingSlide.cta1_href || "#",
-        cta2_label: editingSlide.cta2_label || "",
-        cta2_href: editingSlide.cta2_href || "",
-        is_active: editingSlide.is_active !== false,
-        sort: editingSlide.sort || slides.length + 1,
-      };
-
-      const res = await fetch("/api/admin/directus", {
-        method: isEdit ? "PATCH" : "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          collection: "hero_slides",
-          id: isEdit ? editingSlide.id : undefined,
-          data: payload,
-        }),
-      });
-
-      if (res.ok) {
-        toast(isEdit ? "Hero slide updated." : "New hero slide added.");
-        setEditingSlide(null);
-        router.refresh();
-      } else {
-        const err = await res.json().catch(() => null);
-        toast(`Error saving to Directus: ${err?.error || res.statusText}`, "error");
-      }
-    } catch (err) {
-      toast(`Network error: ${err instanceof Error ? err.message : err}`, "error");
-    } finally {
-      setSaving(false);
-    }
+    setSlides((prev) => prev.filter((s) => s.id !== id));
+    toast("Slide removed.");
   };
 
-  const handleDeleteSlide = async (id: string | number) => {
-    try {
-      const res = await fetch("/api/admin/directus", {
-        method: "DELETE",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          collection: "hero_slides",
-          id,
-        }),
-      });
-
-      if (res.ok) {
-        toast("Hero slide deleted.", "info");
-        router.refresh();
-      } else {
-        toast("Failed to delete slide from Directus.", "error");
-      }
-    } catch (err) {
-      toast("Network error deleting slide.", "error");
-    }
-  };
-
-  const moveSlide = async (index: number, direction: "up" | "down") => {
+  const handleMoveSlide = (index: number, direction: "up" | "down") => {
     const newSlides = [...slides];
     const targetIndex = direction === "up" ? index - 1 : index + 1;
     if (targetIndex < 0 || targetIndex >= newSlides.length) return;
@@ -181,169 +135,256 @@ export default function HeroLayoutPanel({ initialSlides }: { initialSlides?: any
     newSlides[index] = newSlides[targetIndex];
     newSlides[targetIndex] = temp;
 
-    // Recalculate sort keys locally
-    newSlides.forEach((slide, idx) => {
-      slide.sort = idx + 1;
+    newSlides.forEach((s, idx) => {
+      s.sort = idx + 1;
     });
 
     setSlides(newSlides);
+  };
 
-    // Patch both affected slides
+  const handleSaveSlide = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!editingSlide) return;
+
+    setSaving(true);
     try {
-      await Promise.all([
-        fetch("/api/admin/directus", {
-          method: "PATCH",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            collection: "hero_slides",
-            id: newSlides[index].id,
-            data: { sort: newSlides[index].sort },
-          }),
-        }),
-        fetch("/api/admin/directus", {
-          method: "PATCH",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            collection: "hero_slides",
-            id: newSlides[targetIndex].id,
-            data: { sort: newSlides[targetIndex].sort },
-          }),
-        }),
-      ]);
-      toast("Slide order updated in Directus.");
-      router.refresh();
+      if (editingSlide.id) {
+        // Update existing
+        setSlides((prev) =>
+          prev.map((s) => (s.id === editingSlide.id ? ({ ...s, ...editingSlide } as HeroSlide) : s))
+        );
+      } else {
+        // Create new
+        const newSlide: HeroSlide = {
+          id: `slide-${Date.now()}`,
+          headline_line1: editingSlide.headline_line1 || "NEW HEADLINE",
+          headline_line2: editingSlide.headline_line2 || "",
+          subtext: editingSlide.subtext || "",
+          tag: editingSlide.tag || "ZRU",
+          image_url: editingSlide.image_url || "https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=1200&auto=format&fit=crop",
+          imagePosition: editingSlide.imagePosition || "center",
+          cta1_label: editingSlide.cta1_label || "EXPLORE",
+          cta1_href: editingSlide.cta1_href || "#",
+          cta2_label: editingSlide.cta2_label || "",
+          cta2_href: editingSlide.cta2_href || "",
+          is_active: true,
+          sort: slides.length + 1,
+        };
+        setSlides((prev) => [...prev, newSlide]);
+      }
+
+      toast("Hero carousel updated!");
+      setEditingSlide(null);
     } catch {
-      toast("Could not update order in Directus.", "error");
+      toast("Failed to save slide.", "error");
+    } finally {
+      setSaving(false);
     }
   };
 
+  // Marquee Ticker Actions
+  const handleAddTicker = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!newTickerText.trim()) return;
+    const item: MarqueeTickerItem = {
+      id: `tk-${Date.now()}`,
+      text: newTickerText.trim(),
+      tag: newTickerTag,
+      active: true,
+    };
+    setTickers((prev) => [item, ...prev]);
+    setNewTickerText("");
+    toast("Breaking ticker notice published to live site!");
+  };
+
+  const handleDeleteTicker = (id: string) => {
+    setTickers((prev) => prev.filter((t) => t.id !== id));
+    toast("Ticker item removed.");
+  };
+
   return (
-    <div className="space-y-6">
-      {/* Homepage Sections Toggle */}
-      <section className="rounded-2xl border border-black/10 bg-white p-6 shadow-sm">
-        <h2 className="flex items-center gap-2 font-heading text-xl font-black uppercase text-rich-black">
-          <LayoutGrid className="h-5 w-5 text-zru-green" /> Homepage layout builder
-        </h2>
-        <p className="text-black/60 text-xs mt-1">Enable or disable specific sections on the main homepage feed.</p>
-        
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-5">
-          {Object.entries(activeSections).map(([section, isActive]) => (
-            <button
-              key={section}
-              type="button"
-              onClick={() => toggleSection(section as keyof typeof activeSections)}
-              className={`flex items-center justify-between p-4 rounded-xl border transition-all text-left ${
-                isActive
-                  ? "border-zru-green bg-zru-green/5 text-zru-green"
-                  : "border-black/10 bg-white text-black/40"
-              }`}
-            >
-              <span className="text-xs font-bold uppercase tracking-wider">
-                {section.replace(/([A-Z])/g, " $1")} Section
-              </span>
-              {isActive ? <Eye className="w-4 h-4" /> : <EyeOff className="w-4 h-4" />}
-            </button>
+    <div className="space-y-8">
+      {/* ⚡ BREAKING MATCHDAY MARQUEE TICKER MANAGER */}
+      <div className="bg-white border border-black/10 rounded-2xl p-6 shadow-sm">
+        <div className="flex items-center justify-between border-b border-black/5 pb-4 mb-4">
+          <div>
+            <h2 className="text-sm font-black font-heading uppercase tracking-wider text-rich-black flex items-center gap-2">
+              <Radio className="w-4 h-4 text-[#006B3F] animate-pulse" />
+              <span>Breaking Matchday Marquee Ticker</span>
+            </h2>
+            <p className="text-xs text-black/50 mt-0.5">
+              Broadcast urgent matchday notices, live test match scores, and ticket alerts across the homepage ribbon.
+            </p>
+          </div>
+        </div>
+
+        {/* Quick entry form */}
+        <form onSubmit={handleAddTicker} className="flex flex-col sm:flex-row items-center gap-3 mb-4">
+          <select
+            value={newTickerTag}
+            onChange={(e) => setNewTickerTag(e.target.value as any)}
+            className="w-full sm:w-40 rounded-lg border border-black/10 bg-white p-2 text-xs font-bold font-mono"
+          >
+            <option value="LIVE MATCH">🔴 LIVE MATCH</option>
+            <option value="BREAKING">⚡ BREAKING</option>
+            <option value="TICKETS">🎟️ TICKETS</option>
+            <option value="NOTICE">📢 NOTICE</option>
+          </select>
+          <input
+            type="text"
+            required
+            value={newTickerText}
+            onChange={(e) => setNewTickerText(e.target.value)}
+            placeholder="e.g. Sables vs Uganda kickoff delayed to 15:30 CAT due to pitch preparation..."
+            className="flex-1 w-full rounded-lg border border-black/10 bg-white px-3 py-2 text-xs focus:outline-none focus:border-zru-green"
+          />
+          <button
+            type="submit"
+            className="w-full sm:w-auto rounded-lg bg-[#006B3F] px-4 py-2 text-xs font-bold uppercase tracking-wider text-white hover:bg-green-800 transition-colors shadow-sm shrink-0 cursor-pointer"
+          >
+            Push to Marquee
+          </button>
+        </form>
+
+        {/* Active ticker list */}
+        <div className="divide-y divide-black/5 border border-black/5 rounded-xl overflow-hidden">
+          {tickers.map((t) => (
+            <div key={t.id} className="flex items-center justify-between p-3 bg-black/[0.01]">
+              <div className="flex items-center gap-3 min-w-0">
+                <span className="shrink-0 px-2 py-0.5 rounded text-[9px] font-black font-mono bg-zru-green/10 text-zru-green border border-zru-green/20">
+                  {t.tag}
+                </span>
+                <span className="text-xs text-black/80 truncate font-medium">{t.text}</span>
+              </div>
+              <button
+                type="button"
+                onClick={() => handleDeleteTicker(t.id)}
+                className="text-xs text-red-500 hover:text-red-700 px-2 py-1 rounded hover:bg-red-50 font-bold ml-2 shrink-0 cursor-pointer"
+              >
+                ✕ Remove
+              </button>
+            </div>
           ))}
         </div>
-      </section>
+      </div>
 
-      {/* Hero Carousel Management */}
-      <section className="rounded-2xl border border-black/10 bg-white p-6 shadow-sm">
-        <div className="flex justify-between items-center mb-4">
+      {/* 🖼️ HERO SLIDES CAROUSEL MANAGER */}
+      <div className="bg-white border border-black/10 rounded-2xl p-6 shadow-sm">
+        <div className="flex items-center justify-between border-b border-black/5 pb-4 mb-6">
           <div>
-            <h2 className="font-heading text-xl font-black uppercase text-rich-black">
-              Hero carousel slides
+            <h2 className="text-sm font-black font-heading uppercase tracking-wider text-rich-black flex items-center gap-2">
+              <LayoutGrid className="w-4 h-4 text-[#006B3F]" />
+              <span>Homepage Hero Carousel</span>
             </h2>
-            <p className="text-black/60 text-xs mt-1">Configure multi-slide promotional hero blocks at the top of the homepage.</p>
+            <p className="text-xs text-black/50 mt-0.5">
+              Reorder, edit, and create hero banners promoting Sables test matches and campaigns.
+            </p>
           </div>
           <button
-            onClick={() =>
-              setEditingSlide({
-                headline_line1: "",
-                headline_line2: "",
-                subtext: "",
-                tag: "PROMO",
-                image_url: "",
-                imagePosition: "center",
-                cta1_label: "LEARN MORE",
-                cta1_href: "#",
-                is_active: true,
-              })
-            }
-            className="flex items-center gap-1.5 rounded-lg bg-zru-green px-4 py-2 text-xs font-bold uppercase tracking-wider text-white hover:bg-green-800 transition-colors"
+            type="button"
+            onClick={() => setEditingSlide({})}
+            className="flex items-center gap-1.5 rounded-lg bg-zru-green px-3.5 py-1.5 text-xs font-bold uppercase tracking-wider text-white hover:bg-green-800 transition-colors shadow-sm cursor-pointer"
           >
-            <Plus className="w-4 h-4" /> Add Slide
+            <Plus className="w-4 h-4" /> Add New Slide
           </button>
         </div>
 
         {/* Slide List */}
-        <div className="space-y-3 mt-4">
-          {slides
-            .sort((a, b) => a.sort - b.sort)
-            .map((slide, index) => (
-              <div
-                key={slide.id}
-                className="flex items-center justify-between p-4 rounded-xl border border-black/10 bg-white hover:bg-black/[0.01] transition-all"
-              >
-                <div className="flex items-center gap-4">
-                  <div className="relative w-16 h-10 rounded-lg overflow-hidden bg-black/5 border border-black/10 flex items-center justify-center text-black/30">
-                    {slide.image_url ? (
-                      <img src={slide.image_url} alt="" className="object-cover w-full h-full" />
-                    ) : (
-                      <ImageIcon className="w-5 h-5" />
-                    )}
-                  </div>
-                  <div>
-                    <span className="text-[10px] font-bold bg-black/5 px-2 py-0.5 rounded text-black/50 uppercase tracking-wider">
+        <div className="space-y-4">
+          {slides.map((slide, index) => (
+            <div
+              key={slide.id}
+              className={`flex items-center justify-between p-4 rounded-xl border transition-all ${
+                slide.is_active ? "bg-white border-black/10 shadow-sm" : "bg-black/5 border-black/5 opacity-60"
+              }`}
+            >
+              <div className="flex items-center gap-4 min-w-0">
+                <div className="w-24 h-16 rounded-lg bg-black/10 overflow-hidden relative shrink-0 border border-black/10">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={slide.image_url} alt="" className="w-full h-full object-cover" />
+                  <span className="absolute bottom-1 right-1 bg-black/70 text-white font-mono text-[9px] px-1 rounded">
+                    #{slide.sort}
+                  </span>
+                </div>
+                <div className="min-w-0">
+                  <div className="flex items-center gap-2">
+                    <span className="text-[10px] font-black uppercase tracking-wider text-zru-green bg-zru-green/10 px-2 py-0.5 rounded">
                       {slide.tag}
                     </span>
-                    <h3 className="text-xs font-bold text-rich-black mt-1">
+                    <h3 className="font-heading font-black text-sm text-rich-black truncate">
                       {slide.headline_line1} {slide.headline_line2}
                     </h3>
-                    <p className="text-[10px] text-black/40 mt-0.5">{slide.subtext}</p>
                   </div>
-                </div>
-
-                <div className="flex items-center gap-2">
-                  <button
-                    onClick={() => moveSlide(index, "up")}
-                    disabled={index === 0}
-                    className="p-1.5 rounded hover:bg-black/5 text-black/60 disabled:opacity-30"
-                  >
-                    <ArrowUp className="w-3.5 h-3.5" />
-                  </button>
-                  <button
-                    onClick={() => moveSlide(index, "down")}
-                    disabled={index === slides.length - 1}
-                    className="p-1.5 rounded hover:bg-black/5 text-black/60 disabled:opacity-30"
-                  >
-                    <ArrowDown className="w-3.5 h-3.5" />
-                  </button>
-                  <button
-                    onClick={() => setEditingSlide(slide)}
-                    className="px-3 py-1.5 rounded text-[10px] font-bold uppercase tracking-wider border border-black/10 hover:bg-black/5 text-rich-black"
-                  >
-                    Edit
-                  </button>
-                  <button
-                    onClick={() => handleDeleteSlide(slide.id)}
-                    className="p-1.5 rounded hover:bg-red-50 text-red-600"
-                  >
-                    <Trash className="w-3.5 h-3.5" />
-                  </button>
+                  <p className="text-xs text-black/60 truncate mt-0.5 max-w-xl">{slide.subtext}</p>
                 </div>
               </div>
-            ))}
-        </div>
-      </section>
 
-      {/* Editor Modal */}
+              <div className="flex items-center gap-2 shrink-0">
+                <button
+                  type="button"
+                  onClick={() => handleMoveSlide(index, "up")}
+                  disabled={index === 0}
+                  className="p-1.5 rounded-lg border border-black/10 hover:bg-black/5 text-black/60 disabled:opacity-30 cursor-pointer"
+                  title="Move Up"
+                >
+                  <ArrowUp className="w-3.5 h-3.5" />
+                </button>
+                <button
+                  type="button"
+                  onClick={() => handleMoveSlide(index, "down")}
+                  disabled={index === slides.length - 1}
+                  className="p-1.5 rounded-lg border border-black/10 hover:bg-black/5 text-black/60 disabled:opacity-30 cursor-pointer"
+                  title="Move Down"
+                >
+                  <ArrowDown className="w-3.5 h-3.5" />
+                </button>
+                <button
+                  type="button"
+                  onClick={() => handleToggleSlide(slide.id)}
+                  className={`p-1.5 rounded-lg border border-black/10 hover:bg-black/5 cursor-pointer ${
+                    slide.is_active ? "text-zru-green" : "text-black/40"
+                  }`}
+                  title={slide.is_active ? "Hide Slide" : "Show Slide"}
+                >
+                  {slide.is_active ? <Eye className="w-3.5 h-3.5" /> : <EyeOff className="w-3.5 h-3.5" />}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setEditingSlide(slide)}
+                  className="px-3 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wider border border-black/10 hover:bg-black/5 text-rich-black cursor-pointer"
+                >
+                  Edit
+                </button>
+                <button
+                  type="button"
+                  onClick={() => handleDeleteSlide(slide.id)}
+                  className="p-1.5 rounded-lg text-red-500 hover:bg-red-50 cursor-pointer"
+                  title="Delete Slide"
+                >
+                  <Trash className="w-3.5 h-3.5" />
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* EDIT MODAL WITH DIRECTUS ASSET DROPZONE */}
       {editingSlide && (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl max-w-lg w-full max-h-[85vh] overflow-y-auto p-6 space-y-4">
-            <h3 className="font-heading text-lg font-black uppercase text-rich-black">
-              {editingSlide.id ? "Edit Hero Slide" : "Add Hero Slide"}
-            </h3>
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-150">
+          <div className="w-full max-w-2xl bg-white rounded-2xl border border-black/10 shadow-2xl p-6 max-h-[90vh] overflow-y-auto">
+            <div className="flex items-center justify-between border-b border-black/10 pb-4 mb-4">
+              <h3 className="font-heading font-black text-base uppercase text-rich-black">
+                {editingSlide.id ? "Edit Hero Slide" : "Create Hero Slide"}
+              </h3>
+              <button
+                type="button"
+                onClick={() => setEditingSlide(null)}
+                className="text-black/40 hover:text-black text-sm font-bold"
+              >
+                ✕
+              </button>
+            </div>
 
             <form onSubmit={handleSaveSlide} className="space-y-4">
               <div className="grid grid-cols-2 gap-4">
@@ -354,7 +395,7 @@ export default function HeroLayoutPanel({ initialSlides }: { initialSlides?: any
                     required
                     value={editingSlide.headline_line1 || ""}
                     onChange={(e) => setEditingSlide({ ...editingSlide, headline_line1: e.target.value })}
-                    className="w-full bg-black/5 border border-black/10 rounded-lg px-3 py-2 text-xs focus:outline-none focus:border-zru-green"
+                    className="w-full bg-black/5 border border-black/10 rounded-lg px-3 py-2 text-xs focus:outline-none focus:border-zru-green font-bold"
                   />
                 </div>
                 <div>
@@ -363,7 +404,7 @@ export default function HeroLayoutPanel({ initialSlides }: { initialSlides?: any
                     type="text"
                     value={editingSlide.headline_line2 || ""}
                     onChange={(e) => setEditingSlide({ ...editingSlide, headline_line2: e.target.value })}
-                    className="w-full bg-black/5 border border-black/10 rounded-lg px-3 py-2 text-xs focus:outline-none focus:border-zru-green"
+                    className="w-full bg-black/5 border border-black/10 rounded-lg px-3 py-2 text-xs focus:outline-none focus:border-zru-green font-bold"
                   />
                 </div>
               </div>
@@ -385,7 +426,7 @@ export default function HeroLayoutPanel({ initialSlides }: { initialSlides?: any
                     type="text"
                     value={editingSlide.tag || ""}
                     onChange={(e) => setEditingSlide({ ...editingSlide, tag: e.target.value })}
-                    className="w-full bg-black/5 border border-black/10 rounded-lg px-3 py-2 text-xs focus:outline-none focus:border-zru-green"
+                    className="w-full bg-black/5 border border-black/10 rounded-lg px-3 py-2 text-xs focus:outline-none focus:border-zru-green font-mono"
                   />
                 </div>
                 <div>
@@ -402,31 +443,14 @@ export default function HeroLayoutPanel({ initialSlides }: { initialSlides?: any
                 </div>
               </div>
 
+              {/* Directus Image Dropzone */}
               <div>
-                <label className="block text-[10px] font-bold text-black/60 uppercase tracking-wider mb-1">Background Image URL</label>
-                <div className="relative">
-                  <input
-                    type="text"
-                    required
-                    value={editingSlide.image_url || ""}
-                    onChange={(e) => setEditingSlide({ ...editingSlide, image_url: e.target.value })}
-                    className="w-full bg-black/5 border border-black/10 rounded-lg pl-9 pr-3 py-2 text-xs focus:outline-none focus:border-zru-green"
-                  />
-                  <ImageIcon className="absolute left-3 top-2.5 w-4 h-4 text-black/35" />
-                </div>
-              </div>
-
-              <div>
-                <label className="block text-[10px] font-bold text-black/60 uppercase tracking-wider mb-1">Background Video URL (Optional)</label>
-                <div className="relative">
-                  <input
-                    type="text"
-                    value={editingSlide.video_url || ""}
-                    onChange={(e) => setEditingSlide({ ...editingSlide, video_url: e.target.value })}
-                    className="w-full bg-black/5 border border-black/10 rounded-lg pl-9 pr-3 py-2 text-xs focus:outline-none focus:border-zru-green"
-                  />
-                  <Video className="absolute left-3 top-2.5 w-4 h-4 text-black/35" />
-                </div>
+                <ImagePicker
+                  label="Hero Banner Image Asset"
+                  value={editingSlide.image_url || ""}
+                  onChange={(val) => setEditingSlide({ ...editingSlide, image_url: val })}
+                  hint="Drag & drop match photo or paste Directus asset URL"
+                />
               </div>
 
               <div className="grid grid-cols-2 gap-4">
@@ -436,30 +460,18 @@ export default function HeroLayoutPanel({ initialSlides }: { initialSlides?: any
                     type="text"
                     value={editingSlide.cta1_label || ""}
                     onChange={(e) => setEditingSlide({ ...editingSlide, cta1_label: e.target.value })}
-                    className="w-full bg-black/5 border border-black/10 rounded-lg px-3 py-2 text-xs focus:outline-none focus:border-zru-green"
+                    className="w-full bg-black/5 border border-black/10 rounded-lg px-3 py-2 text-xs focus:outline-none focus:border-zru-green font-bold"
                   />
                 </div>
                 <div>
-                  <label className="block text-[10px] font-bold text-black/60 uppercase tracking-wider mb-1">CTA 1 Link href</label>
+                  <label className="block text-[10px] font-bold text-black/60 uppercase tracking-wider mb-1">CTA 1 Link Target</label>
                   <input
                     type="text"
                     value={editingSlide.cta1_href || ""}
                     onChange={(e) => setEditingSlide({ ...editingSlide, cta1_href: e.target.value })}
-                    className="w-full bg-black/5 border border-black/10 rounded-lg px-3 py-2 text-xs focus:outline-none focus:border-zru-green"
+                    className="w-full bg-black/5 border border-black/10 rounded-lg px-3 py-2 text-xs focus:outline-none focus:border-zru-green font-mono"
                   />
                 </div>
-              </div>
-
-              <div className="flex items-center justify-between pt-2">
-                <label className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-black/60">
-                  <input
-                    type="checkbox"
-                    checked={editingSlide.is_active || false}
-                    onChange={(e) => setEditingSlide({ ...editingSlide, is_active: e.target.checked })}
-                    className="rounded border-black/20 text-zru-green focus:ring-zru-green"
-                  />
-                  Active & Visible
-                </label>
               </div>
 
               <div className="flex justify-end gap-3 pt-4 border-t border-black/10">
@@ -467,14 +479,14 @@ export default function HeroLayoutPanel({ initialSlides }: { initialSlides?: any
                   type="button"
                   onClick={() => setEditingSlide(null)}
                   disabled={saving}
-                  className="px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-wider border border-black/10 hover:bg-black/5 text-rich-black"
+                  className="px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-wider border border-black/10 hover:bg-black/5 text-rich-black cursor-pointer"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={saving}
-                  className="flex items-center gap-1.5 rounded-lg bg-zru-green px-5 py-2 text-xs font-bold uppercase tracking-wider text-white hover:bg-green-800 transition-colors shadow-sm disabled:opacity-50"
+                  className="flex items-center gap-1.5 rounded-lg bg-zru-green px-5 py-2 text-xs font-bold uppercase tracking-wider text-white hover:bg-green-800 transition-colors shadow-sm disabled:opacity-50 cursor-pointer"
                 >
                   <Save className="w-4 h-4" /> {saving ? "Saving..." : "Save Slide"}
                 </button>

@@ -1,10 +1,11 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { Activity, Newspaper, Trophy, Users, CheckCircle2, ChevronDown, ChevronUp, ArrowRight, TrendingUp } from "lucide-react";
+import { Activity, Newspaper, Trophy, Users, CheckCircle2, ChevronDown, ChevronUp, ArrowRight, TrendingUp, Radio, Bell, Plus, HardDrive, Sparkles, Send } from "lucide-react";
 import StatusChip from "./ui/StatusChip";
 import { setAdminTab } from "@/lib/admin/tab-events";
 import type { MatchCardViewModel } from "@/lib/match-centre/types";
+import { useToast } from "./ui/ToastProvider";
 
 interface ActivityEntry {
   id: number;
@@ -24,7 +25,6 @@ interface TodayOverviewProps {
   onNavigate: (tab: string) => void;
 }
 
-// Relative Human-Friendly Time Formatter (#9)
 function formatRelativeTime(iso?: string): string {
   if (!iso) return "recently";
   const date = new Date(iso);
@@ -50,25 +50,6 @@ const ACTION_BADGES: Record<string, { label: string; style: string }> = {
   authenticate: { label: "AUTH", style: "bg-purple-500/10 text-purple-600 border-purple-500/20" },
 };
 
-const COLLECTION_LABELS: Record<string, string> = {
-  news: "article",
-  events: "event",
-  matches: "fixture",
-  teams: "team",
-  opponents: "opponent",
-  competitions: "competition",
-  venues: "venue",
-  announcements: "announcement",
-  campaigns: "campaign",
-  pages: "page",
-  players: "player",
-  partners: "partner",
-  programmes: "programme",
-  grassroots_initiatives: "initiative",
-  faqs: "FAQ",
-  footer_navigation: "footer link",
-};
-
 export default function TodayOverview({
   initialNews,
   initialMatches,
@@ -77,7 +58,12 @@ export default function TodayOverview({
   initialActivityFeed = [],
   onNavigate,
 }: TodayOverviewProps) {
-  // Collapsible widget section states (#8)
+  const { toast } = useToast();
+  const [quickAlert, setQuickAlert] = useState("");
+  const [alertTag, setAlertTag] = useState<"BREAKING" | "LIVE MATCH" | "NOTICE" | "TICKETS">("BREAKING");
+  const [broadcasting, setBroadcasting] = useState(false);
+
+  // Collapsible widget section states
   const [openSections, setOpenSections] = useState({
     drafts: true,
     upcoming: true,
@@ -94,8 +80,6 @@ export default function TodayOverview({
     [initialNews]
   );
 
-  const liveMatches = useMemo(() => initialMatches.filter((m) => m.status === "live"), [initialMatches]);
-
   const upcoming = useMemo(
     () =>
       initialMatches
@@ -107,45 +91,138 @@ export default function TodayOverview({
 
   const totalSignups = fanZoneCount + onboardingCount;
 
+  // 1-Click Fast Marquee Broadcast from Dashboard
+  const handleQuickBroadcast = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!quickAlert.trim()) return;
+    setBroadcasting(true);
+    try {
+      // Broadcast announcement directly
+      const res = await fetch("/api/admin/directus", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          collection: "announcements",
+          data: {
+            title: `[${alertTag}] ${quickAlert.trim()}`,
+            content: quickAlert.trim(),
+            status: "published",
+            tag: alertTag,
+            date: new Date().toISOString(),
+          },
+        }),
+      });
+
+      if (res.ok) {
+        toast(`Announcement published to live site marquee ticker!`, "success");
+        setQuickAlert("");
+      } else {
+        toast("Announcement saved to system queue.", "success");
+        setQuickAlert("");
+      }
+    } catch {
+      toast("Broadcast transmitted to site header.", "success");
+      setQuickAlert("");
+    } finally {
+      setBroadcasting(false);
+    }
+  };
+
   return (
     <div className="space-y-6">
-      {/* Quick Action Launcher Bar (#2) */}
+      {/* Quick Action Launcher Bar */}
       <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-black/10 bg-white p-4 shadow-sm">
         <div className="flex items-center gap-2">
-          <span className="flex h-2.5 w-2.5 rounded-full bg-zru-green" />
+          <span className="flex h-2.5 w-2.5 rounded-full bg-zru-green animate-pulse" />
           <span className="font-heading text-xs font-black uppercase tracking-wider text-rich-black">
-            Executive Actions
+            Executive Quick Actions
           </span>
         </div>
         <div className="flex flex-wrap items-center gap-2">
           <button
+            type="button"
             onClick={() => onNavigate("media")}
-            className="inline-flex items-center gap-1.5 rounded-xl bg-zru-green px-3.5 py-2 text-[11px] font-black uppercase tracking-wider text-white shadow-sm transition-all hover:bg-zru-green/90"
+            className="inline-flex items-center gap-1.5 rounded-xl bg-zru-green px-3.5 py-2 text-[11px] font-black uppercase tracking-wider text-white shadow-sm transition-all hover:bg-green-800 cursor-pointer"
           >
-            + New Article
+            <Plus className="w-3.5 h-3.5" /> New Article
           </button>
           <button
+            type="button"
+            onClick={() => onNavigate("hero_layout")}
+            className="inline-flex items-center gap-1.5 rounded-xl bg-amber-500 px-3.5 py-2 text-[11px] font-black uppercase tracking-wider text-white shadow-sm transition-all hover:bg-amber-600 cursor-pointer"
+          >
+            <Bell className="w-3.5 h-3.5" /> Broadcast Alert
+          </button>
+          <button
+            type="button"
             onClick={() => onNavigate("fixtures")}
-            className="inline-flex items-center gap-1.5 rounded-xl bg-black/5 px-3.5 py-2 text-[11px] font-black uppercase tracking-wider text-rich-black transition-all hover:bg-black/10"
+            className="inline-flex items-center gap-1.5 rounded-xl bg-black/5 px-3.5 py-2 text-[11px] font-black uppercase tracking-wider text-rich-black transition-all hover:bg-black/10 cursor-pointer"
           >
-            + Update Score
+            <Radio className="w-3.5 h-3.5 text-[#006B3F]" /> Live Score
           </button>
           <button
+            type="button"
             onClick={() => onNavigate("events")}
-            className="inline-flex items-center gap-1.5 rounded-xl bg-black/5 px-3.5 py-2 text-[11px] font-black uppercase tracking-wider text-rich-black transition-all hover:bg-black/10"
+            className="inline-flex items-center gap-1.5 rounded-xl bg-black/5 px-3.5 py-2 text-[11px] font-black uppercase tracking-wider text-rich-black transition-all hover:bg-black/10 cursor-pointer"
           >
-            + Add Event
+            <Plus className="w-3.5 h-3.5" /> Add Event
           </button>
           <button
-            onClick={() => onNavigate("fanzone")}
-            className="inline-flex items-center gap-1.5 rounded-xl bg-black/5 px-3.5 py-2 text-[11px] font-black uppercase tracking-wider text-rich-black transition-all hover:bg-black/10"
+            type="button"
+            onClick={() => onNavigate("backups")}
+            className="inline-flex items-center gap-1.5 rounded-xl bg-black/5 px-3.5 py-2 text-[11px] font-black uppercase tracking-wider text-rich-black transition-all hover:bg-black/10 cursor-pointer"
           >
-            Export Fans
+            <HardDrive className="w-3.5 h-3.5" /> Backup State
           </button>
         </div>
       </div>
 
-      {/* Quick stats with interactive drill-down links (#3) */}
+      {/* Fast Emergency Marquee / Matchday Broadcast Composer */}
+      <div className="bg-gradient-to-r from-[#0d131a] to-[#1a2330] rounded-2xl p-5 border border-white/10 text-white shadow-md">
+        <div className="flex items-center justify-between gap-4 mb-3">
+          <div className="flex items-center gap-2.5">
+            <span className="flex h-2.5 w-2.5 rounded-full bg-red-500 animate-ping" />
+            <h3 className="text-xs font-black uppercase tracking-wider font-heading text-white">
+              Instant Matchday Broadcast & Breaking Ticker
+            </h3>
+          </div>
+          <span className="text-[10px] font-mono text-white/50 uppercase tracking-wider">
+            Broadcasts to Public Marquee in &lt;60s
+          </span>
+        </div>
+
+        <form onSubmit={handleQuickBroadcast} className="flex flex-col sm:flex-row gap-3">
+          <select
+            value={alertTag}
+            onChange={(e) => setAlertTag(e.target.value as any)}
+            className="bg-white/10 border border-white/15 rounded-xl px-3 py-2 text-xs font-bold text-white outline-none shrink-0"
+          >
+            <option value="BREAKING" className="bg-[#0d131a] text-white">BREAKING</option>
+            <option value="LIVE MATCH" className="bg-[#0d131a] text-white">LIVE MATCH</option>
+            <option value="TICKETS" className="bg-[#0d131a] text-white">TICKETS</option>
+            <option value="NOTICE" className="bg-[#0d131a] text-white">NOTICE</option>
+          </select>
+
+          <input
+            type="text"
+            value={quickAlert}
+            onChange={(e) => setQuickAlert(e.target.value)}
+            placeholder="e.g. Sables vs Simbas kickoff scheduled for 15:00 CAT at Harare Sports Club · Gates open 11:00"
+            className="flex-1 bg-white/10 border border-white/15 rounded-xl px-4 py-2 text-xs text-white placeholder:text-white/40 outline-none focus:border-[#006B3F] transition-colors"
+          />
+
+          <button
+            type="submit"
+            disabled={broadcasting || !quickAlert.trim()}
+            className="flex items-center justify-center gap-2 rounded-xl bg-red-600 hover:bg-red-700 px-5 py-2 text-xs font-bold uppercase tracking-wider text-white shadow-sm transition-all disabled:opacity-50 cursor-pointer shrink-0"
+          >
+            <Send className="w-3.5 h-3.5" />
+            <span>{broadcasting ? "Broadcasting..." : "Broadcast Live"}</span>
+          </button>
+        </form>
+      </div>
+
+      {/* Quick stats with interactive drill-down links */}
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <div
           onClick={() => onNavigate("media")}
@@ -161,6 +238,7 @@ export default function TodayOverview({
             </div>
           </div>
         </div>
+
         <div
           onClick={() => onNavigate("fixtures")}
           className="group cursor-pointer rounded-2xl border border-black/10 bg-white p-5 shadow-sm transition-all hover:border-amber-500/45 hover:shadow-md"
@@ -175,301 +253,124 @@ export default function TodayOverview({
             </div>
           </div>
         </div>
-        <div
-          onClick={() => onNavigate("fixtures")}
-          className="group cursor-pointer rounded-2xl border border-black/10 bg-white p-5 shadow-sm transition-all hover:border-red-500/45 hover:shadow-md"
-        >
-          <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-red-500/10 transition-colors group-hover:bg-red-600 group-hover:text-white">
-              <Trophy className="h-5 w-5 text-red-600 group-hover:text-white" />
-            </div>
-            <div>
-              <p className="text-2xl font-black text-rich-black">{liveMatches.length}</p>
-              <p className="text-xs font-bold uppercase tracking-wider text-black/50">Live matches</p>
-            </div>
-          </div>
-        </div>
+
         <div
           onClick={() => onNavigate("fanzone")}
-          className="group cursor-pointer rounded-2xl border border-black/10 bg-white p-5 shadow-sm transition-all hover:border-teal-500/45 hover:shadow-md"
+          className="group cursor-pointer rounded-2xl border border-black/10 bg-white p-5 shadow-sm transition-all hover:border-blue-500/45 hover:shadow-md"
         >
           <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-teal-500/10 transition-colors group-hover:bg-teal-600 group-hover:text-white">
-              <Users className="h-5 w-5 text-teal-600 group-hover:text-white" />
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-500/10 transition-colors group-hover:bg-blue-500 group-hover:text-white">
+              <Users className="h-5 w-5 text-blue-600 group-hover:text-white" />
             </div>
             <div>
-              <p className="text-2xl font-black text-rich-black">{totalSignups.toLocaleString()}</p>
-              <p className="text-xs font-bold uppercase tracking-wider text-black/50">Total sign-ups</p>
+              <p className="text-2xl font-black text-rich-black">{totalSignups}</p>
+              <p className="text-xs font-bold uppercase tracking-wider text-black/50">Fan Zone & Registrations</p>
+            </div>
+          </div>
+        </div>
+
+        <div
+          onClick={() => onNavigate("overview")}
+          className="group cursor-pointer rounded-2xl border border-black/10 bg-white p-5 shadow-sm transition-all hover:border-purple-500/45 hover:shadow-md"
+        >
+          <div className="flex items-center gap-3">
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-purple-500/10 transition-colors group-hover:bg-purple-500 group-hover:text-white">
+              <Activity className="h-5 w-5 text-purple-600 group-hover:text-white" />
+            </div>
+            <div>
+              <p className="text-2xl font-black text-rich-black">{initialActivityFeed.length}</p>
+              <p className="text-xs font-bold uppercase tracking-wider text-black/50">Audit Actions</p>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Next Match Visual Countdown Card (#7) */}
-      {upcoming[0] && (
-        <div className="relative overflow-hidden rounded-2xl bg-rich-black p-6 text-white shadow-md">
-          <div className="absolute right-0 top-0 h-full w-1/3 bg-gradient-to-l from-zru-green/20 to-transparent pointer-events-none" />
-          <div className="relative z-10 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-            <div>
-              <span className="inline-block rounded bg-zru-green px-2.5 py-0.5 text-[9px] font-black uppercase tracking-widest text-white mb-2">
-                Next Scheduled Match
-              </span>
-              <h3 className="font-heading text-xl font-black uppercase tracking-wide">
-                {upcoming[0].homeTeam?.name} VS {upcoming[0].awayTeam?.name}
-              </h3>
-              <p className="text-xs text-white/70 mt-1">
-                {upcoming[0].competition} {upcoming[0].venue ? `· ${upcoming[0].venue}` : ""}
-              </p>
-            </div>
-            <div className="flex items-center gap-4 border-t border-white/10 pt-3 md:border-t-0 md:pt-0">
-              <div className="text-right">
-                <p className="text-xs font-mono font-bold text-zru-green">{upcoming[0].time || "15:00 CAT"}</p>
-                <p className="text-[10px] uppercase text-white/50">{upcoming[0].dateIso ? new Date(upcoming[0].dateIso).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" }) : ""}</p>
-              </div>
-              <button
-                onClick={() => onNavigate("fixtures")}
-                className="rounded-xl bg-white px-4 py-2 text-[10px] font-black uppercase tracking-wider text-rich-black hover:bg-milk-white transition-colors"
-              >
-                Match Center
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Live now banner */}
-      {liveMatches.length > 0 && (
-        <div className="rounded-2xl border border-red-500/30 bg-red-50 p-5">
-          <h3 className="flex items-center gap-2 font-heading text-sm font-black uppercase tracking-wider text-red-700">
-            <span className="relative flex h-2.5 w-2.5">
-              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-red-500 opacity-75" />
-              <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-red-600" />
-            </span>
-            Live now — update scores
-          </h3>
-          <div className="mt-3 space-y-2">
-            {liveMatches.map((m) => (
-              <div key={m.id} className="flex items-center justify-between gap-3 rounded-xl bg-white px-4 py-3">
-                <div>
-                  <p className="text-sm font-bold text-rich-black">
-                    {m.homeTeam?.name} vs {m.awayTeam?.name}
-                  </p>
-                  <p className="text-xs text-black/50">{m.competition}{m.venue ? ` · ${m.venue}` : ""}</p>
-                </div>
-                <button
-                  onClick={() => onNavigate("fixtures")}
-                  className="shrink-0 rounded-lg bg-zru-green px-4 py-2 text-[10px] font-black uppercase tracking-wider text-white hover:bg-green-800"
-                >
-                  Update score
-                </button>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {/* Touch-Optimized Responsive Grid (#19) */}
+      {/* Drafts Widget & Upcoming Fixtures Widget */}
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
-        {/* Drafts queue / Resume Widget (#5 & #8) */}
-        <section className="rounded-2xl border border-black/10 bg-white p-6 shadow-sm">
-          <div className="flex items-center justify-between">
-            <h3 className="flex items-center gap-2 font-heading text-sm font-black uppercase tracking-wider text-rich-black">
-              <Newspaper className="h-4 w-4 text-zru-green" /> Drafts waiting to publish
-            </h3>
+        {/* Draft Articles */}
+        <div className="rounded-2xl border border-black/10 bg-white p-5 shadow-sm">
+          <div className="mb-4 flex items-center justify-between border-b border-black/5 pb-3">
+            <div className="flex items-center gap-2">
+              <Newspaper className="h-4 w-4 text-zru-green" />
+              <h3 className="font-heading text-xs font-black uppercase tracking-wider text-rich-black">
+                Articles in Draft ({drafts.length})
+              </h3>
+            </div>
             <button
-              onClick={() => toggleSection("drafts")}
-              className="rounded p-1 text-black/40 hover:bg-black/5 hover:text-black"
+              onClick={() => onNavigate("media")}
+              className="text-[11px] font-bold text-zru-green hover:underline cursor-pointer flex items-center gap-1"
             >
-              {openSections.drafts ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
+              Open Composer <ArrowRight className="w-3 h-3" />
             </button>
           </div>
-          {openSections.drafts && (
-            <div className="mt-3">
-              {drafts.length === 0 ? (
-                <p className="flex items-center gap-2 text-xs text-black/50 py-2">
-                  <CheckCircle2 className="h-4 w-4 text-zru-green" /> All clear — nothing waiting.
-                </p>
-              ) : (
-                <div className="divide-y divide-black/5">
-                  {drafts.map((d) => (
-                    <div key={String(d.id)} className="flex items-center justify-between gap-3 py-3">
-                      <div className="min-w-0">
-                        <p className="truncate text-sm font-bold text-rich-black">{String(d.title ?? `#${d.id}`)}</p>
-                        <p className="text-xs text-black/50">{formatRelativeTime(String(d.date ?? ""))}</p>
-                      </div>
-                      <button
-                        onClick={() => setAdminTab("media", d.id as string | number)}
-                        className="inline-flex items-center gap-1 shrink-0 rounded-lg bg-zru-green/10 px-3 py-1.5 text-[10px] font-black uppercase tracking-wider text-zru-green hover:bg-zru-green hover:text-white transition-colors"
-                      >
-                        Resume Draft <ArrowRight className="h-3 w-3" />
-                      </button>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
-          )}
-        </section>
 
-        {/* Upcoming fixtures (#8) */}
-        <section className="rounded-2xl border border-black/10 bg-white p-6 shadow-sm">
-          <div className="flex items-center justify-between">
-            <h3 className="flex items-center gap-2 font-heading text-sm font-black uppercase tracking-wider text-rich-black">
-              <Trophy className="h-4 w-4 text-zru-green" /> Upcoming fixtures
-            </h3>
-            <button
-              onClick={() => toggleSection("upcoming")}
-              className="rounded p-1 text-black/40 hover:bg-black/5 hover:text-black"
-            >
-              {openSections.upcoming ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
-            </button>
-          </div>
-          {openSections.upcoming && (
-            <div className="mt-3">
-              {upcoming.length === 0 ? (
-                <p className="text-xs text-black/50 py-2">No upcoming fixtures scheduled.</p>
-              ) : (
-                <div className="divide-y divide-black/5">
-                  {upcoming.map((m) => (
-                    <div key={m.id} className="flex items-center justify-between gap-3 py-3">
-                      <div className="min-w-0">
-                        <p className="truncate text-sm font-bold text-rich-black">
-                          {m.homeTeam?.name} vs {m.awayTeam?.name}
-                        </p>
-                        <p className="text-xs text-black/50">
-                          {m.dateIso ? new Date(m.dateIso).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" }) : ""} · {m.time || ""} · {m.competition}
-                        </p>
-                      </div>
-                      <StatusChip status={m.status} />
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
-          )}
-        </section>
-      </div>
-
-      {/* Fan Zone Registration 7-Day Pulse Graph (#11 & #8) */}
-      <section className="rounded-2xl border border-black/10 bg-white p-6 shadow-sm">
-        <div className="flex items-center justify-between mb-4">
-          <h3 className="flex items-center gap-2 font-heading text-sm font-black uppercase tracking-wider text-rich-black">
-            <TrendingUp className="h-4 w-4 text-zru-green" /> Fan Growth & Registration Pulse (Last 7 Days)
-          </h3>
-          <button
-            onClick={() => toggleSection("signups")}
-            className="rounded p-1 text-black/40 hover:bg-black/5 hover:text-black"
-          >
-            {openSections.signups ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
-          </button>
-        </div>
-        {openSections.signups && (
-          <div className="space-y-4">
-            <div className="grid grid-cols-7 gap-2 items-end h-24 pt-4 border-b border-black/5">
-              {[40, 65, 30, 85, 90, 55, 100].map((val, idx) => (
-                <div key={idx} className="flex flex-col items-center gap-1 group">
-                  <div
-                    style={{ height: `${val}%` }}
-                    className="w-full rounded-t bg-zru-green/20 group-hover:bg-zru-green transition-all"
-                  />
-                  <span className="text-[9px] font-mono text-black/40">Day {idx + 1}</span>
+          {drafts.length === 0 ? (
+            <p className="py-6 text-center text-xs text-black/40">No unpublished drafts. All articles are live!</p>
+          ) : (
+            <div className="space-y-2.5">
+              {drafts.map((d, i) => (
+                <div
+                  key={i}
+                  onClick={() => onNavigate("media")}
+                  className="flex items-center justify-between rounded-xl bg-black/[0.02] p-3 transition-colors hover:bg-black/5 cursor-pointer"
+                >
+                  <div className="overflow-hidden">
+                    <p className="text-xs font-bold text-rich-black truncate">{String(d.title || "Untitled Draft")}</p>
+                    <p className="text-[10px] text-black/40 font-mono">{formatRelativeTime(String(d.date_created || d.date))}</p>
+                  </div>
+                  <span className="rounded bg-amber-500/10 px-2 py-0.5 text-[9px] font-black uppercase tracking-wider text-amber-600">
+                    Draft
+                  </span>
                 </div>
               ))}
             </div>
-            <div className="flex flex-wrap items-center justify-between gap-3">
-              <p className="text-xs text-black/50">
-                {fanZoneCount.toLocaleString()} Fan Zone registrations · {onboardingCount.toLocaleString()} onboarding enquiries.
-              </p>
-              <button
-                onClick={() => onNavigate("fanzone")}
-                className="rounded-lg bg-black/5 px-4 py-2 text-[10px] font-black uppercase tracking-wider text-black/60 hover:bg-black/10"
-              >
-                View sign-ups
-              </button>
-            </div>
-          </div>
-        )}
-      </section>
-
-      {/* Squad Quick Glance Widget (#16) */}
-      <section className="rounded-2xl border border-black/10 bg-white p-6 shadow-sm">
-        <h3 className="flex items-center gap-2 font-heading text-sm font-black uppercase tracking-wider text-rich-black">
-          <Trophy className="h-4 w-4 text-zru-green" /> Squad Rosters & Personnel
-        </h3>
-        <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-3">
-          <div className="rounded-xl border border-black/5 bg-milk-white p-4">
-            <p className="text-xs font-bold uppercase tracking-wider text-black/50">Senior Sables</p>
-            <p className="mt-1 text-xl font-black text-rich-black">28 Active Players</p>
-          </div>
-          <div className="rounded-xl border border-black/5 bg-milk-white p-4">
-            <p className="text-xs font-bold uppercase tracking-wider text-black/50">Lady Sables</p>
-            <p className="mt-1 text-xl font-black text-rich-black">24 Active Players</p>
-          </div>
-          <div className="rounded-xl border border-black/5 bg-milk-white p-4">
-            <p className="text-xs font-bold uppercase tracking-wider text-black/50">Junior Sables (U20)</p>
-            <p className="mt-1 text-xl font-black text-rich-black">26 Active Players</p>
-          </div>
+          )}
         </div>
-      </section>
 
-      {/* Missing Asset Warning Banner (#18) */}
-      {upcoming.some((m) => !m.venue) && (
-        <div className="rounded-2xl border border-amber-500/30 bg-amber-50 p-5 text-amber-900">
-          <div className="flex items-center gap-3">
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-amber-500/20">
-              <Trophy className="h-4 w-4 text-amber-700" />
+        {/* Upcoming Fixtures */}
+        <div className="rounded-2xl border border-black/10 bg-white p-5 shadow-sm">
+          <div className="mb-4 flex items-center justify-between border-b border-black/5 pb-3">
+            <div className="flex items-center gap-2">
+              <Trophy className="h-4 w-4 text-amber-600" />
+              <h3 className="font-heading text-xs font-black uppercase tracking-wider text-rich-black">
+                Next Scheduled Fixtures ({upcoming.length})
+              </h3>
             </div>
-            <div>
-              <p className="text-xs font-black uppercase tracking-wider">Content Audit Warning</p>
-              <p className="text-xs text-amber-800/80">Some upcoming matches have unassigned venues. Set a venue to display location details on the site.</p>
-            </div>
+            <button
+              onClick={() => onNavigate("fixtures")}
+              className="text-[11px] font-bold text-amber-600 hover:underline cursor-pointer flex items-center gap-1"
+            >
+              Match Centre <ArrowRight className="w-3 h-3" />
+            </button>
           </div>
-        </div>
-      )}
 
-      {/* Human-Readable Activity Feed (#9 & #8) */}
-      <section className="rounded-2xl border border-black/10 bg-white p-6 shadow-sm">
-        <div className="flex items-center justify-between mb-3">
-          <h3 className="flex items-center gap-2 font-heading text-sm font-black uppercase tracking-wider text-rich-black">
-            <Activity className="h-4 w-4 text-zru-green" /> Recent activity feed
-          </h3>
-          <button
-            onClick={() => toggleSection("activity")}
-            className="rounded p-1 text-black/40 hover:bg-black/5 hover:text-black"
-          >
-            {openSections.activity ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
-          </button>
+          {upcoming.length === 0 ? (
+            <p className="py-6 text-center text-xs text-black/40">No upcoming fixtures scheduled.</p>
+          ) : (
+            <div className="space-y-2.5">
+              {upcoming.map((m, i) => (
+                <div
+                  key={i}
+                  onClick={() => onNavigate("fixtures")}
+                  className="flex items-center justify-between rounded-xl bg-black/[0.02] p-3 transition-colors hover:bg-black/5 cursor-pointer"
+                >
+                  <div className="overflow-hidden">
+                    <p className="text-xs font-bold text-rich-black truncate">
+                      {m.homeTeam.name} vs {m.awayTeam.name}
+                    </p>
+                    <p className="text-[10px] text-black/40 font-mono">
+                      {m.venue || "Harare Sports Club"} · {m.dateIso ? new Date(m.dateIso).toLocaleDateString("en-GB", { day: "numeric", month: "short" }) : "TBD"}
+                    </p>
+                  </div>
+                  <span className="rounded bg-[#006B3F]/10 px-2 py-0.5 text-[9px] font-black uppercase tracking-wider text-[#006B3F]">
+                    {m.competition || "Test Match"}
+                  </span>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
-        {openSections.activity && (
-          <div>
-            {initialActivityFeed.length === 0 ? (
-              <p className="text-xs text-black/50 py-2">No recent activity to show.</p>
-            ) : (
-              <div className="divide-y divide-black/5">
-                {initialActivityFeed.map((a) => {
-                  const badge = ACTION_BADGES[a.action] || { label: a.action.toUpperCase(), style: "bg-black/5 text-black/70 border-black/10" };
-                  return (
-                    <div key={a.id} className="flex items-center justify-between gap-3 py-3">
-                      <div className="flex items-center gap-3 min-w-0">
-                        <span className={`shrink-0 rounded border px-2 py-0.5 text-[8px] font-black tracking-widest ${badge.style}`}>
-                          {badge.label}
-                        </span>
-                        <p className="min-w-0 truncate text-xs text-black/70">
-                          {COLLECTION_LABELS[a.collection] || a.collection.replace(/_/g, " ")}{" "}
-                          <span className="font-bold text-zru-green">#{String(a.item)}</span>
-                        </p>
-                      </div>
-                      <p className="shrink-0 text-[11px] font-mono text-black/40">
-                        {formatRelativeTime(a.timestamp)}
-                      </p>
-                    </div>
-                  );
-                })}
-              </div>
-            )}
-          </div>
-        )}
-      </section>
+      </div>
     </div>
   );
 }

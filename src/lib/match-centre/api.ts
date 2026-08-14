@@ -151,13 +151,21 @@ export async function getDirectusMatches(): Promise<MatchCardViewModel[]> {
     // Unassigned venue leaves blank text (no hardcoded fallback)
     const venueName = (m.venue_name_override as string) || (venueObj?.name as string) || (venueObj?.city ? `${venueObj.name}, ${venueObj.city}` : "");
 
-    // Automatic status evaluation: if kickoff_at date has passed, automatically mark as completed
-    const isLapsed = kickoff.getTime() < Date.now() - 3 * 3600 * 1000;
-    const computedStatus = (m.status === "final" || m.status === "completed" || isLapsed) 
-      ? "completed" 
-      : m.status === "live" 
-      ? "live" 
-      : "upcoming";
+    // Automatic status evaluation based on explicit admin setting or 2.5-hour match window
+    const now = Date.now();
+    const kickoffTime = !isNaN(kickoff.getTime()) ? kickoff.getTime() : null;
+    const matchDurationMs = 2.5 * 3600 * 1000;
+
+    let computedStatus: "upcoming" | "live" | "completed" = "upcoming";
+    if (m.status === "final" || m.status === "completed") {
+      computedStatus = "completed";
+    } else if (m.status === "live") {
+      computedStatus = "live";
+    } else if (kickoffTime && now > kickoffTime + matchDurationMs) {
+      computedStatus = "completed";
+    } else if (kickoffTime && now >= kickoffTime && now <= kickoffTime + matchDurationMs) {
+      computedStatus = "live";
+    }
 
     return {
       id: String(m.id),
