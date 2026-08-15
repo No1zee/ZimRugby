@@ -135,7 +135,7 @@ export default function TeamPageClient({ team }: TeamPageClientProps) {
       </div>
 
       {/* 2. Match Context Strip */}
-      <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
+      <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
         <NextMatchBanner matches={team.matches} teamName={team.name} />
         <RecentResultsStrip matches={team.matches} teamName={team.name} />
       </div>
@@ -163,7 +163,7 @@ export default function TeamPageClient({ team }: TeamPageClientProps) {
       </div>
 
       {/* 4. Dynamic Content Panels */}
-      <main className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-10 md:py-12">
+      <main className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-10">
         <AnimatePresence mode="wait">
           <motion.div
             key={activeTab}
@@ -313,10 +313,10 @@ export default function TeamPageClient({ team }: TeamPageClientProps) {
                   <p className="text-sm text-black/50 mt-1">Cinematic snapshots of {team.name} in action, during training campaigns and historic matches.</p>
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
                   {team.gallery.map((img, idx) => (
                     <Tilt3DCard key={idx} tiltAmount={12} glareEnabled>
-                      <div className="relative h-64 rounded-2xl overflow-hidden group border border-zru-green/20 hover:border-zru-green/50 transition-colors shadow-lg">
+                      <div className="relative h-56 rounded-2xl overflow-hidden group border border-zru-green/20 hover:border-zru-green/50 transition-colors shadow-lg">
                         <Image 
                           src={img} 
                           alt={`${team.name} gallery image ${idx + 1}`} 
@@ -345,7 +345,7 @@ export default function TeamPageClient({ team }: TeamPageClientProps) {
         </AnimatePresence>
 
         {/* Next / Previous Linear Navigation Pager */}
-        <div className="mt-20 pt-12 border-t border-black/10 grid grid-cols-1 sm:grid-cols-2 gap-6 relative z-10">
+        <div className="mt-14 pt-10 border-t border-black/10 grid grid-cols-1 sm:grid-cols-2 gap-5 relative z-10">
           <Link
             href={prevTeam.href}
             className="bg-white border border-black/5 shadow-sm rounded-2xl p-6 flex items-center justify-between group hover:border-zru-green hover:shadow-md transition-[border-color,box-shadow] duration-300 text-left"

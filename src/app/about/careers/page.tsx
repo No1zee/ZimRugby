@@ -14,7 +14,7 @@ export default function CareersPage() {
   ];
 
   return (
-    <div className="space-y-12">
+    <div className="space-y-10">
       
       {/* Overview header */}
       <div className="border-l-4 border-zru-green pl-4">
@@ -23,11 +23,11 @@ export default function CareersPage() {
       </div>
 
       <p className="text-rich-black/80 leading-relaxed text-sm font-normal">
-        At the Zimbabwe Rugby Union, we believe in professionalism, innovation, and passion. We look for dedicated professionals and aspiring sports administrators who want to make a difference in African rugby. Check out our open roles below.
+        We hire skilled administrators, analysts, and development officers who build rugby at every level of Zimbabwean sport. Vacancies are posted here as they open.
       </p>
 
       {/* Jobs list */}
-      <div className="pt-6 border-t border-black/5 space-y-6">
+      <div className="pt-5 border-t border-black/5 space-y-5">
         <h3 className="text-lg font-black uppercase tracking-wide text-rich-black flex items-center gap-2">
           <Briefcase className="w-5 h-5 text-zru-green" />
           <span>CURRENT VACANCIES</span>
@@ -37,7 +37,7 @@ export default function CareersPage() {
           {jobs.map((job, idx) => (
             <div 
               key={idx} 
-              className="bg-milk-white border border-black/5 rounded-xl p-5 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 group transition-[border-color,box-shadow] duration-300 hover:border-zru-green/30 hover:shadow-md"
+              className="bg-milk-white border border-black/5 rounded-xl p-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 group transition-[border-color,box-shadow] duration-300 hover:border-zru-green/30 hover:shadow-md"
             >
               <div>
                 <h4 className="font-black text-sm text-rich-black uppercase tracking-tight">{job.title}</h4>

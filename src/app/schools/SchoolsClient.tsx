@@ -29,19 +29,19 @@ export default function SchoolsClient({ cmsPage, initiatives }: SchoolsClientPro
       />
 
       <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 pt-8">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-10 items-center">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 mb-8 items-center">
           <div className="lg:col-span-7 space-y-6">
             <h2 className="font-heading text-3xl md:text-4xl text-rich-black font-black uppercase tracking-wide">
               The Foundation of National Excellence
             </h2>
             <p className="text-rich-black/70 text-sm md:text-base font-body leading-relaxed">
-              Zimbabwe school rugby is globally renowned for its exceptional quality, intense rivalry, and passionate support. Schools rugby serves as the primary pipeline feeding our **Junior Sables (U20)** and elite senior squads.
+              Zimbabwe school rugby is recognised for its intensity and depth, and has produced generations of Sables players. Schools rugby serves as the primary pipeline feeding our Junior Sables (U20) and elite senior squads.
             </p>
             <p className="text-rich-black/70 text-sm md:text-base font-body leading-relaxed">
               ZRU oversees school structures across all ten provinces, organizing leagues, certifying schoolmasters, enforcing strict age-grade regulations, and ensuring medical safety compliance at all schoolboy fixtures.
             </p>
           </div>
-          <div className="lg:col-span-5 p-5 bg-zru-green/5 border border-zru-green/10 rounded-3xl space-y-4">
+          <div className="lg:col-span-5 p-5 bg-zru-green/5 border border-zru-green/10 rounded-2xl space-y-4">
             <div className="w-12 h-12 rounded-xl bg-zru-green/10 border border-zru-green/20 flex items-center justify-center text-zru-green">
               <GraduationCap className="w-6 h-6" />
             </div>
@@ -69,8 +69,8 @@ export default function SchoolsClient({ cmsPage, initiatives }: SchoolsClientPro
           </div>
         </div>
 
-        <div className="mb-10">
-          <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-8 gap-4">
+        <div className="mb-8">
+          <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-6 gap-4">
             <div>
               <span className="text-xs font-bold uppercase tracking-widest text-zru-green font-heading block mb-1">
                 NATIONAL SCHOOLS CHAMPIONSHIPS
@@ -84,13 +84,13 @@ export default function SchoolsClient({ cmsPage, initiatives }: SchoolsClientPro
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
             {[
               { src: "/images/schools/schoolboy-action-1.jpg", label: "National Super 8 Fixtures", tag: "MATCH ACTION", alt: "Schoolboy Rugby Action - Breakaway Play" },
               { src: "/images/schools/schoolboy-team-group.jpg", label: "Combined Schools Squad", tag: "UNITY & CAMARADERIE", alt: "Schoolboy Rugby Squad - Post Match Group Photo" },
               { src: "/images/schools/schoolboy-lineout.jpg", label: "Set Piece Lineout Mastery", tag: "AIRBORNE INTENSITY", alt: "Schoolboy Rugby Lineout Jump Action" },
             ].map((img) => (
-              <div key={img.src} className="group relative h-80 rounded-2xl overflow-hidden shadow-md border border-black/5">
+              <div key={img.src} className="group relative h-72 rounded-2xl overflow-hidden shadow-md border border-black/5">
                 <Image
                   src={img.src}
                   alt={img.alt}
@@ -109,7 +109,7 @@ export default function SchoolsClient({ cmsPage, initiatives }: SchoolsClientPro
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-10">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
           {initiatives.map((item) => {
             const Icon = iconMap[item.icon || ""] || GraduationCap;
             return (
@@ -138,7 +138,7 @@ export default function SchoolsClient({ cmsPage, initiatives }: SchoolsClientPro
           })}
         </div>
 
-        <div className="p-6 md:p-8 bg-rich-black rounded-3xl border border-white/10 relative overflow-hidden shadow-2xl">
+        <div className="p-6 md:p-7 bg-rich-black rounded-2xl border border-white/10 relative overflow-hidden shadow-2xl">
           <div className="absolute top-0 right-0 w-1/3 h-full bg-[radial-gradient(circle_at_top_right,rgba(0,107,63,0.12),transparent_70%)]" />
           <div className="relative z-10 max-w-2xl space-y-6">
             <span className="text-[10px] font-black text-zru-green uppercase tracking-[0.3em]">Schools Association</span>
@@ -151,7 +151,7 @@ export default function SchoolsClient({ cmsPage, initiatives }: SchoolsClientPro
             <div className="pt-4">
               <a
                 href="mailto:schools@zru.co.zw"
-                className="inline-flex items-center gap-2 px-6 py-3.5 bg-zru-green hover:bg-green-700 text-white rounded-xl text-xs font-bold uppercase tracking-widest transition-all shadow-lg"
+                className="inline-flex items-center gap-2 px-6 py-3.5 bg-zru-green hover:bg-zru-green/90 text-white rounded-xl text-xs font-bold uppercase tracking-widest transition-all shadow-lg"
               >
                 Register School <Mail className="w-4 h-4" />
               </a>

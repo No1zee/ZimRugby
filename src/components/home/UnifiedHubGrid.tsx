@@ -14,7 +14,7 @@ interface Props {
 export default function UnifiedHubGrid({ news = [], nextMatch, customTitle }: Props) {
 
   return (
-    <section className="py-12 md:py-16 px-4 sm:px-6 lg:px-8 max-w-[1440px] mx-auto">
+    <section className="py-12 md:py-14 px-4 sm:px-6 lg:px-8 max-w-[1440px] mx-auto">
       {/* Section Title */}
       <div className="mb-8 max-w-3xl">
         <h2 className="heading-plate text-3xl sm:text-5xl font-heading font-black uppercase tracking-wide sm:tracking-widest text-rich-black not-italic leading-[1.05]">
@@ -85,7 +85,7 @@ export default function UnifiedHubGrid({ news = [], nextMatch, customTitle }: Pr
           </div>
 
           {/* Match Details */}
-          <div className="bg-[#FDFBF0] rounded-lg p-5 space-y-3 mt-auto mb-5 border border-black/5">
+          <div className="bg-milk-white rounded-lg p-5 space-y-3 mt-auto mb-5 border border-black/5">
             <div className="flex items-center gap-3 text-rich-black">
               <Calendar size={18} className="text-zru-green" />
               <span className="font-body font-bold text-xs uppercase tracking-wide">
@@ -205,7 +205,7 @@ export default function UnifiedHubGrid({ news = [], nextMatch, customTitle }: Pr
             <span className="absolute inset-0 z-0 clip-slanted bg-black/5 translate-x-[4px] translate-y-[4px] transition-transform duration-200 group-hover/btn:translate-x-[6px] group-hover/btn:translate-y-[6px] group-active/btn:translate-x-[2px] group-active/btn:translate-y-[2px]" aria-hidden="true" />
             <Link
               href="/media"
-              className="relative z-10 w-full clip-slanted bg-[#FDFBF0] hover:bg-white text-rich-black hover:text-zru-green font-black flex items-center justify-center gap-2 py-2.5 transition-all duration-200 group-hover/btn:-translate-y-px group-active/btn:translate-x-[2px] group-active/btn:translate-y-[2px] text-[11px] tracking-widest uppercase border border-black/5 font-heading"
+              className="relative z-10 w-full clip-slanted bg-milk-white hover:bg-white text-rich-black hover:text-zru-green font-black flex items-center justify-center gap-2 py-2.5 transition-all duration-200 group-hover/btn:-translate-y-px group-active/btn:translate-x-[2px] group-active/btn:translate-y-[2px] text-[11px] tracking-widest uppercase border border-black/5 font-heading"
             >
               <span>EXPLORE ALL NEWS</span>
               <ArrowRight size={14} className="group-hover/btn:translate-x-1 transition-transform" />

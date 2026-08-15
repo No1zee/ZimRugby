@@ -39,7 +39,7 @@ export default function VideoHubPage() {
   const featuredVideo = videos[0];
 
   return (
-    <main className="bg-rich-black min-h-screen pt-12 md:pt-16 pb-12 md:pb-16 text-white">
+    <main className="bg-rich-black min-h-screen pt-10 md:pt-12 pb-10 md:pb-12 text-white">
       
       {/* 1. Widescreen Cinematic Header / Hero Video */}
       {featuredVideo && (
@@ -54,7 +54,7 @@ export default function VideoHubPage() {
               sizes="100vw"
               className="object-cover opacity-50"
             />
-            <div className="absolute inset-0 bg-linear-to-t from-rich-black via-rich-black/50 to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-t from-rich-black via-rich-black/50 to-transparent" />
           </div>
 
           <div className="relative z-10 w-full max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 pb-12">
@@ -137,8 +137,8 @@ export default function VideoHubPage() {
       </div>
 
       {/* 3. Video Grid Section */}
-      <section className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-10 md:py-12">
-        <div className="flex items-center gap-4 mb-8">
+      <section className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-10">
+        <div className="flex items-center gap-4 mb-6">
           <h2 className="text-2xl font-black uppercase tracking-wider flex items-center gap-2">
             <Film className="w-5 h-5 text-zru-green" />
             <span>VIDEO ARCHIVE ({filteredVideos.length})</span>
@@ -147,7 +147,7 @@ export default function VideoHubPage() {
         </div>
 
         {filteredVideos.length > 0 ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {filteredVideos.map((video) => (
               <motion.div
                 key={video.id}

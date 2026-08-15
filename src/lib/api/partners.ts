@@ -31,7 +31,7 @@ const MOCK_PARTNERS: Partner[] = [
     id: 1,
     name: "Nedbank",
     role: "HEADLINE SPONSOR",
-    logo: "/images/sponsors/Nedbank.jpeg",
+    logo: "/images/sponsors/nedbank.jpeg",
     blurb: "Official headline sponsor powering the Sables national team, domestic competitions, and grassroots rugby nationwide.",
     href: "https://www.nedbank.co.zw",
     badge: "PRIMARY PARTNER",
@@ -85,7 +85,7 @@ const MOCK_PARTNERS: Partner[] = [
 ];
 
 const LOCAL_LOGO_FALLBACKS: Record<string, string> = {
-  nedbank: "/images/sponsors/Nedbank.jpeg",
+  nedbank: "/images/sponsors/nedbank.jpeg",
   africa: "/images/sponsors/Rugby Africa.png",
   world: "/images/sponsors/World_Rugby_logo.png",
   olympic: "/images/sponsors/Zimbabwean Olympic Comitte-Logo.png",
@@ -114,14 +114,21 @@ export async function getPartners(): Promise<Partner[]> {
 
       if (response && response.length > 0) {
         return response.map((p) => {
+          const localLogo = getFallbackLogo(p.name);
           const directusLogo = assetUrl(p.logo ?? undefined);
+          const directusLogoOk =
+            directusLogo &&
+            !directusLogo.includes("undefined") &&
+            !directusLogo.startsWith("/api/assets/");
           return {
             id: p.id,
             name: p.name,
             role: p.role || "PARTNER",
-            logo: directusLogo && !directusLogo.includes("undefined")
-              ? directusLogo
-              : getFallbackLogo(p.name),
+            logo: localLogo !== "/images/logos/zru-logo.svg"
+              ? localLogo
+              : directusLogoOk
+                ? directusLogo
+                : localLogo,
             blurb: p.description || "",
             href: p.website_url || "#",
             badge: p.badge || "PARTNER",

@@ -104,7 +104,7 @@ export default function GrassrootsInitiativeSection({ initiatives: apiInitiative
   const isReduced = mounted && reduceMotion;
 
   return (
-    <section className="py-12 sm:py-16 bg-[#006747] text-white relative overflow-hidden select-none">
+    <section className="py-12 sm:py-16 bg-zru-green text-white relative overflow-hidden select-none">
       
       {/* Background ambient pitch watermark & diagonal brand lines */}
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(255,255,255,0.08)_0%,transparent_70%)] pointer-events-none" />
@@ -153,7 +153,7 @@ export default function GrassrootsInitiativeSection({ initiatives: apiInitiative
                 
                 {/* Floating Top Badges */}
                 <div className="absolute top-3 left-3 right-3 flex items-center justify-between gap-2 z-10">
-                  <span className="px-2.5 py-1 bg-[#004D34] border border-white/20 text-white rounded-full text-[10px] font-black tracking-widest uppercase shadow-md">
+                  <span className="px-2.5 py-1 bg-zru-green border border-white/20 text-white rounded-full text-[10px] font-black tracking-widest uppercase shadow-md">
                     {item.badge}
                   </span>
                   <span className="px-2.5 py-1 bg-black/65 border border-white/20 text-white rounded-full text-[9px] font-bold tracking-wider uppercase">
@@ -165,10 +165,10 @@ export default function GrassrootsInitiativeSection({ initiatives: apiInitiative
               {/* Card Body Content */}
               <div className="p-4 sm:p-5 flex flex-col justify-between flex-grow min-h-0 bg-white">
                 <div className="space-y-2">
-                  <span className="text-[10px] font-extrabold text-[#006747] tracking-widest uppercase block">
+                  <span className="text-[10px] font-extrabold text-zru-green tracking-widest uppercase block">
                     {item.subtitle}
                   </span>
-                  <h3 className="font-heading font-black text-base sm:text-lg text-black uppercase leading-snug group-hover/card:text-[#006747] transition-colors line-clamp-2">
+                  <h3 className="font-heading font-black text-base sm:text-lg text-black uppercase leading-snug group-hover/card:text-zru-green transition-colors line-clamp-2">
                     {item.title}
                   </h3>
                   <p className="text-black/70 text-xs font-normal leading-relaxed line-clamp-3">

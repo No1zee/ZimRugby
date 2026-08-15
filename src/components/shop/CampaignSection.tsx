@@ -73,7 +73,7 @@ export default function CampaignSection() {
             className="absolute right-0 bottom-[-10%] w-2/5 aspect-[3/4] overflow-hidden border border-white/10 shadow-2xl hidden sm:block"
           >
             <img 
-              src="https://images.unsplash.com/photo-1508098682722-e99c43a406b2?q=80&w=800&auto=format&fit=crop" 
+              src="https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=800&auto=format&fit=crop" 
               alt="Sables Gold Embroidery detail" 
               className="w-full h-full object-cover"
             />

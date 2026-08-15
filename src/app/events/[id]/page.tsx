@@ -112,7 +112,7 @@ export default async function EventDetailPage({ params }: { params: Promise<{ id
   }
 
   return (
-    <main className="bg-milk-white min-h-screen pb-24 text-rich-black">
+    <main className="bg-milk-white min-h-screen pb-16 text-rich-black">
       {/* Hero */}
       <PageHero
         title={event.title}
@@ -125,7 +125,7 @@ export default async function EventDetailPage({ params }: { params: Promise<{ id
         ]}
       />
 
-      <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8 pt-12 sm:pt-16">
+      <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8 pt-10 sm:pt-12">
         {/* Metadata Strip */}
         <div className="flex flex-wrap items-center gap-3 sm:gap-4 mb-10 pb-8 border-b border-black/10">
           <span className={`px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest ${STATUS_STYLES[event.status]}`}>
@@ -146,7 +146,7 @@ export default async function EventDetailPage({ params }: { params: Promise<{ id
         </div>
 
         {/* Description & Sidebar */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-10 lg:gap-12">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-10">
           <div className="lg:col-span-2 space-y-6">
             <h2 className="text-2xl sm:text-3xl font-heading font-black uppercase tracking-tight italic text-rich-black">
               Tournament Briefing

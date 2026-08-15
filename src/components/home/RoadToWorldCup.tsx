@@ -80,7 +80,7 @@ export default function RoadToWorldCup({ featuredPlayers, campaign }: RoadToWorl
 
 
         {/* Section heading on the green */}
-        <div className="relative z-10 max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 text-center pt-14 mb-10">
+        <div className="relative z-10 max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 text-center pt-12 mb-8">
           <h2 className="text-4xl sm:text-5xl lg:text-6xl font-heading font-black uppercase tracking-wide sm:tracking-widest text-white not-italic leading-[1.05]">
             {mainHeadline}{" "}
             <span className="text-accent-teal">{accentWord}</span>
@@ -92,9 +92,9 @@ export default function RoadToWorldCup({ featuredPlayers, campaign }: RoadToWorl
 
         {/* White center tile — sits on top of the green */}
         <div className="relative z-20 max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="bg-[#FDFBF0] rounded-2xl shadow-[0_-8px_40px_rgba(0,0,0,0.15)] overflow-hidden">
+          <div className="bg-milk-white rounded-2xl shadow-[0_-8px_40px_rgba(0,0,0,0.15)] overflow-hidden">
             {/* Countdown row */}
-            <div className="px-8 py-10 flex flex-col items-center border-b border-black/5">
+            <div className="px-8 py-8 flex flex-col items-center border-b border-black/5">
               <AnimatedCountdown
                 targetDate={targetDate}
                 variant="digital"
@@ -114,7 +114,7 @@ export default function RoadToWorldCup({ featuredPlayers, campaign }: RoadToWorl
             </div>
 
             {/* Featured Players */}
-            <div className="px-4 sm:px-6 lg:px-8 py-10 border-t border-black/5">
+            <div className="px-4 sm:px-6 lg:px-8 py-8 border-t border-black/5">
               <div className="mb-8 max-w-3xl">
                 <div className="heading-plate">
                   <h2 className="text-3xl sm:text-5xl font-heading font-black uppercase tracking-wide sm:tracking-widest text-rich-black not-italic leading-[1.05]">

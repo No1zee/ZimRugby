@@ -62,7 +62,7 @@ export default function ShopCardShowcase() {
   return (
     <div ref={wrapperRef} className="h-full w-full">
     <Link
-      href="/shop"
+      href="/clubhouse"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       className="relative bg-white group h-full w-full flex flex-col"

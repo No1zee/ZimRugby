@@ -80,7 +80,7 @@ export default function RefereesPortalPage() {
 
 
         {/* Tab Selection */}
-        <div className="flex border-b border-black/10 py-1 overflow-x-auto gap-4 mb-8">
+        <div className="flex border-b border-black/10 py-1 overflow-x-auto gap-4 mb-6">
           {tabs.map((tab) => {
             const Icon = tab.icon;
             const isActive = activeTab === tab.id;
@@ -106,7 +106,7 @@ export default function RefereesPortalPage() {
         </div>
 
         {/* Tab Content panels */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           
           {/* Main Area (2 columns on desktop) */}
           <div className="lg:col-span-2 space-y-6">
@@ -122,7 +122,7 @@ export default function RefereesPortalPage() {
                 {/* Notices Tab */}
                 {activeTab === "notices" && (
                   <div className="space-y-6">
-                    <div className="border-l-4 border-zru-green pl-4 mb-8">
+                    <div className="border-l-4 border-zru-green pl-4 mb-6">
                       <h2 className="text-xl font-black uppercase tracking-wider">OFFICIAL ANNOUNCEMENTS</h2>
                       <p className="text-sm text-black/50 mt-1">Law amendments and pre-season directives for active panels.</p>
                     </div>
@@ -131,7 +131,7 @@ export default function RefereesPortalPage() {
                       {notices.map((notice) => (
                         <div 
                           key={notice.id} 
-                          className="bg-white border border-black/5 rounded-2xl p-6 shadow-sm space-y-4"
+                          className="bg-white border border-black/5 rounded-2xl p-5 shadow-sm space-y-4"
                         >
                           <div className="flex justify-between items-center text-[10px] text-black/40 font-bold uppercase tracking-wider">
                             <span>ZRU REF COMMITTEE</span>
@@ -155,7 +155,7 @@ export default function RefereesPortalPage() {
                 {/* Laws & Downloads Tab */}
                 {activeTab === "laws" && (
                   <div className="space-y-6">
-                    <div className="border-l-4 border-zru-green pl-4 mb-8">
+                    <div className="border-l-4 border-zru-green pl-4 mb-6">
                       <h2 className="text-xl font-black uppercase tracking-wider">RULEBOOKS & TEMPLATES</h2>
                       <p className="text-sm text-black/50 mt-1">Download official World Rugby and ZRU variation PDFs.</p>
                     </div>
@@ -190,7 +190,7 @@ export default function RefereesPortalPage() {
                 {/* Courses & Training Tab */}
                 {activeTab === "courses" && (
                   <div className="space-y-6">
-                    <div className="border-l-4 border-zru-green pl-4 mb-8">
+                    <div className="border-l-4 border-zru-green pl-4 mb-6">
                       <h2 className="text-xl font-black uppercase tracking-wider">EDUCATION CALENDAR</h2>
                       <p className="text-sm text-black/50 mt-1">World Rugby accredited levels and domestic specialist clinics.</p>
                     </div>
@@ -199,7 +199,7 @@ export default function RefereesPortalPage() {
                       {courses.map((course, idx) => (
                         <div 
                           key={idx} 
-                          className="bg-white border border-black/5 rounded-xl p-6 flex flex-col md:flex-row md:items-center md:justify-between gap-6 shadow-sm"
+                          className="bg-white border border-black/5 rounded-xl p-5 flex flex-col md:flex-row md:items-center md:justify-between gap-6 shadow-sm"
                         >
                           <div className="flex items-center gap-4">
                             <div className="w-10 h-10 bg-zru-green/10 rounded-lg flex items-center justify-center shrink-0 border border-zru-green/10 text-zru-green">
@@ -240,7 +240,7 @@ export default function RefereesPortalPage() {
 
           {/* Sidebar Area: Interactive Registration Form */}
           <div className="lg:col-span-1">
-            <div className="bg-white border border-black/5 rounded-2xl p-6 shadow-sm sticky top-28 space-y-6">
+            <div className="bg-white border border-black/5 rounded-2xl p-5 shadow-sm sticky top-28 space-y-6">
               
               <div className="border-b border-black/5 pb-4">
                 <h3 className="text-sm font-black uppercase tracking-widest text-zru-green">COURSE REGISTRATION</h3>

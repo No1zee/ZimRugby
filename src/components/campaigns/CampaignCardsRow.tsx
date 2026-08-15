@@ -7,7 +7,7 @@ import { assetUrl } from "@/lib/directus/assets";
 const CAMPAIGN_FALLBACK_IMAGES: Record<string, string> = {
   "road-to-australia-2027": "https://images.unsplash.com/photo-1544698310-74ea9d1c8258?auto=format&fit=crop&w=1200&q=80",
   "africa-cup-tour-2026": "https://images.unsplash.com/photo-1519315901367-f34ff9154487?auto=format&fit=crop&w=1200&q=80",
-  "schools-festival-2026": "https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=1200&q=80",
+  "schools-festival-2026": "/images/events/schools-fest.jpg",
 };
 
 const GLOBAL_DEFAULT_IMAGE = "https://images.unsplash.com/photo-1544698310-74ea9d1c8258?auto=format&fit=crop&w=1200&q=80";

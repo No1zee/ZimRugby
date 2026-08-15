@@ -50,6 +50,7 @@ export default async function ReportPage({ params }: PageProps) {
   const contentHtml = looksLikeHtml
     ? body
     : body.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+  const readingMinutes = Math.max(1, Math.round(body.replace(/<[^>]*>/g, " ").split(/\s+/).filter(Boolean).length / 200));
 
   return (
     <main className="min-h-screen bg-rich-black text-white selection:bg-zru-green selection:text-black">
@@ -64,7 +65,7 @@ export default async function ReportPage({ params }: PageProps) {
           priority
           className="object-cover opacity-60 scale-105"
         />
-        <div className="absolute inset-0 bg-linear-to-t from-rich-black via-rich-black/40 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-rich-black via-rich-black/40 to-transparent" />
         
         <div className="absolute inset-0 flex flex-col justify-end px-6 pb-12 md:pb-24 max-w-[1440px] mx-auto w-full">
           <Link 
@@ -82,7 +83,7 @@ export default async function ReportPage({ params }: PageProps) {
               <Calendar className="w-3.5 h-3.5 text-zru-green" />
               <span>{report.date}</span>
               <span className="w-1 h-1 rounded-full bg-white/20" />
-              <span>5 Min Read</span>
+              <span>{readingMinutes} min read</span>
             </div>
           </div>
           
@@ -96,9 +97,9 @@ export default async function ReportPage({ params }: PageProps) {
       <section className="relative z-10 px-6 py-24 bg-rich-black">
         <div className="max-w-4xl mx-auto">
           {/* Author / Social Meta */}
-          <div className="flex items-center justify-between py-10 border-y border-white/5 mb-20">
+          <div className="flex items-center justify-between py-10 border-y border-white/5 mb-16">
             <div className="flex items-center gap-5">
-              <div className="w-14 h-14 rounded-2xl bg-linear-to-br from-zru-green/20 to-transparent flex items-center justify-center border border-zru-green/20 group">
+              <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-zru-green/20 to-transparent flex items-center justify-center border border-zru-green/20 group">
                 <span className="text-zru-green font-black text-xl group-hover:scale-110 transition-transform">ZR</span>
               </div>
               <div className="space-y-1">
@@ -129,7 +130,7 @@ export default async function ReportPage({ params }: PageProps) {
             
             {/* Call to action for the jersey */}
             {report.id === 'heritage-1991' && (
-              <div className="mt-20 p-1 bg-linear-to-r from-zru-green/50 via-zru-green/20 to-transparent rounded-3xl">
+              <div className="mt-20 p-1 bg-gradient-to-r from-zru-green/50 via-zru-green/20 to-transparent rounded-3xl">
                 <div className="bg-rich-black rounded-[22px] p-10 md:p-16 flex flex-col md:flex-row items-center gap-12 border border-white/5">
                   <div className="relative w-48 h-48 md:w-64 md:h-64 shrink-0">
                      <Image 
@@ -143,8 +144,8 @@ export default async function ReportPage({ params }: PageProps) {
                   </div>
                   <div className="space-y-6 text-center md:text-left">
                     <h2 className="text-4xl font-black uppercase tracking-tighter">Own a Piece of <span className="text-zru-green">History</span></h2>
-                    <p className="text-white/60 text-lg">The 1991 Heritage Jersey is available now in limited quantities. Every stitch tells a story of pride, passion, and the indestructible Sable spirit.</p>
-                    <SlantedButton href="/shop" variant="primary" size="sm" rightIcon={<ArrowLeft className="w-4 h-4 rotate-180" />}>
+                    <p className="text-white/60 text-lg">The 1991 Heritage Jersey is available now in limited quantities. Every stitch carries the indestructible Sable spirit.</p>
+                    <SlantedButton href="/clubhouse" variant="primary" size="sm" rightIcon={<ArrowLeft className="w-4 h-4 rotate-180" />}>
                       Visit Clubhouse Store
                     </SlantedButton>
                   </div>
@@ -154,7 +155,7 @@ export default async function ReportPage({ params }: PageProps) {
           </div>
           
           {/* Tags */}
-          <div className="mt-32 pt-12 border-t border-white/5 flex flex-wrap gap-4">
+          <div className="mt-20 pt-10 border-t border-white/5 flex flex-wrap gap-4">
              {["Sables", "Heritage", "World Cup", "History", "The 1991 Era"].map(tag => (
                <span key={tag} className="text-[10px] font-black uppercase tracking-widest px-6 py-3 bg-white/5 border border-white/10 rounded-full hover:border-zru-green/40 transition-colors cursor-default">
                  #{tag}
@@ -165,7 +166,7 @@ export default async function ReportPage({ params }: PageProps) {
       </section>
 
       {/* More from The FanZone */}
-      <section className="py-32 px-6 bg-[#050505] border-t border-white/5">
+      <section className="py-24 px-6 bg-[#050505] border-t border-white/5">
         <div className="max-w-[1440px] mx-auto">
           <div className="flex justify-between items-end mb-16">
             <h2 className="text-4xl md:text-6xl font-black uppercase tracking-tighter leading-none">
@@ -176,7 +177,7 @@ export default async function ReportPage({ params }: PageProps) {
             </Link>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
             {relatedReports.map(item => (
               <Link key={item.id} href={`/media/${item.id}`} className="group block space-y-6">
                 <div className="relative aspect-video overflow-hidden rounded-3xl bg-neutral-900 border border-white/5 transition-all group-hover:border-zru-green/30 group-hover:-translate-y-1">
@@ -187,7 +188,7 @@ export default async function ReportPage({ params }: PageProps) {
                     sizes="(max-width: 768px) 100vw, 33vw"
                     className="object-cover opacity-50 group-hover:opacity-100 transition-all duration-700 group-hover:scale-110"
                   />
-                  <div className="absolute inset-0 bg-linear-to-t from-black/80 via-transparent to-transparent opacity-60 group-hover:opacity-20 transition-opacity" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-60 group-hover:opacity-20 transition-opacity" />
                 </div>
                 <div className="space-y-3">
                   <div className="flex items-center gap-3">

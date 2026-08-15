@@ -86,13 +86,13 @@ function TeamTile({ team }: { team: Team }) {
 export default function TeamBentoGrid({ teams }: { teams: Team[] }) {
   return (
     <>
-      <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 pt-10 md:pt-12 mb-6 sm:mb-8">
+      <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 pt-8 md:pt-10 mb-6 sm:mb-8">
         <h2 className="font-heading text-4xl sm:text-5xl font-black uppercase tracking-tight not-italic text-rich-black leading-[1.0]">
           OUR <span className="text-accent-teal">TEAMS</span>
         </h2>
       </div>
 
-      <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 pb-10 md:pb-14">
+      <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 pb-8 md:pb-10">
         <div className="grid grid-cols-2 sm:grid-cols-4 grid-rows-[auto_auto_auto] gap-3 sm:gap-4">
           {teams.map((team) => (
             <TeamTile key={team.id} team={team} />

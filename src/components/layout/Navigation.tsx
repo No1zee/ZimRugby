@@ -15,7 +15,7 @@ import type { SearchEventResult } from "@/types";
 import { useAuth } from "@/context/AuthContext";
 
 /* ── Static config ── */
-const TRANSPARENT_ROUTES = ["/", "/live", "/world-cup-campaign", "/fan-zone", "/teams", "/match-centre", "/schools", "/clubs", "/about", "/events", "/media", "/volunteer", "/referees"];
+const SOLID_ROUTES = ["/admin", "/admin-login", "/login", "/verify-email", "/onboarding", "/tickets", "/video-hub", "/gallery", "/competitions"];
 const SCROLL_THRESHOLD = 20;
 
 export default function Navigation() {
@@ -56,7 +56,7 @@ export default function Navigation() {
   const [allReports, setAllReports] = useState<any[]>([]);
 
   /* ── Derived booleans (computed once) ── */
-  const isTransparentAllowed = TRANSPARENT_ROUTES.some((route) =>
+  const isTransparentAllowed = !SOLID_ROUTES.some((route) =>
     route === "/" ? pathname === "/" : pathname.startsWith(route)
   );
   const isOnHero = isTransparentAllowed && !isScrolled;

@@ -133,7 +133,7 @@ export default function MatchCentreClient({
 
           {/* Fan Info / Union Bulletin Block (Directus) */}
           {settings.showFanBulletin && bulletin && (
-            <div className="mb-8 p-6 bg-milk-white border border-black/10 rounded-2xl shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div className="mb-6 p-5 bg-milk-white border border-black/10 rounded-2xl shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
               <div>
                 <span className="text-[10px] font-black text-zru-green uppercase tracking-widest block mb-1">
                   {bulletin.eyebrow}
@@ -169,7 +169,7 @@ export default function MatchCentreClient({
           />
 
           {/* Filters & Tabs */}
-          <div className="flex flex-col lg:flex-row justify-between items-center gap-6 mb-12">
+          <div className="flex flex-col lg:flex-row justify-between items-center gap-5 mb-8">
             {/* Tabs */}
             <div className="flex p-1 bg-black/5 rounded-xl border border-black/10 relative z-0">
               {(["fixtures", "results", "standings"] as const).map((tab) => {
@@ -228,7 +228,7 @@ export default function MatchCentreClient({
 
           {/* Campaign Filter chips */}
           {campaigns.length > 0 && activeTab !== "standings" && (
-            <div className="flex overflow-x-auto py-1 gap-2 no-scrollbar mb-10 w-full">
+            <div className="flex overflow-x-auto py-1 gap-2 no-scrollbar mb-8 w-full">
               <button
                 onClick={() => setSelectedCampaign("All")}
                 className={`px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-wider whitespace-nowrap transition-colors border ${

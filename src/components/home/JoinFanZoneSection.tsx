@@ -47,7 +47,7 @@ export default function JoinFanZoneSection() {
   /* ── Success state ── */
   if (submitted) {
     return (
-      <section className="w-full bg-milk-white py-10 sm:py-14 lg:py-20 relative z-20">
+      <section className="w-full bg-milk-white py-10 sm:py-12 lg:py-16 relative z-20">
         <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
           <div
             className="rounded-3xl p-8 text-center space-y-3 border border-white/10"
@@ -65,7 +65,7 @@ export default function JoinFanZoneSection() {
             </p>
             <Link
               href="/fan-zone"
-              className="inline-flex items-center gap-2 mt-2 bg-[#006B3F] hover:bg-[#007A48] text-white font-black uppercase tracking-widest text-xs px-6 py-3 rounded-xl transition-all duration-200"
+              className="inline-flex items-center gap-2 mt-2 bg-zru-green hover:bg-zru-green/90 text-white font-black uppercase tracking-widest text-xs px-6 py-3 rounded-xl transition-all duration-200"
             >
               Visit Fan Zone <ArrowRight className="w-4 h-4" />
             </Link>
@@ -78,7 +78,7 @@ export default function JoinFanZoneSection() {
   /* ── Already logged in ── */
   if (isAuthenticated && user) {
     return (
-      <section className="w-full bg-milk-white py-10 sm:py-14 lg:py-20 relative z-20">
+      <section className="w-full bg-milk-white py-10 sm:py-12 lg:py-16 relative z-20">
         <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
           <div
             className="rounded-3xl p-6 sm:p-8 flex flex-col sm:flex-row items-center justify-between gap-4 border border-white/10"
@@ -104,7 +104,7 @@ export default function JoinFanZoneSection() {
             </div>
             <Link
               href="/fan-zone"
-              className="inline-flex items-center gap-2 bg-[#006B3F] hover:bg-[#007A48] text-white font-black uppercase tracking-widest text-xs px-6 py-3 rounded-xl transition-all duration-200 shadow-lg shadow-[#006B3F]/30"
+              className="inline-flex items-center gap-2 bg-zru-green hover:bg-zru-green/90 text-white font-black uppercase tracking-widest text-xs px-6 py-3 rounded-xl transition-all duration-200 shadow-lg shadow-[#006B3F]/30"
             >
               Fan Zone Dashboard <ArrowRight className="w-4 h-4" />
             </Link>
@@ -116,7 +116,7 @@ export default function JoinFanZoneSection() {
 
   /* ── Main banner (original expand mechanic) ── */
   return (
-    <section className="w-full bg-milk-white py-10 sm:py-14 lg:py-20 relative z-20">
+    <section className="w-full bg-milk-white py-10 sm:py-12 lg:py-16 relative z-20">
       <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
 
         {/*
@@ -132,7 +132,7 @@ export default function JoinFanZoneSection() {
           }}
         >
           {/* Border glow on hover */}
-          <div className="absolute inset-0 border border-white/10 group-hover/fzCard:border-[#006B3F]/60 group-focus-within/fzCard:border-[#006B3F]/60 group-hover/fzCard:shadow-[inset_0_0_60px_rgba(0,107,63,0.4)] transition-shadow duration-700 pointer-events-none rounded-3xl" />
+          <div className="absolute inset-0 border border-white/10 group-hover/fzCard:border-zru-green/60 group-focus-within/fzCard:border-[#006B3F]/60 group-hover/fzCard:shadow-[inset_0_0_60px_rgba(0,107,63,0.4)] transition-shadow duration-700 pointer-events-none rounded-3xl" />
           {/* Green gradient sweep */}
           <div className="absolute inset-0 opacity-0 group-hover/fzCard:opacity-20 group-focus-within/fzCard:opacity-20 pointer-events-none bg-gradient-to-r from-transparent via-[#006B3F] to-transparent transition-opacity duration-700" />
 
@@ -167,7 +167,7 @@ export default function JoinFanZoneSection() {
             <div className="w-full sm:w-auto group-hover/fzCard:w-full group-focus-within/fzCard:w-full bg-white p-3 group-hover/fzCard:p-5 sm:group-hover/fzCard:p-7 group-focus-within/fzCard:p-5 sm:group-focus-within/fzCard:p-7 rounded-2xl border border-black/5 group-hover/fzCard:border-[#006B3F]/50 group-focus-within/fzCard:border-[#006B3F]/50 transition-[width,padding,border-color] duration-500 ease-in-out shadow-lg">
 
               {/* Header — revealed on expand */}
-              <p className="text-[#003822]/70 text-xs font-black uppercase tracking-wider font-heading transition-[opacity,max-height,margin] duration-500 opacity-0 max-h-0 overflow-hidden mb-0 group-hover/fzCard:opacity-100 group-hover/fzCard:max-h-10 group-hover/fzCard:mb-3 group-hover/fzCard:text-[#002D1A] group-focus-within/fzCard:opacity-100 group-focus-within/fzCard:max-h-10 group-focus-within/fzCard:mb-3 group-focus-within/fzCard:text-[#002D1A]">
+              <p className="text-zru-green/70 text-xs font-black uppercase tracking-wider font-heading transition-[opacity,max-height,margin] duration-500 opacity-0 max-h-0 overflow-hidden mb-0 group-hover/fzCard:opacity-100 group-hover/fzCard:max-h-10 group-hover/fzCard:mb-3 group-hover/fzCard:text-[#002D1A] group-focus-within/fzCard:opacity-100 group-focus-within/fzCard:max-h-10 group-focus-within/fzCard:mb-3 group-focus-within/fzCard:text-[#002D1A]">
                 Join the Fan Zone &mdash; It&apos;s Free
               </p>
 
@@ -180,7 +180,7 @@ export default function JoinFanZoneSection() {
                 <button
                   type="button"
                   onClick={() => signInWithOAuth("google")}
-                  className="w-full flex items-center justify-center gap-3 bg-white border border-black/12 hover:border-[#006B3F]/60 hover:bg-[#006B3F]/5 text-[#0E0E0E] text-xs font-bold py-3 rounded-xl transition-all duration-200 shadow-sm group/gbtn"
+                  className="w-full flex items-center justify-center gap-3 bg-white border border-black/12 hover:border-[#006B3F]/60 hover:bg-zru-green/5 text-rich-black text-xs font-bold py-3 rounded-xl transition-all duration-200 shadow-sm group/gbtn"
                 >
                   {/* Google "G" SVG */}
                   <svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true">
@@ -189,7 +189,7 @@ export default function JoinFanZoneSection() {
                     <path d="M3.964 10.71A5.41 5.41 0 0 1 3.682 9c0-.593.102-1.17.282-1.71V4.958H.957A8.996 8.996 0 0 0 0 9c0 1.452.348 2.827.957 4.042l3.007-2.332Z" fill="#FBBC05"/>
                     <path d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 0 0 .957 4.958L3.964 6.29C4.672 4.163 6.656 3.58 9 3.58Z" fill="#EA4335"/>
                   </svg>
-                  <span className="group-hover/gbtn:text-[#006B3F] transition-colors duration-200">Continue with Google</span>
+                  <span className="group-hover/gbtn:text-zru-green transition-colors duration-200">Continue with Google</span>
                 </button>
                 {/* OR divider */}
                 <div className="flex items-center gap-2 my-3">
@@ -208,7 +208,7 @@ export default function JoinFanZoneSection() {
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                     placeholder="Full Name"
-                    className="w-full bg-black/5 text-[#0E0E0E] px-4 py-3 rounded-xl border border-black/10 focus:outline-none focus:border-[#006B3F] text-sm placeholder:text-[#0E0E0E]/40 transition-[border-color] duration-300"
+                    className="w-full bg-black/5 text-rich-black px-4 py-3 rounded-xl border border-black/10 focus:outline-none focus:border-[#006B3F] text-sm placeholder:text-rich-black/40 transition-[border-color] duration-300"
                   />
                   <input
                     type="email"
@@ -216,7 +216,7 @@ export default function JoinFanZoneSection() {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="name@domain.com"
-                    className="w-full bg-black/5 text-[#0E0E0E] px-4 py-3 rounded-xl border border-black/10 focus:outline-none focus:border-[#006B3F] text-sm placeholder:text-[#0E0E0E]/40 transition-[border-color] duration-300"
+                    className="w-full bg-black/5 text-rich-black px-4 py-3 rounded-xl border border-black/10 focus:outline-none focus:border-[#006B3F] text-sm placeholder:text-rich-black/40 transition-[border-color] duration-300"
                   />
                 </div>
               </div>
@@ -231,7 +231,7 @@ export default function JoinFanZoneSection() {
                   <select
                     value={favoriteTeam}
                     onChange={(e) => setFavoriteTeam(e.target.value as typeof favoriteTeam)}
-                    className="w-full bg-black/5 text-[#0E0E0E] px-4 py-3.5 rounded-xl border border-black/10 focus:outline-none focus:border-[#006B3F] text-sm transition-[border-color] duration-300 min-h-[46px]"
+                    className="w-full bg-black/5 text-rich-black px-4 py-3.5 rounded-xl border border-black/10 focus:outline-none focus:border-[#006B3F] text-sm transition-[border-color] duration-300 min-h-[46px]"
                   >
                     <option value="Sables">Zimbabwe Sables (Men&apos;s XV)</option>
                     <option value="Lady Sables">Lady Sables (Women&apos;s XV)</option>
@@ -246,7 +246,7 @@ export default function JoinFanZoneSection() {
                   type="submit"
                   disabled={isSubmitting || !cdpaConsent}
                   id="fan-zone-join-btn"
-                  className="group/btn bg-gradient-to-b from-[#00704D] to-[#005238] hover:from-[#00855B] hover:to-[#006B3F] text-white px-8 py-3.5 rounded-xl transition-colors duration-300 flex items-center justify-center gap-2 font-black text-xs tracking-widest uppercase font-heading shrink-0 shadow-lg shadow-[#006B3F]/30 min-h-[46px] w-full sm:w-auto disabled:opacity-50"
+                  className="group/btn bg-gradient-to-b from-zru-green to-[#005238] hover:from-[#00855B] hover:to-zru-green text-white px-8 py-3.5 rounded-xl transition-colors duration-300 flex items-center justify-center gap-2 font-black text-xs tracking-widest uppercase font-heading shrink-0 shadow-lg shadow-zru-green/30 min-h-[46px] w-full sm:w-auto disabled:opacity-50"
                 >
                   <span>{isSubmitting ? "…" : "JOIN"}</span>
                   <ArrowRight className="w-0 opacity-0 -translate-x-2 transition-[width,opacity,transform] duration-300 ease-in-out group-hover/fzCard:w-4 group-hover/fzCard:opacity-100 group-hover/fzCard:translate-x-0 group-focus-within/fzCard:w-4 group-focus-within/fzCard:opacity-100 group-focus-within/fzCard:translate-x-0 shrink-0" />
@@ -262,7 +262,7 @@ export default function JoinFanZoneSection() {
                   "VIP fan competitions",
                 ].map((b) => (
                   <div key={b} className="flex items-center gap-1.5 text-[10px] text-black/60">
-                    <span className="w-1 h-1 rounded-full bg-[#006B3F] shrink-0" />
+                    <span className="w-1 h-1 rounded-full bg-zru-green shrink-0" />
                     <span>{b}</span>
                   </div>
                 ))}
@@ -276,19 +276,19 @@ export default function JoinFanZoneSection() {
                     id="cdpa-banner"
                     checked={cdpaConsent}
                     onChange={(e) => setCdpaConsent(e.target.checked)}
-                    className="mt-0.5 rounded border-black/20 text-[#006B3F] focus:ring-[#006B3F] focus:ring-offset-0"
+                    className="mt-0.5 rounded border-black/20 text-zru-green focus:ring-zru-green focus:ring-offset-0"
                   />
                   <label htmlFor="cdpa-banner" className="text-[10px] text-black/50 leading-relaxed cursor-pointer">
                     I consent to ZRU news &amp; ticket alerts (
-                    <Link href="/privacy-policy" className="text-[#006B3F] underline hover:text-black transition-colors">
+                    <Link href="/privacy-policy" className="text-zru-green underline hover:text-black transition-colors">
                       CDPA 2021
                     </Link>
                     ).
                   </label>
                 </div>
-                <div className="text-[10px] text-[#0E0E0E]/40 flex items-center justify-between w-full">
+                <div className="text-[10px] text-rich-black/40 flex items-center justify-between w-full">
                   <span>Priority tickets, discounts, and VIP access.</span>
-                  <Link className="underline hover:text-[#006B3F] transition-[color]" href="/fan-zone">
+                  <Link className="underline hover:text-zru-green transition-[color]" href="/fan-zone">
                     Learn more
                   </Link>
                 </div>

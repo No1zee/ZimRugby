@@ -15,7 +15,7 @@ export default function BoardPage() {
   ];
 
   return (
-    <div className="space-y-12">
+    <div className="space-y-10">
       
       {/* Overview header */}
       <div className="border-l-4 border-zru-green pl-4">
@@ -24,9 +24,9 @@ export default function BoardPage() {
       </div>
 
       {/* Active board grid */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-6 border-t border-black/5">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-5 pt-5 border-t border-black/5">
         {leaders.map((person) => (
-          <div key={person.name} className="bg-milk-white border border-black/5 rounded-2xl p-6 text-center group transition-[border-color,box-shadow] hover:border-zru-green/30 hover:shadow-md">
+          <div key={person.name} className="bg-milk-white border border-black/5 rounded-2xl p-5 text-center group transition-[border-color,box-shadow] hover:border-zru-green/30 hover:shadow-md">
             <div className="w-16 h-16 bg-zru-green/10 rounded-full flex items-center justify-center mx-auto mb-4 border border-zru-green/10">
               <Users className="w-6 h-6 text-zru-green" />
             </div>
@@ -40,8 +40,8 @@ export default function BoardPage() {
       </div>
 
       {/* Special Memorial Section for ZRU President Aaron Jani */}
-      <div className="pt-10 border-t border-black/5">
-        <div className="bg-[#004D2C] text-white rounded-3xl p-8 relative overflow-hidden border border-white/10 shadow-lg">
+      <div className="pt-8 border-t border-black/5">
+        <div className="bg-[#004D2C] text-white rounded-3xl p-7 relative overflow-hidden border border-white/10 shadow-lg">
           <div className="absolute top-4 right-4 text-white/5">
             <Heart className="w-24 h-24 fill-current" />
           </div>

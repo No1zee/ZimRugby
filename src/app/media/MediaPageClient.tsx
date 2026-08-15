@@ -81,12 +81,12 @@ export default function MediaPageClient({ initialSocialPosts, cmsPage, initialNe
         <PageAnnouncements scope="media" className="mb-8" />
 
         {/* Nations Cup Matchday Media & Video Highlights */}
-        <div className="mb-14">
+        <div className="mb-10">
           <MatchdayVideoHighlights />
         </div>
 
         {/* Filters */}
-        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-10">
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
             <div className="flex p-1 bg-black/5 rounded-xl border border-black/10 w-fit overflow-x-auto no-scrollbar">
                 <button 
                     onClick={() => setActiveTab("all")}
@@ -128,8 +128,8 @@ export default function MediaPageClient({ initialSocialPosts, cmsPage, initialNe
 
         {/* Section 1: Video Highlights */}
         {(activeTab === "all" || activeTab === "videos") && (
-          <section className="mb-14">
-            <div className="flex items-center justify-between mb-6 pb-3 border-b border-black/10">
+          <section className="mb-10">
+            <div className="flex items-center justify-between mb-5 pb-3 border-b border-black/10">
               <h2 className="text-xl font-heading font-bold text-rich-black uppercase tracking-wider flex items-center gap-2">
                 <Play className="w-5 h-5 text-zru-green fill-zru-green" />
                 Featured Video Highlights
@@ -160,8 +160,8 @@ export default function MediaPageClient({ initialSocialPosts, cmsPage, initialNe
 
         {/* Section 2: Official News & Press */}
         {(activeTab === "all" || activeTab === "news") && (
-          <section className="mb-14">
-            <div className="flex items-center justify-between mb-6 pb-3 border-b border-black/10">
+          <section className="mb-10">
+            <div className="flex items-center justify-between mb-5 pb-3 border-b border-black/10">
               <h2 className="text-xl font-heading font-bold text-rich-black uppercase tracking-wider flex items-center gap-2">
                 <span className="w-2.5 h-2.5 rounded-full bg-zru-green" />
                 Official News & Press Releases
@@ -240,8 +240,8 @@ export default function MediaPageClient({ initialSocialPosts, cmsPage, initialNe
 
         {/* Section 3: Social Media Feed */}
         {(activeTab === "all" || activeTab === "social") && (
-          <section className="mb-14">
-            <div className="flex items-center justify-between mb-6 pb-3 border-b border-black/10">
+          <section className="mb-10">
+            <div className="flex items-center justify-between mb-5 pb-3 border-b border-black/10">
               <h2 className="text-xl font-heading font-bold text-rich-black uppercase tracking-wider flex items-center gap-2">
                 <Facebook className="w-5 h-5 text-[#1877F2]" />
                 Official Facebook Feed

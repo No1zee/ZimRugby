@@ -169,7 +169,7 @@ export default function KineticNav({ isOpen, onClose, navItems, pathname }: Kine
                   <Ticket className="w-4 h-4" />
                   <span>MATCH TICKETS</span>
                 </Link>
-                <Link href="/shop" onClick={onClose} className="k-quick-action-secondary">
+                <Link href="/clubhouse" onClick={onClose} className="k-quick-action-secondary">
                   <ShoppingBag className="w-4 h-4" />
                   <span>STORE</span>
                 </Link>

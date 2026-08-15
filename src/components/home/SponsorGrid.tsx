@@ -26,7 +26,7 @@ export default function SponsorGrid({ partners }: SponsorGridProps) {
     : partners;
 
   return (
-    <section id="partners" className="bg-[#FDFBF0] border-t border-black/5 pt-0 pb-0 px-4 sm:px-6 lg:px-8">
+    <section id="partners" className="bg-milk-white border-t border-black/5 pt-0 pb-0 px-4 sm:px-6 lg:px-8">
       {/* ── Green & White Strips with Logo Dock + Bottom CTA ── */}
       <div className="relative -mx-4 sm:-mx-6 lg:-mx-8">
 
@@ -59,7 +59,7 @@ export default function SponsorGrid({ partners }: SponsorGridProps) {
         <div className="bg-white py-10 sm:py-12 border-b border-black/5 overflow-hidden relative w-full flex items-center justify-center">
           {useStaticGrid ? (
             /* Reduced Motion Fallback: Show original partners list once statically without wrapping grid slop */
-            <div className="max-w-[1440px] mx-auto flex flex-wrap items-center justify-center gap-10 sm:gap-16 py-2">
+            <div className="max-w-[1440px] mx-auto flex flex-wrap items-center justify-center gap-8 sm:gap-12 py-2">
               {partners.map((s) => (
                 <div
                   key={s.id}
@@ -77,7 +77,7 @@ export default function SponsorGrid({ partners }: SponsorGridProps) {
             </div>
           ) : (
             /* Animated Path: Infinite horizontal looping marquee */
-            <div className="flex gap-16 sm:gap-24 animate-marquee py-2">
+            <div className="flex gap-12 sm:gap-16 animate-marquee py-2">
               {/* First set of logos */}
               {logoList.map((s, idx) => (
                 <div

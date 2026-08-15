@@ -79,7 +79,7 @@ export default function GalleryPageClient({ initialPhotos }: GalleryPageClientPr
   );
 
   return (
-    <main className="bg-milk-white min-h-screen pb-24 text-rich-black relative overflow-hidden">
+    <main className="bg-milk-white min-h-screen pb-16 text-rich-black relative overflow-hidden">
       <div className="absolute inset-0 pointer-events-none select-none z-0">
         <EdgyGradient opacity={0.05} />
       </div>
@@ -204,7 +204,7 @@ export default function GalleryPageClient({ initialPhotos }: GalleryPageClientPr
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: index * 0.02 }}
                     whileHover={{ y: -5 }}
-                    className="break-inside-avoid mb-8 bg-white border border-black/5 rounded-2xl overflow-hidden group cursor-pointer shadow-md hover:shadow-lg transition-all duration-300 flex flex-col"
+                    className="break-inside-avoid mb-6 bg-white border border-black/5 rounded-2xl overflow-hidden group cursor-pointer shadow-md hover:shadow-lg transition-all duration-300 flex flex-col"
                     onClick={() => setActivePhoto(photo)}
                   >
                     <div
@@ -229,7 +229,7 @@ export default function GalleryPageClient({ initialPhotos }: GalleryPageClientPr
                       </span>
                     </div>
 
-                    <div className="p-6 space-y-3">
+                    <div className="p-5 space-y-3">
                       <h3 className="text-lg font-black uppercase tracking-tight text-rich-black line-clamp-1 group-hover:text-zru-green transition-colors duration-300">
                         {photo.title}
                       </h3>
@@ -302,7 +302,7 @@ export default function GalleryPageClient({ initialPhotos }: GalleryPageClientPr
               {/* Archival metadata and details in Milk White */}
               <div className="p-6 md:p-8 bg-white space-y-4 text-rich-black">
                 <div className="flex flex-wrap items-center gap-3">
-                  <span className="bg-[#006747] text-white px-3 py-1 rounded-lg text-[10px] font-black uppercase tracking-widest shadow-sm">
+                  <span className="bg-zru-green text-white px-3 py-1 rounded-lg text-[10px] font-black uppercase tracking-widest shadow-sm">
                     {activePhoto.album}
                   </span>
                   <span className="text-[10px] font-bold text-black/50 uppercase tracking-widest">{activePhoto.date}</span>

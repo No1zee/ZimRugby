@@ -42,8 +42,8 @@ export default function MatchDetailClient({ data }: MatchDetailClientProps) {
       </div>
 
       {/* Scoreboard / Cinematic Header */}
-      <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 mb-12">
-        <div className="relative card-green border rounded-2xl p-6 md:p-12 overflow-hidden shadow-2xl glow-green-card">
+      <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 mb-10">
+        <div className="relative card-green border rounded-2xl p-6 md:p-10 overflow-hidden shadow-2xl glow-green-card">
           {/* Subtle background glow */}
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[60%] h-[60%] rounded-full bg-zru-green/10 opacity-30 blur-[100px] pointer-events-none" />
           
@@ -154,7 +154,7 @@ export default function MatchDetailClient({ data }: MatchDetailClientProps) {
 
       {/* Tabs */}
       {tabs.length > 1 && (
-        <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 mb-12">
+        <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 mb-10">
           <div className="flex border-b border-white/10 py-1 overflow-x-auto gap-4">
             {tabs.map((tab) => {
               const Icon = tab.icon;
@@ -195,7 +195,7 @@ export default function MatchDetailClient({ data }: MatchDetailClientProps) {
             
             {/* Report Tab */}
             {activeTab === "report" && report && (
-              <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
                 {/* Paragraphs and narrative */}
                 <div className="lg:col-span-2 space-y-6">
                   <div>
@@ -293,7 +293,7 @@ export default function MatchDetailClient({ data }: MatchDetailClientProps) {
 
             {/* Stats Tab */}
             {activeTab === "stats" && stats && (
-              <div className="max-w-3xl mx-auto space-y-12">
+              <div className="max-w-3xl mx-auto space-y-10">
                 <div>
                   <h2 className="text-xl font-black uppercase tracking-wider">STATS & PERFORMANCE COMPARISON</h2>
                   <p className="text-sm text-white/50 mt-1">A comparative look at key performance indicators.</p>

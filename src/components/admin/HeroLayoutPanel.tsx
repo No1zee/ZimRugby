@@ -52,7 +52,7 @@ const DEFAULT_SLIDES: HeroSlide[] = [
     headline_line2: "WORLD SEVENS CHALLENGER",
     subtext: "High-octane rugby sevens action live from Dubai & Montevideo.",
     tag: "SEVENS",
-    image_url: "https://images.unsplash.com/photo-1508098682722-e99c43a406b2?q=80&w=1200&auto=format&fit=crop",
+    image_url: "https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=1200&auto=format&fit=crop",
     imagePosition: "center",
     cta1_label: "SQUAD & FIXTURES",
     cta1_href: "/teams",

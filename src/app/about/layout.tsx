@@ -23,7 +23,7 @@ export default function AboutLayout({
   ];
 
   return (
-    <div className="bg-milk-white min-h-screen text-rich-black pb-12 relative overflow-hidden">
+    <div className="bg-milk-white min-h-screen text-rich-black pb-10 relative overflow-hidden">
       <PageHero 
         title="About The Union"
         subtitle="Discover the structure, values, history, and governance of the Zimbabwe Rugby Union."
@@ -32,10 +32,10 @@ export default function AboutLayout({
       />
 
       <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
           <aside className="lg:col-span-1">
-            <div className="sticky top-28 bg-white border border-black/5 rounded-2xl p-6 shadow-sm">
-              <h2 className="text-xs font-black uppercase tracking-widest text-zru-green mb-6 border-b border-black/5 pb-3">
+            <div className="sticky top-28 bg-white border border-black/5 rounded-2xl p-5 shadow-sm">
+              <h2 className="text-xs font-black uppercase tracking-widest text-zru-green mb-5 border-b border-black/5 pb-3">
                 PORTAL NAVIGATION
               </h2>
               <nav className="hidden lg:flex flex-col gap-1.5">
@@ -46,7 +46,7 @@ export default function AboutLayout({
                     <Link
                       key={item.href}
                       href={item.href}
-                      className={`flex items-center gap-3 px-4 py-3 rounded-xl text-xs font-black uppercase tracking-wider transition-all duration-300 ${
+                      className={`flex items-center gap-3 px-4 py-2.5 rounded-xl text-xs font-black uppercase tracking-wider transition-all duration-300 ${
                         isActive
                           ? "bg-zru-green text-white shadow-lg"
                           : "text-black/60 hover:text-black hover:bg-black/5"
@@ -77,7 +77,7 @@ export default function AboutLayout({
             </div>
           </aside>
           <section className="lg:col-span-3">
-            <div className="bg-white border border-black/5 rounded-3xl p-6 md:p-10 shadow-sm min-h-[50vh]">
+            <div className="bg-white border border-black/5 rounded-3xl p-6 md:p-8 shadow-sm min-h-[50vh]">
               {children}
             </div>
           </section>

@@ -42,7 +42,7 @@ export default async function GovernancePage() {
   }
 
   return (
-    <div className="space-y-12">
+    <div className="space-y-10">
       {/* Overview header */}
       <div className="border-l-4 border-zru-green pl-4">
         <h2 className="text-2xl font-black uppercase tracking-wider text-rich-black">GOVERNANCE & COMPLIANCE</h2>
@@ -50,11 +50,11 @@ export default async function GovernancePage() {
       </div>
 
       <p className="text-rich-black/80 leading-relaxed text-sm font-normal">
-        The Zimbabwe Rugby Union is committed to the highest standards of transparency, integrity, and ethical governance. We operate in alignment with the guidelines established by World Rugby, Rugby Africa, and the Sports and Recreation Commission (SRC) of Zimbabwe.
+        The Zimbabwe Rugby Union operates in alignment with World Rugby, Rugby Africa, and the Sports and Recreation Commission (SRC) of Zimbabwe, publishing its constitution and compliance documents for public review.
       </p>
 
       {/* Constitution downloads */}
-      <div className="pt-6 border-t border-black/5 space-y-6">
+      <div className="pt-5 border-t border-black/5 space-y-5">
         <h3 className="text-lg font-black uppercase tracking-wide text-rich-black flex items-center gap-2">
           <Landmark className="w-5 h-5 text-zru-green" />
           <span>OFFICIAL CONSTITUTIONAL DOCUMENTS</span>
@@ -64,7 +64,7 @@ export default async function GovernancePage() {
           {documents.map((doc, idx) => (
             <div 
               key={idx} 
-              className="bg-milk-white border border-black/5 rounded-xl p-5 flex items-center justify-between group transition-[border-color,box-shadow] duration-300 hover:border-zru-green/30 hover:shadow-md"
+              className="bg-milk-white border border-black/5 rounded-xl p-4 flex items-center justify-between group transition-[border-color,box-shadow] duration-300 hover:border-zru-green/30 hover:shadow-md"
             >
               <div className="flex items-center gap-4">
                 <div className="w-10 h-10 bg-zru-green/10 rounded-lg flex items-center justify-center shrink-0 border border-zru-green/10">

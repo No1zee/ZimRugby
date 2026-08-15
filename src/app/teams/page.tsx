@@ -24,11 +24,11 @@ export default async function TeamsPage() {
   ]);
 
   return (
-    <main className="bg-milk-white min-h-screen pb-12">
+    <main className="bg-milk-white min-h-screen pb-10">
       <TeamsClient cmsPage={cmsPage} />
 
       {/* Bento Grid */}
-      <div className="pt-10 md:pt-12">
+      <div className="pt-8 md:pt-10">
         <Suspense>
           <TeamBentoGrid teams={teams} />
         </Suspense>

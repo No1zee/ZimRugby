@@ -205,7 +205,7 @@ export default async function CampaignPage({ params }: Props) {
         </div>
       </section>
 
-      <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-16">
+      <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-14">
         <section>
           <h2 className="font-heading text-2xl font-black text-rich-black uppercase tracking-wider mb-8 flex items-center gap-3">
             <span className="w-8 h-px bg-zru-green" />

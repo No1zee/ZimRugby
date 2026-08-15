@@ -1,6 +1,6 @@
 import React from 'react';
 import { Metadata } from 'next';
-import PartnersHero from '../../components/partners/PartnersHero';
+import PageHero from '../../components/ui/PageHero';
 import PartnerTierSection from '../../components/partners/PartnerTierSection';
 import { partnerData } from '../../data/partners';
 export const metadata: Metadata = {
@@ -12,9 +12,14 @@ export default function PartnersPage() {
   return (
     <main className="min-h-screen bg-milk-white overflow-hidden selection:bg-zru-green selection:text-rich-black">
       
-      <PartnersHero />
+      <PageHero
+        title="Our"
+        accentTitle="Partners"
+        subtitle="Proudly partnered with the brands that fuel Zimbabwe Rugby."
+        breadcrumb={[{ label: "Partners", href: "/partners" }]}
+      />
 
-      <div className="relative z-10 w-full pb-10 md:pb-14">
+      <div className="relative z-10 w-full pb-8 md:pb-10">
         {partnerData.map((tier, index) => (
           <PartnerTierSection 
             key={tier.id} 

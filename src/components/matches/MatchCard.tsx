@@ -55,7 +55,7 @@ export default function MatchCard({
       className="relative h-full flex flex-col bg-white border border-black/10 hover:border-zru-green/60 rounded-2xl overflow-hidden group shadow-[0_1px_2px_rgba(0,0,0,0.14),0_6px_16px_rgba(0,0,0,0.10)] hover:shadow-[0_2px_4px_rgba(0,0,0,0.14),0_14px_28px_rgba(0,0,0,0.16)] transition-all duration-300 text-black before:content-[''] before:absolute before:top-0 before:left-[12%] before:right-[12%] before:h-px before:bg-gradient-to-r before:from-transparent before:via-black/20 before:to-transparent"
     >
       {/* Header: Competition & Round */}
-      <div className="bg-milk-white px-6 py-3.5 flex justify-between items-center border-b border-black/10">
+      <div className="bg-milk-white px-5 py-3 flex justify-between items-center border-b border-black/10">
         <div className="flex items-center gap-2 truncate max-w-[70%]">
           {teamCategory && (
             <span className="bg-zru-green text-white text-[9px] font-extrabold uppercase px-2.5 py-0.5 rounded tracking-wider shrink-0">
@@ -69,8 +69,8 @@ export default function MatchCard({
         <span className="text-black/50 text-xs font-bold uppercase">{round}</span>
       </div>
 
-      <div className="p-6 flex flex-col flex-1">
-        <div className="flex justify-between items-center mb-6">
+      <div className="p-5 flex flex-col flex-1">
+        <div className="flex justify-between items-center mb-5">
           {/* Home Team */}
           <div className="flex flex-col items-center gap-2.5 w-1/3">
             <div className="w-16 h-16 bg-milk-white rounded-full flex items-center justify-center p-2 border border-black/10 overflow-hidden relative shadow-sm group-hover:border-zru-green/30 transition-colors">
@@ -140,7 +140,7 @@ export default function MatchCard({
         </div>
 
         {/* Details: Date, Time, Venue */}
-        <div className="flex flex-col gap-2 border-t border-black/10 pt-4 mt-auto">
+        <div className="flex flex-col gap-2 border-t border-black/10 pt-3 mt-auto">
           <div className="flex items-center justify-between text-xs text-black/70">
             <div className="flex items-center gap-2">
               <Calendar className="w-3.5 h-3.5 text-zru-green" />

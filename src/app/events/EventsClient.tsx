@@ -3,9 +3,10 @@
 import { useState, useEffect, useMemo } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { Calendar as CalendarIcon, MapPin, Clock, Award, Users, Layers, Shield, Trophy, Activity, CheckCircle, Sparkles } from "lucide-react";
+import { MapPin, Clock, Award, Users, Layers, Shield, Trophy, Activity, CheckCircle, Sparkles } from "lucide-react";
 import PageAnnouncements from "@/components/ui/PageAnnouncements";
 import CmsHero from "@/components/cms/CmsHero";
+import PageHero from "@/components/ui/PageHero";
 import DayTimelineDrawer from "@/components/events/DayTimelineDrawer";
 
 import FeaturedFixtureHero from "@/components/events/FeaturedFixtureHero";
@@ -255,7 +256,7 @@ export default function EventsClient({ cmsPage, competitions: apiCompetitions = 
   const hasActiveFilters = selectedCategories.length > 0 || searchQuery !== "" || activeShortcut !== null;
 
   return (
-    <div className="bg-milk-white min-h-screen pb-24">
+    <div className="bg-milk-white min-h-screen pb-16">
       {/* CMS Top Hero */}
       {cmsPage ? (
         <CmsHero
@@ -266,20 +267,12 @@ export default function EventsClient({ cmsPage, competitions: apiCompetitions = 
           pageId={cmsPage.id}
         />
       ) : (
-        <div className="bg-rich-black text-white pt-32 pb-16 px-4 sm:px-6 lg:px-8 border-b border-zru-green/20">
-          <div className="max-w-7xl mx-auto text-center space-y-4">
-            <span className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full text-xs font-mono font-black uppercase tracking-widest bg-zru-green text-white">
-              <CalendarIcon className="w-3.5 h-3.5" />
-              OFFICIAL FIXTURE & EVENT UTILITY
-            </span>
-            <h1 className="text-4xl sm:text-5xl md:text-6xl font-heading font-black tracking-tight uppercase">
-              MASTER <span className="text-zru-green">CALENDAR</span>
-            </h1>
-            <p className="text-white/70 max-w-2xl mx-auto text-sm sm:text-base">
-              The single source of truth for Zimbabwe Rugby. Track test fixtures, club championships, school leagues, squad announcements, and union clinics.
-            </p>
-          </div>
-        </div>
+        <PageHero
+          title="Master"
+          accentTitle="Calendar"
+          subtitle="The single source of truth for Zimbabwe Rugby. Track test fixtures, club championships, school leagues, squad announcements, and union clinics."
+          breadcrumb={[{ label: "Events", href: "/events" }]}
+        />
       )}
 
       {/* Main Container */}
@@ -311,7 +304,7 @@ export default function EventsClient({ cmsPage, competitions: apiCompetitions = 
         {/* 4. Main Body Layout */}
         {viewMode === "calendar" ? (
           /* Desktop 2-Column Dashboard Layout */
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
             {/* Left 60% Column: Month Calendar Grid */}
             <div className="lg:col-span-7 xl:col-span-8">
               <CalendarMonthGrid

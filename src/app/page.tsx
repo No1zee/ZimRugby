@@ -99,7 +99,7 @@ export default async function Home() {
   const hasDynamicHomeSections = cmsPage?.sections?.some(s => homepageSectionKeys.includes(s.section_key));
 
   return (
-    <main className="min-h-screen relative bg-[#FDFBF0]">
+    <main className="min-h-screen relative bg-milk-white">
       
       {hasDynamicHomeSections ? (
         /* ═══ CMS-Driven Mode ═══ All sections rendered dynamically from CMS order */

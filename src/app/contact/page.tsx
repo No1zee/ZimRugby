@@ -46,23 +46,23 @@ export default function ContactPage() {
 
   return (
     <main className="bg-rich-black min-h-screen text-white flex flex-col justify-between selection:bg-zru-green selection:text-white">
-      <div className="flex-1 max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 pt-32 pb-12 md:pb-16 w-full">
+      <div className="flex-1 max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 pt-28 pb-10 md:pb-12 w-full">
         
         {/* Header Section */}
-        <section className="mb-16 border-l-4 border-zru-green pl-6">
+        <section className="mb-12 border-l-4 border-zru-green pl-6">
           <span className="text-zru-green text-xs font-black uppercase tracking-[0.4em] mb-2 block">
             GET IN TOUCH
           </span>
-          <h1 className="text-5xl md:text-7xl font-black uppercase italic tracking-tighter text-glow-green leading-none">
+          <h1 className="text-5xl md:text-7xl font-black uppercase not-italic tracking-tighter text-glow-green leading-none">
             CONTACT ZRU
           </h1>
-          <p className="text-xl text-white/50 max-w-2xl mt-4">
-            Have questions about matches, ticketing, officiating, or sponsorships? Reach out to our dedicated committees.
+          <p className="text-xl text-white/50 max-w-2xl mt-3">
+            Questions about matches, ticketing, officiating, or sponsorships? Reach out to the relevant committee.
           </p>
         </section>
 
         {/* Form + Details split grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-16 items-start">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-10 items-start">
           
           {/* Details Column (1 column) */}
           <div className="lg:col-span-1 space-y-6">
@@ -86,7 +86,7 @@ export default function ContactPage() {
           </div>
 
           {/* Form Column (2 columns) */}
-          <div className="lg:col-span-2 card-green border rounded-3xl p-6 md:p-10 backdrop-blur-md shadow-2xl glow-green-card">
+          <div className="lg:col-span-2 card-green border rounded-3xl p-6 md:p-8 backdrop-blur-md shadow-2xl glow-green-card">
             
             <div className="border-b border-white/5 pb-6 mb-6">
               <h3 className="text-lg font-black uppercase tracking-widest text-zru-green flex items-center gap-2">
