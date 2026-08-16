@@ -1,5 +1,6 @@
 import { createClient } from "@/lib/supabase/server";
 import {
+  canAccessPanel,
   canUseFeature,
   hasPermission,
   isSuperAdmin,
@@ -165,6 +166,20 @@ export async function requireFeature(
 ): Promise<AdminSession> {
   const session = await requireAdmin();
   if (!canUseFeature(session.permissions, feature)) {
+    throw new Error("Forbidden");
+  }
+  return session;
+}
+
+/**
+ * Server-side panel gate — mirrors the client nav gate (`canAccessPanel`)
+ * so a page or API route is reachable only when BOTH the role's tab list and
+ * its feature flags allow it. The client nav is UX filtering; this is the
+ * enforcement layer (defense in depth).
+ */
+export async function requirePanel(tab: string): Promise<AdminSession> {
+  const session = await requireAdmin();
+  if (!canAccessPanel(session.permissions, tab)) {
     throw new Error("Forbidden");
   }
   return session;

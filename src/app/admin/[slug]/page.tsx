@@ -1,7 +1,7 @@
 import { notFound, redirect } from "next/navigation";
 import { directusFetch } from "@/lib/directus/fetch";
 import { assetUrl } from "@/lib/directus/assets";
-import { requireFeature } from "@/lib/admin/auth";
+import { requirePanel } from "@/lib/admin/auth";
 import PageBuilderClient from "./PageBuilderClient";
 
 export const dynamic = "force-dynamic";
@@ -48,9 +48,9 @@ export default async function PageBuilderPage({
   const { slug } = await params;
 
   try {
-    await requireFeature("pages_builder");
+    await requirePanel("pages");
   } catch (e: any) {
-    // Authenticated but lacking pages_builder -> the main dashboard; only
+    // Authenticated but lacking panel access -> the main dashboard; only
     // unauthenticated visitors (or MFA-incomplete) go to the login screen.
     if (e?.message === "MfaRequired") {
       redirect("/admin-login?step=mfa");

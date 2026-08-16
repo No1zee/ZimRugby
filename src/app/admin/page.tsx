@@ -2,10 +2,10 @@ import { Metadata } from "next";
 import nextDynamic from "next/dynamic";
 import { redirect } from "next/navigation";
 import { directusFetch, directusCount } from "@/lib/directus/fetch";
-import { getActiveCampaigns } from "@/lib/api/campaigns";
+import { getActiveCampaigns, type Campaign } from "@/lib/api/campaigns";
 import { getDirectusMatches, getStandings } from "@/lib/match-centre/api";
 import { requireAdmin } from "@/lib/admin/auth";
-import { canUseFeature } from "@/lib/admin/iam";
+import { canAccessTab, canUseFeature } from "@/lib/admin/iam";
 import type { AdminSession } from "@/lib/admin/auth";
 import { listFanZoneMembers, listOnboardingSubmissions } from "@/lib/supabase/admin";
 import type { MatchCardViewModel, StandingsTableViewModel } from "@/lib/match-centre/types";
@@ -145,41 +145,59 @@ export default async function AdminDashboard() {
     redirect("/login?redirect=/admin");
   }
 
+  const perms = session.permissions;
+  const canTab = (tab: string) => canAccessTab(perms, tab);
+  // Role-scoped data loading: each collection is only fetched when the actor's
+  // tab grants expose a panel that displays it (least privilege — a viewer
+  // never receives news/announcements/partners payloads in the HTML).
+  const overview = canTab("overview");
+  const showNews = canTab("media") || overview;
+  const showEvents = canTab("events") || overview;
+  const showMatches = canTab("fixtures") || overview;
+  const showTeams = canTab("teams") || canTab("fixtures");
+  const showPages = canTab("pages") || overview;
+  const showGrassroots = canTab("grassroots");
+  const showFaqFooter = canTab("faq-footer");
+  const showCampaigns = canTab("campaigns") || overview;
+  const showHeroLayout = canTab("hero_layout");
+  const showSponsors = canTab("sponsors");
+  const showResources = canTab("resources");
+  const showAnnouncements = canTab("media");
+
   const [
     pages, sectionCounts,
-    eventCount, teamCount, playerCount, matchCount, partnerCount, announcementCount,
-    campaigns, allMatches, standings, announcements,
+    campaigns, announcements,
     news, events, grassrootsInitiatives, programmes, faqs, footerNav,
+    eventsCount, teamCount, playerCount, matchCount, partnerCount, announcementCount,
+    allMatches, standings, heroSlides, sponsors, resources, lookups,
     fanZoneMembers, onboardingSubmissions,
     activityFeed,
-    lookups,
-    heroSlides, sponsors, resources,
   ] = await Promise.all([
-    directusFetch<Page>("pages", { sort: ["sort"] }, 0),
-    getPageSectionCounts(),
-    directusCount("events"),
-    directusCount("teams"),
-    directusCount("players"),
-    directusCount("matches"),
-    directusCount("partners"),
-    directusCount("announcements"),
-    getActiveCampaigns(),
-    getDirectusMatches().catch(() => [] as MatchCardViewModel[]),
-    getStandings().catch(() => [] as StandingsTableViewModel[]),
-    getAdminAnnouncements(),
-    getAdminCollection<Record<string, unknown>>("news"),
-    getAdminCollection<Record<string, unknown>>("events"),
-    getAdminCollection<Record<string, unknown>>("grassroots_initiatives"),
-    getAdminCollection<Record<string, unknown>>("programmes"),
-    getAdminCollection<Record<string, unknown>>("faqs"),
-    getAdminCollection<Record<string, unknown>>("footer_navigation"),
-    canUseFeature(session.permissions, "fanzone_pii") ? listFanZoneMembers() : Promise.resolve([] as Awaited<ReturnType<typeof listFanZoneMembers>>),
-    canUseFeature(session.permissions, "fanzone_pii") ? listOnboardingSubmissions() : Promise.resolve([] as Awaited<ReturnType<typeof listOnboardingSubmissions>>),
-    fetchActivityFeed(),
-    getLookups(),
-    getAdminCollection<Record<string, unknown>>("hero_slides"),
-    getAdminCollection<Record<string, unknown>>("partners"),
-    getAdminCollection<Record<string, unknown>>("referee_resources"),
+    showPages ? directusFetch<Page>("pages", { sort: ["sort"] }, 0) : Promise.resolve([] as Page[]),
+    showPages ? getPageSectionCounts() : Promise.resolve({} as Record<string, number>),
+    showCampaigns ? getActiveCampaigns() : Promise.resolve([] as Campaign[]),
+    showAnnouncements ? getAdminAnnouncements() : Promise.resolve([] as Record<string, unknown>[]),
+    showNews ? getAdminCollection<Record<string, unknown>>("news") : Promise.resolve([] as Record<string, unknown>[]),
+    showEvents ? getAdminCollection<Record<string, unknown>>("events") : Promise.resolve([] as Record<string, unknown>[]),
+    showGrassroots ? getAdminCollection<Record<string, unknown>>("grassroots_initiatives") : Promise.resolve([] as Record<string, unknown>[]),
+    showGrassroots ? getAdminCollection<Record<string, unknown>>("programmes") : Promise.resolve([] as Record<string, unknown>[]),
+    showFaqFooter ? getAdminCollection<Record<string, unknown>>("faqs") : Promise.resolve([] as Record<string, unknown>[]),
+    showFaqFooter ? getAdminCollection<Record<string, unknown>>("footer_navigation") : Promise.resolve([] as Record<string, unknown>[]),
+    showEvents ? directusCount("events") : Promise.resolve(0),
+    showTeams ? directusCount("teams") : Promise.resolve(0),
+    showTeams ? directusCount("players") : Promise.resolve(0),
+    showMatches ? directusCount("matches") : Promise.resolve(0),
+    showSponsors ? directusCount("partners") : Promise.resolve(0),
+    showAnnouncements ? directusCount("announcements") : Promise.resolve(0),
+    showMatches ? getDirectusMatches().catch(() => [] as MatchCardViewModel[]) : Promise.resolve([] as MatchCardViewModel[]),
+    showMatches ? getStandings().catch(() => [] as StandingsTableViewModel[]) : Promise.resolve([] as StandingsTableViewModel[]),
+    showHeroLayout ? getAdminCollection<Record<string, unknown>>("hero_slides") : Promise.resolve([] as Record<string, unknown>[]),
+    showSponsors ? getAdminCollection<Record<string, unknown>>("partners") : Promise.resolve([] as Record<string, unknown>[]),
+    showResources ? getAdminCollection<Record<string, unknown>>("referee_resources") : Promise.resolve([] as Record<string, unknown>[]),
+    showTeams ? getLookups() : Promise.resolve({ teams: [], opponents: [], competitions: [], venues: [], teamOptions: [], opponentOptions: [], competitionOptions: [], venueOptions: [] } as Awaited<ReturnType<typeof getLookups>>),
+    canUseFeature(perms, "fanzone_pii") ? listFanZoneMembers() : Promise.resolve([] as Awaited<ReturnType<typeof listFanZoneMembers>>),
+    canUseFeature(perms, "fanzone_pii") ? listOnboardingSubmissions() : Promise.resolve([] as Awaited<ReturnType<typeof listOnboardingSubmissions>>),
+    overview ? fetchActivityFeed() : Promise.resolve([] as ActivityEntry[]),
   ]);
 
   const stats = {
@@ -187,7 +205,7 @@ export default async function AdminDashboard() {
     publishedPages: pages.filter((p) => p.status === "published").length,
     draftPages: pages.length - pages.filter((p) => p.status === "published").length,
     totalSections: Object.values(sectionCounts).reduce((a, b) => a + b, 0),
-    eventCount,
+    eventCount: eventsCount,
     teamCount,
     playerCount,
     matchCount,

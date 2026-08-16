@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { requireAdmin } from "@/lib/admin/auth";
+import { requirePanel } from "@/lib/admin/auth";
 import { fetchAuditLogs } from "@/lib/supabase/admin";
 import { logAuditEvent, type AuditLogEntry } from "@/lib/admin/iam";
 
@@ -7,8 +7,8 @@ export const dynamic = "force-dynamic";
 
 export async function GET() {
   try {
-    // 1. Check administrative authentication
-    await requireAdmin();
+    // 1. Check administrative authentication + audit-log panel access
+    await requirePanel("audit_logs");
 
     // 2. Fetch recent audit logs from Supabase DB
     const logs = await fetchAuditLogs(100);
@@ -21,7 +21,7 @@ export async function GET() {
 
 export async function POST(req: NextRequest) {
   try {
-    const user = await requireAdmin();
+    const user = await requirePanel("audit_logs");
     const body = await req.json();
 
     const entry = logAuditEvent({
