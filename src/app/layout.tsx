@@ -6,7 +6,7 @@ import Footer from "@/components/layout/Footer";
 import ClientLayoutShell from "@/components/layout/ClientLayoutShell";
 import PageTransitionLoader from "@/components/common/PageTransitionLoader";
 import { directusFetch } from "@/lib/directus/fetch";
-import CampaignAnnouncementBar from "@/components/campaigns/CampaignAnnouncementBar";
+import BreakingNewsBar from "@/components/ui/BreakingNewsBar";
 import AnnouncementsTicker from "@/components/ui/AnnouncementsTicker";
 import { AdaptivePerformanceProvider } from "@/components/providers/AdaptivePerformanceProvider";
 import { DraftAdminBar } from "@/components/admin/DraftAdminBar";
@@ -105,7 +105,7 @@ export default async function RootLayout({
           </div>
         </noscript>
         {/* Page transition particle burst loader — fires on mount and on every route change */}
-        <CampaignAnnouncementBar />
+        <BreakingNewsBar />
         <PageTransitionLoader />
         <AdaptivePerformanceProvider>
           <EditModeShell>
