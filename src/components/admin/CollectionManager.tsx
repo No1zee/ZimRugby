@@ -13,7 +13,7 @@ import { useConfirm } from "./ui/ConfirmProvider";
 export interface FieldConfig {
   key: string;
   label: string;
-  type?: "text" | "textarea" | "richtext" | "select" | "image" | "date" | "datetime" | "number" | "boolean";
+  type?: "text" | "textarea" | "richtext" | "select" | "image" | "date" | "datetime" | "number" | "boolean" | "csv";
   options?: string[];
   placeholder?: string;
   required?: boolean;
@@ -230,6 +230,8 @@ export default function CollectionManager({
         data[f.key] = "";
       } else if (duplicate && f.key === displayField) {
         data[f.key] = `${raw !== null && raw !== undefined ? String(raw) : ""} (copy)`;
+      } else if (f.type === "csv") {
+        data[f.key] = Array.isArray(raw) ? String(raw.join(", ")) : raw !== null && raw !== undefined ? String(raw) : "";
       } else {
         data[f.key] = raw !== null && raw !== undefined ? String(raw) : "";
       }
@@ -297,6 +299,7 @@ export default function CollectionManager({
       if (f.type === "number") v = v === "" ? null : Number(v);
       else if (f.type === "boolean") v = v === "1";
       else if (f.type === "datetime") v = v ? new Date(String(v)).toISOString() : null;
+      else if (f.type === "csv") v = String(v).split(",").map((s) => s.trim()).filter(Boolean);
       else if (isDateFieldType(f.type)) v = v || null;
       else if (v === "") v = null;
       payload[f.key] = v;

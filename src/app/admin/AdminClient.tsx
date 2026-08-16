@@ -519,7 +519,7 @@ function AdminClientInner(props: AdminClientProps) {
                 { key: "starts_at", label: "Show from (UTC)", type: "datetime" },
                 { key: "ends_at", label: "Show until (UTC)", type: "datetime" },
                 { key: "segment", label: "Audience segment", type: "select", options: ["general", "sables", "lady_sables", "schools"] },
-                { key: "scope", label: "Scope (comma-separated)", type: "text", placeholder: "global, homepage, media" },
+                { key: "scope", label: "Scope (comma-separated)", type: "csv", placeholder: "global, homepage, media" },
                 { key: "cta_label", label: "Button label", type: "text", placeholder: "e.g. BOOK TICKETS" },
                 { key: "cta_url", label: "Button link (route)", type: "text", placeholder: "e.g. /tickets" },
                 { key: "is_sticky", label: "Sticky (stays pinned)", type: "boolean" },
