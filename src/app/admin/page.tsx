@@ -69,7 +69,7 @@ async function fetchActivityFeed(): Promise<ActivityEntry[]> {
 
 async function getAdminAnnouncements(): Promise<Record<string, unknown>[]> {
   try {
-    return await directusFetch<Record<string, unknown>>("announcements", { sort: ["-date_created"], limit: 20 }, 60);
+    return await directusFetch<Record<string, unknown>>("announcements", { sort: ["-created_at"], limit: 20 }, 60);
   } catch {
     return [];
   }

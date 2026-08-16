@@ -71,7 +71,7 @@ function statusValue(item: Record<string, unknown>, statusField?: string): strin
 }
 
 function itemSortKey(item: Record<string, unknown>): string {
-  const d = item.date_created || item.date || item.updated_at;
+  const d = item.created_at || item.date_created || item.date || item.updated_at;
   if (d) return String(d);
   return String(item.id ?? "");
 }
