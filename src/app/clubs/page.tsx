@@ -3,6 +3,8 @@ import { getPageBySlug } from "@/lib/api/pages";
 import { getClubs } from "@/lib/api/clubs";
 import ClubsClient from "./ClubsClient";
 
+export const dynamic = "force-dynamic";
+
 export const metadata: Metadata = {
   title: "Clubs | Zimbabwe Rugby Union",
   description: "Browse official registered rugby clubs across Zimbabwe. Find teams, training schedules, and local leagues.",
