@@ -7,6 +7,7 @@ import ClientLayoutShell from "@/components/layout/ClientLayoutShell";
 import PageTransitionLoader from "@/components/common/PageTransitionLoader";
 import { directusFetch } from "@/lib/directus/fetch";
 import CampaignAnnouncementBar from "@/components/campaigns/CampaignAnnouncementBar";
+import AnnouncementsTicker from "@/components/ui/AnnouncementsTicker";
 import { AdaptivePerformanceProvider } from "@/components/providers/AdaptivePerformanceProvider";
 import { DraftAdminBar } from "@/components/admin/DraftAdminBar";
 import EditModeShell from "@/components/admin/EditModeShell";
@@ -111,6 +112,7 @@ export default async function RootLayout({
             <ClientLayoutShell>
               <Navigation />
               <main id="main-content" className="relative min-h-screen bg-milk-white">
+                <AnnouncementsTicker />
                 {children}
               </main>
               <Footer initialColumns={footerNav} />

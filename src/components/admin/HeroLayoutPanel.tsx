@@ -1,9 +1,8 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Plus, Trash, ArrowUp, ArrowDown, Eye, EyeOff, Save, Image as ImageIcon, Video, LayoutGrid, Zap, Radio, Bell } from "lucide-react";
+import { Plus, Trash, ArrowUp, ArrowDown, Eye, EyeOff, Save, LayoutGrid, Radio } from "lucide-react";
 import { useToast } from "./ui/ToastProvider";
-import { useRouter } from "next/navigation";
 import ImagePicker from "./ui/ImagePicker";
 
 interface HeroSlide {
@@ -12,9 +11,9 @@ interface HeroSlide {
   headline_line2: string;
   subtext: string;
   tag: string;
-  image_url: string;
-  video_url?: string;
-  imagePosition: "center" | "top" | "bottom";
+  context_pill: string;
+  image: string;
+  image_position: "center" | "top" | "bottom";
   cta1_label: string;
   cta1_href: string;
   cta2_label?: string;
@@ -23,123 +22,181 @@ interface HeroSlide {
   sort: number;
 }
 
-interface MarqueeTickerItem {
+interface TickerItem {
   id: string;
-  text: string;
-  tag: "BREAKING" | "LIVE MATCH" | "TICKETS" | "NOTICE";
-  active: boolean;
+  title: string;
+  tag: string;
 }
 
-const DEFAULT_SLIDES: HeroSlide[] = [
-  {
-    id: "sable-world-cup",
-    headline_line1: "ROAD TO AUSTRALIA",
-    headline_line2: "RUGBY WORLD CUP 2027",
-    subtext: "Support the Zimbabwe Sables as they clash with Africa's elite in the qualification pathway.",
-    tag: "ROAD TO 2027",
-    image_url: "https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=1200&auto=format&fit=crop",
-    imagePosition: "center",
-    cta1_label: "CAMPAIGN HUB",
-    cta1_href: "/world-cup-campaign",
-    cta2_label: "GET TICKETS",
-    cta2_href: "/tickets",
-    is_active: true,
-    sort: 1,
-  },
-  {
-    id: "cheetahs-7s",
-    headline_line1: "ZIMBABWE CHEETAHS",
-    headline_line2: "WORLD SEVENS CHALLENGER",
-    subtext: "High-octane rugby sevens action live from Dubai & Montevideo.",
-    tag: "SEVENS",
-    image_url: "https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=1200&auto=format&fit=crop",
-    imagePosition: "center",
-    cta1_label: "SQUAD & FIXTURES",
-    cta1_href: "/teams",
-    is_active: true,
-    sort: 2,
-  },
-];
+const DEFAULT_IMAGE = "/images/gallery/zimbabwe-sables-battle-of-zambezi-gameday1-505.webp";
 
-const DEFAULT_TICKERS: MarqueeTickerItem[] = [
-  { id: "tk-1", text: "Sables vs Kenya Simbas: Africa Cup Final at Harare Sports Club · Kickoff 15:00 CAT", tag: "LIVE MATCH", active: true },
-  { id: "tk-2", text: "Matchday Grandstand & VIP Hospitality tickets are 85% sold out on Ticketmaster", tag: "TICKETS", active: true },
-  { id: "tk-3", text: "ZRU announces 32-player travelling squad for the November European Tour", tag: "BREAKING", active: true },
-];
+const TICKER_TTL_MS = 7 * 24 * 60 * 60 * 1000; // 7 days
+
+// announcements.priority is an integer in Directus; public API sorts -priority
+// descending, so bigger = more urgent.
+const TAG_PRIORITY: Record<string, number> = {
+  "BREAKING": 30,
+  "LIVE MATCH": 20,
+  "TICKETS": 10,
+  "NOTICE": 10,
+};
 
 export default function HeroLayoutPanel({ initialSlides }: { initialSlides?: any[] }) {
   const { toast } = useToast();
-  const router = useRouter();
 
-  const [slides, setSlides] = useState<HeroSlide[]>(DEFAULT_SLIDES);
-  const [tickers, setTickers] = useState<MarqueeTickerItem[]>(DEFAULT_TICKERS);
+  const [slides, setSlides] = useState<HeroSlide[]>([]);
+  const [tickers, setTickers] = useState<TickerItem[]>([]);
   const [newTickerText, setNewTickerText] = useState("");
   const [newTickerTag, setNewTickerTag] = useState<"BREAKING" | "LIVE MATCH" | "TICKETS" | "NOTICE">("LIVE MATCH");
 
-  const [layoutToggles, setLayoutToggles] = useState<Record<string, boolean>>({
-    hero: true,
-    ticker: true,
-    roadToWorldCup: true,
-    hubGrid: true,
-    sponsors: true,
-  });
-
   const [editingSlide, setEditingSlide] = useState<Partial<HeroSlide> | null>(null);
   const [saving, setSaving] = useState(false);
+  const [loading, setLoading] = useState(true);
 
-  // Sync initial slides from Directus if provided
-  useEffect(() => {
-    if (initialSlides && initialSlides.length > 0) {
-      const mapped = initialSlides.map((slide: any) => ({
-        id: slide.id,
-        headline_line1: slide.headline_line1 || "",
-        headline_line2: slide.headline_line2 || "",
-        subtext: slide.subtext || "",
-        tag: slide.tag || "PROMO",
-        image_url: slide.image_url || "",
-        video_url: slide.video_url || "",
-        imagePosition: slide.imagePosition || "center",
-        cta1_label: slide.cta1_label || "LEARN MORE",
-        cta1_href: slide.cta1_href || "#",
-        cta2_label: slide.cta2_label || "",
-        cta2_href: slide.cta2_href || "",
-        is_active: slide.is_active !== undefined ? slide.is_active : true,
-        sort: slide.sort || 1,
-      }));
-      setSlides(mapped);
+  const loadSlides = async () => {
+    try {
+      const res = await fetch("/api/admin/directus?collection=hero_slides&sort=sort&limit=50");
+      if (!res.ok) throw new Error("Failed to load hero slides");
+      const json = await res.json();
+      const rows: any[] = json.data || [];
+      if (rows.length > 0) {
+        setSlides(
+          rows.map((s: any) => ({
+            id: s.id,
+            headline_line1: s.headline_line1 || "",
+            headline_line2: s.headline_line2 || "",
+            subtext: s.subtext || "",
+            tag: s.tag || "ZRU",
+            context_pill: s.context_pill || "",
+            image: s.image || s.image_url || "",
+            image_position: (s.image_position || "center") as HeroSlide["image_position"],
+            cta1_label: s.cta1_label || "EXPLORE",
+            cta1_href: s.cta1_href || "/",
+            cta2_label: s.cta2_label || "",
+            cta2_href: s.cta2_href || "",
+            is_active: s.is_active !== false,
+            sort: Number(s.sort || 0),
+          }))
+        );
+        return;
+      }
+    } catch (err) {
+      console.warn("Failed to load hero slides from CMS:", err);
     }
-  }, [initialSlides]);
-
-  const handleToggleSlide = (id: string | number) => {
-    setSlides((prev) =>
-      prev.map((s) => (s.id === id ? { ...s, is_active: !s.is_active } : s))
-    );
-    toast("Slide visibility updated.");
+    // Fallback: server-provided props (or empty state)
+    if (initialSlides && initialSlides.length > 0) {
+      setSlides(
+        initialSlides.map((s: any) => ({
+          id: s.id,
+          headline_line1: s.headline_line1 || "",
+          headline_line2: s.headline_line2 || "",
+          subtext: s.subtext || "",
+          tag: s.tag || "ZRU",
+          context_pill: s.context_pill || "",
+          image: s.image || s.image_url || "",
+          image_position: "center",
+          cta1_label: s.cta1_label || "EXPLORE",
+          cta1_href: s.cta1_href || "/",
+          cta2_label: s.cta2_label || "",
+          cta2_href: s.cta2_href || "",
+          is_active: s.is_active !== false,
+          sort: Number(s.sort || 0),
+        }))
+      );
+    }
   };
 
-  const handleDeleteSlide = (id: string | number) => {
+  const loadTickers = async () => {
+    try {
+      const res = await fetch("/api/admin/directus?collection=announcements&limit=50");
+      if (!res.ok) throw new Error("Failed to load ticker items");
+      const json = await res.json();
+      const rows: any[] = json.data || [];
+      setTickers(
+        rows
+          .filter((a: any) => a.design_variant === "ticker")
+          .map((a: any) => ({ id: String(a.id), title: a.title || "", tag: a.badge || "NOTICE" }))
+      );
+    } catch (err) {
+      console.warn("Failed to load ticker items from CMS:", err);
+    }
+  };
+
+  useEffect(() => {
+    (async () => {
+      setLoading(true);
+      await Promise.all([loadSlides(), loadTickers()]);
+      setLoading(false);
+    })();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const handleToggleSlide = async (id: string | number) => {
+    const slide = slides.find((s) => s.id === id);
+    if (!slide) return;
+    const next = !slide.is_active;
+    // Optimistic update
+    setSlides((prev) => prev.map((s) => (s.id === id ? { ...s, is_active: next } : s)));
+    try {
+      const res = await fetch("/api/admin/directus", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ collection: "hero_slides", id, data: { is_active: next } }),
+      });
+      if (!res.ok) throw new Error((await res.json().catch(() => ({}))).error || "Update failed");
+      toast(next ? "Slide is now visible on the homepage." : "Slide hidden from the homepage.");
+    } catch (err) {
+      setSlides((prev) => prev.map((s) => (s.id === id ? { ...s, is_active: slide.is_active } : s)));
+      toast(`Failed to update slide: ${err instanceof Error ? err.message : String(err)}`, "error");
+    }
+  };
+
+  const handleDeleteSlide = async (id: string | number) => {
     if (slides.length <= 1) {
       toast("You must keep at least one hero slide.", "error");
       return;
     }
-    setSlides((prev) => prev.filter((s) => s.id !== id));
-    toast("Slide removed.");
+    try {
+      const res = await fetch("/api/admin/directus", {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ collection: "hero_slides", id }),
+      });
+      if (!res.ok) throw new Error((await res.json().catch(() => ({}))).error || "Delete failed");
+      setSlides((prev) => prev.filter((s) => s.id !== id));
+      toast("Slide deleted from the homepage.");
+    } catch (err) {
+      toast(`Failed to delete slide: ${err instanceof Error ? err.message : String(err)}`, "error");
+    }
   };
 
-  const handleMoveSlide = (index: number, direction: "up" | "down") => {
-    const newSlides = [...slides];
+  const handleMoveSlide = async (index: number, direction: "up" | "down") => {
     const targetIndex = direction === "up" ? index - 1 : index + 1;
-    if (targetIndex < 0 || targetIndex >= newSlides.length) return;
+    if (targetIndex < 0 || targetIndex >= slides.length) return;
 
-    const temp = newSlides[index];
-    newSlides[index] = newSlides[targetIndex];
-    newSlides[targetIndex] = temp;
+    const next = [...slides];
+    const temp = next[index];
+    next[index] = next[targetIndex];
+    next[targetIndex] = temp;
+    next.forEach((s, idx) => { s.sort = idx + 1; });
 
-    newSlides.forEach((s, idx) => {
-      s.sort = idx + 1;
-    });
-
-    setSlides(newSlides);
+    const prev = slides;
+    setSlides(next);
+    try {
+      // Persist the new sort order for both moved slides (Directus sorts by `sort`)
+      for (const slide of [next[index], next[targetIndex]]) {
+        const res = await fetch("/api/admin/directus", {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ collection: "hero_slides", id: slide.id, data: { sort: slide.sort } }),
+        });
+        if (!res.ok) throw new Error((await res.json().catch(() => ({}))).error || "Reorder failed");
+      }
+      toast("Slide order saved.");
+    } catch (err) {
+      setSlides(prev);
+      toast(`Failed to reorder slides: ${err instanceof Error ? err.message : String(err)}`, "error");
+    }
   };
 
   const handleSaveSlide = async (e: React.FormEvent) => {
@@ -148,59 +205,128 @@ export default function HeroLayoutPanel({ initialSlides }: { initialSlides?: any
 
     setSaving(true);
     try {
-      if (editingSlide.id) {
-        // Update existing
-        setSlides((prev) =>
-          prev.map((s) => (s.id === editingSlide.id ? ({ ...s, ...editingSlide } as HeroSlide) : s))
-        );
-      } else {
-        // Create new
-        const newSlide: HeroSlide = {
-          id: `slide-${Date.now()}`,
-          headline_line1: editingSlide.headline_line1 || "NEW HEADLINE",
-          headline_line2: editingSlide.headline_line2 || "",
-          subtext: editingSlide.subtext || "",
-          tag: editingSlide.tag || "ZRU",
-          image_url: editingSlide.image_url || "https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=1200&auto=format&fit=crop",
-          imagePosition: editingSlide.imagePosition || "center",
-          cta1_label: editingSlide.cta1_label || "EXPLORE",
-          cta1_href: editingSlide.cta1_href || "#",
-          cta2_label: editingSlide.cta2_label || "",
-          cta2_href: editingSlide.cta2_href || "",
-          is_active: true,
-          sort: slides.length + 1,
-        };
-        setSlides((prev) => [...prev, newSlide]);
-      }
+      const payload = {
+        headline_line1: editingSlide.headline_line1 || "NEW HEADLINE",
+        headline_line2: editingSlide.headline_line2 || "",
+        subtext: editingSlide.subtext || "",
+        tag: editingSlide.tag || "ZRU",
+        context_pill: editingSlide.context_pill || "",
+        image: editingSlide.image || DEFAULT_IMAGE,
+        image_position: editingSlide.image_position || "center",
+        alignment: "left",
+        cta1_label: editingSlide.cta1_label || "EXPLORE",
+        cta1_href: editingSlide.cta1_href || "/",
+        cta2_label: editingSlide.cta2_label || "",
+        cta2_href: editingSlide.cta2_href || "",
+      };
 
-      toast("Hero carousel updated!");
+      if (editingSlide.id) {
+        const res = await fetch("/api/admin/directus", {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ collection: "hero_slides", id: editingSlide.id, data: payload }),
+        });
+        if (!res.ok) throw new Error((await res.json().catch(() => ({}))).error || "Save failed");
+        setSlides((prev) =>
+          prev.map((s) => (s.id === editingSlide.id ? ({ ...s, ...payload, id: s.id } as HeroSlide) : s))
+        );
+        toast("Hero slide saved to the live homepage.");
+      } else {
+        const res = await fetch("/api/admin/directus", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            collection: "hero_slides",
+            data: { ...payload, is_active: true, sort: slides.length + 1 },
+          }),
+        });
+        if (!res.ok) throw new Error((await res.json().catch(() => ({}))).error || "Create failed");
+        const created = (await res.json()).data;
+        setSlides((prev) => [
+          ...prev,
+          {
+            id: created.id,
+            ...payload,
+            is_active: true,
+            sort: slides.length + 1,
+          } as HeroSlide,
+        ]);
+        toast("New hero slide published to the homepage.");
+      }
       setEditingSlide(null);
-    } catch {
-      toast("Failed to save slide.", "error");
+    } catch (err) {
+      toast(`Failed to save slide: ${err instanceof Error ? err.message : String(err)}`, "error");
     } finally {
       setSaving(false);
     }
   };
 
-  // Marquee Ticker Actions
-  const handleAddTicker = (e: React.FormEvent) => {
+  // Marquee Ticker Actions — writes real announcements (design_variant = ticker)
+  const handleAddTicker = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!newTickerText.trim()) return;
-    const item: MarqueeTickerItem = {
-      id: `tk-${Date.now()}`,
-      text: newTickerText.trim(),
-      tag: newTickerTag,
-      active: true,
-    };
-    setTickers((prev) => [item, ...prev]);
-    setNewTickerText("");
-    toast("Breaking ticker notice published to live site!");
+    setSaving(true);
+    const now = new Date();
+    try {
+      const res = await fetch("/api/admin/directus", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          collection: "announcements",
+          data: {
+            title: newTickerText.trim(),
+            slug: `ticker-${Date.now()}`,
+            body: "",
+            design_variant: "ticker",
+            priority: TAG_PRIORITY[newTickerTag] || 10,
+            starts_at: now.toISOString(),
+            ends_at: new Date(now.getTime() + TICKER_TTL_MS).toISOString(),
+            is_enabled: true,
+            status: "published",
+            badge: newTickerTag,
+            segment: "general",
+            scope: ["global"],
+          },
+        }),
+      });
+      if (!res.ok) throw new Error((await res.json().catch(() => ({}))).error || "Publish failed");
+      const created = (await res.json()).data;
+      setTickers((prev) => [
+        { id: String(created.id || `tk-${Date.now()}`), title: newTickerText.trim(), tag: newTickerTag },
+        ...prev,
+      ]);
+      setNewTickerText("");
+      toast("Ticker notice published to the live marquee.");
+    } catch (err) {
+      toast(`Broadcast failed: ${err instanceof Error ? err.message : String(err)}`, "error");
+    } finally {
+      setSaving(false);
+    }
   };
 
-  const handleDeleteTicker = (id: string) => {
-    setTickers((prev) => prev.filter((t) => t.id !== id));
-    toast("Ticker item removed.");
+  const handleDeleteTicker = async (id: string) => {
+    try {
+      const res = await fetch("/api/admin/directus", {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ collection: "announcements", id }),
+      });
+      if (!res.ok) throw new Error((await res.json().catch(() => ({}))).error || "Delete failed");
+      setTickers((prev) => prev.filter((t) => t.id !== id));
+      toast("Ticker item removed from the live marquee.");
+    } catch (err) {
+      toast(`Failed to remove ticker item: ${err instanceof Error ? err.message : String(err)}`, "error");
+    }
   };
+
+  if (loading) {
+    return (
+      <div className="space-y-4">
+        <div className="animate-pulse h-24 bg-black/5 rounded-2xl" />
+        <div className="animate-pulse h-64 bg-black/5 rounded-2xl" />
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-8">
@@ -213,7 +339,7 @@ export default function HeroLayoutPanel({ initialSlides }: { initialSlides?: any
               <span>Breaking Matchday Marquee Ticker</span>
             </h2>
             <p className="text-xs text-black/50 mt-0.5">
-              Broadcast urgent matchday notices, live test match scores, and ticket alerts across the homepage ribbon.
+              Broadcast urgent matchday notices, live test match scores, and ticket alerts to the homepage ribbon. Items stay live for 7 days.
             </p>
           </div>
         </div>
@@ -240,32 +366,39 @@ export default function HeroLayoutPanel({ initialSlides }: { initialSlides?: any
           />
           <button
             type="submit"
-            className="w-full sm:w-auto rounded-lg bg-[#006B3F] px-4 py-2 text-xs font-bold uppercase tracking-wider text-white hover:bg-green-800 transition-colors shadow-sm shrink-0 cursor-pointer"
+            disabled={saving}
+            className="w-full sm:w-auto rounded-lg bg-[#006B3F] px-4 py-2 text-xs font-bold uppercase tracking-wider text-white hover:bg-green-800 transition-colors shadow-sm shrink-0 disabled:opacity-50 cursor-pointer"
           >
             Push to Marquee
           </button>
         </form>
 
         {/* Active ticker list */}
-        <div className="divide-y divide-black/5 border border-black/5 rounded-xl overflow-hidden">
-          {tickers.map((t) => (
-            <div key={t.id} className="flex items-center justify-between p-3 bg-black/[0.01]">
-              <div className="flex items-center gap-3 min-w-0">
-                <span className="shrink-0 px-2 py-0.5 rounded text-[9px] font-black font-mono bg-zru-green/10 text-zru-green border border-zru-green/20">
-                  {t.tag}
-                </span>
-                <span className="text-xs text-black/80 truncate font-medium">{t.text}</span>
+        {tickers.length === 0 ? (
+          <div className="text-[11px] text-black/30 text-center py-6 border border-dashed border-black/5 rounded-xl">
+            No live ticker items. Publish matchday notices above.
+          </div>
+        ) : (
+          <div className="divide-y divide-black/5 border border-black/5 rounded-xl overflow-hidden">
+            {tickers.map((t) => (
+              <div key={t.id} className="flex items-center justify-between p-3 bg-black/[0.01]">
+                <div className="flex items-center gap-3 min-w-0">
+                  <span className="shrink-0 px-2 py-0.5 rounded text-[9px] font-black font-mono bg-zru-green/10 text-zru-green border border-zru-green/20">
+                    {t.tag}
+                  </span>
+                  <span className="text-xs text-black/80 truncate font-medium">{t.title}</span>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => handleDeleteTicker(t.id)}
+                  className="text-xs text-red-500 hover:text-red-700 px-2 py-1 rounded hover:bg-red-50 font-bold ml-2 shrink-0 cursor-pointer"
+                >
+                  ✕ Remove
+                </button>
               </div>
-              <button
-                type="button"
-                onClick={() => handleDeleteTicker(t.id)}
-                className="text-xs text-red-500 hover:text-red-700 px-2 py-1 rounded hover:bg-red-50 font-bold ml-2 shrink-0 cursor-pointer"
-              >
-                ✕ Remove
-              </button>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        )}
       </div>
 
       {/* 🖼️ HERO SLIDES CAROUSEL MANAGER */}
@@ -282,7 +415,7 @@ export default function HeroLayoutPanel({ initialSlides }: { initialSlides?: any
           </div>
           <button
             type="button"
-            onClick={() => setEditingSlide({})}
+            onClick={() => setEditingSlide({ image_position: "center", cta1_label: "EXPLORE", cta1_href: "/" })}
             className="flex items-center gap-1.5 rounded-lg bg-zru-green px-3.5 py-1.5 text-xs font-bold uppercase tracking-wider text-white hover:bg-green-800 transition-colors shadow-sm cursor-pointer"
           >
             <Plus className="w-4 h-4" /> Add New Slide
@@ -290,83 +423,95 @@ export default function HeroLayoutPanel({ initialSlides }: { initialSlides?: any
         </div>
 
         {/* Slide List */}
-        <div className="space-y-4">
-          {slides.map((slide, index) => (
-            <div
-              key={slide.id}
-              className={`flex items-center justify-between p-4 rounded-xl border transition-all ${
-                slide.is_active ? "bg-white border-black/10 shadow-sm" : "bg-black/5 border-black/5 opacity-60"
-              }`}
-            >
-              <div className="flex items-center gap-4 min-w-0">
-                <div className="w-24 h-16 rounded-lg bg-black/10 overflow-hidden relative shrink-0 border border-black/10">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={slide.image_url} alt="" className="w-full h-full object-cover" />
-                  <span className="absolute bottom-1 right-1 bg-black/70 text-white font-mono text-[9px] px-1 rounded">
-                    #{slide.sort}
-                  </span>
-                </div>
-                <div className="min-w-0">
-                  <div className="flex items-center gap-2">
-                    <span className="text-[10px] font-black uppercase tracking-wider text-zru-green bg-zru-green/10 px-2 py-0.5 rounded">
-                      {slide.tag}
+        {slides.length === 0 ? (
+          <div className="text-[11px] text-black/30 text-center py-10 border border-dashed border-black/5 rounded-xl">
+            No hero slides yet. Add your first slide above.
+          </div>
+        ) : (
+          <div className="space-y-4">
+            {slides.map((slide, index) => (
+              <div
+                key={slide.id}
+                className={`flex items-center justify-between p-4 rounded-xl border transition-all ${
+                  slide.is_active ? "bg-white border-black/10 shadow-sm" : "bg-black/5 border-black/5 opacity-60"
+                }`}
+              >
+                <div className="flex items-center gap-4 min-w-0">
+                  <div className="w-24 h-16 rounded-lg bg-black/10 overflow-hidden relative shrink-0 border border-black/10">
+                    {slide.image ? (
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img src={slide.image} alt="" className="w-full h-full object-cover" />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center text-black/20 text-[9px] font-mono">
+                        NO IMAGE
+                      </div>
+                    )}
+                    <span className="absolute bottom-1 right-1 bg-black/70 text-white font-mono text-[9px] px-1 rounded">
+                      #{slide.sort}
                     </span>
-                    <h3 className="font-heading font-black text-sm text-rich-black truncate">
-                      {slide.headline_line1} {slide.headline_line2}
-                    </h3>
                   </div>
-                  <p className="text-xs text-black/60 truncate mt-0.5 max-w-xl">{slide.subtext}</p>
+                  <div className="min-w-0">
+                    <div className="flex items-center gap-2">
+                      <span className="text-[10px] font-black uppercase tracking-wider text-zru-green bg-zru-green/10 px-2 py-0.5 rounded">
+                        {slide.tag}
+                      </span>
+                      <h3 className="font-heading font-black text-sm text-rich-black truncate">
+                        {slide.headline_line1} {slide.headline_line2}
+                      </h3>
+                    </div>
+                    <p className="text-xs text-black/60 truncate mt-0.5 max-w-xl">{slide.subtext}</p>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-2 shrink-0">
+                  <button
+                    type="button"
+                    onClick={() => handleMoveSlide(index, "up")}
+                    disabled={index === 0}
+                    className="p-1.5 rounded-lg border border-black/10 hover:bg-black/5 text-black/60 disabled:opacity-30 cursor-pointer"
+                    title="Move Up"
+                  >
+                    <ArrowUp className="w-3.5 h-3.5" />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => handleMoveSlide(index, "down")}
+                    disabled={index === slides.length - 1}
+                    className="p-1.5 rounded-lg border border-black/10 hover:bg-black/5 text-black/60 disabled:opacity-30 cursor-pointer"
+                    title="Move Down"
+                  >
+                    <ArrowDown className="w-3.5 h-3.5" />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => handleToggleSlide(slide.id)}
+                    className={`p-1.5 rounded-lg border border-black/10 hover:bg-black/5 cursor-pointer ${
+                      slide.is_active ? "text-zru-green" : "text-black/40"
+                    }`}
+                    title={slide.is_active ? "Hide Slide" : "Show Slide"}
+                  >
+                    {slide.is_active ? <Eye className="w-3.5 h-3.5" /> : <EyeOff className="w-3.5 h-3.5" />}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setEditingSlide(slide)}
+                    className="px-3 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wider border border-black/10 hover:bg-black/5 text-rich-black cursor-pointer"
+                  >
+                    Edit
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => handleDeleteSlide(slide.id)}
+                    className="p-1.5 rounded-lg text-red-500 hover:bg-red-50 cursor-pointer"
+                    title="Delete Slide"
+                  >
+                    <Trash className="w-3.5 h-3.5" />
+                  </button>
                 </div>
               </div>
-
-              <div className="flex items-center gap-2 shrink-0">
-                <button
-                  type="button"
-                  onClick={() => handleMoveSlide(index, "up")}
-                  disabled={index === 0}
-                  className="p-1.5 rounded-lg border border-black/10 hover:bg-black/5 text-black/60 disabled:opacity-30 cursor-pointer"
-                  title="Move Up"
-                >
-                  <ArrowUp className="w-3.5 h-3.5" />
-                </button>
-                <button
-                  type="button"
-                  onClick={() => handleMoveSlide(index, "down")}
-                  disabled={index === slides.length - 1}
-                  className="p-1.5 rounded-lg border border-black/10 hover:bg-black/5 text-black/60 disabled:opacity-30 cursor-pointer"
-                  title="Move Down"
-                >
-                  <ArrowDown className="w-3.5 h-3.5" />
-                </button>
-                <button
-                  type="button"
-                  onClick={() => handleToggleSlide(slide.id)}
-                  className={`p-1.5 rounded-lg border border-black/10 hover:bg-black/5 cursor-pointer ${
-                    slide.is_active ? "text-zru-green" : "text-black/40"
-                  }`}
-                  title={slide.is_active ? "Hide Slide" : "Show Slide"}
-                >
-                  {slide.is_active ? <Eye className="w-3.5 h-3.5" /> : <EyeOff className="w-3.5 h-3.5" />}
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setEditingSlide(slide)}
-                  className="px-3 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wider border border-black/10 hover:bg-black/5 text-rich-black cursor-pointer"
-                >
-                  Edit
-                </button>
-                <button
-                  type="button"
-                  onClick={() => handleDeleteSlide(slide.id)}
-                  className="p-1.5 rounded-lg text-red-500 hover:bg-red-50 cursor-pointer"
-                  title="Delete Slide"
-                >
-                  <Trash className="w-3.5 h-3.5" />
-                </button>
-              </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        )}
       </div>
 
       {/* EDIT MODAL WITH DIRECTUS ASSET DROPZONE */}
@@ -430,10 +575,23 @@ export default function HeroLayoutPanel({ initialSlides }: { initialSlides?: any
                   />
                 </div>
                 <div>
+                  <label className="block text-[10px] font-bold text-black/60 uppercase tracking-wider mb-1">Context Pill</label>
+                  <input
+                    type="text"
+                    value={editingSlide.context_pill || ""}
+                    onChange={(e) => setEditingSlide({ ...editingSlide, context_pill: e.target.value })}
+                    placeholder="e.g. ROAD TO AUSTRALIA 2027"
+                    className="w-full bg-black/5 border border-black/10 rounded-lg px-3 py-2 text-xs focus:outline-none focus:border-zru-green font-mono"
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div>
                   <label className="block text-[10px] font-bold text-black/60 uppercase tracking-wider mb-1">Focal Position</label>
                   <select
-                    value={editingSlide.imagePosition || "center"}
-                    onChange={(e) => setEditingSlide({ ...editingSlide, imagePosition: e.target.value as "center" | "top" | "bottom" })}
+                    value={editingSlide.image_position || "center"}
+                    onChange={(e) => setEditingSlide({ ...editingSlide, image_position: e.target.value as "center" | "top" | "bottom" })}
                     className="w-full bg-black/5 border border-black/10 rounded-lg px-3 py-2 text-xs focus:outline-none focus:border-zru-green font-bold"
                   >
                     <option value="center">Center</option>
@@ -441,15 +599,20 @@ export default function HeroLayoutPanel({ initialSlides }: { initialSlides?: any
                     <option value="bottom">Bottom</option>
                   </select>
                 </div>
+                <div className="flex items-end">
+                  <p className="text-[10px] text-black/40 pb-2">
+                    Slides render in `sort` order. Hidden (`is_active = false`) slides are skipped on the homepage.
+                  </p>
+                </div>
               </div>
 
               {/* Directus Image Dropzone */}
               <div>
                 <ImagePicker
                   label="Hero Banner Image Asset"
-                  value={editingSlide.image_url || ""}
-                  onChange={(val) => setEditingSlide({ ...editingSlide, image_url: val })}
-                  hint="Drag & drop match photo or paste Directus asset URL"
+                  value={editingSlide.image || ""}
+                  onChange={(val) => setEditingSlide({ ...editingSlide, image: val })}
+                  hint="Drag & drop match photo or paste a Directus asset URL / local /images path"
                 />
               </div>
 
@@ -469,6 +632,27 @@ export default function HeroLayoutPanel({ initialSlides }: { initialSlides?: any
                     type="text"
                     value={editingSlide.cta1_href || ""}
                     onChange={(e) => setEditingSlide({ ...editingSlide, cta1_href: e.target.value })}
+                    className="w-full bg-black/5 border border-black/10 rounded-lg px-3 py-2 text-xs focus:outline-none focus:border-zru-green font-mono"
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-[10px] font-bold text-black/60 uppercase tracking-wider mb-1">CTA 2 Button Label</label>
+                  <input
+                    type="text"
+                    value={editingSlide.cta2_label || ""}
+                    onChange={(e) => setEditingSlide({ ...editingSlide, cta2_label: e.target.value })}
+                    className="w-full bg-black/5 border border-black/10 rounded-lg px-3 py-2 text-xs focus:outline-none focus:border-zru-green font-bold"
+                  />
+                </div>
+                <div>
+                  <label className="block text-[10px] font-bold text-black/60 uppercase tracking-wider mb-1">CTA 2 Link Target</label>
+                  <input
+                    type="text"
+                    value={editingSlide.cta2_href || ""}
+                    onChange={(e) => setEditingSlide({ ...editingSlide, cta2_href: e.target.value })}
                     className="w-full bg-black/5 border border-black/10 rounded-lg px-3 py-2 text-xs focus:outline-none focus:border-zru-green font-mono"
                   />
                 </div>

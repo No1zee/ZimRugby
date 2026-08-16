@@ -13,7 +13,9 @@ interface SnapshotMetadata {
   data: Record<string, any[]>;
 }
 
-const COLLECTIONS = ["matches", "teams", "opponents", "competitions", "venues", "hero_slides", "news", "sponsors", "resources", "campaigns", "announcements"];
+// Real Directus collections (previous list referenced non-existent
+// "sponsors"/"resources" — every GET silently returned empty snapshots).
+const COLLECTIONS = ["matches", "teams", "opponents", "competitions", "venues", "hero_slides", "news", "partners", "campaigns", "announcements", "events"];
 
 export default function BackupsPanel() {
   const { toast } = useToast();
@@ -336,7 +338,7 @@ export default function BackupsPanel() {
               <span>{sessionCheckpoint.counts["matches"] || 0} Fixtures</span>
               <span>{sessionCheckpoint.counts["news"] || 0} Articles</span>
               <span>{sessionCheckpoint.counts["hero_slides"] || 0} Hero Slides</span>
-              <span>{sessionCheckpoint.counts["sponsors"] || 0} Sponsors</span>
+              <span>{sessionCheckpoint.counts["partners"] || 0} Partners</span>
             </div>
           </div>
         ) : (

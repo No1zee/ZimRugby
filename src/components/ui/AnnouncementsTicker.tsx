@@ -3,10 +3,12 @@
 import React, { useEffect, useState } from "react";
 import { Volume2, ArrowRight } from "lucide-react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { Announcement } from "@/types";
 
 export default function AnnouncementsTicker() {
   const [tickerItems, setTickerItems] = useState<Announcement[]>([]);
+  const pathname = usePathname();
 
   useEffect(() => {
     async function fetchTicker() {
@@ -25,6 +27,16 @@ export default function AnnouncementsTicker() {
 
     fetchTicker();
   }, []);
+
+  // The ticker lives in the global header — never render it on the admin
+  // portal or fan-zone (those pages hide the site chrome).
+  if (
+    pathname?.startsWith("/admin") ||
+    pathname?.startsWith("/admin-login") ||
+    pathname === "/fan-zone"
+  ) {
+    return null;
+  }
 
   if (tickerItems.length === 0) return null;
 

@@ -86,10 +86,11 @@ interface DirectusAnnouncement {
 }
 
 function announcementToReport(da: DirectusAnnouncement): Report {
+  const body = da.body || "";
   return {
     id: `directus-${da.id}`,
     title: da.title,
-    excerpt: da.body.length > 140 ? da.body.substring(0, 140) + "..." : da.body,
+    excerpt: body.length > 140 ? body.substring(0, 140) + "..." : body,
     content: da.body,
     date: da.date ? new Date(da.date).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }) : "Just now",
     image: "https://images.unsplash.com/photo-1544698310-74ea9d1c8258?q=80&w=1200&auto=format&fit=crop",

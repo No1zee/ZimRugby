@@ -15,6 +15,7 @@ interface DirectusAnnouncementItem {
   segment?: "sables" | "lady_sables" | "schools" | "general";
   design_variant?: "banner" | "spotlight-card" | "ticker" | "overlay";
   is_sticky?: boolean;
+  is_enabled?: boolean;
   badge?: string;
   related_match?: string | number;
   related_event?: string | number;
@@ -113,13 +114,15 @@ export async function getAnnouncements(): Promise<Announcement[]> {
 
   try {
     if (process.env.NEXT_PUBLIC_DIRECTUS_URL) {
-      // Query active announcements (filtering by ends_at >= now)
+      // Query active announcements (filtering by ends_at >= now, starts_at <= now,
+      // and only enabled ones — disabled announcements are excluded from the site)
       const response = await directusFetch<DirectusAnnouncementItem>(
         "announcements",
         {
           filter: {
             ends_at: { _gte: nowStr },
-            starts_at: { _lte: nowStr }
+            starts_at: { _lte: nowStr },
+            is_enabled: { _eq: true },
           },
           sort: ["-is_sticky", "-priority", "-starts_at"]
         },
@@ -147,9 +150,14 @@ export async function getAnnouncements(): Promise<Announcement[]> {
           return {
             id: String(item.id),
             title: item.title,
-            slug: item.slug,
+            slug: item.slug || `ann-${item.id}`,
             body: item.body || "",
-            priority: item.priority || "normal",
+            // Directus stores priority as a number (0 = normal); map back to the
+            // string union the site components expect.
+            priority: (() => {
+              const p = Number(item.priority) || 0;
+              return p >= 30 ? "critical" : p >= 20 ? "high" : "normal";
+            })(),
             scope: parsedScope,
             ctaLabel: item.cta_label,
             ctaUrl: item.cta_url,

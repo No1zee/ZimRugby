@@ -96,8 +96,10 @@ export default function TodayOverview({
     e.preventDefault();
     if (!quickAlert.trim()) return;
     setBroadcasting(true);
+    const now = new Date();
     try {
-      // Broadcast announcement directly
+      // Broadcast announcement directly — MUST be design_variant=ticker with
+      // active date window, otherwise the public API silently excludes it.
       const res = await fetch("/api/admin/directus", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -105,24 +107,29 @@ export default function TodayOverview({
           collection: "announcements",
           data: {
             title: `[${alertTag}] ${quickAlert.trim()}`,
-            content: quickAlert.trim(),
+            slug: `ticker-${Date.now()}`,
+            body: "",
+            design_variant: "ticker",
+            priority: alertTag === "BREAKING" ? 30 : alertTag === "LIVE MATCH" ? 20 : 10,
+            starts_at: now.toISOString(),
+            ends_at: new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000).toISOString(),
+            is_enabled: true,
             status: "published",
-            tag: alertTag,
-            date: new Date().toISOString(),
+            badge: alertTag,
+            segment: "general",
+            scope: ["global"],
           },
         }),
       });
 
-      if (res.ok) {
-        toast(`Announcement published to live site marquee ticker!`, "success");
-        setQuickAlert("");
-      } else {
-        toast("Announcement saved to system queue.", "success");
-        setQuickAlert("");
+      if (!res.ok) {
+        const errBody = await res.json().catch(() => ({}));
+        throw new Error(errBody.error || "Broadcast failed");
       }
-    } catch {
-      toast("Broadcast transmitted to site header.", "success");
+      toast("Broadcast published to the live marquee.", "success");
       setQuickAlert("");
+    } catch (err) {
+      toast(`Broadcast failed: ${err instanceof Error ? err.message : String(err)}`, "error");
     } finally {
       setBroadcasting(false);
     }

@@ -28,7 +28,7 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
 
   try {
     // 1. Attempt to fetch partner website from Directus CMS
-    const partners = await directusFetch<SponsorRecord>("sponsors", {
+    const partners = await directusFetch<SponsorRecord>("partners", {
       filter: {
         _or: [
           { id: { _eq: isNaN(Number(id)) ? 0 : Number(id) } },

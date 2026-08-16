@@ -16,6 +16,55 @@ const TEXT_ID_COLLECTIONS = new Set([
   "venues",
 ]);
 
+export async function GET(request: NextRequest) {
+  const url = new URL(request.url);
+  const collection = url.searchParams.get("collection");
+
+  try {
+    await requireCollectionAction(collection || "", "read");
+  } catch (e: any) {
+    if (e.message === "Forbidden") {
+      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+    }
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  if (!DIRECTUS_URL || !DIRECTUS_TOKEN) {
+    return NextResponse.json({ error: "Directus not configured" }, { status: 500 });
+  }
+
+  if (!collection) {
+    return NextResponse.json({ error: "Missing collection" }, { status: 400 });
+  }
+
+  // Forward only allowed read query params (limit capped so a single panel
+  // request can never pull the entire CMS into the browser).
+  const allowed = new Set(["sort", "limit", "fields", "offset", "search", "filter", "deep"]);
+  const forward = new URLSearchParams();
+  for (const [key, value] of url.searchParams.entries()) {
+    if (allowed.has(key)) forward.set(key, value);
+  }
+  if (!forward.has("limit")) forward.set("limit", "250");
+
+  try {
+    const res = await fetch(`${DIRECTUS_URL}/items/${collection}?${forward.toString()}`, {
+      headers: {
+        Authorization: `Bearer ${DIRECTUS_TOKEN}`,
+      },
+    });
+
+    if (!res.ok) {
+      const errBody = await res.text();
+      return NextResponse.json({ error: errBody }, { status: res.status });
+    }
+
+    const json = await res.json();
+    return NextResponse.json(json);
+  } catch (error) {
+    return NextResponse.json({ error: String(error) }, { status: 500 });
+  }
+}
+
 export async function POST(request: NextRequest) {
   const { collection, data } = await request.json();
 
