@@ -298,39 +298,56 @@ export async function persistAuditEvent(entry: {
   details?: string;
   ipAddress?: string;
 }): Promise<boolean> {
-  const client = getAdminClient();
-  if (!client) return false;
+  // Audit trail is backed by the Directus `audit_log` collection (Phase 1 WS2):
+  // the Supabase audit_logs migration is not present on the live project, while
+  // Directus schema is fully controllable from this app. Same signatures kept.
+  const baseUrl = process.env.NEXT_PUBLIC_DIRECTUS_URL;
+  const token = process.env.DIRECTUS_TOKEN;
+  if (!baseUrl || !token) return false;
 
   try {
-    const { error } = await client.from("audit_logs").insert({
-      actor_email: entry.actorEmail,
-      actor_role: entry.actorRole,
-      action: entry.action,
-      resource: entry.resource,
-      details: entry.details,
-      ip_address: entry.ipAddress,
+    const res = await fetch(`${baseUrl}/items/audit_log`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        actor_email: entry.actorEmail,
+        actor_role: entry.actorRole,
+        action: entry.action,
+        resource: entry.resource,
+        details: entry.details,
+        ip_address: entry.ipAddress,
+        created_at: new Date().toISOString(),
+      }),
     });
-    return !error;
-  } catch {
+    if (!res.ok) {
+      console.error(`[persistAuditEvent] audit write failed (${res.status}): ${await res.text()}`);
+      return false;
+    }
+    return true;
+  } catch (e) {
+    console.error("[persistAuditEvent] unexpected error:", e);
     return false;
   }
 }
 
 export async function fetchAuditLogs(limit = 100): Promise<any[]> {
-  const client = getAdminClient();
-  if (!client) return [];
+  const baseUrl = process.env.NEXT_PUBLIC_DIRECTUS_URL;
+  const token = process.env.DIRECTUS_TOKEN;
+  if (!baseUrl || !token) return [];
 
   try {
-    const { data, error } = await client
-      .from("audit_logs")
-      .select("*")
-      .order("timestamp", { ascending: false })
-      .limit(limit);
-
-    if (error || !data) return [];
-    return data.map((d: any) => ({
+    const filter = JSON.stringify({ deleted_at: { _null: true } });
+    const res = await fetch(`${baseUrl}/items/audit_log?sort=-created_at&limit=${limit}&fields=*&filter=${encodeURIComponent(filter)}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    if (!res.ok) return [];
+    const json = await res.json();
+    return ((json.data || []) as any[]).map((d: any) => ({
       id: d.id,
-      timestamp: d.timestamp,
+      timestamp: d.created_at ?? d.date_created,
       actorEmail: d.actor_email,
       actorRole: d.actor_role,
       action: d.action,

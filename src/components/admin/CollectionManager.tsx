@@ -1,7 +1,7 @@
 ﻿"use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import { Plus, Pencil, Trash2, ChevronDown, Copy, CheckSquare, Square, Loader2, AlertCircle } from "lucide-react";
+import { Plus, Pencil, Trash2, ChevronDown, Copy, CheckSquare, Square, Loader2, AlertCircle, Archive, RotateCcw, ShieldX } from "lucide-react";
 import { useRouter } from "next/navigation";
 import StatusChip from "./ui/StatusChip";
 import ImagePicker, { toAssetUrl } from "./ui/ImagePicker";
@@ -13,7 +13,7 @@ import { useConfirm } from "./ui/ConfirmProvider";
 export interface FieldConfig {
   key: string;
   label: string;
-  type?: "text" | "textarea" | "richtext" | "select" | "image" | "date" | "number" | "boolean";
+  type?: "text" | "textarea" | "richtext" | "select" | "image" | "date" | "datetime" | "number" | "boolean";
   options?: string[];
   placeholder?: string;
   required?: boolean;
@@ -39,6 +39,8 @@ interface CollectionManagerProps {
   onFocusHandled?: () => void;
   /** Per-action grants (role-gated UI). Absent = full access (all allowed). */
   grants?: { create?: boolean; update?: boolean; delete?: boolean };
+  /** Whether the actor may permanently purge trashed items (super admin). */
+  canPurge?: boolean;
 }
 
 function formatDisplay(value: unknown): string {
@@ -51,7 +53,7 @@ function formatDisplay(value: unknown): string {
 }
 
 function isDateFieldType(type?: string): boolean {
-  return type === "date";
+  return type === "date" || type === "datetime";
 }
 
 function isBooleanValue(v: unknown): boolean {
@@ -89,6 +91,7 @@ export default function CollectionManager({
   focusId,
   onFocusHandled,
   grants,
+  canPurge = false,
 }: CollectionManagerProps) {
   const canCreate = grants?.create !== false;
   const canUpdate = grants?.update !== false;
@@ -105,6 +108,9 @@ export default function CollectionManager({
   const [bulkBusy, setBulkBusy] = useState(false);
   const [sortNewest, setSortNewest] = useState(true);
   const [page, setPage] = useState(1);
+  const [showTrash, setShowTrash] = useState(false);
+  const [trashItems, setTrashItems] = useState<Record<string, unknown>[]>([]);
+  const [trashBusy, setTrashBusy] = useState(false);
   const deletedBackup = useRef<{ id: string | number; item: Record<string, unknown> } | null>(null);
   const dirtyRef = useRef(false);
 
@@ -184,7 +190,7 @@ export default function CollectionManager({
       if (f.type === "boolean") {
         data[f.key] = raw === true || raw === "true" || raw === 1 ? "1" : "0";
       } else if (isDateFieldType(f.type)) {
-        data[f.key] = raw ? String(raw).slice(0, 10) : "";
+        data[f.key] = f.type === "datetime" ? (raw ? String(raw).slice(0, 16) : "") : raw ? String(raw).slice(0, 10) : "";
       } else if (duplicate && f.key === "slug") {
         data[f.key] = "";
       } else if (duplicate && f.key === displayField) {
@@ -255,6 +261,7 @@ export default function CollectionManager({
       let v: unknown = formData[f.key] ?? "";
       if (f.type === "number") v = v === "" ? null : Number(v);
       else if (f.type === "boolean") v = v === "1";
+      else if (f.type === "datetime") v = v ? new Date(String(v)).toISOString() : null;
       else if (isDateFieldType(f.type)) v = v || null;
       else if (v === "") v = null;
       payload[f.key] = v;
@@ -289,16 +296,16 @@ export default function CollectionManager({
     const backup = deletedBackup.current;
     if (!backup) return;
     deletedBackup.current = null;
-    const payload: Record<string, unknown> = { ...backup.item };
-    delete payload.id;
     try {
-      const res = await fetch("/api/admin/directus", {
+      const res = await fetch("/api/admin/directus/trash", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ collection, data: payload }),
+        body: JSON.stringify({ collection, action: "restore", id: backup.id }),
       });
       if (res.ok) {
         toast("Item restored.");
+        setShowTrash(false);
+        setTrashItems([]);
         router.refresh();
       } else {
         const err = await res.json().catch(() => null);
@@ -309,10 +316,106 @@ export default function CollectionManager({
     }
   }
 
+  async function loadTrash() {
+    if (showTrash) {
+      setShowTrash(false);
+      return;
+    }
+    setShowTrash(true);
+    setTrashBusy(true);
+    try {
+      const res = await fetch(`/api/admin/directus/trash?collection=${encodeURIComponent(collection)}`);
+      const json = await res.json().catch(() => null);
+      if (res.ok) {
+        setTrashItems(json?.data || []);
+      } else {
+        toast(`Could not load trash: ${json?.error || res.statusText}`, "error");
+      }
+    } catch (err) {
+      toast(`Error: ${err instanceof Error ? err.message : err}`, "error");
+    } finally {
+      setTrashBusy(false);
+    }
+  }
+
+  async function restoreTrashRow(id: string | number) {
+    if (!canUpdate || trashBusy) return;
+    setTrashBusy(true);
+    try {
+      const res = await fetch("/api/admin/directus/trash", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ collection, action: "restore", id }),
+      });
+      if (!res.ok) throw new Error((await res.json().catch(() => null))?.error || res.statusText);
+      toast("Item restored.");
+      setTrashItems((prev) => prev.filter((it) => String(it.id) !== String(id)));
+      router.refresh();
+    } catch (err) {
+      toast(`Restore failed: ${err instanceof Error ? err.message : err}`, "error");
+    } finally {
+      setTrashBusy(false);
+    }
+  }
+
+  async function purgeTrashRow(id: string | number) {
+    if (!canPurge || trashBusy) return;
+    const ok = await confirm({
+      title: "Permanently delete this item?",
+      message: "This permanently removes the item from the CMS. It cannot be recovered.",
+      confirmLabel: "Purge",
+      danger: true,
+    });
+    if (!ok) return;
+    setTrashBusy(true);
+    try {
+      const res = await fetch("/api/admin/directus/trash", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ collection, action: "purge", id }),
+      });
+      if (!res.ok) throw new Error((await res.json().catch(() => null))?.error || res.statusText);
+      toast("Item permanently deleted.");
+      setTrashItems((prev) => prev.filter((it) => String(it.id) !== String(id)));
+      router.refresh();
+    } catch (err) {
+      toast(`Purge failed: ${err instanceof Error ? err.message : err}`, "error");
+    } finally {
+      setTrashBusy(false);
+    }
+  }
+
+  async function purgeAllTrash() {
+    if (!canPurge || trashBusy || trashItems.length === 0) return;
+    const ok = await confirm({
+      title: `Permanently delete ${trashItems.length} trashed item(s)?`,
+      message: "This permanently removes every trashed item in this collection. It cannot be recovered.",
+      confirmLabel: "Purge all",
+      danger: true,
+    });
+    if (!ok) return;
+    setTrashBusy(true);
+    try {
+      const res = await fetch("/api/admin/directus/trash", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ collection, action: "purge-all" }),
+      });
+      if (!res.ok) throw new Error((await res.json().catch(() => null))?.error || res.statusText);
+      toast(`Purged ${trashItems.length} item(s).`);
+      setTrashItems([]);
+      router.refresh();
+    } catch (err) {
+      toast(`Purge failed: ${err instanceof Error ? err.message : err}`, "error");
+    } finally {
+      setTrashBusy(false);
+    }
+  }
+
   async function handleDelete(id: string | number) {
     const ok = await confirm({
       title: `Delete this ${singularLabel || "item"}?`,
-      message: "This cannot be undone. The item will be removed from the website.",
+      message: "The item moves to the trash (removed from the website). You can restore it from the Trash panel.",
       confirmLabel: "Delete",
       danger: true,
     });
@@ -440,9 +543,9 @@ export default function CollectionManager({
   async function bulkDelete() {
     if (bulkBusy || selectedIds.size === 0) return;
     const ok = await confirm({
-      title: `Delete ${selectedIds.size} ${label}?`,
-      message: "This cannot be undone. The selected items will be removed from the website.",
-      confirmLabel: "Delete all",
+      title: `Move ${selectedIds.size} ${label} to trash?`,
+      message: "The selected items will be removed from the website and can be restored from the Trash panel.",
+      confirmLabel: "Move to trash",
       danger: true,
     });
     if (!ok) return;
@@ -484,6 +587,16 @@ export default function CollectionManager({
           {description && <p className="mt-0.5 text-xs text-black/50">{description}</p>}
         </div>
         <div className="flex items-center gap-2">
+          <button
+            onClick={loadTrash}
+            title="Trashed items (soft-deleted)"
+            className={`flex items-center gap-1.5 rounded-lg px-3 py-2 text-[10px] font-black uppercase tracking-wider transition-colors ${
+              showTrash ? "bg-amber-100 text-amber-800" : "bg-black/5 text-black/60 hover:bg-black/10"
+            }`}
+          >
+            <Archive className="h-3 w-3" />
+            Trash
+          </button>
           <label className="flex items-center gap-1.5 rounded-lg bg-black/5 px-3 py-2 text-[10px] font-black uppercase tracking-wider text-black/60">
             <ChevronDown className="h-3 w-3" />
             <select
@@ -505,6 +618,66 @@ export default function CollectionManager({
           )}
         </div>
       </div>
+
+      {/* Trash panel: soft-deleted rows, restored with the SAME id (links survive). */}
+      {showTrash && (
+        <div className="border-b border-black/5 bg-amber-50/50 p-6">
+          <div className="mb-3 flex items-center justify-between">
+            <h3 className="flex items-center gap-2 font-heading text-sm font-black uppercase tracking-wider text-amber-900">
+              <Archive className="h-4 w-4" /> Trash — {collection}
+              <span className="rounded-full bg-amber-200/70 px-2 py-0.5 text-[10px] text-amber-900">{trashItems.length}</span>
+            </h3>
+            {canPurge && trashItems.length > 0 && (
+              <button
+                onClick={purgeAllTrash}
+                disabled={trashBusy}
+                className="flex items-center gap-1.5 rounded-lg bg-red-700 px-3 py-1.5 text-[10px] font-black uppercase tracking-wider text-white transition-colors hover:bg-red-800 disabled:opacity-50"
+              >
+                <ShieldX className="h-3 w-3" /> Purge all ({trashItems.length})
+              </button>
+            )}
+          </div>
+          {trashBusy && !trashItems.length ? (
+            <p className="flex items-center gap-2 text-xs text-amber-800"><Loader2 className="h-3.5 w-3.5 animate-spin" /> Loading trashed items…</p>
+          ) : trashItems.length === 0 ? (
+            <p className="text-xs text-amber-800/70">Trash is empty. Deleted items appear here and stay until purged.</p>
+          ) : (
+            <ul className="space-y-2">
+              {trashItems.map((it) => (
+                <li key={String(it.id)} className="flex items-center justify-between gap-3 rounded-lg border border-amber-200/70 bg-white px-3 py-2">
+                  <div className="min-w-0">
+                    <p className="truncate text-sm font-bold text-rich-black">{String(it[displayField] ?? it.id)}</p>
+                    <p className="text-[10px] text-black/40">
+                      {String(it.id)} · trashed {it.deleted_at ? new Date(String(it.deleted_at)).toLocaleString() : "?"}
+                      {it.deleted_by ? ` by ${it.deleted_by}` : ""}
+                    </p>
+                  </div>
+                  <div className="flex shrink-0 items-center gap-2">
+                    {canUpdate && (
+                      <button
+                        onClick={() => restoreTrashRow(it.id as string | number)}
+                        disabled={trashBusy}
+                        className="flex items-center gap-1 rounded-lg bg-zru-green px-2.5 py-1.5 text-[10px] font-black uppercase tracking-wider text-white transition-colors hover:bg-green-800 disabled:opacity-50"
+                      >
+                        <RotateCcw className="h-3 w-3" /> Restore
+                      </button>
+                    )}
+                    {canPurge && (
+                      <button
+                        onClick={() => purgeTrashRow(it.id as string | number)}
+                        disabled={trashBusy}
+                        className="flex items-center gap-1 rounded-lg bg-black/10 px-2.5 py-1.5 text-[10px] font-black uppercase tracking-wider text-red-700 transition-colors hover:bg-red-100 disabled:opacity-50"
+                      >
+                        <Trash2 className="h-3 w-3" /> Purge
+                      </button>
+                    )}
+                  </div>
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+      )}
 
       {/* Create / Edit form */}
       {formOpen && (
@@ -557,6 +730,15 @@ export default function CollectionManager({
                     <input
                       id={fieldId}
                       type="date"
+                      value={formData[field.key] || ""}
+                      onChange={(e) => setField(field.key, e.target.value)}
+                      disabled={saving}
+                      className={`w-full rounded-lg border bg-white p-2.5 text-sm disabled:opacity-60 ${fieldError ? "border-red-400" : "border-black/10"}`}
+                    />
+                  ) : field.type === "datetime" ? (
+                    <input
+                      id={fieldId}
+                      type="datetime-local"
                       value={formData[field.key] || ""}
                       onChange={(e) => setField(field.key, e.target.value)}
                       disabled={saving}

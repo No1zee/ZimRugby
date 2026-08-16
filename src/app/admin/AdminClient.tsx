@@ -482,6 +482,7 @@ function AdminClientInner(props: AdminClientProps) {
               title="News articles"
               description="Articles here appear in the homepage Latest News panel and the media archive."
               grants={grantsFor("news")}
+              canPurge={permissions?.all === true}
               fields={[
                 { key: "title", label: "Headline", type: "text", placeholder: "e.g. Sables squad named for Rugby Africa Cup", required: true, colSpan: "full" },
                 { key: "slug", label: "Web address (slug)", type: "text", placeholder: "auto-generated", colSpan: "full" },
@@ -508,19 +509,28 @@ function AdminClientInner(props: AdminClientProps) {
               title="Banners & announcements"
               description="Short alert banners shown on the site (e.g. ticket on-sale notices)."
               grants={grantsFor("announcements")}
+              canPurge={permissions?.all === true}
               fields={[
                 { key: "title", label: "Title", type: "text", placeholder: "e.g. Tickets on sale now", required: true, colSpan: "full" },
                 { key: "body", label: "Message", type: "textarea", colSpan: "full" },
-                { key: "category", label: "Category", type: "text", placeholder: "e.g. Sables" },
-                { key: "priority", label: "Priority", type: "select", options: ["normal", "high", "urgent"] },
+                { key: "design_variant", label: "Design variant", type: "select", options: ["banner", "spotlight-card", "ticker", "overlay"] },
+                { key: "badge", label: "Badge", type: "text", placeholder: "e.g. TICKET ALERT, LIVE UPDATES" },
+                { key: "priority", label: "Priority (0 normal / 20 high / 30 critical)", type: "select", options: ["0", "20", "30"] },
+                { key: "starts_at", label: "Show from (UTC)", type: "datetime" },
+                { key: "ends_at", label: "Show until (UTC)", type: "datetime" },
+                { key: "segment", label: "Audience segment", type: "select", options: ["general", "sables", "lady_sables", "schools"] },
+                { key: "scope", label: "Scope (comma-separated)", type: "text", placeholder: "global, homepage, media" },
+                { key: "cta_label", label: "Button label", type: "text", placeholder: "e.g. BOOK TICKETS" },
+                { key: "cta_url", label: "Button link (route)", type: "text", placeholder: "e.g. /tickets" },
+                { key: "is_sticky", label: "Sticky (stays pinned)", type: "boolean" },
                 { key: "is_enabled", label: "Show on website", type: "boolean" },
                 { key: "status", label: "Status", type: "select", options: ["draft", "published"] },
               ]}
               items={initialAnnouncements}
               displayField="title"
-              subtitleField="category"
+              subtitleField="badge"
               statusField="is_enabled"
-              searchable={["title", "body"]}
+              searchable={["title", "body", "badge"]}
               singularLabel="announcement"
               onDirtyChange={registerDirty("announcements")}
             />
@@ -541,7 +551,7 @@ function AdminClientInner(props: AdminClientProps) {
                 return {
                   id: Number(m.id.replace(/\D/g, "")) || Math.floor(Math.random() * 100000),
                   title: `${home} vs ${away}`,
-                  subtitle: `${m.competition} • ${m.teamCategory}`,
+                  subtitle: `${m.competition} â€¢ ${m.teamCategory}`,
                   date: m.dateIso ? m.dateIso.split("T")[0] : "",
                   time: m.time,
                   location: m.venue,
@@ -563,6 +573,7 @@ function AdminClientInner(props: AdminClientProps) {
               title="Grassroots initiatives"
               description="Cards shown in the homepage Grassroots & Youth Rugby section."
               grants={grantsFor("grassroots_initiatives")}
+              canPurge={permissions?.all === true}
               fields={[
                 { key: "title", label: "Title", type: "text", placeholder: "e.g. Schoolboy & Schoolgirl Leagues", required: true },
                 { key: "badge", label: "Badge", type: "text", placeholder: "e.g. YOUTH PATHWAYS" },
@@ -585,6 +596,7 @@ function AdminClientInner(props: AdminClientProps) {
               title="Programmes (Play Rugby)"
               description="Programmes displayed on the Play Rugby page."
               grants={grantsFor("programmes")}
+              canPurge={permissions?.all === true}
               fields={[
                 { key: "title", label: "Title", type: "text", placeholder: "e.g. Get Into Rugby", required: true },
                 { key: "description", label: "Description", type: "textarea" },
@@ -610,6 +622,7 @@ function AdminClientInner(props: AdminClientProps) {
               title="Frequently asked questions"
               description="FAQs displayed on the Tickets page."
               grants={grantsFor("faqs")}
+              canPurge={permissions?.all === true}
               fields={[
                 { key: "question", label: "Question", type: "text", placeholder: "e.g. How do I buy tickets?", required: true, colSpan: "full" },
                 { key: "answer", label: "Answer", type: "richtext", colSpan: "full" },
@@ -626,6 +639,7 @@ function AdminClientInner(props: AdminClientProps) {
               title="Footer navigation"
               description="Link columns shown in the website footer."
               grants={grantsFor("footer_navigation")}
+              canPurge={permissions?.all === true}
               fields={[
                 { key: "column_title", label: "Column title", type: "text", placeholder: "e.g. About ZRU", required: true },
                 { key: "links", label: "Links (JSON array)", type: "textarea", colSpan: "full", placeholder: '[{"label":"Governance","url":"/about/governance"}]' },
@@ -656,7 +670,7 @@ function AdminClientInner(props: AdminClientProps) {
               key={`teams-${teamsRemountKey}`}
               title="National teams"
               icon={<Trophy className="h-5 w-5" />}
-              description="Senior and age-grade national squads (Sables, Lady Sables, U20â€¦)."
+              description="Senior and age-grade national squads (Sables, Lady Sables, U20Ã¢â‚¬Â¦)."
               defaultOpen={true}
             >
               <CollectionManager
@@ -664,6 +678,7 @@ function AdminClientInner(props: AdminClientProps) {
                 title="Teams"
                 description="National squads shown across the site."
                 grants={grantsFor("teams")}
+                canPurge={permissions?.all === true}
                 fields={[
                   { key: "name", label: "Name", type: "text", placeholder: "e.g. Zimbabwe Sables", required: true },
                   { key: "short_name", label: "Short name", type: "text", placeholder: "e.g. Sables" },
@@ -705,6 +720,7 @@ function AdminClientInner(props: AdminClientProps) {
                 title="Opponents"
                 description="Sides used in the fixtures dropdown."
                 grants={grantsFor("opponents")}
+                canPurge={permissions?.all === true}
                 fields={[
                   { key: "name", label: "Name", type: "text", placeholder: "e.g. Namibia", required: true },
                   { key: "short_name", label: "Short name", type: "text", placeholder: "e.g. NAM" },
@@ -731,7 +747,7 @@ function AdminClientInner(props: AdminClientProps) {
               key={`competitions-${teamsRemountKey}`}
               title="Competitions"
               icon={<Trophy className="h-5 w-5" />}
-              description="Tournaments and leagues (Rugby Africa Cup, Gold Cupâ€¦)."
+              description="Tournaments and leagues (Rugby Africa Cup, Gold CupÃ¢â‚¬Â¦)."
               defaultOpen={false}
             >
               <CollectionManager
@@ -739,6 +755,7 @@ function AdminClientInner(props: AdminClientProps) {
                 title="Competitions"
                 description="Competitions used in the fixtures dropdown."
                 grants={grantsFor("competitions")}
+                canPurge={permissions?.all === true}
                 fields={[
                   { key: "name", label: "Name", type: "text", placeholder: "e.g. Rugby Africa Cup", required: true },
                   { key: "short_name", label: "Short name", type: "text", placeholder: "e.g. RAC" },
@@ -777,6 +794,7 @@ function AdminClientInner(props: AdminClientProps) {
                 title="Venues"
                 description="Venues used in the fixtures dropdown."
                 grants={grantsFor("venues")}
+                canPurge={permissions?.all === true}
                 fields={[
                   { key: "name", label: "Name", type: "text", placeholder: "e.g. Hartsfield Grounds", required: true },
                   { key: "slug", label: "Slug", type: "text", placeholder: "e.g. hartsfield-grounds" },
@@ -785,7 +803,7 @@ function AdminClientInner(props: AdminClientProps) {
                   { key: "country", label: "Country", type: "text", placeholder: "e.g. Zimbabwe" },
                   { key: "full_label", label: "Full label", type: "text", placeholder: "e.g. Hartsfield Grounds, Bulawayo" },
                   { key: "address", label: "Address", type: "text", placeholder: "e.g. 12 Park Road" },
-                  { key: "google_maps_url", label: "Google Maps URL", type: "text", placeholder: "https://maps.google.com/â€¦" },
+                  { key: "google_maps_url", label: "Google Maps URL", type: "text", placeholder: "https://maps.google.com/Ã¢â‚¬Â¦" },
                   { key: "timezone", label: "Timezone", type: "text", placeholder: "e.g. Africa/Harare" },
                   { key: "capacity", label: "Capacity", type: "number" },
                   { key: "status", label: "Status", type: "select", options: ["published", "draft"] },

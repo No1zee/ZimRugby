@@ -27,7 +27,8 @@ interface FetchParams {
 export async function directusFetch<T>(
   collection: string,
   params: FetchParams = {},
-  revalidateSeconds: number = 60
+  revalidateSeconds: number = 60,
+  opts?: { includeDeleted?: boolean }
 ): Promise<T[]> {
   const baseUrl = process.env.DIRECTUS_API_URL || process.env.NEXT_PUBLIC_DIRECTUS_URL;
   const token = process.env.DIRECTUS_READ_TOKEN || process.env.DIRECTUS_TOKEN;
@@ -37,34 +38,44 @@ export async function directusFetch<T>(
     return [] as T[];
   }
 
+  // Soft-delete safety net: trashed rows never reach public readers unless
+  // explicitly requested (includeDeleted). Every content collection now has
+  // deleted_at/deleted_by, so the filter is universal.
+  const effectiveParams: FetchParams = opts?.includeDeleted
+    ? params
+    : {
+        ...params,
+        filter: { deleted_at: { _null: true } as Record<string, unknown>, ...params.filter },
+      };
+
   const url = new URL(`${baseUrl}/items/${collection}`);
 
-  if (params.fields) {
-    url.searchParams.append("fields", params.fields.join(","));
+  if (effectiveParams.fields) {
+    url.searchParams.append("fields", effectiveParams.fields.join(","));
   }
-  if (params.filter) {
-    url.searchParams.append("filter", JSON.stringify(params.filter));
+  if (effectiveParams.filter) {
+    url.searchParams.append("filter", JSON.stringify(effectiveParams.filter));
   }
-  if (params.sort) {
-    url.searchParams.append("sort", params.sort.join(","));
+  if (effectiveParams.sort) {
+    url.searchParams.append("sort", effectiveParams.sort.join(","));
   }
-  if (params.limit !== undefined) {
-    url.searchParams.append("limit", String(params.limit));
+  if (effectiveParams.limit !== undefined) {
+    url.searchParams.append("limit", String(effectiveParams.limit));
   }
-  if (params.page !== undefined) {
-    url.searchParams.append("page", String(params.page));
+  if (effectiveParams.page !== undefined) {
+    url.searchParams.append("page", String(effectiveParams.page));
   }
-  if (params.search) {
-    url.searchParams.append("search", params.search);
+  if (effectiveParams.search) {
+    url.searchParams.append("search", effectiveParams.search);
   }
-  if (params.aggregate) {
-    url.searchParams.append("aggregate", JSON.stringify(params.aggregate));
+  if (effectiveParams.aggregate) {
+    url.searchParams.append("aggregate", JSON.stringify(effectiveParams.aggregate));
   }
-  if (params.groupBy?.length) {
-    url.searchParams.append("groupBy", params.groupBy.join(","));
+  if (effectiveParams.groupBy?.length) {
+    url.searchParams.append("groupBy", effectiveParams.groupBy.join(","));
   }
 
-  const key = cacheKey(collection, params);
+  const key = cacheKey(collection, effectiveParams);
 
   try {
     const controller = new AbortController();
@@ -115,7 +126,8 @@ export async function directusFetch<T>(
 export async function directusCount(
   collection: string,
   filter?: Record<string, unknown>,
-  revalidateSeconds: number = 0
+  revalidateSeconds: number = 0,
+  opts?: { includeDeleted?: boolean }
 ): Promise<number> {
   const baseUrl = process.env.DIRECTUS_API_URL || process.env.NEXT_PUBLIC_DIRECTUS_URL;
   const token = process.env.DIRECTUS_READ_TOKEN || process.env.DIRECTUS_TOKEN;
@@ -126,11 +138,14 @@ export async function directusCount(
 
   const url = new URL(`${baseUrl}/items/${collection}`);
   url.searchParams.append("aggregate", JSON.stringify({ count: "*" }));
-  if (filter) {
-    url.searchParams.append("filter", JSON.stringify(filter));
+  const effectiveFilter: Record<string, unknown> | undefined = opts?.includeDeleted
+    ? filter
+    : { deleted_at: { _null: true } as Record<string, unknown>, ...filter };
+  if (effectiveFilter) {
+    url.searchParams.append("filter", JSON.stringify(effectiveFilter));
   }
 
-  const key = `directus:${collection}:count:${createHash("sha1").update(JSON.stringify({ filter })).digest("hex")}`;
+  const key = `directus:${collection}:count:${createHash("sha1").update(JSON.stringify({ filter: effectiveFilter })).digest("hex")}`;
 
   try {
     const res = await fetch(url.toString(), {

@@ -207,25 +207,46 @@ export interface StandingsTables {
   date_updated?: string;
 }
 
-export interface Announcements {
+/**
+ * Soft-delete markers present on every content collection (added 2026-08-16).
+ * Rows with deleted_at set are trashed: hidden from the public site, restorable
+ * by id (links survive), purged only by super admins.
+ */
+export interface SoftDeletedFields {
+  deleted_at?: string | null;
+  deleted_by?: string | null;
+}
+
+/**
+ * Canonical prod schema for `announcements` (verified against the live
+ * Directus API 2026-08-16). Keys are the single source of truth for the
+ * admin form (AdminClient), the public mapper (api/announcements.ts) and the
+ * ticker/hero panels. Do NOT reintroduce legacy aliases (variant, page_scope,
+ * start_at, urgent, category) — Directus silently drops unknown fields.
+ */
+export interface Announcements extends SoftDeletedFields {
   id?: string;
   title?: string;
-  body?: string;
-  variant?: string;
-  page_scope?: string;
-  audience_scope?: string;
-  linked_match_id?: string;
-  cta_label?: string;
-  cta_url?: string;
-  dismissible?: boolean;
+  slug?: string;
+  body?: string | null;
+  design_variant?: "banner" | "spotlight-card" | "ticker" | "overlay" | string;
+  /** Integer: 0 = normal, 20 = high, 30 = critical (site normalizes). */
   priority?: number;
-  start_at?: string;
-  end_at?: string;
+  starts_at?: string | null;
+  ends_at?: string | null;
+  scope?: string | string[];
+  segment?: "sables" | "lady_sables" | "schools" | "general" | string;
+  badge?: string | null;
+  cta_label?: string | null;
+  cta_url?: string | null;
+  is_sticky?: boolean;
   is_enabled?: boolean;
   status?: string;
-  category?: string;
-  date?: string;
-  urgent?: boolean;
+  related_match?: string | number | null;
+  related_event?: string | number | null;
+  related_article?: string | number | null;
+  date_created?: string;
+  date_updated?: string;
 }
 
 export interface HeroSlides {

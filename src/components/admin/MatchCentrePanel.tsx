@@ -199,7 +199,7 @@ export default function MatchCentrePanel({
   async function deleteFixture(id: string, label: string) {
     const ok = await confirm({
       title: "Delete fixture?",
-      message: `'${label}' will be permanently removed. This cannot be undone.`,
+      message: `'${label}' will be moved to the trash (removed from the website). Restorable from the Trash panel.`,
       confirmLabel: "Delete fixture",
       danger: true,
     });

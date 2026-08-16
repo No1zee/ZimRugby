@@ -336,7 +336,7 @@ export default function EventsPanel({ initialEvents, onDirtyChange }: EventsPane
   async function handleDelete(ev: AdminEventRow) {
     const ok = await confirm({
       title: "Delete event?",
-      message: `"${ev.title || "this event"}" will be permanently removed. This cannot be undone.`,
+      message: `"${ev.title || "this event"}" will be moved to the trash (removed from the website). Restorable from the Trash panel.`,
       confirmLabel: "Delete event",
       danger: true,
     });
