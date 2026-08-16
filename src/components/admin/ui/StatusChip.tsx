@@ -16,7 +16,7 @@ function toneFor(status: string): Tone {
   if (["published", "active", "live", "complete", "completed", "enabled", "featured", "winner", "true", "1", "on"].includes(s)) return "green";
   if (["draft", "pending", "review", "onboarding", "disabled", "false", "0", "off"].includes(s)) return "amber";
   if (["scheduled", "upcoming", "future"].includes(s)) return "blue";
-  if (["final", "full_time", "closed", "cancelled"].includes(s)) return "red";
+  if (["final", "full_time", "closed", "cancelled", "expired"].includes(s)) return "red";
   if (["fixture", "open", "archived"].includes(s)) return "teal";
   return "grey";
 }

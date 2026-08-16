@@ -530,6 +530,7 @@ function AdminClientInner(props: AdminClientProps) {
               displayField="title"
               subtitleField="badge"
               statusField="is_enabled"
+              scheduleField={{ starts: "starts_at", ends: "ends_at" }}
               searchable={["title", "body", "badge"]}
               singularLabel="announcement"
               onDirtyChange={registerDirty("announcements")}

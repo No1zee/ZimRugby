@@ -30,6 +30,8 @@ interface CollectionManagerProps {
   subtitleField?: string;
   badgeField?: string;
   statusField?: string;
+  /** Date-window fields (e.g. announcement starts_at/ends_at). Enables upcoming/active/expired chips + purge-expired. */
+  scheduleField?: { starts: string; ends: string };
   searchable?: string[];
   pageSize?: number;
   singularLabel?: string;
@@ -74,6 +76,36 @@ function itemSortKey(item: Record<string, unknown>): string {
   return String(item.id ?? "");
 }
 
+/** Window lifecycle of a dated item: "upcoming" | "active" | "expired" | "" (no window set). */
+function scheduleValue(item: Record<string, unknown>, schedule?: { starts: string; ends: string }): string {
+  if (!schedule) return "";
+  const now = Date.now();
+  const starts = item[schedule.starts] ? new Date(String(item[schedule.starts])).getTime() : null;
+  const ends = item[schedule.ends] ? new Date(String(item[schedule.ends])).getTime() : null;
+  const hasStarts = starts !== null && !isNaN(starts);
+  const hasEnds = ends !== null && !isNaN(ends);
+  if (hasStarts && now < starts) return "upcoming";
+  if (hasEnds && now > ends) return "expired";
+  if (hasStarts || hasEnds) return "active";
+  return "";
+}
+
+function formatWindowRange(item: Record<string, unknown>, schedule?: { starts: string; ends: string }): string {
+  if (!schedule) return "";
+  const fmt = (v: unknown) => {
+    if (!v) return "";
+    const d = new Date(String(v));
+    return isNaN(d.getTime())
+      ? ""
+      : d.toLocaleDateString("en-GB", { day: "numeric", month: "short" }) +
+        (String(v).length > 10 ? ` ${d.toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit" })}` : "");
+  };
+  const s = fmt(item[schedule.starts]);
+  const e = fmt(item[schedule.ends]);
+  if (s && e) return `${s} → ${e}`;
+  return s || e;
+}
+
 export default function CollectionManager({
   collection,
   title,
@@ -84,6 +116,7 @@ export default function CollectionManager({
   subtitleField,
   badgeField,
   statusField,
+  scheduleField,
   searchable,
   pageSize = 8,
   singularLabel,
@@ -104,6 +137,7 @@ export default function CollectionManager({
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [query, setQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState<string>("all");
+  const [scheduleFilter, setScheduleFilter] = useState<string>("all");
   const [selected, setSelected] = useState<Set<string>>(new Set());
   const [bulkBusy, setBulkBusy] = useState(false);
   const [sortNewest, setSortNewest] = useState(true);
@@ -156,12 +190,13 @@ export default function CollectionManager({
     let list = items;
     if (q) list = list.filter((it) => keys.some((k) => term(it[k]).toLowerCase().includes(q)));
     if (statusFilter !== "all") list = list.filter((it) => statusValue(it, statusField) === statusFilter);
+    if (scheduleFilter !== "all") list = list.filter((it) => scheduleValue(it, scheduleField) === scheduleFilter);
     list = [...list].sort((a, b) => {
       const cmp = itemSortKey(a).localeCompare(itemSortKey(b));
       return sortNewest ? -cmp : cmp;
     });
     return list;
-  }, [items, query, searchable, displayField, subtitleField, sortNewest, statusFilter, statusField]);
+  }, [items, query, searchable, displayField, subtitleField, sortNewest, statusFilter, statusField, scheduleFilter, scheduleField]);
 
   const pageCount = Math.max(1, Math.ceil(filtered.length / pageSize));
   const safePage = Math.min(page, pageCount);
@@ -575,6 +610,43 @@ export default function CollectionManager({
   const label = singularLabel || "item";
   const statusIsBoolean = !!statusField && (items.length === 0 || isBooleanValue(items[0][statusField]));
 
+  // Only reachable when super-admin (canPurge). Moves every date-window-expired
+  // row to the trash (recoverable), mirroring the phased soft-delete model.
+  async function purgeExpired() {
+    if (!canPurge || !scheduleField || bulkBusy) return;
+    const expired = items.filter((it) => scheduleValue(it, scheduleField) === "expired");
+    if (expired.length === 0) return;
+    const ok = await confirm({
+      title: `Move ${expired.length} expired to trash?`,
+      message: "Expired announcements are no longer shown on the site. They will be moved to the Trash panel where you can restore or permanently purge them.",
+      confirmLabel: "Move expired to trash",
+      danger: true,
+    });
+    if (!ok) return;
+    setBulkBusy(true);
+    try {
+      const ids = expired.map((it) => String(it.id));
+      const res = await fetch("/api/admin/directus", {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ collection, ids }),
+      });
+      if (res.ok) {
+        toast(`Moved ${ids.length} expired item(s) to trash.`);
+        if (scheduleFilter === "expired") setScheduleFilter("all");
+        setSelected(new Set());
+        router.refresh();
+      } else {
+        const err = await res.json().catch(() => null);
+        toast(`Failed: ${err?.error || res.statusText}`, "error");
+      }
+    } catch (err) {
+      toast(`Error: ${err instanceof Error ? err.message : err}`, "error");
+    } finally {
+      setBulkBusy(false);
+    }
+  }
+
   return (
     <div className="rounded-2xl border border-black/10 bg-white shadow-sm">
       {/* Header */}
@@ -855,6 +927,46 @@ export default function CollectionManager({
           </div>
         )}
 
+        {scheduleField && (
+          <div className="mb-3 flex flex-wrap items-center gap-1.5">
+            <button
+              onClick={() => { setScheduleFilter("all"); setPage(1); }}
+              className={`rounded-full px-3 py-1 text-[10px] font-black uppercase tracking-wider transition-colors ${
+                scheduleFilter === "all" ? "bg-rich-black text-white" : "bg-black/5 text-black/60 hover:bg-black/10"
+              }`}
+            >
+              All windows ({items.length})
+            </button>
+            {(["upcoming", "active", "expired"] as const).map((opt) => {
+              const count = items.filter((it) => scheduleValue(it, scheduleField) === opt).length;
+              const active = scheduleFilter === opt;
+              const tone = opt === "active" ? "bg-zru-green text-white" : opt === "upcoming" ? "bg-blue-600 text-white" : "bg-red-600 text-white";
+              return (
+                <button
+                  key={opt}
+                  onClick={() => { setScheduleFilter(active ? "all" : opt); setPage(1); }}
+                  className={`rounded-full px-3 py-1 text-[10px] font-black uppercase tracking-wider transition-colors ${
+                    active ? tone : "bg-black/5 text-black/60 hover:bg-black/10"
+                  }`}
+                >
+                  {opt} ({count})
+                </button>
+              );
+            })}
+            <span className="mx-1 h-4 w-px bg-black/10" />
+            {canPurge && (
+              <button
+                onClick={purgeExpired}
+                disabled={bulkBusy || items.filter((it) => scheduleValue(it, scheduleField) === "expired").length === 0}
+                className="flex items-center gap-1 rounded-full bg-red-600/10 px-3 py-1 text-[10px] font-black uppercase tracking-wider text-red-700 transition-colors hover:bg-red-600/20 disabled:cursor-not-allowed disabled:opacity-40"
+              >
+                <Archive className="h-3 w-3" />
+                Purge expired ({items.filter((it) => scheduleValue(it, scheduleField) === "expired").length})
+              </button>
+            )}
+          </div>
+        )}
+
         {selectedIds.size > 0 && (
           <div className="mb-3 flex flex-wrap items-center gap-2 rounded-xl bg-rich-black px-4 py-2.5">
             <span className="text-[11px] font-black uppercase tracking-wider text-white">
@@ -957,6 +1069,14 @@ export default function CollectionManager({
                         )}
                         <h4 className="truncate font-heading text-sm font-black uppercase text-rich-black">{display}</h4>
                         {status && statusField && <StatusChip status={status} />}
+                        {scheduleField && scheduleValue(item, scheduleField) && (
+                          <>
+                            <StatusChip status={scheduleValue(item, scheduleField)} />
+                            <span className="rounded bg-black/5 px-1.5 py-0.5 text-[10px] font-bold text-black/50">
+                              {formatWindowRange(item, scheduleField)}
+                            </span>
+                          </>
+                        )}
                       </div>
                       {subtitle && <p className="mt-0.5 truncate text-xs text-black/50">{subtitle}</p>}
                     </div>
