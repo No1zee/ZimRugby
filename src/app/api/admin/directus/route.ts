@@ -55,6 +55,23 @@ function clientIp(request: NextRequest): string {
   );
 }
 
+// Fire-and-forget Next.js fetch-cache purge so admin writes (create/patch/delete)
+// show up in the CMS immediately instead of waiting on the Directus flow round-trip.
+async function revalidateCollection(request: NextRequest, collection: string) {
+  const secret = process.env.REVALIDATE_SECRET;
+  if (!secret) return;
+  try {
+    await fetch(`${request.nextUrl.origin}/api/revalidate`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", Authorization: `Bearer ${secret}` },
+      body: JSON.stringify({ collection }),
+      signal: AbortSignal.timeout(4000),
+    });
+  } catch {
+    // Best-effort only; the Directus revalidation flow is the fallback.
+  }
+}
+
 async function directusJson(path: string, init: RequestInit = {}): Promise<{ ok: boolean; status: number; body: any }> {
   const res = await fetch(`${DIRECTUS_URL}${path}`, {
     ...init,
@@ -181,6 +198,7 @@ export async function POST(request: NextRequest) {
 
   const created = result.body?.data;
   await audit(session, "CREATE", `${collection}:${created?.id ?? "?"}`, JSON.stringify(payload).slice(0, 2000), clientIp(request));
+  void revalidateCollection(request, collection);
   return NextResponse.json(result.body);
 }
 
@@ -232,6 +250,7 @@ export async function PATCH(request: NextRequest) {
         return { id: row.id, changes: diffScalars(before as Record<string, unknown>, row) };
       });
       await audit(session, "UPDATE", `${collection}:${ids.join(",")}`, JSON.stringify(diffs).slice(0, 3000), clientIp(request));
+      void revalidateCollection(request, collection);
       return NextResponse.json(result.body);
     }
 
@@ -257,6 +276,7 @@ export async function PATCH(request: NextRequest) {
     const after = result.body?.data as Record<string, unknown> | null;
     const diff = diffScalars(before || {}, after || {});
     await audit(session, "UPDATE", `${collection}:${id}`, JSON.stringify(diff).slice(0, 3000), clientIp(request));
+    void revalidateCollection(request, collection);
     return NextResponse.json(result.body);
   } catch (error) {
     return NextResponse.json({ error: String(error) }, { status: 500 });
@@ -299,6 +319,7 @@ export async function DELETE(request: NextRequest) {
           return NextResponse.json({ error: result.body?.errors?.[0]?.message || "Directus error" }, { status: result.status });
         }
         await audit(session2, "PURGE", `${collection}:${ids.join(",")}`, `hard-deleted ${ids.length} items`, clientIp(request));
+        void revalidateCollection(request, collection);
         return NextResponse.json({ success: true });
       }
       const result = await directusJson(`/items/${collection}/${id}`, { method: "DELETE" });
@@ -306,6 +327,7 @@ export async function DELETE(request: NextRequest) {
         return NextResponse.json({ error: "Directus error" }, { status: result.status });
       }
       await audit(session2, "PURGE", `${collection}:${id}`, "hard-deleted item", clientIp(request));
+      void revalidateCollection(request, collection);
       return NextResponse.json({ success: true });
     }
 
@@ -342,6 +364,7 @@ export async function DELETE(request: NextRequest) {
         { status: result.status }
       );
     }
+    void revalidateCollection(request, collection);
     return NextResponse.json({ success: true });
   } catch (error) {
     return NextResponse.json({ error: String(error) }, { status: 500 });

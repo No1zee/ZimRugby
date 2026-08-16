@@ -43,6 +43,23 @@ function clientIp(request: NextRequest): string {
   return request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || request.headers.get("x-real-ip") || "unknown";
 }
 
+// Fire-and-forget Next.js fetch-cache purge so trash restore/purge is visible
+// in the CMS immediately (Directus revalidation flow is the async fallback).
+async function revalidateCollection(request: NextRequest, collection: string) {
+  const secret = process.env.REVALIDATE_SECRET;
+  if (!secret) return;
+  try {
+    await fetch(`${request.nextUrl.origin}/api/revalidate`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", Authorization: `Bearer ${secret}` },
+      body: JSON.stringify({ collection }),
+      signal: AbortSignal.timeout(4000),
+    });
+  } catch {
+    // Best-effort only; the Directus revalidation flow is the fallback.
+  }
+}
+
 // List trashed rows: GET /api/admin/directus/trash?collection=news
 export async function GET(request: NextRequest) {
   const collection = request.nextUrl.searchParams.get("collection");
@@ -97,6 +114,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Directus error" }, { status: result.status });
     }
     await audit(session, "RESTORE", `${collection}:${keys.join(",")}`, `restored ${keys.length} item(s) from trash`, ip);
+    void revalidateCollection(request, collection);
     return NextResponse.json({ success: true, count: keys.length });
   }
 
@@ -132,6 +150,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Directus error" }, { status: result.status });
     }
     await audit(session, "PURGE", `${collection}:${keys.join(",")}`, `permanently deleted ${keys.length} item(s)`, ip);
+    void revalidateCollection(request, collection);
     return NextResponse.json({ success: true, count: keys.length });
   }
 
