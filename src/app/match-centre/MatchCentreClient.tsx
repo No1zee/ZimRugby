@@ -46,6 +46,7 @@ function viewModelToMatch(vm: MatchCardViewModel): Match {
     awayTeam: { name: vm.awayTeam.name, score: vm.awayTeam.score },
     status: vm.status,
     teamCategory: vm.teamCategory,
+    opponentCategory: vm.opponentCategory,
   };
 }
 

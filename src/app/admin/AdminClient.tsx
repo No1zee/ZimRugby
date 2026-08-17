@@ -30,6 +30,7 @@ import type { Campaign } from "@/lib/api/campaigns";
 export interface LookupOption {
   id: string | number;
   name: string;
+  teamType?: string;
 }
 
 interface AdminClientProps {
@@ -690,7 +691,7 @@ function AdminClientInner(props: AdminClientProps) {
                   { key: "short_name", label: "Short name", type: "text", placeholder: "e.g. Sables" },
                   { key: "code", label: "Code", type: "text", placeholder: "e.g. ZIM" },
                   { key: "slug", label: "Slug", type: "text", placeholder: "e.g. sables" },
-                  { key: "team_type", label: "Team type", type: "select", options: ["mens_15s", "womens_15s", "mens_7s", "womens_7s", "age_grade", "club"] },
+                  { key: "team_type", label: "Team type", type: "select", options: ["mens_15s", "womens_15s", "mens_7s", "womens_7s", "u20", "u18", "development", "club"] },
                   { key: "gender", label: "Gender", type: "select", options: ["men", "women"] },
                   { key: "age_grade", label: "Age grade", type: "text", placeholder: "e.g. U20" },
                   { key: "filter_label", label: "Filter label", type: "text", placeholder: "e.g. Sables" },
@@ -733,7 +734,7 @@ function AdminClientInner(props: AdminClientProps) {
                   { key: "code", label: "Code", type: "text", placeholder: "e.g. NAM" },
                   { key: "slug", label: "Slug", type: "text", placeholder: "e.g. namibia" },
                   { key: "country", label: "Country", type: "text", placeholder: "e.g. Namibia" },
-                  { key: "team_type", label: "Team type", type: "select", options: ["international", "club", "province", "tour"] },
+                  { key: "team_type", label: "Team type", type: "select", options: ["international", "club", "province", "tour", "u20", "u18"] },
                   { key: "crest", label: "Crest image", type: "image" },
                   { key: "notes", label: "Notes", type: "textarea", colSpan: "full" },
                   { key: "status", label: "Status", type: "select", options: ["published", "draft"] },

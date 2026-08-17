@@ -93,10 +93,10 @@ async function getLookups(): Promise<{
   competitionOptions: Array<{ id: string | number; name: string }>;
   venueOptions: Array<{ id: string | number; name: string }>;
 }> {
-  const map = (rows: Array<{ id?: string | number; name?: string }>) =>
+  const map = (rows: Array<{ id?: string | number; name?: string; team_type?: string }>) =>
     rows
       .filter((r) => r.id != null && r.name)
-      .map((r) => ({ id: r.id as string | number, name: r.name as string }))
+      .map((r) => ({ id: r.id as string | number, name: r.name as string, teamType: (r.team_type as string) || undefined }))
       .sort((a, b) => a.name.localeCompare(b.name));
   const [teams, opponents, competitions, venues] = await Promise.all([
     directusFetch<Record<string, unknown>>("teams", { fields: ["*"], limit: 200 }, 60).catch(() => []),

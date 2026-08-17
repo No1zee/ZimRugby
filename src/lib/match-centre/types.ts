@@ -64,6 +64,7 @@ export interface MatchCardViewModel {
   resultOutcome?: "win" | "loss" | "draw" | "na";
   resultLabel?: string;
   teamCategory: string;
+  opponentCategory?: string;
   ticketUrl?: string;
 }
 

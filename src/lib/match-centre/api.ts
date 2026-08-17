@@ -190,6 +190,7 @@ export async function getDirectusMatches(): Promise<MatchCardViewModel[]> {
       resultOutcome: (m.result_outcome as "win" | "loss" | "draw" | "na") || "na",
       resultLabel: (m.result_label as string) || (computedStatus === "completed" ? "RESULT" : "UPCOMING"),
       teamCategory: (teamObj?.filter_label as string) || "Sables",
+      opponentCategory: (oppObj?.team_type as string) || "",
       ticketUrl: m.ticket_url as string,
     };
   });

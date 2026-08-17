@@ -70,6 +70,7 @@ export interface Match {
   ticketUrl?: string;
   category?: string;
   teamCategory?: string;
+  opponentCategory?: string;
   dateIso?: string;
 }
 

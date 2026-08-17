@@ -13,6 +13,7 @@ import type { MatchCardViewModel, StandingsTableViewModel } from "@/lib/match-ce
 interface LookupOption {
   id: string | number;
   name: string;
+  teamType?: string;
 }
 
 interface MatchCentrePanelProps {
@@ -79,6 +80,8 @@ export default function MatchCentrePanel({
     }
     const homeName = teams.find((t) => String(t.id) === teamId)?.name || "Zimbabwe";
     const awayName = opponents.find((o) => String(o.id) === opponentId)?.name || "Opponent";
+    const awayType = opponents.find((o) => String(o.id) === opponentId)?.teamType;
+    const matchType = awayType === "u20" || awayType === "u18" ? "age_grade" : "international";
     const slug = `${homeName} vs ${awayName}`
       .toLowerCase()
       .replace(/[^a-z0-9]+/g, "-")
@@ -97,7 +100,7 @@ export default function MatchCentrePanel({
             competition_id: competitionId || null,
             venue_id: venueId || null,
             status,
-            match_type: "international",
+            match_type: matchType,
             kickoff_at: new Date(kickoff).toISOString(),
             round_label: roundLabel || null,
             home_or_away: homeOrAway,
@@ -221,7 +224,7 @@ export default function MatchCentrePanel({
     const q = query.trim().toLowerCase();
     if (!q) return initialMatches;
     return initialMatches.filter((m) =>
-      [m.title, m.competition, m.round, m.venue, m.homeTeam?.name, m.awayTeam?.name]
+      [m.title, m.competition, m.round, m.venue, m.homeTeam?.name, m.awayTeam?.name, m.opponentCategory]
         .filter(Boolean)
         .some((v) => String(v).toLowerCase().includes(q))
     );
@@ -381,7 +384,7 @@ export default function MatchCentrePanel({
             <select value={opponentId} onChange={(e) => setOpponentId(e.target.value)} className="w-full rounded-lg border border-black/10 bg-white p-2.5 text-sm font-bold">
               <option value="">— Select —</option>
               {opponents.map((o) => (
-                <option key={o.id} value={o.id}>{o.name}</option>
+                <option key={o.id} value={o.id}>{o.teamType && o.teamType !== "international" ? `${o.name} — ${o.teamType}` : o.name}</option>
               ))}
             </select>
           </div>
@@ -482,6 +485,9 @@ export default function MatchCentrePanel({
                     <div className="flex flex-wrap items-center gap-2">
                       <h4 className="truncate font-heading text-sm font-black uppercase text-rich-black">{matchLabel(m)}</h4>
                       <StatusChip status={m.status} />
+                      {m.opponentCategory && m.opponentCategory !== "international" && (
+                        <span className="rounded-md bg-black/5 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-black/60">{m.opponentCategory} opponent</span>
+                      )}
                     </div>
                     <p className="mt-0.5 truncate text-xs text-black/50">
                       {m.dateIso ? new Date(m.dateIso).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" }) : ""} · {m.time || ""} · {m.venue} · {m.competition}{m.round ? ` · ${m.round}` : ""}

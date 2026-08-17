@@ -27,6 +27,7 @@ interface MatchCardProps {
   };
   status?: "upcoming" | "live" | "completed" | "finished";
   teamCategory?: string;
+  opponentCategory?: string;
 }
 
 export default function MatchCard({
@@ -40,6 +41,7 @@ export default function MatchCard({
   awayTeam,
   status = "upcoming",
   teamCategory,
+  opponentCategory,
 }: MatchCardProps) {
   const [imgError, setImgError] = useState<{ home: boolean; away: boolean }>({
     home: false,
@@ -60,6 +62,11 @@ export default function MatchCard({
           {teamCategory && (
             <span className="bg-zru-green text-white text-[9px] font-extrabold uppercase px-2.5 py-0.5 rounded tracking-wider shrink-0">
               {teamCategory}
+            </span>
+          )}
+          {opponentCategory && opponentCategory !== "international" && (
+            <span className="bg-black/10 text-black/70 text-[9px] font-extrabold uppercase px-2.5 py-0.5 rounded tracking-wider shrink-0">
+              Opp {opponentCategory}
             </span>
           )}
           <span className="text-black/80 text-xs font-extrabold tracking-widest uppercase truncate font-heading">
