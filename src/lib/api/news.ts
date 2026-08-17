@@ -12,6 +12,25 @@ export interface DirectusNewsItem {
   category?: string;
   date?: string;
   status?: string;
+  publish_at?: string | null;
+  expire_at?: string | null;
+}
+
+/**
+ * Filter object that hides scheduled-but-not-yet-live articles and
+ * expired ones. publish_at null = immediately visible; expire_at null =
+ * never hidden. Applied at query time so the public site never sees
+ * future/expired news.
+ */
+export function newsVisibilityFilter(now = new Date()): Record<string, unknown> {
+  const iso = now.toISOString();
+  return {
+    status: { _eq: "published" },
+    _and: [
+      { _or: [{ publish_at: { _null: true } }, { publish_at: { _lte: iso } }] },
+      { _or: [{ expire_at: { _null: true } }, { expire_at: { _gte: iso } }] },
+    ],
+  };
 }
 
 export function newsImageToUrl(image?: string): string {
@@ -43,7 +62,7 @@ export async function getNewsArticles(limit = 4): Promise<Report[]> {
     if (!process.env.NEXT_PUBLIC_DIRECTUS_URL) return [];
     const items = await directusFetch<DirectusNewsItem>(
       "news",
-      { filter: { status: { _eq: "published" } }, sort: ["-date"], limit },
+      { filter: newsVisibilityFilter(), sort: ["-date"], limit },
       60
     );
     return items.map(newsItemToReport);

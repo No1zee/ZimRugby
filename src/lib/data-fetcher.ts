@@ -74,7 +74,7 @@ export async function getLiveMatches(): Promise<Match[]> {
 }
 
 import { directusFetch } from './directus/fetch';
-import { newsItemToReport, type DirectusNewsItem } from './api/news';
+import { newsItemToReport, newsVisibilityFilter, type DirectusNewsItem } from './api/news';
 
 interface DirectusAnnouncement {
   id: number;
@@ -103,7 +103,7 @@ function announcementToReport(da: DirectusAnnouncement): Report {
 
 export async function getLatestReports(): Promise<Report[]> {
   const [newsItems, staticReports, directusAnnouncements] = await Promise.allSettled([
-    directusFetch<DirectusNewsItem>("news", { filter: { status: { _eq: "published" } }, sort: ["-date"] }, 60),
+    directusFetch<DirectusNewsItem>("news", { filter: newsVisibilityFilter(), sort: ["-date"] }, 60),
     readStaticJson<Report>("reports.json", 300),
     directusFetch<DirectusAnnouncement>("announcements", {}, 60)
   ]);
@@ -173,7 +173,7 @@ export async function getReportById(id: string): Promise<Report | undefined> {
   // Fall back to the Directus news collection keyed by slug (homepage /media links use news slugs).
   try {
     const items = await directusFetch<DirectusNewsLookup>("news", {
-      filter: { slug: { _eq: id } },
+      filter: { ...newsVisibilityFilter(), slug: { _eq: id } },
       limit: 1,
     }, 60);
     if (items && items[0]) {

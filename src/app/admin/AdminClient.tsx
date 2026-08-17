@@ -496,6 +496,8 @@ function AdminClientInner(props: AdminClientProps) {
                 { key: "body", label: "Body", type: "richtext", colSpan: "full" },
                 { key: "category", label: "Category", type: "text", placeholder: "e.g. NEWS" },
                 { key: "date", label: "Publish date", type: "date" },
+                { key: "publish_at", label: "Go live at (schedule)", type: "datetime" },
+                { key: "expire_at", label: "Hide after (expire)", type: "datetime" },
                 { key: "status", label: "Status", type: "select", options: ["draft", "published"] },
                 { key: "image", label: "Hero image", type: "image" },
               ]}
@@ -505,6 +507,7 @@ function AdminClientInner(props: AdminClientProps) {
               badgeField="category"
               statusField="status"
               searchable={["title", "excerpt", "category"]}
+              scheduleField={{ starts: "publish_at", ends: "expire_at" }}
               singularLabel="article"
               onDirtyChange={registerDirty("news")}
               focusId={activeTab === "media" ? focusItem?.id : null}

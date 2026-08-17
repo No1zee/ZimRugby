@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { directusFetch } from "@/lib/directus/fetch";
 import { assetUrl } from "@/lib/directus/assets";
+import { newsVisibilityFilter } from "@/lib/api/news";
 
 export const dynamic = "force-dynamic";
 
@@ -31,7 +32,7 @@ export async function GET() {
 
   try {
     articles = await directusFetch<DirectusNewsItem>("news", {
-      filter: { status: { _eq: "published" } },
+      filter: newsVisibilityFilter(),
       sort: ["-date"],
       limit: 30,
     });
