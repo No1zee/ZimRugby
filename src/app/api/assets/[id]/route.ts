@@ -3,7 +3,9 @@ import { NextRequest, NextResponse } from "next/server";
 export const dynamic = "force-dynamic";
 
 const DIRECTUS_URL = process.env.NEXT_PUBLIC_DIRECTUS_URL || "http://localhost:8055";
-const DIRECTUS_TOKEN = process.env.DIRECTUS_TOKEN || process.env.DIRECTUS_ADMIN_TOKEN;
+// Public asset proxy must use the READ-ONLY token (matches directusFetch);
+// never the admin token — an exposed asset id must not escalate to admin writes.
+const DIRECTUS_TOKEN = process.env.DIRECTUS_READ_TOKEN || process.env.DIRECTUS_TOKEN;
 
 export async function GET(
   request: NextRequest,
