@@ -170,6 +170,7 @@ export type AdminTabId =
   | "faq-footer"
   | "fixtures"
   | "teams"
+  | "clubs"
   | "campaigns"
   | "fanzone"
   | "onboarding"

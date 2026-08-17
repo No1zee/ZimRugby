@@ -163,13 +163,14 @@ export default async function AdminDashboard() {
   const showSponsors = canTab("sponsors");
   const showResources = canTab("resources");
   const showAnnouncements = canTab("media");
+  const showClubs = canTab("clubs");
 
   const [
     pages, sectionCounts,
     campaigns, announcements,
     news, events, grassrootsInitiatives, programmes, faqs, footerNav,
     eventsCount, teamCount, playerCount, matchCount, partnerCount, announcementCount,
-    allMatches, standings, heroSlides, sponsors, resources, lookups,
+    allMatches, standings, heroSlides, sponsors, resources, clubs, lookups,
     fanZoneMembers, onboardingSubmissions,
     activityFeed,
   ] = await Promise.all([
@@ -194,6 +195,7 @@ export default async function AdminDashboard() {
     showHeroLayout ? getAdminCollection<Record<string, unknown>>("hero_slides") : Promise.resolve([] as Record<string, unknown>[]),
     showSponsors ? getAdminCollection<Record<string, unknown>>("partners") : Promise.resolve([] as Record<string, unknown>[]),
     showResources ? getAdminCollection<Record<string, unknown>>("referee_resources") : Promise.resolve([] as Record<string, unknown>[]),
+    showClubs ? getAdminCollection<Record<string, unknown>>("clubs") : Promise.resolve([] as Record<string, unknown>[]),
     showTeams ? getLookups() : Promise.resolve({ teams: [], opponents: [], competitions: [], venues: [], teamOptions: [], opponentOptions: [], competitionOptions: [], venueOptions: [] } as Awaited<ReturnType<typeof getLookups>>),
     canUseFeature(perms, "fanzone_pii") ? listFanZoneMembers() : Promise.resolve([] as Awaited<ReturnType<typeof listFanZoneMembers>>),
     canUseFeature(perms, "fanzone_pii") ? listOnboardingSubmissions() : Promise.resolve([] as Awaited<ReturnType<typeof listOnboardingSubmissions>>),
@@ -245,6 +247,7 @@ export default async function AdminDashboard() {
         initialHeroSlides={heroSlides}
         initialSponsors={sponsors}
         initialResources={resources}
+        initialClubs={clubs}
         stats={stats}
       />
     </AdminAuthGate>

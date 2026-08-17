@@ -1,11 +1,23 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { Activity, Newspaper, Trophy, Users, CheckCircle2, ChevronDown, ChevronUp, ArrowRight, TrendingUp, Radio, Bell, Plus, HardDrive, Sparkles, Send } from "lucide-react";
-import StatusChip from "./ui/StatusChip";
-import { setAdminTab } from "@/lib/admin/tab-events";
+import {
+  Activity,
+  Newspaper,
+  ArrowRight,
+  Radio,
+  Bell,
+  Send,
+  CalendarDays,
+  Building2,
+  Flag,
+  Layers,
+  CheckCircle2,
+  Inbox,
+} from "lucide-react";
 import type { MatchCardViewModel } from "@/lib/match-centre/types";
 import { useToast } from "./ui/ToastProvider";
+import { canAccessPanel, canOnCollection, type RolePermissions } from "@/lib/admin/iam";
 
 interface ActivityEntry {
   id: number;
@@ -17,6 +29,7 @@ interface ActivityEntry {
 }
 
 interface TodayOverviewProps {
+  permissions: RolePermissions;
   initialNews: Record<string, unknown>[];
   initialMatches: MatchCardViewModel[];
   fanZoneCount: number;
@@ -50,7 +63,18 @@ const ACTION_BADGES: Record<string, { label: string; style: string }> = {
   authenticate: { label: "AUTH", style: "bg-purple-500/10 text-purple-600 border-purple-500/20" },
 };
 
+interface HubAction {
+  id: string;
+  label: string;
+  description: string;
+  icon: React.ReactNode;
+  iconStyle: string;
+  tab: string;
+  visible: boolean;
+}
+
 export default function TodayOverview({
+  permissions,
   initialNews,
   initialMatches,
   fanZoneCount,
@@ -63,21 +87,89 @@ export default function TodayOverview({
   const [alertTag, setAlertTag] = useState<"BREAKING" | "LIVE MATCH" | "NOTICE" | "TICKETS">("BREAKING");
   const [broadcasting, setBroadcasting] = useState(false);
 
-  // Collapsible widget section states
-  const [openSections, setOpenSections] = useState({
-    drafts: true,
-    upcoming: true,
-    signups: true,
-    activity: true,
-  });
+  const hasPanel = (tab: string) => canAccessPanel(permissions, tab);
+  const canCreate = (collection: string) => canOnCollection(permissions, collection, "create");
+  const canUpdate = (collection: string) => canOnCollection(permissions, collection, "update");
 
-  const toggleSection = (key: keyof typeof openSections) => {
-    setOpenSections((prev) => ({ ...prev, [key]: !prev[key] }));
-  };
+  // ---- Role-aware "What do you want to do?" hub ----
+  const hubActions: HubAction[] = [
+    {
+      id: "article",
+      label: "Post an article",
+      description: "Write a news story for the site",
+      icon: <Newspaper className="h-5 w-5" />,
+      iconStyle: "bg-zru-green/10 text-zru-green group-hover:bg-zru-green group-hover:text-white",
+      tab: "media",
+      visible: hasPanel("media") && canCreate("news"),
+    },
+    {
+      id: "announce",
+      label: "Broadcast a notice",
+      description: "Alert banner or ticker (breaking, tickets…)",
+      icon: <Bell className="h-5 w-5" />,
+      iconStyle: "bg-red-500/10 text-red-600 group-hover:bg-red-500 group-hover:text-white",
+      tab: "media",
+      visible: hasPanel("media") && canCreate("announcements"),
+    },
+    {
+      id: "fixture",
+      label: "Update a fixture / score",
+      description: "Schedule, scores or results",
+      icon: <Radio className="h-5 w-5" />,
+      iconStyle: "bg-amber-500/10 text-amber-600 group-hover:bg-amber-500 group-hover:text-white",
+      tab: "fixtures",
+      visible: hasPanel("fixtures"),
+    },
+    {
+      id: "event",
+      label: "Add an event",
+      description: "Something on the calendar",
+      icon: <CalendarDays className="h-5 w-5" />,
+      iconStyle: "bg-blue-500/10 text-blue-600 group-hover:bg-blue-500 group-hover:text-white",
+      tab: "events",
+      visible: hasPanel("events") && canCreate("events"),
+    },
+    {
+      id: "club",
+      label: "Update a club",
+      description: "Club info shown on the Clubs page",
+      icon: <Building2 className="h-5 w-5" />,
+      iconStyle: "bg-violet-500/10 text-violet-600 group-hover:bg-violet-500 group-hover:text-white",
+      tab: "clubs",
+      visible: hasPanel("clubs") && (canCreate("clubs") || canUpdate("clubs")),
+    },
+    {
+      id: "campaign",
+      label: "Run a campaign",
+      description: "Drive fans to an initiative",
+      icon: <Flag className="h-5 w-5" />,
+      iconStyle: "bg-purple-500/10 text-purple-600 group-hover:bg-purple-500 group-hover:text-white",
+      tab: "campaigns",
+      visible: hasPanel("campaigns") && canCreate("campaigns"),
+    },
+    {
+      id: "hero",
+      label: "Update hero / layout",
+      description: "Big images on the homepage",
+      icon: <Layers className="h-5 w-5" />,
+      iconStyle: "bg-black/5 text-rich-black group-hover:bg-black group-hover:text-white",
+      tab: "hero_layout",
+      visible: hasPanel("hero_layout"),
+    },
+  ].filter((a) => a.visible);
 
+  // ---- Pending queue ----
   const drafts = useMemo(
     () => initialNews.filter((n) => String(n.status ?? "").toLowerCase() === "draft").slice(0, 5),
     [initialNews]
+  );
+
+  const matchesNeedingScores = useMemo(
+    () =>
+      initialMatches.filter(
+        (m) => m.status === "completed" && (m.homeTeam.score == null || m.awayTeam.score == null)
+      ).slice(0, 5),
+    [initialMatches]
   );
 
   const upcoming = useMemo(
@@ -89,7 +181,15 @@ export default function TodayOverview({
     [initialMatches]
   );
 
-  const totalSignups = fanZoneCount + onboardingCount;
+  const queueItems = [
+    { key: "drafts", label: "Draft articles awaiting publish", count: drafts.length, tab: "media", show: hasPanel("media") },
+    { key: "scores", label: "Completed fixtures missing scores", count: matchesNeedingScores.length, tab: "fixtures", show: hasPanel("fixtures") },
+    { key: "upcoming", label: "Upcoming fixtures scheduled", count: upcoming.length, tab: "fixtures", show: hasPanel("fixtures") },
+    { key: "onboarding", label: "New enquiries to answer", count: onboardingCount, tab: "onboarding", show: hasPanel("onboarding") },
+    { key: "fanzone", label: "New fan zone registrations", count: fanZoneCount, tab: "fanzone", show: hasPanel("fanzone") },
+  ].filter((q) => q.show);
+
+  const totalNeedingAttention = queueItems.reduce((sum, q) => sum + (q.key === "upcoming" ? 0 : q.count), 0);
 
   // 1-Click Fast Marquee Broadcast from Dashboard
   const handleQuickBroadcast = async (e: React.FormEvent) => {
@@ -137,51 +237,45 @@ export default function TodayOverview({
 
   return (
     <div className="space-y-6">
-      {/* Quick Action Launcher Bar */}
-      <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-black/10 bg-white p-4 shadow-sm">
-        <div className="flex items-center gap-2">
+      {/* Spoonfed Hub Header */}
+      <div className="rounded-2xl border border-black/10 bg-gradient-to-r from-[#0d131a] to-[#1a2330] p-6 text-white shadow-md">
+        <div className="mb-1 flex items-center gap-2">
           <span className="flex h-2.5 w-2.5 rounded-full bg-zru-green animate-pulse" />
-          <span className="font-heading text-xs font-black uppercase tracking-wider text-rich-black">
-            Executive Quick Actions
+          <span className="font-heading text-xs font-black uppercase tracking-wider text-white/70">
+            Quick start
           </span>
         </div>
-        <div className="flex flex-wrap items-center gap-2">
-          <button
-            type="button"
-            onClick={() => onNavigate("media")}
-            className="inline-flex items-center gap-1.5 rounded-xl bg-zru-green px-3.5 py-2 text-[11px] font-black uppercase tracking-wider text-white shadow-sm transition-all hover:bg-green-800 cursor-pointer"
-          >
-            <Plus className="w-3.5 h-3.5" /> New Article
-          </button>
-          <button
-            type="button"
-            onClick={() => onNavigate("hero_layout")}
-            className="inline-flex items-center gap-1.5 rounded-xl bg-amber-500 px-3.5 py-2 text-[11px] font-black uppercase tracking-wider text-white shadow-sm transition-all hover:bg-amber-600 cursor-pointer"
-          >
-            <Bell className="w-3.5 h-3.5" /> Broadcast Alert
-          </button>
-          <button
-            type="button"
-            onClick={() => onNavigate("fixtures")}
-            className="inline-flex items-center gap-1.5 rounded-xl bg-black/5 px-3.5 py-2 text-[11px] font-black uppercase tracking-wider text-rich-black transition-all hover:bg-black/10 cursor-pointer"
-          >
-            <Radio className="w-3.5 h-3.5 text-[#006B3F]" /> Live Score
-          </button>
-          <button
-            type="button"
-            onClick={() => onNavigate("events")}
-            className="inline-flex items-center gap-1.5 rounded-xl bg-black/5 px-3.5 py-2 text-[11px] font-black uppercase tracking-wider text-rich-black transition-all hover:bg-black/10 cursor-pointer"
-          >
-            <Plus className="w-3.5 h-3.5" /> Add Event
-          </button>
-          <button
-            type="button"
-            onClick={() => onNavigate("backups")}
-            className="inline-flex items-center gap-1.5 rounded-xl bg-black/5 px-3.5 py-2 text-[11px] font-black uppercase tracking-wider text-rich-black transition-all hover:bg-black/10 cursor-pointer"
-          >
-            <HardDrive className="w-3.5 h-3.5" /> Backup State
-          </button>
-        </div>
+        <h2 className="mb-4 font-heading text-2xl font-black uppercase tracking-wide">
+          What would you like to do?
+        </h2>
+
+        {hubActions.length === 0 ? (
+          <p className="text-sm text-white/60">
+            You don&apos;t have any content actions yet — your role is read-only.
+          </p>
+        ) : (
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+            {hubActions.map((action) => (
+              <button
+                key={action.id}
+                type="button"
+                onClick={() => onNavigate(action.tab)}
+                className="group flex items-center gap-3 rounded-xl border border-white/10 bg-white/[0.04] p-4 text-left transition-all hover:border-white/25 hover:bg-white/[0.08] cursor-pointer"
+              >
+                <span className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl transition-colors ${action.iconStyle}`}>
+                  {action.icon}
+                </span>
+                <span className="min-w-0 flex-1">
+                  <span className="block text-xs font-black uppercase tracking-wider text-white">
+                    {action.label}
+                  </span>
+                  <span className="block text-[11px] text-white/50">{action.description}</span>
+                </span>
+                <ArrowRight className="h-4 w-4 shrink-0 text-white/30 transition-transform group-hover:translate-x-0.5 group-hover:text-white" />
+              </button>
+            ))}
+          </div>
+        )}
       </div>
 
       {/* Fast Emergency Marquee / Matchday Broadcast Composer */}
@@ -229,154 +323,117 @@ export default function TodayOverview({
         </form>
       </div>
 
-      {/* Quick stats with interactive drill-down links */}
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <div
-          onClick={() => onNavigate("media")}
-          className="group cursor-pointer rounded-2xl border border-black/10 bg-white p-5 shadow-sm transition-all hover:border-zru-green/45 hover:shadow-md"
-        >
-          <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-zru-green/10 transition-colors group-hover:bg-zru-green group-hover:text-white">
-              <Newspaper className="h-5 w-5 text-zru-green group-hover:text-white" />
-            </div>
-            <div>
-              <p className="text-2xl font-black text-rich-black">{drafts.length}</p>
-              <p className="text-xs font-bold uppercase tracking-wider text-black/50">Draft articles</p>
-            </div>
+      {/* Needs Your Attention Queue */}
+      <div className="rounded-2xl border border-black/10 bg-white p-5 shadow-sm">
+        <div className="mb-4 flex items-center justify-between border-b border-black/5 pb-3">
+          <div className="flex items-center gap-2">
+            <Inbox className="h-4 w-4 text-zru-green" />
+            <h3 className="font-heading text-xs font-black uppercase tracking-wider text-rich-black">
+              Needs your attention
+            </h3>
+            {totalNeedingAttention > 0 && (
+              <span className="rounded-full bg-zru-green px-2 py-0.5 text-[10px] font-black uppercase tracking-wider text-white">
+                {totalNeedingAttention}
+              </span>
+            )}
           </div>
+          {totalNeedingAttention === 0 && (
+            <span className="inline-flex items-center gap-1.5 text-[11px] font-bold text-zru-green">
+              <CheckCircle2 className="h-3.5 w-3.5" /> All caught up
+            </span>
+          )}
         </div>
 
-        <div
-          onClick={() => onNavigate("fixtures")}
-          className="group cursor-pointer rounded-2xl border border-black/10 bg-white p-5 shadow-sm transition-all hover:border-amber-500/45 hover:shadow-md"
-        >
-          <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-amber-500/10 transition-colors group-hover:bg-amber-500 group-hover:text-white">
-              <Trophy className="h-5 w-5 text-amber-600 group-hover:text-white" />
-            </div>
-            <div>
-              <p className="text-2xl font-black text-rich-black">{upcoming.length}</p>
-              <p className="text-xs font-bold uppercase tracking-wider text-black/50">Upcoming fixtures</p>
-            </div>
+        {queueItems.every((q) => q.count === 0) ? (
+          <p className="py-6 text-center text-xs text-black/40">
+            Nothing needs your attention right now. Everything on the site is live and up to date!
+          </p>
+        ) : (
+          <div className="space-y-2.5">
+            {queueItems.map((item) => (
+              <div
+                key={item.key}
+                onClick={() => onNavigate(item.tab)}
+                className="flex items-center justify-between gap-3 rounded-xl bg-black/[0.02] p-3 transition-colors hover:bg-black/5 cursor-pointer"
+              >
+                <div className="flex min-w-0 items-center gap-3">
+                  <span
+                    className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-lg text-xs font-black ${
+                      item.count > 0 ? "bg-amber-500/10 text-amber-600" : "bg-zru-green/10 text-zru-green"
+                    }`}
+                  >
+                    {item.count}
+                  </span>
+                  <p className="truncate text-xs font-bold text-rich-black">{item.label}</p>
+                </div>
+                <span className="inline-flex shrink-0 items-center gap-1 text-[10px] font-black uppercase tracking-wider text-zru-green">
+                  Review <ArrowRight className="h-3 w-3" />
+                </span>
+              </div>
+            ))}
           </div>
-        </div>
+        )}
 
-        <div
-          onClick={() => onNavigate("fanzone")}
-          className="group cursor-pointer rounded-2xl border border-black/10 bg-white p-5 shadow-sm transition-all hover:border-blue-500/45 hover:shadow-md"
-        >
-          <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-500/10 transition-colors group-hover:bg-blue-500 group-hover:text-white">
-              <Users className="h-5 w-5 text-blue-600 group-hover:text-white" />
-            </div>
-            <div>
-              <p className="text-2xl font-black text-rich-black">{totalSignups}</p>
-              <p className="text-xs font-bold uppercase tracking-wider text-black/50">Fan Zone & Registrations</p>
-            </div>
-          </div>
-        </div>
-
-        <div
-          onClick={() => onNavigate("overview")}
-          className="group cursor-pointer rounded-2xl border border-black/10 bg-white p-5 shadow-sm transition-all hover:border-purple-500/45 hover:shadow-md"
-        >
-          <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-purple-500/10 transition-colors group-hover:bg-purple-500 group-hover:text-white">
-              <Activity className="h-5 w-5 text-purple-600 group-hover:text-white" />
-            </div>
-            <div>
-              <p className="text-2xl font-black text-rich-black">{initialActivityFeed.length}</p>
-              <p className="text-xs font-bold uppercase tracking-wider text-black/50">Audit Actions</p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Drafts Widget & Upcoming Fixtures Widget */}
-      <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
-        {/* Draft Articles */}
-        <div className="rounded-2xl border border-black/10 bg-white p-5 shadow-sm">
-          <div className="mb-4 flex items-center justify-between border-b border-black/5 pb-3">
-            <div className="flex items-center gap-2">
-              <Newspaper className="h-4 w-4 text-zru-green" />
-              <h3 className="font-heading text-xs font-black uppercase tracking-wider text-rich-black">
-                Articles in Draft ({drafts.length})
-              </h3>
-            </div>
-            <button
-              onClick={() => onNavigate("media")}
-              className="text-[11px] font-bold text-zru-green hover:underline cursor-pointer flex items-center gap-1"
-            >
-              Open Composer <ArrowRight className="w-3 h-3" />
-            </button>
-          </div>
-
-          {drafts.length === 0 ? (
-            <p className="py-6 text-center text-xs text-black/40">No unpublished drafts. All articles are live!</p>
-          ) : (
-            <div className="space-y-2.5">
+        {drafts.length > 0 && (
+          <div className="mt-4 border-t border-black/5 pt-4">
+            <p className="mb-2 text-[10px] font-black uppercase tracking-wider text-black/40">
+              Drafts waiting
+            </p>
+            <div className="space-y-2">
               {drafts.map((d, i) => (
                 <div
                   key={i}
                   onClick={() => onNavigate("media")}
-                  className="flex items-center justify-between rounded-xl bg-black/[0.02] p-3 transition-colors hover:bg-black/5 cursor-pointer"
+                  className="flex items-center justify-between rounded-lg bg-amber-500/[0.04] px-3 py-2 transition-colors hover:bg-amber-500/10 cursor-pointer"
                 >
-                  <div className="overflow-hidden">
-                    <p className="text-xs font-bold text-rich-black truncate">{String(d.title || "Untitled Draft")}</p>
-                    <p className="text-[10px] text-black/40 font-mono">{formatRelativeTime(String(d.date_created || d.date))}</p>
-                  </div>
-                  <span className="rounded bg-amber-500/10 px-2 py-0.5 text-[9px] font-black uppercase tracking-wider text-amber-600">
+                  <p className="truncate text-xs font-bold text-rich-black">{String(d.title || "Untitled Draft")}</p>
+                  <span className="ml-3 shrink-0 rounded bg-amber-500/10 px-2 py-0.5 text-[9px] font-black uppercase tracking-wider text-amber-600">
                     Draft
                   </span>
                 </div>
               ))}
             </div>
-          )}
+          </div>
+        )}
+      </div>
+
+      {/* Recent activity */}
+      <div className="rounded-2xl border border-black/10 bg-white p-5 shadow-sm">
+        <div className="mb-4 flex items-center justify-between border-b border-black/5 pb-3">
+          <div className="flex items-center gap-2">
+            <Activity className="h-4 w-4 text-purple-600" />
+            <h3 className="font-heading text-xs font-black uppercase tracking-wider text-rich-black">
+              Recent activity
+            </h3>
+          </div>
         </div>
 
-        {/* Upcoming Fixtures */}
-        <div className="rounded-2xl border border-black/10 bg-white p-5 shadow-sm">
-          <div className="mb-4 flex items-center justify-between border-b border-black/5 pb-3">
-            <div className="flex items-center gap-2">
-              <Trophy className="h-4 w-4 text-amber-600" />
-              <h3 className="font-heading text-xs font-black uppercase tracking-wider text-rich-black">
-                Next Scheduled Fixtures ({upcoming.length})
-              </h3>
-            </div>
-            <button
-              onClick={() => onNavigate("fixtures")}
-              className="text-[11px] font-bold text-amber-600 hover:underline cursor-pointer flex items-center gap-1"
-            >
-              Match Centre <ArrowRight className="w-3 h-3" />
-            </button>
-          </div>
-
-          {upcoming.length === 0 ? (
-            <p className="py-6 text-center text-xs text-black/40">No upcoming fixtures scheduled.</p>
-          ) : (
-            <div className="space-y-2.5">
-              {upcoming.map((m, i) => (
+        {initialActivityFeed.length === 0 ? (
+          <p className="py-6 text-center text-xs text-black/40">No activity recorded yet.</p>
+        ) : (
+          <div className="space-y-2.5">
+            {initialActivityFeed.slice(0, 10).map((entry) => {
+              const badge = ACTION_BADGES[entry.action] ?? ACTION_BADGES.update;
+              return (
                 <div
-                  key={i}
-                  onClick={() => onNavigate("fixtures")}
-                  className="flex items-center justify-between rounded-xl bg-black/[0.02] p-3 transition-colors hover:bg-black/5 cursor-pointer"
+                  key={entry.id}
+                  className="flex items-center justify-between gap-3 rounded-xl bg-black/[0.02] px-3 py-2"
                 >
-                  <div className="overflow-hidden">
-                    <p className="text-xs font-bold text-rich-black truncate">
-                      {m.homeTeam.name} vs {m.awayTeam.name}
-                    </p>
-                    <p className="text-[10px] text-black/40 font-mono">
-                      {m.venue || "Harare Sports Club"} · {m.dateIso ? new Date(m.dateIso).toLocaleDateString("en-GB", { day: "numeric", month: "short" }) : "TBD"}
+                  <div className="flex min-w-0 items-center gap-2.5">
+                    <span className={`rounded border px-1.5 py-0.5 text-[9px] font-black uppercase tracking-wider ${badge.style}`}>
+                      {badge.label}
+                    </span>
+                    <p className="truncate text-xs text-black/70">
+                      <span className="font-bold text-rich-black">{entry.collection}</span>{" "}
+                      <span className="text-black/50">· item {entry.item}</span>
                     </p>
                   </div>
-                  <span className="rounded bg-[#006B3F]/10 px-2 py-0.5 text-[9px] font-black uppercase tracking-wider text-[#006B3F]">
-                    {m.competition || "Test Match"}
-                  </span>
+                  <span className="shrink-0 text-[10px] text-black/40">{formatRelativeTime(entry.timestamp)}</span>
                 </div>
-              ))}
-            </div>
-          )}
-        </div>
+              );
+            })}
+          </div>
+        )}
       </div>
     </div>
   );

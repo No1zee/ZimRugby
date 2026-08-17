@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { BookOpen, ExternalLink, FileText, Flag, HelpCircle, LayoutDashboard, Radio, ShieldCheck, Sparkles, Sprout, Users, CalendarDays, Trophy, RefreshCw, Layers, Handshake, FolderOpen } from "lucide-react";
+import { BookOpen, ExternalLink, FileText, Flag, HelpCircle, LayoutDashboard, Radio, ShieldCheck, Sparkles, Sprout, Users, CalendarDays, Trophy, RefreshCw, Layers, Handshake, FolderOpen, Building2 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import CollectionManager from "@/components/admin/CollectionManager";
 import ArticleComposer from "@/components/admin/ArticleComposer";
@@ -92,6 +92,7 @@ interface AdminClientProps {
   initialHeroSlides: Record<string, unknown>[];
   initialSponsors: Record<string, unknown>[];
   initialResources: Record<string, unknown>[];
+  initialClubs: Record<string, unknown>[];
   stats: {
     pagesCount: number;
     publishedPages: number;
@@ -121,6 +122,7 @@ type TabId =
   | "faq-footer"
   | "fixtures"
   | "teams"
+  | "clubs"
   | "campaigns"
   | "fanzone"
   | "onboarding"
@@ -164,6 +166,7 @@ function AdminClientInner(props: AdminClientProps) {
     initialHeroSlides,
     initialSponsors,
     initialResources,
+    initialClubs,
     stats,
   } = props;
 
@@ -205,6 +208,7 @@ function AdminClientInner(props: AdminClientProps) {
         { id: "media", label: "News & Articles", icon: BookOpen, count: initialNews.length },
         { id: "pages", label: "Pages", icon: FileText, count: stats.pagesCount },
         { id: "events", label: "Events", icon: CalendarDays, count: stats.eventCount },
+        { id: "clubs", label: "Clubs", icon: Building2, count: initialClubs.length },
         { id: "resources", label: "Resource Vault", icon: FolderOpen, count: 0 },
         { id: "sponsors", label: "Sponsors & Partners", icon: Handshake, count: 0 },
         { id: "grassroots", label: "Grassroots & Programmes", icon: Sprout, count: initialGrassroots.length + initialProgrammes.length },
@@ -463,6 +467,7 @@ function AdminClientInner(props: AdminClientProps) {
         {/* Panel body */}
         {activeTab === "overview" && (
           <TodayOverview
+            permissions={permissions}
             initialNews={initialNews}
             initialMatches={initialMatches}
             fanZoneCount={initialFanZoneMembers.length}
@@ -823,6 +828,37 @@ function AdminClientInner(props: AdminClientProps) {
         )}
 
         {activeTab === "hero_layout" && <HeroLayoutPanel initialSlides={initialHeroSlides as any[]} />}
+
+        {activeTab === "clubs" && (
+          <CollectionManager
+            collection="clubs"
+            title="Clubs"
+            description="Club cards shown on the Clubs page."
+            grants={grantsFor("clubs")}
+            canPurge={permissions?.all === true}
+            fields={[
+              { key: "name", label: "Name", type: "text", placeholder: "e.g. Old Hararians RFC", required: true },
+              { key: "slug", label: "Web address (slug)", type: "text", placeholder: "auto-generated", colSpan: "full" },
+              { key: "province", label: "Province", type: "text", placeholder: "e.g. Mashonaland" },
+              { key: "league", label: "League", type: "text", placeholder: "e.g. Super Six League" },
+              { key: "venue", label: "Venue", type: "text", placeholder: "e.g. Old Hararians Sports Club, Milton Park, Harare" },
+              { key: "color", label: "Colours", type: "text", placeholder: "e.g. ZRU Green / Gold Accent" },
+              { key: "contact", label: "Contact email", type: "text", placeholder: "e.g. ohrfc@zru.co.zw" },
+              { key: "description", label: "Description", type: "textarea", colSpan: "full" },
+              { key: "sort", label: "Display order", type: "number" },
+              { key: "status", label: "Status", type: "select", options: ["published", "draft"] },
+            ]}
+            items={initialClubs}
+            displayField="name"
+            subtitleField="league"
+            badgeField="province"
+            statusField="status"
+            searchable={["name", "province", "league", "venue"]}
+            singularLabel="club"
+            onDirtyChange={registerDirty("clubs")}
+          />
+        )}
+
         {activeTab === "sponsors" && <SponsorsPanel initialSponsors={initialSponsors as any[]} />}
         {activeTab === "resources" && <ResourcesPanel initialResources={initialResources as any[]} />}
 
