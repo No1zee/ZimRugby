@@ -98,3 +98,11 @@ px vercel --prod --yes → https://zimrugby.vercel.app. Live E2E: calendar-sso-e
 - Verified: tsc clean, 27/27 vitest, lint clean (pre-existing warning only), build green, deployed live: /media 200 with announcement category labels, /api/calendar 200 (announcement occurrences intact).
 - Queued next (audit plan, still open): proxy hardening rows already done (GET+audit+soft-delete); remaining = none major — optional: custom CMS domain (parked by Ed), Upstash KV enable (awaits Ed's creds).
 
+
+## Session 2026-08-17 late — Asset proxy least-privilege + missing collections DONE — commit c9755d6
+- /api/assets/[id] proxy now uses DIRECTUS_READ_TOKEN (fallback DIRECTUS_TOKEN), never admin token — public asset proxy can't escalate to admin writes (audit-plan security finding). Live round-trip verified: upload -> site proxy 200 -> cleanup.
+- Directus 12 gotcha: /assets 403s with read token UNLESS the policy has a directus_files read grant — added (permission id 41).
+- footer_navigation + referee_resources collections CREATED on prod (were missing entirely — Postgres migration gap; site code + admin panels referenced them and got 403 at build -> local fallback). Fields match admin forms (column_title/links for footer; title/category/description/size/download_url/file for referee resources), soft-delete columns included, read grants ids 39/40. Empty (0 rows) — hardcoded fallbacks still render. scripts/create-missing-collections.mjs = repeatable create+verify (8/8).
+- Verified: tsc clean, 27/27 vitest, build green, deployed; site /api/assets 200 with new code, admin + read-token queries for both collections 200.
+- Remaining audit-plan items: all done. Optional/parked: Upstash KV enable (awaits Ed creds), custom CMS domain (parked), WS5/WS6 roadmap (unscheduled).
+
