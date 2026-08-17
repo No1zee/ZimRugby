@@ -2,12 +2,23 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
-import { CalendarDays, ChevronLeft, ChevronRight, List, MapPin, Pencil, Plus, Trash2, CalendarPlus } from "lucide-react";
+import { CalendarDays, ChevronLeft, ChevronRight, List, MapPin, Pencil, Plus, Trash2, CalendarPlus, Ban, RotateCcw } from "lucide-react";
 import ImagePicker from "./ui/ImagePicker";
 import { EmptyState } from "./ui/StatusChip";
 import { deriveEventStatus } from "@/lib/events/status";
 import { useToast } from "./ui/ToastProvider";
 import { useConfirm } from "./ui/ConfirmProvider";
+
+export interface AdminOccurrenceRow {
+  id: number;
+  event_id: number;
+  starts_at?: string;
+  ends_at?: string | null;
+  all_day?: boolean;
+  venue_id?: string | null;
+  status?: string;
+  sequence?: number;
+}
 
 export interface AdminEventRow {
   id: number;
@@ -29,6 +40,9 @@ export interface AdminEventRow {
   tags?: string[] | string | null;
   score?: string;
   is_match?: boolean;
+  event_type?: string;
+  visibility?: string;
+  occurrences?: AdminOccurrenceRow[];
 }
 
 interface EventsPanelProps {
@@ -54,6 +68,8 @@ interface FormState {
   sort: string;
   status: string;
   score: string;
+  event_type: string;
+  visibility: string;
 }
 
 const EMPTY_FORM: FormState = {
@@ -72,6 +88,8 @@ const EMPTY_FORM: FormState = {
   sort: "",
   status: "published",
   score: "",
+  event_type: "event",
+  visibility: "public",
 };
 
 const LOCATION_PRESETS = [
@@ -220,6 +238,8 @@ export default function EventsPanel({ initialEvents, onDirtyChange }: EventsPane
       sort: ev.sort != null ? String(ev.sort) : "",
       status: ev.status || "published",
       score: ev.score || "",
+      event_type: ev.event_type || "event",
+      visibility: ev.visibility || "public",
     });
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
@@ -307,6 +327,8 @@ export default function EventsPanel({ initialEvents, onDirtyChange }: EventsPane
           sort: form.sort === "" ? null : Number(form.sort),
           status: form.status || "published",
           score: form.score || null,
+          event_type: form.event_type || "event",
+          visibility: form.visibility || "public",
         };
         const res = await fetch("/api/admin/directus", {
           method: editingId !== null ? "PATCH" : "POST",
@@ -321,6 +343,46 @@ export default function EventsPanel({ initialEvents, onDirtyChange }: EventsPane
           const err = await res.json().catch(() => null);
           throw new Error(err?.error || res.statusText);
         }
+        const created = (await res.json().catch(() => null))?.data as { id?: number } | null;
+        const eventId = editingId ?? created?.id;
+
+        // SSoT write-through: the scheduled date/time lives in event_occurrences.
+        if (eventId != null) {
+          const existing = initialEvents.find((e) => e.id === eventId)?.occurrences?.[0];
+          if (form.date) {
+            const startsAt = `${form.date}T${form.time || "00:00"}:00+02:00`;
+            const occurrenceData = {
+              starts_at: startsAt,
+              all_day: !form.time,
+              status: "confirmed",
+              sequence: 0,
+            };
+            const occRes = await fetch("/api/admin/directus", {
+              method: existing ? "PATCH" : "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(
+                existing
+                  ? { collection: "event_occurrences", id: existing.id, data: occurrenceData }
+                  : { collection: "event_occurrences", data: { event_id: eventId, ...occurrenceData } }
+              ),
+            });
+            if (!occRes.ok) {
+              const err = await occRes.json().catch(() => null);
+              throw new Error(err?.error || res.statusText);
+            }
+          } else if (existing) {
+            // Date cleared → remove from the calendar (occurrence-first).
+            const occRes = await fetch("/api/admin/directus", {
+              method: "DELETE",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ collection: "event_occurrences", id: existing.id }),
+            });
+            if (!occRes.ok) {
+              const err = await occRes.json().catch(() => null);
+              throw new Error(err?.error || res.statusText);
+            }
+          }
+        }
         toast(editingId !== null ? "Event saved." : "Event created.");
       }
       setForm(null);
@@ -330,6 +392,42 @@ export default function EventsPanel({ initialEvents, onDirtyChange }: EventsPane
       toast(`Failed to save: ${err instanceof Error ? err.message : err}`, "error");
     } finally {
       setSaving(false);
+    }
+  }
+
+  async function handleOccurrenceCancel(ev: AdminEventRow, cancel: boolean) {
+    const occ = ev.occurrences?.[0];
+    if (!occ) return;
+    const ok = await confirm({
+      title: cancel ? "Cancel this event?" : "Reinstate this event?",
+      message: cancel
+        ? `"${ev.title || "this event"}" will be marked CANCELLED on the calendar (kept in the ICS feed with STATUS:CANCELLED).`
+        : `"${ev.title || "this event"}" will be marked as confirmed again.`,
+      confirmLabel: cancel ? "Cancel event" : "Reinstate",
+      danger: cancel,
+    });
+    if (!ok) return;
+    try {
+      const res = await fetch("/api/admin/directus", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          collection: "event_occurrences",
+          id: occ.id,
+          data: {
+            status: cancel ? "cancelled" : "confirmed",
+            sequence: (occ.sequence || 0) + 1,
+          },
+        }),
+      });
+      if (!res.ok) {
+        const err = await res.json().catch(() => null);
+        throw new Error(err?.error || res.statusText);
+      }
+      toast(cancel ? "Event cancelled (kept on calendar)." : "Event reinstated.");
+      router.refresh();
+    } catch (err) {
+      toast(`Failed: ${err instanceof Error ? err.message : err}`, "error");
     }
   }
 
@@ -527,6 +625,32 @@ export default function EventsPanel({ initialEvents, onDirtyChange }: EventsPane
                     placeholder="e.g. ZIM 32 - 10 KEN"
                     className="w-full rounded-lg border border-black/10 bg-white p-2.5 text-sm font-bold"
                   />
+                </div>
+                <div>
+                  <label className="mb-1 block text-[10px] font-bold uppercase tracking-wider text-black/60">Event Type</label>
+                  <select
+                    value={form.event_type}
+                    onChange={(e) => setForm({ ...form, event_type: e.target.value })}
+                    className="w-full rounded-lg border border-black/10 bg-white p-2.5 text-sm font-bold"
+                  >
+                    <option value="event">Event</option>
+                    <option value="match">Match / Fixture</option>
+                    <option value="announcement">Announcement</option>
+                    <option value="campaign">Campaign</option>
+                    <option value="competition">Competition (season container)</option>
+                    <option value="other">Other</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="mb-1 block text-[10px] font-bold uppercase tracking-wider text-black/60">Visibility</label>
+                  <select
+                    value={form.visibility}
+                    onChange={(e) => setForm({ ...form, visibility: e.target.value })}
+                    className="w-full rounded-lg border border-black/10 bg-white p-2.5 text-sm font-bold"
+                  >
+                    <option value="public">Public</option>
+                    <option value="internal">Internal only</option>
+                  </select>
                 </div>
               </>
             ) : (
@@ -747,8 +871,8 @@ export default function EventsPanel({ initialEvents, onDirtyChange }: EventsPane
                             openEdit(ev);
                           }
                         }}
-                        title={ev.is_match ? `[MATCH] ${ev.title}` : ev.title}
-                        className={`block w-full truncate rounded-md px-1.5 py-1 text-left text-[10px] font-bold leading-tight transition-opacity hover:opacity-80 ${ev.is_match ? "bg-green-100 text-green-800 border border-green-200/50" : statusTone(derivedStatus(ev))}`}
+                        title={ev.is_match ? `[MATCH] ${ev.title}` : ev.occurrences?.[0]?.status === "cancelled" ? `[CANCELLED] ${ev.title}` : ev.title}
+                        className={`block w-full truncate rounded-md px-1.5 py-1 text-left text-[10px] font-bold leading-tight transition-opacity hover:opacity-80 ${ev.is_match ? "bg-green-100 text-green-800 border border-green-200/50" : ev.occurrences?.[0]?.status === "cancelled" ? "bg-red-50 text-red-500 line-through border border-red-200/50" : statusTone(derivedStatus(ev))}`}
                       >
                         {ev.is_match ? `🏉 ${ev.title}` : ev.title}
                       </button>
@@ -812,9 +936,15 @@ export default function EventsPanel({ initialEvents, onDirtyChange }: EventsPane
                         </td>
                         <td className="px-4 py-2.5">
                           <div className="flex flex-wrap items-center gap-1.5">
-                            <span className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-0.5 text-xs font-medium ${statusTone(st)}`}>
-                              {st === "ongoing" ? "Today" : st === "completed" ? "Completed" : "Upcoming"}
-                            </span>
+                            {ev.occurrences?.[0]?.status === "cancelled" ? (
+                              <span className="inline-flex items-center gap-1.5 rounded-full bg-red-100 px-2.5 py-0.5 text-xs font-medium text-red-700 ring-1 ring-inset ring-red-600/20">
+                                Cancelled
+                              </span>
+                            ) : (
+                              <span className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-0.5 text-xs font-medium ${statusTone(st)}`}>
+                                {st === "ongoing" ? "Today" : st === "completed" ? "Completed" : "Upcoming"}
+                              </span>
+                            )}
                             {ev.status === "draft" && (
                               <span className="inline-flex items-center gap-1.5 rounded-full bg-amber-100 px-2.5 py-0.5 text-xs font-medium text-amber-800 ring-1 ring-inset ring-amber-600/20">
                                 Draft
@@ -830,6 +960,16 @@ export default function EventsPanel({ initialEvents, onDirtyChange }: EventsPane
                               </span>
                             ) : (
                               <>
+                                {ev.occurrences?.[0] ? (
+                                  <button
+                                    onClick={() => handleOccurrenceCancel(ev, ev.occurrences![0]!.status !== "cancelled")}
+                                    className={`rounded-lg p-2 transition-colors ${ev.occurrences![0]!.status === "cancelled" ? "text-zru-green hover:bg-zru-green/10" : "text-black/50 hover:bg-red-50 hover:text-red-600"}`}
+                                    aria-label={ev.occurrences![0]!.status === "cancelled" ? `Reinstate ${ev.title}` : `Cancel ${ev.title}`}
+                                    title={ev.occurrences![0]!.status === "cancelled" ? "Reinstate event" : "Cancel event (kept on calendar)"}
+                                  >
+                                    {ev.occurrences![0]!.status === "cancelled" ? <RotateCcw className="h-4 w-4" /> : <Ban className="h-4 w-4" />}
+                                  </button>
+                                ) : null}
                                 <button
                                   onClick={() => openEdit(ev)}
                                   className="rounded-lg p-2 text-black/50 transition-colors hover:bg-zru-green/10 hover:text-zru-green"

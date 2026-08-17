@@ -5,6 +5,11 @@ import { staticData } from "@/lib/static-data";
 import type { EventItem } from "@/types";
 import { getDirectusMatches } from "@/lib/match-centre/api";
 import type { MatchCardViewModel } from "@/lib/match-centre/types";
+import {
+  getCalendarOccurrences,
+  toCatWallTime,
+  type CalendarOccurrence,
+} from "@/lib/calendar/occurrences";
 
 export type { EventItem };
 
@@ -43,8 +48,7 @@ interface MatchJson {
   ticketUrl?: string;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-function parseTags(raw: any): string[] {
+function parseTags(raw: string[] | string | null | undefined): string[] {
   if (Array.isArray(raw)) return raw;
   if (typeof raw === "string") {
     try {
@@ -143,16 +147,61 @@ function getStaticFallbackEvents(): EventItem[] {
 
 export async function getEvents(): Promise<EventItem[]> {
   try {
-    const [response, matches] = await Promise.all([
+    const [response, occurrences, matches] = await Promise.all([
       directusFetch<DirectusEvent>('events', {
         sort: ['sort', 'date_label']
       }),
+      getCalendarOccurrences(),
       getDirectusMatches()
     ]);
 
-    const cmsItems = response.map(mapDirectusEvent);
-    const cmsMatches = matches.map(mapDirectusMatchToEvent);
-    
+    // Group event occurrences by parent event id, earliest first.
+    const eventOccurrences = new Map<number, CalendarOccurrence[]>();
+    for (const occ of occurrences) {
+      if (occ.source !== "event") continue;
+      const key = Number(occ.parentId);
+      const list = eventOccurrences.get(key) || [];
+      list.push(occ);
+      eventOccurrences.set(key, list);
+    }
+
+    // Occurrence-first: an event only appears on the calendar if it has ≥1
+    // occurrence; date/time come from the earliest (non-cancelled) occurrence.
+    const cmsItems = response
+      .filter((e) => eventOccurrences.has(e.id))
+      .map((item) => {
+        const occs = (eventOccurrences.get(item.id) || []).sort((a, b) =>
+          a.startsAt.localeCompare(b.startsAt)
+        );
+        const primary = occs.find((o) => o.status !== "cancelled") || occs[0];
+        const wall = toCatWallTime(primary.startsAt);
+        return {
+          ...mapDirectusEvent(item),
+          date: wall.date,
+          time: primary.allDay ? undefined : wall.time || undefined,
+          cancelled: primary.status === "cancelled",
+        };
+      });
+
+    const matchOccurrences = new Map<string, CalendarOccurrence>();
+    for (const occ of occurrences) {
+      if (occ.source !== "match") continue;
+      matchOccurrences.set(String(occ.parentId), occ);
+    }
+
+    const cmsMatches = matches.map((match) => {
+      const occ = matchOccurrences.get(String(match.id));
+      const mapped = mapDirectusMatchToEvent(match);
+      if (!occ) return mapped;
+      const wall = toCatWallTime(occ.startsAt);
+      return {
+        ...mapped,
+        date: wall.date,
+        time: wall.time || match.time,
+        cancelled: occ.status === "cancelled",
+      };
+    });
+
     // Directus is the absolute source of truth. We only return CMS items here.
     return [...cmsItems, ...cmsMatches];
   } catch (error) {

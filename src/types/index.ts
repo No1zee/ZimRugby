@@ -202,6 +202,8 @@ export interface EventItem {
   time?: string;
   /** Derived from date/time at render time: "upcoming" | "ongoing" | "completed" */
   status?: "upcoming" | "ongoing" | "completed";
+  /** True when the occurrence was cancelled (kept on calendar with STATUS:CANCELLED). */
+  cancelled?: boolean;
 }
 
 // 10. Hero Slides (CMS)

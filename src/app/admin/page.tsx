@@ -75,9 +75,9 @@ async function getAdminAnnouncements(): Promise<Record<string, unknown>[]> {
   }
 }
 
-async function getAdminCollection<T>(collection: string): Promise<T[]> {
+async function getAdminCollection<T>(collection: string, params: Record<string, unknown> = {}): Promise<T[]> {
   try {
-    return await directusFetch<T>(collection, { fields: ["*"], limit: 500 }, 60);
+    return await directusFetch<T>(collection, { fields: ["*"], limit: 500, ...params }, 60);
   } catch {
     return [];
   }
@@ -168,7 +168,7 @@ export default async function AdminDashboard() {
   const [
     pages, sectionCounts,
     campaigns, announcements,
-    news, events, grassrootsInitiatives, programmes, faqs, footerNav,
+    news, events, eventOccurrences, grassrootsInitiatives, programmes, faqs, footerNav,
     eventsCount, teamCount, playerCount, matchCount, partnerCount, announcementCount,
     allMatches, standings, heroSlides, sponsors, resources, clubs, lookups,
     fanZoneMembers, onboardingSubmissions,
@@ -180,6 +180,7 @@ export default async function AdminDashboard() {
     showAnnouncements ? getAdminAnnouncements() : Promise.resolve([] as Record<string, unknown>[]),
     showNews ? getAdminCollection<Record<string, unknown>>("news") : Promise.resolve([] as Record<string, unknown>[]),
     showEvents ? getAdminCollection<Record<string, unknown>>("events") : Promise.resolve([] as Record<string, unknown>[]),
+    showEvents ? getAdminCollection<Record<string, unknown>>("event_occurrences", { sort: ["starts_at"] }) : Promise.resolve([] as Record<string, unknown>[]),
     showGrassroots ? getAdminCollection<Record<string, unknown>>("grassroots_initiatives") : Promise.resolve([] as Record<string, unknown>[]),
     showGrassroots ? getAdminCollection<Record<string, unknown>>("programmes") : Promise.resolve([] as Record<string, unknown>[]),
     showFaqFooter ? getAdminCollection<Record<string, unknown>>("faqs") : Promise.resolve([] as Record<string, unknown>[]),
@@ -217,6 +218,12 @@ export default async function AdminDashboard() {
     activeCampaignCount: campaigns.filter((c) => c.status === "active" || c.status === "published").length,
   };
 
+  // Merge event occurrences onto their parent events (calendar SSoT).
+  const eventsWithOccurrences = events.map((e) => ({
+    ...e,
+    occurrences: eventOccurrences.filter((o) => o.event_id === e.id),
+  }));
+
   return (
     <AdminAuthGate>
       <AdminContentManager
@@ -228,7 +235,7 @@ export default async function AdminDashboard() {
         initialOnboardingSubmissions={onboardingSubmissions}
         initialCampaigns={campaigns}
         initialNews={news}
-        initialEvents={events as unknown as AdminEventRow[]}
+        initialEvents={eventsWithOccurrences as unknown as AdminEventRow[]}
         initialGrassroots={grassrootsInitiatives}
         initialProgrammes={programmes}
         initialFaqs={faqs}
