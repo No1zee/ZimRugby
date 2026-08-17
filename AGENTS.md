@@ -92,3 +92,9 @@ ADMIN_EMAIL, ADMIN_PASSWORD (new), KEY, SECRET (new), DB_CLIENT=pg, DB_HOST=post
 - Verified: tsc clean, 27/27 vitest, lint clean, build green (webpack), deployed 
 px vercel --prod --yes → https://zimrugby.vercel.app. Live E2E: calendar-sso-e2e.mjs 18/18, phase1 12/12, ws2 10/10 (flake on first run = revalidate propagation, re-run passes).
 - Queued next: remaining admin improvements + stub-panel consolidation (hero_slides/partners) per ADMIN-AUDIT-PLAN.md.
+## Session 2026-08-17 pm — Announcement schema consolidation DONE — commit 501d947
+- Audit-plan row 'stub-panel consolidation (hero_slides/partners)' verified ALREADY DONE (0aeac6c): SponsorsPanel + HeroLayoutPanel full CRUD, click route queries partners not sponsors, /partners CMS-driven, proxy has GET + audit logging. The genuinely-open item was the canonical announcement schema: 7 parallel interfaces existed.
+- Consolidated 3 wire-schema duplicates onto canonical Announcements (directus-generated.ts, the documented single source of truth): api/announcements.ts local DirectusAnnouncementItem deleted; data-fetcher.ts legacy DirectusAnnouncement (fake category/date/urgent fields) deleted + mapping fixed to real prod fields (starts_at→date, badge/priority→category; previously every announcement rendered 'Just now'/'Official Announcement'); occurrences.ts local subset deleted. Also DirectusSocialPost→SocialPosts and DirectusNewsLookup→DirectusNewsItem in data-fetcher. UI-local prop types (PinnedAnnouncements, TeamMediaSection) kept - component props, not wire schemas.
+- Verified: tsc clean, 27/27 vitest, lint clean (pre-existing warning only), build green, deployed live: /media 200 with announcement category labels, /api/calendar 200 (announcement occurrences intact).
+- Queued next (audit plan, still open): proxy hardening rows already done (GET+audit+soft-delete); remaining = none major — optional: custom CMS domain (parked by Ed), Upstash KV enable (awaits Ed's creds).
+
