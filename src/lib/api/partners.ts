@@ -1,6 +1,8 @@
 import { directusFetch } from "@/lib/directus/fetch";
 import { assetUrl } from "@/lib/directus/assets";
 
+export type PartnerTierKey = "title" | "gold" | "silver" | "bronze";
+
 export interface Partner {
   id: number;
   name: string;
@@ -10,6 +12,7 @@ export interface Partner {
   href: string;
   badge: string;
   sort: number;
+  tier: PartnerTierKey;
   is_active: boolean;
 }
 
@@ -22,8 +25,25 @@ interface DirectusPartner {
   description?: string;
   website_url?: string;
   badge?: string;
+  tier?: string | null;
   sort?: number;
   status?: string;
+}
+
+const TIER_ALIASES: Record<string, PartnerTierKey> = {
+  title: "title",
+  gold: "gold",
+  silver: "silver",
+  bronze: "bronze",
+  "1": "title",
+  "2": "gold",
+  "3": "silver",
+  "4": "bronze",
+};
+
+function normalizeTier(tier?: string | null): PartnerTierKey {
+  if (!tier) return "gold";
+  return TIER_ALIASES[String(tier).toLowerCase().trim()] || "gold";
 }
 
 const MOCK_PARTNERS: Partner[] = [
@@ -36,6 +56,7 @@ const MOCK_PARTNERS: Partner[] = [
     href: "https://www.nedbank.co.zw",
     badge: "PRIMARY PARTNER",
     sort: 1,
+    tier: "title",
     is_active: true,
   },
   {
@@ -47,6 +68,7 @@ const MOCK_PARTNERS: Partner[] = [
     href: "https://www.rugbyafrique.com",
     badge: "GOVERNING BODY",
     sort: 2,
+    tier: "title",
     is_active: true,
   },
   {
@@ -58,6 +80,7 @@ const MOCK_PARTNERS: Partner[] = [
     href: "https://www.world.rugby",
     badge: "GOVERNING BODY",
     sort: 3,
+    tier: "title",
     is_active: true,
   },
   {
@@ -69,6 +92,7 @@ const MOCK_PARTNERS: Partner[] = [
     href: "#",
     badge: "NATIONAL PARTNER",
     sort: 4,
+    tier: "gold",
     is_active: true,
   },
   {
@@ -80,6 +104,7 @@ const MOCK_PARTNERS: Partner[] = [
     href: "#",
     badge: "NATIONAL PARTNER",
     sort: 5,
+    tier: "gold",
     is_active: true,
   },
 ];
@@ -89,7 +114,7 @@ const LOCAL_LOGO_FALLBACKS: Record<string, string> = {
   africa: "/images/sponsors/Rugby Africa.png",
   world: "/images/sponsors/World_Rugby_logo.png",
   olympic: "/images/sponsors/Zimbabwean Olympic Comitte-Logo.png",
-  src: "/images/sponsors/src.png",
+  "sports and recreation": "/images/sponsors/src.png",
 };
 
 function getFallbackLogo(name: string): string {
@@ -106,7 +131,7 @@ export async function getPartners(): Promise<Partner[]> {
   try {
     if (process.env.NEXT_PUBLIC_DIRECTUS_URL) {
       const response = await directusFetch<DirectusPartner>("partners", {
-        fields: ["id", "name", "role", "logo", "description", "website_url", "badge", "sort", "status"],
+        fields: ["id", "name", "role", "logo", "description", "website_url", "badge", "tier", "sort", "status"],
         filter: { status: { _eq: "published" } },
         sort: ["sort"],
         limit: 20,
@@ -133,6 +158,7 @@ export async function getPartners(): Promise<Partner[]> {
             href: p.website_url || "#",
             badge: p.badge || "PARTNER",
             sort: p.sort || 0,
+            tier: normalizeTier(p.tier),
             is_active: true,
           };
         });

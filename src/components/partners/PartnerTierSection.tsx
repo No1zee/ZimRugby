@@ -1,9 +1,16 @@
 import React from 'react';
-import { PartnerTier } from '../../data/partners';
+import { Partner, PartnerTierKey } from '../../lib/api/partners';
 import PartnerLogo from './PartnerLogo';
 
+export interface PartnerTierGroup {
+  key: PartnerTierKey;
+  id: string;
+  title: string;
+  partners: Partner[];
+}
+
 interface PartnerTierSectionProps {
-  tier: PartnerTier;
+  tier: PartnerTierGroup;
   isAlternate: boolean;
 }
 
@@ -11,7 +18,7 @@ export default function PartnerTierSection({ tier, isAlternate }: PartnerTierSec
   return (
     <section className={`py-14 md:py-20 ${isAlternate ? 'bg-black/5' : 'bg-transparent'}`}>
       <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center">
-        
+
         {/* Category Badge */}
         <div className="mb-10 md:mb-14 flex flex-col items-center">
           <span className="text-zru-green font-bold tracking-[0.2em] text-sm md:text-base uppercase mb-3">
