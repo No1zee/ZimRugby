@@ -1,4 +1,5 @@
 import { directusFetch } from "@/lib/directus/fetch";
+import type { Announcements as DirectusAnnouncement } from "@/types/directus-generated";
 
 /**
  * Calendar SSoT — unified occurrence stream.
@@ -125,18 +126,6 @@ interface DirectusMatch {
   title?: string | null;
   display_time_label?: string | null;
   ticket_url?: string | null;
-}
-
-interface DirectusAnnouncement {
-  id: string;
-  title: string;
-  starts_at: string | null;
-  ends_at: string | null;
-  badge?: string | null;
-  scope?: string | string[] | null;
-  design_variant?: string | null;
-  is_enabled?: boolean;
-  status?: string | null;
 }
 
 interface DirectusCampaign {
@@ -309,9 +298,9 @@ export async function getCalendarOccurrences(): Promise<CalendarOccurrence[]> {
     out.push({
       uid: `zru-announcement-${a.id}@zimrugby.org`,
       source: "announcement",
-      sourceId: a.id,
-      parentId: a.id,
-      title: a.title,
+      sourceId: a.id || 0,
+      parentId: a.id || 0,
+      title: a.title || `Announcement ${a.id}`,
       startsAt: a.starts_at,
       endsAt: a.ends_at,
       allDay: true,

@@ -74,27 +74,24 @@ export async function getLiveMatches(): Promise<Match[]> {
 }
 
 import { directusFetch } from './directus/fetch';
+import type { Announcements as DirectusAnnouncement, SocialPosts as DirectusSocialPost } from '@/types/directus-generated';
 import { newsItemToReport, newsVisibilityFilter, type DirectusNewsItem } from './api/news';
-
-interface DirectusAnnouncement {
-  id: number;
-  title: string;
-  body: string;
-  category?: string;
-  date?: string;
-  urgent?: boolean;
-}
 
 function announcementToReport(da: DirectusAnnouncement): Report {
   const body = da.body || "";
+  const starts = da.starts_at ? new Date(da.starts_at) : null;
+  const hasStart = starts && !isNaN(starts.getTime());
+  const priority = Number(da.priority) || 0;
   return {
     id: `directus-${da.id}`,
-    title: da.title,
+    title: da.title || "",
     excerpt: body.length > 140 ? body.substring(0, 140) + "..." : body,
-    content: da.body,
-    date: da.date ? new Date(da.date).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }) : "Just now",
+    content: da.body || "",
+    date: hasStart
+      ? starts.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })
+      : "Just now",
     image: "https://images.unsplash.com/photo-1544698310-74ea9d1c8258?q=80&w=1200&auto=format&fit=crop",
-    category: da.category || "Official Announcement",
+    category: da.badge || (priority >= 30 ? "URGENT ANNOUNCEMENT" : "Official Announcement"),
     url: `/media/directus-${da.id}`,
     source: "website",
     type: "news",
@@ -128,18 +125,6 @@ export async function getLatestReports(): Promise<Report[]> {
 }
 
 
-interface DirectusSocialPost {
-  id: number;
-  source_id: string;
-  title: string;
-  excerpt: string;
-  date_label: string;
-  image_url: string;
-  category: string;
-  post_url: string;
-  source_platform: string;
-}
-
 function socialPostToReport(p: DirectusSocialPost): Report {
   return {
     id: `social-${p.id}`,
@@ -172,7 +157,7 @@ export async function getReportById(id: string): Promise<Report | undefined> {
 
   // Fall back to the Directus news collection keyed by slug (homepage /media links use news slugs).
   try {
-    const items = await directusFetch<DirectusNewsLookup>("news", {
+    const items = await directusFetch<DirectusNewsItem>("news", {
       filter: { ...newsVisibilityFilter(), slug: { _eq: id } },
       limit: 1,
     }, 60);
@@ -205,15 +190,4 @@ export async function getReportById(id: string): Promise<Report | undefined> {
   }
 
   return undefined;
-}
-
-interface DirectusNewsLookup {
-  id: string | number;
-  title?: string;
-  slug?: string;
-  excerpt?: string;
-  body?: string;
-  image?: string;
-  category?: string;
-  date?: string;
 }

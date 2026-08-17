@@ -1,26 +1,6 @@
 import { Announcement } from "@/types";
+import type { Announcements as DirectusAnnouncement } from "@/types/directus-generated";
 import { directusFetch } from "@/lib/directus/fetch";
-
-interface DirectusAnnouncementItem {
-  id: string | number;
-  title: string;
-  slug: string;
-  body?: string;
-  priority?: "critical" | "high" | "normal";
-  scope?: string | string[];
-  cta_label?: string;
-  cta_url?: string;
-  starts_at?: string;
-  ends_at?: string;
-  segment?: "sables" | "lady_sables" | "schools" | "general";
-  design_variant?: "banner" | "spotlight-card" | "ticker" | "overlay";
-  is_sticky?: boolean;
-  is_enabled?: boolean;
-  badge?: string;
-  related_match?: string | number;
-  related_event?: string | number;
-  related_article?: string | number;
-}
 
 const MOCK_ANNOUNCEMENTS: Announcement[] = [
   {
@@ -116,7 +96,7 @@ export async function getAnnouncements(): Promise<Announcement[]> {
     if (process.env.NEXT_PUBLIC_DIRECTUS_URL) {
       // Query active announcements (filtering by ends_at >= now, starts_at <= now,
       // and only enabled ones — disabled announcements are excluded from the site)
-      const response = await directusFetch<DirectusAnnouncementItem>(
+      const response = await directusFetch<DirectusAnnouncement>(
         "announcements",
         {
           filter: {
@@ -149,7 +129,7 @@ export async function getAnnouncements(): Promise<Announcement[]> {
 
           return {
             id: String(item.id),
-            title: item.title,
+            title: item.title || "",
             slug: item.slug || `ann-${item.id}`,
             body: item.body || "",
             // Directus stores priority as a number (0 = normal); map back to the
@@ -159,14 +139,14 @@ export async function getAnnouncements(): Promise<Announcement[]> {
               return p >= 30 ? "critical" : p >= 20 ? "high" : "normal";
             })(),
             scope: parsedScope,
-            ctaLabel: item.cta_label,
-            ctaUrl: item.cta_url,
+            ctaLabel: item.cta_label || undefined,
+            ctaUrl: item.cta_url || undefined,
             startsAt: item.starts_at || nowStr,
             endsAt: item.ends_at || nowStr,
-            segment: item.segment || "general",
-            designVariant: item.design_variant || "spotlight-card",
+            segment: (item.segment as Announcement["segment"]) || "general",
+            designVariant: (item.design_variant as Announcement["designVariant"]) || "spotlight-card",
             isSticky: !!item.is_sticky,
-            badge: item.badge,
+            badge: item.badge || undefined,
             relatedMatchId: item.related_match ? String(item.related_match) : undefined,
             relatedEventId: item.related_event ? String(item.related_event) : undefined,
             relatedArticleId: item.related_article ? String(item.related_article) : undefined
