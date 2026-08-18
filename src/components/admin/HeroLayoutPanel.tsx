@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { Plus, Trash, ArrowUp, ArrowDown, Eye, EyeOff, Save, LayoutGrid, Radio } from "lucide-react";
 import { useToast } from "./ui/ToastProvider";
-import ImagePicker from "./ui/ImagePicker";
+import ImagePicker, { toAssetUrl } from "./ui/ImagePicker";
 
 interface HeroSlide {
   id: string | number;
@@ -438,9 +438,9 @@ export default function HeroLayoutPanel({ initialSlides }: { initialSlides?: any
               >
                 <div className="flex items-center gap-4 min-w-0">
                   <div className="w-24 h-16 rounded-lg bg-black/10 overflow-hidden relative shrink-0 border border-black/10">
-                    {slide.image ? (
+                    {toAssetUrl(slide.image) ? (
                       // eslint-disable-next-line @next/next/no-img-element
-                      <img src={slide.image} alt="" className="w-full h-full object-cover" />
+                      <img src={toAssetUrl(slide.image)} alt="" className="w-full h-full object-cover" />
                     ) : (
                       <div className="w-full h-full flex items-center justify-center text-black/20 text-[9px] font-mono">
                         NO IMAGE

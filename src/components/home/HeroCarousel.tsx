@@ -334,8 +334,8 @@ export default function HeroCarousel({ slides = [] }: { slides: HeroSlideData[] 
                   )
                 ) : (
                   <Image
-                    src={activeSlide.image}
-                    alt={`${activeSlide.headline.line1} ${activeSlide.headline.line2}`}
+                    src={activeSlide.image || "/images/gallery/zimbabwe-sables-battle-of-zambezi-gameday1-505.webp"}
+                    alt={`${activeSlide.headline?.line1 || "Zimbabwe"} ${activeSlide.headline?.line2 || "Sables"}`}
                     fill
                     priority={currentSlide === 0}
                     loading={currentSlide === 0 ? undefined : "lazy"}

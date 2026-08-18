@@ -3,9 +3,16 @@
 import { useCallback, useRef, useState } from "react";
 import { ImagePlus, Loader2, X, UploadCloud } from "lucide-react";
 
-export function toAssetUrl(idOrUrl: string): string {
+export function toAssetUrl(idOrUrl?: string | null): string {
   if (!idOrUrl) return "";
-  return /^[a-f0-9-]{36}$/i.test(idOrUrl) ? `/api/assets/${idOrUrl}` : idOrUrl;
+  if (idOrUrl.startsWith("http://") || idOrUrl.startsWith("https://") || idOrUrl.startsWith("/")) {
+    return idOrUrl;
+  }
+  if (/^[a-f0-9-]{36}$/i.test(idOrUrl)) {
+    const directusBase = process.env.NEXT_PUBLIC_DIRECTUS_URL || "https://zru-directus-cms-production.up.railway.app";
+    return `${directusBase}/assets/${idOrUrl}`;
+  }
+  return idOrUrl;
 }
 
 export default function ImagePicker({

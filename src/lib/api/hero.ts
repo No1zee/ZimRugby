@@ -91,12 +91,22 @@ export async function getHeroSlides(): Promise<HeroSlideData[]> {
       if (response && response.length > 0) {
         return response.map((slide: any) => {
           const rawImage = slide.image || slide.image_url || "";
-          const isDirectUrl = rawImage.startsWith("http") || rawImage.startsWith("/");
+          const directusBase = process.env.NEXT_PUBLIC_DIRECTUS_URL || "https://zru-directus-cms-production.up.railway.app";
+          let resolvedImage = "/images/gallery/zimbabwe-sables-battle-of-zambezi-gameday1-505.webp";
+          if (rawImage) {
+            if (rawImage.startsWith("http://") || rawImage.startsWith("https://") || rawImage.startsWith("/")) {
+              resolvedImage = rawImage;
+            } else if (/^[a-f0-9-]{36}$/i.test(rawImage)) {
+              resolvedImage = `${directusBase}/assets/${rawImage}`;
+            } else {
+              resolvedImage = heroAssetUrl(rawImage) || rawImage;
+            }
+          }
           return {
             id: Number(slide.id),
             tag: slide.tag,
             contextPill: slide.context_pill,
-            image: isDirectUrl ? rawImage : (heroAssetUrl(rawImage) || rawImage),
+            image: resolvedImage,
             video: slide.video ? `/api/assets/${slide.video}` : slide.video_url,
             headline: {
               line1: slide.headline_line1 || "",
