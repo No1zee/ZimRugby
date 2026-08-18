@@ -127,17 +127,36 @@ export async function getPhotos(): Promise<Photo[]> {
   try {
     if (process.env.NEXT_PUBLIC_DIRECTUS_URL) {
       const response = await directusFetch<any>('photos', {
-        sort: ['-date']
+        filter: { status: { _eq: 'published' } },
+        sort: ['-date_created'],
+        fields: ['id', 'title', 'album', 'folder', 'date_label', 'date', 'description', 'photographer', 'license', 'image_url', 'directus_image.*'],
       });
       if (response && response.length > 0) {
-        return response.map((photo: any) => ({
-          id: String(photo.id),
-          title: photo.title || "",
-          album: photo.album || "General",
-          image: photoAssetUrl(photo.image) || photo.image_url,
-          date: photo.date_label || new Date(photo.date).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric', timeZone: 'UTC' }).toUpperCase(),
-          description: photo.description || ""
-        }));
+        return response.map((photo: any) => {
+          // Prefer the uploaded Directus file; fall back to legacy image_url text field
+          const imageUrl = photo.directus_image?.id
+            ? photoAssetUrl(photo.directus_image.id)
+            : photo.image_url || null;
+
+          const dateDisplay = photo.date_label
+            || (photo.date
+              ? new Date(photo.date).toLocaleDateString('en-GB', {
+                  day: '2-digit', month: 'short', year: 'numeric', timeZone: 'UTC'
+                }).toUpperCase()
+              : '2026');
+
+          return {
+            id: String(photo.id),
+            title: photo.title || 'ZRU Gallery',
+            album: photo.album || 'Match Day',
+            folder: photo.folder || 'General Sables Archive',
+            image: imageUrl,
+            date: dateDisplay,
+            photographer: photo.photographer || 'ZRU Media Staff',
+            license: photo.license || 'All Rights Reserved (C) Zimbabwe Rugby Union',
+            description: photo.description || '',
+          };
+        }).filter((p: any) => p.image); // Only show photos that have an image
       }
     }
   } catch (error) {
