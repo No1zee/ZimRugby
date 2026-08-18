@@ -13,7 +13,7 @@ async function getCmsPhotos(): Promise<Photo[]> {
 
     const response = await directusFetch<any>("photos", {
       filter: { status: { _eq: "published" } },
-      sort: ["-date_created"],
+      sort: ["-id"],
       fields: [
         "id", "title", "album", "folder", "date_label", "date",
         "description", "photographer", "license", "image_url", "directus_image.*",
