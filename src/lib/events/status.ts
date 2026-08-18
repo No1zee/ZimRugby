@@ -9,6 +9,45 @@
 
 export type DerivedEventStatus = "upcoming" | "ongoing" | "completed";
 
+const catWallFmt = new Intl.DateTimeFormat("en-CA", {
+  timeZone: "Africa/Harare",
+  year: "numeric",
+  month: "2-digit",
+  day: "2-digit",
+});
+
+/** End of the CAT day a given instant falls on (an event with no ends_at runs to midnight). */
+function endOfCatDay(instant: Date): Date {
+  const parts = catWallFmt.formatToParts(instant);
+  const get = (type: string) => parts.find((p) => p.type === type)?.value || "";
+  return new Date(`${get("year")}-${get("month")}-${get("day")}T23:59:59+02:00`);
+}
+
+/**
+ * Derive the live status from an occurrence's stored UTC instants — the
+ * calendar SSoT. `startsAt` is an absolute timestamp, so no wall-clock
+ * guessing is involved.
+ */
+export function deriveEventStatusFromOccurrence(
+  startsAtIso: string | null | undefined,
+  endsAtIso?: string | null,
+  now: Date = new Date()
+): DerivedEventStatus {
+  if (!startsAtIso) return "upcoming";
+  const start = new Date(startsAtIso);
+  if (isNaN(start.getTime())) return "upcoming";
+  if (now < start) return "upcoming";
+
+  let end: Date;
+  if (endsAtIso) {
+    end = new Date(endsAtIso);
+    if (isNaN(end.getTime())) end = endOfCatDay(start);
+  } else {
+    end = endOfCatDay(start);
+  }
+  return now < end ? "ongoing" : "completed";
+}
+
 export function deriveEventStatus(
   dateIso: string | null | undefined,
   time: string | null | undefined,

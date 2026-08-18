@@ -101,7 +101,12 @@ export default function MatchCentrePanel({
             venue_id: venueId || null,
             status,
             match_type: matchType,
-            kickoff_at: new Date(kickoff).toISOString(),
+            // Naive datetime-local input is Africa/Harare wall time (kickoffToUtc
+            // on the read side expects naive → +02:00). Parsing with the browser's
+            // local zone would silently shift the kickoff on non-CAT machines.
+            kickoff_at: kickoff.includes("+") || kickoff.endsWith("Z") || kickoff.endsWith("z")
+              ? kickoff
+              : `${kickoff}:00+02:00`,
             round_label: roundLabel || null,
             home_or_away: homeOrAway,
             show_on_match_centre: true,

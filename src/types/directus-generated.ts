@@ -390,7 +390,26 @@ export interface Events {
   page_type?: string;
   category?: string;
   time?: string;
+  score?: string;
+  event_type?: string;
+  timezone?: string;
+  visibility?: string;
   related_team_id?: number;
+}
+
+export interface EventOccurrences {
+  id?: number;
+  event_id?: number;
+  starts_at?: any;
+  ends_at?: any;
+  all_day?: boolean;
+  venue_id?: string;
+  status?: string;
+  sequence?: number;
+  note?: string;
+  created_at?: any;
+  deleted_at?: any;
+  deleted_by?: string;
 }
 
 export interface Tickets {
@@ -443,7 +462,12 @@ export interface Campaigns {
   sort?: number;
   name: string;
   slug: string;
+  subtitle?: string;
   description?: string;
+  start_date?: any;
+  end_date?: any;
+  auto_archive?: boolean;
+  priority?: number;
   countdown_target?: string;
   hero_image?: string;
   cta_label?: string;

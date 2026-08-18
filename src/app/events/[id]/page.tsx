@@ -44,7 +44,7 @@ export default async function EventDetailPage({ params }: { params: Promise<{ id
         timeZone: "UTC",
       })
     : event.date;
-  const timeLabel = event.time || "Time TBC";
+  const timeLabel = event.isAllDay ? "All day" : event.time || "Time TBC";
   const categoryTag = event.tags?.[0] || (event.homeTeam ? "FIXTURE" : "EVENT");
   const score = event.score
     ? event.score

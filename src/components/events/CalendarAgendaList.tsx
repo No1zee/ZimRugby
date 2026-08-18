@@ -20,7 +20,7 @@ export default function CalendarAgendaList({
     return (
       <div className="bg-white rounded-3xl border border-black/10 p-12 text-center text-black/50 space-y-3">
         <Calendar className="w-12 h-12 mx-auto text-black/30" />
-        <h4 className="text-lg font-heading font-black uppercase text-rich-black">No Fixtures Match Your Search</h4>
+        <h4 className="text-lg font-heading font-black uppercase text-rich-black">No Events Match Your Search</h4>
         <p className="text-sm">Try broadening your search term or clearing active category filters.</p>
       </div>
     );
@@ -67,7 +67,7 @@ export default function CalendarAgendaList({
               {dateStr}
             </h3>
             <span className="text-xs font-mono font-bold bg-black/5 text-black/60 px-2.5 py-0.5 rounded-full">
-              {dayEvents.length} {dayEvents.length === 1 ? "fixture" : "fixtures"}
+              {dayEvents.length} {dayEvents.length === 1 ? "event" : "events"}
             </span>
           </div>
 

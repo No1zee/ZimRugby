@@ -131,6 +131,7 @@ interface DirectusMatch {
 interface DirectusCampaign {
   id: number;
   name: string;
+  slug?: string | null;
   start_date: string | null;
   end_date: string | null;
   status?: string | null;
@@ -200,7 +201,7 @@ export async function getCalendarOccurrences(): Promise<CalendarOccurrence[]> {
       ),
       safe(() =>
         directusFetch<DirectusCampaign>("campaigns", {
-          fields: ["id", "name", "start_date", "end_date", "status"],
+          fields: ["id", "name", "slug", "start_date", "end_date", "status"],
         })
       ),
       safe(() =>
@@ -312,9 +313,9 @@ export async function getCalendarOccurrences(): Promise<CalendarOccurrence[]> {
     });
   }
 
-  // 4. Campaign windows
+  // 4. Campaign windows (running = live per ADR 0001; published = legacy live)
   for (const c of campaigns) {
-    if (c.status !== "published") continue;
+    if (!c.status || !["published", "running"].includes(c.status)) continue;
     if (!c.start_date) continue;
     out.push({
       uid: `zru-campaign-${c.id}@zimrugby.org`,
@@ -329,21 +330,9 @@ export async function getCalendarOccurrences(): Promise<CalendarOccurrence[]> {
       status: "confirmed",
       sequence: 0,
       badge: "CAMPAIGN",
-      href: `/campaigns/${c.name}`,
+      href: c.slug ? `/campaigns/${c.slug}` : undefined,
     });
   }
 
   return out.sort((a, b) => a.startsAt.localeCompare(b.startsAt));
-}
-
-/** Occurrences that fall on a given calendar day (YYYY-MM-DD, Africa/Harare). */
-export function occurrencesOnDay(
-  occurrences: CalendarOccurrence[],
-  day: string
-): CalendarOccurrence[] {
-  return occurrences.filter((o) => {
-    const start = toCatWallTime(o.startsAt).date;
-    const end = o.endsAt ? toCatWallTime(o.endsAt).date : start;
-    return day >= start && day <= end;
-  });
 }

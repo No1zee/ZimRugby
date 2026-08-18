@@ -47,7 +47,7 @@ export default function SelectedDatePanel({
             SELECTED DAY SCHEDULE
           </span>
           <h3 className="text-xl font-heading font-black uppercase text-rich-black">
-            {selectedDateStr ? selectedDateStr : "Upcoming Fixtures"}
+            {selectedDateStr ? selectedDateStr : "Upcoming Events"}
           </h3>
         </div>
         <span className="text-xs font-mono font-bold bg-zru-green/10 text-zru-green px-3 py-1 rounded-full">
@@ -59,7 +59,7 @@ export default function SelectedDatePanel({
       {events.length === 0 ? (
         <div className="py-12 text-center text-black/40 space-y-3">
           <Calendar className="w-10 h-10 mx-auto opacity-30" />
-          <p className="text-sm font-bold">No fixtures or events scheduled for this day.</p>
+          <p className="text-sm font-bold">No events scheduled for this day.</p>
           <p className="text-xs text-black/50">Pick another date on the calendar grid to inspect schedules.</p>
         </div>
       ) : (

@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { CalendarDays, ChevronLeft, ChevronRight, List, MapPin, Pencil, Plus, Trash2, CalendarPlus, Ban, RotateCcw } from "lucide-react";
 import ImagePicker from "./ui/ImagePicker";
 import { EmptyState } from "./ui/StatusChip";
-import { deriveEventStatus } from "@/lib/events/status";
+import { deriveEventStatus, deriveEventStatusFromOccurrence } from "@/lib/events/status";
 import { useToast } from "./ui/ToastProvider";
 import { useConfirm } from "./ui/ConfirmProvider";
 
@@ -50,13 +50,21 @@ interface EventsPanelProps {
   onDirtyChange?: (dirty: boolean) => void;
 }
 
+const EVENT_TYPE_LABELS: Record<string, string> = {
+  event: "Event",
+  match: "Match / Fixture",
+  announcement: "Announcement",
+  campaign: "Campaign",
+  competition: "Competition",
+  other: "Other",
+};
+
 type ViewMode = "month" | "list";
 
 interface FormState {
-  entry_kind: "event" | "news" | "campaign";
+  entry_kind: "event" | "news";
   title: string;
   subtitle: string;
-  page_type: string;
   category: string;
   date: string;
   time: string;
@@ -76,7 +84,6 @@ const EMPTY_FORM: FormState = {
   entry_kind: "event",
   title: "",
   subtitle: "",
-  page_type: "general",
   category: "",
   date: "",
   time: "",
@@ -193,7 +200,11 @@ export default function EventsPanel({ initialEvents, onDirtyChange }: EventsPane
     return map;
   }, [initialEvents]);
 
-  const derivedStatus = (ev: AdminEventRow) => deriveEventStatus(ev.date, ev.time);
+  const derivedStatus = (ev: AdminEventRow) => {
+    const occ = ev.occurrences?.[0];
+    if (occ?.starts_at) return deriveEventStatusFromOccurrence(occ.starts_at, occ.ends_at);
+    return deriveEventStatus(ev.date, ev.time);
+  };
 
   const calendar = useMemo(() => {
     const year = cursor.getFullYear();
@@ -226,7 +237,6 @@ export default function EventsPanel({ initialEvents, onDirtyChange }: EventsPane
       entry_kind: "event",
       title: ev.title || "",
       subtitle: ev.subtitle || "",
-      page_type: ev.page_type || "general",
       category: ev.category || "",
       date: toDateStr(ev.date),
       time: ev.time || "",
@@ -284,37 +294,10 @@ export default function EventsPanel({ initialEvents, onDirtyChange }: EventsPane
           throw new Error(err?.error || res.statusText);
         }
         toast(`Scheduled news article '${form.title}' for ${form.date}.`);
-      } else if (form.entry_kind === "campaign") {
-        const campaignPayload = {
-          title: form.title,
-          subtitle: form.subtitle || "Official ZRU Campaign",
-          page_type: "general",
-          category: "Campaign",
-          tags: ["Campaign"],
-          date: form.date || null,
-          time: form.time || null,
-          location: form.location || "National Digital & Stadium",
-          description: form.description || null,
-          content: form.content || null,
-          image: form.image || null,
-          ticket_url: form.ticket_url || null,
-          status: form.status || "published",
-        };
-        const res = await fetch("/api/admin/directus", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ collection: "events", data: campaignPayload }),
-        });
-        if (!res.ok) {
-          const err = await res.json().catch(() => null);
-          throw new Error(err?.error || res.statusText);
-        }
-        toast(`Scheduled campaign '${form.title}' on the Master Calendar for ${form.date}.`);
       } else {
         const payload: Record<string, unknown> = {
           title: form.title || null,
           subtitle: form.subtitle || null,
-          page_type: form.page_type || "general",
           category: form.category || "National Team",
           tags: [form.category || "National Team"],
           date: form.date || null,
@@ -351,12 +334,16 @@ export default function EventsPanel({ initialEvents, onDirtyChange }: EventsPane
           const existing = initialEvents.find((e) => e.id === eventId)?.occurrences?.[0];
           if (form.date) {
             const startsAt = `${form.date}T${form.time || "00:00"}:00+02:00`;
-            const occurrenceData = {
+            const occurrenceData: Record<string, unknown> = {
               starts_at: startsAt,
               all_day: !form.time,
-              status: "confirmed",
-              sequence: 0,
             };
+            // A normal edit must NOT wipe cancel/tentative state — only a new
+            // occurrence starts confirmed at sequence 0.
+            if (!existing) {
+              occurrenceData.status = "confirmed";
+              occurrenceData.sequence = 0;
+            }
             const occRes = await fetch("/api/admin/directus", {
               method: existing ? "PATCH" : "POST",
               headers: { "Content-Type": "application/json" },
@@ -478,16 +465,12 @@ export default function EventsPanel({ initialEvents, onDirtyChange }: EventsPane
                   ? "Edit Event" 
                   : form.entry_kind === "news" 
                   ? "Schedule News Article" 
-                  : form.entry_kind === "campaign"
-                  ? "Schedule Campaign Drop"
-                  : "New Event / Fixture / Clinic"}
+                  : "New Match / Event / Clinic"}
               </h2>
               <p className="mt-1 text-xs text-black/50">
                 {form.entry_kind === "news" 
                   ? "Schedule a news post to publish on the chosen date." 
-                  : form.entry_kind === "campaign"
-                  ? "Schedule a supporters or sponsor campaign on the Master Calendar."
-                  : "Events, matches, squad drops, clinics, and meetings appear on the Master Calendar."}
+                  : "Matches, squad drops, clinics, and meetings appear on the Master Calendar."}
               </p>
             </div>
 
@@ -511,15 +494,6 @@ export default function EventsPanel({ initialEvents, onDirtyChange }: EventsPane
                   }`}
                 >
                   📰 News Post
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setForm({ ...form, entry_kind: "campaign" })}
-                  className={`px-3 py-2 rounded-lg text-xs font-bold uppercase tracking-wider transition-all ${
-                    form.entry_kind === "campaign" ? "bg-rose-600 text-white shadow font-black" : "text-black/60 hover:text-black"
-                  }`}
-                >
-                  🚀 Campaign
                 </button>
               </div>
             )}
@@ -923,8 +897,8 @@ export default function EventsPanel({ initialEvents, onDirtyChange }: EventsPane
                           {ev.subtitle ? <div className="text-xs text-black/50">{ev.subtitle}</div> : null}
                         </td>
                         <td className="px-4 py-2.5">
-                          <span className={`rounded px-1.5 py-0.5 text-xs font-bold ${ev.page_type === "competition" ? "bg-amber-100 text-amber-800" : "bg-zru-green/10 text-zru-green"}`}>
-                            {ev.page_type === "competition" ? "Competition" : "Event"}
+                          <span className={`rounded px-1.5 py-0.5 text-xs font-bold ${ev.event_type === "competition" ? "bg-amber-100 text-amber-800" : "bg-zru-green/10 text-zru-green"}`}>
+                            {EVENT_TYPE_LABELS[ev.event_type || "event"]}
                           </span>
                         </td>
                         <td className="px-4 py-2.5 text-black/60">

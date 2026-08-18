@@ -251,7 +251,7 @@ export async function getStandings(): Promise<StandingsTableViewModel[]> {
 export async function getActiveAnnouncementStrip(): Promise<LiveAnnouncementStripViewModel | null> {
   const records = await directusFetch<Record<string, unknown>>(
     "announcements",
-    { filter: { is_enabled: { _eq: true } }, sort: ["-priority"] },
+    { filter: { is_enabled: { _eq: true }, status: { _eq: "published" } }, sort: ["-priority"] },
     60
   );
 
@@ -262,9 +262,9 @@ export async function getActiveAnnouncementStrip(): Promise<LiveAnnouncementStri
     id: String(item.id),
     title: (item.title as string) || "LIVE: ZIMBABWE SABLES",
     body: item.body as string,
-    variant: (item.variant as string) || "live_score",
-    category: item.category as string,
-    urgent: Boolean(item.urgent),
+    variant: (item.design_variant as string) || (item.badge as string) || "live_score",
+    category: (item.badge as string) || "",
+    urgent: Number(item.priority) >= 30,
   };
 }
 

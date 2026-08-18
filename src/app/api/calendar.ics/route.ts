@@ -14,7 +14,10 @@ export async function GET() {
       headers: {
         "Content-Type": "text/calendar; charset=utf-8",
         "Content-Disposition": 'attachment; filename="zimrugby-calendar.ics"',
-        "Cache-Control": "public, max-age=3600, s-maxage=3600",
+        // Short CDN TTL: the Directus revalidate flow purges the fetch cache,
+        // but revalidateTag can't reach the edge cache of this force-dynamic
+        // route — s-maxage bounds how long cancels/schedule changes linger.
+        "Cache-Control": "public, max-age=60, s-maxage=60",
       },
     });
   } catch (error) {

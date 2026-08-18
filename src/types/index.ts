@@ -200,6 +200,8 @@ export interface EventItem {
   featured?: boolean;
   slug?: string;
   time?: string;
+  /** True for all-day events (rendered as "All day", not a clock time). */
+  isAllDay?: boolean;
   /** Derived from date/time at render time: "upcoming" | "ongoing" | "completed" */
   status?: "upcoming" | "ongoing" | "completed";
   /** True when the occurrence was cancelled (kept on calendar with STATUS:CANCELLED). */

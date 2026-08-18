@@ -215,7 +215,7 @@ export default async function AdminDashboard() {
     partnerCount,
     announcementCount,
     campaignCount: campaigns.length,
-    activeCampaignCount: campaigns.filter((c) => c.status === "active" || c.status === "published").length,
+    activeCampaignCount: campaigns.filter((c) => c.status === "running" || c.status === "published").length,
   };
 
   // Merge event occurrences onto their parent events (calendar SSoT).

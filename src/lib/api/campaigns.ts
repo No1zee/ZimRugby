@@ -73,7 +73,7 @@ const fallbackCampaigns: Campaign[] = [
     hero_image: "edad0b11-9eab-45ca-b08c-19ffd9b7edf0",
     cta_label: "Follow the Tour",
     cta_url: "/campaigns/africa-cup-tour-2026",
-    status: "active",
+    status: "running",
     sort: 2,
     auto_archive: true,
     players: [
@@ -106,7 +106,7 @@ const fallbackCampaigns: Campaign[] = [
     hero_image: "a958c30c-5dfc-434a-9af5-48abf0c7bbd5",
     cta_label: "View Fixtures",
     cta_url: "/campaigns/schools-festival-2026",
-    status: "active",
+    status: "running",
     sort: 3,
     auto_archive: true,
     players: [],
@@ -123,7 +123,7 @@ const fallbackCampaigns: Campaign[] = [
 
 export async function getActiveCampaigns(): Promise<Campaign[]> {
   try {
-    if (!process.env.NEXT_PUBLIC_DIRECTUS_URL) return fallbackCampaigns.filter(c => c.status === "active" || c.status === "published");
+    if (!process.env.NEXT_PUBLIC_DIRECTUS_URL) return fallbackCampaigns.filter(c => c.status === "running" || c.status === "published");
 
     const fields = ["id", "name", "slug", "subtitle", "description", "start_date", "end_date", "auto_archive", "priority", "hero_image", "cta_label", "cta_url", "status", "sort", "players.*", "matches.*", "media.*"];
 

@@ -1,23 +1,11 @@
 import { NextResponse } from "next/server";
-import { getCalendarOccurrences } from "@/lib/calendar/occurrences";
-import { generateCalendarIcs } from "@/lib/calendar/ics";
 
 export const dynamic = "force-dynamic";
 
-export async function GET() {
-  try {
-    const occurrences = await getCalendarOccurrences();
-    const icsContent = generateCalendarIcs(occurrences);
-
-    return new NextResponse(icsContent, {
-      headers: {
-        "Content-Type": "text/calendar; charset=utf-8",
-        "Content-Disposition": 'attachment; filename="zimrugby_calendar.ics"',
-        "Cache-Control": "public, max-age=3600, s-maxage=3600",
-      },
-    });
-  } catch (error) {
-    console.error("Failed to generate ICS calendar:", error);
-    return new NextResponse("Internal Server Error", { status: 500 });
-  }
+// The ICS feed lives at /api/calendar.ics (canonical, "zimrugby-calendar.ics").
+// /api/calendar previously served the same ICS under a different filename and
+// error shape — redirect so existing subscribers keep working and there's one
+// endpoint to point people at.
+export async function GET(req: Request) {
+  return NextResponse.redirect(new URL("/api/calendar.ics", req.url), 301);
 }

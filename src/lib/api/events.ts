@@ -1,6 +1,6 @@
 import { directusFetch } from "@/lib/directus/fetch";
 import { photoAssetUrl } from "@/lib/directus/assets";
-import { deriveEventStatus } from "@/lib/events/status";
+import { deriveEventStatus, deriveEventStatusFromOccurrence } from "@/lib/events/status";
 import { staticData } from "@/lib/static-data";
 import type { EventItem } from "@/types";
 import { getDirectusMatches } from "@/lib/match-centre/api";
@@ -179,7 +179,9 @@ export async function getEvents(): Promise<EventItem[]> {
           ...mapDirectusEvent(item),
           date: wall.date,
           time: primary.allDay ? undefined : wall.time || undefined,
+          isAllDay: primary.allDay,
           cancelled: primary.status === "cancelled",
+          status: deriveEventStatusFromOccurrence(primary.startsAt, primary.endsAt),
         };
       });
 
