@@ -56,27 +56,33 @@ const nextConfig: NextConfig = {
       frame-ancestors 'none';
     `.replace(/\s{2,}/g, ' ').trim();
 
-    return [
+    // Apply security headers only to pages and API routes.
+    // Excluding /_next/static, /_next/image, /images, /fonts, and /favicon
+    // prevents Vercel from counting those static-asset fetches as edge invocations.
+    const securityHeaders = [
       {
-        source: "/(.*)",
-        headers: [
-          {
-            key: "Content-Security-Policy",
-            value: cspHeader,
-          },
-          {
-            key: "X-Frame-Options",
-            value: "DENY",
-          },
-          {
-            key: "X-Content-Type-Options",
-            value: "nosniff",
-          },
-          {
-            key: "Referrer-Policy",
-            value: "strict-origin-when-cross-origin",
-          },
-        ],
+        key: "Content-Security-Policy",
+        value: cspHeader,
+      },
+      {
+        key: "X-Frame-Options",
+        value: "DENY",
+      },
+      {
+        key: "X-Content-Type-Options",
+        value: "nosniff",
+      },
+      {
+        key: "Referrer-Policy",
+        value: "strict-origin-when-cross-origin",
+      },
+    ];
+
+    return [
+      // Pages and API routes — need full security headers
+      {
+        source: "/((?!_next/static|_next/image|images|fonts|favicon|icons|manifest\\.json).*)",
+        headers: securityHeaders,
       },
     ];
   },
