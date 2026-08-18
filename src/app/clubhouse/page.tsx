@@ -15,6 +15,7 @@ import {
 
 import ClubhouseNavBridge from "@/components/shop/ClubhouseNavBridge";
 import FixtureRibbon from "@/components/shop/FixtureRibbon";
+import JoinFanZoneSection from "@/components/home/JoinFanZoneSection";
 
 /* ------------------------------------------------------------------ */
 /*  Email Registration                                                 */
@@ -355,6 +356,9 @@ export default function ClubhousePage() {
       <Hero />
       <WhatToExpect />
       <MemberPerks />
+      <div className="bg-milk-white">
+        <JoinFanZoneSection />
+      </div>
       <BottomCta />
     </main>
   );
