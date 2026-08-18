@@ -72,12 +72,11 @@ function Hero() {
           </span>
 
           <h1 className="text-4xl sm:text-5xl md:text-6xl font-heading text-white uppercase tracking-tight leading-[0.95]">
-            The Clubhouse
+            Shop Coming Soon
           </h1>
 
-          <p className="mt-5 text-sm sm:text-[15px] text-white/55 leading-relaxed max-w-md">
-            Official jerseys, training kits, and supporter gear — direct from Zimbabwe Rugby.
-            Register below and be the first to know when we open the doors.
+          <p className="mt-5 text-sm sm:text-[15px] text-white/70 leading-relaxed max-w-md">
+            Match jerseys, supporter gear, and international kits are arriving soon. Join the <Link href="/fan-zone" className="text-white font-bold underline decoration-zru-green underline-offset-4 hover:text-zru-green transition-colors">Fan Zone</Link> today for 10% off, exclusive early drop access, and member-first ordering.
           </p>
 
           {/* Email */}
@@ -91,7 +90,7 @@ function Hero() {
                   className="flex items-center gap-3 py-3.5 px-5 bg-zru-green/15 border border-zru-green/25 rounded-xl"
                 >
                   <Check className="w-4 h-4 text-zru-green shrink-0" />
-                  <span className="text-sm text-white font-medium">You&apos;re registered. We&apos;ll be in touch.</span>
+                  <span className="text-sm text-white font-medium">You&apos;re registered. We&apos;ll notify you first.</span>
                 </motion.div>
               ) : (
                 <motion.div key="form" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="flex flex-col sm:flex-row gap-3">
@@ -100,8 +99,8 @@ function Hero() {
                     required
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    placeholder="Your email address"
-                    className="flex-1 px-4 py-3 bg-white/10 border border-white/15 rounded-lg text-sm text-white placeholder-white/30 focus:outline-none focus:border-zru-green/40 transition-colors"
+                    placeholder="Enter email for early access..."
+                    className="flex-1 px-4 py-3 bg-white/10 border border-white/15 rounded-lg text-sm text-white placeholder-white/40 focus:outline-none focus:border-zru-green/40 transition-colors"
                   />
                   <button
                     type="submit"
@@ -113,7 +112,7 @@ function Hero() {
                     ) : (
                       <>
                         <Bell className="w-3.5 h-3.5" />
-                        <span>Notify Me</span>
+                        <span>Join Waitlist</span>
                       </>
                     )}
                   </button>
@@ -122,6 +121,16 @@ function Hero() {
             </AnimatePresence>
             {status === "error" && <p className="text-xs text-red-400 mt-2">Something went wrong. Please try again.</p>}
           </form>
+
+          <div className="mt-5">
+            <Link
+              href="/fan-zone"
+              className="inline-flex items-center gap-2 text-xs font-bold text-zru-green hover:text-white transition-colors"
+            >
+              <span>Explore Fan Zone & Member Privileges</span>
+              <ArrowRight className="w-3.5 h-3.5" />
+            </Link>
+          </div>
         </div>
       </div>
     </section>
