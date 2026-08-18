@@ -206,8 +206,8 @@ export default function LoginPage() {
               Rugby Union
             </h2>
             <div className="mt-3 w-12 h-0.5 bg-white/40 mx-auto" />
-            <p className="mt-4 text-white/60 text-sm font-sans leading-relaxed max-w-[220px]">
-              One team. One nation. The Sables.
+            <p className="mt-4 text-white/60 text-sm font-sans leading-relaxed max-w-[240px]">
+              One nation. Every team. United in rugby.
             </p>
           </div>
         </div>
@@ -236,8 +236,8 @@ export default function LoginPage() {
               </h2>
               <p className="mt-1.5 text-sm text-gray-500">
                 {mode === "signin"
-                  ? "Welcome back to Zimbabwe Rugby."
-                  : "Join the Sables supporters network."}
+                  ? "Sign in to access your Zimbabwe Rugby account."
+                  : "Join the Zimbabwe Rugby supporters network."}
               </p>
             </div>
 
