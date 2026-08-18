@@ -7,7 +7,7 @@ export interface Match {
   venue: string;
   competition: string;
   category: string;
-  status: 'upcoming' | 'live' | 'finished';
+  status: 'upcoming' | 'live' | 'completed';
   score?: { home: number; away: number };
 }
 
@@ -61,7 +61,7 @@ export async function getLiveMatches(): Promise<Match[]> {
         venue: m.venue,
         competition: m.competition,
         category: m.teamCategory,
-        status: m.status === 'completed' ? 'finished' : (m.status as 'upcoming' | 'live' | 'finished'),
+        status: m.status === 'completed' ? 'completed' : (m.status as 'upcoming' | 'live' | 'completed'),
         score: (m.homeTeam.score !== undefined && m.awayTeam.score !== undefined) ? { home: m.homeTeam.score, away: m.awayTeam.score } : undefined
       }));
     }

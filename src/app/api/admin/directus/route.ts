@@ -17,8 +17,8 @@ const TEXT_ID_COLLECTIONS = new Set([
   "venues",
 ]);
 
-// Fields clients may never set directly — they are owned by soft-delete + audit.
-const SERVER_ONLY_FIELDS = ["deleted_at", "deleted_by"];
+// Fields clients may never set directly — they are owned by soft-delete, audit, or authorship.
+const SERVER_ONLY_FIELDS = ["deleted_at", "deleted_by", "created_by_email"];
 
 function stripServerOnly(data: Record<string, unknown>): Record<string, unknown> {
   const out = { ...data };
@@ -182,6 +182,9 @@ export async function POST(request: NextRequest) {
   const payload = stripServerOnly({ ...data });
   if (!payload.id && TEXT_ID_COLLECTIONS.has(collection)) {
     payload.id = crypto.randomUUID();
+  }
+  if (collection === "news" || collection === "campaigns") {
+    payload.created_by_email = session.email;
   }
 
   const result = await directusJson(`/items/${collection}`, {

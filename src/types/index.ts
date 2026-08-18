@@ -66,7 +66,7 @@ export interface Match {
   venue: string;
   homeTeam: TeamDetails;
   awayTeam: TeamDetails;
-  status?: 'upcoming' | 'live' | 'completed' | 'finished';
+  status?: 'upcoming' | 'live' | 'completed';
   ticketUrl?: string;
   category?: string;
   teamCategory?: string;

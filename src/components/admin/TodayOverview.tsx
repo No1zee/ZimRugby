@@ -31,6 +31,7 @@ interface ActivityEntry {
 interface TodayOverviewProps {
   permissions: RolePermissions;
   role?: string;
+  email?: string;
   canReview?: boolean;
   initialNews: Record<string, unknown>[];
   initialMatches: MatchCardViewModel[];
@@ -78,6 +79,7 @@ interface HubAction {
 export default function TodayOverview({
   permissions,
   role,
+  email,
   canReview = false,
   initialNews,
   initialMatches,
@@ -427,18 +429,21 @@ export default function TodayOverview({
               : "These items are waiting on the editor. You'll see the outcome here."}
           </p>
           <div className="space-y-2.5">
-            {inReviewItems.map((d, i) => (
-              <div
-                key={i}
-                onClick={() => onNavigate("media")}
-                className="flex items-center justify-between rounded-lg bg-amber-500/[0.04] px-3 py-2 transition-colors hover:bg-amber-500/10 cursor-pointer"
-              >
-                <p className="truncate text-xs font-bold text-rich-black">{String(d.title || "Untitled")}</p>
-                <span className="ml-3 shrink-0 inline-flex items-center gap-1 text-[10px] font-black uppercase tracking-wider text-amber-600">
-                  {canReview ? "Review" : "Waiting"} <ArrowRight className="h-3 w-3" />
-                </span>
-              </div>
-            ))}
+            {inReviewItems.map((d, i) => {
+                const isOwn = email ? String(d.created_by_email || "") === email : false;
+                return (
+                  <div
+                    key={i}
+                    onClick={() => onNavigate("media")}
+                    className="flex items-center justify-between rounded-lg bg-amber-500/[0.04] px-3 py-2 transition-colors hover:bg-amber-500/10 cursor-pointer"
+                  >
+                    <p className="truncate text-xs font-bold text-rich-black">{String(d.title || "Untitled")}</p>
+                    <span className="ml-3 shrink-0 inline-flex items-center gap-1 text-[10px] font-black uppercase tracking-wider text-amber-600">
+                      {canReview && !isOwn ? "Review" : "Waiting"} <ArrowRight className="h-3 w-3" />
+                    </span>
+                  </div>
+                );
+              })}
           </div>
         </div>
       )}

@@ -138,9 +138,9 @@ export async function getMatchDetail(id: string): Promise<MatchDetailData | null
           match,
           homeLineup,
           awayLineup,
-          stats: match.status === 'finished' || match.status === 'completed' || match.status === 'live' ? stats : undefined,
+          stats: match.status === 'completed' || match.status === 'live' ? stats : undefined,
           campaign: campaign ? { slug: campaign.slug, name: campaign.name } : undefined,
-          report: match.status === 'finished' || match.status === 'completed' ? report : undefined
+          report: match.status === 'completed' ? report : undefined
         };
       }
     }
@@ -229,8 +229,8 @@ export async function getMatchDetail(id: string): Promise<MatchDetailData | null
     match,
     homeLineup,
     awayLineup,
-    stats: match.status === 'finished' || match.status === 'completed' || match.status === 'live' ? stats : undefined,
+    stats: match.status === 'completed' || match.status === 'live' ? stats : undefined,
     campaign: campaign ? { slug: campaign.slug, name: campaign.name } : undefined,
-    report: match.status === 'finished' || match.status === 'completed' ? report : undefined
+    report: match.status === 'completed' ? report : undefined
   };
 }

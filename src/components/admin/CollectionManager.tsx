@@ -47,6 +47,8 @@ interface CollectionManagerProps {
   reviewable?: boolean;
   /** Whether the actor can approve/reject in-review items (editor, super admin). */
   canReview?: boolean;
+  /** Signed-in staff email — used to prevent reviewers approving their own work. */
+  currentUserEmail?: string;
 }
 
 function formatDisplay(value: unknown): string {
@@ -131,6 +133,7 @@ export default function CollectionManager({
   canPurge = false,
   reviewable = false,
   canReview = false,
+  currentUserEmail,
 }: CollectionManagerProps) {
   const canCreate = grants?.create !== false;
   const canUpdate = grants?.update !== false;
@@ -525,7 +528,7 @@ export default function CollectionManager({
       const current = term(item[statusFieldName]);
       let next: string;
       if (reviewable) {
-        if (current === "published" || current === "active" || current === "approved") next = "draft";
+        if (current === "published" || current === "running" || current === "active" || current === "approved") next = "draft";
         else if (current === "in_review" || current === "draft") next = current === "in_review" ? "draft" : "in_review";
         else next = "published";
       } else {
@@ -1211,7 +1214,7 @@ export default function CollectionManager({
                             ? "Hide"
                             : "Show"
                           : reviewable
-                            ? term(item[statusField]) === "published" || term(item[statusField]) === "active" || term(item[statusField]) === "approved"
+                            ? term(item[statusField]) === "published" || term(item[statusField]) === "running" || term(item[statusField]) === "active" || term(item[statusField]) === "approved"
                               ? "Unpublish"
                               : term(item[statusField]) === "in_review"
                                 ? "Back to draft"
@@ -1223,18 +1226,26 @@ export default function CollectionManager({
                     )}
                     {reviewable && canReview && statusField && term(item[statusField]) === "in_review" && (
                       <>
-                        <button
-                          onClick={() => approveItem(item, statusField!)}
-                          className="flex items-center gap-1 rounded-lg bg-zru-green/10 px-3 py-1.5 text-[10px] font-black uppercase tracking-wider text-zru-green transition-colors hover:bg-zru-green/20"
-                        >
-                          Approve
-                        </button>
-                        <button
-                          onClick={() => requestChanges(item, statusField!)}
-                          className="flex items-center gap-1 rounded-lg bg-amber-500/10 px-3 py-1.5 text-[10px] font-black uppercase tracking-wider text-amber-600 transition-colors hover:bg-amber-500/20"
-                        >
-                          Request changes
-                        </button>
+                        {currentUserEmail && item.created_by_email === currentUserEmail ? (
+                          <span className="rounded-lg bg-black/5 px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider text-black/40">
+                            Waiting for another reviewer
+                          </span>
+                        ) : (
+                          <>
+                            <button
+                              onClick={() => approveItem(item, statusField!)}
+                              className="flex items-center gap-1 rounded-lg bg-zru-green/10 px-3 py-1.5 text-[10px] font-black uppercase tracking-wider text-zru-green transition-colors hover:bg-zru-green/20"
+                            >
+                              Approve
+                            </button>
+                            <button
+                              onClick={() => requestChanges(item, statusField!)}
+                              className="flex items-center gap-1 rounded-lg bg-amber-500/10 px-3 py-1.5 text-[10px] font-black uppercase tracking-wider text-amber-600 transition-colors hover:bg-amber-500/20"
+                            >
+                              Request changes
+                            </button>
+                          </>
+                        )}
                       </>
                     )}
                     {canUpdate && (

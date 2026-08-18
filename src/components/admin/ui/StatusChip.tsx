@@ -14,7 +14,7 @@ const TONES: Record<Tone, string> = {
 
 function toneFor(status: string): Tone {
   const s = (status || "").toLowerCase();
-  if (["published", "active", "live", "complete", "completed", "enabled", "featured", "winner", "true", "1", "on"].includes(s)) return "green";
+  if (["published", "active", "running", "live", "complete", "completed", "enabled", "featured", "winner", "true", "1", "on"].includes(s)) return "green";
   if (["in_review", "pending", "onboarding"].includes(s)) return "amber";
   if (["draft", "review", "disabled", "false", "0", "off"].includes(s)) return "grey";
   if (["approved"].includes(s)) return "teal";
@@ -36,7 +36,9 @@ const LABELS: Record<string, string> = {
   expired: "Archived",
   cancelled: "Cancelled",
   completed: "Completed",
+  final: "Completed",
   active: "Active",
+  running: "Running",
   live: "Live",
   pending: "In review",
   review: "In review",

@@ -229,6 +229,7 @@ export default async function AdminDashboard() {
       <AdminContentManager
         permissions={session.permissions}
         role={session.role}
+        email={session.email}
         initialMatches={allMatches}
         initialStandings={standings}
         initialAnnouncements={announcements}

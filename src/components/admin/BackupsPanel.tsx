@@ -318,6 +318,9 @@ export default function BackupsPanel() {
               <p className="text-xs text-white/60 mt-1">
                 A safe point is captured automatically when you sign in. Made a mistake or accidentally deleted something? Revert this session to how it looked when you started.
               </p>
+              <p className="text-[10px] text-white/40 mt-1">
+                Safe points undo your own editing session — they live in this browser tab and are gone when you leave. They are not backups. For something that survives anything, use Download a copy or the nightly dump below.
+              </p>
             </div>
           </div>
 

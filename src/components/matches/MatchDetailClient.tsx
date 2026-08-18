@@ -77,7 +77,7 @@ export default function MatchDetailClient({ data }: MatchDetailClientProps) {
 
               {/* Score / Status Badge */}
               <div className="flex flex-col items-center shrink-0">
-                {match.status === "finished" || match.status === "completed" ? (
+                {match.status === "completed" ? (
                   <div className="flex flex-col items-center">
                     <span className="text-4xl md:text-6xl font-black italic tracking-tighter text-glow-green text-white">
                       {match.homeTeam.score ?? 0} - {match.awayTeam.score ?? 0}

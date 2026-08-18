@@ -36,6 +36,7 @@ export interface LookupOption {
 interface AdminClientProps {
   permissions: RolePermissions;
   role: string;
+  email: string;
   initialMatches: MatchCardViewModel[];
   initialStandings: StandingsTableViewModel[];
   initialAnnouncements: Record<string, unknown>[];
@@ -143,6 +144,7 @@ function AdminClientInner(props: AdminClientProps) {
   const {
     permissions,
     role,
+    email,
     initialMatches,
     initialStandings,
     initialAnnouncements,
@@ -474,6 +476,7 @@ function AdminClientInner(props: AdminClientProps) {
           <TodayOverview
             permissions={permissions}
             role={role}
+            email={email}
             canReview={canReview}
             initialNews={initialNews}
             initialMatches={initialMatches}
@@ -497,6 +500,7 @@ function AdminClientInner(props: AdminClientProps) {
               canPurge={permissions?.all === true}
               reviewable
               canReview={canReview}
+              currentUserEmail={email}
               fields={[
                 { key: "title", label: "Headline", type: "text", placeholder: "e.g. Sables squad named for Rugby Africa Cup", required: true, colSpan: "full" },
                 { key: "slug", label: "Web address (slug)", type: "text", placeholder: "auto-generated", colSpan: "full" },
@@ -874,7 +878,7 @@ function AdminClientInner(props: AdminClientProps) {
         {activeTab === "sponsors" && <SponsorsPanel initialSponsors={initialSponsors as any[]} />}
         {activeTab === "resources" && <ResourcesPanel initialResources={initialResources as any[]} />}
 
-        {activeTab === "campaigns" && <CampaignsPanel initialCampaigns={initialCampaigns} canReview={canReview} />}
+        {activeTab === "campaigns" && <CampaignsPanel initialCampaigns={initialCampaigns} canReview={canReview} currentUserEmail={email} />}
 
         {activeTab === "fanzone" && (
           <SignupsPanel

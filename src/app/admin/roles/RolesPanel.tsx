@@ -225,13 +225,13 @@ export default function RolesPanel() {
     }
   };
 
-  // Actor editor state
+  // Role editor state
   const [editingRole, setEditingRole] = useState<RoleRow | null>(null);
   const [editingName, setEditingName] = useState("");
   const [editingPerms, setEditingPerms] = useState<RolePermissions>(EMPTY_PERMS);
   const [isSaving, setIsSaving] = useState(false);
 
-  // New actor state
+  // New role state
   const [isCreating, setIsCreating] = useState(false);
   const [newName, setNewName] = useState("");
 
@@ -339,7 +339,7 @@ export default function RolesPanel() {
       if (!res.ok) throw new Error(data?.error || "Failed to create role");
       setNewName("");
       setIsCreating(false);
-      setNotice(`Actor "${newName.trim()}" created.`);
+      setNotice(`Role "${newName.trim()}" created.`);
       load();
     } catch (e: any) {
       setError(e?.message || "Failed to create role");
@@ -351,9 +351,9 @@ export default function RolesPanel() {
   const deleteRole = async (role: RoleRow) => {
     if (role.name === "super_admin") return;
     const ok = await confirm({
-      title: `Delete actor "${role.name}"?`,
-      message: `Anyone assigned this actor will immediately lose admin access to the studio. This cannot be undone.`,
-      confirmLabel: "Yes, delete actor",
+      title: `Delete role "${role.name}"?`,
+      message: `Anyone assigned this role will immediately lose admin access to the studio. This cannot be undone.`,
+      confirmLabel: "Yes, delete role",
       danger: true,
     });
     if (!ok) return;
@@ -362,7 +362,7 @@ export default function RolesPanel() {
       const res = await fetch(`/api/admin/roles/${role.id}`, { method: "DELETE" });
       const data = await res.json();
       if (!res.ok) throw new Error(data?.error || "Failed to delete role");
-      setNotice(`Actor "${role.name}" deleted.`);
+      setNotice(`Role "${role.name}" deleted.`);
       load();
     } catch (e: any) {
       setError(e?.message || "Failed to delete role");
@@ -541,18 +541,18 @@ export default function RolesPanel() {
         )}
       </div>
 
-      {/* ── Actors ─────────────────────────────────────────────── */}
+      {/* ── Roles ─────────────────────────────────────────────── */}
       <div className="bg-white border border-black/10 rounded-2xl p-6 shadow-sm">
         <div className="flex items-center justify-between mb-4">
           <h2 className="font-heading text-xl font-black uppercase text-rich-black flex items-center gap-2">
-            <Shield className="w-5 h-5 text-zru-green" /> Actors (Roles &amp; Permissions)
+            <Shield className="w-5 h-5 text-zru-green" /> Roles &amp; Permissions
           </h2>
           {!isCreating ? (
             <button
               onClick={() => setIsCreating(true)}
               className="flex items-center gap-2 px-3 py-2 rounded-xl bg-[#006B3F] text-white text-xs font-bold hover:bg-[#005a34] transition-colors"
             >
-              <Plus className="w-4 h-4" /> New Actor
+              <Plus className="w-4 h-4" /> New Role
             </button>
           ) : (
             <div className="flex items-center gap-2">
@@ -639,7 +639,7 @@ export default function RolesPanel() {
             <thead>
               <tr className="border-b border-black/10 text-xs font-black uppercase text-black/50">
                 <th className="py-2">Email</th>
-                <th className="py-2">Actor</th>
+                <th className="py-2">Role</th>
                 <th className="py-2">Last Sign In</th>
               </tr>
             </thead>
@@ -667,7 +667,7 @@ export default function RolesPanel() {
         </div>
       </div>
 
-      {/* ── Actor editor modal ─────────────────────────────────── */}
+      {/* ── Role editor modal ─────────────────────────────────── */}
       {editingRole && (
         <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4"
           onClick={closeEditor}>
@@ -675,7 +675,7 @@ export default function RolesPanel() {
             onClick={(e) => e.stopPropagation()}>
             <div className="flex items-center justify-between border-b border-black/10 px-6 py-4 sticky top-0 bg-white z-10">
               <h2 className="font-heading text-lg font-black uppercase text-rich-black flex items-center gap-2">
-                <Pencil className="w-5 h-5 text-zru-green" /> Edit Actor
+                <Pencil className="w-5 h-5 text-zru-green" /> Edit Role
               </h2>
               <button onClick={closeEditor} className="w-8 h-8 flex items-center justify-center rounded-lg bg-black/5 hover:bg-black/10 text-black/60 transition-colors" aria-label="Close">
                 <X className="w-4 h-4" />
@@ -684,7 +684,7 @@ export default function RolesPanel() {
 
             <div className="p-6 space-y-5">
               <div>
-                <label className="block text-xs font-bold uppercase text-black/60 mb-1">Actor Name</label>
+                <label className="block text-xs font-bold uppercase text-black/60 mb-1">Role Name</label>
                 <input
                   value={editingName}
                   onChange={(e) => setEditingName(e.target.value)}
@@ -702,7 +702,7 @@ export default function RolesPanel() {
                   {/* Capability summary — plain language */}
                   <div className="rounded-xl border border-black/10 bg-black/[0.02] p-4">
                     <p className="text-xs font-black uppercase tracking-wider text-black/60 mb-2">
-                      This actor will be able to:
+                      This role will be able to:
                     </p>
                     {roleSummary(editingPerms).can.length > 0 ? (
                       <ul className="space-y-1">
@@ -719,7 +719,7 @@ export default function RolesPanel() {
                       <p className="text-xs text-black/40 italic">Nothing yet — tick tabs and collections below.</p>
                     )}
                     <p className="text-xs font-black uppercase tracking-wider text-black/60 mt-3 mb-2">
-                      This actor will NOT be able to:
+                      This role will NOT be able to:
                     </p>
                     <ul className="space-y-1">
                       {roleSummary(editingPerms).cannot.slice(0, 6).map((line) => (
