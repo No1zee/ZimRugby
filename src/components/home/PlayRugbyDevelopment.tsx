@@ -46,37 +46,24 @@ export default function PlayRugbyDevelopment() {
     <section className="bg-zru-green text-white py-16 sm:py-20 overflow-hidden relative">
       <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         
-        {/* Section Header: Hallmark Asymmetric Style */}
-        <div className="mb-16 flex flex-col lg:flex-row lg:items-end justify-between gap-10 border-b border-white/20 pb-10">
-          <div className="max-w-3xl space-y-8">
-            <motion.div 
-              initial={{ opacity: 0, y: 10 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-            >
-              <span className="text-xs font-black uppercase tracking-[0.2em] text-accent-teal">For the Future</span>
-            </motion.div>
-            <motion.h2 
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
-              className="text-5xl md:text-7xl lg:text-8xl font-heading font-black uppercase tracking-tight text-white leading-[0.9]"
-            >
-              Rugby <br />For <span className="text-accent-teal">Good</span>
-            </motion.h2>
+        {/* Section Header */}
+        <motion.div
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+          className="mb-16 border-b border-white/20 pb-10 max-w-3xl space-y-4"
+        >
+          <span className="text-xs font-black uppercase tracking-[0.2em] text-accent-teal">For the Future</span>
+          <div className="heading-plate heading-plate-light">
+            <h2 className="text-3xl sm:text-5xl font-heading font-black uppercase tracking-wide sm:tracking-widest text-white not-italic leading-[1.05]">
+              Rugby For <span className="text-accent-teal">Good</span>
+            </h2>
           </div>
-          <motion.div
-            initial={{ opacity: 0, x: 20 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            className="max-w-md lg:pb-2"
-          >
-            <p className="text-sm md:text-base text-white/70 font-normal leading-relaxed border-l-2 border-accent-teal pl-6">
-              Using rugby to transform communities, empower youth, and build a lasting legacy across Zimbabwe.
-            </p>
-          </motion.div>
-        </div>
+          <p className="text-sm md:text-base text-white/70 font-normal leading-relaxed border-l-2 border-accent-teal pl-6 max-w-xl">
+            Using rugby to transform communities, empower youth, and build a lasting legacy across Zimbabwe.
+          </p>
+        </motion.div>
 
         {/* Programs: Cinematic Grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-10 lg:gap-16">
