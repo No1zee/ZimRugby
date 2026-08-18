@@ -3,7 +3,13 @@
 import CollectionManager from "@/components/admin/CollectionManager";
 import type { Campaign } from "@/lib/api/campaigns";
 
-export default function CampaignsPanel({ initialCampaigns }: { initialCampaigns: Campaign[] }) {
+export default function CampaignsPanel({
+  initialCampaigns,
+  canReview = false,
+}: {
+  initialCampaigns: Campaign[];
+  canReview?: boolean;
+}) {
   return (
     <CollectionManager
       collection="campaigns"
@@ -14,7 +20,7 @@ export default function CampaignsPanel({ initialCampaigns }: { initialCampaigns:
         { key: "slug", label: "Web address (slug)", type: "text", placeholder: "e.g. road-to-australia-2027", colSpan: "full" },
         { key: "subtitle", label: "Subtitle", type: "text", placeholder: "e.g. The journey to the World Cup", colSpan: "full" },
         { key: "description", label: "Description", type: "textarea", colSpan: "full" },
-        { key: "status", label: "Status", type: "select", options: ["active", "published", "draft"] },
+        { key: "status", label: "Status", type: "select", options: ["draft", "in_review", "approved", "active", "published"] },
         { key: "start_date", label: "Start date", type: "date" },
         { key: "end_date", label: "End date", type: "date" },
         { key: "countdown_target", label: "Countdown target", type: "date" },
@@ -32,6 +38,8 @@ export default function CampaignsPanel({ initialCampaigns }: { initialCampaigns:
       statusField="status"
       searchable={["name", "subtitle", "slug"]}
       singularLabel="campaign"
+      reviewable
+      canReview={canReview}
     />
   );
 }

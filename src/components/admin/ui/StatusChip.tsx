@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 
-type Tone = "green" | "amber" | "blue" | "red" | "grey" | "teal";
+type Tone = "green" | "amber" | "blue" | "red" | "grey" | "teal" | "dark";
 
 const TONES: Record<Tone, string> = {
   green: "bg-green-100 text-green-800 ring-green-600/20",
@@ -9,32 +9,37 @@ const TONES: Record<Tone, string> = {
   red: "bg-red-100 text-red-800 ring-red-600/20",
   grey: "bg-neutral-100 text-neutral-700 ring-neutral-600/20",
   teal: "bg-teal-100 text-teal-800 ring-teal-600/20",
+  dark: "bg-rich-black text-white ring-rich-black/30",
 };
 
 function toneFor(status: string): Tone {
   const s = (status || "").toLowerCase();
   if (["published", "active", "live", "complete", "completed", "enabled", "featured", "winner", "true", "1", "on"].includes(s)) return "green";
-  if (["draft", "pending", "review", "onboarding", "disabled", "false", "0", "off"].includes(s)) return "amber";
+  if (["in_review", "pending", "onboarding"].includes(s)) return "amber";
+  if (["draft", "review", "disabled", "false", "0", "off"].includes(s)) return "grey";
+  if (["approved"].includes(s)) return "teal";
   if (["scheduled", "upcoming", "future"].includes(s)) return "blue";
   if (["final", "full_time", "closed", "cancelled", "expired"].includes(s)) return "red";
-  if (["fixture", "open", "archived"].includes(s)) return "teal";
+  if (["fixture", "open", "archived"].includes(s)) return "dark";
   return "grey";
 }
 
 const LABELS: Record<string, string> = {
   published: "Live",
   draft: "Draft",
+  in_review: "In review",
+  approved: "Approved",
   archived: "Archived",
   scheduled: "Scheduled",
   upcoming: "Scheduled",
   future: "Scheduled",
-  expired: "Expired",
+  expired: "Archived",
   cancelled: "Cancelled",
   completed: "Completed",
   active: "Active",
   live: "Live",
-  pending: "Review",
-  review: "Review",
+  pending: "In review",
+  review: "In review",
   enabled: "On",
   disabled: "Off",
 };

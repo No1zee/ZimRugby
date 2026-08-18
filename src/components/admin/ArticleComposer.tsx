@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { Newspaper, Send, Eye, EyeOff, Calendar, Smartphone, Monitor, Clock, X } from "lucide-react";
+import { Newspaper, Send, Eye, Smartphone, Monitor, X, CheckCircle2, ChevronRight } from "lucide-react";
 import ImagePicker, { toAssetUrl } from "./ui/ImagePicker";
 import RichTextEditor from "./ui/RichTextEditor";
 import CollapsibleSection from "./ui/CollapsibleSection";
@@ -34,8 +34,17 @@ export default function ArticleComposer({ onDirtyChange }: { onDirtyChange?: (di
   const [saving, setSaving] = useState(false);
   const [showPreview, setShowPreview] = useState(false);
   const [previewDevice, setPreviewDevice] = useState<"desktop" | "mobile">("desktop");
+  const [step, setStep] = useState<1 | 2 | 3>(1);
+  const [posted, setPosted] = useState<{ id: string | number; slug: string; wasLive: boolean } | null>(null);
 
   const hasInput = title.trim() !== "" || excerpt.trim() !== "" || body.trim() !== "" || slug.trim() !== "";
+
+  const reviewChecklist = [
+    { label: "Headline is set", ok: title.trim().length >= 5 },
+    { label: "Category chosen", ok: category.trim() !== "" },
+    { label: "Hero image attached", ok: image.trim() !== "" },
+  ];
+  const checklistComplete = reviewChecklist.every((c) => c.ok);
 
   // Close modal on Escape key
   useEffect(() => {
@@ -53,8 +62,7 @@ export default function ArticleComposer({ onDirtyChange }: { onDirtyChange?: (di
     if (!slugTouched) setSlug(slugify(v));
   }
 
-  async function handleSubmit(e: React.FormEvent, saveStatus: string) {
-    e.preventDefault();
+  async function save(saveStatus: string) {
     setSaving(true);
     try {
       const res = await fetch("/api/admin/directus", {
@@ -71,22 +79,55 @@ export default function ArticleComposer({ onDirtyChange }: { onDirtyChange?: (di
             image: image || null,
             status: saveStatus,
             date: publishAt ? new Date(publishAt).toISOString() : new Date().toISOString(),
+            ...(publishAt ? { publish_at: new Date(publishAt).toISOString() } : {}),
           },
         }),
       });
+      const body2 = await res.json().catch(() => null);
       if (res.ok) {
-        toast(saveStatus === "published" ? `'${title}' is now live on the website.` : `'${title}' saved as a draft.`);
+        const createdId = body2?.data?.id;
+        setPosted({ id: createdId ?? 0, slug: slug || slugify(title), wasLive: saveStatus === "published" });
+        if (saveStatus === "published") {
+          toast(`'${title}' is now live on the website. Click Undo to take it down.`, "success", {
+            label: "Undo",
+            onClick: () => undoPublish(createdId),
+            durationMs: 5000,
+          });
+        } else if (saveStatus === "in_review") {
+          toast(`'${title}' sent for review — the editor will see it in their queue.`);
+        } else {
+          toast(`'${title}' saved as a draft.`);
+        }
         setTitle(""); setExcerpt(""); setBody(""); setImage(""); setSlug("");
-        setSlugTouched(false); setStatus("draft"); setPublishAt("");
+        setSlugTouched(false); setStatus("draft"); setPublishAt(""); setStep(1);
         router.refresh();
       } else {
-        const err = await res.json().catch(() => null);
-        toast(`Failed to save: ${err?.error || res.statusText}`, "error");
+        toast(`Failed to save: ${body2?.error || res.statusText}`, "error");
       }
     } catch (err) {
       toast(`Error: ${err instanceof Error ? err.message : err}`, "error");
     } finally {
       setSaving(false);
+    }
+  }
+
+  function handleSubmit(e: React.FormEvent, saveStatus: string) {
+    e.preventDefault();
+    return save(saveStatus);
+  }
+
+  async function undoPublish(id: string | number | undefined) {
+    if (id === undefined || id === 0) return;
+    const res = await fetch("/api/admin/directus", {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ collection: "news", id, data: { status: "draft" } }),
+    });
+    if (res.ok) {
+      toast("Taken down — back to draft.");
+      router.refresh();
+    } else {
+      toast("Could not take the article down.", "error");
     }
   }
 
@@ -202,125 +243,261 @@ export default function ArticleComposer({ onDirtyChange }: { onDirtyChange?: (di
       <CollapsibleSection
         title="Write a news article"
         icon={<Newspaper className="h-5 w-5" />}
-        description="Articles appear in the homepage Latest News panel and the media archive. Add a hero image and write the body."
+        description="Articles appear in the homepage Latest News panel and the media archive. Three quick steps: story, write, post."
         defaultOpen={false}
         onDirtyChange={onDirtyChange}
         dirty={hasInput}
       >
-        <form onSubmit={(e) => handleSubmit(e, status)} className="space-y-4">
-          <div>
-            <label className="mb-1 block text-[10px] font-bold uppercase tracking-wider text-black/60">Headline</label>
-            <input
-              type="text"
-              value={title}
-              onChange={(e) => onTitleChange(e.target.value)}
-              placeholder="e.g. Sables squad named for Rugby Africa Cup"
-              required
-              className="w-full rounded-lg border border-black/10 bg-white p-2.5 text-sm font-bold"
-            />
-          </div>
-
-          <div>
-            <label className="mb-1 block text-[10px] font-bold uppercase tracking-wider text-black/60">Summary (shown in lists)</label>
-            <textarea
-              rows={2}
-              value={excerpt}
-              onChange={(e) => setExcerpt(e.target.value)}
-              placeholder="One or two sentences to hook readers."
-              className="w-full rounded-lg border border-black/10 bg-white p-2.5 text-sm"
-            />
-          </div>
-
-          <div>
-            <label className="mb-1 block text-[10px] font-bold uppercase tracking-wider text-black/60">Article body</label>
-            <RichTextEditor value={body} onChange={setBody} placeholder="Write your article here — bold, headings, lists and links supported." />
-          </div>
-
-          <div className="grid grid-cols-1 gap-4 md:grid-cols-4">
-            <div>
-              <label className="mb-1 block text-[10px] font-bold uppercase tracking-wider text-black/60">Category</label>
-              <select
-                value={category}
-                onChange={(e) => setCategory(e.target.value)}
-                className="w-full rounded-lg border border-black/10 bg-white p-2.5 text-sm font-bold"
-              >
-                {CATEGORIES.map((c) => (
-                  <option key={c} value={c}>{c}</option>
-                ))}
-              </select>
-            </div>
-            
-            <div>
-              <label className="mb-1 block text-[10px] font-bold uppercase tracking-wider text-black/60">Scheduled / Embargo Date</label>
-              <input
-                type="datetime-local"
-                value={publishAt}
-                onChange={(e) => setPublishAt(e.target.value)}
-                className="w-full rounded-lg border border-black/10 bg-white p-2.5 text-sm font-mono"
-              />
-            </div>
-
-            <div>
-              <label className="mb-1 block text-[10px] font-bold uppercase tracking-wider text-black/60">Web address (slug)</label>
-              <input
-                type="text"
-                value={slug}
-                onChange={(e) => { setSlug(e.target.value); setSlugTouched(true); }}
-                placeholder="auto-generated from headline"
-                className="w-full rounded-lg border border-black/10 bg-white p-2.5 text-sm"
-              />
-              <p className="mt-0.5 text-[10px] text-black/40">Live link: /media/{slug || slugify(title) || "…"}</p>
-            </div>
-            
-            <div>
-              <label className="mb-1 block text-[10px] font-bold uppercase tracking-wider text-black/60">Status</label>
-              <select
-                value={status}
-                onChange={(e) => setStatus(e.target.value)}
-                className="w-full rounded-lg border border-black/10 bg-white p-2.5 text-sm font-bold"
-              >
-                <option value="draft">Draft (hidden)</option>
-                <option value="published">Published (live)</option>
-              </select>
+        {posted ? (
+          <div className="space-y-4">
+            <div className="rounded-2xl border border-zru-green/30 bg-zru-green/5 p-6 text-center">
+              <CheckCircle2 className="mx-auto h-10 w-10 text-zru-green" />
+              <h3 className="mt-2 font-heading text-lg font-black uppercase text-rich-black">
+                {posted.wasLive ? "Posted to the website" : "Saved"}
+              </h3>
+              <p className="mt-1 text-xs text-black/60">
+                {posted.wasLive
+                  ? "It's live at /media within about a minute."
+                  : "You'll find it in the News articles list below."}
+              </p>
+              <div className="mt-4 flex flex-wrap items-center justify-center gap-3">
+                <a
+                  href={`/media/${posted.slug}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 rounded-lg bg-zru-green px-5 py-2.5 font-heading text-xs font-black uppercase tracking-wider text-white transition-colors hover:bg-green-800"
+                >
+                  View live page <Eye className="h-3.5 w-3.5" />
+                </a>
+                <button
+                  type="button"
+                  onClick={() => setPosted(null)}
+                  className="rounded-lg border border-black/15 bg-white px-5 py-2.5 font-heading text-xs font-black uppercase tracking-wider text-rich-black transition-colors hover:bg-black/5 cursor-pointer"
+                >
+                  Write another
+                </button>
+                {posted.wasLive && (
+                  <button
+                    type="button"
+                    onClick={() => undoPublish(posted.id)}
+                    className="rounded-lg bg-black/5 px-5 py-2.5 font-heading text-xs font-black uppercase tracking-wider text-black/60 transition-colors hover:bg-black/10 cursor-pointer"
+                  >
+                    Undo (unpublish)
+                  </button>
+                )}
+              </div>
             </div>
           </div>
-
-          <div className="md:col-span-3">
-            <ImagePicker value={image} onChange={setImage} label="Hero image" hint="Recommended: landscape, ~1200px wide (Directus Asset)." />
+        ) : (
+        <div className="space-y-5">
+          {/* Step indicator */}
+          <div className="flex items-center gap-2">
+            {[
+              { n: 1 as const, label: "Story" },
+              { n: 2 as const, label: "Write" },
+              { n: 3 as const, label: "Post" },
+            ].map((s, i) => (
+              <div key={s.n} className="flex items-center gap-2">
+                {i > 0 && <span className="h-px w-6 bg-black/15" />}
+                <button
+                  type="button"
+                  onClick={() => s.n < step && setStep(s.n)}
+                  disabled={s.n > step}
+                  className={`flex items-center gap-1.5 rounded-full px-3 py-1 text-[10px] font-black uppercase tracking-wider transition-colors ${
+                    step === s.n
+                      ? "bg-zru-green text-white"
+                      : s.n < step
+                        ? "bg-zru-green/10 text-zru-green cursor-pointer"
+                        : "bg-black/5 text-black/40"
+                  }`}
+                >
+                  <span className="flex h-4 w-4 items-center justify-center rounded-full bg-white/20 text-[9px]">{s.n}</span>
+                  {s.label}
+                </button>
+              </div>
+            ))}
           </div>
 
-          <div className="flex flex-wrap items-center gap-3 pt-2">
-            <button
-              type="submit"
-              disabled={saving}
-              className="inline-flex items-center gap-2 rounded-lg bg-zru-green px-6 py-2.5 font-heading text-xs font-black uppercase tracking-wider text-white transition-colors hover:bg-green-800 disabled:opacity-50 cursor-pointer shadow-sm"
-            >
-              <Send className="h-3.5 w-3.5" />
-              {saving ? "Saving…" : status === "published" ? "Publish article" : "Save as draft"}
-            </button>
+          <form onSubmit={(e) => handleSubmit(e, "published")} className="space-y-4">
+            {step === 1 && (
+              <div className="space-y-4">
+                <div>
+                  <label className="mb-1 block text-[10px] font-bold uppercase tracking-wider text-black/60">Headline</label>
+                  <input
+                    type="text"
+                    value={title}
+                    onChange={(e) => onTitleChange(e.target.value)}
+                    placeholder="e.g. Sables squad named for Rugby Africa Cup"
+                    required
+                    autoFocus
+                    className="w-full rounded-lg border border-black/10 bg-white p-2.5 text-sm font-bold"
+                  />
+                  {title.trim().length > 0 && title.trim().length < 5 && (
+                    <p className="mt-1 text-[10px] text-amber-600">Headlines under 5 characters look weak — try something fuller.</p>
+                  )}
+                </div>
 
-            {/* Live Preview Toggle Button */}
-            <button
-              type="button"
-              onClick={() => setShowPreview(true)}
-              className="inline-flex items-center gap-1.5 rounded-lg border border-black/15 bg-white px-4 py-2.5 font-heading text-xs font-black uppercase tracking-wider text-rich-black hover:bg-black/5 transition-colors cursor-pointer"
-            >
-              <Eye className="h-3.5 w-3.5 text-[#006B3F]" />
-              <span>Side-by-Side Preview</span>
-            </button>
+                <div>
+                  <label className="mb-1 block text-[10px] font-bold uppercase tracking-wider text-black/60">Category</label>
+                  <select
+                    value={category}
+                    onChange={(e) => setCategory(e.target.value)}
+                    className="w-full rounded-lg border border-black/10 bg-white p-2.5 text-sm font-bold"
+                  >
+                    {CATEGORIES.map((c) => (
+                      <option key={c} value={c}>{c}</option>
+                    ))}
+                  </select>
+                </div>
 
-            {status === "draft" && (
-              <button
-                type="button"
-                disabled={saving}
-                onClick={() => setStatus("published")}
-                className="rounded-lg bg-black/5 px-4 py-2.5 font-heading text-xs font-black uppercase tracking-wider text-black/60 transition-colors hover:bg-black/10 disabled:opacity-50 cursor-pointer"
-              >
-                Switch to publish
-              </button>
+                <ImagePicker value={image} onChange={setImage} label="Hero image" hint="Recommended: landscape, ~1200px wide." />
+
+                <div className="flex justify-end">
+                  <button
+                    type="button"
+                    onClick={() => setStep(2)}
+                    disabled={title.trim().length < 5}
+                    className="inline-flex items-center gap-2 rounded-lg bg-zru-green px-5 py-2.5 font-heading text-xs font-black uppercase tracking-wider text-white transition-colors hover:bg-green-800 disabled:opacity-40 cursor-pointer"
+                  >
+                    Next: Write <ChevronRight className="h-3.5 w-3.5" />
+                  </button>
+                </div>
+              </div>
             )}
-          </div>
-        </form>
+
+            {step === 2 && (
+              <div className="space-y-4">
+                <div>
+                  <label className="mb-1 block text-[10px] font-bold uppercase tracking-wider text-black/60">Summary (shown in lists)</label>
+                  <textarea
+                    rows={2}
+                    value={excerpt}
+                    onChange={(e) => setExcerpt(e.target.value)}
+                    placeholder="One or two sentences to hook readers."
+                    className="w-full rounded-lg border border-black/10 bg-white p-2.5 text-sm"
+                  />
+                </div>
+
+                <div>
+                  <label className="mb-1 block text-[10px] font-bold uppercase tracking-wider text-black/60">
+                    Article body <span className="normal-case text-black/40">({body.replace(/<[^>]*>/g, "").split(/\s+/).filter(Boolean).length} words)</span>
+                  </label>
+                  <RichTextEditor value={body} onChange={setBody} placeholder="Write your article here — bold, headings, lists and links supported." />
+                </div>
+
+                <div className="flex items-center justify-between">
+                  <button
+                    type="button"
+                    onClick={() => setStep(1)}
+                    className="rounded-lg border border-black/15 bg-white px-4 py-2.5 font-heading text-xs font-black uppercase tracking-wider text-black/60 transition-colors hover:bg-black/5 cursor-pointer"
+                  >
+                    Back
+                  </button>
+                  <div className="flex items-center gap-3">
+                    <button
+                      type="button"
+                      onClick={() => setShowPreview(true)}
+                      className="inline-flex items-center gap-1.5 rounded-lg border border-black/15 bg-white px-4 py-2.5 font-heading text-xs font-black uppercase tracking-wider text-rich-black hover:bg-black/5 transition-colors cursor-pointer"
+                    >
+                      <Eye className="h-3.5 w-3.5 text-[#006B3F]" />
+                      <span>Preview</span>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setStep(3)}
+                      className="inline-flex items-center gap-2 rounded-lg bg-zru-green px-5 py-2.5 font-heading text-xs font-black uppercase tracking-wider text-white transition-colors hover:bg-green-800 cursor-pointer"
+                    >
+                      Next: Post <ChevronRight className="h-3.5 w-3.5" />
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {step === 3 && (
+              <div className="space-y-4">
+                <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+                  <div>
+                    <label className="mb-1 block text-[10px] font-bold uppercase tracking-wider text-black/60">Schedule (optional)</label>
+                    <input
+                      type="datetime-local"
+                      value={publishAt}
+                      onChange={(e) => setPublishAt(e.target.value)}
+                      className="w-full rounded-lg border border-black/10 bg-white p-2.5 text-sm font-mono"
+                    />
+                    <p className="mt-0.5 text-[10px] text-black/40">Leave empty to go out immediately.</p>
+                  </div>
+
+                  <div>
+                    <label className="mb-1 block text-[10px] font-bold uppercase tracking-wider text-black/60">Web address (slug)</label>
+                    <input
+                      type="text"
+                      value={slug}
+                      onChange={(e) => { setSlug(e.target.value); setSlugTouched(true); }}
+                      placeholder="auto-generated from headline"
+                      className="w-full rounded-lg border border-black/10 bg-white p-2.5 text-sm"
+                    />
+                    <p className="mt-0.5 text-[10px] text-black/40">Live link: /media/{slug || slugify(title) || "…"}</p>
+                  </div>
+                </div>
+
+                <div className="rounded-xl border border-black/10 bg-black/[0.02] p-4">
+                  <p className="mb-2 text-[10px] font-black uppercase tracking-wider text-black/50">Ready to post? Checklist</p>
+                  <ul className="space-y-1.5">
+                    {reviewChecklist.map((c) => (
+                      <li key={c.label} className="flex items-center gap-2 text-xs">
+                        {c.ok ? (
+                          <CheckCircle2 className="h-3.5 w-3.5 text-zru-green" />
+                        ) : (
+                          <span className="flex h-3.5 w-3.5 items-center justify-center rounded-full bg-amber-500/20 text-[9px] font-black text-amber-600">!</span>
+                        )}
+                        <span className={c.ok ? "text-black/70" : "text-amber-700"}>{c.label}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                <div className="flex flex-wrap items-center gap-3 pt-2">
+                  <button
+                    type="button"
+                    onClick={() => setStep(2)}
+                    className="rounded-lg border border-black/15 bg-white px-4 py-2.5 font-heading text-xs font-black uppercase tracking-wider text-black/60 transition-colors hover:bg-black/5 cursor-pointer"
+                  >
+                    Back
+                  </button>
+                  <button
+                    type="button"
+                    disabled={saving}
+                    onClick={() => save("draft")}
+                    className="rounded-lg bg-black/5 px-4 py-2.5 font-heading text-xs font-black uppercase tracking-wider text-black/60 transition-colors hover:bg-black/10 disabled:opacity-50 cursor-pointer"
+                  >
+                    Save as draft
+                  </button>
+                  <button
+                    type="button"
+                    disabled={saving}
+                    onClick={() => save("in_review")}
+                    className="rounded-lg bg-amber-500/10 px-4 py-2.5 font-heading text-xs font-black uppercase tracking-wider text-amber-700 transition-colors hover:bg-amber-500/20 disabled:opacity-50 cursor-pointer"
+                  >
+                    Send for review
+                  </button>
+                  <button
+                    type="submit"
+                    disabled={saving || !checklistComplete}
+                    className="inline-flex items-center gap-2 rounded-lg bg-zru-green px-6 py-2.5 font-heading text-xs font-black uppercase tracking-wider text-white transition-colors hover:bg-green-800 disabled:opacity-50 cursor-pointer shadow-sm"
+                  >
+                    <Send className="h-3.5 w-3.5" />
+                    {saving ? "Posting…" : publishAt ? "Schedule post" : "Post now"}
+                  </button>
+                </div>
+                {!checklistComplete && (
+                  <p className="text-[10px] text-amber-700">Complete the checklist above to enable posting.</p>
+                )}
+              </div>
+            )}
+          </form>
+        </div>
+        )}
       </CollapsibleSection>
     </>
   );

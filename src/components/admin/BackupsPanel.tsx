@@ -23,7 +23,7 @@ export default function BackupsPanel() {
   const [exporting, setExporting] = useState(false);
   const [importing, setImporting] = useState(false);
   const [sessionRollingBack, setSessionRollingBack] = useState(false);
-  const [sessionCheckpoint, setSessionCheckpoint] = useState<SnapshotMetadata | null>(null);
+  const [sessionCheckpoints, setSessionCheckpoints] = useState<SnapshotMetadata[]>([]);
   const [previewSnapshot, setPreviewSnapshot] = useState<SnapshotMetadata | null>(null);
 
   // Schema Drift Check State (ISO 27001 A.8.9)
@@ -34,21 +34,29 @@ export default function BackupsPanel() {
   const [drillRunning, setDrillRunning] = useState(false);
   const [drillResult, setDrillResult] = useState<{ latencyMs: number; cacheServed: boolean; status: "PASSED" | "FAILED" } | null>(null);
 
-  // Initialize or load Session Checkpoint from sessionStorage
+  const checkpointKey = "zru_session_checkpoints";
+
+  // Initialize or load the safe-point timeline from sessionStorage
   useEffect(() => {
-    const stored = sessionStorage.getItem("zru_session_checkpoint");
+    const stored = sessionStorage.getItem(checkpointKey);
     if (stored) {
       try {
-        setSessionCheckpoint(JSON.parse(stored));
-        return;
+        const parsed = JSON.parse(stored);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          setSessionCheckpoints(parsed);
+          return;
+        }
       } catch {}
     }
 
-    // Auto-capture session start checkpoint in background
-    captureCurrentState("Session baseline").then((snap) => {
+    // Auto-capture session start baseline in background
+    captureCurrentState("Session start").then((snap) => {
       if (snap) {
-        sessionStorage.setItem("zru_session_checkpoint", JSON.stringify(snap));
-        setSessionCheckpoint(snap);
+        setSessionCheckpoints((prev) => {
+          const next = [snap, ...prev].slice(0, 10);
+          sessionStorage.setItem(checkpointKey, JSON.stringify(next));
+          return next;
+        });
       }
     });
   }, []);
@@ -88,14 +96,17 @@ export default function BackupsPanel() {
     }
   };
 
-  // Create an explicit user checkpoint
+  // Create an explicit user safe point
   const handleCreateCheckpoint = async () => {
     setExporting(true);
     try {
-      const snap = await captureCurrentState("Manual checkpoint");
+      const snap = await captureCurrentState("Safe point");
       if (snap) {
-        sessionStorage.setItem("zru_session_checkpoint", JSON.stringify(snap));
-        setSessionCheckpoint(snap);
+        setSessionCheckpoints((prev) => {
+          const next = [snap, ...prev].slice(0, 10);
+          sessionStorage.setItem(checkpointKey, JSON.stringify(next));
+          return next;
+        });
         toast("Safe point saved — you can revert to it anytime.");
       }
     } finally {
@@ -103,14 +114,20 @@ export default function BackupsPanel() {
     }
   };
 
-  // 1-Click Rollback to Session Start State
-  const handleRollbackSession = async () => {
-    if (!sessionCheckpoint) return;
+  function humanLabel(ts: string, author: string): string {
+    const d = new Date(ts);
+    const now = Date.now();
+    const diffMin = Math.floor((now - d.getTime()) / 60000);
+    const when = diffMin < 1 ? "just now" : diffMin < 60 ? `${diffMin}m ago` : d.toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit" });
+    return `${author} · ${when}`;
+  }
 
+  // 1-Click Rollback to a Safe Point
+  const handleRollbackTo = async (checkpoint: SnapshotMetadata) => {
     const ok = await confirm({
-      title: "Revert to Session Starting State?",
-      message: `This will overwrite any changes made during this editing session and revert to the state recorded at ${new Date(sessionCheckpoint.timestamp).toLocaleTimeString()}. Are you sure?`,
-      confirmLabel: "Yes, Revert Entire Session",
+      title: "Revert to this safe point?",
+      message: `This will overwrite any changes made since ${new Date(checkpoint.timestamp).toLocaleTimeString()} and put the site back to how it looked then. Are you sure?`,
+      confirmLabel: "Yes, Revert",
       danger: true,
     });
     if (!ok) return;
@@ -118,7 +135,7 @@ export default function BackupsPanel() {
     setSessionRollingBack(true);
     try {
       let restored = 0;
-      for (const [col, items] of Object.entries(sessionCheckpoint.data)) {
+      for (const [col, items] of Object.entries(checkpoint.data)) {
         if (!Array.isArray(items)) continue;
         for (const item of items) {
           if (!item.id) continue;
@@ -132,9 +149,9 @@ export default function BackupsPanel() {
           } catch {}
         }
       }
-      toast(`Session reverted — restored ${restored} records to where you started.`, "success");
+      toast(`Reverted — restored ${restored} records to that safe point.`, "success");
     } catch (err) {
-      toast(`Rollback error: ${err instanceof Error ? err.message : String(err)}`, "error");
+      toast(`Revert error: ${err instanceof Error ? err.message : String(err)}`, "error");
     } finally {
       setSessionRollingBack(false);
     }
@@ -314,35 +331,47 @@ export default function BackupsPanel() {
               <Bookmark className="w-3.5 h-3.5 text-[#006B3F]" />
               <span>Save a new safe point</span>
             </button>
-
-            <button
-              type="button"
-              onClick={handleRollbackSession}
-              disabled={sessionRollingBack || !sessionCheckpoint}
-              className="flex items-center gap-2 rounded-xl bg-amber-500 hover:bg-amber-600 px-5 py-2 text-xs font-bold uppercase tracking-wider text-rich-black font-heading transition-colors shadow-sm disabled:opacity-50 cursor-pointer"
-            >
-              {sessionRollingBack ? <RefreshCw className="w-4 h-4 animate-spin" /> : <RotateCcw className="w-4 h-4" />}
-              <span>{sessionRollingBack ? "Reverting..." : "Revert to session start"}</span>
-            </button>
           </div>
         </div>
 
-        {/* Checkpoint Status Details */}
-        {sessionCheckpoint ? (
-          <div className="bg-black/30 rounded-xl p-4 border border-white/5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
-            <div className="flex items-center gap-2 text-white/80 font-mono">
-              <Clock className="w-4 h-4 text-[#006B3F]" />
-              <span>Safe point captured: {new Date(sessionCheckpoint.timestamp).toLocaleTimeString()} ({sessionCheckpoint.author})</span>
-            </div>
-            <div className="flex items-center gap-4 text-white/60 font-mono text-[11px]">
-              <span>{sessionCheckpoint.counts["matches"] || 0} Fixtures</span>
-              <span>{sessionCheckpoint.counts["news"] || 0} Articles</span>
-              <span>{sessionCheckpoint.counts["hero_slides"] || 0} Homepage slides</span>
-              <span>{sessionCheckpoint.counts["partners"] || 0} Partners</span>
-            </div>
+        {/* Safe-point timeline */}
+        {sessionCheckpoints.length > 0 ? (
+          <div className="space-y-2">
+            {sessionCheckpoints.map((cp, idx) => {
+              const total = Object.values(cp.counts || {}).reduce((a, b) => a + (b || 0), 0);
+              const isFirst = idx === sessionCheckpoints.length - 1;
+              return (
+                <div
+                  key={cp.timestamp}
+                  className="bg-black/30 rounded-xl p-3 border border-white/5 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs"
+                >
+                  <div className="flex items-center gap-2 text-white/80 font-mono min-w-0">
+                    <Clock className="w-4 h-4 text-[#006B3F] shrink-0" />
+                    <span className="truncate">{humanLabel(cp.timestamp, cp.author)}</span>
+                    {isFirst && (
+                      <span className="shrink-0 rounded bg-white/10 px-1.5 py-0.5 text-[9px] font-black uppercase tracking-wider text-emerald-400">
+                        Session start
+                      </span>
+                    )}
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <span className="text-white/60 font-mono text-[11px] shrink-0">{total} records</span>
+                    <button
+                      type="button"
+                      onClick={() => handleRollbackTo(cp)}
+                      disabled={sessionRollingBack}
+                      className="flex items-center gap-1.5 rounded-lg bg-amber-500/15 hover:bg-amber-500/25 border border-amber-500/30 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-amber-400 transition-colors disabled:opacity-50 cursor-pointer shrink-0"
+                    >
+                      <RotateCcw className="w-3 h-3" />
+                      {sessionRollingBack ? "Reverting..." : "Revert to this"}
+                    </button>
+                  </div>
+                </div>
+              );
+            })}
           </div>
         ) : (
-          <p className="text-xs text-white/40 italic">Capturing safe point in the background...</p>
+          <p className="text-xs text-white/40 italic">Capturing session start in the background...</p>
         )}
       </section>
 

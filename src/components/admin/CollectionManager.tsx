@@ -8,7 +8,7 @@ import ImagePicker, { toAssetUrl } from "./ui/ImagePicker";
 import RichTextEditor from "./ui/RichTextEditor";
 import { SearchBox, Pagination } from "./ui/ListTools";
 import { useToast } from "./ui/ToastProvider";
-import { useConfirm } from "./ui/ConfirmProvider";
+import { useConfirm, usePrompt } from "./ui/ConfirmProvider";
 
 export interface FieldConfig {
   key: string;
@@ -43,6 +43,10 @@ interface CollectionManagerProps {
   grants?: { create?: boolean; update?: boolean; delete?: boolean };
   /** Whether the actor may permanently purge trashed items (super admin). */
   canPurge?: boolean;
+  /** Enables the approval pipeline (Draft → In review → Approved → Live) for this collection. */
+  reviewable?: boolean;
+  /** Whether the actor can approve/reject in-review items (editor, super admin). */
+  canReview?: boolean;
 }
 
 function formatDisplay(value: unknown): string {
@@ -125,6 +129,8 @@ export default function CollectionManager({
   onFocusHandled,
   grants,
   canPurge = false,
+  reviewable = false,
+  canReview = false,
 }: CollectionManagerProps) {
   const canCreate = grants?.create !== false;
   const canUpdate = grants?.update !== false;
@@ -152,6 +158,7 @@ export default function CollectionManager({
   const router = useRouter();
   const { toast } = useToast();
   const confirm = useConfirm();
+  const prompt = usePrompt();
 
   const term = (v: unknown) => (v === null || v === undefined ? "" : String(v));
 
@@ -488,6 +495,15 @@ export default function CollectionManager({
     }
   }
 
+  /** Audience-naming publish gate: "Post" is always a confirm that names who sees it. */
+  const publishConfirm = async (): Promise<boolean> => {
+    return confirm({
+      title: "Post to the website?",
+      message: "This will be visible to everyone on zimrugby.co.zw within about a minute. You'll get an Undo button if you change your mind.",
+      confirmLabel: "Post it",
+    });
+  };
+
   async function toggleStatus(item: Record<string, unknown>, statusFieldName: string) {
     const raw = item[statusFieldName];
     try {
@@ -507,20 +523,75 @@ export default function CollectionManager({
         return;
       }
       const current = term(item[statusFieldName]);
-      const next = current === "published" || current === "active" ? "draft" : "published";
+      let next: string;
+      if (reviewable) {
+        if (current === "published" || current === "active" || current === "approved") next = "draft";
+        else if (current === "in_review" || current === "draft") next = current === "in_review" ? "draft" : "in_review";
+        else next = "published";
+      } else {
+        next = current === "published" || current === "active" ? "draft" : "published";
+      }
+      if (next === "published" && !(await publishConfirm())) return;
       const res = await fetch("/api/admin/directus", {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ collection, id: item.id, data: { [statusFieldName]: next } }),
       });
       if (res.ok) {
-        toast(next === "published" ? "Published." : "Moved back to draft.");
+        if (next === "published") {
+          publishedBackup.current = [{ id: item.id as string | number, prev: current }];
+          toast("Posted to the website. Click Undo to take it down.", "success", {
+            label: "Undo",
+            onClick: undoPublish,
+            durationMs: 5000,
+          });
+        } else if (next === "in_review") {
+          toast("Sent for review — waiting on the editor.");
+        } else {
+          toast(next === "draft" ? "Moved back to draft." : "Marked as approved.");
+        }
         router.refresh();
       } else {
         toast("Could not update status.", "error");
       }
     } catch (err) {
       toast(`Error: ${err instanceof Error ? err.message : err}`, "error");
+    }
+  }
+
+  async function approveItem(item: Record<string, unknown>, statusFieldName: string) {
+    const res = await fetch("/api/admin/directus", {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ collection, id: item.id, data: { [statusFieldName]: "approved", review_note: null } }),
+    });
+    if (res.ok) {
+      toast("Approved — ready to post.");
+      router.refresh();
+    } else {
+      toast("Could not approve.", "error");
+    }
+  }
+
+  async function requestChanges(item: Record<string, unknown>, statusFieldName: string) {
+    const note = await prompt({
+      title: "Request changes",
+      message: "The author will see your note and can fix it before re-submitting.",
+      label: "What should the author change?",
+      placeholder: "e.g. Please add the team line-up and a final score.",
+      confirmLabel: "Send back",
+    });
+    if (!note) return;
+    const res = await fetch("/api/admin/directus", {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ collection, id: item.id, data: { [statusFieldName]: "draft", review_note: note } }),
+    });
+    if (res.ok) {
+      toast("Sent back to the author with your note.");
+      router.refresh();
+    } else {
+      toast("Could not send back.", "error");
     }
   }
 
@@ -579,9 +650,9 @@ export default function CollectionManager({
     const ok = await confirm({
       title: publish ? `Publish ${selectedIds.size} ${label}?` : `Move ${selectedIds.size} ${label} to draft?`,
       message: publish
-        ? "Selected items will become visible on the website."
+        ? `These will be visible to everyone on zimrugby.co.zw within about a minute. You'll get an Undo button if you change your mind.`
         : "Selected items will be hidden from the website.",
-      confirmLabel: publish ? "Publish" : "Move to draft",
+      confirmLabel: publish ? "Post it" : "Move to draft",
     });
     if (!ok) return;
     setBulkBusy(true);
@@ -1121,6 +1192,12 @@ export default function CollectionManager({
                         )}
                       </div>
                       {subtitle && <p className="mt-0.5 truncate text-xs text-black/50">{subtitle}</p>}
+                      {reviewable && term(item["review_note"]) && (
+                        <p className="mt-0.5 flex items-start gap-1 text-[11px] text-amber-600">
+                          <AlertCircle className="mt-0.5 h-3 w-3 shrink-0" />
+                          <span className="line-clamp-1">Reviewer note: {term(item["review_note"])}</span>
+                        </p>
+                      )}
                     </div>
                   </div>
                   <div className="flex shrink-0 flex-wrap items-center gap-2">
@@ -1133,10 +1210,32 @@ export default function CollectionManager({
                           ? term(item[statusField]) === "true" || term(item[statusField]) === "1"
                             ? "Hide"
                             : "Show"
-                          : term(item[statusField]) === "published"
-                            ? "Unpublish"
-                            : "Publish"}
+                          : reviewable
+                            ? term(item[statusField]) === "published" || term(item[statusField]) === "active" || term(item[statusField]) === "approved"
+                              ? "Unpublish"
+                              : term(item[statusField]) === "in_review"
+                                ? "Back to draft"
+                                : "Send for review"
+                            : term(item[statusField]) === "published"
+                              ? "Unpublish"
+                              : "Publish"}
                       </button>
+                    )}
+                    {reviewable && canReview && statusField && term(item[statusField]) === "in_review" && (
+                      <>
+                        <button
+                          onClick={() => approveItem(item, statusField!)}
+                          className="flex items-center gap-1 rounded-lg bg-zru-green/10 px-3 py-1.5 text-[10px] font-black uppercase tracking-wider text-zru-green transition-colors hover:bg-zru-green/20"
+                        >
+                          Approve
+                        </button>
+                        <button
+                          onClick={() => requestChanges(item, statusField!)}
+                          className="flex items-center gap-1 rounded-lg bg-amber-500/10 px-3 py-1.5 text-[10px] font-black uppercase tracking-wider text-amber-600 transition-colors hover:bg-amber-500/20"
+                        >
+                          Request changes
+                        </button>
+                      </>
                     )}
                     {canUpdate && (
                       <button

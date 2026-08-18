@@ -30,6 +30,8 @@ interface ActivityEntry {
 
 interface TodayOverviewProps {
   permissions: RolePermissions;
+  role?: string;
+  canReview?: boolean;
   initialNews: Record<string, unknown>[];
   initialMatches: MatchCardViewModel[];
   fanZoneCount: number;
@@ -75,6 +77,8 @@ interface HubAction {
 
 export default function TodayOverview({
   permissions,
+  role,
+  canReview = false,
   initialNews,
   initialMatches,
   fanZoneCount,
@@ -190,6 +194,12 @@ export default function TodayOverview({
   ].filter((q) => q.show);
 
   const totalNeedingAttention = queueItems.reduce((sum, q) => sum + (q.key === "upcoming" ? 0 : q.count), 0);
+
+  // ---- Approval pipeline (in-review items) ----
+  const inReviewItems = useMemo(
+    () => initialNews.filter((n) => String(n.status ?? "").toLowerCase() === "in_review").slice(0, 5),
+    [initialNews]
+  );
 
   // 1-Click Fast Marquee Broadcast from Dashboard
   const handleQuickBroadcast = async (e: React.FormEvent) => {
@@ -396,6 +406,42 @@ export default function TodayOverview({
           </div>
         )}
       </div>
+
+      {/* Approval pipeline */}
+      {inReviewItems.length > 0 && hasPanel("media") && (
+        <div className="rounded-2xl border border-black/10 bg-white p-5 shadow-sm">
+          <div className="mb-4 flex items-center justify-between border-b border-black/5 pb-3">
+            <div className="flex items-center gap-2">
+              <CheckCircle2 className="h-4 w-4 text-amber-600" />
+              <h3 className="font-heading text-xs font-black uppercase tracking-wider text-rich-black">
+                {canReview ? "Needs your review" : "In review"}
+              </h3>
+              <span className="rounded-full bg-amber-500/10 px-2 py-0.5 text-[10px] font-black uppercase tracking-wider text-amber-600">
+                {inReviewItems.length}
+              </span>
+            </div>
+          </div>
+          <p className="mb-3 text-[11px] text-black/50">
+            {canReview
+              ? "These items are waiting on you. Approve them or send them back with a note."
+              : "These items are waiting on the editor. You'll see the outcome here."}
+          </p>
+          <div className="space-y-2.5">
+            {inReviewItems.map((d, i) => (
+              <div
+                key={i}
+                onClick={() => onNavigate("media")}
+                className="flex items-center justify-between rounded-lg bg-amber-500/[0.04] px-3 py-2 transition-colors hover:bg-amber-500/10 cursor-pointer"
+              >
+                <p className="truncate text-xs font-bold text-rich-black">{String(d.title || "Untitled")}</p>
+                <span className="ml-3 shrink-0 inline-flex items-center gap-1 text-[10px] font-black uppercase tracking-wider text-amber-600">
+                  {canReview ? "Review" : "Waiting"} <ArrowRight className="h-3 w-3" />
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
 
       {/* Recent activity */}
       <div className="rounded-2xl border border-black/10 bg-white p-5 shadow-sm">

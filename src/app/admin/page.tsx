@@ -228,6 +228,7 @@ export default async function AdminDashboard() {
     <AdminAuthGate>
       <AdminContentManager
         permissions={session.permissions}
+        role={session.role}
         initialMatches={allMatches}
         initialStandings={standings}
         initialAnnouncements={announcements}

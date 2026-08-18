@@ -35,6 +35,7 @@ export interface LookupOption {
 
 interface AdminClientProps {
   permissions: RolePermissions;
+  role: string;
   initialMatches: MatchCardViewModel[];
   initialStandings: StandingsTableViewModel[];
   initialAnnouncements: Record<string, unknown>[];
@@ -141,6 +142,7 @@ interface NavItem {
 function AdminClientInner(props: AdminClientProps) {
   const {
     permissions,
+    role,
     initialMatches,
     initialStandings,
     initialAnnouncements,
@@ -179,6 +181,8 @@ function AdminClientInner(props: AdminClientProps) {
   const [focusItem, setFocusItem] = useState<{ id: string | number } | null>(null);
 
   const dirty = Object.values(panelDirty).some(Boolean);
+
+  const canReview = role === "super_admin" || role === "editor";
 
   const registerDirty = (panel: string) => (d: boolean) => {
     setPanelDirty((prev) => (prev[panel] === d ? prev : { ...prev, [panel]: d }));
@@ -469,6 +473,8 @@ function AdminClientInner(props: AdminClientProps) {
         {activeTab === "overview" && (
           <TodayOverview
             permissions={permissions}
+            role={role}
+            canReview={canReview}
             initialNews={initialNews}
             initialMatches={initialMatches}
             fanZoneCount={initialFanZoneMembers.length}
@@ -489,6 +495,8 @@ function AdminClientInner(props: AdminClientProps) {
               description="Articles here appear in the homepage Latest News panel and the media archive."
               grants={grantsFor("news")}
               canPurge={permissions?.all === true}
+              reviewable
+              canReview={canReview}
               fields={[
                 { key: "title", label: "Headline", type: "text", placeholder: "e.g. Sables squad named for Rugby Africa Cup", required: true, colSpan: "full" },
                 { key: "slug", label: "Web address (slug)", type: "text", placeholder: "auto-generated", colSpan: "full" },
@@ -498,7 +506,7 @@ function AdminClientInner(props: AdminClientProps) {
                 { key: "date", label: "Publish date", type: "date" },
                 { key: "publish_at", label: "Go live at (schedule)", type: "datetime" },
                 { key: "expire_at", label: "Hide after (expire)", type: "datetime" },
-                { key: "status", label: "Status", type: "select", options: ["draft", "published"] },
+                { key: "status", label: "Status", type: "select", options: ["draft", "in_review", "approved", "published"] },
                 { key: "image", label: "Hero image", type: "image" },
               ]}
               items={initialNews}
@@ -866,7 +874,7 @@ function AdminClientInner(props: AdminClientProps) {
         {activeTab === "sponsors" && <SponsorsPanel initialSponsors={initialSponsors as any[]} />}
         {activeTab === "resources" && <ResourcesPanel initialResources={initialResources as any[]} />}
 
-        {activeTab === "campaigns" && <CampaignsPanel initialCampaigns={initialCampaigns} />}
+        {activeTab === "campaigns" && <CampaignsPanel initialCampaigns={initialCampaigns} canReview={canReview} />}
 
         {activeTab === "fanzone" && (
           <SignupsPanel

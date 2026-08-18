@@ -138,6 +138,20 @@ export default function MatchCentrePanel({
       opponentScore = edit?.opponent_score !== undefined && edit?.opponent_score !== "" ? Number(edit.opponent_score) : null;
     }
 
+    // 6.5: changing an existing result needs a second, explicit confirm
+    const existing = initialMatches.find((m) => m.id === id);
+    const hasExistingResult =
+      existing != null && existing.homeTeam?.score != null && existing.awayTeam?.score != null;
+    const scoresChanged = teamScore !== null && opponentScore !== null && hasExistingResult;
+    if (scoresChanged) {
+      const ok = await confirm({
+        title: "Change the existing result?",
+        message: `${existing.homeTeam.name} ${existing.homeTeam.score}–${existing.awayTeam.score} ${existing.awayTeam.name} is already on the website. The new score (${teamScore}–${opponentScore}) will replace it within about a minute.`,
+        confirmLabel: "Update result",
+      });
+      if (!ok) return;
+    }
+
     try {
       const data: Record<string, unknown> = {
         team_score: teamScore,
