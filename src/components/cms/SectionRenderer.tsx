@@ -207,7 +207,7 @@ function SectionBlock({
       content = <UnifiedHubGrid news={hubNews} nextMatch={hubNextMatch} customTitle={section.title} />;
       break;
     case "campaign_highlight":
-      content = <RoadToWorldCup featuredPlayers={featuredPlayers || []} campaign={campaign} />;
+      content = <RoadToWorldCup campaign={campaign} />;
       break;
     case "grassroots":
       content = <GrassrootsInitiativeSection initiatives={initiatives} />;

@@ -5,16 +5,13 @@ import Image from "next/image";
 import { motion } from "framer-motion";
 import { AnimatedCountdown } from "@/components/ui/animated-countdown";
 import MatchdayVideoHighlights from "@/components/media/MatchdayVideoHighlights";
-import FeaturedPlayersGrid from "@/components/teams/FeaturedPlayersGrid";
-import type { FeaturedPlayer } from "@/types";
 import type { Campaign } from "@/lib/api/campaigns";
 
 interface RoadToWorldCupProps {
-  featuredPlayers: FeaturedPlayer[];
   campaign?: Campaign | null;
 }
 
-export default function RoadToWorldCup({ featuredPlayers, campaign }: RoadToWorldCupProps) {
+export default function RoadToWorldCup({ campaign }: RoadToWorldCupProps) {
   const targetDate = campaign?.countdown_target
     ? new Date(campaign.countdown_target)
     : new Date("2027-10-01T20:00:00");
@@ -111,19 +108,6 @@ export default function RoadToWorldCup({ featuredPlayers, campaign }: RoadToWorl
               <MatchdayVideoHighlights
                 showChannelLink={true}
               />
-            </div>
-
-            {/* Featured Players */}
-            <div className="px-4 sm:px-6 lg:px-8 py-8 border-t border-black/5">
-              <div className="mb-8 max-w-3xl">
-                <div className="heading-plate">
-                  <h2 className="text-3xl sm:text-5xl font-heading font-black uppercase tracking-wide sm:tracking-widest text-rich-black not-italic leading-[1.05]">
-                    FEATURED{" "}
-                    <span className="text-accent-teal">PLAYERS</span>
-                  </h2>
-                </div>
-              </div>
-              <FeaturedPlayersGrid players={featuredPlayers} />
             </div>
           </div>
         </div>

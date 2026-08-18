@@ -15,7 +15,6 @@ import RoadToWorldCup from "@/components/home/RoadToWorldCup";
 import GrassrootsInitiativeSection from "@/components/home/GrassrootsInitiativeSection";
 import SponsorGrid from "@/components/home/SponsorGrid";
 import PinnedAnnouncements from "@/components/home/PinnedAnnouncements";
-import PlayRugbyDevelopment from "@/components/home/PlayRugbyDevelopment";
 
 import { getHeroSlides } from "@/lib/api/hero";
 import { getPartners } from "@/lib/api/partners";
@@ -138,13 +137,10 @@ export default async function Home() {
             <UnifiedHubGrid news={hubNews} nextMatch={hubNextMatch} />
 
             {/* 3. Road to World Cup — frame with countdown + Nations Cup video + Featured Players */}
-            <RoadToWorldCup featuredPlayers={mappedFeaturedPlayers} campaign={campaign} />
+            <RoadToWorldCup campaign={campaign} />
 
             {/* 4. Grassroots & Growing the Sport Section */}
             <GrassrootsInitiativeSection initiatives={initiatives} />
-
-            {/* 4b. Rugby Pathways & Community Development */}
-            <PlayRugbyDevelopment />
 
             {/* 5. Join the Fan Zone — animated micro-interaction section */}
             <JoinFanZoneSection />
