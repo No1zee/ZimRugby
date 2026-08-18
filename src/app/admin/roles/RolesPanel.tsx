@@ -21,14 +21,14 @@ interface UserRow {
 
 const TAB_OPTIONS: { id: string; label: string }[] = [
   { id: "overview", label: "Overview" },
-  { id: "directus_ai", label: "Directus AI" },
-  { id: "hero_layout", label: "Hero & Layout Manager" },
+  { id: "directus_ai", label: "Drafting Assistant" },
+  { id: "hero_layout", label: "Homepage & Banners" },
   { id: "pages", label: "Pages & Layouts" },
   { id: "media", label: "News & Media" },
-  { id: "resources", label: "Resource Vault" },
+  { id: "resources", label: "Resources" },
   { id: "sponsors", label: "Sponsors & Partners" },
   { id: "grassroots", label: "Grassroots & Programs" },
-  { id: "faq-footer", label: "FAQ & Footer" },
+  { id: "faq-footer", label: "Help & Footer" },
   { id: "fixtures", label: "Match Centre & Fixtures" },
   { id: "campaigns", label: "Campaigns" },
   { id: "fanzone", label: "Fan Zone Members" },

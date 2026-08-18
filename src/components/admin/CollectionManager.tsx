@@ -146,6 +146,7 @@ export default function CollectionManager({
   const [trashItems, setTrashItems] = useState<Record<string, unknown>[]>([]);
   const [trashBusy, setTrashBusy] = useState(false);
   const deletedBackup = useRef<{ id: string | number; item: Record<string, unknown> } | null>(null);
+  const publishedBackup = useRef<{ id: string | number; prev: unknown }[] | null>(null);
   const dirtyRef = useRef(false);
 
   const router = useRouter();
@@ -545,6 +546,34 @@ export default function CollectionManager({
     });
   }
 
+  async function undoPublish() {
+    const backup = publishedBackup.current;
+    if (!backup || backup.length === 0) return;
+    publishedBackup.current = null;
+    const ids = backup.map((b) => b.id);
+    const prevByKey = new Map(backup.map((b) => [String(b.id), b.prev]));
+    try {
+      const res = await fetch("/api/admin/directus", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          collection,
+          ids,
+          data: { [statusField ?? ""]: prevByKey.get(String(ids[0])) ?? "draft" },
+        }),
+      });
+      if (res.ok) {
+        toast(`Unpublished ${ids.length} item(s) — back to draft.`);
+        router.refresh();
+      } else {
+        const err = await res.json().catch(() => null);
+        toast(`Undo failed: ${err?.error || res.statusText}`, "error");
+      }
+    } catch (err) {
+      toast(`Undo failed: ${err instanceof Error ? err.message : err}`, "error");
+    }
+  }
+
   async function bulkSetStatus(publish: boolean) {
     if (bulkBusy || selectedIds.size === 0) return;
     const ok = await confirm({
@@ -558,20 +587,30 @@ export default function CollectionManager({
     setBulkBusy(true);
     try {
       const ids = [...selectedIds];
+      if (publish && statusField) {
+        publishedBackup.current = items
+          .filter((it) => ids.includes(String(it.id)))
+          .map((it) => ({ id: it.id as string | number, prev: it[statusField] }));
+      }
       const res = await fetch("/api/admin/directus", {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ collection, ids, data: { [statusField ?? ""]: publish ? "published" : "draft" } }),
       });
       if (res.ok) {
-        toast(publish ? `Published ${ids.length} items.` : `Moved ${ids.length} items to draft.`);
+        toast(publish ? `Published ${ids.length} items.` : `Moved ${ids.length} items to draft.`, "success",
+          publish && publishedBackup.current
+            ? { label: "Undo", onClick: undoPublish, durationMs: 5000 }
+            : undefined);
         setSelected(new Set());
         router.refresh();
       } else {
+        publishedBackup.current = null;
         const err = await res.json().catch(() => null);
         toast(`Failed: ${err?.error || res.statusText}`, "error");
       }
     } catch (err) {
+      publishedBackup.current = null;
       toast(`Error: ${err instanceof Error ? err.message : err}`, "error");
     } finally {
       setBulkBusy(false);

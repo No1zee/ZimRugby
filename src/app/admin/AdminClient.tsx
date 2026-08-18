@@ -195,38 +195,38 @@ function AdminClientInner(props: AdminClientProps) {
   const NAV_SECTIONS: { id: string; label: string; items: NavItem[] }[] = [
     {
       id: "dashboard",
-      label: "Dashboard",
+      label: "Home",
       items: [
         { id: "overview", label: "Today", icon: LayoutDashboard, count: stats.activeCampaignCount },
-        { id: "directus_ai", label: "AI Writer", icon: Sparkles, count: 0 },
+        { id: "directus_ai", label: "Drafting Assistant", icon: Sparkles, count: 0 },
       ],
     },
     {
       id: "content",
-      label: "Content",
+      label: "Site & Audience",
       items: [
-        { id: "hero_layout", label: "Hero & Layout", icon: Layers, count: 0 },
-        { id: "media", label: "News & Articles", icon: BookOpen, count: initialNews.length },
-        { id: "pages", label: "Pages", icon: FileText, count: stats.pagesCount },
-        { id: "events", label: "Events", icon: CalendarDays, count: stats.eventCount },
+        { id: "hero_layout", label: "Homepage & Banners", icon: Layers, count: 0 },
+        { id: "media", label: "News & Stories", icon: BookOpen, count: initialNews.length },
+        { id: "pages", label: "Website Pages", icon: FileText, count: stats.pagesCount },
+        { id: "events", label: "Events & Festivals", icon: CalendarDays, count: stats.eventCount },
         { id: "clubs", label: "Clubs", icon: Building2, count: initialClubs.length },
-        { id: "resources", label: "Resource Vault", icon: FolderOpen, count: 0 },
+        { id: "resources", label: "Resources", icon: FolderOpen, count: 0 },
         { id: "sponsors", label: "Sponsors & Partners", icon: Handshake, count: 0 },
-        { id: "grassroots", label: "Grassroots & Programmes", icon: Sprout, count: initialGrassroots.length + initialProgrammes.length },
-        { id: "faq-footer", label: "FAQ & Footer", icon: HelpCircle, count: initialFaqs.length + initialFooterNav.length },
+        { id: "grassroots", label: "Clubs & Development", icon: Sprout, count: initialGrassroots.length + initialProgrammes.length },
+        { id: "faq-footer", label: "Help & Footer", icon: HelpCircle, count: initialFaqs.length + initialFooterNav.length },
       ],
     },
     {
       id: "matches",
       label: "Matches",
       items: [
-        { id: "fixtures", label: "Fixtures & Scores", icon: Radio, count: initialMatches.length },
+        { id: "fixtures", label: "Fixtures & Results", icon: Radio, count: initialMatches.length },
         { id: "teams", label: "Teams & Squads", icon: Trophy, count: teamsCount },
       ],
     },
     {
       id: "fans",
-      label: "Fans",
+      label: "Fans & Partners",
       items: [
         { id: "campaigns", label: "Campaigns", icon: Flag, count: stats.campaignCount },
         { id: "fanzone", label: "Fan Zone", icon: Users, count: initialFanZoneMembers.length },
@@ -235,9 +235,9 @@ function AdminClientInner(props: AdminClientProps) {
     },
     {
       id: "admin",
-      label: "Admin",
+      label: "Team & Safety",
       items: [
-        { id: "roles", label: "Roles & Permissions", icon: ShieldCheck, count: 0 },
+        { id: "roles", label: "Team & Permissions", icon: ShieldCheck, count: 0 },
       ],
     },
   ];
@@ -346,12 +346,12 @@ function AdminClientInner(props: AdminClientProps) {
     try {
       const res = await fetch("/api/revalidate", { method: "POST" });
       if (res.ok) {
-        toast("CDN Cache Purged Successfully! Live site updated.", "success");
+        toast("Live site refreshed — changes are now visible.", "success");
       } else {
-        toast("Failed to purge cache. Please try again.", "error");
+        toast("Could not refresh the live site. Please try again.", "error");
       }
     } catch {
-      toast("Network error while purging CDN cache.", "error");
+      toast("Network error while refreshing the live site.", "error");
     } finally {
       setIsPurgingCache(false);
     }
@@ -381,7 +381,7 @@ function AdminClientInner(props: AdminClientProps) {
               className="inline-flex items-center gap-2 rounded-xl bg-zru-green px-4 py-2.5 font-heading text-xs font-black uppercase tracking-wider text-white shadow-sm transition-all hover:bg-zru-green/90 disabled:opacity-50"
             >
               <RefreshCw className={`h-3.5 w-3.5 ${isPurgingCache ? "animate-spin" : ""}`} />
-              {isPurgingCache ? "Purging..." : "Purge CDN Cache"}
+              {isPurgingCache ? "Refreshing..." : "Refresh live site"}
             </button>
 
             <a

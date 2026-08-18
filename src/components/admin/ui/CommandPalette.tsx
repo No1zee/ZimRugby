@@ -119,7 +119,7 @@ export default function CommandPalette({ isOpen, onClose }: CommandPaletteProps)
     },
     {
       id: "nav-resources",
-      title: "Resource Vault: Laws, Handbooks & Circulars",
+      title: "Resources: Laws, Handbooks & Circulars",
       category: "Navigation",
       icon: FolderOpen,
       tabTarget: "resources",
@@ -127,7 +127,7 @@ export default function CommandPalette({ isOpen, onClose }: CommandPaletteProps)
     },
     {
       id: "nav-grassroots",
-      title: "Grassroots & School Rugby Initiatives",
+      title: "Clubs & Development (Schools, Grassroots, Programmes)",
       category: "Navigation",
       icon: Sprout,
       tabTarget: "grassroots",
@@ -135,7 +135,7 @@ export default function CommandPalette({ isOpen, onClose }: CommandPaletteProps)
     },
     {
       id: "nav-backups",
-      title: "CMS Snapshots, Backups & Disaster Recovery",
+      title: "Backups & Restore",
       category: "Navigation",
       icon: Database,
       tabTarget: "backups",
@@ -311,7 +311,7 @@ export default function CommandPalette({ isOpen, onClose }: CommandPaletteProps)
             <span>Use <kbd className="px-1.5 py-0.5 bg-white/10 rounded font-mono text-white/60">↑</kbd> <kbd className="px-1.5 py-0.5 bg-white/10 rounded font-mono text-white/60">↓</kbd> to navigate</span>
             <span><kbd className="px-1.5 py-0.5 bg-white/10 rounded font-mono text-white/60">ENTER</kbd> to select</span>
           </div>
-          <span className="font-mono text-[#006B3F]">ZRU STUDIO v2.5</span>
+          <span className="font-mono text-[#006B3F]">THE TOUCHLINE · ZRU Digital</span>
         </div>
       </div>
     </div>

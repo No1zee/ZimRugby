@@ -8,46 +8,51 @@ import CommandPalette from "@/components/admin/ui/CommandPalette";
 
 const NAV_SECTIONS = [
   {
-    label: "Dashboard",
+    label: "Home",
     items: [
       { id: "overview", label: "Today", icon: LayoutDashboard },
-      { id: "directus_ai", label: "AI Writer", icon: Sparkles },
+      { id: "directus_ai", label: "Drafting Assistant", icon: Sparkles },
     ],
   },
   {
-    label: "Content",
+    label: "Write & Publish",
     items: [
-      { id: "hero_layout", label: "Hero & Layout", icon: Layers },
-      { id: "media", label: "News & Articles", icon: BookOpen },
-      { id: "pages", label: "Pages", icon: FileText },
+      { id: "media", label: "News & Stories", icon: BookOpen },
+    ],
+  },
+  {
+    label: "Site & Audience",
+    items: [
+      { id: "hero_layout", label: "Homepage & Banners", icon: Layers },
+      { id: "pages", label: "Website Pages", icon: FileText },
       { id: "events", label: "Events & Festivals", icon: CalendarDays },
-      { id: "resources", label: "Resource Vault", icon: FolderOpen },
+      { id: "resources", label: "Resources", icon: FolderOpen },
       { id: "sponsors", label: "Sponsors & Partners", icon: Handshake },
-      { id: "grassroots", label: "Grassroots & Pathways", icon: Sprout },
-      { id: "faq-footer", label: "FAQ & Footer", icon: HelpCircle },
+      { id: "grassroots", label: "Clubs & Development", icon: Sprout },
+      { id: "faq-footer", label: "Help & Footer", icon: HelpCircle },
     ],
   },
   {
     label: "Matches",
     items: [
-      { id: "fixtures", label: "Fixtures & Scores", icon: Radio },
+      { id: "fixtures", label: "Fixtures & Results", icon: Radio },
       { id: "teams", label: "Teams & Squads", icon: Trophy },
     ],
   },
   {
-    label: "Fans & Operations",
+    label: "Fans & Partners",
     items: [
       { id: "campaigns", label: "Campaigns", icon: Flag },
       { id: "fanzone", label: "Fan Zone", icon: Users },
-      { id: "onboarding", label: "Enquiries & Signups", icon: ShieldAlert },
+      { id: "onboarding", label: "Enquiries", icon: ShieldAlert },
     ],
   },
   {
-    label: "Admin & Security",
+    label: "Team & Safety",
     items: [
-      { id: "roles", label: "Roles & Permissions", icon: KeyRound },
-      { id: "audit_logs", label: "Security & Audit Logs", icon: ShieldAlert },
-      { id: "backups", label: "CMS Snapshots & Recovery", icon: Database },
+      { id: "roles", label: "Team & Permissions", icon: KeyRound },
+      { id: "audit_logs", label: "Activity Log", icon: ShieldAlert },
+      { id: "backups", label: "Backups & Restore", icon: Database },
     ],
   },
 ];
@@ -189,9 +194,9 @@ export default function AdminSidebar({ activeTab = "overview", onTabChange }: Ad
                 <Shield className="w-5 h-5 text-white" />
               </div>
               <div>
-                <h2 className="text-sm font-bold text-white tracking-wider">ZRU STUDIO</h2>
+                <h2 className="text-sm font-bold text-white tracking-wider">THE TOUCHLINE</h2>
                 <p className="text-[10px] text-[#006B3F] font-mono uppercase tracking-widest font-semibold">
-                  Directus Control Plane
+                  ZRU Digital
                 </p>
               </div>
             </div>
@@ -252,9 +257,8 @@ export default function AdminSidebar({ activeTab = "overview", onTabChange }: Ad
           <div className="flex items-center justify-between text-[10px] text-white/40 font-mono">
             <div className="flex items-center gap-1.5">
               <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-              <span>Directus Cloud Online</span>
+              <span>All systems normal</span>
             </div>
-            <span>v2.5</span>
           </div>
 
           {userInfo && (

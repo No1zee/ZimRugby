@@ -85,7 +85,7 @@ export default function AuditLogsPanel() {
       <section className="rounded-2xl border border-black/10 bg-white p-6 shadow-sm">
         <div className="flex justify-between items-center">
           <h2 className="flex items-center gap-2 font-heading text-xl font-black uppercase text-rich-black">
-            <Shield className="h-5 w-5 text-zru-green" /> Security & Audit Logs
+            <Shield className="h-5 w-5 text-zru-green" /> Activity Log
           </h2>
           <button
             onClick={fetchLogs}

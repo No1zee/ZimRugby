@@ -45,7 +45,7 @@ export default function BackupsPanel() {
     }
 
     // Auto-capture session start checkpoint in background
-    captureCurrentState("Auto Session Baseline").then((snap) => {
+    captureCurrentState("Session baseline").then((snap) => {
       if (snap) {
         sessionStorage.setItem("zru_session_checkpoint", JSON.stringify(snap));
         setSessionCheckpoint(snap);
@@ -92,11 +92,11 @@ export default function BackupsPanel() {
   const handleCreateCheckpoint = async () => {
     setExporting(true);
     try {
-      const snap = await captureCurrentState("Manual Editor Checkpoint");
+      const snap = await captureCurrentState("Manual checkpoint");
       if (snap) {
         sessionStorage.setItem("zru_session_checkpoint", JSON.stringify(snap));
         setSessionCheckpoint(snap);
-        toast("Manual Session Checkpoint created successfully!");
+        toast("Safe point saved — you can revert to it anytime.");
       }
     } finally {
       setExporting(false);
@@ -132,7 +132,7 @@ export default function BackupsPanel() {
           } catch {}
         }
       }
-      toast(`Session rollback complete! Restored ${restored} records to session baseline.`, "success");
+      toast(`Session reverted — restored ${restored} records to where you started.`, "success");
     } catch (err) {
       toast(`Rollback error: ${err instanceof Error ? err.message : String(err)}`, "error");
     } finally {
@@ -159,9 +159,9 @@ export default function BackupsPanel() {
         status: "CLEAN",
         details,
       });
-      toast("ISO 27001 Schema Drift Check: 100% Intact.");
+      toast("Integrity check passed — everything is connected.");
     } catch {
-      toast("Drift check failed to reach CMS.", "error");
+      toast("Integrity check could not reach the CMS.", "error");
     } finally {
       setDriftChecking(false);
     }
@@ -182,7 +182,7 @@ export default function BackupsPanel() {
           cacheServed: true,
           status: "PASSED",
         });
-        toast(`Chaos Drill Passed! Edge Memory Shield responded in ${duration}ms.`, "success");
+        toast(`Speed test passed — the site responded in ${duration}ms.`, "success");
       } else {
         throw new Error("Endpoint failed");
       }
@@ -192,7 +192,7 @@ export default function BackupsPanel() {
         cacheServed: false,
         status: "FAILED",
       });
-      toast("Outage drill detected latency anomalies.", "error");
+      toast("Speed test found the site is responding slowly.", "error");
     } finally {
       setDrillRunning(false);
     }
@@ -202,7 +202,7 @@ export default function BackupsPanel() {
   const handleExportSnapshot = async () => {
     setExporting(true);
     try {
-      const snapshot = await captureCurrentState("ZRU Studio Admin Export");
+      const snapshot = await captureCurrentState("Site backup");
       if (!snapshot) throw new Error("Failed to capture database state");
 
       const blob = new Blob([JSON.stringify(snapshot, null, 2)], { type: "application/json" });
@@ -215,7 +215,7 @@ export default function BackupsPanel() {
       document.body.removeChild(a);
       URL.revokeObjectURL(url);
 
-      toast("Full CMS Snapshot exported successfully!");
+      toast("Backup file downloaded — keep it somewhere safe.");
     } catch (err) {
       toast(`Export failed: ${err instanceof Error ? err.message : String(err)}`, "error");
     } finally {
@@ -236,7 +236,7 @@ export default function BackupsPanel() {
           throw new Error("Invalid snapshot format. Missing 'data' object.");
         }
         setPreviewSnapshot(parsed);
-        toast("Snapshot validated! Review contents below.");
+        toast("Backup file looks good — review the contents below.");
       } catch (err) {
         toast(`Invalid JSON file: ${err instanceof Error ? err.message : "Malformed JSON"}`, "error");
       }
@@ -249,9 +249,9 @@ export default function BackupsPanel() {
     if (!previewSnapshot) return;
 
     const ok = await confirm({
-      title: "Restore CMS Snapshot?",
-      message: `You are about to restore data from snapshot (${new Date(previewSnapshot.timestamp).toLocaleString()}). This will overwrite active records. Are you sure?`,
-      confirmLabel: "Confirm & Restore Snapshot",
+      title: "Restore this backup?",
+      message: `You are about to restore data from a backup saved ${new Date(previewSnapshot.timestamp).toLocaleString()}. This will overwrite current records. Are you sure?`,
+      confirmLabel: "Confirm & restore backup",
       danger: true,
     });
     if (!ok) return;
@@ -273,7 +273,7 @@ export default function BackupsPanel() {
           } catch {}
         }
       }
-      toast(`Snapshot restore complete! Updated ${restoredCount} items.`, "success");
+      toast(`Restore complete — updated ${restoredCount} items from the backup.`, "success");
       setPreviewSnapshot(null);
     } catch (err) {
       toast(`Restore error: ${err instanceof Error ? err.message : String(err)}`, "error");
@@ -295,11 +295,11 @@ export default function BackupsPanel() {
               <div className="flex items-center gap-2">
                 <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse" />
                 <h3 className="text-sm font-black font-heading uppercase tracking-wider text-white">
-                  Active Session Checkpoint & Rollback Shield
+                  Undo button for this session
                 </h3>
               </div>
               <p className="text-xs text-white/60 mt-1">
-                Every admin session automatically captures a baseline state. If any mistakes or accidental deletions occur, revert the entire session in 1 click.
+                A safe point is captured automatically when you sign in. Made a mistake or accidentally deleted something? Revert this session to how it looked when you started.
               </p>
             </div>
           </div>
@@ -312,7 +312,7 @@ export default function BackupsPanel() {
               className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-white/10 hover:bg-white/15 border border-white/15 text-white text-xs font-bold uppercase tracking-wider transition-colors cursor-pointer"
             >
               <Bookmark className="w-3.5 h-3.5 text-[#006B3F]" />
-              <span>Save New Checkpoint</span>
+              <span>Save a new safe point</span>
             </button>
 
             <button
@@ -322,7 +322,7 @@ export default function BackupsPanel() {
               className="flex items-center gap-2 rounded-xl bg-amber-500 hover:bg-amber-600 px-5 py-2 text-xs font-bold uppercase tracking-wider text-rich-black font-heading transition-colors shadow-sm disabled:opacity-50 cursor-pointer"
             >
               {sessionRollingBack ? <RefreshCw className="w-4 h-4 animate-spin" /> : <RotateCcw className="w-4 h-4" />}
-              <span>{sessionRollingBack ? "Rolling Back..." : "Revert Entire Session"}</span>
+              <span>{sessionRollingBack ? "Reverting..." : "Revert to session start"}</span>
             </button>
           </div>
         </div>
@@ -332,44 +332,44 @@ export default function BackupsPanel() {
           <div className="bg-black/30 rounded-xl p-4 border border-white/5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
             <div className="flex items-center gap-2 text-white/80 font-mono">
               <Clock className="w-4 h-4 text-[#006B3F]" />
-              <span>Baseline Captured: {new Date(sessionCheckpoint.timestamp).toLocaleTimeString()} ({sessionCheckpoint.author})</span>
+              <span>Safe point captured: {new Date(sessionCheckpoint.timestamp).toLocaleTimeString()} ({sessionCheckpoint.author})</span>
             </div>
             <div className="flex items-center gap-4 text-white/60 font-mono text-[11px]">
               <span>{sessionCheckpoint.counts["matches"] || 0} Fixtures</span>
               <span>{sessionCheckpoint.counts["news"] || 0} Articles</span>
-              <span>{sessionCheckpoint.counts["hero_slides"] || 0} Hero Slides</span>
+              <span>{sessionCheckpoint.counts["hero_slides"] || 0} Homepage slides</span>
               <span>{sessionCheckpoint.counts["partners"] || 0} Partners</span>
             </div>
           </div>
         ) : (
-          <p className="text-xs text-white/40 italic">Capturing baseline state in background...</p>
+          <p className="text-xs text-white/40 italic">Capturing safe point in the background...</p>
         )}
       </section>
 
-      {/* 🔬 ISO 27001 SCHEMA DRIFT & CHAOS DRILL TOOLS */}
+      {/* SYSTEM HEALTH CHECK TOOLS */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {/* ISO 27001 Schema Drift Checker */}
+        {/* Integrity Audit */}
         <section className="bg-white border border-black/10 rounded-2xl p-6 shadow-sm flex flex-col justify-between">
           <div>
             <div className="flex items-center justify-between gap-2 mb-2">
               <h3 className="text-sm font-black font-heading uppercase tracking-wider text-rich-black flex items-center gap-2">
                 <Activity className="w-4 h-4 text-indigo-600" />
-                <span>ISO 27001 Schema Drift Check</span>
+                <span>Data integrity check</span>
               </h3>
               {driftReport && (
                 <span className="px-2 py-0.5 rounded text-[10px] font-bold font-mono bg-emerald-100 text-emerald-800">
-                  {driftReport.status}
+                  {driftReport.status === "CLEAN" ? "ALL GOOD" : driftReport.status}
                 </span>
               )}
             </div>
             <p className="text-xs text-black/50 mb-4">
-              Automated configuration audit verifying that active Directus collections match committed schemas.
+              Checks that every part of the website is connected to the right place and nothing is missing or out of sync.
             </p>
           </div>
 
           <div className="pt-2 border-t border-black/5 flex items-center justify-between">
             <span className="text-[11px] font-mono text-black/40">
-              {driftReport ? `Last run: ${driftReport.checkedAt}` : "Not checked this session"}
+              {driftReport ? `Last check: ${driftReport.checkedAt}` : "Not checked this session"}
             </span>
             <button
               type="button"
@@ -378,33 +378,33 @@ export default function BackupsPanel() {
               className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-indigo-50 hover:bg-indigo-100 border border-indigo-200 text-indigo-700 text-xs font-bold uppercase tracking-wider transition-colors cursor-pointer"
             >
               {driftChecking ? <RefreshCw className="w-3.5 h-3.5 animate-spin" /> : <ShieldCheck className="w-3.5 h-3.5" />}
-              <span>{driftChecking ? "Auditing..." : "Run Integrity Audit"}</span>
+              <span>{driftChecking ? "Checking..." : "Run integrity check"}</span>
             </button>
           </div>
         </section>
 
-        {/* Chaos Engineering & 99.999% Outage Simulation Drill */}
+        {/* Speed Test */}
         <section className="bg-white border border-black/10 rounded-2xl p-6 shadow-sm flex flex-col justify-between">
           <div>
             <div className="flex items-center justify-between gap-2 mb-2">
               <h3 className="text-sm font-black font-heading uppercase tracking-wider text-rich-black flex items-center gap-2">
                 <Zap className="w-4 h-4 text-amber-500" />
-                <span>Chaos Outage Simulation Drill</span>
+                <span>Website speed test</span>
               </h3>
               {drillResult && (
                 <span className="px-2 py-0.5 rounded text-[10px] font-bold font-mono bg-emerald-100 text-emerald-800">
-                  {drillResult.status} ({drillResult.latencyMs}ms)
+                  {drillResult.status === "PASSED" ? `FAST (${drillResult.latencyMs}ms)` : "SLOW"}
                 </span>
               )}
             </div>
             <p className="text-xs text-black/50 mb-4">
-              Simulates CMS origin latency to verify that the Edge Memory Shield delivers 100% cached content in &lt;50ms.
+              Tests how quickly the live site loads from a visitor's perspective and confirms the fast-delivery system is working.
             </p>
           </div>
 
           <div className="pt-2 border-t border-black/5 flex items-center justify-between">
             <span className="text-[11px] font-mono text-black/40">
-              {drillResult ? `Edge Latency: ${drillResult.latencyMs}ms` : "Simulate failover test"}
+              {drillResult ? `Last response: ${drillResult.latencyMs}ms` : "Simulate a visitor request"}
             </span>
             <button
               type="button"
@@ -413,22 +413,22 @@ export default function BackupsPanel() {
               className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-amber-50 hover:bg-amber-100 border border-amber-200 text-amber-800 text-xs font-bold uppercase tracking-wider transition-colors cursor-pointer"
             >
               {drillRunning ? <RefreshCw className="w-3.5 h-3.5 animate-spin" /> : <Zap className="w-3.5 h-3.5" />}
-              <span>{drillRunning ? "Testing..." : "Simulate Failover"}</span>
+              <span>{drillRunning ? "Testing..." : "Test site speed"}</span>
             </button>
           </div>
         </section>
       </div>
 
-      {/* 📦 1-CLICK EXPORT TO FILE */}
+      {/* 📦 EXPORT BACKUP FILE */}
       <section className="bg-white border border-black/10 rounded-2xl p-6 shadow-sm">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-black/5 pb-4 mb-6">
           <div>
             <h2 className="text-base font-black font-heading uppercase tracking-wider text-rich-black flex items-center gap-2">
               <Database className="w-5 h-5 text-[#006B3F]" />
-              <span>Full CMS Export (.json)</span>
+              <span>Download a backup</span>
             </h2>
             <p className="text-xs text-black/50 mt-0.5">
-              Download complete immutable backup files of all 11 ZRU collections before major tournaments.
+              Saves everything on the site to a single file you can keep on your computer — great before a big tournament.
             </p>
           </div>
 
@@ -439,18 +439,18 @@ export default function BackupsPanel() {
             className="flex items-center gap-2 rounded-xl bg-[#006B3F] px-5 py-2.5 text-xs font-bold uppercase tracking-wider text-white hover:bg-green-800 transition-colors shadow-sm disabled:opacity-50 cursor-pointer shrink-0"
           >
             {exporting ? <RefreshCw className="w-4 h-4 animate-spin" /> : <Download className="w-4 h-4" />}
-            <span>{exporting ? "Exporting..." : "Export Full CMS Snapshot (.json)"}</span>
+            <span>{exporting ? "Saving..." : "Download site backup (.json)"}</span>
           </button>
         </div>
 
-        {/* Disaster Recovery Architecture Info */}
+        {/* Backup Protection Info */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div className="bg-black/[0.02] border border-black/5 rounded-xl p-4 flex items-start gap-3">
             <ShieldCheck className="w-5 h-5 text-[#006B3F] shrink-0 mt-0.5" />
             <div>
-              <h4 className="text-xs font-bold text-rich-black">Pre-Matchday Protection</h4>
+              <h4 className="text-xs font-bold text-rich-black">Before matchdays</h4>
               <p className="text-[11px] text-black/50 mt-0.5">
-                Download a snapshot before major international matches so you can rollback unexpected score changes instantly.
+                Download a backup before big matches so you can undo accidental score changes instantly.
               </p>
             </div>
           </div>
@@ -458,9 +458,9 @@ export default function BackupsPanel() {
           <div className="bg-black/[0.02] border border-black/5 rounded-xl p-4 flex items-start gap-3">
             <History className="w-5 h-5 text-teal-600 shrink-0 mt-0.5" />
             <div>
-              <h4 className="text-xs font-bold text-rich-black">Directus Field Revisions</h4>
+              <h4 className="text-xs font-bold text-rich-black">Change history</h4>
               <p className="text-[11px] text-black/50 mt-0.5">
-                Every individual field change is recorded in Directus system history for granular undo.
+                Every individual change is recorded automatically, so a single field can always be undone.
               </p>
             </div>
           </div>
@@ -468,47 +468,47 @@ export default function BackupsPanel() {
           <div className="bg-black/[0.02] border border-black/5 rounded-xl p-4 flex items-start gap-3">
             <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" />
             <div>
-              <h4 className="text-xs font-bold text-rich-black">PostgreSQL Daily PITR</h4>
+              <h4 className="text-xs font-bold text-rich-black">Automatic daily copies</h4>
               <p className="text-[11px] text-black/50 mt-0.5">
-                Database-level automated daily snapshots run at 02:00 UTC with 7-day point-in-time recovery.
+                The system takes its own full copy every day at 02:00 and keeps 7 days of history.
               </p>
             </div>
           </div>
         </div>
       </section>
 
-      {/* 📥 RESTORE FROM SNAPSHOT FILE */}
+      {/* 📥 RESTORE FROM BACKUP FILE */}
       <section className="bg-white border border-black/10 rounded-2xl p-6 shadow-sm">
         <h3 className="text-sm font-black font-heading uppercase tracking-wider text-rich-black mb-1 flex items-center gap-2">
           <Upload className="w-4 h-4 text-[#006B3F]" />
-          <span>Restore from Snapshot File</span>
+          <span>Restore from a backup</span>
         </h3>
         <p className="text-xs text-black/50 mb-4">
-          Select any previously exported `.json` snapshot to inspect its collections and apply state restoration.
+          Pick a previously saved backup file to review what's inside and put it back on the site if needed.
         </p>
 
         <div className="flex flex-col sm:flex-row items-center gap-3">
           <label className="flex items-center gap-2 px-4 py-2.5 rounded-xl border-2 border-dashed border-black/15 bg-black/[0.02] hover:border-black/30 text-xs font-bold text-black/70 cursor-pointer transition-all">
             <FileJson className="w-4 h-4 text-[#006B3F]" />
-            <span>Browse Snapshot File (.json)</span>
+            <span>Choose a backup file (.json)</span>
             <input type="file" accept=".json" onChange={handleFileSelect} className="hidden" />
           </label>
 
           {previewSnapshot && (
             <span className="text-xs font-mono text-[#006B3F] font-bold">
-              ✓ Loaded snapshot from {new Date(previewSnapshot.timestamp).toLocaleDateString()}
+              ✓ Loaded backup from {new Date(previewSnapshot.timestamp).toLocaleDateString()}
             </span>
           )}
         </div>
 
-        {/* Snapshot Inspection Table */}
+        {/* Backup Inspection Table */}
         {previewSnapshot && (
           <div className="mt-6 border border-black/10 rounded-xl overflow-hidden bg-black/[0.01]">
             <div className="bg-black/5 px-4 py-3 border-b border-black/10 flex items-center justify-between">
               <div>
-                <h4 className="text-xs font-black uppercase text-rich-black">Snapshot Metadata Preview</h4>
+                <h4 className="text-xs font-black uppercase text-rich-black">Backup contents</h4>
                 <p className="text-[11px] text-black/50 font-mono">
-                  Timestamp: {previewSnapshot.timestamp} · Author: {previewSnapshot.author}
+                  Saved: {previewSnapshot.timestamp} · By: {previewSnapshot.author}
                 </p>
               </div>
 
@@ -519,7 +519,7 @@ export default function BackupsPanel() {
                 className="flex items-center gap-1.5 px-4 py-1.5 rounded-lg bg-red-600 text-white text-xs font-bold uppercase tracking-wider hover:bg-red-700 transition-colors shadow-sm disabled:opacity-50 cursor-pointer"
               >
                 {importing ? <RefreshCw className="w-3.5 h-3.5 animate-spin" /> : <AlertTriangle className="w-3.5 h-3.5" />}
-                <span>{importing ? "Restoring..." : "Apply Snapshot Restore"}</span>
+                <span>{importing ? "Restoring..." : "Restore this backup"}</span>
               </button>
             </div>
 

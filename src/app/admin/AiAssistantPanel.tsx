@@ -40,7 +40,7 @@ export default function AiAssistantPanel() {
       <div className="flex items-center justify-between border-b border-black/5 pb-4">
         <div>
           <h2 className="flex items-center gap-2 font-heading text-xl font-black uppercase text-rich-black">
-            <Sparkles className="h-5 w-5 text-zru-green" /> AI Writer
+            <Sparkles className="h-5 w-5 text-zru-green" /> Drafting Assistant
           </h2>
           <p className="mt-1 text-xs text-black/60">
             Draft press releases, match recaps or SEO tags to paste into your article.

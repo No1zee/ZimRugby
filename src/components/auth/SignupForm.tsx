@@ -12,6 +12,7 @@ export function SignupForm() {
   const [isOfficialRole, setIsOfficialRole] = useState(false);
   const [role, setRole] = useState<"fan" | "player" | "coach" | "referee" | "club-registrar">("fan");
   const [organization, setOrganization] = useState("");
+  const [cdpaConsent, setCdpaConsent] = useState(false);
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
   const [errorMessage, setErrorMessage] = useState("");
 
@@ -33,7 +34,8 @@ export function SignupForm() {
           phone: isOfficialRole ? phone : undefined, 
           password, 
           role: targetRole, 
-          organization: isOfficialRole ? organization : "ZRU Fan Club"
+          organization: isOfficialRole ? organization : "ZRU Fan Club",
+          cdpaConsent
         }),
       });
 
@@ -230,12 +232,30 @@ export function SignupForm() {
               </div>
             )}
 
+            {/* CDPA 2021 Consent (required for all signups) */}
+            <div className="flex items-start space-x-3 py-2 border-t border-gray-100">
+              <input
+                type="checkbox"
+                id="cdpa-consent"
+                required
+                checked={cdpaConsent}
+                onChange={(e) => setCdpaConsent(e.target.checked)}
+                className="mt-0.5 w-4 h-4 text-[#006B3F] border-gray-300 rounded focus:ring-[#006B3F]"
+              />
+              <label htmlFor="cdpa-consent" className="text-xs font-semibold text-[#003322]/80 leading-relaxed cursor-pointer select-none">
+                I consent to ZRU processing my personal data for membership,
+                ticketing, and match communications, and I agree to the{" "}
+                <span className="font-black text-[#003322]">Zimbabwe CDPA 2021</span>{" "}
+                data protection terms.
+              </label>
+            </div>
+
             <div className="pt-2">
               <SlantedButton
                 variant="primary"
                 type="submit"
                 className="w-full justify-center py-4"
-                disabled={status === "loading"}
+                disabled={status === "loading" || !cdpaConsent}
               >
                 {status === "loading" ? "PROCESSING..." : isOfficialRole ? "SUBMIT ONBOARDING REQUEST" : "JOIN FAN CLUB"}
               </SlantedButton>

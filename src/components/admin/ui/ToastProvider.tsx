@@ -8,6 +8,7 @@ type ToastType = "success" | "error" | "info";
 export interface ToastAction {
   label: string;
   onClick: () => void;
+  durationMs?: number;
 }
 
 interface ToastItem {
@@ -48,7 +49,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
     setItems((prev) => [...prev.slice(-3), { id, type, text, action }]);
     setTimeout(() => {
       setItems((prev) => prev.filter((t) => t.id !== id));
-    }, action ? 10000 : 4000);
+    }, action ? action.durationMs ?? 10000 : 4000);
   }, []);
 
   return (

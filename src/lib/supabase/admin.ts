@@ -40,7 +40,7 @@ export async function listFanZoneMembers(limit = 100): Promise<AdminFanMember[]>
   try {
     const { data } = await client
       .from("fan_zone_members")
-      .select("id, name, email, favorite_team, vip_code, cdpa_consent, registered_at")
+      .select("id, name, email, favorite_team, cdpa_consent, registered_at")
       .order("registered_at", { ascending: false })
       .limit(limit);
 
@@ -51,6 +51,36 @@ export async function listFanZoneMembers(limit = 100): Promise<AdminFanMember[]>
 }
 
 export async function listOnboardingSubmissions(limit = 100): Promise<AdminOnboardingSubmission[]> {
+  // Source of truth is Directus: `onboarding_submissions` was never created in
+  // Supabase (only the Directus collection exists), and the Supabase select
+  // silently 404s. Read from Directus with the admin token, mapping snake_case.
+  const directusUrl = process.env.NEXT_PUBLIC_DIRECTUS_URL;
+  const adminToken = process.env.DIRECTUS_TOKEN;
+  if (directusUrl && adminToken) {
+    try {
+      const res = await fetch(
+        `${directusUrl}/items/onboarding_submissions?fields=id,full_name,email,phone,role,organization,submitted_at&filter[deleted_at][_null]=true&sort=-submitted_at&limit=${limit}`,
+        { headers: { Authorization: `Bearer ${adminToken}` } }
+      );
+      if (res.ok) {
+        const body = (await res.json()) as { data?: Array<Record<string, unknown>> };
+        return (body.data || []).map((r) => ({
+          id: Number(r.id ?? 0),
+          full_name: String(r.full_name ?? ""),
+          email: String(r.email ?? ""),
+          phone: r.phone !== undefined && r.phone !== null ? String(r.phone) : undefined,
+          role: String(r.role ?? ""),
+          organization:
+            r.organization !== undefined && r.organization !== null ? String(r.organization) : undefined,
+          submitted_at: String(r.submitted_at ?? ""),
+        }));
+      }
+    } catch (directusError) {
+      console.warn("Directus onboarding_submissions read failed:", directusError);
+    }
+  }
+
+  // Fallback: Supabase (if the table ever exists there).
   const client = getAdminClient();
   if (!client) return [];
 

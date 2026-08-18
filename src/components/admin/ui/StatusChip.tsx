@@ -21,11 +21,29 @@ function toneFor(status: string): Tone {
   return "grey";
 }
 
+const LABELS: Record<string, string> = {
+  published: "Live",
+  draft: "Draft",
+  archived: "Archived",
+  scheduled: "Scheduled",
+  upcoming: "Scheduled",
+  future: "Scheduled",
+  expired: "Expired",
+  cancelled: "Cancelled",
+  completed: "Completed",
+  active: "Active",
+  live: "Live",
+  pending: "Review",
+  review: "Review",
+  enabled: "On",
+  disabled: "Off",
+};
+
 function displayStatus(status: string): string {
   const s = (status || "").toLowerCase();
   if (s === "true" || s === "1") return "On";
   if (s === "false" || s === "0") return "Off";
-  return status;
+  return LABELS[s] ?? status;
 }
 
 export default function StatusChip({ status, label }: { status: string; label?: string }) {
