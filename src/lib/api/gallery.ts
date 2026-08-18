@@ -3,165 +3,85 @@ import { Photo } from "@/types";
 import { directusFetch } from "@/lib/directus/fetch";
 import { photoAssetUrl } from "@/lib/directus/assets";
 
-import manifestData from "../../../public/data/media-manifest.json";
+// Static gallery manifest — 313 photos pre-sorted by folder from /public/images/gallery/
+import galleryPhotosData from "../../../public/data/gallery-photos.json";
 
-export async function getPhotos(): Promise<Photo[]> {
+/** Fetch any photos added via the Directus admin CMS. Returns [] on failure. */
+async function getCmsPhotos(): Promise<Photo[]> {
   try {
-    // Defensive read: older manifests exposed an `assets` array; the current
-    // regenerated manifest is a flat filename->asset map without categories.
-    // If the old shape is absent, fall through to the Directus/mock path.
-    const legacyAssets = (manifestData as unknown as { assets?: unknown[] }).assets;
-    const galleryAssets = Array.isArray(legacyAssets)
-      ? (legacyAssets as any[]).filter((a: any) => a.category === 'gallery')
-      : [];
-    
-    if (galleryAssets.length > 0) {
-      return galleryAssets.map((asset: any) => {
-        // Map tags/event to album categories
-        let album: "Match Day" | "Historical Collections" | "Community Rugby" | "Training Camps" = "Match Day";
-        const fullPathLower = (asset.src_original || "").toLowerCase();
-        
-        if (fullPathLower.includes("women")) {
-          album = "Match Day";
-        } else if (fullPathLower.includes("training") || fullPathLower.includes("gym")) {
-          album = "Training Camps";
-        }
-        
-        // Format date or default
-        let dateStr = "2026";
-        if (fullPathLower.includes("battle of zambezi 2026") || fullPathLower.includes("zambezi")) {
-          dateStr = "12 JUL 2026";
-        } else if (fullPathLower.includes("nations cup")) {
-          dateStr = "JUN 2026";
-        }
-        
-        // Clean up titles
-        let title = asset.label
-          .replace(/-/g, ' ')
-          .replace(/\b\w/g, (c: string) => c.toUpperCase())
-          .replace(/\d+$/, '')
-          .trim();
-          
-        if (!title) {
-          title = album === "Training Camps" ? "Sables Training Camp" : "Sables Match Action";
-        }
+    if (!process.env.NEXT_PUBLIC_DIRECTUS_URL) return [];
 
-        // Resolve clean folders based on original asset layout
-        let folder = "General Sables Archive";
-        if (fullPathLower.includes("battle of zambezi 2026") || fullPathLower.includes("zambezi")) {
-          folder = "Battle of the Zambezi (2026)";
-        } else if (fullPathLower.includes("nations cup")) {
-          folder = "Nations Cup (2026)";
-        } else if (fullPathLower.includes("sables women")) {
-          folder = "Sables Women";
-        }
+    const response = await directusFetch<any>("photos", {
+      filter: { status: { _eq: "published" } },
+      sort: ["-date_created"],
+      fields: [
+        "id", "title", "album", "folder", "date_label", "date",
+        "description", "photographer", "license", "image_url", "directus_image.*",
+      ],
+    });
+
+    if (!response || response.length === 0) return [];
+
+    return response
+      .map((photo: any) => {
+        const imageUrl = photo.directus_image?.id
+          ? photoAssetUrl(photo.directus_image.id)
+          : photo.image_url || null;
+
+        const dateDisplay =
+          photo.date_label ||
+          (photo.date
+            ? new Date(photo.date)
+                .toLocaleDateString("en-GB", {
+                  day: "2-digit",
+                  month: "short",
+                  year: "numeric",
+                  timeZone: "UTC",
+                })
+                .toUpperCase()
+            : "2026");
 
         return {
-          id: asset.id,
-          title: title,
-          album: album,
-          image: asset.src_web,
-          date: dateStr,
-          folder: folder,
-          photographer: asset.photographer || "ZRU Media Staff",
-          license: asset.license || "All Rights Reserved (C) Zim Rugby Union",
-          description: `Official ZRU high-performance media coverage: ${title} from the national squad campaign.`
+          id: String(photo.id),
+          title: photo.title || "ZRU Gallery",
+          album: photo.album || "Match Day",
+          folder: photo.folder || "General Sables Archive",
+          image: imageUrl,
+          date: dateDisplay,
+          photographer: photo.photographer || "ZRU Media Staff",
+          license:
+            photo.license || "All Rights Reserved (C) Zimbabwe Rugby Union",
+          description: photo.description || "",
         };
-      });
-    }
-  } catch (err) {
-    console.warn("Local manifest read failed, using Directus/Mock fallback:", err);
+      })
+      .filter((p: any) => p.image); // only photos with an actual image
+  } catch {
+    return [];
+  }
+}
+
+export async function getPhotos(): Promise<Photo[]> {
+  const staticPhotos = galleryPhotosData as Photo[];
+
+  if (staticPhotos.length > 0) {
+    // Merge CMS-added photos (appear first) with the 313 static local photos
+    const cmsPhotos = await getCmsPhotos();
+    return [...cmsPhotos, ...staticPhotos];
   }
 
-  const mockPhotos: Photo[] = [
+  // Fallback — should never reach here with 313 photos in the manifest
+  return [
     {
       id: "photo-africa-cup-2025",
       title: "Africa Cup Triumph",
       album: "Match Day",
+      folder: "General Sables Archive",
       image: "/images/events/africa-cup.jpg",
       date: "27 JUL 2025",
-      description: "Zimbabwe Sables lift the Africa Cup trophy after defeating Algeria in the final."
+      photographer: "ZRU Media Staff",
+      license: "All Rights Reserved (C) Zimbabwe Rugby Union",
+      description:
+        "Zimbabwe Sables lift the Africa Cup trophy after defeating Algeria in the final.",
     },
-    {
-      id: "photo-jersey-unveil-1991",
-      title: "Heritage Unveiling",
-      album: "Historical Collections",
-      image: "/images/media/1991-jersey-original.jpg",
-      date: "23 APR 2026",
-      description: "Details of the iconic 1991 Rugby World Cup recreation jersey."
-    },
-    {
-      id: "photo-schools-fest-2025",
-      title: "Schoolboy Rugby Action",
-      album: "Community Rugby",
-      image: "/images/events/schools-fest.jpg",
-      date: "05 MAY 2025",
-      description: "Intensity and passion at the annual Schools Rugby Festival."
-    },
-    {
-      id: "photo-cheetahs-training-2026",
-      title: "Sevens Conditioning",
-      album: "Training Camps",
-      image: "/images/teams/cheetahs.jpg",
-      date: "12 APR 2026",
-      description: "Cheetahs squad members pushing boundaries during sand dune sprint training."
-    },
-    {
-      id: "photo-lady-sables-lineout-2025",
-      title: "Perfect Lineout Drill",
-      album: "Match Day",
-      image: "/images/teams/lady-sables.jpg",
-      date: "15 OCT 2025",
-      description: "Lady Sables secure clean ball off the top in their Africa Cup qualifier."
-    },
-    {
-      id: "photo-super-league-scrum-2025",
-      title: "Domestic League Showdown",
-      album: "Community Rugby",
-      image: "/images/events/super-league.jpg",
-      date: "10 JUN 2025",
-      description: "Heavy contact during the ZRU Super League club championship final."
-    }
   ];
-
-  try {
-    if (process.env.NEXT_PUBLIC_DIRECTUS_URL) {
-      const response = await directusFetch<any>('photos', {
-        filter: { status: { _eq: 'published' } },
-        sort: ['-date_created'],
-        fields: ['id', 'title', 'album', 'folder', 'date_label', 'date', 'description', 'photographer', 'license', 'image_url', 'directus_image.*'],
-      });
-      if (response && response.length > 0) {
-        return response.map((photo: any) => {
-          // Prefer the uploaded Directus file; fall back to legacy image_url text field
-          const imageUrl = photo.directus_image?.id
-            ? photoAssetUrl(photo.directus_image.id)
-            : photo.image_url || null;
-
-          const dateDisplay = photo.date_label
-            || (photo.date
-              ? new Date(photo.date).toLocaleDateString('en-GB', {
-                  day: '2-digit', month: 'short', year: 'numeric', timeZone: 'UTC'
-                }).toUpperCase()
-              : '2026');
-
-          return {
-            id: String(photo.id),
-            title: photo.title || 'ZRU Gallery',
-            album: photo.album || 'Match Day',
-            folder: photo.folder || 'General Sables Archive',
-            image: imageUrl,
-            date: dateDisplay,
-            photographer: photo.photographer || 'ZRU Media Staff',
-            license: photo.license || 'All Rights Reserved (C) Zimbabwe Rugby Union',
-            description: photo.description || '',
-          };
-        }).filter((p: any) => p.image); // Only show photos that have an image
-      }
-    }
-  } catch (error) {
-    console.warn("Directus fetch failed for photo gallery, falling back to mock data:", error);
-  }
-
-  return mockPhotos;
 }
