@@ -23,3 +23,41 @@ _Avoid_: admin, dashboard (when meaning the whole portal), the CMS (architecture
 **The Touchline**:
 The product brand of the Admin portal's user interface. Not a separate system — the Admin
 portal, presented as The Touchline.
+
+**Role**:
+A named set of permissions a staff member holds (Content Editor, Media Manager, super admin,
+...). The single word for who-can-do-what. Never "actor".
+_Avoid_: actor, role/permissions split
+
+**Status**:
+An item's place in the editorial workflow: `draft` → `in_review` → `approved` → `published`
+(→ `archived`). One axis. Applies to anything staff create and publish.
+_Avoid_: conflating with schedule (below); "active" as an editorial state
+
+**Schedule**:
+When an item is live to the public: a start/end window (`publish_at`/`expire_at`,
+`start_date`/`end_date`). The other axis. An item can be approved but not yet live, or live
+inside a window and in review for the next one.
+_Avoid_: "scheduled" as an editorial status; window vs status mixing in copy
+
+**Match status**:
+Stored values `upcoming` | `live` | `final` | `cancelled`. Display label for `final` is
+**Completed**. There is no "finished" variant — public-facing values are `upcoming` |
+`live` | `completed`. Results live in `result_outcome`, never in the status.
+_Avoid_: "finished", mixing result_outcome into status
+
+**Reviewer**:
+The content manager — the editor role (and super admin) — approves the work of everyone
+else. No one approves their own work: an item you created shows "Waiting for another
+reviewer" to you. Authorship is tracked via `created_by_email` (server-set on create).
+_Avoid_: self-approval, "the system approves", anonymous review
+
+**Safe point**:
+A session-scoped undo state in the Backups panel — lives in this browser tab, gone when
+you leave. It undoes your own editing session; it is NOT a backup.
+_Avoid_: calling safe points backups, implying they survive the browser
+
+**Backup**:
+A durable copy that survives anything: the nightly dump, or the downloaded copy from the
+Backups panel. Restores data from outside the session.
+_Avoid_: calling session undo state a backup
