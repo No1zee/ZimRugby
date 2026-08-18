@@ -3,6 +3,7 @@ import { getTicketmasterFixtures } from './ticketmaster';
 import { getFlagUrl } from './flags';
 import { getAllTeamFixtures } from './api/teams';
 import { getLiveMatches } from './data-fetcher';
+import { getTeamEmblem } from './teamLogos';
 
 /**
  * Map a data-fetcher Match to our Fixture type so it flows into the match centre.
@@ -70,13 +71,13 @@ function directusMatchToFixture(m: DirectusMatch): Fixture {
     time: m.display_time_label || kickoff.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
     venue: m.venue_name || "TBA",
     homeTeam: {
-      name: isHome ? (m.team_name || "Zimbabwe") : (m.opponent_name || "TBA"),
-      logo: isHome ? m.team_crest : m.opponent_crest,
+      name: isHome ? (m.team_name || "Zimbabwe Sables") : (m.opponent_name || "TBA"),
+      logo: isHome ? getTeamEmblem(m.team_name || "Zimbabwe Sables", m.team_crest) : getTeamEmblem(m.opponent_name || "TBA", m.opponent_crest),
       score: isHome ? m.team_score : m.opponent_score,
     },
     awayTeam: {
-      name: isHome ? (m.opponent_name || "TBA") : (m.team_name || "Zimbabwe"),
-      logo: isHome ? m.opponent_crest : m.team_crest,
+      name: isHome ? (m.opponent_name || "TBA") : (m.team_name || "Zimbabwe Sables"),
+      logo: isHome ? getTeamEmblem(m.opponent_name || "TBA", m.opponent_crest) : getTeamEmblem(m.team_name || "Zimbabwe Sables", m.team_crest),
       score: isHome ? m.opponent_score : m.team_score,
     },
     status: m.status === "completed" ? "completed" : m.status === "live" ? "live" : "upcoming",

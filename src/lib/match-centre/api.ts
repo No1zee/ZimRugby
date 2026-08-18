@@ -1,4 +1,5 @@
 import { directusFetch } from "../directus/fetch";
+import { getTeamEmblem } from "../teamLogos";
 import type {
   GlobalSettings,
   MatchCentrePageConfig,
@@ -179,11 +180,13 @@ export async function getDirectusMatches(): Promise<MatchCardViewModel[]> {
       homeTeam: {
         name: isAway ? oppName : teamName,
         code: isAway ? oppCode : teamCode,
+        logo: isAway ? getTeamEmblem(oppName, oppObj?.crest as string) : getTeamEmblem(teamName, teamObj?.crest as string),
         score: isAway ? (m.opponent_score !== null && m.opponent_score !== undefined ? Number(m.opponent_score) : undefined) : (m.team_score !== null && m.team_score !== undefined ? Number(m.team_score) : undefined),
       },
       awayTeam: {
         name: isAway ? teamName : oppName,
         code: isAway ? teamCode : oppCode,
+        logo: isAway ? getTeamEmblem(teamName, teamObj?.crest as string) : getTeamEmblem(oppName, oppObj?.crest as string),
         score: isAway ? (m.team_score !== null && m.team_score !== undefined ? Number(m.team_score) : undefined) : (m.opponent_score !== null && m.opponent_score !== undefined ? Number(m.opponent_score) : undefined),
       },
       status: computedStatus,
