@@ -1,8 +1,8 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { Plus, Trophy, Pencil, Radio, Shield, Zap, CheckCircle2, ChevronRight, Activity } from "lucide-react";
+import { Plus, Trophy, Pencil, Radio, Shield, Zap, CheckCircle2, ChevronRight, Activity, CalendarClock, ListChecks, Newspaper, Camera } from "lucide-react";
 import StatusChip, { EmptyState } from "./ui/StatusChip";
 import { Pagination } from "./ui/ListTools";
 import CollapsibleSection from "./ui/CollapsibleSection";
@@ -250,11 +250,195 @@ export default function MatchCentrePanel({
 
   const matchLabel = (m: MatchCardViewModel) => `${m.homeTeam?.name || "Zimbabwe"} vs ${m.awayTeam?.name || "Opponent"}`;
 
+  // ── Matchday mode ──────────────────────────────────────────────
+  const [now, setNow] = useState(() => Date.now());
+  const [matchdayNews, setMatchdayNews] = useState<any[] | null>(null);
+
+  useEffect(() => {
+    const t = setInterval(() => setNow(Date.now()), 30000);
+    return () => clearInterval(t);
+  }, []);
+
+  useEffect(() => {
+    if (matchdayNews !== null) return;
+    fetch("/api/admin/directus?collection=news&limit=200")
+      .then((r) => (r.ok ? r.json() : null))
+      .then((d) => setMatchdayNews(d?.data || []))
+      .catch(() => setMatchdayNews([]));
+  }, [matchdayNews]);
+
+  const nextMatch = useMemo(() => {
+    const upcoming = initialMatches
+      .filter((m) => m.status === "upcoming" || m.status === "live")
+      .sort((a, b) => new Date(a.dateIso).getTime() - new Date(b.dateIso).getTime());
+    const future = upcoming.find((m) => new Date(m.dateIso).getTime() >= now - 2 * 3600 * 1000);
+    if (future) return future;
+    const live = initialMatches.find((m) => m.status === "live");
+    if (live) return live;
+    const completed = [...initialMatches].sort((a, b) => new Date(b.dateIso).getTime() - new Date(a.dateIso).getTime())[0];
+    return completed || null;
+  }, [initialMatches, now]);
+
+  const kickoffAt = nextMatch ? new Date(nextMatch.dateIso).getTime() : 0;
+  const countdown = useMemo(() => {
+    if (!nextMatch || kickoffAt <= now) return null;
+    const diff = Math.max(0, kickoffAt - now);
+    const d = Math.floor(diff / 86400000);
+    const h = Math.floor((diff % 86400000) / 3600000);
+    const m = Math.floor((diff % 3600000) / 60000);
+    return { d, h, m };
+  }, [nextMatch, kickoffAt, now]);
+
+  const resultEntered =
+    nextMatch != null && (nextMatch.status === "live" || nextMatch.status === "completed") &&
+    typeof nextMatch.homeTeam?.score === "number" && typeof nextMatch.awayTeam?.score === "number";
+
+  const reportDrafted = useMemo(() => {
+    if (!nextMatch || matchdayNews === null) return null;
+    const opp = nextMatch.awayTeam?.name || "";
+    const home = nextMatch.homeTeam?.name || "";
+    const hit = matchdayNews.find(
+      (n) => (n.title || "").toLowerCase().includes(opp.toLowerCase()) || (n.excerpt || "").toLowerCase().includes(opp.toLowerCase()) || (n.title || "").toLowerCase().includes(home.toLowerCase())
+    );
+    return Boolean(hit);
+  }, [nextMatch, matchdayNews]);
+
+  const galleryUploaded = useMemo(() => {
+    if (matchdayNews === null) return null;
+    const since = now - 14 * 86400000;
+    const hit = matchdayNews.find((n) => {
+      const t = `${n.title || ""} ${n.excerpt || ""}`.toLowerCase();
+      if (!(t.includes("gallery") || t.includes("photos") || t.includes("album"))) return false;
+      const d = new Date(n.publish_at || n.date || n.created_at || 0).getTime();
+      return d >= since;
+    });
+    return Boolean(hit);
+  }, [matchdayNews, now]);
+
+  const checklistItems = nextMatch
+    ? [
+        { label: "Result sheet filled in", ok: resultEntered, hint: "Enter the score in the live operator" },
+        { label: "Match report on the site", ok: reportDrafted === true, hint: "Draft it from the button below" },
+        { label: "Match Day photos uploaded", ok: galleryUploaded === true, hint: "Publish a gallery in News & Articles" },
+      ]
+    : [];
+  const checklistDone = checklistItems.filter((c) => c.ok).length;
+  const checklistTotal = checklistItems.length;
+
+  async function draftMatchReport() {
+    if (!nextMatch) return;
+    const home = nextMatch.homeTeam?.name || "Zimbabwe";
+    const away = nextMatch.awayTeam?.name || "Opponent";
+    const title = `${home} vs ${away} — match report`;
+    const res = await fetch("/api/admin/directus", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        collection: "news",
+        data: { title, slug: `${nextMatch.slug}-report`, excerpt: "", body: "<p>Match report…</p>", category: "News", status: "draft", date: new Date().toISOString() },
+      }),
+    });
+    if (res.ok) {
+      toast(`Draft created: "${title}" — open News & Articles to write it up.`);
+      router.refresh();
+    } else {
+      const err = await res.json().catch(() => null);
+      toast(`Could not draft the report: ${err?.error || res.statusText}`, "error");
+    }
+  }
+
+  function openOperator(matchId: string) {
+    setActiveOperatorMatchId(matchId);
+    setTimeout(() => {
+      document.getElementById("zru-live-operator")?.scrollIntoView({ behavior: "smooth", block: "start" });
+    }, 80);
+  }
+
   return (
     <div className="space-y-6">
+      {/* 🏉 MATCHDAY MODE */}
+      {nextMatch && (
+        <section className="rounded-2xl border-2 border-zru-green/40 bg-gradient-to-br from-black via-[#0a1526] to-black text-white p-5 sm:p-6 shadow-2xl">
+          <div className="flex flex-wrap items-start justify-between gap-4">
+            <div className="flex items-center gap-3">
+              <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-zru-green/15 border border-zru-green/30">
+                <CalendarClock className="h-5 w-5 text-zru-green" />
+              </span>
+              <div>
+                <h3 className="font-heading text-sm font-black uppercase tracking-wider text-white flex items-center gap-2">
+                  Matchday Mode
+                  <span className="rounded-full bg-zru-green/15 text-zru-green px-2 py-0.5 text-[9px] font-black uppercase tracking-wider border border-zru-green/30">
+                    {nextMatch.status === "live" ? "LIVE NOW" : countdown ? "NEXT MATCH" : "RECENT"}
+                  </span>
+                </h3>
+                <p className="text-xs text-white/60 mt-0.5">
+                  {matchLabel(nextMatch)} · {nextMatch.competition} · {nextMatch.venue || "Venue TBC"}
+                </p>
+              </div>
+            </div>
+            <div className="flex flex-col items-end">
+              {countdown ? (
+                <div className="flex items-center gap-1.5 font-mono text-lg font-black text-white">
+                  <span className="bg-white/10 rounded-lg px-2 py-1 min-w-10 text-center">{countdown.d}<span className="block text-[8px] text-white/50 font-bold uppercase">days</span></span>
+                  <span className="bg-white/10 rounded-lg px-2 py-1 min-w-10 text-center">{countdown.h}<span className="block text-[8px] text-white/50 font-bold uppercase">hrs</span></span>
+                  <span className="bg-white/10 rounded-lg px-2 py-1 min-w-10 text-center">{countdown.m}<span className="block text-[8px] text-white/50 font-bold uppercase">min</span></span>
+                </div>
+              ) : nextMatch.status === "live" ? (
+                <span className="text-xs font-black uppercase tracking-wider text-red-400 animate-pulse">Taking scores live…</span>
+              ) : (
+                <span className="text-xs text-white/40">Kickoff {nextMatch.time}</span>
+              )}
+            </div>
+          </div>
+
+          <div className="mt-4 grid grid-cols-1 md:grid-cols-3 gap-2">
+            {checklistItems.map((c) => (
+              <div key={c.label} className={`flex items-start gap-2 rounded-xl border p-3 text-xs ${c.ok ? "border-zru-green/30 bg-zru-green/5" : "border-white/10 bg-white/[0.03]"}`}>
+                {c.ok ? (
+                  <CheckCircle2 className="h-4 w-4 text-zru-green shrink-0 mt-0.5" />
+                ) : (
+                  <span className="flex h-4 w-4 items-center justify-center rounded-full bg-amber-500/20 text-[9px] font-black text-amber-400 shrink-0 mt-0.5">!</span>
+                )}
+                <div>
+                  <p className={`font-bold ${c.ok ? "text-emerald-300" : "text-white/80"}`}>{c.label}</p>
+                  {!c.ok && <p className="text-white/40">{c.hint}</p>}
+                </div>
+              </div>
+            ))}
+          </div>
+          <p className="mt-2 text-[10px] text-white/40">
+            {checklistDone}/{checklistTotal} done — {checklistDone === checklistTotal ? "everything's covered, nice work." : checklistTotal - checklistDone > 0 ? `${checklistTotal - checklistDone} to go before kickoff.` : ""}
+          </p>
+
+          <div className="mt-4 flex flex-wrap items-center gap-2">
+            <button
+              type="button"
+              onClick={() => openOperator(nextMatch.id)}
+              className="inline-flex items-center gap-1.5 rounded-lg bg-zru-green px-4 py-2 text-[10px] font-black uppercase tracking-wider text-white hover:bg-green-700 transition-colors cursor-pointer"
+            >
+              <Radio className="h-3.5 w-3.5" /> Enter result / live score
+            </button>
+            <button
+              type="button"
+              onClick={draftMatchReport}
+              className="inline-flex items-center gap-1.5 rounded-lg bg-white/10 hover:bg-white/15 border border-white/15 px-4 py-2 text-[10px] font-black uppercase tracking-wider text-white transition-colors cursor-pointer"
+            >
+              <Newspaper className="h-3.5 w-3.5 text-zru-green" /> Draft the match report
+            </button>
+            <button
+              type="button"
+              onClick={() => { setActiveOperatorMatchId(null); document.getElementById("zru-add-fixture")?.scrollIntoView({ behavior: "smooth", block: "center" }); }}
+              className="inline-flex items-center gap-1.5 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 px-4 py-2 text-[10px] font-black uppercase tracking-wider text-white/70 transition-colors cursor-pointer"
+            >
+              <Plus className="h-3.5 w-3.5" /> Add fixture
+            </button>
+          </div>
+        </section>
+      )}
+
       {/* 🏉 RUGBY LIVE SCORE OPERATOR WIDGET */}
       {activeOperatorMatch && (
-        <section className="rounded-2xl border-2 border-[#006B3F] bg-[#090d16] text-white p-6 shadow-2xl animate-in fade-in duration-200">
+        <section id="zru-live-operator" className="rounded-2xl border-2 border-[#006B3F] bg-[#090d16] text-white p-6 shadow-2xl animate-in fade-in duration-200">
           <div className="flex items-center justify-between border-b border-white/10 pb-4 mb-4">
             <div className="flex items-center gap-3">
               <span className="flex h-3 w-3 relative">
@@ -383,6 +567,7 @@ export default function MatchCentrePanel({
         dirty={formDirty}
         onDirtyChange={onDirtyChange}
       >
+        <div id="zru-add-fixture" />
         <form onSubmit={createFixture} className="grid grid-cols-1 gap-4 md:grid-cols-2">
           <div>
             <label className="mb-1 block text-[10px] font-bold uppercase tracking-wider text-black/60">Home team</label>

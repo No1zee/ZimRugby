@@ -234,6 +234,39 @@ export default function ArticleComposer({ onDirtyChange }: { onDirtyChange?: (di
                   <p className="text-black/40 italic">Article body will appear here...</p>
                 )}
               </div>
+
+              {/* How it looks on the homepage — Latest News card */}
+              <div className="border-t border-black/10 pt-5">
+                <p className="text-[10px] font-black uppercase tracking-widest text-black/40 mb-3">
+                  As it appears in the homepage “Latest News” panel
+                </p>
+                <div className="max-w-xs rounded-xl border border-black/10 bg-white overflow-hidden shadow-sm">
+                  {previewImageUrl ? (
+                    <div className="aspect-video bg-black/5 relative">
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img src={previewImageUrl} alt="" className="w-full h-full object-cover" />
+                    </div>
+                  ) : (
+                    <div className="aspect-video bg-black/5 flex items-center justify-center text-[10px] text-black/30">
+                      No image — card shows a placeholder
+                    </div>
+                  )}
+                  <div className="p-4">
+                    <span className="px-2 py-0.5 rounded bg-[#006B3F] text-white text-[8px] font-black uppercase font-mono tracking-widest">
+                      {category}
+                    </span>
+                    <h4 className="font-heading text-sm font-black uppercase text-rich-black leading-snug mt-2 line-clamp-2">
+                      {title || "Untitled Article Headline"}
+                    </h4>
+                    <p className="text-[11px] text-black/60 mt-1.5 line-clamp-2">
+                      {excerpt || "Summary will appear here when you add one in Step 2."}
+                    </p>
+                    <p className="text-[9px] text-black/35 font-mono mt-2">
+                      {publishAt ? new Date(publishAt).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" }) : new Date().toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" })}
+                    </p>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>

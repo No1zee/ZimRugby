@@ -1,8 +1,9 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import { Plus, Trash2, Save, Shield, Users, Pencil, X, UserPlus, KeyRound } from "lucide-react";
+import { Plus, Trash2, Save, Shield, Users, Pencil, X, UserPlus, KeyRound, CheckCircle2, Ban } from "lucide-react";
 import type { RolePermissions, CollectionGrant } from "@/lib/admin/iam";
+import { useConfirm } from "@/components/admin/ui/ConfirmProvider";
 
 interface RoleRow {
   id: string;
@@ -56,7 +57,82 @@ const FEATURES: { key: keyof RolePermissions; label: string }[] = [
 
 const EMPTY_PERMS: RolePermissions = { tabs: [], collections: {} };
 
+const TEMPLATES: { label: string; perms: RolePermissions }[] = [
+  {
+    label: "Content Editor",
+    perms: {
+      tabs: ["overview", "media", "fixtures", "teams"],
+      collections: { news: { create: true, read: true, update: true }, matches: { read: true, update: true }, announcements: { create: true, read: true, update: true }, teams: { read: true, update: true } },
+      ai_assistant: true,
+      media_upload: true,
+    },
+  },
+  {
+    label: "Media Manager",
+    perms: {
+      tabs: ["overview", "media", "hero_layout", "resources", "sponsors", "grassroots", "faq-footer", "campaigns"],
+      collections: { news: { create: true, read: true, update: true }, campaigns: { create: true, read: true, update: true }, announcements: { create: true, read: true, update: true }, players: { read: true, update: true }, grassroots_initiatives: { create: true, read: true, update: true } },
+      media_upload: true,
+    },
+  },
+  {
+    label: "Fan & Enquiry Support",
+    perms: {
+      tabs: ["overview", "fanzone", "onboarding"],
+      collections: {},
+      fanzone_pii: true,
+    },
+  },
+  {
+    label: "Viewer (read-only)",
+    perms: {
+      tabs: ["overview", "fanzone", "onboarding"],
+      collections: {},
+    },
+  },
+];
+
+const TAB_LABEL: Record<string, string> = Object.fromEntries(TAB_OPTIONS.map((t) => [t.id, t.label]));
+const FEATURE_LABEL: Partial<Record<keyof RolePermissions, string>> = {
+  pages_builder: "Build and edit website pages",
+  ai_assistant: "Use the AI drafting assistant",
+  media_upload: "Upload and manage photos",
+  fanzone_pii: "See fans' personal data",
+};
+
+function roleSummary(perms: RolePermissions): { can: string[]; cannot: string[] } {
+  if (perms.all) {
+    return { can: ["Everything — full control of the website"], cannot: [] };
+  }
+  const can: string[] = [];
+  const cannot: string[] = [];
+  const tabs = perms.tabs || [];
+
+  for (const t of TAB_OPTIONS) {
+    if (tabs.includes(t.id)) can.push(`Open the ${t.label} panel`);
+  }
+  for (const f of FEATURES) {
+    if (perms[f.key] === true) can.push(FEATURE_LABEL[f.key] ?? f.label);
+  }
+  const cols = perms.collections || {};
+  for (const [col, grant] of Object.entries(cols)) {
+    if (!grant) continue;
+    const verb = grant.delete ? "Create, edit and delete" : grant.create && grant.update ? "Create and edit" : grant.create ? "Create" : grant.update ? "Edit" : "Read";
+    can.push(`${verb} ${col.replace(/_/g, " ")}`);
+  }
+  const grantedCols = new Set(Object.keys(cols));
+  const deniedTabs = TAB_OPTIONS.filter((t) => !tabs.includes(t.id)).map((t) => `the ${t.label} panel`);
+  const deniedWrites = COLLECTIONS.filter((c) => !grantedCols.has(c)).map((c) => `change ${c.replace(/_/g, " ")}`);
+  const deniedDeletes = COLLECTIONS.filter((c) => grantedCols.has(c) && !cols[c]?.delete).map((c) => `delete ${c.replace(/_/g, " ")}`);
+  for (const f of FEATURES) {
+    if (perms[f.key] !== true) cannot.push(FEATURE_LABEL[f.key] ?? f.label);
+  }
+  cannot.push(...deniedTabs, ...deniedWrites, ...deniedDeletes);
+  return { can, cannot };
+}
+
 export default function RolesPanel() {
+  const confirm = useConfirm();
   const [roles, setRoles] = useState<RoleRow[]>([]);
   const [users, setUsers] = useState<UserRow[]>([]);
   const [loading, setLoading] = useState(true);
@@ -123,7 +199,13 @@ export default function RolesPanel() {
   };
 
   const disableMfa = async () => {
-    if (!window.confirm("Disable two-step verification? Your account will then be protected only by your password.")) return;
+    const ok = await confirm({
+      title: "Disable two-step verification?",
+      message: "Your account will then be protected only by your password.",
+      confirmLabel: "Yes, disable",
+      danger: true,
+    });
+    if (!ok) return;
     setMfaBusy(true);
     setMfaMsg(null);
     try {
@@ -268,7 +350,13 @@ export default function RolesPanel() {
 
   const deleteRole = async (role: RoleRow) => {
     if (role.name === "super_admin") return;
-    if (!confirm(`Delete actor "${role.name}"? Users assigned to it will lose admin access.`)) return;
+    const ok = await confirm({
+      title: `Delete actor "${role.name}"?`,
+      message: `Anyone assigned this actor will immediately lose admin access to the studio. This cannot be undone.`,
+      confirmLabel: "Yes, delete actor",
+      danger: true,
+    });
+    if (!ok) return;
     setNotice(null);
     try {
       const res = await fetch(`/api/admin/roles/${role.id}`, { method: "DELETE" });
@@ -281,7 +369,24 @@ export default function RolesPanel() {
     }
   };
 
-  const assignUserRole = async (userId: string, role: string) => {
+  const assignUserRole = async (userId: string, role: string, email: string) => {
+    if (role === "") {
+      const ok = await confirm({
+        title: `Remove admin access for ${email}?`,
+        message: `${email} will no longer be able to sign in to the studio. Their account is not deleted — they can be re-added later.`,
+        confirmLabel: "Yes, remove access",
+        danger: true,
+      });
+      if (!ok) return;
+    } else if (role === "super_admin") {
+      const ok = await confirm({
+        title: "Grant full control?",
+        message: `${email} will get full control of the website — including deleting content permanently, changing roles, and seeing fans' personal data.`,
+        confirmLabel: "Yes, make super admin",
+        danger: true,
+      });
+      if (!ok) return;
+    }
     setNotice(null);
     try {
       const res = await fetch("/api/admin/roles/assign", {
@@ -545,7 +650,7 @@ export default function RolesPanel() {
                   <td className="py-3">
                     <select
                       value={user.role || ""}
-                      onChange={(e) => assignUserRole(user.id, e.target.value)}
+                      onChange={(e) => assignUserRole(user.id, e.target.value, user.email)}
                       className="px-2 py-1.5 rounded-lg border border-black/10 text-xs font-mono bg-white"
                     >
                       <option value="">— no access —</option>
@@ -594,6 +699,54 @@ export default function RolesPanel() {
                 </div>
               ) : (
                 <>
+                  {/* Capability summary — plain language */}
+                  <div className="rounded-xl border border-black/10 bg-black/[0.02] p-4">
+                    <p className="text-xs font-black uppercase tracking-wider text-black/60 mb-2">
+                      This actor will be able to:
+                    </p>
+                    {roleSummary(editingPerms).can.length > 0 ? (
+                      <ul className="space-y-1">
+                        {roleSummary(editingPerms).can.slice(0, 10).map((line) => (
+                          <li key={line} className="flex items-start gap-1.5 text-xs text-emerald-700">
+                            <CheckCircle2 className="w-3.5 h-3.5 mt-0.5 shrink-0" /> {line}
+                          </li>
+                        ))}
+                        {roleSummary(editingPerms).can.length > 10 && (
+                          <li className="text-[10px] text-black/40">+ {roleSummary(editingPerms).can.length - 10} more…</li>
+                        )}
+                      </ul>
+                    ) : (
+                      <p className="text-xs text-black/40 italic">Nothing yet — tick tabs and collections below.</p>
+                    )}
+                    <p className="text-xs font-black uppercase tracking-wider text-black/60 mt-3 mb-2">
+                      This actor will NOT be able to:
+                    </p>
+                    <ul className="space-y-1">
+                      {roleSummary(editingPerms).cannot.slice(0, 6).map((line) => (
+                        <li key={line} className="flex items-start gap-1.5 text-xs text-red-700/70">
+                          <Ban className="w-3.5 h-3.5 mt-0.5 shrink-0" /> {line}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+
+                  {/* Templates */}
+                  <div>
+                    <label className="block text-xs font-bold uppercase text-black/60 mb-2">Start from a template</label>
+                    <div className="flex flex-wrap gap-2">
+                      {TEMPLATES.map((t) => (
+                        <button
+                          key={t.label}
+                          type="button"
+                          onClick={() => setEditingPerms(JSON.parse(JSON.stringify(t.perms)))}
+                          className="rounded-full border border-black/10 bg-white px-3 py-1.5 text-[10px] font-black uppercase tracking-wider text-black/60 hover:border-zru-green hover:text-zru-green transition-colors cursor-pointer"
+                        >
+                          {t.label}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
                   <div>
                     <label className="block text-xs font-bold uppercase text-black/60 mb-2">Visible Tabs</label>
                     <div className="grid sm:grid-cols-2 gap-2">
