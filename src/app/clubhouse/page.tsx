@@ -10,7 +10,6 @@ import {
   Shirt,
   Package,
   Star,
-  Bell,
 } from "lucide-react";
 
 import ClubhouseNavBridge from "@/components/shop/ClubhouseNavBridge";
@@ -18,57 +17,28 @@ import FixtureRibbon from "@/components/shop/FixtureRibbon";
 import JoinFanZoneSection from "@/components/home/JoinFanZoneSection";
 
 /* ------------------------------------------------------------------ */
-/*  Email Registration                                                 */
-/* ------------------------------------------------------------------ */
-function useRegister() {
-  const [email, setEmail] = useState("");
-  const [status, setStatus] = useState<"idle" | "submitting" | "success" | "error">("idle");
-
-  const submit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!email || status === "submitting") return;
-    setStatus("submitting");
-    try {
-      const res = await fetch("/api/fan-zone/register", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, source: "clubhouse_waitlist", tags: ["merch-early-access"] }),
-      });
-      if (!res.ok) throw new Error();
-      setStatus("success");
-    } catch {
-      setStatus("error");
-    }
-  };
-
-  return { email, setEmail, status, submit };
-}
-
-/* ------------------------------------------------------------------ */
-/*  Hero                                                               */
+/*  Hero Section with Embedded Fan Zone Join Card                      */
 /* ------------------------------------------------------------------ */
 function Hero() {
-  const { email, setEmail, status, submit } = useRegister();
-
   return (
-    <section className="relative min-h-[100dvh] w-full flex items-end overflow-hidden bg-rich-black">
-      {/* Background */}
-      <div className="absolute inset-0">
+    <section className="relative min-h-[90dvh] w-full flex items-center overflow-hidden bg-rich-black py-16 sm:py-24">
+      {/* Background with Darkened Atmosphere */}
+      <div className="absolute inset-0 z-0 pointer-events-none">
         <Image
           src="/images/gallery/zimbabwe-sables-battle-of-zambezi-gameday1-371.webp"
-          alt="Zimbabwe Sables"
+          alt="Zimbabwe Sables Rugby"
           fill
           priority
           quality={60}
-          className="object-cover object-top"
+          className="object-cover object-top opacity-30"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-rich-black via-rich-black/60 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-rich-black via-rich-black/80 to-rich-black/40" />
       </div>
 
-      {/* Content — bottom-left aligned, clean */}
-      <div className="relative z-10 w-full max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 pb-20 lg:pb-28 pt-32">
-        <div className="max-w-xl">
-          <span className="text-[10px] font-black uppercase tracking-[0.25em] text-zru-green block mb-4">
+      {/* Content */}
+      <div className="relative z-10 w-full max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-3xl mb-8">
+          <span className="text-[10px] font-black uppercase tracking-[0.25em] text-zru-green block mb-3">
             Official Zimbabwe Rugby Store
           </span>
 
@@ -76,62 +46,14 @@ function Hero() {
             Shop Coming Soon
           </h1>
 
-          <p className="mt-5 text-sm sm:text-[15px] text-white/70 leading-relaxed max-w-md">
-            Match jerseys, supporter gear, and international kits are arriving soon. Join the <Link href="/fan-zone" className="text-white font-bold underline decoration-zru-green underline-offset-4 hover:text-zru-green transition-colors">Fan Zone</Link> today for 10% off, exclusive early drop access, and member-first ordering.
+          <p className="mt-4 text-sm sm:text-base text-white/70 leading-relaxed max-w-2xl font-body">
+            Match jerseys, supporter gear, and international kits are arriving soon. Join the Fan Zone below for 10% member pricing, exclusive early drop access, and priority ordering.
           </p>
+        </div>
 
-          {/* Email */}
-          <form onSubmit={submit} className="mt-8 max-w-md">
-            <AnimatePresence mode="wait">
-              {status === "success" ? (
-                <motion.div
-                  key="done"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  className="flex items-center gap-3 py-3.5 px-5 bg-zru-green/15 border border-zru-green/25 rounded-xl"
-                >
-                  <Check className="w-4 h-4 text-zru-green shrink-0" />
-                  <span className="text-sm text-white font-medium">You&apos;re registered. We&apos;ll notify you first.</span>
-                </motion.div>
-              ) : (
-                <motion.div key="form" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="flex flex-col sm:flex-row gap-3">
-                  <input
-                    type="email"
-                    required
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    placeholder="Enter email for early access..."
-                    className="flex-1 px-4 py-3 bg-white/10 border border-white/15 rounded-lg text-sm text-white placeholder-white/40 focus:outline-none focus:border-zru-green/40 transition-colors"
-                  />
-                  <button
-                    type="submit"
-                    disabled={status === "submitting"}
-                    className="px-5 py-3 bg-zru-green hover:bg-[#005238] text-white font-bold text-xs uppercase tracking-wider rounded-lg transition-colors flex items-center justify-center gap-2 disabled:opacity-50 cursor-pointer shrink-0"
-                  >
-                    {status === "submitting" ? (
-                      <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                    ) : (
-                      <>
-                        <Bell className="w-3.5 h-3.5" />
-                        <span>Join Waitlist</span>
-                      </>
-                    )}
-                  </button>
-                </motion.div>
-              )}
-            </AnimatePresence>
-            {status === "error" && <p className="text-xs text-red-400 mt-2">Something went wrong. Please try again.</p>}
-          </form>
-
-          <div className="mt-5">
-            <Link
-              href="/fan-zone"
-              className="inline-flex items-center gap-2 text-xs font-bold text-zru-green hover:text-white transition-colors"
-            >
-              <span>Explore Fan Zone & Member Privileges</span>
-              <ArrowRight className="w-3.5 h-3.5" />
-            </Link>
-          </div>
+        {/* Embedded Homepage Interactive Fan Zone Card with Full Logic & Animations */}
+        <div className="w-full">
+          <JoinFanZoneSection />
         </div>
       </div>
     </section>
@@ -139,23 +61,23 @@ function Hero() {
 }
 
 /* ------------------------------------------------------------------ */
-/*  What to Expect — simple 3-column grid                              */
+/*  What to Expect — 3 Cutout Product Showcase Cards                   */
 /* ------------------------------------------------------------------ */
 const items = [
   {
-    image: "/images/gallery/zimbabwe-sables-battle-of-zambezi-gameday1-344.webp",
+    image: "/images/shop/1.png",
     label: "Match Jerseys",
     note: "Official home and away kits in men's, women's, and junior sizing.",
   },
   {
-    image: "/images/gallery/zimbabwe-sables-battle-of-zambezi-gameday1-383.webp",
+    image: "/images/shop/2.png",
     label: "Training & Leisure",
     note: "Performance training wear and casual supporter apparel.",
   },
   {
-    image: "/images/gallery/sables-women-2523590097200736450.webp",
+    image: "/images/shop/3.png",
     label: "Accessories",
-    note: "Caps, scarves, bags, and match-day essentials.",
+    note: "Caps, scarves, duffels, and matchday essentials.",
   },
 ];
 
@@ -184,28 +106,28 @@ function WhatToExpect() {
           </p>
         </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {items.map((item, i) => (
             <motion.div
               key={item.label}
               initial={{ opacity: 0, y: 24 }}
               animate={inView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.5, delay: 0.1 * i }}
-              className="group"
+              className="group bg-white rounded-2xl border border-black/8 p-6 shadow-sm hover:shadow-md transition-shadow duration-300 flex flex-col items-center text-center"
             >
-              <div className="relative aspect-[3/4] rounded-xl overflow-hidden bg-black/5 mb-4">
+              <div className="relative w-full aspect-square rounded-xl overflow-hidden bg-black/[0.02] mb-5 flex items-center justify-center p-4">
                 <Image
                   src={item.image}
                   alt={item.label}
                   fill
                   sizes="(max-width: 768px) 100vw, 33vw"
-                  className="object-cover group-hover:scale-[1.03] transition-transform duration-700"
+                  className="object-contain group-hover:scale-105 transition-transform duration-500 p-2"
                 />
               </div>
-              <h3 className="text-sm font-heading font-black uppercase tracking-tight text-rich-black">
+              <h3 className="text-base font-heading font-black uppercase tracking-tight text-rich-black">
                 {item.label}
               </h3>
-              <p className="mt-1 text-xs text-black/50 leading-relaxed">
+              <p className="mt-1.5 text-xs text-black/50 leading-relaxed max-w-xs">
                 {item.note}
               </p>
             </motion.div>
@@ -217,12 +139,24 @@ function WhatToExpect() {
 }
 
 /* ------------------------------------------------------------------ */
-/*  Member Perks — clean horizontal strip                              */
+/*  Member Perks Strip                                                 */
 /* ------------------------------------------------------------------ */
 const perks = [
-  { icon: Star, title: "Early Access", desc: "Shop new collections before anyone else." },
-  { icon: Shirt, title: "Member Pricing", desc: "Permanent 10% discount on all purchases." },
-  { icon: Package, title: "Worldwide Shipping", desc: "Tracked delivery from Harare to your door." },
+  {
+    icon: Star,
+    title: "Early Access",
+    desc: "Shop new collections before anyone else.",
+  },
+  {
+    icon: Shirt,
+    title: "Member Pricing",
+    desc: "10% discount on selected items.",
+  },
+  {
+    icon: Package,
+    title: "Worldwide Shipping",
+    desc: "Tracked delivery to your door.",
+  },
 ];
 
 function MemberPerks() {
@@ -265,10 +199,9 @@ function MemberPerks() {
 }
 
 /* ------------------------------------------------------------------ */
-/*  Bottom CTA — simple, quiet                                         */
+/*  Bottom CTA                                                         */
 /* ------------------------------------------------------------------ */
 function BottomCta() {
-  const { email, setEmail, status, submit } = useRegister();
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: true, margin: "-40px" });
 
@@ -284,60 +217,26 @@ function BottomCta() {
           Be First In Line
         </h2>
         <p className="mt-3 text-sm text-white/45 leading-relaxed">
-          Leave your email and we&apos;ll let you know the moment the store opens.
-          No spam — just one email when it matters.
+          Join the Fan Zone today to unlock your 10% member discount and get notified the moment the store opens.
         </p>
 
-        <form onSubmit={submit} className="mt-8">
-          <AnimatePresence mode="wait">
-            {status === "success" ? (
-              <motion.div
-                key="done"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                className="flex items-center justify-center gap-2 py-3 text-sm text-zru-green font-medium"
-              >
-                <Check className="w-4 h-4" />
-                <span>Registered. We&apos;ll be in touch.</span>
-              </motion.div>
-            ) : (
-              <motion.div key="form" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="flex flex-col sm:flex-row gap-3">
-                <input
-                  type="email"
-                  required
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="Your email address"
-                  className="flex-1 px-4 py-3 bg-white/8 border border-white/12 rounded-lg text-sm text-white placeholder-white/30 focus:outline-none focus:border-white/25 transition-colors"
-                />
-                <button
-                  type="submit"
-                  disabled={status === "submitting"}
-                  className="px-5 py-3 bg-zru-green hover:bg-[#005238] text-white font-bold text-xs uppercase tracking-wider rounded-lg transition-colors flex items-center justify-center gap-2 disabled:opacity-50 cursor-pointer shrink-0"
-                >
-                  {status === "submitting" ? (
-                    <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                  ) : (
-                    <>
-                      <ArrowRight className="w-3.5 h-3.5" />
-                      <span>Register</span>
-                    </>
-                  )}
-                </button>
-              </motion.div>
-            )}
-          </AnimatePresence>
-          {status === "error" && <p className="text-xs text-red-400 mt-2">Something went wrong. Try again.</p>}
-        </form>
+        <div className="mt-8 flex justify-center">
+          <Link
+            href="/fan-zone"
+            className="inline-flex items-center gap-2 bg-zru-green hover:bg-[#005238] text-white font-bold text-xs uppercase tracking-wider px-6 py-3.5 rounded-xl transition-all duration-200 shadow-lg shadow-zru-green/20"
+          >
+            <span>Join Fan Zone Now</span>
+            <ArrowRight className="w-4 h-4" />
+          </Link>
+        </div>
 
-        {/* Fan Zone link */}
         <div className="mt-10 pt-8 border-t border-white/8">
           <p className="text-xs text-white/30">
-            Already a supporter?{" "}
+            Already a member?{" "}
             <Link href="/fan-zone" className="text-zru-green hover:text-zru-green/80 transition-colors font-medium">
               Sign in to your Fan Zone
             </Link>{" "}
-            for member pricing when we launch.
+            to check your supporter privileges.
           </p>
         </div>
       </motion.div>
@@ -346,7 +245,7 @@ function BottomCta() {
 }
 
 /* ------------------------------------------------------------------ */
-/*  Page                                                               */
+/*  Page Assembly                                                      */
 /* ------------------------------------------------------------------ */
 export default function ClubhousePage() {
   return (
@@ -356,9 +255,6 @@ export default function ClubhousePage() {
       <Hero />
       <WhatToExpect />
       <MemberPerks />
-      <div className="bg-milk-white">
-        <JoinFanZoneSection />
-      </div>
       <BottomCta />
     </main>
   );

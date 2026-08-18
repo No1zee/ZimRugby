@@ -38,9 +38,9 @@ export default function ClubhouseNavBridge() {
           </span>
         </Link>
 
-        {/* FanZone label */}
+        {/* Shop label */}
         <span className="text-[10px] font-black uppercase tracking-[0.2em] text-white/50 font-heading">
-          The FanZone
+          Official Shop
         </span>
       </div>
     </div>

@@ -54,7 +54,6 @@ export default function PlayRugbyDevelopment() {
           transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
           className="mb-16 border-b border-white/20 pb-10 max-w-3xl space-y-4"
         >
-          <span className="text-xs font-black uppercase tracking-[0.2em] text-accent-teal">For the Future</span>
           <div className="heading-plate heading-plate-light">
             <h2 className="text-3xl sm:text-5xl font-heading font-black uppercase tracking-wide sm:tracking-widest text-white not-italic leading-[1.05]">
               Rugby For <span className="text-accent-teal">Good</span>
