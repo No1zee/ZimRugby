@@ -13,6 +13,7 @@ export interface Match {
 
 export interface Report {
   id: string;
+  slug?: string;
   title: string;
   excerpt: string;
   content?: string;
@@ -153,7 +154,7 @@ export async function getSocialPosts(): Promise<Report[]> {
 
 export async function getReportById(id: string): Promise<Report | undefined> {
   const reports = await getLatestReports();
-  const found = reports.find(r => r.id === id);
+  const found = reports.find(r => r.id === id || r.slug === id || r.url === `/media/${id}` || r.url.endsWith(`/${id}`));
   if (found) return found;
 
   // Fall back to the Directus news collection keyed by slug (homepage /media links use news slugs).
