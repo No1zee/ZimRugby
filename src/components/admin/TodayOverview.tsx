@@ -245,10 +245,10 @@ export default function TodayOverview({
         body: JSON.stringify({
           collection: "announcements",
           data: {
-            title: `[${alertTag}] ${quickAlert.trim()}`,
-            slug: `ticker-${Date.now()}`,
+            title: quickAlert.trim(),
+            slug: `ann-live-${Date.now()}`,
             body: "",
-            design_variant: "ticker",
+            design_variant: "banner",
             priority: alertTag === "BREAKING" ? 30 : alertTag === "LIVE MATCH" ? 20 : 10,
             starts_at: now.toISOString(),
             ends_at: new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000).toISOString(),
