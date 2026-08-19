@@ -32,64 +32,55 @@ function mapPlayer(p: Player): Player {
   return { ...p, photo: resolvePhoto(p) };
 }
 
-const fallbackPlayers: Player[] = [
-  { id: 1, name: "Bornwell Gwinji", position: "Prop", team: "Sables", caps: 42, age: 28, photo: "/images/teams/headshots/Bornwell Gwinji.jpg", slug: "bornwell-gwinji" },
-  { id: 2, name: "Brandan Mudzekenyedzi", position: "Lock", team: "Sables", caps: 35, age: 27, photo: "/images/teams/headshots/Brandan Mudzekenyedzi.jpg", slug: "brandan-mudzekenyedzi" },
-  { id: 3, name: "Brendon Marume", position: "Scrumhalf", team: "Sables", caps: 28, age: 26, photo: "/images/teams/headshots/Brendon Marume.jpg", slug: "brendon-marume" },
-];
-
 export async function getPlayers(): Promise<Player[]> {
   try {
-    if (!process.env.NEXT_PUBLIC_DIRECTUS_URL) return fallbackPlayers;
+    if (!process.env.NEXT_PUBLIC_DIRECTUS_URL) return [];
 
     const players = await directusFetch<Player>("players", {
-      filter: { status: { _eq: "published" } },
+      filter: { status: { _eq: "published" }, deleted_at: { _null: true } },
       sort: ["id"],
       limit: 50,
     });
 
     if (players && players.length > 0) return players.map(mapPlayer);
-
-    return fallbackPlayers;
-  } catch {
-    console.warn("Failed to fetch players from Directus, using fallback");
-    return fallbackPlayers;
+    return [];
+  } catch (error) {
+    console.warn("Failed to fetch players from Directus:", error);
+    return [];
   }
 }
 
 export async function getFeaturedPlayers(): Promise<Player[]> {
   try {
-    if (!process.env.NEXT_PUBLIC_DIRECTUS_URL) return fallbackPlayers;
+    if (!process.env.NEXT_PUBLIC_DIRECTUS_URL) return [];
 
     const players = await directusFetch<Player>("players", {
-      filter: { status: { _eq: "published" }, featured: { _eq: true } },
+      filter: { status: { _eq: "published" }, featured: { _eq: true }, deleted_at: { _null: true } },
       sort: ["id"],
       limit: 10,
-    }).catch(() => fallbackPlayers);
+    });
 
     if (players && players.length > 0) return players.map(mapPlayer);
-
-    return fallbackPlayers;
-  } catch {
-    console.warn("Failed to fetch featured players from Directus, using fallback");
-    return fallbackPlayers;
+    return [];
+  } catch (error) {
+    console.warn("Failed to fetch featured players from Directus:", error);
+    return [];
   }
 }
 
 export async function getPlayerBySlug(slug: string): Promise<Player | null> {
   try {
-    if (!process.env.NEXT_PUBLIC_DIRECTUS_URL) return fallbackPlayers.find(p => p.slug === slug) || null;
+    if (!process.env.NEXT_PUBLIC_DIRECTUS_URL) return null;
 
     const players = await directusFetch<Player>("players", {
-      filter: { slug: { _eq: slug }, status: { _eq: "published" } },
+      filter: { slug: { _eq: slug }, status: { _eq: "published" }, deleted_at: { _null: true } },
       limit: 1,
     });
 
     if (players && players.length > 0) return mapPlayer(players[0]);
-
-    return fallbackPlayers.find(p => p.slug === slug) || null;
+    return null;
   } catch {
-    console.warn(`Failed to fetch player by slug "${slug}" from Directus, using fallback`);
-    return fallbackPlayers.find(p => p.slug === slug) || null;
+    console.warn(`Failed to fetch player by slug "${slug}" from Directus`);
+    return null;
   }
 }

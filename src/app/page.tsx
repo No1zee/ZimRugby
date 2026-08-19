@@ -59,7 +59,7 @@ export default async function Home() {
     getGrassrootsInitiatives(),
   ]);
 
-  const rawAnnouncements = await directusFetch<any>("announcements", { filter: { is_enabled: { _eq: true } }, sort: ["-priority"] }, 60);
+  const rawAnnouncements = await directusFetch<any>("announcements", { filter: { is_enabled: { _eq: true }, deleted_at: { _null: true } }, sort: ["-priority"] }, 60);
   const announcementItems: AnnouncementItem[] = (rawAnnouncements || []).map((a: any) => ({
     id: String(a.id),
     tag: a.badge || "ANNOUNCEMENT",

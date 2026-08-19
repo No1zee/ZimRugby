@@ -24,37 +24,6 @@ const ZIM_MATCH_PATTERNS = [
   /\bzim\b/i,
 ];
 
-// Hardcoded fallback if RSS fails
-const FALLBACK_HIGHLIGHTS: any[] = [
-  {
-    id: "yt-canada-v-zim-2026",
-    videoId: "kf33dibu7f0",
-    title: "Canada v Zimbabwe | Nations Cup 2026 Extended Highlights",
-    thumbnail: "https://img.youtube.com/vi/kf33dibu7f0/hqdefault.jpg",
-    category: "NATIONS CUP",
-    publishedAt: "JULY 2026",
-    channelName: "World Rugby",
-  },
-  {
-    id: "yt-usa-v-zim-2026",
-    videoId: "2koQbsHjg14",
-    title: "USA v Zimbabwe | Nations Cup 2026 Extended Highlights",
-    thumbnail: "https://img.youtube.com/vi/2koQbsHjg14/hqdefault.jpg",
-    category: "NATIONS CUP",
-    publishedAt: "JULY 2026",
-    channelName: "World Rugby",
-  },
-  {
-    id: "yt-tonga-v-zim-2026",
-    videoId: "h3iy3mTIhs4",
-    title: "Tonga v Zimbabwe | Nations Cup 2026 Extended Highlights",
-    thumbnail: "https://img.youtube.com/vi/h3iy3mTIhs4/hqdefault.jpg",
-    category: "NATIONS CUP",
-    publishedAt: "JULY 2026",
-    channelName: "World Rugby",
-  },
-];
-
 function extractTag(xml: string, tag: string): string {
   const match = xml.match(new RegExp(`<${tag}[^>]*>([^<]*)</${tag}>`));
   return match ? match[1].trim() : "";
@@ -169,7 +138,5 @@ export async function fetchZimbabweVideos(): Promise<YoutubeFeedVideo[]> {
     v.official ? !isBareTrailer(v) : isZimRelevant(v.title) && !isTrailerLike(v)
   );
 
-  // Always include the confirmed Nations Cup highlights, merged with any live finds
-  const merged = [...included, ...FALLBACK_HIGHLIGHTS];
-  return Array.from(new Map(merged.map((v) => [v.videoId, v])).values());
+  return Array.from(new Map(included.map((v) => [v.videoId, v])).values());
 }

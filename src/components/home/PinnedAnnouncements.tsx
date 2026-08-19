@@ -15,18 +15,13 @@ interface Props {
 
 const ICON_MAP = { calendar: Calendar, megaphone: Megaphone } as const;
 
-const FALLBACK_ITEMS: AnnouncementItem[] = [
-  { id: "rwc-qualifier", tag: "Upcoming Match", title: "Zimbabwe v Namibia — RWC Qualifier, 15 August 2026", href: "/tickets", iconType: "calendar" },
-  { id: "membership-drive", tag: "Announcement", title: "Fan Zone membership drive — Join now for priority ticket access", href: "/fan-zone", iconType: "megaphone" },
-];
-
 export default function PinnedAnnouncements({ items }: Props) {
-  const active = items && items.length > 0 ? items : FALLBACK_ITEMS;
+  if (!items || items.length === 0) return null;
 
   return (
     <section className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-2">
       <div className="space-y-2">
-        {active.map((item) => {
+        {items.map((item) => {
           const Icon = ICON_MAP[item.iconType];
           return (
             <Link

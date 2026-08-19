@@ -46,69 +46,6 @@ function normalizeTier(tier?: string | null): PartnerTierKey {
   return TIER_ALIASES[String(tier).toLowerCase().trim()] || "gold";
 }
 
-const MOCK_PARTNERS: Partner[] = [
-  {
-    id: 1,
-    name: "Nedbank",
-    role: "HEADLINE SPONSOR",
-    logo: "/images/sponsors/nedbank.jpeg",
-    blurb: "Official headline sponsor powering the Sables national team, domestic competitions, and grassroots rugby nationwide.",
-    href: "https://www.nedbank.co.zw",
-    badge: "PRIMARY PARTNER",
-    sort: 1,
-    tier: "title",
-    is_active: true,
-  },
-  {
-    id: 2,
-    name: "Rugby Africa",
-    role: "CONTINENTAL BODY",
-    logo: "/images/sponsors/Rugby Africa.png",
-    blurb: "The administrative body for rugby union within Africa.",
-    href: "https://www.rugbyafrique.com",
-    badge: "GOVERNING BODY",
-    sort: 2,
-    tier: "title",
-    is_active: true,
-  },
-  {
-    id: 3,
-    name: "World Rugby",
-    role: "GLOBAL BODY",
-    logo: "/images/sponsors/World_Rugby_logo.png",
-    blurb: "The world governing body for the sport of rugby union.",
-    href: "https://www.world.rugby",
-    badge: "GOVERNING BODY",
-    sort: 3,
-    tier: "title",
-    is_active: true,
-  },
-  {
-    id: 4,
-    name: "Zimbabwean Olympic Committee",
-    role: "NATIONAL COMMITTEE",
-    logo: "/images/sponsors/Zimbabwean Olympic Comitte-Logo.png",
-    blurb: "The National Olympic Committee representing Zimbabwe.",
-    href: "#",
-    badge: "NATIONAL PARTNER",
-    sort: 4,
-    tier: "gold",
-    is_active: true,
-  },
-  {
-    id: 5,
-    name: "Sports and Recreation Commission",
-    role: "SPORTS COMMISSION",
-    logo: "/images/sponsors/src.png",
-    blurb: "Governing sports and recreation across Zimbabwe.",
-    href: "#",
-    badge: "NATIONAL PARTNER",
-    sort: 5,
-    tier: "gold",
-    is_active: true,
-  },
-];
-
 const LOCAL_LOGO_FALLBACKS: Record<string, string> = {
   nedbank: "/images/sponsors/nedbank.jpeg",
   africa: "/images/sponsors/Rugby Africa.png",
@@ -124,7 +61,7 @@ function getFallbackLogo(name: string): string {
       return LOCAL_LOGO_FALLBACKS[key];
     }
   }
-  return "/images/logos/zru-logo.svg"; // Fallback to main union logo if completely unknown
+  return "/images/logos/zru-logo.svg";
 }
 
 export async function getPartners(): Promise<Partner[]> {
@@ -132,7 +69,7 @@ export async function getPartners(): Promise<Partner[]> {
     if (process.env.NEXT_PUBLIC_DIRECTUS_URL) {
       const response = await directusFetch<DirectusPartner>("partners", {
         fields: ["id", "name", "role", "logo", "description", "website_url", "badge", "tier", "sort", "status"],
-        filter: { status: { _eq: "published" } },
+        filter: { status: { _eq: "published" }, deleted_at: { _null: true } },
         sort: ["sort"],
         limit: 20,
       }, 300);
@@ -165,8 +102,8 @@ export async function getPartners(): Promise<Partner[]> {
       }
     }
   } catch (error) {
-    console.warn("Directus fetch failed for partners, using mock data:", error);
+    console.warn("Directus fetch failed for partners:", error);
   }
 
-  return MOCK_PARTNERS;
+  return [];
 }

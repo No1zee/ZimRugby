@@ -5,7 +5,6 @@ import { X, ArrowRight, Bell } from "lucide-react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { Announcement } from "@/types";
-import { Campaign } from "@/lib/api/campaigns";
 
 const DISMISS_PREFIX = "zru_dismissed_ann_";
 
@@ -41,39 +40,20 @@ export default function GlobalAnnouncementBar() {
 
     async function load() {
       try {
-        const [annsRes, campsRes] = await Promise.all([
-          fetch("/api/announcements"),
-          fetch("/api/campaigns"),
-        ]);
-        const [anns, camps]: [Announcement[], Campaign[]] = await Promise.all([
-          annsRes.ok ? annsRes.json() : [],
-          campsRes.ok ? campsRes.json() : [],
-        ]);
+        const annsRes = await fetch("/api/announcements");
+        const anns: Announcement[] = annsRes.ok ? await annsRes.json() : [];
         if (!alive) return;
 
-        const feed: FeedItem[] = [
-          ...(anns || [])
-            .filter((a) => !dismissed.has(`ann-${a.id}`))
-            .map<FeedItem>((a) => ({
-              key: `ann-${a.id}`,
-              badge: a.badge || (a.priority === "critical" ? "TICKET ALERT" : "ANNOUNCEMENT"),
-              title: a.title,
-              body: a.body,
-              href: a.ctaUrl || undefined,
-              cta: a.ctaLabel || "BOOK TICKETS",
-            })),
-          ...(camps || [])
-            .filter((c) => (c.start_date || c.end_date) || Number(c.priority) > 0)
-            .filter((c) => !dismissed.has(`camp-${c.id}`))
-            .map<FeedItem>((c) => ({
-              key: `camp-${c.id}`,
-              badge: "CAMPAIGN",
-              title: c.name,
-              body: c.subtitle,
-              href: c.cta_url || `/campaigns/${c.slug}`,
-              cta: c.cta_label || "EXPLORE",
-            })),
-        ];
+        const feed: FeedItem[] = (anns || [])
+          .filter((a) => !dismissed.has(`ann-${a.id}`))
+          .map<FeedItem>((a) => ({
+            key: `ann-${a.id}`,
+            badge: a.badge || (a.priority === "critical" ? "TICKET ALERT" : "ANNOUNCEMENT"),
+            title: a.title,
+            body: a.body,
+            href: a.ctaUrl || undefined,
+            cta: a.ctaLabel || "BOOK TICKETS",
+          }));
 
         if (!alive) return;
         setItems(feed.filter(Boolean));
