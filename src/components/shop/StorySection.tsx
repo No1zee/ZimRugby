@@ -49,10 +49,10 @@ export default function StorySection() {
             </h2>
             <div className="space-y-6 text-sm md:text-base text-clubhouse-charcoal/70 leading-relaxed font-normal">
               <p>
-                Founded in Harare, The Clubhouse is an independent label bridging the gap between professional-grade rugby engineering and contemporary African street style.
+                Founded in Harare, The 1985 Club is an independent label bridging the gap between professional-grade rugby engineering and contemporary African street style.
               </p>
               <p>
-                We believe that the discipline of the pitch should reflect in the precision of the garment. Every stitch in our Clubhouse collection is tested for elite performance while maintaining a silhouette that belongs in the metropolitan landscape.
+                We believe that the discipline of the pitch should reflect in the precision of the garment. Every stitch in our 1985 Club collection is tested for elite performance while maintaining a silhouette that belongs in the metropolitan landscape.
               </p>
             </div>
             

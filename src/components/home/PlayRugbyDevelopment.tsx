@@ -134,7 +134,7 @@ export default function PlayRugbyDevelopment() {
                GET INVOLVED
              </span>
              <h3 className="text-2xl md:text-4xl font-heading font-black text-white uppercase tracking-tight leading-tight">
-               Join The <span className="text-accent-teal">Ranks of Impact</span>
+               Join The <span className="text-accent-teal">1985 Club</span>
              </h3>
              <p className="text-white/70 text-xs sm:text-sm leading-relaxed">
                Whether as a volunteer, donor, or strategic grassroots partner, your involvement drives the next era of Zimbabwe Rugby.

@@ -77,7 +77,7 @@ export default function ClubhouseBanner() {
                   transition={{ duration: 1, delay: 0.5, ease: [0.16, 1, 0.3, 1] }}
                   className="text-zru-green/90 block"
                 >
-                  CLUBHOUSE
+                  1985 CLUB
                 </motion.span>
               </h2>
               
