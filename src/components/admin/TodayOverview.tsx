@@ -379,7 +379,7 @@ export default function TodayOverview({
         <div className="absolute inset-0 bg-gradient-to-r from-red-950/60 to-transparent pointer-events-none" />
 
         <div className="relative z-10 px-6 py-5">
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1 mb-4">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-4">
             <div className="flex items-center gap-3">
               <span className="relative flex h-3 w-3">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-500 opacity-75" />
@@ -387,15 +387,15 @@ export default function TodayOverview({
               </span>
               <div>
                 <h3 className="font-heading text-sm font-black uppercase tracking-wider text-white">
-                  Instant Live Broadcast
+                  Post to Header Ribbon
                 </h3>
-                <p className="text-[10px] text-white/40 uppercase tracking-wider">
-                  Pushes to public marquee in &lt;60s
+                <p className="text-[11px] text-white/70 font-normal">
+                  Instantly publish an urgent match notice, ticket alert, or breaking news banner to all website visitors.
                 </p>
               </div>
             </div>
-            <span className="inline-flex items-center gap-1.5 rounded-full border border-red-500/30 bg-red-500/10 px-3 py-1 text-[10px] font-black uppercase tracking-wider text-red-400">
-              <Zap className="h-3 w-3" /> Matchday Ticker
+            <span className="inline-flex items-center gap-1.5 rounded-full border border-accent-teal/40 bg-accent-teal/10 px-3 py-1 text-[10px] font-heading font-black uppercase tracking-wider text-accent-teal">
+              <Zap className="h-3 w-3" /> Live Ribbon Banner
             </span>
           </div>
 
@@ -403,11 +403,11 @@ export default function TodayOverview({
             <select
               value={alertTag}
               onChange={(e) => setAlertTag(e.target.value as "BREAKING" | "LIVE MATCH" | "NOTICE" | "TICKETS")}
-              className="shrink-0 rounded-xl border border-white/10 bg-white/10 px-3 py-2.5 text-xs font-black uppercase tracking-wider text-white outline-none focus:border-red-500 transition-colors"
+              className="shrink-0 rounded-xl border border-white/10 bg-white/10 px-3 py-2.5 text-xs font-black uppercase tracking-wider text-white outline-none focus:border-accent-teal transition-colors"
             >
+              <option value="TICKETS" className="bg-[#160a0a] text-white">TICKETS</option>
               <option value="BREAKING" className="bg-[#160a0a] text-white">BREAKING</option>
               <option value="LIVE MATCH" className="bg-[#160a0a] text-white">LIVE MATCH</option>
-              <option value="TICKETS" className="bg-[#160a0a] text-white">TICKETS</option>
               <option value="NOTICE" className="bg-[#160a0a] text-white">NOTICE</option>
             </select>
 
@@ -415,17 +415,17 @@ export default function TodayOverview({
               type="text"
               value={quickAlert}
               onChange={(e) => setQuickAlert(e.target.value)}
-              placeholder="e.g. Sables vs Simbas kickoff 15:00 CAT — Gates open 11:00"
-              className="flex-1 rounded-xl border border-white/10 bg-white/10 px-4 py-2.5 text-sm text-white placeholder:text-white/30 outline-none focus:border-red-500 transition-colors"
+              placeholder="e.g. Battle of the Zambezi Tickets Now on Sale! — Early bird ends Friday"
+              className="flex-1 rounded-xl border border-white/10 bg-white/10 px-4 py-2.5 text-sm text-white placeholder:text-white/40 outline-none focus:border-accent-teal transition-colors"
             />
 
             <button
               type="submit"
               disabled={broadcasting || !quickAlert.trim()}
-              className="flex shrink-0 items-center justify-center gap-2 rounded-xl bg-red-600 px-6 py-2.5 text-xs font-black uppercase tracking-wider text-white shadow-lg transition-all hover:bg-red-500 disabled:opacity-40 cursor-pointer"
+              className="flex shrink-0 items-center justify-center gap-2 rounded-xl bg-zru-green hover:bg-[#00875A] px-6 py-2.5 text-xs font-heading font-black uppercase tracking-wider text-white shadow-lg transition-all disabled:opacity-40 cursor-pointer"
             >
               <Send className="h-3.5 w-3.5" />
-              {broadcasting ? "Broadcasting…" : "Broadcast Live"}
+              {broadcasting ? "Publishing..." : "Publish Banner"}
             </button>
           </form>
         </div>
