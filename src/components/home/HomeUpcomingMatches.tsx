@@ -49,9 +49,11 @@ export default function HomeUpcomingMatches({
                 MATCH CENTRE
               </span>
             </div>
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-heading font-black uppercase text-white tracking-tight leading-none">
-              UPCOMING <span className="text-accent-teal">FIXTURES</span>
-            </h2>
+            <div className="heading-plate heading-plate-light">
+              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-heading font-black uppercase text-white tracking-tight leading-[1.05]">
+                UPCOMING <span className="text-accent-teal">FIXTURES</span>
+              </h2>
+            </div>
           </div>
 
           <Link

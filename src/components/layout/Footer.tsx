@@ -10,9 +10,8 @@ const footerColumns = [
   {
     title: "The Union",
     links: [
-      { label: "Governance & Board", href: "/about/governance" },
-      { label: "High Performance", href: "/teams/sables" },
-      { label: "Sables Trust", href: "/about/history" },
+      { label: "About Us", href: "/about" },
+      { label: "Contact Us", href: "/contact" },
       { label: "Commercial Partners", href: "/partners" },
     ],
   },
@@ -30,17 +29,14 @@ const footerColumns = [
     links: [
       { label: "Fixtures & Results", href: "/match-centre" },
       { label: "Match Tickets", href: "/tickets" },
-      { label: "Nations Cup", href: "/events" },
-      { label: "Live Broadcast Hub", href: "/live" },
     ],
   },
   {
     title: "Grassroots & Support",
     links: [
-      { label: "Schools Rugby", href: "/schools" },
       { label: "Get Into Rugby", href: "/play-rugby" },
+      { label: "Schools Rugby", href: "/schools" },
       { label: "Coaching & Referees", href: "/referees" },
-      { label: "Safeguarding", href: "/about/safeguarding" },
     ],
   },
 ];
