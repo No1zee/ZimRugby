@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Plus, Pencil, Trash2, ChevronDown, Copy, CheckSquare, Square, Loader2, AlertCircle, Archive, RotateCcw, ShieldX } from "lucide-react";
@@ -49,6 +49,8 @@ interface CollectionManagerProps {
   canReview?: boolean;
   /** Signed-in staff email — used to prevent reviewers approving their own work. */
   currentUserEmail?: string;
+  /** Default initial values to populate when creating a new record (e.g. preselected team). */
+  initialValues?: Record<string, string>;
 }
 
 function formatDisplay(value: unknown): string {
@@ -134,6 +136,7 @@ export default function CollectionManager({
   reviewable = false,
   canReview = false,
   currentUserEmail,
+  initialValues,
 }: CollectionManagerProps) {
   const canCreate = grants?.create !== false;
   const canUpdate = grants?.update !== false;
@@ -268,10 +271,17 @@ export default function CollectionManager({
     const data: Record<string, string> = {};
     const today = new Date().toISOString().slice(0, 10);
     fields.forEach((f) => {
-      if (f.type === "boolean") data[f.key] = "0";
-      else if (f.type === "select" && f.options?.[0]) data[f.key] = f.options[0];
-      else if (isDateFieldType(f.type)) data[f.key] = today;
-      else data[f.key] = "";
+      if (initialValues && initialValues[f.key] !== undefined) {
+        data[f.key] = initialValues[f.key];
+      } else if (f.type === "boolean") {
+        data[f.key] = "0";
+      } else if (f.type === "select" && f.options?.[0]) {
+        data[f.key] = f.options[0];
+      } else if (isDateFieldType(f.type)) {
+        data[f.key] = today;
+      } else {
+        data[f.key] = "";
+      }
     });
     setFormData(data);
     setEditingId(null);
