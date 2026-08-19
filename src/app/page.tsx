@@ -3,7 +3,7 @@ import { Metadata } from "next";
 import HeroCarousel from "@/components/home/HeroCarousel";
 import HomeLatestNews from "@/components/home/HomeLatestNews";
 import HomeUpcomingMatches from "@/components/home/HomeUpcomingMatches";
-import GrassrootsInitiativeSection from "@/components/home/GrassrootsInitiativeSection";
+import PlayRugbyDevelopment from "@/components/home/PlayRugbyDevelopment";
 import JoinFanZoneSection from "@/components/home/JoinFanZoneSection";
 import SponsorGrid from "@/components/home/SponsorGrid";
 import PinnedAnnouncements from "@/components/home/PinnedAnnouncements";
@@ -117,8 +117,8 @@ export default async function Home() {
             <HomeUpcomingMatches nextMatch={hubNextMatch} upcomingMatches={allMatches} />
 
 
-            {/* 5. Grassroots & Growing the Game (Stats unchanged) */}
-            <GrassrootsInitiativeSection initiatives={initiatives} />
+            {/* 4. Rugby For Good & Grassroots */}
+            <PlayRugbyDevelopment />
 
             {/* 6. Fan Zone (Preserved as-is) */}
             <JoinFanZoneSection />

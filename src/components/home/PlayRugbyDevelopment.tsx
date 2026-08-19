@@ -4,34 +4,35 @@ import { motion } from "framer-motion";
 import { ArrowRight, Heart, Users, GraduationCap } from "lucide-react";
 import Link from "next/link";
 import { AnimatedCounter } from "../ui/animations";
+import SlantedButton from "@/components/ui/SlantedButton";
 
 const programs = [
   {
     id: 1,
     title: "GRASSROOTS DEVELOPMENT",
-    description: "Building the future of Zimbabwe Rugby from the ground up in communities across the nation.",
+    description: "Building the future of Zimbabwe Rugby from the ground up in communities and provincial unions across the nation.",
     icon: Users,
     stat: 50,
     statLabel: "CLUBS",
     cta: "Explore Program",
     ctaLink: "/play-rugby",
-    color: "from-zru-green to-green-900"
+    color: "from-zru-green to-[#002214]"
   },
   {
     id: 2,
     title: "SCHOOLS PROGRAMME",
-    description: "Partnering with schools nationwide to introduce young Zimbabweans to the game of rugby.",
+    description: "Partnering with primary and secondary schools nationwide to introduce young Zimbabweans to the game of rugby.",
     icon: GraduationCap,
     stat: 200,
     statLabel: "SCHOOLS",
     cta: "Explore Program",
     ctaLink: "/schools",
-    color: "from-gray-900 to-black"
+    color: "from-[#003822] to-black"
   },
   {
     id: 3,
-    title: "WOMEN&apos;S RUGBY",
-    description: "Empowering women and girls through rugby with pathways from community to international level.",
+    title: "WOMEN'S RUGBY",
+    description: "Empowering women and girls through rugby with structured pathways from community leagues to the national Lady Sables.",
     icon: Heart,
     stat: 5000,
     statLabel: "PLAYERS",
@@ -43,8 +44,12 @@ const programs = [
 
 export default function PlayRugbyDevelopment() {
   return (
-    <section className="bg-zru-green text-white py-16 sm:py-20 overflow-hidden relative">
-      <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+    <section className="bg-zru-green text-white py-16 sm:py-20 overflow-hidden relative select-none">
+      {/* Pitch Watermark & Ambient Dot Pattern */}
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(255,255,255,0.08)_0%,transparent_70%)] pointer-events-none" />
+      <div className="absolute inset-0 opacity-10 pointer-events-none bg-[radial-gradient(circle,#ffffff_1px,transparent_1px)] [background-size:24px_24px]" />
+
+      <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 relative z-10 space-y-12">
         
         {/* Section Header */}
         <motion.div
@@ -52,57 +57,104 @@ export default function PlayRugbyDevelopment() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-          className="mb-16 border-b border-white/20 pb-10 max-w-3xl space-y-4"
+          className="border-b border-white/20 pb-8 max-w-3xl space-y-4"
         >
-          <div className="heading-plate heading-plate-light">
-            <h2 className="text-3xl sm:text-5xl font-heading font-black uppercase tracking-wide sm:tracking-widest text-white not-italic leading-[1.05]">
-              Rugby For <span className="text-accent-teal">Good</span>
-            </h2>
+          <div className="flex items-center gap-2">
+            <span className="w-2 h-2 rounded-full bg-accent-teal" />
+            <span className="text-accent-teal font-heading font-black text-xs sm:text-sm uppercase tracking-[0.25em]">
+              COMMUNITY &amp; IMPACT
+            </span>
           </div>
-          <p className="text-sm md:text-base text-white/70 font-normal leading-relaxed border-l-2 border-accent-teal pl-6 max-w-xl">
-            Using rugby to transform communities, empower youth, and build a lasting legacy across Zimbabwe.
+          <h2 className="text-3xl sm:text-5xl font-heading font-black uppercase tracking-wide sm:tracking-widest text-white not-italic leading-[1.05]">
+            Rugby For <span className="text-accent-teal">Good</span>
+          </h2>
+          <p className="text-sm md:text-base text-white/80 font-normal leading-relaxed border-l-2 border-accent-teal pl-6 max-w-2xl">
+            Using rugby to transform communities, empower youth, and build an enduring sporting legacy across Zimbabwe.
           </p>
         </motion.div>
 
         {/* Programs: Cinematic Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-10 lg:gap-16">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-12">
           {programs.map((program, idx) => (
             <motion.div
               key={program.id}
               initial={{ opacity: 0, scale: 0.95 }}
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true }}
-              transition={{ delay: idx * 0.1, duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
+              transition={{ delay: idx * 0.1, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
               className="group relative"
             >
-              <div className="relative aspect-3/4 mb-8 overflow-hidden rounded-2xl bg-neutral-100 shadow-2xl shadow-black/5">
+              <div className="relative aspect-[3/4] overflow-hidden rounded-[24px] bg-[#002214]/60 border border-white/20 shadow-2xl backdrop-blur-md">
                 <div className={`absolute inset-0 bg-gradient-to-br ${program.color} opacity-90 transition-opacity group-hover:opacity-100`} />
-                <div className="absolute inset-0 flex flex-col justify-end p-10 space-y-6">
+                <div className="absolute inset-0 flex flex-col justify-end p-6 sm:p-8 space-y-5">
                   <div className="space-y-2">
-                    <program.icon className="w-8 h-8 text-zru-green" />
-                    <div className="text-6xl font-black text-white px-0 tracking-tighter">
+                    <div className="w-12 h-12 rounded-xl bg-white/10 border border-white/20 flex items-center justify-center">
+                      <program.icon className="w-6 h-6 text-accent-teal" />
+                    </div>
+                    <div className="text-5xl sm:text-6xl font-heading font-black text-white tracking-tighter">
                       <AnimatedCounter value={program.stat} suffix="+" />
                     </div>
+                    <span className="text-[10px] font-heading font-black tracking-widest uppercase text-accent-teal">
+                      {program.statLabel}
+                    </span>
                   </div>
-                  <h3 className="text-2xl font-black text-white uppercase tracking-tight leading-none">
+                  <h3 className="text-xl sm:text-2xl font-heading font-black text-white uppercase tracking-tight leading-tight">
                     {program.title}
                   </h3>
-                  <p className="text-sm text-white/70 font-normal line-clamp-3">
+                  <p className="text-xs sm:text-sm text-white/70 font-normal line-clamp-3 leading-relaxed">
                     {program.description}
                   </p>
-                  <Link href={program.ctaLink} className="pt-4 block group/btn">
-                    <div className="flex items-center gap-3 text-[10px] font-black uppercase tracking-widest text-white">
+                  <div className="pt-2">
+                    <SlantedButton
+                      href={program.ctaLink}
+                      variant="primary"
+                      size="sm"
+                      className="w-full justify-between group/btn"
+                      rightIcon={<ArrowRight className="w-4 h-4 transition-transform group-hover/btn:translate-x-1 shrink-0" />}
+                    >
                       <span>{program.cta}</span>
-                      <ArrowRight className="w-4 h-4 translate-x-0 group-hover/btn:translate-x-2 transition-transform" />
-                    </div>
-                  </Link>
+                    </SlantedButton>
+                  </div>
                 </div>
-                {/* Visual backdrop removed as icon is now anchored */}
-                {/* <program.icon className="absolute top-10 right-10 w-24 h-24 text-white/10 rotate-12" /> */}
               </div>
             </motion.div>
           ))}
         </div>
+
+        {/* Bottom CTA: High-end Banner */}
+        <motion.div 
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.7 }}
+          className="p-8 md:p-12 bg-[#002214]/70 border border-white/20 rounded-[24px] backdrop-blur-xl relative overflow-hidden flex flex-col md:flex-row items-center justify-between gap-8 shadow-2xl"
+        >
+          <div className="space-y-3 relative z-10 max-w-xl text-center md:text-left">
+             <span className="text-accent-teal text-xs font-heading font-black tracking-[0.2em] uppercase">
+               GET INVOLVED
+             </span>
+             <h3 className="text-2xl md:text-4xl font-heading font-black text-white uppercase tracking-tight leading-tight">
+               Join The <span className="text-accent-teal">Ranks of Impact</span>
+             </h3>
+             <p className="text-white/70 text-xs sm:text-sm leading-relaxed">
+               Whether as a volunteer, donor, or strategic grassroots partner, your involvement drives the next era of Zimbabwe Rugby.
+             </p>
+          </div>
+          <div className="flex flex-wrap gap-4 relative z-10 w-full sm:w-auto justify-center">
+            <Link
+              href="/contact"
+              className="px-8 py-3.5 bg-accent-teal text-rich-black text-xs font-heading font-black uppercase tracking-wider rounded-xl hover:bg-white transition-all shadow-lg"
+            >
+              Partner With Us
+            </Link>
+            <Link
+              href="/play-rugby"
+              className="px-8 py-3.5 border border-white/30 text-white text-xs font-heading font-black uppercase tracking-wider rounded-xl hover:bg-white/10 transition-all"
+            >
+              Get Into Rugby
+            </Link>
+          </div>
+        </motion.div>
 
       </div>
     </section>
