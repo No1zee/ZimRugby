@@ -85,6 +85,7 @@ async function getAdminCollection<T>(collection: string, params: Record<string, 
 
 async function getLookups(): Promise<{
   teams: Record<string, unknown>[];
+  players: Record<string, unknown>[];
   opponents: Record<string, unknown>[];
   competitions: Record<string, unknown>[];
   venues: Record<string, unknown>[];
@@ -98,14 +99,16 @@ async function getLookups(): Promise<{
       .filter((r) => r.id != null && r.name)
       .map((r) => ({ id: r.id as string | number, name: r.name as string, teamType: (r.team_type as string) || undefined }))
       .sort((a, b) => a.name.localeCompare(b.name));
-  const [teams, opponents, competitions, venues] = await Promise.all([
+  const [teams, players, opponents, competitions, venues] = await Promise.all([
     directusFetch<Record<string, unknown>>("teams", { fields: ["*"], limit: 200 }, 60).catch(() => []),
+    directusFetch<Record<string, unknown>>("players", { fields: ["*"], limit: 500 }, 60).catch(() => []),
     directusFetch<Record<string, unknown>>("opponents", { fields: ["*"], limit: 200 }, 60).catch(() => []),
     directusFetch<Record<string, unknown>>("competitions", { fields: ["*"], limit: 200 }, 60).catch(() => []),
     directusFetch<Record<string, unknown>>("venues", { fields: ["*"], limit: 200 }, 60).catch(() => []),
   ]);
   return {
     teams,
+    players,
     opponents,
     competitions,
     venues,
@@ -197,7 +200,7 @@ export default async function AdminDashboard() {
     showSponsors ? getAdminCollection<Record<string, unknown>>("partners") : Promise.resolve([] as Record<string, unknown>[]),
     showResources ? getAdminCollection<Record<string, unknown>>("referee_resources") : Promise.resolve([] as Record<string, unknown>[]),
     showClubs ? getAdminCollection<Record<string, unknown>>("clubs") : Promise.resolve([] as Record<string, unknown>[]),
-    showTeams ? getLookups() : Promise.resolve({ teams: [], opponents: [], competitions: [], venues: [], teamOptions: [], opponentOptions: [], competitionOptions: [], venueOptions: [] } as Awaited<ReturnType<typeof getLookups>>),
+    showTeams ? getLookups() : Promise.resolve({ teams: [], players: [], opponents: [], competitions: [], venues: [], teamOptions: [], opponentOptions: [], competitionOptions: [], venueOptions: [] } as Awaited<ReturnType<typeof getLookups>>),
     canUseFeature(perms, "fanzone_pii") ? listFanZoneMembers() : Promise.resolve([] as Awaited<ReturnType<typeof listFanZoneMembers>>),
     canUseFeature(perms, "fanzone_pii") ? listOnboardingSubmissions() : Promise.resolve([] as Awaited<ReturnType<typeof listOnboardingSubmissions>>),
     overview ? fetchActivityFeed() : Promise.resolve([] as ActivityEntry[]),
@@ -250,6 +253,7 @@ export default async function AdminDashboard() {
         competitions={lookups.competitionOptions}
         venues={lookups.venueOptions}
         initialTeams={lookups.teams}
+        initialPlayers={lookups.players}
         initialOpponents={lookups.opponents}
         initialCompetitions={lookups.competitions}
         initialVenues={lookups.venues}

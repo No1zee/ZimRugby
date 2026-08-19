@@ -89,6 +89,7 @@ interface AdminClientProps {
   competitions: LookupOption[];
   venues: LookupOption[];
   initialTeams: Record<string, unknown>[];
+  initialPlayers?: Record<string, unknown>[];
   initialOpponents: Record<string, unknown>[];
   initialCompetitions: Record<string, unknown>[];
   initialVenues: Record<string, unknown>[];
@@ -165,6 +166,7 @@ function AdminClientInner(props: AdminClientProps) {
     competitions,
     venues,
     initialTeams,
+    initialPlayers = [],
     initialOpponents,
     initialCompetitions,
     initialVenues,
@@ -727,6 +729,42 @@ function AdminClientInner(props: AdminClientProps) {
                 searchable={["name", "short_name", "code", "filter_label"]}
                 singularLabel="team"
                 onDirtyChange={registerDirty("teams")}
+              />
+            </CollapsibleSection>
+
+            <CollapsibleSection
+              key={`players-${teamsRemountKey}`}
+              title="Squad players & profiles"
+              icon={<Users className="h-5 w-5" />}
+              description="National team players, test caps, positions, and bio profiles."
+              defaultOpen={false}
+            >
+              <CollectionManager
+                collection="players"
+                title="Players"
+                description="Players displayed in team rosters and player spotlight cards."
+                grants={grantsFor("players")}
+                canPurge={permissions?.all === true}
+                fields={[
+                  { key: "name", label: "Full name", type: "text", placeholder: "e.g. Hilton Mudariki", required: true },
+                  { key: "slug", label: "Slug", type: "text", placeholder: "e.g. hilton-mudariki" },
+                  { key: "team", label: "Squad / Team name", type: "text", placeholder: "e.g. Sables, Lady Sables, Junior Sables" },
+                  { key: "position", label: "Position", type: "text", placeholder: "e.g. Scrum-half, Fly-half, Lock" },
+                  { key: "caps", label: "Test caps", type: "number", placeholder: "e.g. 34" },
+                  { key: "age", label: "Age", type: "number", placeholder: "e.g. 28" },
+                  { key: "photo", label: "Player photo (Headshot/Cutout)", type: "image" },
+                  { key: "bio", label: "Player biography", type: "textarea", colSpan: "full", placeholder: "Background, club career, achievements..." },
+                  { key: "featured", label: "Featured player (Spotlight)", type: "boolean" },
+                  { key: "status", label: "Status", type: "select", options: ["published", "draft"] },
+                ]}
+                items={initialPlayers}
+                displayField="name"
+                subtitleField="position"
+                badgeField="team"
+                statusField="status"
+                searchable={["name", "position", "team"]}
+                singularLabel="player"
+                onDirtyChange={registerDirty("players")}
               />
             </CollapsibleSection>
 
