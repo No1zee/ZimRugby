@@ -216,8 +216,8 @@ export default function ResourcesPanel({ initialResources }: { initialResources?
 
       {/* Editor Modal */}
       {editingResource && (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl max-w-md w-full p-6 space-y-4 shadow-xl">
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4" data-lenis-prevent>
+          <div className="bg-white rounded-2xl max-w-md w-full p-6 space-y-4 shadow-xl" data-lenis-prevent>
             <h3 className="font-heading text-lg font-black uppercase text-rich-black">
               {editingResource.id ? "Edit Document Info" : "Register Document"}
             </h3>

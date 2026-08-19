@@ -3,8 +3,12 @@ import Image from "next/image";
 import { Users, Heart } from "lucide-react";
 
 export const metadata: Metadata = {
-  title: "Board & Leadership | Zimbabwe Rugby Union",
-  description: "Meet the ZRU Board of Directors and executive leadership team.",
+  title: "Board & Governance | Zimbabwe Rugby Union",
+  description: "Meet the ZRU Board of Directors and governance committee leading rugby in Zimbabwe.",
+  robots: {
+    index: false,
+    follow: false,
+  },
 };
 
 export default function BoardPage() {

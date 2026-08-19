@@ -283,8 +283,8 @@ export default function SponsorsPanel({ initialSponsors }: { initialSponsors?: a
 
       {/* Editor Modal with Directus Dropzone */}
       {editingSponsor && (
-        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl max-w-md w-full p-6 space-y-4 shadow-2xl border border-black/10">
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4" data-lenis-prevent>
+          <div className="bg-white rounded-2xl max-w-md w-full p-6 space-y-4 shadow-2xl border border-black/10" data-lenis-prevent>
             <div className="flex items-center justify-between border-b border-black/10 pb-3">
               <h3 className="font-heading text-base font-black uppercase text-rich-black">
                 {editingSponsor.id ? "Edit Partner Profile" : "Add Sponsor"}

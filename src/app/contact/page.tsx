@@ -38,10 +38,30 @@ export default function ContactPage() {
   };
 
   const contactDetails = [
-    { title: "HEADQUARTERS", value: "Harare Sports Club, Josiah Tongogara Avenue, Harare, Zimbabwe", icon: MapPin },
-    { title: "PHONE NUMBER", value: "+263 (24) 275 1234 / +263 (24) 275 5678", icon: Phone },
-    { title: "EMAIL SUPPORT", value: "info@zimbabwerugby.co.zw", icon: Mail },
-    { title: "OFFICE HOURS", value: "Monday – Friday: 8:00 AM – 4:30 PM", icon: Clock }
+    {
+      title: "HEADQUARTERS",
+      value: "36 Walmer Drive, Newlands, Harare",
+      href: "https://www.google.com/maps/search/?api=1&query=36+Walmer+Drive,+Newlands,+Harare,+Zimbabwe",
+      icon: MapPin,
+      isExternal: true,
+    },
+    {
+      title: "PHONE NUMBER",
+      value: "+263 78 782 8474",
+      href: "tel:+263787828474",
+      icon: Phone,
+    },
+    {
+      title: "EMAIL SUPPORT",
+      value: "info@zimbabwerugby.co.zw",
+      href: "mailto:info@zimbabwerugby.co.zw",
+      icon: Mail,
+    },
+    {
+      title: "OFFICE HOURS",
+      value: "Monday – Friday: 8:00 AM – 4:30 PM",
+      icon: Clock,
+    },
   ];
 
   return (
@@ -78,7 +98,18 @@ export default function ContactPage() {
                   </div>
                   <div className="space-y-1">
                     <h4 className="font-black text-xs text-white/40 tracking-wider uppercase">{detail.title}</h4>
-                    <p className="text-white text-sm font-bold leading-relaxed">{detail.value}</p>
+                    {detail.href ? (
+                      <a
+                        href={detail.href}
+                        target={detail.isExternal ? "_blank" : undefined}
+                        rel={detail.isExternal ? "noopener noreferrer" : undefined}
+                        className="text-white text-sm font-bold leading-relaxed hover:text-emerald-400 transition-colors inline-block"
+                      >
+                        {detail.value}
+                      </a>
+                    ) : (
+                      <p className="text-white text-sm font-bold leading-relaxed">{detail.value}</p>
+                    )}
                   </div>
                 </div>
               );

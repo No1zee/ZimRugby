@@ -179,10 +179,10 @@ Each workstream is independently shippable — no big-bang rewrite.
 
 ## 7. Key decisions for Ed (approval gates)
 
-1. **Ticker placement** — mount `AnnouncementsTicker` in the global header (below nav) vs only on match-centre?
-2. **Calendar SSoT scope** — full Event+Occurrence model refactor now, or incremental (keep separate collections, add cross-links + unified admin calendar view first)?
-3. **Mailing provider** — Resend API (self-hosted list) vs Brevo (managed platform, GDPR-friendly) vs both (transactional=Resend, marketing=Brevo)?
-4. **Ticket attachments** — store via existing Directus `/files` upload (recommended) vs Vercel Blob?
-5. **Deletion policy** — retention window (e.g., 30 days in trash) + purge cron; super_admin-only hard delete; GDPR erasure path for PII collections
+1. **Ticker placement** — mount `AnnouncementsTicker` in the global header (below nav) vs only on match-centre? YES
+2. **Calendar SSoT scope** — full Event+Occurrence model refactor now, or incremental (keep separate collections, add cross-links + unified admin calendar view first)? FULL REFACTOR
+3. **Mailing provider** — Resend API (self-hosted list) vs Brevo (managed platform, GDPR-friendly) vs both (transactional=Resend, marketing=Brevo)? LETS ADD THIS TO THE FULL BLUEPRINT.MD AND DEVELOP IT
+4. **Ticket attachments** — store via existing Directus `/files` upload (recommended) vs Vercel Blob? STORE VIA EXISTING DIRECTUS
+5. **Deletion policy** — retention window (e.g., 30 days in trash) + purge cron; super_admin-only hard delete; GDPR erasure path for PII collections BEST COMPLIANT OPTION
 6. **Hardcoded super_admin backdoor** — remove in favor of env bootstrap (recommended) or keep for convenience?
-7. **/partners page** — migrate hardcoded tier list to Directus `partners` data (recommended)
+7. **/partners page** — migrate hardcoded tier list to Directus `partners` data (recommended) YES

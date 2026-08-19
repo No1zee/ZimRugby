@@ -11,16 +11,15 @@ import {
   MapPin,
 } from "lucide-react";
 
-const MAPS_URL = "https://maps.google.com/?q=Harare+Sports+Club,+Harare,+Zimbabwe";
+const MAPS_URL = "https://www.google.com/maps/search/?api=1&query=36+Walmer+Drive,+Newlands,+Harare,+Zimbabwe";
 
 const platforms = [
   { Icon: MapPin, href: MAPS_URL, label: "Location" },
-  { Icon: Phone, href: "tel:+263242700100", label: "Call Us" },
-  { Icon: Facebook, href: "https://facebook.com/zimbabwerugby", label: "Facebook" },
-  { Icon: Twitter, href: "https://twitter.com/zimbabwerugby", label: "X" },
-  { Icon: Instagram, href: "https://instagram.com/zimbabwerugby", label: "Instagram" },
-  { Icon: Youtube, href: "https://youtube.com/zimbabwerugby", label: "YouTube" },
-  { Icon: Linkedin, href: "https://linkedin.com/zimbabwerugby", label: "LinkedIn" },
+  { Icon: Phone, href: "tel:+263787828474", label: "Call Us" },
+  { Icon: Facebook, href: "https://www.facebook.com/share/1BaLCkdCZ3/", label: "Facebook" },
+  { Icon: Twitter, href: "https://x.com/ZimRugbyZW", label: "X" },
+  { Icon: Instagram, href: "https://www.instagram.com/zimbabwerugbyunion?igsh=NTdxbWszeDdheXpy", label: "Instagram" },
+  { Icon: Youtube, href: "https://youtube.com/@ZimbabweRugbyUnion", label: "YouTube" },
 ];
 
 /**

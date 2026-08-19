@@ -6,11 +6,15 @@ import { getPageBySlug } from "@/lib/api/pages";
 import { buildPageMetadata } from "@/lib/api/metadata";
 
 export async function generateMetadata(): Promise<Metadata> {
-  return buildPageMetadata(
-    "about-governance",
-    "Governance & Compliance | Zimbabwe Rugby Union",
-    "ZRU governance structure, constitution, annual reports, and compliance documentation."
-  );
+  const page = await getPageBySlug("governance");
+  return {
+    title: page?.seo_title || "Governance & Board | Zimbabwe Rugby Union",
+    description: page?.seo_description || "Executive leadership and governance structure of the Zimbabwe Rugby Union.",
+    robots: {
+      index: false,
+      follow: false,
+    },
+  };
 }
 
 const DEFAULT_DOCUMENTS = [

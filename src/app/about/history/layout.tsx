@@ -1,8 +1,12 @@
-import type { Metadata } from "next";
+import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "History | Zimbabwe Rugby Union",
-  description: "Explore the rich history of Zimbabwe Rugby, from the founding of the Union in 1895 through to the modern era of the Sables.",
+  title: "History & Heritage | Zimbabwe Rugby Union",
+  description: "Explore the rich history and heritage of Zimbabwe rugby since 1895.",
+  robots: {
+    index: false,
+    follow: false,
+  },
 };
 
 export default function HistoryLayout({ children }: { children: React.ReactNode }) {

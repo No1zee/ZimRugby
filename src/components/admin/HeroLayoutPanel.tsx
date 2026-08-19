@@ -516,8 +516,8 @@ export default function HeroLayoutPanel({ initialSlides }: { initialSlides?: any
 
       {/* EDIT MODAL WITH DIRECTUS ASSET DROPZONE */}
       {editingSlide && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-150">
-          <div className="w-full max-w-2xl bg-white rounded-2xl border border-black/10 shadow-2xl p-6 max-h-[90vh] overflow-y-auto">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-150" data-lenis-prevent>
+          <div className="w-full max-w-2xl bg-white rounded-2xl border border-black/10 shadow-2xl p-6 max-h-[90vh] overflow-y-auto overscroll-contain" data-lenis-prevent>
             <div className="flex items-center justify-between border-b border-black/10 pb-4 mb-4">
               <h3 className="font-heading font-black text-base uppercase text-rich-black">
                 {editingSlide.id ? "Edit Hero Slide" : "Create Hero Slide"}

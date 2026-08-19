@@ -9,7 +9,7 @@ export interface DirectusNewsItem {
   excerpt?: string;
   body?: string;
   image?: string;
-  category?: string;
+  category?: string | string[];
   date?: string;
   status?: string;
   publish_at?: string | null;
@@ -33,6 +33,29 @@ export function newsVisibilityFilter(now = new Date()): Record<string, unknown> 
   };
 }
 
+export function parseCategories(category?: string | string[]): string[] {
+  if (!category) return ["ZRU"];
+  if (Array.isArray(category)) return category.filter(Boolean);
+  if (typeof category === "string") {
+    const trimmed = category.trim();
+    if (!trimmed) return ["ZRU"];
+    if (trimmed.startsWith("[") && trimmed.endsWith("]")) {
+      try {
+        const parsed = JSON.parse(trimmed);
+        if (Array.isArray(parsed)) return parsed.filter(Boolean);
+      } catch {
+        // fallback to split
+      }
+    }
+    const list = trimmed
+      .split(",")
+      .map((c) => c.trim())
+      .filter(Boolean);
+    return list.length > 0 ? list : ["ZRU"];
+  }
+  return ["ZRU"];
+}
+
 export function newsImageToUrl(image?: string): string {
   if (!image) return "/images/teams/sables.jpg";
   return assetUrl(image) || image;
@@ -41,6 +64,7 @@ export function newsImageToUrl(image?: string): string {
 export function newsItemToReport(item: DirectusNewsItem): Report {
   const parsed = item.date ? new Date(item.date) : null;
   const hasDate = parsed && !isNaN(parsed.getTime());
+  const categories = parseCategories(item.category);
   return {
     id: `news-${item.id}`,
     title: item.title || "",
@@ -50,22 +74,35 @@ export function newsItemToReport(item: DirectusNewsItem): Report {
       ? parsed.toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" }).toUpperCase()
       : "",
     image: newsImageToUrl(item.image),
-    category: item.category || "NEWS",
+    category: categories[0] || "ZRU",
+    categories,
     url: item.slug ? `/media/${item.slug}` : "/media",
     source: "website",
     type: "news",
   };
 }
 
-export async function getNewsArticles(limit = 4): Promise<Report[]> {
+export async function getNewsArticles(limit = 6, category?: string): Promise<Report[]> {
   try {
     if (!process.env.NEXT_PUBLIC_DIRECTUS_URL) return [];
+    const filter: Record<string, unknown> = newsVisibilityFilter();
+    
     const items = await directusFetch<DirectusNewsItem>(
       "news",
-      { filter: newsVisibilityFilter(), sort: ["-date"], limit },
+      { filter, sort: ["-date"], limit: limit * 2 },
       60
     );
-    return items.map(newsItemToReport);
+    const reports = items.map(newsItemToReport);
+    
+    if (category && category !== "ALL") {
+      const target = category.toLowerCase();
+      const filtered = reports.filter((r) =>
+        r.categories?.some((c) => c.toLowerCase() === target || c.toLowerCase().includes(target))
+      );
+      return filtered.slice(0, limit);
+    }
+
+    return reports.slice(0, limit);
   } catch (error) {
     console.warn("Directus fetch failed for news collection:", error);
     return [];

@@ -2,7 +2,7 @@
 
 **Date:** 17 July 2026
 **Requested by:** Ed (Magejo)
-**Audit performed by:** opencode (AI assistant)
+**Audit performed by:** opencode/kilo (AI assistant)
 **Addressed to:** Rick (Antigravity)
 
 ---

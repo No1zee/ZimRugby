@@ -24,12 +24,15 @@ export interface SiteSettings {
   privacy_policy_url?: string;
   terms_url?: string;
   cookie_policy_url?: string;
+  // Contact & Location
+  phone?: string;
+  address?: string;
+  maps_url?: string;
   // Social
   facebook_url?: string;
   x_url?: string;
   instagram_url?: string;
   youtube_url?: string;
-  linkedin_url?: string;
 }
 
 const fallbackSettings: SiteSettings = {
@@ -47,11 +50,13 @@ const fallbackSettings: SiteSettings = {
   seo_title: "Zimbabwe Rugby Union | Official Home of the Sables",
   seo_description: "Official website of the Zimbabwe Rugby Union. Follow the Sables, Lady Sables, and all Zimbabwe rugby teams. Fixtures, results, news, and tickets.",
   compliance_label: "CDPA 2021 COMPLIANT",
-  facebook_url: "https://facebook.com/ZimbabweRugby",
-  x_url: "https://x.com/ZimRugby",
-  instagram_url: "https://instagram.com/zimrugbyunion",
+  phone: "+263 78 782 8474",
+  address: "36 Walmer Drive, Newlands, Harare",
+  maps_url: "https://www.google.com/maps/search/?api=1&query=36+Walmer+Drive,+Newlands,+Harare,+Zimbabwe",
+  facebook_url: "https://www.facebook.com/share/1BaLCkdCZ3/",
+  x_url: "https://x.com/ZimRugbyZW",
+  instagram_url: "https://www.instagram.com/zimbabwerugbyunion?igsh=NTdxbWszeDdheXpy",
   youtube_url: "https://youtube.com/@ZimbabweRugbyUnion",
-  linkedin_url: "https://linkedin.com/company/zimbabwe-rugby-union",
 };
 
 export async function getSiteSettings(): Promise<SiteSettings | null> {

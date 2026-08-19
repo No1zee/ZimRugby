@@ -19,6 +19,7 @@ export interface Report {
   date: string;
   image: string;
   category: string;
+  categories?: string[];
   url: string;
   source: 'website' | 'social';
   type?: 'news' | 'video';
@@ -179,7 +180,12 @@ export async function getReportById(id: string): Promise<Report | undefined> {
           ? parsed.toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" }).toUpperCase()
           : "",
         image: /^[a-f0-9-]{36}$/i.test(image) ? `/api/assets/${image}` : image || "/images/teams/sables.jpg",
-        category: item.category || "NEWS",
+        category: Array.isArray(item.category) ? item.category.join(", ") : (item.category || "NEWS"),
+        categories: Array.isArray(item.category)
+          ? item.category
+          : typeof item.category === "string"
+          ? item.category.split(",").map((s: string) => s.trim()).filter(Boolean)
+          : ["NEWS"],
         url: `/media/${item.slug || id}`,
         source: "website",
         type: "news",

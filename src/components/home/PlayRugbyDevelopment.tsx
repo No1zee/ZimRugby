@@ -104,32 +104,6 @@ export default function PlayRugbyDevelopment() {
           ))}
         </div>
 
-        {/* Bottom CTA: High-end Banner */}
-        <motion.div 
-          initial={{ opacity: 0, y: 50 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="mt-24 p-10 md:p-16 bg-clubhouse-charcoal rounded-4xl relative overflow-hidden flex flex-col md:flex-row items-center justify-between gap-10"
-        >
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,215,0,0.1),transparent_50%)]" />
-          <div className="space-y-4 relative z-10 max-w-xl">
-             <h3 className="text-3xl md:text-5xl font-black text-white uppercase tracking-tighter leading-[0.9]">
-               Join The <br /><span className="text-zru-green">Ranks of Impact</span>
-             </h3>
-             <p className="text-white/60 font-normal">
-               Whether as a volunteer, donor, or strategic partner, your involvement drives the next era of Zimbabwe Rugby.
-             </p>
-          </div>
-          <div className="flex gap-4 relative z-10">
-            <Link href="/volunteer" className="px-10 py-5 bg-zru-green text-white text-[10px] font-black uppercase tracking-widest clip-slanted hover:bg-white hover:text-clubhouse-charcoal transition-all shadow-xl">
-              Donate Now
-            </Link>
-            <Link href="/volunteer" className="px-10 py-5 border border-white/20 text-white text-[10px] font-black uppercase tracking-widest clip-slanted hover:bg-white/10 transition-all">
-              Volunteer
-            </Link>
-          </div>
-        </motion.div>
-
       </div>
     </section>
   );

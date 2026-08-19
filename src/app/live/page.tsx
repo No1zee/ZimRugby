@@ -6,6 +6,10 @@ import { Calendar, Radio } from "lucide-react";
 export const metadata: Metadata = {
   title: "Live Scores | Zimbabwe Rugby Union",
   description: "Live match scores and real-time updates from Zimbabwe rugby fixtures.",
+  robots: {
+    index: false,
+    follow: false,
+  },
 };
 
 export const revalidate = 60;

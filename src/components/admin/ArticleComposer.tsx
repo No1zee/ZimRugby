@@ -48,7 +48,8 @@ export default function ArticleComposer({ onDirtyChange }: { onDirtyChange?: (di
   const [title, setTitle] = useState("");
   const [excerpt, setExcerpt] = useState("");
   const [body, setBody] = useState("");
-  const [category, setCategory] = useState("NEWS");
+  const [category, setCategory] = useState("ZRU");
+  const [selectedCategories, setSelectedCategories] = useState<string[]>(["ZRU"]);
   const [image, setImage] = useState("");
   const [status, setStatus] = useState("draft");
   const [slug, setSlug] = useState("");
@@ -59,6 +60,18 @@ export default function ArticleComposer({ onDirtyChange }: { onDirtyChange?: (di
   const [previewDevice, setPreviewDevice] = useState<"desktop" | "mobile">("desktop");
   const [step, setStep] = useState<1 | 2 | 3>(1);
   const [posted, setPosted] = useState<{ id: string | number; slug: string; wasLive: boolean } | null>(null);
+
+  const toggleCategory = (cat: string) => {
+    setSelectedCategories((prev) => {
+      const exists = prev.includes(cat);
+      if (exists) {
+        if (prev.length === 1) return prev;
+        return prev.filter((c) => c !== cat);
+      } else {
+        return [...prev, cat];
+      }
+    });
+  };
 
   const hasInput = title.trim() !== "" || excerpt.trim() !== "" || body.trim() !== "" || slug.trim() !== "";
 
@@ -98,7 +111,7 @@ export default function ArticleComposer({ onDirtyChange }: { onDirtyChange?: (di
             slug: slug || slugify(title),
             excerpt,
             body,
-            category,
+            category: selectedCategories.join(", "),
             image: image || null,
             status: saveStatus,
             date: publishAt ? new Date(publishAt).toISOString() : new Date().toISOString(),
@@ -170,12 +183,14 @@ export default function ArticleComposer({ onDirtyChange }: { onDirtyChange?: (di
         <div
           className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4"
           onClick={() => setShowPreview(false)}
+          data-lenis-prevent
         >
           <div
             className={`bg-white rounded-3xl shadow-2xl flex flex-col overflow-hidden border border-white/20 transition-all duration-300 ${
               previewDevice === "mobile" ? "w-[390px] h-[780px]" : "w-full max-w-4xl h-[85vh]"
             }`}
             onClick={(e) => e.stopPropagation()}
+            data-lenis-prevent
           >
             {/* Modal Header */}
             <div className="bg-[#0B1520] text-white px-6 py-4 flex items-center justify-between border-b border-white/10 shrink-0">
@@ -396,24 +411,27 @@ export default function ArticleComposer({ onDirtyChange }: { onDirtyChange?: (di
                   </div>
 
                   <div>
-                    <label className="mb-2 block text-xs font-black uppercase tracking-wider text-black/70">
-                      Category Tag
+                    <label className="block text-xs font-black uppercase tracking-wider text-rich-black/70">
+                      Category Badges (Select all that apply)
                     </label>
                     <div className="flex flex-wrap gap-2">
-                      {CATEGORIES.map((c) => (
-                        <button
-                          key={c}
-                          type="button"
-                          onClick={() => setCategory(c)}
-                          className={`rounded-xl px-3.5 py-2 text-xs font-black uppercase tracking-wider transition-all cursor-pointer ${
-                            category === c
-                              ? "bg-zru-green text-white shadow-sm"
-                              : "bg-black/5 text-black/70 hover:bg-black/10"
-                          }`}
-                        >
-                          {c}
-                        </button>
-                      ))}
+                      {CATEGORIES.map((c) => {
+                        const isSelected = selectedCategories.includes(c);
+                        return (
+                          <button
+                            key={c}
+                            type="button"
+                            onClick={() => toggleCategory(c)}
+                            className={`px-3 py-1.5 rounded-lg text-xs font-black uppercase tracking-wider transition-all border ${
+                              isSelected
+                                ? "bg-zru-green text-white border-zru-green shadow-sm"
+                                : "bg-black/5 text-rich-black/60 border-black/10 hover:border-black/20"
+                            }`}
+                          >
+                            {isSelected ? `✓ ${c}` : c}
+                          </button>
+                        );
+                      })}
                     </div>
                   </div>
 

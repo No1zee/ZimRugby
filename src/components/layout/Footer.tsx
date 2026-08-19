@@ -12,10 +12,8 @@ const footerColumns = [
   {
     title: "The Union",
     links: [
-      { label: "Governance & Board", href: "/about/governance" },
-      { label: "High Performance", href: "/teams/sables" },
-      { label: "Sables Trust", href: "/about/history" },
-      { label: "Commercial Partners", href: "/partners" },
+      { label: "About Us", href: "/about" },
+      { label: "Contact Us", href: "/contact" },
     ],
   },
   {
@@ -32,46 +30,26 @@ const footerColumns = [
     links: [
       { label: "Fixtures & Results", href: "/match-centre" },
       { label: "Match Tickets", href: "/tickets" },
-      { label: "Nations Cup", href: "/events" },
-      { label: "Live Broadcast Hub", href: "/live" },
     ],
   },
   {
     title: "Grassroots & Support",
     links: [
-      { label: "Schools Rugby", href: "/schools" },
       { label: "Get Into Rugby", href: "/play-rugby" },
-      { label: "Coaching & Referees", href: "/referees" },
-      { label: "Safeguarding", href: "/about/safeguarding" },
     ],
   },
 ];
 
-interface FooterProps {
-  initialColumns?: any[];
-}
-
-export default function Footer({ initialColumns }: FooterProps) {
+export default function Footer({ initialColumns, siteSettings }: { initialColumns?: any[]; siteSettings?: any }) {
   const pathname = usePathname();
+  const columns: { title: string; links: { label: string; href: string }[] }[] = footerColumns;
 
   if (pathname?.startsWith('/clubhouse') || pathname?.startsWith('/admin')) return null;
 
-  const columns: { title: string; links: { label: string; href: string }[] }[] = initialColumns && initialColumns.length > 0
-    ? initialColumns.map((col: any) => ({
-        title: col.column_title || "",
-        links: (Array.isArray(col.links)
-          ? col.links
-          : JSON.parse(col.links || "[]")).map((l: any) => ({
-              label: l.label || "",
-              href: l.href || "#"
-            })),
-      }))
-    : footerColumns;
-
   return (
-    <footer className="bg-[#FDFBF0] text-[#003822] border-t border-black/10 pb-12 relative overflow-hidden pt-4 lg:pt-6">
+    <footer className="relative bg-rich-black text-white overflow-hidden select-none border-t border-white/10">
       
-      {/* Schema.org Sports Organization Metadata */}
+      {/* Schema.org Organization Structured Data for SEO */}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
@@ -80,13 +58,12 @@ export default function Footer({ initialColumns }: FooterProps) {
             "@type": "SportsOrganization",
             "name": "Zimbabwe Rugby Union",
             "url": "https://zimrugby.vercel.app",
-            "logo": "https://zimrugby.vercel.app/images/logos/zru-logo.svg",
+            "logo": "https://zimrugby.vercel.app/logos/zru-crest.png",
             "sameAs": [
-              "https://facebook.com/zimbabwerugby",
-              "https://twitter.com/zimbabwerugby",
-              "https://instagram.com/zimbabwerugby",
-              "https://youtube.com/zimbabwerugby",
-              "https://linkedin.com/zimbabwerugby"
+              "https://www.facebook.com/share/1BaLCkdCZ3/",
+              "https://x.com/ZimRugbyZW",
+              "https://www.instagram.com/zimbabwerugbyunion?igsh=NTdxbWszeDdheXpy",
+              "https://youtube.com/@ZimbabweRugbyUnion"
             ]
           })
         }}
