@@ -75,15 +75,23 @@ export default function MatchCentreClient({
 
   const filterList = ["All", ...teams.map((t) => t.filterLabel)];
 
+  // Only surface campaign filters that have matches associated with available fixtures/results
+  const allMatchIds = new Set([...legacyFixtures, ...legacyResults].map((m) => String(m.id)));
+  const campaignsWithMatches = campaigns.filter(
+    (c) => c.matches && c.matches.length > 0 && c.matches.some((m) => allMatchIds.has(String(m.match_id)))
+  );
+
   const campaignMatchIds = new Set(
-    campaigns
+    campaignsWithMatches
       .filter((c) => selectedCampaign === "All" || c.slug === selectedCampaign)
       .flatMap((c) => (c.matches || []).map((m) => m.match_id))
   );
 
   const filteredFixtures = legacyFixtures.filter((match) => {
     const matchesTeam = selectedTeam === "All" || match.teamCategory === selectedTeam;
-    const matchesCampaign = selectedCampaign === "All" || campaignMatchIds.has(String(match.id));
+    const matchesCampaign =
+      selectedCampaign === "All" ||
+      (campaignsWithMatches.length > 0 && campaignMatchIds.has(String(match.id)));
     const matchesSearch =
       match.homeTeam.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       match.awayTeam.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -93,7 +101,9 @@ export default function MatchCentreClient({
 
   const filteredResults = legacyResults.filter((match) => {
     const matchesTeam = selectedTeam === "All" || match.teamCategory === selectedTeam;
-    const matchesCampaign = selectedCampaign === "All" || campaignMatchIds.has(String(match.id));
+    const matchesCampaign =
+      selectedCampaign === "All" ||
+      (campaignsWithMatches.length > 0 && campaignMatchIds.has(String(match.id)));
     const matchesSearch =
       match.homeTeam.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       match.awayTeam.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -228,7 +238,7 @@ export default function MatchCentreClient({
           )}
 
           {/* Campaign Filter chips */}
-          {campaigns.length > 0 && activeTab !== "standings" && (
+          {campaignsWithMatches.length > 0 && activeTab !== "standings" && (
             <div className="flex overflow-x-auto py-1 gap-2 no-scrollbar mb-8 w-full">
               <button
                 onClick={() => setSelectedCampaign("All")}
@@ -240,7 +250,7 @@ export default function MatchCentreClient({
               >
                 All Matches
               </button>
-              {campaigns.map((c) => (
+              {campaignsWithMatches.map((c) => (
                 <button
                   key={c.slug}
                   onClick={() => setSelectedCampaign(c.slug === selectedCampaign ? "All" : c.slug)}
