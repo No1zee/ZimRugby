@@ -82,11 +82,24 @@ export default function EventsClient({ cmsPage, competitions: apiCompetitions = 
     return [...apiCompetitions, ...apiGeneralEvents];
   }, [apiCompetitions, apiGeneralEvents]);
 
-  // Featured Event: First national/sables event or highest priority upcoming
+  // Featured Event: Only genuine upcoming national/featured match fixtures
   const featuredEvent = useMemo(() => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    const upcoming = allEvents.filter((e) => {
+      if (!e.date) return false;
+      const d = new Date(e.date);
+      return !isNaN(d.getTime()) && d >= today;
+    });
+
+    // 1. National or campaign-priority match fixture with upcoming date
     return (
-      allEvents.find((e) => e.tags?.some((t) => /national|sables|campaign/i.test(t))) ||
-      allEvents[0]
+      upcoming.find(
+        (e) =>
+          (e.tags?.some((t) => /national|sables|featured|campaign/i.test(t)) || !!e.ticketUrl) &&
+          (!!e.homeTeam || /vs/i.test(e.title))
+      ) || null
     );
   }, [allEvents]);
 
