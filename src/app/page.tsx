@@ -3,7 +3,6 @@ import { Metadata } from "next";
 import HeroCarousel from "@/components/home/HeroCarousel";
 import HomeLatestNews from "@/components/home/HomeLatestNews";
 import HomeUpcomingMatches from "@/components/home/HomeUpcomingMatches";
-import CampaignCardsRow from "@/components/campaigns/CampaignCardsRow";
 import GrassrootsInitiativeSection from "@/components/home/GrassrootsInitiativeSection";
 import JoinFanZoneSection from "@/components/home/JoinFanZoneSection";
 import SponsorGrid from "@/components/home/SponsorGrid";
@@ -117,8 +116,6 @@ export default async function Home() {
             {/* 3. Upcoming Matches */}
             <HomeUpcomingMatches nextMatch={hubNextMatch} upcomingMatches={allMatches} />
 
-            {/* 4. Active Campaigns */}
-            <CampaignCardsRow />
 
             {/* 5. Grassroots & Growing the Game (Stats unchanged) */}
             <GrassrootsInitiativeSection initiatives={initiatives} />

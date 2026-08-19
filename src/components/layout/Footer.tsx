@@ -3,17 +3,17 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { 
-  ShieldCheck 
-} from "lucide-react";
+import { ShieldCheck } from "lucide-react";
 import SocialCard from "@/components/ui/SocialCard";
 
 const footerColumns = [
   {
     title: "The Union",
     links: [
-      { label: "About Us", href: "/about" },
-      { label: "Contact Us", href: "/contact" },
+      { label: "Governance & Board", href: "/about/governance" },
+      { label: "High Performance", href: "/teams/sables" },
+      { label: "Sables Trust", href: "/about/history" },
+      { label: "Commercial Partners", href: "/partners" },
     ],
   },
   {
@@ -30,26 +30,47 @@ const footerColumns = [
     links: [
       { label: "Fixtures & Results", href: "/match-centre" },
       { label: "Match Tickets", href: "/tickets" },
+      { label: "Nations Cup", href: "/events" },
+      { label: "Live Broadcast Hub", href: "/live" },
     ],
   },
   {
     title: "Grassroots & Support",
     links: [
+      { label: "Schools Rugby", href: "/schools" },
       { label: "Get Into Rugby", href: "/play-rugby" },
+      { label: "Coaching & Referees", href: "/referees" },
+      { label: "Safeguarding", href: "/about/safeguarding" },
     ],
   },
 ];
 
-export default function Footer({ initialColumns, siteSettings }: { initialColumns?: any[]; siteSettings?: any }) {
+interface FooterProps {
+  initialColumns?: any[];
+  siteSettings?: any;
+}
+
+export default function Footer({ initialColumns, siteSettings }: FooterProps) {
   const pathname = usePathname();
-  const columns: { title: string; links: { label: string; href: string }[] }[] = footerColumns;
 
   if (pathname?.startsWith('/clubhouse') || pathname?.startsWith('/admin')) return null;
 
+  const columns: { title: string; links: { label: string; href: string }[] }[] = initialColumns && initialColumns.length > 0
+    ? initialColumns.map((col: any) => ({
+        title: col.column_title || "",
+        links: (Array.isArray(col.links)
+          ? col.links
+          : JSON.parse(col.links || "[]")).map((l: any) => ({
+              label: l.label || "",
+              href: l.href || "#"
+            })),
+      }))
+    : footerColumns;
+
   return (
-    <footer className="relative bg-rich-black text-white overflow-hidden select-none border-t border-white/10">
+    <footer className="bg-[#FDFBF0] text-[#003822] border-t border-black/10 pb-12 relative overflow-hidden pt-4 lg:pt-6">
       
-      {/* Schema.org Organization Structured Data for SEO */}
+      {/* Schema.org Sports Organization Metadata */}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
@@ -71,7 +92,7 @@ export default function Footer({ initialColumns, siteSettings }: { initialColumn
 
       <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 relative z-10 space-y-0">
         
-        {/* Header: Emblem 1/3 + Text/CTA 2/3 — always 3-col, never stacks */}
+        {/* Header: Emblem 1/3 + Text/CTA 2/3 */}
         <div className="grid grid-cols-3 items-center pb-3">
           {/* Left Column — Emblem (1/3) */}
           <div className="flex items-center justify-center px-[8%] py-1">
@@ -103,7 +124,7 @@ export default function Footer({ initialColumns, siteSettings }: { initialColumn
           </div>
         </div>
 
-        {/* Compact 4-Column Navigation Links */}
+        {/* 4-Column Navigation Links */}
         <div className="bg-[#006747] -mx-4 sm:-mx-6 lg:-mx-8 px-4 sm:px-6 lg:px-8 py-6 rounded-lg">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 lg:gap-12">
             {columns.map((col) => (
@@ -116,7 +137,7 @@ export default function Footer({ initialColumns, siteSettings }: { initialColumn
                     <li key={link.label}>
                       <Link
                         href={link.href}
-                        className="text-[13px] font-bold text-white/70 hover:text-zru-green transition-colors inline-block"
+                        className="text-[13px] font-bold text-white/85 hover:text-accent-teal transition-colors inline-block"
                       >
                         {link.label}
                       </Link>
