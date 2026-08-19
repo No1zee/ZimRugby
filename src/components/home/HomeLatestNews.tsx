@@ -21,12 +21,6 @@ export default function HomeLatestNews({ news = [] }: HomeLatestNewsProps) {
         {/* Header Row */}
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-black/10 pb-4">
           <div>
-            <div className="flex items-center gap-2 mb-1.5">
-              <span className="w-2.5 h-2.5 rounded-full bg-zru-green animate-pulse" />
-              <span className="text-[11px] font-black tracking-[0.25em] text-zru-green uppercase font-heading">
-                UNION DISPATCH
-              </span>
-            </div>
             <div className="heading-plate">
               <h2 className="text-3xl sm:text-4xl lg:text-5xl font-heading font-black uppercase text-rich-black tracking-tight leading-[1.05]">
                 LATEST <span className="text-zru-green">NEWS &amp; STORIES</span>

@@ -42,18 +42,10 @@ export default function HomeUpcomingMatches({
       <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Section Header */}
         <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-8 sm:mb-10 gap-4 border-b border-white/10 pb-4">
-          <div className="space-y-1">
-            <div className="flex items-center gap-2">
-              <span className="w-2 h-2 rounded-full bg-accent-teal" />
-              <span className="text-accent-teal font-heading font-black text-xs sm:text-sm uppercase tracking-[0.25em]">
-                MATCH CENTRE
-              </span>
-            </div>
-            <div className="heading-plate heading-plate-light">
-              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-heading font-black uppercase text-white tracking-tight leading-[1.05]">
-                UPCOMING <span className="text-accent-teal">FIXTURES</span>
-              </h2>
-            </div>
+          <div className="heading-plate heading-plate-light">
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-heading font-black uppercase text-white tracking-tight leading-[1.05]">
+              UPCOMING <span className="text-accent-teal">FIXTURES</span>
+            </h2>
           </div>
 
           <Link

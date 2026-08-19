@@ -59,15 +59,11 @@ export default function PlayRugbyDevelopment() {
           transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
           className="border-b border-white/20 pb-8 max-w-3xl space-y-4"
         >
-          <div className="flex items-center gap-2">
-            <span className="w-2 h-2 rounded-full bg-accent-teal" />
-            <span className="text-accent-teal font-heading font-black text-xs sm:text-sm uppercase tracking-[0.25em]">
-              COMMUNITY &amp; IMPACT
-            </span>
+          <div className="heading-plate heading-plate-light">
+            <h2 className="text-3xl sm:text-5xl font-heading font-black uppercase tracking-tight text-white not-italic leading-[1.05]">
+              RUGBY FOR <span className="text-accent-teal">GOOD</span>
+            </h2>
           </div>
-          <h2 className="text-3xl sm:text-5xl font-heading font-black uppercase tracking-wide sm:tracking-widest text-white not-italic leading-[1.05]">
-            Rugby For <span className="text-accent-teal">Good</span>
-          </h2>
           <p className="text-sm md:text-base text-white/80 font-normal leading-relaxed border-l-2 border-accent-teal pl-6 max-w-2xl">
             Using rugby to transform communities, empower youth, and build an enduring sporting legacy across Zimbabwe.
           </p>
@@ -130,12 +126,11 @@ export default function PlayRugbyDevelopment() {
           className="p-8 md:p-12 bg-[#002214]/70 border border-white/20 rounded-[24px] backdrop-blur-xl relative overflow-hidden flex flex-col md:flex-row items-center justify-between gap-8 shadow-2xl"
         >
           <div className="space-y-3 relative z-10 max-w-xl text-center md:text-left">
-             <span className="text-accent-teal text-xs font-heading font-black tracking-[0.2em] uppercase">
-               GET INVOLVED
-             </span>
-             <h3 className="text-2xl md:text-4xl font-heading font-black text-white uppercase tracking-tight leading-tight">
-               Join The <span className="text-accent-teal">1985 Club</span>
-             </h3>
+             <div className="heading-plate heading-plate-light">
+               <h3 className="text-2xl md:text-4xl font-heading font-black text-white uppercase tracking-tight leading-tight">
+                 JOIN THE <span className="text-accent-teal">1985 CLUB</span>
+               </h3>
+             </div>
              <p className="text-white/70 text-xs sm:text-sm leading-relaxed">
                Whether as a volunteer, donor, or strategic grassroots partner, your involvement drives the next era of Zimbabwe Rugby.
              </p>
