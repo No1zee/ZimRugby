@@ -155,11 +155,9 @@ export async function getAnnouncements(): Promise<Announcement[]> {
       }
     }
   } catch (error) {
-    console.warn("Directus fetch failed for announcements, falling back to mock data:", error);
+    console.warn("Directus fetch failed for announcements:", error);
   }
 
-  // Fallback: Filter mock data to only active items (though all mock items above are active in 2026)
-  return MOCK_ANNOUNCEMENTS.filter(
-    (ann) => new Date(ann.startsAt) <= new Date() && new Date(ann.endsAt) >= new Date()
-  );
+  // If Directus is empty or offline, return empty array (do not show fake/mock announcements)
+  return [];
 }

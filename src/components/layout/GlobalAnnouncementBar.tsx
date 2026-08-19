@@ -1,13 +1,15 @@
 "use client";
 
 import React, { useEffect, useRef, useState } from "react";
-import { X, ArrowRight, Bell, Sparkles } from "lucide-react";
+import { X, ArrowRight, Bell, Megaphone, Ticket } from "lucide-react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { Announcement } from "@/types";
 import { Campaign } from "@/lib/api/campaigns";
 
 const DISMISS_PREFIX = "zru_dismissed_ann_";
+
+type NotificationTheme = "ticket" | "critical" | "match" | "general";
 
 type FeedItem = {
   key: string;
@@ -16,21 +18,66 @@ type FeedItem = {
   body?: string;
   href?: string;
   cta?: string;
-  isCritical: boolean;
-  isHigh: boolean;
+  theme: NotificationTheme;
+};
+
+function resolveNotificationTheme(badge: string | null, priority?: string): NotificationTheme {
+  const normalized = (badge || "").toUpperCase();
+  if (normalized.includes("TICKET") || normalized.includes("PASS")) return "ticket";
+  if (priority === "critical" || normalized.includes("BREAKING") || normalized.includes("URGENT")) return "critical";
+  if (normalized.includes("MATCH") || normalized.includes("SABLES") || normalized.includes("LIVE")) return "match";
+  return "general";
+}
+
+const THEME_STYLES: Record<
+  NotificationTheme,
+  {
+    gradient: string;
+    badgeStyle: string;
+    buttonStyle: string;
+    icon: typeof Bell;
+    glow: string;
+  }
+> = {
+  ticket: {
+    gradient: "from-[#2A0505] via-[#052114] to-[#2A0505] border-red-500/30",
+    badgeStyle: "bg-[#EF4444] text-white shadow-sm shadow-red-500/30",
+    buttonStyle: "bg-white text-[#002D1A] hover:bg-accent-teal hover:text-rich-black",
+    icon: Ticket,
+    glow: "shadow-[0_4px_25px_rgba(239,68,68,0.2)]",
+  },
+  critical: {
+    gradient: "from-[#350808] via-[#1A0404] to-[#350808] border-red-500/40",
+    badgeStyle: "bg-[#DC2626] text-white shadow-sm shadow-red-600/40 animate-pulse",
+    buttonStyle: "bg-white text-red-950 hover:bg-red-500 hover:text-white",
+    icon: Bell,
+    glow: "shadow-[0_4px_30px_rgba(220,38,38,0.25)]",
+  },
+  match: {
+    gradient: "from-[#002D1A] via-[#00482B] to-[#002D1A] border-accent-teal/30",
+    badgeStyle: "bg-white text-[#006747] shadow-sm",
+    buttonStyle: "bg-accent-teal text-rich-black hover:bg-white hover:text-rich-black",
+    icon: Megaphone,
+    glow: "shadow-[0_4px_25px_rgba(0,200,140,0.15)]",
+  },
+  general: {
+    gradient: "from-[#0A1A12] via-[#002817] to-[#0A1A12] border-white/10",
+    badgeStyle: "bg-accent-teal text-rich-black font-black",
+    buttonStyle: "bg-white text-[#002D1A] hover:bg-accent-teal hover:text-rich-black",
+    icon: Bell,
+    glow: "shadow-[0_4px_20px_rgba(0,0,0,0.3)]",
+  },
 };
 
 export default function GlobalAnnouncementBar() {
   const [items, setItems] = useState<FeedItem[]>([]);
   const [index, setIndex] = useState(0);
   const [isVisible, setIsVisible] = useState(false);
-  const [showGlow, setShowGlow] = useState(false);
   const [paused, setPaused] = useState(false);
   const mutedRef = useRef<Set<string>>(new Set());
 
   useEffect(() => {
     let alive = true;
-    const timers: ReturnType<typeof setTimeout>[] = [];
 
     const dismissed = new Set<string>();
     try {
@@ -56,20 +103,18 @@ export default function GlobalAnnouncementBar() {
         if (!alive) return;
 
         const feed: FeedItem[] = [
-          ...anns
-            .filter((a) => a.scope.includes("global"))
+          ...(anns || [])
             .filter((a) => !dismissed.has(`ann-${a.id}`))
             .map<FeedItem>((a) => ({
               key: `ann-${a.id}`,
-              badge: a.badge ?? null,
+              badge: a.badge ?? (a.priority === "critical" ? "URGENT" : "ANNOUNCEMENT"),
               title: a.title,
               body: a.body,
               href: a.ctaUrl || undefined,
-              cta: a.ctaLabel || "Learn More",
-              isCritical: a.priority === "critical" || a.badge === "BREAKING",
-              isHigh: a.priority === "high",
+              cta: a.ctaLabel || "Book Tickets",
+              theme: resolveNotificationTheme(a.badge || null, a.priority),
             })),
-          ...camps
+          ...(camps || [])
             .filter((c) => (c.start_date || c.end_date) || Number(c.priority) > 0)
             .filter((c) => !dismissed.has(`camp-${c.id}`))
             .map<FeedItem>((c) => ({
@@ -78,9 +123,8 @@ export default function GlobalAnnouncementBar() {
               title: c.name,
               body: c.subtitle,
               href: c.cta_url || `/campaigns/${c.slug}`,
-              cta: c.cta_label || "View",
-              isCritical: false,
-              isHigh: false,
+              cta: c.cta_label || "Explore",
+              theme: "general" as NotificationTheme,
             })),
         ];
 
@@ -88,11 +132,11 @@ export default function GlobalAnnouncementBar() {
         setItems(feed.filter(Boolean));
         setIndex(0);
 
-        if (feed.length === 0) return;
-
-        timers.push(setTimeout(() => setIsVisible(true), 800));
-        timers.push(setTimeout(() => setShowGlow(true), 1600));
-        timers.push(setTimeout(() => setShowGlow(false), 3400));
+        if (feed.length > 0) {
+          setIsVisible(true);
+        } else {
+          setIsVisible(false);
+        }
       } catch (error) {
         console.error("Failed to load global announcements:", error);
       }
@@ -101,7 +145,6 @@ export default function GlobalAnnouncementBar() {
 
     return () => {
       alive = false;
-      timers.forEach(clearTimeout);
     };
   }, []);
 
@@ -111,110 +154,102 @@ export default function GlobalAnnouncementBar() {
 
   useEffect(() => {
     if (paused || items.length < 2) return;
-    const t = setInterval(() => setIndex((i) => (i + 1) % items.length), 6000);
+    const t = setInterval(() => setIndex((i) => (i + 1) % items.length), 6500);
     return () => clearInterval(t);
   }, [paused, items.length]);
 
-  if (items.length === 0) return null;
+  if (!isVisible || items.length === 0) return null;
 
   const current = items[Math.min(index, items.length - 1)];
+  const theme = THEME_STYLES[current.theme] || THEME_STYLES.general;
+  const IconComponent = theme.icon;
 
   const handleDismiss = (key: string) => {
     mutedRef.current.add(key);
-    localStorage.setItem(`${DISMISS_PREFIX}${key}`, "true");
+    try {
+      localStorage.setItem(`${DISMISS_PREFIX}${key}`, "true");
+    } catch {
+      /* ignore */
+    }
     const next = items.filter((item) => item.key !== key);
     setItems(next);
     if (next.length === 0) setIsVisible(false);
   };
-
-  const isCritical = current.isCritical;
-  const isHigh = current.isHigh;
 
   return (
     <AnimatePresence>
       {isVisible && (
         <motion.div
           key="global-announcement-ribbon"
-          initial={{ y: "-100%", opacity: 0, scaleY: 0.8 }}
-          animate={{ y: 0, opacity: 1, scaleY: 1 }}
+          initial={{ y: "-100%", opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
           exit={{ y: "-100%", opacity: 0, transition: { duration: 0.3 } }}
-          transition={{
-            type: "spring",
-            stiffness: 240,
-            damping: 20,
-            mass: 0.8,
-          }}
+          transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
           onMouseEnter={() => setPaused(true)}
           onMouseLeave={() => setPaused(false)}
-          className={`w-full text-white relative z-50 border-b transition-all duration-500 overflow-hidden ${
-            showGlow
-              ? "shadow-[0_4px_35px_rgba(0,255,135,0.45)] ring-2 ring-[#006747]/40"
-              : ""
-          } ${
-            isCritical
-              ? "bg-gradient-to-r from-red-950/95 via-zru-green/95 to-red-950/95 border-red-500/30 shadow-[0_4px_20px_rgba(239,68,68,0.15)]"
-              : isHigh
-                ? "bg-gradient-to-r from-zru-green via-neutral-900 to-zru-green border-zru-green/30"
-                : "bg-gradient-to-r from-neutral-950 via-zru-green/40 to-neutral-950 border-white/10"
-          }`}
+          className={`w-full text-white relative z-50 border-b bg-gradient-to-r ${theme.gradient} ${theme.glow} transition-all duration-700 select-none overflow-hidden`}
         >
-          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full animate-[shimmer_3s_infinite] pointer-events-none" />
+          {/* Shimmer line */}
+          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full animate-[shimmer_4s_infinite] pointer-events-none" />
 
           <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-2.5 flex items-center justify-between gap-4 relative z-10">
-            <div className="flex-1 flex items-center justify-center gap-3">
-              <span className="relative inline-flex items-center justify-center shrink-0">
-                {isCritical && (
-                  <span className="absolute inline-flex h-2.5 w-2.5 rounded-full bg-red-500 animate-ping opacity-75" />
-                )}
-                {isCritical ? (
-                  <Bell className="w-4 h-4 text-red-400 relative z-10 animate-bounce" />
-                ) : (
-                  <Sparkles className="w-4 h-4 text-[#006747] relative z-10 animate-pulse" />
-                )}
-              </span>
+            {/* Left Notification Icon */}
+            <div className="flex items-center shrink-0">
+              <div className="w-7 h-7 rounded-full bg-white/10 border border-white/15 flex items-center justify-center">
+                <IconComponent className="w-3.5 h-3.5 text-accent-teal" />
+              </div>
+            </div>
 
+            {/* Middle Notification Text & CTA */}
+            <div className="flex-1 flex items-center justify-center overflow-hidden">
               <AnimatePresence mode="wait">
-                <motion.p
+                <motion.div
                   key={current.key}
-                  initial={{ opacity: 0, y: -6 }}
+                  initial={{ opacity: 0, y: -8 }}
                   animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: 6 }}
-                  transition={{ duration: 0.25 }}
-                  className="text-[10px] sm:text-xs font-normal tracking-wide leading-tight text-center md:text-left flex flex-wrap items-center justify-center gap-x-2"
+                  exit={{ opacity: 0, y: 8 }}
+                  transition={{ duration: 0.3 }}
+                  className="flex flex-wrap items-center justify-center gap-2.5 text-center text-xs"
                 >
+                  {/* Badge */}
                   {current.badge && (
-                    <span className={`text-[8px] font-black uppercase tracking-widest px-1.5 py-0.5 rounded-sm shrink-0 ${
-                      isCritical
-                        ? "bg-red-500 text-white animate-pulse"
-                        : "bg-[#006747]/20 text-[#006747] border border-[#006747]/30"
-                    }`}>
+                    <span
+                      className={`text-[9px] font-heading font-black uppercase tracking-wider px-2 py-0.5 rounded ${theme.badgeStyle}`}
+                    >
                       {current.badge}
                     </span>
                   )}
-                  <span className="font-heading font-bold text-white uppercase tracking-wide">{current.title}</span>
+
+                  {/* Title */}
+                  <span className="font-heading font-black uppercase tracking-wide text-white text-xs sm:text-[13px]">
+                    {current.title}
+                  </span>
+
+                  {/* Body Subtext */}
                   {current.body && (
-                    <span className="hidden md:inline opacity-80 font-normal">— {current.body}</span>
+                    <span className="text-white/80 font-normal text-xs hidden md:inline">
+                      — {current.body}
+                    </span>
                   )}
-                  {current.href && current.cta && (
+
+                  {/* CTA Button */}
+                  {current.href && (
                     <Link
                       href={current.href}
-                      className={`inline-flex items-center gap-1.5 text-[9px] font-black uppercase tracking-widest px-3 py-1 rounded-md shrink-0 transition-all duration-300 ${
-                        isCritical
-                          ? "bg-white text-red-950 hover:bg-[#006747] hover:text-black"
-                          : "bg-[#006747] text-[#002D1A] hover:bg-white hover:text-black shadow-lg shadow-[#006747]/20"
-                      }`}
+                      className={`inline-flex items-center gap-1.5 px-3.5 py-1 rounded-md text-[10px] font-heading font-black uppercase tracking-wider transition-all duration-200 shadow-md ${theme.buttonStyle}`}
                     >
                       <span>{current.cta}</span>
-                      <ArrowRight className="w-2.5 h-2.5" />
+                      <ArrowRight className="w-3 h-3" />
                     </Link>
                   )}
-                </motion.p>
+                </motion.div>
               </AnimatePresence>
             </div>
 
+            {/* Right Pagination & Dismiss */}
             <div className="flex items-center gap-3 shrink-0">
               {items.length > 1 && (
-                <span className="hidden sm:inline text-[9px] font-mono text-white/50 uppercase tracking-wider">
+                <span className="text-[10px] font-mono font-bold text-white/60 tracking-wider">
                   {Math.min(index, items.length - 1) + 1}/{items.length}
                 </span>
               )}
@@ -222,7 +257,6 @@ export default function GlobalAnnouncementBar() {
                 onClick={() => handleDismiss(current.key)}
                 className="p-1 hover:bg-white/10 rounded-full transition-colors text-white/60 hover:text-white"
                 aria-label="Dismiss Announcement"
-                title="Dismiss Announcement"
               >
                 <X className="w-3.5 h-3.5" />
               </button>
