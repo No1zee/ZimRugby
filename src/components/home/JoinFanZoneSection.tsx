@@ -199,8 +199,11 @@ export default function JoinFanZoneSection() {
                 </div>
               </div>
 
-              {/* Name + Email row — revealed on expand */}
-              <div className="overflow-hidden opacity-0 max-h-0 transition-[opacity,max-height,margin] duration-500 group-hover/fzCard:opacity-100 group-hover/fzCard:max-h-28 group-hover/fzCard:mb-2.5 group-focus-within/fzCard:opacity-100 group-focus-within/fzCard:max-h-28 group-focus-within/fzCard:mb-2.5">
+              {/* Name + Email + Submit row — revealed on expand */}
+              <form
+                onSubmit={handleSubmit}
+                className="overflow-hidden opacity-0 max-h-0 transition-[opacity,max-height,margin] duration-500 group-hover/fzCard:opacity-100 group-hover/fzCard:max-h-48 group-hover/fzCard:mb-2.5 group-focus-within/fzCard:opacity-100 group-focus-within/fzCard:max-h-48 group-focus-within/fzCard:mb-2.5 space-y-3"
+              >
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 w-full">
                   <input
                     type="text"
@@ -219,37 +222,16 @@ export default function JoinFanZoneSection() {
                     className="w-full bg-black/5 text-rich-black px-4 py-3 rounded-xl border border-black/10 focus:outline-none focus:border-[#006B3F] text-sm placeholder:text-rich-black/40 transition-[border-color] duration-300"
                   />
                 </div>
-              </div>
 
-              {/* Team select + submit row */}
-              <form
-                onSubmit={handleSubmit}
-                className="flex flex-col sm:flex-row gap-2 w-full items-center justify-center group-hover/fzCard:justify-end group-focus-within/fzCard:justify-end transition-[justify-content] duration-500"
-              >
-                {/* Team select — revealed on expand */}
-                <div className="w-0 opacity-0 max-w-0 overflow-hidden transition-[width,opacity,max-width] duration-500 ease-in-out group-hover/fzCard:w-full group-hover/fzCard:opacity-100 group-hover/fzCard:max-w-full group-focus-within/fzCard:w-full group-focus-within/fzCard:opacity-100 group-focus-within/fzCard:max-w-full flex-1">
-                  <select
-                    value={favoriteTeam}
-                    onChange={(e) => setFavoriteTeam(e.target.value as typeof favoriteTeam)}
-                    className="w-full bg-black/5 text-rich-black px-4 py-3.5 rounded-xl border border-black/10 focus:outline-none focus:border-[#006B3F] text-sm transition-[border-color] duration-300 min-h-[46px]"
-                  >
-                    <option value="Sables">Zimbabwe Sables (Men&apos;s XV)</option>
-                    <option value="Lady Sables">Lady Sables (Women&apos;s XV)</option>
-                    <option value="Cheetahs">Cheetahs (7s)</option>
-                    <option value="Junior Sables">Junior Sables (U20)</option>
-                    <option value="Domestic Rugby">Domestic Club League</option>
-                  </select>
-                </div>
-
-                {/* JOIN button — always visible */}
+                {/* JOIN button */}
                 <button
                   type="submit"
                   disabled={isSubmitting || !cdpaConsent}
                   id="fan-zone-join-btn"
-                  className="group/btn bg-gradient-to-b from-zru-green to-[#005238] hover:from-[#00855B] hover:to-zru-green text-white px-8 py-3.5 rounded-xl transition-colors duration-300 flex items-center justify-center gap-2 font-black text-xs tracking-widest uppercase font-heading shrink-0 shadow-lg shadow-zru-green/30 min-h-[46px] w-full sm:w-auto disabled:opacity-50"
+                  className="group/btn bg-gradient-to-b from-zru-green to-[#005238] hover:from-[#00855B] hover:to-zru-green text-white px-8 py-3.5 rounded-xl transition-colors duration-300 flex items-center justify-center gap-2 font-black text-xs tracking-widest uppercase font-heading w-full shadow-lg shadow-zru-green/30 min-h-[46px] disabled:opacity-50 cursor-pointer"
                 >
-                  <span>{isSubmitting ? "…" : "JOIN"}</span>
-                  <ArrowRight className="w-0 opacity-0 -translate-x-2 transition-[width,opacity,transform] duration-300 ease-in-out group-hover/fzCard:w-4 group-hover/fzCard:opacity-100 group-hover/fzCard:translate-x-0 group-focus-within/fzCard:w-4 group-focus-within/fzCard:opacity-100 group-focus-within/fzCard:translate-x-0 shrink-0" />
+                  <span>{isSubmitting ? "Submitting..." : "JOIN THE FAN ZONE"}</span>
+                  <ArrowRight className="w-4 h-4 transition-transform group-hover/btn:translate-x-1" />
                 </button>
               </form>
 
