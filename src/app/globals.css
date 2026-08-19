@@ -678,6 +678,7 @@ html, body {
   inset: 0;
   z-index: 999;
   display: none;
+  overscroll-behavior: contain;
 }
 .k-nav-wrapper[data-nav="open"] { display: block; }
 .k-nav-wrapper[data-nav="closed"] { display: none; }
@@ -697,6 +698,7 @@ html, body {
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  overscroll-behavior: contain;
 }
 
 /* ── Backdrop ── */

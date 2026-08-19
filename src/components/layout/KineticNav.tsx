@@ -112,8 +112,23 @@ export default function KineticNav({ isOpen, onClose, navItems, pathname }: Kine
 
   // Lock body scroll
   useEffect(() => {
-    document.documentElement.style.overflow = isOpen ? "hidden" : "";
-    return () => { document.documentElement.style.overflow = ""; };
+    if (isOpen) {
+      const scrollY = window.scrollY;
+      document.body.style.position = "fixed";
+      document.body.style.top = `-${scrollY}px`;
+      document.body.style.width = "100%";
+      document.body.style.overflow = "hidden";
+      document.documentElement.style.overflow = "hidden";
+
+      return () => {
+        document.body.style.position = "";
+        document.body.style.top = "";
+        document.body.style.width = "";
+        document.body.style.overflow = "";
+        document.documentElement.style.overflow = "";
+        window.scrollTo(0, scrollY);
+      };
+    }
   }, [isOpen]);
 
   return (
