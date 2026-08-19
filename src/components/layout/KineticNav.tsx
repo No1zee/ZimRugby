@@ -138,11 +138,8 @@ export default function KineticNav({ isOpen, onClose, navItems, pathname }: Kine
               {/* Top bar */}
               <div className="k-top-bar">
                 <Link href="/" onClick={onClose} className="k-logo-link">
-                  <Image src="/images/logos/zru-logo.svg" alt="ZRU" width={36} height={36} className="object-contain" />
-                  <div>
-                    <span className="k-logo-title">ZIMBABWE RUGBY</span>
-                    <span className="k-logo-subtitle">OFFICIAL UNION NAVIGATION</span>
-                  </div>
+                  <Image src="/images/logos/zru-logo.svg" alt="ZRU" width={34} height={34} className="object-contain" />
+                  <span className="k-logo-title">ZIMBABWE RUGBY</span>
                 </Link>
 
                 <button onClick={onClose} className="k-close-btn" aria-label="Close menu">
@@ -161,18 +158,6 @@ export default function KineticNav({ isOpen, onClose, navItems, pathname }: Kine
                     </svg>
                   </div>
                 </button>
-              </div>
-
-              {/* Quick Actions strip */}
-              <div data-menu-fade className="k-quick-actions">
-                <Link href="/tickets" onClick={onClose} className="k-quick-action-primary">
-                  <Ticket className="w-4 h-4" />
-                  <span>MATCH TICKETS</span>
-                </Link>
-                <Link href="/clubhouse" onClick={onClose} className="k-quick-action-secondary">
-                  <ShoppingBag className="w-4 h-4" />
-                  <span>STORE</span>
-                </Link>
               </div>
 
               {/* Nav links — grouped under Browse */}
