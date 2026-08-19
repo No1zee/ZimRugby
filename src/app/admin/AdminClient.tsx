@@ -23,6 +23,7 @@ import HeroLayoutPanel from "@/components/admin/HeroLayoutPanel";
 import SponsorsPanel from "@/components/admin/SponsorsPanel";
 import ResourcesPanel from "@/components/admin/ResourcesPanel";
 import BackupsPanel from "@/components/admin/BackupsPanel";
+import VisualTeamsManager from "@/components/admin/VisualTeamsManager";
 import AdminInactivityLock from "@/components/admin/ui/AdminInactivityLock";
 import type { MatchCardViewModel, StandingsTableViewModel } from "@/lib/match-centre/types";
 import type { Campaign } from "@/lib/api/campaigns";
@@ -690,83 +691,14 @@ function AdminClientInner(props: AdminClientProps) {
 
         {activeTab === "teams" && (
           <div className="space-y-6">
-            <CollapsibleSection
-              key={`teams-${teamsRemountKey}`}
-              title="National teams"
-              icon={<Trophy className="h-5 w-5" />}
-              description="Senior and age-grade national squads (Sables, Lady Sables, U20Ã¢â‚¬Â¦)."
-              defaultOpen={true}
-            >
-              <CollectionManager
-                collection="teams"
-                title="Teams"
-                description="National squads shown across the site."
-                grants={grantsFor("teams")}
-                canPurge={permissions?.all === true}
-                fields={[
-                  { key: "name", label: "Name", type: "text", placeholder: "e.g. Zimbabwe Sables", required: true },
-                  { key: "short_name", label: "Short name", type: "text", placeholder: "e.g. Sables" },
-                  { key: "code", label: "Code", type: "text", placeholder: "e.g. ZIM" },
-                  { key: "slug", label: "Slug", type: "text", placeholder: "e.g. sables" },
-                  { key: "team_type", label: "Team type", type: "select", options: ["mens_15s", "womens_15s", "mens_7s", "womens_7s", "u20", "u18", "development", "club"] },
-                  { key: "gender", label: "Gender", type: "select", options: ["men", "women"] },
-                  { key: "age_grade", label: "Age grade", type: "text", placeholder: "e.g. U20" },
-                  { key: "filter_label", label: "Filter label", type: "text", placeholder: "e.g. Sables" },
-                  { key: "display_name", label: "Display name", type: "text", placeholder: "e.g. Zimbabwe Rugby Union Men's National Team" },
-                  { key: "crest", label: "Crest image", type: "image" },
-                  { key: "primary_color", label: "Primary colour", type: "text", placeholder: "e.g. #006B3F" },
-                  { key: "secondary_color", label: "Secondary colour", type: "text", placeholder: "e.g. #F5B800" },
-                  { key: "is_national_team", label: "National team", type: "boolean" },
-                  { key: "is_active", label: "Active (shown in filters)", type: "boolean" },
-                  { key: "display_order", label: "Display order", type: "number" },
-                  { key: "status", label: "Status", type: "select", options: ["published", "draft"] },
-                ]}
-                items={initialTeams}
-                displayField="name"
-                subtitleField="team_type"
-                badgeField="code"
-                statusField="is_active"
-                searchable={["name", "short_name", "code", "filter_label"]}
-                singularLabel="team"
-                onDirtyChange={registerDirty("teams")}
-              />
-            </CollapsibleSection>
-
-            <CollapsibleSection
-              key={`players-${teamsRemountKey}`}
-              title="Squad players & profiles"
-              icon={<Users className="h-5 w-5" />}
-              description="National team players, test caps, positions, and bio profiles."
-              defaultOpen={false}
-            >
-              <CollectionManager
-                collection="players"
-                title="Players"
-                description="Players displayed in team rosters and player spotlight cards."
-                grants={grantsFor("players")}
-                canPurge={permissions?.all === true}
-                fields={[
-                  { key: "name", label: "Full name", type: "text", placeholder: "e.g. Hilton Mudariki", required: true },
-                  { key: "slug", label: "Slug", type: "text", placeholder: "e.g. hilton-mudariki" },
-                  { key: "team", label: "Squad / Team name", type: "text", placeholder: "e.g. Sables, Lady Sables, Junior Sables" },
-                  { key: "position", label: "Position", type: "text", placeholder: "e.g. Scrum-half, Fly-half, Lock" },
-                  { key: "caps", label: "Test caps", type: "number", placeholder: "e.g. 34" },
-                  { key: "age", label: "Age", type: "number", placeholder: "e.g. 28" },
-                  { key: "photo", label: "Player photo (Headshot/Cutout)", type: "image" },
-                  { key: "bio", label: "Player biography", type: "textarea", colSpan: "full", placeholder: "Background, club career, achievements..." },
-                  { key: "featured", label: "Featured player (Spotlight)", type: "boolean" },
-                  { key: "status", label: "Status", type: "select", options: ["published", "draft"] },
-                ]}
-                items={initialPlayers}
-                displayField="name"
-                subtitleField="position"
-                badgeField="team"
-                statusField="status"
-                searchable={["name", "position", "team"]}
-                singularLabel="player"
-                onDirtyChange={registerDirty("players")}
-              />
-            </CollapsibleSection>
+            {/* Visual Team Cards & Squad Player Management */}
+            <VisualTeamsManager
+              teams={initialTeams}
+              players={initialPlayers}
+              grantsFor={grantsFor}
+              canPurge={permissions?.all === true}
+              onDirtyChange={registerDirty("teams")}
+            />
 
             <CollapsibleSection
               key={`opponents-${teamsRemountKey}`}
