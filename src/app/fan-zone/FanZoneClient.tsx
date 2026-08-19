@@ -178,7 +178,7 @@ export default function FanZonePage({ cmsPage }: FanZoneClientProps) {
                 </div>
 
                 {/* Right Passport Credential Box */}
-                <div className="shrink-0 bg-white/5 border border-white/10 rounded-2xl p-5 lg:p-6 text-xs flex flex-col justify-between min-w-[280px] sm:min-w-[320px] backdrop-blur-sm">
+                <div className="shrink-0 bg-white/5 border border-white/10 rounded-2xl p-5 lg:p-6 text-xs flex flex-col justify-between min-w-[280px] sm:min-w-[320px]">
                   <div className="flex items-center justify-between border-b border-white/10 pb-4 mb-4">
                     <div className="flex items-center gap-3">
                       <div className="w-10 h-10 rounded-xl bg-zru-green flex items-center justify-center text-base font-heading font-black text-white">
@@ -189,7 +189,6 @@ export default function FanZonePage({ cmsPage }: FanZoneClientProps) {
                         <p className="text-accent-teal text-[11px] font-mono tabular-nums">{user.handle || "@supporter"}</p>
                       </div>
                     </div>
-                    <span className="w-2.5 h-2.5 rounded-full bg-accent-teal" />
                   </div>
 
                   <div className="space-y-3 font-mono text-[11px] tabular-nums">

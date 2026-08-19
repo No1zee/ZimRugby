@@ -1,8 +1,8 @@
 /* ─────────────────────────────────────────────────────────────────────────────
    KnockOnAnimation.module.css
-   CSS-only geometric rugby "knock-on" animation for 404 pages.
-   Minimalist player in green jersey, gold ball, milk-white background.
-   Zero dependencies — pure keyframes + shapes.
+   Realistic, athletic geometric rugby "knock-on" animation for 404 pages.
+   Sculpted player in official Zimbabwe Sables green & white hooped kit.
+   Anatomically articulated limbs, dual-leg shorts, dynamic fumble physics.
    ───────────────────────────────────────────────────────────────────────────── */
 
 /* ── Wrapper ────────────────────────────────────────────────────────────────── */
@@ -20,339 +20,599 @@
 /* ── Scene ──────────────────────────────────────────────────────────────────── */
 .scene {
   position: relative;
-  width: 320px;
+  width: 340px;
   height: 360px;
   margin-bottom: 2.5rem;
   overflow: hidden;
 }
 
-/* ── Player ─────────────────────────────────────────────────────────────────── */
-/* Origin at the player's hip. All parts offset from there. */
+/* ── Player Base Anchor ─────────────────────────────────────────────────────── */
 .player {
   position: absolute;
-  left: 115px;
-  top: 205px;
+  left: 110px;
+  top: 195px;
+  /* Slight forward athletic tilt */
+  transform: rotate(-2deg);
 }
 
-/* ─── Head (smaller to exaggerate the massive upper body) ─── */
+/* ── Head & Ears ────────────────────────────────────────────────────────────── */
 .head {
   position: absolute;
-  width: 30px;
-  height: 30px;
+  width: 28px;
+  height: 28px;
   background: #1a1a1a;
   border-radius: 50%;
-  left: -15px;
-  top: -100px;
+  left: -14px;
+  top: -102px;
+  z-index: 3;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.18);
 }
 
 .headband {
   position: absolute;
-  width: 34px;
-  height: 5px;
-  background: #006747;
+  width: 32px;
+  height: 6px;
+  background: #006b3f;
+  border-top: 1px solid rgba(255, 255, 255, 0.6);
   border-radius: 2px;
   left: -2px;
   top: 10px;
 }
 
-/* ─── Neck (thick) ─── */
+.earLeft,
+.earRight {
+  position: absolute;
+  width: 4px;
+  height: 7px;
+  background: #1a1a1a;
+  border-radius: 2px;
+  top: 10px;
+}
+
+.earLeft {
+  left: -3px;
+}
+
+.earRight {
+  right: -3px;
+}
+
+/* ── Athletic Neck & Traps ──────────────────────────────────────────────────── */
 .neck {
   position: absolute;
   width: 18px;
-  height: 10px;
+  height: 14px;
   background: #1a1a1a;
+  border-radius: 2px;
   left: -9px;
-  top: -72px;
+  top: -76px;
+  z-index: 2;
 }
 
-/* ─── Jersey (Johnny Bravo V-taper: massive chest, tiny waist) ─── */
+.traps {
+  position: absolute;
+  width: 38px;
+  height: 14px;
+  background: #005a35;
+  clip-path: polygon(22% 0%, 78% 0%, 100% 100%, 0% 100%);
+  left: -19px;
+  top: -70px;
+  z-index: 1;
+}
+
+/* ── Jersey Torso & Rounded Deltoids ────────────────────────────────────────── */
+.torso {
+  position: absolute;
+  width: 76px;
+  height: 62px;
+  left: -38px;
+  top: -66px;
+  z-index: 2;
+}
+
+/* Rounded Deltoid Shoulders */
+.shoulderCapLeft,
+.shoulderCapRight {
+  position: absolute;
+  width: 22px;
+  height: 18px;
+  background: #006b3f;
+  border-radius: 10px 10px 4px 4px;
+  top: -2px;
+  z-index: 1;
+}
+
+.shoulderCapLeft {
+  left: -3px;
+  transform: rotate(-10deg);
+}
+
+.shoulderCapRight {
+  right: -3px;
+  transform: rotate(10deg);
+}
+
+/* Hooped Jersey Body with Natural Athletic Taper */
 .jersey {
   position: absolute;
-  width: 54px;
-  height: 52px;
-  background: #006747;
-  border-radius: 6px 6px 10px 10px;
-  left: -27px;
-  top: -64px;
+  inset: 0;
+  background: repeating-linear-gradient(
+    180deg,
+    #006b3f 0px,
+    #006b3f 10px,
+    #ffffff 10px,
+    #ffffff 16px
+  );
+  border: 1.5px solid #004d2c;
+  border-radius: 8px 8px 10px 10px;
+  clip-path: polygon(0% 0%, 100% 0%, 76% 100%, 24% 100%);
   overflow: hidden;
-  /* V-taper: wide shoulders narrowing to waist */
-  clip-path: polygon(0% 0%, 100% 0%, 88% 100%, 12% 100%);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.12);
+  z-index: 2;
 }
 
-/* V-neck collar */
+/* V-Neck Ribbed Collar */
 .collar {
   position: absolute;
-  width: 16px;
-  height: 5px;
-  background: #fdfbf0;
-  border-radius: 0 0 3px 3px;
-  left: 19px;
+  width: 22px;
+  height: 8px;
+  background: #ffffff;
+  border-bottom: 2.5px solid #006b3f;
+  border-radius: 0 0 5px 5px;
+  left: 27px;
   top: 0;
 }
 
-/* Number block on chest */
+.placket {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  background: #006b3f;
+  left: 35px;
+  top: 8px;
+  clip-path: polygon(50% 100%, 0 0, 100% 0);
+}
+
+/* Squad Number Badge */
 .numberBlock {
   position: absolute;
-  width: 20px;
-  height: 16px;
-  background: rgba(255, 255, 255, 0.15);
-  border-radius: 2px;
-  left: 17px;
-  top: 18px;
+  width: 22px;
+  height: 17px;
+  background: rgba(0, 85, 50, 0.92);
+  border: 1.5px solid #ffffff;
+  border-radius: 3px;
+  left: 27px;
+  top: 22px;
   display: flex;
   align-items: center;
   justify-content: center;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
 }
 
 .numberText {
   font-size: 10px;
   font-weight: 900;
-  color: rgba(255, 255, 255, 0.55);
+  color: #ffffff;
   line-height: 1;
-  font-family: "Helvetica Neue LT Std", Helvetica, Arial, sans-serif;
+  letter-spacing: 0.04em;
 }
 
-/* Subtle horizontal jersey texture */
 .jerseyTexture {
   position: absolute;
   inset: 0;
   background: repeating-linear-gradient(
     0deg,
     transparent,
-    transparent 9px,
-    rgba(255, 255, 255, 0.04) 9px,
-    rgba(255, 255, 255, 0.04) 10px
+    transparent 8px,
+    rgba(0, 0, 0, 0.03) 8px,
+    rgba(0, 0, 0, 0.03) 9px
   );
   pointer-events: none;
 }
 
-/* ─── Shorts (narrow waist for V-taper) ─── */
+/* ── Realistic Dual-Leg Rugby Shorts ────────────────────────────────────────── */
 .shorts {
   position: absolute;
-  width: 40px;
-  height: 16px;
-  background: #00452a;
-  border-radius: 4px;
-  left: -20px;
-  top: -12px;
+  width: 44px;
+  height: 22px;
+  left: -22px;
+  top: -8px;
+  z-index: 1;
 }
 
-.shortsStripe {
+.shortsWaist {
   position: absolute;
-  width: 3px;
-  height: 100%;
-  background: rgba(255, 255, 255, 0.15);
-  right: 3px;
+  width: 36px;
+  height: 6px;
+  background: #00361e;
+  border-radius: 2px;
+  left: 4px;
   top: 0;
 }
 
-/* ─── Arms (HUGE biceps — Johnny Bravo style) ─── */
-/* Wrist tape via ::after pseudo-element */
-.armLeft,
-.armRight {
+.shortsLegLeft,
+.shortsLegRight {
   position: absolute;
-  width: 20px;
-  height: 46px;
-  background: #006747;
+  width: 19px;
+  height: 18px;
+  background: #004d2c;
+  border-radius: 2px 2px 4px 4px;
+  top: 4px;
+  overflow: hidden;
+  box-shadow: inset 0 -2px 3px rgba(0, 0, 0, 0.15);
+}
+
+.shortsLegLeft {
+  left: 2px;
+  transform: rotate(-3deg);
+}
+
+.shortsLegRight {
+  right: 2px;
+  transform: rotate(3deg);
+}
+
+.shortsStripeLeft,
+.shortsStripeRight {
+  position: absolute;
+  width: 3px;
+  height: 100%;
+  background: #ffffff;
+  top: 0;
+}
+
+.shortsStripeLeft {
+  left: 2px;
+}
+
+.shortsStripeRight {
+  right: 2px;
+}
+
+/* ── Articulated Left Arm (Reaching Forward Fumble) ─────────────────────────── */
+.armLeftWrapper {
+  position: absolute;
+  left: -48px;
+  top: -62px;
+  transform-origin: 16px 6px;
+  animation: armLeftMotion 2.2s ease-in-out infinite;
+  z-index: 3;
+}
+
+.bicepLeft {
+  width: 22px;
+  height: 32px;
+  background: repeating-linear-gradient(
+    180deg,
+    #006b3f 0px,
+    #006b3f 9px,
+    #ffffff 9px,
+    #ffffff 15px
+  );
+  border: 1px solid rgba(0, 0, 0, 0.12);
   border-radius: 10px 10px 6px 6px;
-  top: -60px;
-  transform-origin: 10px 0;
-  animation: armDrop 2.2s ease-in-out infinite;
 }
 
-/* Forearm (skin) — extends below the sleeve */
-.armLeft::before,
-.armRight::before {
-  content: "";
-  position: absolute;
-  width: 12px;
-  height: 16px;
-  background: #1a1a1a;
-  border-radius: 4px;
-  bottom: -14px;
-  left: 4px;
-}
-
-/* Wrist tape */
-.armLeft::after,
-.armRight::after {
-  content: "";
+.forearmLeft {
   position: absolute;
   width: 14px;
-  height: 4px;
-  background: #fdfbf0;
-  border-radius: 1px;
-  bottom: -2px;
-  left: 3px;
-}
-
-.armLeft {
-  left: -37px;
-}
-
-.armRight {
-  left: 17px;
-}
-
-/* ─── Legs (slim to contrast the massive upper body) ─── */
-.legLeft,
-.legRight {
-  position: absolute;
-  width: 13px;
-  height: 46px;
+  height: 28px;
   background: #1a1a1a;
-  border-radius: 4px;
-  top: 4px;
-}
-
-.legLeft {
-  left: -17px;
-}
-
-.legRight {
+  border-radius: 4px 4px 6px 6px;
   left: 4px;
+  top: 26px;
+  transform-origin: top center;
+  animation: elbowLeftBend 2.2s ease-in-out infinite;
 }
 
-/* ─── Socks ─── */
+.wristTapeLeft,
+.wristTapeRight {
+  position: absolute;
+  width: 16px;
+  height: 5px;
+  background: #ffffff;
+  border: 0.5px solid rgba(0, 0, 0, 0.15);
+  border-radius: 1px;
+  bottom: 8px;
+  left: -1px;
+}
+
+.handLeft,
+.handRight {
+  position: absolute;
+  width: 14px;
+  height: 9px;
+  background: #1a1a1a;
+  border-radius: 3px 6px 6px 3px;
+  bottom: -1px;
+}
+
+/* ── Articulated Right Arm (Dropping Ball Forward) ──────────────────────────── */
+.armRightWrapper {
+  position: absolute;
+  left: 26px;
+  top: -62px;
+  transform-origin: 6px 6px;
+  animation: armRightMotion 2.2s ease-in-out infinite;
+  z-index: 3;
+}
+
+.bicepRight {
+  width: 22px;
+  height: 32px;
+  background: repeating-linear-gradient(
+    180deg,
+    #006b3f 0px,
+    #006b3f 9px,
+    #ffffff 9px,
+    #ffffff 15px
+  );
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  border-radius: 10px 10px 6px 6px;
+}
+
+.forearmRight {
+  position: absolute;
+  width: 14px;
+  height: 28px;
+  background: #1a1a1a;
+  border-radius: 4px 4px 6px 6px;
+  left: 4px;
+  top: 26px;
+  transform-origin: top center;
+  animation: elbowRightBend 2.2s ease-in-out infinite;
+}
+
+/* ── Athletic Left Leg (Lead Stance) ───────────────────────────────────────── */
+.legLeftWrapper {
+  position: absolute;
+  left: -16px;
+  top: 10px;
+  z-index: 0;
+}
+
+.quadLeft,
+.quadRight {
+  width: 13px;
+  height: 24px;
+  background: #1a1a1a;
+  border-radius: 4px 4px 3px 3px;
+}
+
+.kneeLeft,
+.kneeRight {
+  position: absolute;
+  width: 11px;
+  height: 6px;
+  background: #111111;
+  border-radius: 3px;
+  left: 1px;
+  top: 22px;
+}
+
+.calfLeft,
+.calfRight {
+  position: absolute;
+  width: 12px;
+  height: 22px;
+  background: #1a1a1a;
+  border-radius: 3px 3px 4px 4px;
+  left: 0.5px;
+  top: 26px;
+}
+
 .sockLeft,
 .sockRight {
   position: absolute;
-  width: 15px;
-  height: 12px;
-  background: #fdfbf0;
-  border: 1px solid rgba(0, 0, 0, 0.06);
+  width: 13px;
+  height: 16px;
+  background: repeating-linear-gradient(
+    180deg,
+    #006b3f 0px,
+    #006b3f 4px,
+    #ffffff 4px,
+    #ffffff 10px
+  );
+  border: 1px solid rgba(0, 0, 0, 0.12);
   border-radius: 2px;
-  top: 50px;
+  left: 0;
+  top: 44px;
 }
 
-.sockLeft {
-  left: -19px;
-}
-
-.sockRight {
-  left: 4px;
-}
-
-/* ─── Boots (with cleat bumps via pseudo-elements) ─── */
 .bootLeft,
 .bootRight {
   position: absolute;
-  width: 20px;
-  height: 9px;
-  background: #1a1a1a;
+  width: 19px;
+  height: 10px;
+  background: #111111;
   border-radius: 3px 12px 6px 3px;
-  top: 62px;
+  top: 58px;
+  box-shadow: 0 2px 3px rgba(0, 0, 0, 0.25);
 }
 
-.bootLeft::before,
-.bootRight::before,
+.bootLeft {
+  left: -5px;
+}
+
+.bootRight {
+  left: -3px;
+}
+
 .bootLeft::after,
 .bootRight::after {
   content: "";
   position: absolute;
-  width: 3px;
+  width: 4px;
   height: 3px;
   background: #1a1a1a;
   border-radius: 0 0 1px 1px;
   bottom: -2px;
+  right: 4px;
 }
 
 .bootLeft::before,
 .bootRight::before {
+  content: "";
+  position: absolute;
+  width: 4px;
+  height: 3px;
+  background: #1a1a1a;
+  border-radius: 0 0 1px 1px;
+  bottom: -2px;
   left: 4px;
 }
 
-.bootLeft::after,
-.bootRight::after {
-  right: 5px;
+/* ── Athletic Right Leg (Trailing Stance) ──────────────────────────────────── */
+.legRightWrapper {
+  position: absolute;
+  left: 6px;
+  top: 10px;
+  z-index: 0;
 }
 
-.bootLeft {
-  left: -22px;
-}
-
-.bootRight {
-  left: 2px;
-}
-
-/* ── Ball ───────────────────────────────────────────────────────────────────── */
+/* ── Realistic Rugby Match Ball ────────────────────────────────────────────── */
 .ball {
   position: absolute;
-  width: 24px;
-  height: 15px;
-  background: #ffd700;
+  width: 26px;
+  height: 17px;
+  background: #ffffff;
+  border: 1.5px solid #006b3f;
   border-radius: 50%;
-  /* Start near the right hand (massive arm extended at -70deg) */
-  left: 183px;
-  top: 155px;
+  left: 175px;
+  top: 148px;
+  overflow: hidden;
   box-shadow:
-    inset -3px -2px 0 rgba(0, 0, 0, 0.12),
-    0 2px 8px rgba(0, 0, 0, 0.08);
+    inset -3px -2px 0 rgba(0, 0, 0, 0.1),
+    0 4px 10px rgba(0, 107, 63, 0.2);
   animation: ballFall 2.2s ease-in-out infinite;
 }
 
-/* Seam line */
+.ballPanelLeft,
+.ballPanelRight {
+  position: absolute;
+  width: 10px;
+  height: 15px;
+  background: #006b3f;
+  border-radius: 50%;
+  top: 1px;
+  opacity: 0.85;
+}
+
+.ballPanelLeft {
+  left: -2px;
+}
+
+.ballPanelRight {
+  right: -2px;
+}
+
 .ballSeam {
   position: absolute;
   width: 2px;
-  height: 9px;
-  background: rgba(0, 0, 0, 0.1);
+  height: 13px;
+  background: #004d2c;
   border-radius: 1px;
-  left: 11px;
-  top: 3px;
+  left: 12px;
+  top: 2px;
   transform: rotate(15deg);
 }
 
-/* ── Ground ─────────────────────────────────────────────────────────────────── */
+/* ── Ground & Dynamic Shadow ───────────────────────────────────────────────── */
 .ground {
   position: absolute;
   bottom: 80px;
-  left: 30px;
-  right: 30px;
+  left: 20px;
+  right: 20px;
   height: 2px;
-  background: rgba(0, 0, 0, 0.07);
+  background: rgba(0, 0, 0, 0.08);
   border-radius: 1px;
 }
 
 .playerShadow {
   position: absolute;
-  bottom: 76px;
-  left: 78px;
-  width: 84px;
-  height: 8px;
-  background: rgba(0, 0, 0, 0.05);
+  bottom: 74px;
+  left: 85px;
+  width: 80px;
+  height: 9px;
+  background: rgba(0, 0, 0, 0.07);
   border-radius: 50%;
   filter: blur(4px);
 }
 
-/* ── Impact burst ───────────────────────────────────────────────────────────── */
+/* ── Turf Impact Burst ─────────────────────────────────────────────────────── */
 .impact {
   position: absolute;
-  left: 244px;
+  left: 248px;
   bottom: 78px;
-  width: 12px;
-  height: 12px;
+  width: 14px;
+  height: 14px;
   border-radius: 50%;
-  background: #ffd700;
+  background: #006b3f;
   opacity: 0;
   animation: impactPop 2.2s ease-in-out infinite;
 }
 
-/* ── Keyframes ──────────────────────────────────────────────────────────────── */
+/* ── Keyframe Animations ───────────────────────────────────────────────────── */
 
-/* Arms sweep from forward-extended to hanging down */
-@keyframes armDrop {
+/* Left arm: Reaches forward in fumble panic, then drops naturally */
+@keyframes armLeftMotion {
   0%,
   22% {
+    transform: rotate(-45deg);
+  }
+  38% {
+    transform: rotate(-60deg);
+  }
+  55%,
+  100% {
+    transform: rotate(12deg);
+  }
+}
+
+@keyframes elbowLeftBend {
+  0%,
+  22% {
+    transform: rotate(-30deg);
+  }
+  38% {
+    transform: rotate(-45deg);
+  }
+  55%,
+  100% {
+    transform: rotate(5deg);
+  }
+}
+
+/* Right arm: Fumbles forward, attempts grasp, drops down */
+@keyframes armRightMotion {
+  0%,
+  22% {
+    transform: rotate(-55deg);
+  }
+  35% {
     transform: rotate(-70deg);
   }
-  44%,
+  55%,
   100% {
     transform: rotate(8deg);
   }
 }
 
-/* Ball arc: slip forward → fall → land */
+@keyframes elbowRightBend {
+  0%,
+  22% {
+    transform: rotate(-25deg);
+  }
+  35% {
+    transform: rotate(-38deg);
+  }
+  55%,
+  100% {
+    transform: rotate(4deg);
+  }
+}
+
+/* Rugby Ball Flight Arc & Fumble Bounce */
 @keyframes ballFall {
   0%,
   22% {
@@ -360,33 +620,33 @@
     opacity: 1;
   }
   32% {
-    /* Slipping out — small upward bump */
-    transform: translate(12px, -10px) rotate(35deg);
+    /* Slipping out of hands */
+    transform: translate(14px, -12px) rotate(30deg);
     opacity: 1;
   }
   58% {
-    /* Mid-fall arc */
-    transform: translate(50px, 75px) rotate(200deg);
+    /* Mid-air tumble */
+    transform: translate(52px, 68px) rotate(190deg);
     opacity: 1;
   }
-  72% {
-    /* Approaching ground */
-    transform: translate(65px, 120px) rotate(320deg);
+  74% {
+    /* Fast descent */
+    transform: translate(68px, 118px) rotate(310deg);
     opacity: 1;
   }
   78% {
-    /* Landed */
-    transform: translate(68px, 128px) rotate(360deg);
-    opacity: 0.8;
+    /* Turf strike */
+    transform: translate(72px, 126px) rotate(360deg);
+    opacity: 0.9;
   }
   80%,
   100% {
-    transform: translate(68px, 128px) rotate(360deg);
+    transform: translate(72px, 126px) rotate(360deg);
     opacity: 0;
   }
 }
 
-/* Gold burst when ball hits ground */
+/* Impact pop when ball hits turf */
 @keyframes impactPop {
   0%,
   76% {
@@ -394,20 +654,19 @@
     transform: scale(0.3);
   }
   79% {
-    opacity: 0.8;
-    transform: scale(1.4);
+    opacity: 0.85;
+    transform: scale(1.3);
   }
   84% {
     opacity: 0;
-    transform: scale(0.6);
+    transform: scale(1.6);
   }
-  85%,
   100% {
     opacity: 0;
   }
 }
 
-/* ── Text ───────────────────────────────────────────────────────────────────── */
+/* ── Typography & Navigation ───────────────────────────────────────────────── */
 .text {
   text-align: center;
   max-width: 380px;
@@ -432,7 +691,7 @@
   line-height: 1.6;
 }
 
-/* Slanted home button — matches SlantedButton component */
+/* Slanted ZRU green action button */
 .homeLink {
   display: inline-flex;
   align-items: center;

@@ -15,57 +15,93 @@ export default function KnockOnAnimation() {
     <div className={styles.wrapper}>
       {/* ── Animation scene ──────────────────────────────────────── */}
       <div className={styles.scene} aria-hidden="true">
-        {/* Ground line + shadow */}
+        {/* Ground line + dynamic player shadow */}
         <div className={styles.ground} />
         <div className={styles.playerShadow} />
 
         {/* Player figure */}
         <div className={styles.player}>
-          {/* Head + headband */}
+          {/* Head & headband */}
           <div className={styles.head}>
             <div className={styles.headband} />
+            <div className={styles.earLeft} />
+            <div className={styles.earRight} />
           </div>
 
-          {/* Neck */}
+          {/* Athletic Neck & Trapezius muscles */}
           <div className={styles.neck} />
+          <div className={styles.traps} />
 
-          {/* Jersey — collar, number, texture */}
-          <div className={styles.jersey}>
-            <div className={styles.collar} />
-            <div className={styles.numberBlock}>
-              <span className={styles.numberText}>10</span>
+          {/* Jersey Torso & Shoulder Caps */}
+          <div className={styles.torso}>
+            <div className={styles.shoulderCapLeft} />
+            <div className={styles.shoulderCapRight} />
+            <div className={styles.jersey}>
+              <div className={styles.collar} />
+              <div className={styles.placket} />
+              <div className={styles.numberBlock}>
+                <span className={styles.numberText}>10</span>
+              </div>
+              <div className={styles.jerseyTexture} />
             </div>
-            <div className={styles.jerseyTexture} />
           </div>
 
-          {/* Shorts + side stripe */}
+          {/* Realistic Rugby Shorts (Waistband + 2 angled leg openings) */}
           <div className={styles.shorts}>
-            <div className={styles.shortsStripe} />
+            <div className={styles.shortsWaist} />
+            <div className={styles.shortsLegLeft}>
+              <div className={styles.shortsStripeLeft} />
+            </div>
+            <div className={styles.shortsLegRight}>
+              <div className={styles.shortsStripeRight} />
+            </div>
           </div>
 
-          {/* Arms (sleeves with wrist tape via ::after) */}
-          <div className={styles.armLeft} />
-          <div className={styles.armRight} />
+          {/* Articulated Left Arm (Sleeve Bicep -> Elbow -> Forearm -> Hand) */}
+          <div className={styles.armLeftWrapper}>
+            <div className={styles.bicepLeft} />
+            <div className={styles.forearmLeft}>
+              <div className={styles.wristTapeLeft} />
+              <div className={styles.handLeft} />
+            </div>
+          </div>
 
-          {/* Legs */}
-          <div className={styles.legLeft} />
-          <div className={styles.legRight} />
+          {/* Articulated Right Arm (Sleeve Bicep -> Elbow -> Forearm -> Hand) */}
+          <div className={styles.armRightWrapper}>
+            <div className={styles.bicepRight} />
+            <div className={styles.forearmRight}>
+              <div className={styles.wristTapeRight} />
+              <div className={styles.handRight} />
+            </div>
+          </div>
 
-          {/* White socks */}
-          <div className={styles.sockLeft} />
-          <div className={styles.sockRight} />
+          {/* Athletic Left Leg (Quad -> Knee -> Calf -> Sock -> Boot) */}
+          <div className={styles.legLeftWrapper}>
+            <div className={styles.quadLeft} />
+            <div className={styles.kneeLeft} />
+            <div className={styles.calfLeft} />
+            <div className={styles.sockLeft} />
+            <div className={styles.bootLeft} />
+          </div>
 
-          {/* Boots (cleats via ::before/::after) */}
-          <div className={styles.bootLeft} />
-          <div className={styles.bootRight} />
+          {/* Athletic Right Leg (Quad -> Knee -> Calf -> Sock -> Boot) */}
+          <div className={styles.legRightWrapper}>
+            <div className={styles.quadRight} />
+            <div className={styles.kneeRight} />
+            <div className={styles.calfRight} />
+            <div className={styles.sockRight} />
+            <div className={styles.bootRight} />
+          </div>
         </div>
 
-        {/* Rugby ball */}
+        {/* Realistic Rugby Ball (White with ZRU Green panels & seams) */}
         <div className={styles.ball}>
+          <div className={styles.ballPanelLeft} />
+          <div className={styles.ballPanelRight} />
           <div className={styles.ballSeam} />
         </div>
 
-        {/* Impact burst at landing spot */}
+        {/* Turf impact burst */}
         <div className={styles.impact} />
       </div>
 
