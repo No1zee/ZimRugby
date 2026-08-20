@@ -80,7 +80,7 @@ export default function RoadToWorldCup({ campaign }: RoadToWorldCupProps) {
         <div className="relative z-10 max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 text-center pt-12 mb-8">
           <h2 className="text-4xl sm:text-5xl lg:text-6xl font-heading font-black uppercase tracking-wide sm:tracking-widest text-white not-italic leading-[1.05]">
             {mainHeadline}{" "}
-            <span className="text-accent-teal">{accentWord}</span>
+            <span className="text-emerald-300">{accentWord}</span>
             <span className="block text-lg sm:text-xl lg:text-2xl text-white/60 font-normal tracking-[0.15em] mt-3">
               {subheadline}
             </span>

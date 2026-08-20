@@ -61,10 +61,10 @@ export default function PlayRugbyDevelopment() {
         >
           <div className="heading-plate heading-plate-light">
             <h2 className="text-3xl sm:text-5xl font-heading font-black uppercase tracking-tight text-white not-italic leading-[1.05]">
-              RUGBY FOR <span className="text-accent-teal">GOOD</span>
+              RUGBY FOR <span className="text-emerald-400">GOOD</span>
             </h2>
           </div>
-          <p className="text-sm md:text-base text-white/80 font-normal leading-relaxed border-l-2 border-accent-teal pl-6 max-w-2xl">
+          <p className="text-sm md:text-base text-white/80 font-normal leading-relaxed border-l-2 border-emerald-400 pl-6 max-w-2xl">
             Using rugby to transform communities, empower youth, and build an enduring sporting legacy across Zimbabwe.
           </p>
         </motion.div>

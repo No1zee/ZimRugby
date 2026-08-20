@@ -79,9 +79,9 @@ export default function PageHero({
     >
       {/* Breadcrumbs & Kicker */}
       {Boolean(breadcrumb?.length || finalTag) && (
-        <div className="flex flex-wrap items-center gap-3 text-[11px] font-black uppercase tracking-[0.2em]">
+        <div className="flex flex-wrap items-center gap-3 text-[11px] font-black uppercase tracking-[0.25em]">
           {finalTag && (
-            <span className="inline-flex items-center px-3 py-1 rounded-full text-[10px] font-black tracking-[0.2em] uppercase bg-zru-green/15 text-zru-green border border-zru-green/30 backdrop-blur-sm shadow-sm">
+            <span className="text-[10px] sm:text-xs font-black uppercase tracking-[0.25em] text-zru-green">
               {finalTag}
             </span>
           )}

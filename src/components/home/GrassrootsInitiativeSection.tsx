@@ -122,7 +122,7 @@ export default function GrassrootsInitiativeSection({ initiatives: apiInitiative
         >
           <div className="heading-plate heading-plate-light">
             <h2 className="text-3xl sm:text-5xl font-heading font-black uppercase tracking-wide sm:tracking-widest text-white not-italic leading-[1.05]">
-              GROWING THE GAME IN <span className="text-accent-teal">ZIMBABWE</span>
+              GROWING THE GAME IN <span className="text-zru-green">ZIMBABWE</span>
             </h2>
           </div>
         </motion.div>

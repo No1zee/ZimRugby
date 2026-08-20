@@ -2,11 +2,10 @@
 
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { Calendar, Clock, MapPin } from "lucide-react";
+import { Calendar, Clock, MapPin, ArrowRight } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import SlantedButton from "@/components/ui/SlantedButton";
-import { getFlagUrl } from "@/lib/flags";
+import { getFlagUrl, COUNTRY_ISO_MAP } from "@/lib/flags";
 
 interface MatchCardProps {
   id: string | number;
@@ -30,6 +29,27 @@ interface MatchCardProps {
   opponentCategory?: string;
 }
 
+function resolveTeamFlag(teamName: string, customLogo?: string): string {
+  if (customLogo) return customLogo;
+  if (!teamName) return "";
+  const direct = getFlagUrl(teamName);
+  if (direct) return direct;
+  const match = Object.keys(COUNTRY_ISO_MAP).find((c) =>
+    teamName.toLowerCase().includes(c.toLowerCase())
+  );
+  if (match) return getFlagUrl(match);
+  return "";
+}
+
+function getTeamCode(name: string): string {
+  if (!name) return "ZRU";
+  const clean = name.replace(/\b(U\d+|Women|Men|Sevens|XV)\b/gi, "").trim();
+  if (clean.length >= 3) {
+    return clean.substring(0, 3).toUpperCase();
+  }
+  return name.substring(0, 3).toUpperCase();
+}
+
 export default function MatchCard({
   id,
   competition,
@@ -48,137 +68,172 @@ export default function MatchCard({
     away: false,
   });
 
-  const homeLogo = !imgError.home && homeTeam.logo ? homeTeam.logo : getFlagUrl(homeTeam.name);
-  const awayLogo = !imgError.away && awayTeam.logo ? awayTeam.logo : getFlagUrl(awayTeam.name);
+  const homeLogo = !imgError.home ? resolveTeamFlag(homeTeam.name, homeTeam.logo) : "";
+  const awayLogo = !imgError.away ? resolveTeamFlag(awayTeam.name, awayTeam.logo) : "";
+
+  const isLive = status === "live";
+  const isCompleted = status === "completed";
+
+  // Check winner for subtle visual hierarchy if score is present
+  const homeScore = typeof homeTeam.score === "number" ? homeTeam.score : null;
+  const awayScore = typeof awayTeam.score === "number" ? awayTeam.score : null;
 
   return (
-    <motion.div
-      whileHover={{ y: -4 }}
-      className="relative h-full flex flex-col bg-white border border-black/10 hover:border-zru-green/60 rounded-2xl overflow-hidden group shadow-[0_1px_2px_rgba(0,0,0,0.14),0_6px_16px_rgba(0,0,0,0.10)] hover:shadow-[0_2px_4px_rgba(0,0,0,0.14),0_14px_28px_rgba(0,0,0,0.16)] transition-all duration-300 text-black before:content-[''] before:absolute before:top-0 before:left-[12%] before:right-[12%] before:h-px before:bg-gradient-to-r before:from-transparent before:via-black/20 before:to-transparent"
-    >
-      {/* Header: Competition & Round */}
-      <div className="bg-milk-white px-5 py-3 flex justify-between items-center border-b border-black/10">
-        <div className="flex items-center gap-2 truncate max-w-[70%]">
-          {teamCategory && (
-            <span className="bg-zru-green text-white text-[9px] font-extrabold uppercase px-2.5 py-0.5 rounded tracking-wider shrink-0">
-              {teamCategory}
-            </span>
-          )}
-          {opponentCategory && opponentCategory !== "international" && (
-            <span className="bg-black/10 text-black/70 text-[9px] font-extrabold uppercase px-2.5 py-0.5 rounded tracking-wider shrink-0">
-              Opp {opponentCategory}
-            </span>
-          )}
-          <span className="text-black/80 text-xs font-extrabold tracking-widest uppercase truncate font-heading">
-            {competition}
-          </span>
-        </div>
-        <span className="text-black/50 text-xs font-bold uppercase">{round}</span>
-      </div>
-
-      <div className="p-5 flex flex-col flex-1">
-        <div className="flex justify-between items-center mb-5">
-          {/* Home Team */}
-          <div className="flex flex-col items-center gap-2.5 w-1/3">
-            <div className="w-16 h-16 bg-milk-white rounded-full flex items-center justify-center p-2 border border-black/10 overflow-hidden relative shadow-sm group-hover:border-zru-green/30 transition-colors">
-              {homeLogo ? (
-                <Image 
-                  src={homeLogo} 
-                  alt={homeTeam.name} 
-                  fill 
-                  sizes="64px" 
-                  className="object-contain p-2"
-                  onError={() => setImgError(prev => ({ ...prev, home: true }))}
-                />
-              ) : (
-                <span className="text-black font-heading font-black text-xl">
-                  {homeTeam.name.substring(0, 3).toUpperCase()}
-                </span>
-              )}
-            </div>
-            <span className="text-black font-heading text-sm text-center leading-tight uppercase font-black">
-              {homeTeam.name}
+    <Link href={`/matches/${id}`} className="block h-full group focus:outline-none">
+      <motion.div
+        whileHover={{ y: -3 }}
+        transition={{ duration: 0.2, ease: "easeOut" }}
+        className="relative h-full flex flex-col bg-white border border-stone-200/90 group-hover:border-zru-green/50 rounded-2xl overflow-hidden shadow-[0_2px_8px_rgba(0,0,0,0.04)] group-hover:shadow-[0_8px_24px_rgba(0,107,63,0.08)] transition-all duration-300"
+      >
+        {/* Header: Dual-zone Competition & Status Bar */}
+        <div className="bg-[#FAF9F5] px-4 sm:px-5 py-3 flex flex-wrap justify-between items-center gap-2 border-b border-stone-200/80">
+          {/* Left Zone: Category Badge & Competition Title */}
+          <div className="flex items-center gap-2 min-w-0 flex-1">
+            {teamCategory && (
+              <span className="bg-zru-green text-white text-[10px] font-black uppercase px-2 py-0.5 rounded-full tracking-wider shrink-0 shadow-xs">
+                {teamCategory}
+              </span>
+            )}
+            {opponentCategory && opponentCategory.toLowerCase() !== "international" && (
+              <span className="bg-stone-200 text-stone-700 text-[10px] font-extrabold uppercase px-2 py-0.5 rounded-full tracking-wider shrink-0">
+                {opponentCategory}
+              </span>
+            )}
+            <span className="text-stone-900 font-heading font-black text-xs sm:text-sm tracking-wider uppercase truncate" title={competition}>
+              {competition}
             </span>
           </div>
 
-          {/* VS / Score */}
-          <div className="flex flex-col items-center justify-center w-1/3">
-            {status === "completed" || status === "live" ? (
-              <div className="relative overflow-hidden text-2xl font-heading text-white bg-gradient-to-b from-[#0A7A55] to-[#005238] px-4 py-1.5 rounded-lg tracking-widest font-black shadow-[0_3px_0_#00301A,0_6px_12px_rgba(0,0,0,0.20)] before:content-[''] before:absolute before:inset-x-1 before:top-0 before:h-1/2 before:bg-gradient-to-b before:from-white/20 before:to-transparent">
-                {homeTeam.score} - {awayTeam.score}
-              </div>
-            ) : (
-              <div className="flex flex-col items-center">
-                <span className="text-2xl font-heading text-black/30 mb-1 font-black">VS</span>
-                <div className="px-3 py-0.5 bg-black/5 border border-black/10 rounded text-[9px] font-extrabold uppercase text-black/70 tracking-wider">
-                  UPCOMING
-                </div>
-              </div>
+          {/* Right Zone: Stage Tag & Match Status Pill */}
+          <div className="flex items-center gap-2 shrink-0">
+            {round && (
+              <span className="text-stone-500 text-[11px] font-bold uppercase tracking-wider hidden sm:inline-block">
+                {round}
+              </span>
             )}
-            {status === "live" && (
-              <span className="text-zru-green text-[10px] font-black tracking-wider uppercase mt-2 flex items-center gap-1.5 px-2 py-0.5 rounded bg-zru-green/10 border border-zru-green/20">
-                <span className="w-1.5 h-1.5 rounded-full bg-zru-green" /> LIVE NOW
+            {isLive ? (
+              <span className="bg-zru-green text-white text-[10px] font-black tracking-wider uppercase px-2.5 py-0.5 rounded-md flex items-center gap-1.5 shadow-xs">
+                <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
+                LIVE
+              </span>
+            ) : isCompleted ? (
+              <span className="bg-stone-900 text-white text-[10px] font-black tracking-wider uppercase px-2.5 py-0.5 rounded-md shadow-xs">
+                FULL TIME
+              </span>
+            ) : (
+              <span className="bg-stone-100 text-stone-700 border border-stone-200 text-[10px] font-black tracking-wider uppercase px-2.5 py-0.5 rounded-md">
+                UPCOMING
               </span>
             )}
           </div>
+        </div>
 
-          {/* Away Team */}
-          <div className="flex flex-col items-center gap-2.5 w-1/3">
-            <div className="w-16 h-16 bg-milk-white rounded-full flex items-center justify-center p-2 border border-black/10 overflow-hidden relative shadow-sm group-hover:border-zru-green/30 transition-colors">
-              {awayLogo ? (
-                <Image 
-                  src={awayLogo} 
-                  alt={awayTeam.name} 
-                  fill 
-                  sizes="64px" 
-                  className="object-contain p-2" 
-                  onError={() => setImgError(prev => ({ ...prev, away: true }))}
-                />
+        {/* Main Content: Matchup Scoreboard */}
+        <div className="p-5 sm:p-6 flex flex-col flex-1">
+          <div className="grid grid-cols-[1fr_auto_1fr] items-center gap-3 sm:gap-4 my-auto py-2">
+            {/* Home Team */}
+            <div className="flex flex-col items-center text-center gap-2 min-w-0">
+              <div className="w-16 h-16 sm:w-18 sm:h-18 rounded-full bg-[#FAF9F5] border border-stone-200/90 flex items-center justify-center p-2 relative shadow-xs group-hover:border-zru-green/40 group-hover:bg-white transition-all">
+                {homeLogo ? (
+                  <Image
+                    src={homeLogo}
+                    alt={homeTeam.name}
+                    fill
+                    sizes="72px"
+                    className="object-contain p-2 rounded-full"
+                    onError={() => setImgError((prev) => ({ ...prev, home: true }))}
+                  />
+                ) : (
+                  <span className="text-stone-900 font-heading font-black text-lg sm:text-xl tracking-wider">
+                    {getTeamCode(homeTeam.name)}
+                  </span>
+                )}
+              </div>
+              <span className="text-stone-900 font-heading text-xs sm:text-sm font-black uppercase leading-tight tracking-wide line-clamp-2 px-1">
+                {homeTeam.name}
+              </span>
+            </div>
+
+            {/* Score / VS Display (Flat Digital Minimalist) */}
+            <div className="flex flex-col items-center justify-center px-2">
+              {isCompleted || isLive ? (
+                <div className="flex items-center gap-2 sm:gap-3 text-stone-900 font-heading font-black text-3xl sm:text-4xl tracking-tight">
+                  <span className={homeScore !== null && awayScore !== null && homeScore > awayScore ? "text-stone-900" : "text-stone-800"}>
+                    {homeScore ?? 0}
+                  </span>
+                  <span className="text-stone-400 font-light text-2xl sm:text-3xl">-</span>
+                  <span className={homeScore !== null && awayScore !== null && awayScore > homeScore ? "text-stone-900" : "text-stone-800"}>
+                    {awayScore ?? 0}
+                  </span>
+                </div>
               ) : (
-                <span className="text-black font-heading font-black text-xl">
-                  {awayTeam.name.substring(0, 3).toUpperCase()}
-                </span>
+                <div className="flex flex-col items-center justify-center">
+                  <span className="text-2xl sm:text-3xl font-heading font-black text-stone-300 tracking-wider">
+                    VS
+                  </span>
+                </div>
               )}
             </div>
-            <span className="text-black font-heading text-sm text-center leading-tight uppercase font-black">
-              {awayTeam.name}
-            </span>
-          </div>
-        </div>
 
-        {/* Details: Date, Time, Venue */}
-        <div className="flex flex-col gap-2 border-t border-black/10 pt-3 mt-auto">
-          <div className="flex items-center justify-between text-xs text-black/70">
-            <div className="flex items-center gap-2">
-              <Calendar className="w-3.5 h-3.5 text-zru-green" />
-              <span className="font-extrabold uppercase">{date}</span>
-              <span className="w-1 h-1 bg-black/20 rounded-full mx-1" />
-              <Clock className="w-3.5 h-3.5 text-zru-green" />
-              <span className="font-extrabold uppercase">{time}</span>
+            {/* Away Team */}
+            <div className="flex flex-col items-center text-center gap-2 min-w-0">
+              <div className="w-16 h-16 sm:w-18 sm:h-18 rounded-full bg-[#FAF9F5] border border-stone-200/90 flex items-center justify-center p-2 relative shadow-xs group-hover:border-zru-green/40 group-hover:bg-white transition-all">
+                {awayLogo ? (
+                  <Image
+                    src={awayLogo}
+                    alt={awayTeam.name}
+                    fill
+                    sizes="72px"
+                    className="object-contain p-2 rounded-full"
+                    onError={() => setImgError((prev) => ({ ...prev, away: true }))}
+                  />
+                ) : (
+                  <span className="text-stone-900 font-heading font-black text-lg sm:text-xl tracking-wider">
+                    {getTeamCode(awayTeam.name)}
+                  </span>
+                )}
+              </div>
+              <span className="text-stone-900 font-heading text-xs sm:text-sm font-black uppercase leading-tight tracking-wide line-clamp-2 px-1">
+                {awayTeam.name}
+              </span>
             </div>
           </div>
-          <div className="flex items-center gap-2 text-black/70 hover:text-zru-green text-xs font-bold uppercase transition-colors">
-            <MapPin className="w-3.5 h-3.5 text-zru-green" />
-            <a 
-              href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(venue)}`} 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="hover:underline truncate"
-            >
-              {venue}
-            </a>
+
+          {/* Footer Metadata & CTA Row */}
+          <div className="border-t border-stone-100 pt-3.5 mt-4 flex flex-col gap-2">
+            <div className="flex items-center justify-between text-xs text-stone-600">
+              <div className="flex items-center gap-2 flex-wrap font-bold uppercase tracking-wider text-[11px]">
+                <div className="flex items-center gap-1.5 text-stone-700">
+                  <Calendar className="w-3.5 h-3.5 text-zru-green shrink-0" />
+                  <span>{date}</span>
+                </div>
+                {time && (
+                  <>
+                    <span className="text-stone-300">•</span>
+                    <div className="flex items-center gap-1.5 text-stone-700">
+                      <Clock className="w-3.5 h-3.5 text-zru-green shrink-0" />
+                      <span>{time.includes("CAT") ? time : `${time} CAT`}</span>
+                    </div>
+                  </>
+                )}
+              </div>
+
+              {/* Subtle hover arrow indicator */}
+              <div className="flex items-center gap-1 text-[11px] font-black uppercase tracking-wider text-stone-400 group-hover:text-zru-green transition-colors">
+                <span className="hidden sm:inline">Details</span>
+                <ArrowRight className="w-3.5 h-3.5 transform group-hover:translate-x-0.5 transition-transform" />
+              </div>
+            </div>
+
+            {venue && (
+              <div className="flex items-center gap-1.5 text-[11px] font-semibold text-stone-500 uppercase tracking-wider truncate">
+                <MapPin className="w-3.5 h-3.5 text-zru-green shrink-0" />
+                <span className="truncate">{venue}</span>
+              </div>
+            )}
           </div>
         </div>
-
-        {/* Action Button */}
-        <div className="pt-5">
-          <Link href={`/matches/${id}`} className="w-full block">
-            <SlantedButton variant="secondary" size="sm" className="w-full justify-center">
-              MATCH DETAILS
-            </SlantedButton>
-          </Link>
-        </div>
-      </div>
-    </motion.div>
+      </motion.div>
+    </Link>
   );
 }

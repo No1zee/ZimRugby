@@ -50,7 +50,7 @@ export default function SponsorGrid({ partners }: SponsorGridProps) {
             className="relative z-10 max-w-3xl mx-auto px-4 text-center"
           >
             <h2 className="text-2xl sm:text-3xl lg:text-4xl font-heading font-black uppercase tracking-[0.06em] sm:tracking-widest text-white leading-[1.08]">
-              <span className="text-accent-teal">POWERING</span> ZIMBABWEAN RUGBY
+              <span className="text-zru-green">POWERING</span> ZIMBABWEAN RUGBY
             </h2>
           </motion.div>
         </div>

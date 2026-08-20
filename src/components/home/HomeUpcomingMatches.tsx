@@ -168,7 +168,7 @@ export default function HomeUpcomingMatches({
           <div>
             <div className="heading-plate heading-plate-light">
               <h2 className="text-3xl sm:text-4xl lg:text-5xl font-heading font-black uppercase text-white tracking-tight leading-[1.05]">
-                UPCOMING FIXTURES
+                UPCOMING <span className="text-zru-green">FIXTURES</span>
               </h2>
             </div>
           </div>
