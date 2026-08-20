@@ -1,8 +1,9 @@
 "use client";
 
 import React, { useState, useRef } from "react";
-import { Users, Shield, ArrowRight, ChevronDown } from "lucide-react";
+import { Users, Shield, ArrowRight, ChevronDown, LayoutGrid, Flag } from "lucide-react";
 import CollectionManager from "@/components/admin/CollectionManager";
+import { VisualPitchBuilder } from "./VisualPitchBuilder";
 
 interface VisualTeamsManagerProps {
   teams: Record<string, unknown>[];
@@ -63,6 +64,7 @@ export default function VisualTeamsManager({
   onDirtyChange,
 }: VisualTeamsManagerProps) {
   const [selectedTeamSlug, setSelectedTeamSlug] = useState<string | null>(null);
+  const [squadViewMode, setSquadViewMode] = useState<"roster" | "pitch">("pitch");
   const editorRef = useRef<HTMLDivElement | null>(null);
 
   // Identify selected team
@@ -244,27 +246,60 @@ export default function VisualTeamsManager({
         </div>
       </div>
 
-      {/* ── 2. ACTIVE SELECTED SQUAD MANAGEMENT ─────────────────────────── */}
+      {/* ── 2. ACTIVE SELECTED SQUAD MANAGEMENT ───────────────────────────────────────────── */}
       <div ref={editorRef} className="space-y-6 pt-4 scroll-mt-24">
-        {/* Squad Players for the selected team */}
-        <div className="rounded-2xl border border-black/10 bg-white p-6 shadow-sm">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-5 border-b border-black/10">
-            <div className="flex items-center gap-3">
-              <div className="w-12 h-12 rounded-xl bg-zru-green/10 border border-zru-green/20 flex items-center justify-center">
-                <Users className="w-6 h-6 text-zru-green" />
-              </div>
-              <div>
-                <span className="text-[10px] font-heading font-black uppercase tracking-[0.2em] text-zru-green block">
-                  ACTIVE SQUAD ROSTER ({filteredPlayers.length} / {players.length} TOTAL PLAYERS)
-                </span>
-                <h3 className="font-heading text-xl font-black uppercase text-rich-black">
-                  {activeTeamName} Players
-                </h3>
-              </div>
+        {/* Squad Header with View Switcher */}
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-5 rounded-2xl bg-white border border-black/10 shadow-xs">
+          <div className="flex items-center gap-3">
+            <div className="w-12 h-12 rounded-xl bg-zru-green/10 border border-zru-green/20 flex items-center justify-center">
+              <Users className="w-6 h-6 text-zru-green" />
+            </div>
+            <div>
+              <span className="text-[10px] font-heading font-black uppercase tracking-[0.2em] text-zru-green block">
+                ACTIVE SQUAD ({filteredPlayers.length} PLAYERS)
+              </span>
+              <h3 className="font-heading text-xl font-black uppercase text-rich-black">
+                {activeTeamName}
+              </h3>
             </div>
           </div>
 
-          <div className="pt-5">
+          {/* View Switcher: 2D Pitch vs Roster List */}
+          <div className="flex items-center bg-black/5 p-1 rounded-xl border border-black/10">
+            <button
+              type="button"
+              onClick={() => setSquadViewMode("pitch")}
+              className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-black uppercase tracking-wider transition-all cursor-pointer ${
+                squadViewMode === "pitch"
+                  ? "bg-zru-green text-white shadow-xs"
+                  : "text-black/60 hover:text-black"
+              }`}
+            >
+              <Flag className="w-3.5 h-3.5" /> 2D Pitch Lineup
+            </button>
+            <button
+              type="button"
+              onClick={() => setSquadViewMode("roster")}
+              className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-black uppercase tracking-wider transition-all cursor-pointer ${
+                squadViewMode === "roster"
+                  ? "bg-zru-green text-white shadow-xs"
+                  : "text-black/60 hover:text-black"
+              }`}
+            >
+              <LayoutGrid className="w-3.5 h-3.5" /> Player Roster Table
+            </button>
+          </div>
+        </div>
+
+        {/* 2D Pitch View */}
+        {squadViewMode === "pitch" ? (
+          <VisualPitchBuilder
+            teamName={activeTeamName}
+            players={filteredPlayers.length > 0 ? filteredPlayers : players}
+          />
+        ) : (
+          /* Squad Players Roster Table */
+          <div className="rounded-2xl border border-black/10 bg-white p-6 shadow-sm">
             <CollectionManager
               key={`players-${activeTeam?.id || activeTeam?.slug}`}
               collection="players"
@@ -297,7 +332,7 @@ export default function VisualTeamsManager({
               onDirtyChange={onDirtyChange}
             />
           </div>
-        </div>
+        )}
 
         {/* Team Configuration / Metadata */}
         <div className="rounded-2xl border border-black/10 bg-white p-6 shadow-sm">

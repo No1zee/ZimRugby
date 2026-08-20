@@ -380,25 +380,28 @@ function AdminClientInner(props: AdminClientProps) {
         {/* Header */}
         <div className="mb-6 flex flex-col gap-4 border-b border-black/10 pb-6 md:flex-row md:items-center md:justify-between">
           <div>
-            <div className="mb-1 flex items-center gap-2">
-              <span className="rounded bg-zru-green px-2.5 py-1 text-[10px] font-black uppercase tracking-widest text-white">
-                ZRU Content Manager
+            <div className="mb-1.5 flex items-center gap-2">
+              <span className="rounded-lg bg-zru-green px-2.5 py-1 text-[10px] font-black uppercase tracking-[0.2em] text-white shadow-xs">
+                Official ZRU Admin
+              </span>
+              <span className="text-[10px] font-bold uppercase tracking-wider text-black/40">
+                Command Workspace
               </span>
             </div>
-            <h1 className="font-heading text-3xl font-black uppercase text-rich-black">
+            <h1 className="font-heading text-2xl sm:text-3xl font-black uppercase tracking-tight text-rich-black">
               {NAV_SECTIONS.flatMap((s) => s.items).find((i) => i.id === activeTab)?.label ?? "Dashboard"}
             </h1>
           </div>
 
-          <div className="flex flex-wrap items-center gap-3">
-            {/* One-Click CDN Cache Purge Button (#1) */}
+          <div className="flex flex-wrap items-center gap-2.5">
+            {/* One-Click CDN Cache Purge Button */}
             <button
               onClick={handlePurgeCache}
               disabled={isPurgingCache}
-              className="inline-flex items-center gap-2 rounded-xl bg-zru-green px-4 py-2.5 font-heading text-xs font-black uppercase tracking-wider text-white shadow-sm transition-all hover:bg-zru-green/90 disabled:opacity-50"
+              className="inline-flex items-center gap-2 rounded-xl bg-zru-green px-4 py-2.5 font-heading text-xs font-black uppercase tracking-wider text-white shadow-sm transition-all hover:bg-green-800 disabled:opacity-50 cursor-pointer"
             >
               <RefreshCw className={`h-3.5 w-3.5 ${isPurgingCache ? "animate-spin" : ""}`} />
-              {isPurgingCache ? "Refreshing..." : "Refresh live site"}
+              {isPurgingCache ? "Refreshing..." : "Refresh Live Site"}
             </button>
 
             <a
@@ -429,31 +432,34 @@ function AdminClientInner(props: AdminClientProps) {
               }
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 rounded-xl bg-black/5 px-4 py-2.5 font-heading text-xs font-black uppercase tracking-wider text-black/70 transition-colors hover:bg-black/10"
+              className="inline-flex items-center gap-2 rounded-xl bg-white border border-black/10 px-4 py-2.5 font-heading text-xs font-black uppercase tracking-wider text-black/70 transition-all hover:bg-black/5 hover:text-black shadow-xs cursor-pointer"
             >
-              View live page <ExternalLink className="h-3.5 w-3.5 text-[#006B3F]" />
+              View Live Page <ExternalLink className="h-3.5 w-3.5 text-[#006B3F]" />
             </a>
           </div>
         </div>
 
-        {/* Section nav */}
+        {/* Section Navigation Tabs */}
         <div className="mb-6 space-y-3">
-          <div className="no-scrollbar flex gap-2 overflow-x-auto border-b border-black/10 pb-4">
+          {/* Top Category Tabs */}
+          <div className="flex gap-2 overflow-x-auto pb-2 -mx-4 px-4 sm:mx-0 sm:px-0 [scrollbar-width:none] [-webkit-overflow-scrolling:touch]">
             {accessibleSections.map((section) => (
               <button
                 key={section.id}
                 onClick={() => navigate(section.items[0].id)}
-                className={`whitespace-nowrap rounded-xl px-5 py-2.5 text-xs font-black uppercase tracking-wider transition-all ${
+                className={`whitespace-nowrap rounded-xl px-4 py-2 sm:px-5 sm:py-2.5 text-xs font-black uppercase tracking-wider transition-all cursor-pointer ${
                   section.items.some((i) => i.id === activeTab)
-                    ? "bg-zru-green text-white shadow-lg"
-                    : "bg-black/5 text-black/70 hover:bg-black/10"
+                    ? "bg-[#0B1520] text-white shadow-md ring-1 ring-white/10"
+                    : "bg-white border border-black/10 text-black/70 hover:bg-black/5"
                 }`}
               >
                 {section.label}
               </button>
             ))}
           </div>
-          <div className="no-scrollbar flex gap-2 overflow-x-auto">
+
+          {/* Sub-item Tabs */}
+          <div className="flex gap-2 overflow-x-auto pb-2 -mx-4 px-4 sm:mx-0 sm:px-0 [scrollbar-width:none] [-webkit-overflow-scrolling:touch]">
             {accessibleSections
               .filter((s) => s.items.some((i) => i.id === activeTab))
               .map((section) =>
@@ -464,14 +470,20 @@ function AdminClientInner(props: AdminClientProps) {
                     <button
                       key={tab.id}
                       onClick={() => navigate(tab.id)}
-                      className={`flex items-center gap-2 whitespace-nowrap rounded-xl px-4 py-2 text-[11px] font-bold uppercase tracking-wider transition-all ${
-                        isActive ? "bg-black text-white" : "bg-black/5 text-black/70 hover:bg-black/10"
+                      className={`flex items-center gap-2 whitespace-nowrap rounded-xl px-3.5 py-2 text-xs font-bold uppercase tracking-wider transition-all cursor-pointer ${
+                        isActive
+                          ? "bg-zru-green text-white shadow-sm"
+                          : "bg-black/5 text-black/70 hover:bg-black/10 hover:text-black"
                       }`}
                     >
-                      <Icon className="h-4 w-4" />
+                      <Icon className="h-3.5 w-3.5" />
                       <span>{tab.label}</span>
                       {tab.count > 0 && (
-                        <span className={`rounded-full px-2 py-0.5 text-[10px] ${isActive ? "bg-white/20 text-white" : "bg-black/10 text-black/70"}`}>
+                        <span
+                          className={`rounded-full px-2 py-0.5 text-[10px] font-mono ${
+                            isActive ? "bg-white/20 text-white" : "bg-black/10 text-black/70"
+                          }`}
+                        >
                           {tab.count}
                         </span>
                       )}
