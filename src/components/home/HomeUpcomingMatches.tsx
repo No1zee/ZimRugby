@@ -164,13 +164,10 @@ export default function HomeUpcomingMatches({
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Section Header */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-8 sm:mb-12 border-b border-white/10 pb-6">
-          <div className="space-y-2">
-            <span className="block text-[10px] font-black uppercase tracking-[0.3em] text-zru-green">
-              National &amp; Domestic Fixtures
-            </span>
+        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-white/10 pb-4 mb-8 sm:mb-12">
+          <div>
             <div className="heading-plate heading-plate-light">
-              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-heading font-black text-white uppercase tracking-tight leading-[1.05]">
+              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-heading font-black uppercase text-white tracking-tight leading-[1.05]">
                 UPCOMING FIXTURES
               </h2>
             </div>
@@ -178,9 +175,9 @@ export default function HomeUpcomingMatches({
 
           <Link
             href="/match-centre"
-            className="group inline-flex items-center gap-2 text-xs font-heading font-black tracking-widest uppercase text-zru-green hover:text-white transition-colors self-start md:self-auto py-1"
+            className="group inline-flex items-center gap-2 text-xs font-heading font-black tracking-widest uppercase text-zru-green hover:text-white transition-colors self-start sm:self-auto py-1"
           >
-            <span>VIEW FULL MATCH CENTRE</span>
+            <span>VIEW ALL FIXTURES</span>
             <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
           </Link>
         </div>
