@@ -165,21 +165,23 @@ export default function HomeUpcomingMatches({
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Section Header */}
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-8 sm:mb-12 border-b border-white/10 pb-6">
-          <div>
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-none bg-zru-green/15 text-emerald-300 border border-zru-green/30 text-[10px] font-mono font-bold uppercase tracking-widest mb-3">
-              <span>NATIONAL & DOMESTIC FIXTURES</span>
+          <div className="space-y-2">
+            <span className="block text-[10px] font-black uppercase tracking-[0.3em] text-zru-green">
+              National &amp; Domestic Fixtures
+            </span>
+            <div className="heading-plate heading-plate-light">
+              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-heading font-black text-white uppercase tracking-tight leading-[1.05]">
+                UPCOMING FIXTURES
+              </h2>
             </div>
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-heading font-black text-white uppercase tracking-tight">
-              UPCOMING <span className="text-zru-green">FIXTURES</span>
-            </h2>
           </div>
 
           <Link
             href="/match-centre"
-            className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-zru-green/20 hover:bg-zru-green text-white text-xs font-heading font-black uppercase tracking-wider transition-colors border border-zru-green/30 group"
+            className="group inline-flex items-center gap-2 text-xs font-heading font-black tracking-widest uppercase text-zru-green hover:text-white transition-colors self-start md:self-auto py-1"
           >
-            <span>View Full Match Centre</span>
-            <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+            <span>VIEW FULL MATCH CENTRE</span>
+            <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
           </Link>
         </div>
 
