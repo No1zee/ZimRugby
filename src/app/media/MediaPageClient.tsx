@@ -173,9 +173,11 @@ export default function MediaPageClient({ cmsPage, initialNews = [] }: MediaPage
             {/* Top Magazine Lead Grid (Page 1 Default Only) */}
             {leadHeroStory && (
               <div className="space-y-6">
-                <div className="flex items-center gap-2 text-xs font-black uppercase tracking-widest text-zru-green">
-                  <Sparkles className="w-3.5 h-3.5" />
-                  <span>Featured Coverage</span>
+                <div className="flex items-center gap-3">
+                  <div className="w-1.5 h-4 bg-zru-green rounded-full" />
+                  <h2 className="text-xs font-black uppercase tracking-[0.2em] text-neutral-900">
+                    Featured Coverage
+                  </h2>
                 </div>
 
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
@@ -270,9 +272,12 @@ export default function MediaPageClient({ cmsPage, initialNews = [] }: MediaPage
             {/* Standard 3-Column Chronological Grid */}
             <div className="space-y-6">
               <div className="flex items-center justify-between border-b border-neutral-200 pb-3">
-                <h3 className="text-xl font-black uppercase tracking-tight text-neutral-900">
-                  {selectedCategory === "ALL" && searchQuery === "" ? "All Articles & Dispatches" : `Search Results (${filteredArticles.length})`}
-                </h3>
+                <div className="flex items-center gap-3">
+                  <div className="w-1.5 h-5 bg-zru-green rounded-full" />
+                  <h3 className="text-lg sm:text-xl font-black uppercase tracking-tight text-neutral-900">
+                    {selectedCategory === "ALL" && searchQuery === "" ? "All Articles & Dispatches" : `Search Results (${filteredArticles.length})`}
+                  </h3>
+                </div>
                 <span className="text-xs font-bold text-neutral-400 uppercase tracking-wider">
                   Page {currentPage} of {totalPages || 1}
                 </span>

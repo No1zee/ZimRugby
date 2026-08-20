@@ -70,8 +70,7 @@ export default function CmsHero({
 
       {/* Title */}
       <h1 className="text-3xl sm:text-5xl md:text-7xl font-heading font-black not-italic text-white tracking-tight uppercase leading-[1.05]">
-        {mainTitle}{" "}
-        {accentWord && <span className="text-accent-teal">{accentWord}</span>}
+        {title}
       </h1>
 
       {/* Intro */}
