@@ -10,7 +10,12 @@
     "category": "Sables",
     "url": "/media/sables-name-match-day-23-for-nations-cup-opener-against-tonga",
     "source": "website",
-    "type": "news"
+    "type": "news",
+    "categories": [
+      "Sables",
+      "Match Day",
+      "Nations Cup"
+    ]
   },
   {
     "id": "1",
@@ -20,10 +25,15 @@
     "content": "<div data-elementor-type=\"wp-post\" data-elementor-id=\"4362\"  data-elementor-post-type=\"post\">\n\t\t\t\t<div  data-id=\"1ddaf4b3\" data-element_type=\"container\">\n\t\t\t\t\t<div >\n\t\t\t\t<div  data-id=\"cd3d486\" data-element_type=\"widget\" data-widget_type=\"text-editor.default\">\n\t\t\t\t<div ><p ><strong>ZERO TOLERANCE </strong><strong>TOWARDS VIOLENCE</strong></p><p ><em>Statement to All Rugby Stakeholders</em><em>: </em><em>Referees, Players, Parents, Schools & Clubs</em></p><p ><strong>STATEMENT FROM THE ZIMBABWE RUGBY UNION</strong></p><p >The Zimbabwe Rugby Union (ZRU) has been formally notified of an incident that occurred between a parent and a referee on 13 June 2026 at Eaglesvale School during the match between Christian Brothers College (CBC) and Eaglesvale School.</p><p ><strong>The Zimbabwe Rugby Union condemns </strong><strong>any</strong><strong> acts of violence in the strongest possible terms. Our match officials are the backbone of this sport. Any act of intimidation, abuse or violence against them is an attack on the integrity of rugby itself and will be treated accordingly.</strong></p><p >The ZRU reaffirms its absolute and unwavering zero-tolerance policy on violence, intimidation and abuse directed at any match official, player, coach or spectator. This policy applies at every level of the game, from school fixtures to national competitions.</p><p >The conduct witnessed on 13 June 2026 is entirely unacceptable and contrary to the values of rugby: Respect, Discipline, Passion, Integrity and Solidarity.</p><p >The ZRU’s disciplinary structures will convene to consider the appropriate sanctions, which may be applied to individuals and/or institutions found to have been responsible after all investigations have been completed</p><p >To every referee serving this game across Zimbabwe:</p><p ><strong>You are valued. You are protected. You will not be abandoned.</strong></p><p >The ZRU and the Zimbabwe Rugby Referees Society are united in ensuring that you can perform your duties in a safe environment. Any incident of abuse or assault must be reported immediately through your Provincial Referees Society. We commit to standing behind you in every such case through disciplinary processes, legal proceedings and ongoing support.</p><p >No official should ever feel alone in facing violent or abusive behaviour. We are here. Report it. We will act.</p><p >To every rugby player in Zimbabwe at school, club and national level:</p><p >Rugby is built on respect. Respect for your teammates. Respect for your opponents. And above all, respect for the officials who give their time so that you can play. The decisions of match officials must be accepted on the field. Disputing a call, confronting a referee or encouraging or failing to discourage spectator misconduct are all contrary to the spirit of rugby and may result in disciplinary action against you and your team.</p><p >We call on every player to uphold the values of this game and to speak up when they witness abusive behaviour. Your voice matters in protecting this sport.</p><p >To every parent, guardian and supporter who comes to watch rugby in Zimbabwe:</p><p >Your children look up to you. The way you behave on the touchline is the lesson they take home. Referees are qualified officials who apply the laws of the game to the best of their ability. They will make calls that you disagree with. That is a normal part of sport. What is never acceptable is verbal abuse, intimidation, encroachment onto the field of play or any form of physical contact or threat directed at a match official or player.</p><p ><strong>We ask parents and supporters to</strong><strong> </strong><strong>abide by the ZRU Spectator Code of Conduct at all events. Schools and clubs are required to enforce these standards at all their fixtures.</strong></p><p >Zimbabwe Rugby has built a proud tradition over decades. Our referees, our players and our communities have sacrificed and contributed enormously to this game. We will not allow the actions of individuals to undermine what so many have worked to build.</p><p ><strong>Rugby is for everyone. But only when everyone plays by the rules on and off the field.</strong></p><p ><strong>Issued by,</strong></p>\n<p><strong>Takunda</strong><strong> </strong><strong>Chifokoyo</strong></p><p ><strong>General Manager </strong></p><p ><strong>Zimbabwe Rugby Union </strong></p></div>\n\t\t\t\t</div>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t\t</div>",
     "date": "JUNE 15, 2026",
     "image": "/images/legacy-articles/zru-hd.jpeg",
-    "category": "Sables",
+    "category": "ZRU",
     "url": "/media/zero-tolerance-towards-violence",
     "source": "website",
-    "type": "news"
+    "type": "news",
+    "categories": [
+      "ZRU",
+      "Governance",
+      "Code of Conduct"
+    ]
   },
   {
     "id": "2",
@@ -36,7 +46,12 @@
     "category": "Sables",
     "url": "/media/zambia-arrive-in-zimbabwe-for-two-match-series",
     "source": "website",
-    "type": "news"
+    "type": "news",
+    "categories": [
+      "Sables",
+      "International",
+      "Zambezi Challenge"
+    ]
   },
   {
     "id": "3",
@@ -49,7 +64,12 @@
     "category": "Sables",
     "url": "/media/sables-to-launch-international-double-header-against-sa-a-in-nelson-mandela-bay",
     "source": "website",
-    "type": "news"
+    "type": "news",
+    "categories": [
+      "Sables",
+      "International",
+      "Double Header"
+    ]
   },
   {
     "id": "4",
@@ -62,7 +82,12 @@
     "category": "Sables",
     "url": "/media/shingi-katsvere-reunites-with-the-sables-for-the-battle-of-the-zambezi",
     "source": "website",
-    "type": "news"
+    "type": "news",
+    "categories": [
+      "Sables",
+      "Squad Update",
+      "Player Feature"
+    ]
   },
   {
     "id": "5",
@@ -72,10 +97,15 @@
     "content": "<p >The Zimbabwe National Senior Women’s Rugby Team, the Lady Sables, will take to the field for the final time in the 2025 Rugby Africa Women’s Cup Qualifiers in Côte d’Ivoire this Saturday against Uganda, determined to end their campaign with another powerful performance.</p><p >Having entered the tournament ranked lowest among the four competing nations, Zimbabwe has defied expectations with a spirited showing. </p><p >Their opening match on April 11 saw them deliver a thunderous upset over the hosts, Ivory Coast, with a commanding 46–8 win. It was a display of sheer determination, discipline, and heart — a result that not only boosted morale but also set a new tone for Zimbabwean women’s rugby.</p><p >“That win against Ivory Coast sparked something in us,” said team captain Skhumbuzo Muchenje. “We had promised to bring some smiles back home, and that performance gave us a taste of victory that we want to enjoy again.”</p><p >The team’s second match, against a well-drilled Tunisia side on April 15, was a narrow 24–27 loss. Despite the heartbreak of falling just short, the Lady Sables delivered an inspired comeback, led by MVP Ruvimbo Mudyanadzo’s stunning breakaway try. </p><p >The closely fought contest, which saw Zimbabwe erase a 12-point deficit before Tunisia edged ahead late in the game, left many fans proud of the team’s resilience.</p><p >“Things didn’t work well for us and it was heartbreaking in game two,” Muchenje reflected. “But that’s rugby — it’s a game of margins, and sometimes things don’t go your way.”</p><p >Now, all eyes turn to the final match against Uganda — a team currently topping the standings after two strong wins. Uganda will be looking to seal qualification to the Rugby Africa Women’s Cup in Cape Town this May. But Zimbabwe also remains in contention, and a win could reshape the final table depending on results elsewhere.</p><p >The significance of this fixture is not lost on the team.</p><p >“We don’t often get a chance to play Test rugby,” said Muchenje. “We will make the most of this last match and give it everything we have.”</p><p >The Lady Sables have not only shown character on the field but have also been part of a broader vision for the sport. </p><p >Zimbabwe Women’s Rugby Chairperson Regina Mwanandiwa highlighted the team’s efforts as part of a long-term plan to grow the women’s game:</p><p >“We are proud of the team, and are actively working towards ambitious goals beyond this tournament — expanding the game to create platforms for university scholarships and fostering pathways for international rugby careers.”</p><p >Saturday’s clash against Uganda promises to be a spirited encounter, with Zimbabwe looking to draw on their tournament experience, the guidance of their coaching staff, and the unity they’ve built as a squad.</p><p >Fans can catch the action live or on replay via the Rugby Africa Facebook page. Whether or not the Lady Sables advance to Cape Town, they have already made an indelible mark — proving that Zimbabwe belongs on this stage, and that the future of women’s rugby back home is full of promise.</p>",
     "date": "APRIL 17, 2025",
     "image": "/images/legacy-articles/319fa197-783c-4122-be92-8d8bb70879c9.jpeg",
-    "category": "Sables",
+    "category": "Lady Sables",
     "url": "/media/lady-sables-gear-up-for-final-match-with-pride-and-purpose",
     "source": "website",
-    "type": "news"
+    "type": "news",
+    "categories": [
+      "Lady Sables",
+      "Women's Rugby",
+      "Africa Cup"
+    ]
   },
   {
     "id": "6",
@@ -85,10 +115,15 @@
     "content": "<p >At just 19 years old, Gabriella Chawatama has already carved out a place for herself in Zimbabwean rugby, with a story that reflects grit, determination, and vision far beyond her years. </p><p >Her journey began with grassroots clubs like Pitbulls and Raiders, where the foundation for her competitive spirit and commitment to the sport was laid. </p><p >Even in those early years, Gabriella stood out—first for her physicality, and later for the discipline and transformation that would define her career.</p><p >Now officially capped as a Lady Sable, Gabriella made her senior debut last year against Zambia at the Mwana Group Tournament. </p><p >It was a memorable moment, filled with the raw nerves that come with representing your country for the first time. </p><p >“The game went great, but I was showered with anxiety,” she admits. “I stuck to my game plan and played well, even though it was my first time facing a foreign team.” That match didn’t just mark a milestone—it was the beginning of a deeper hunger for excellence.</p><figure ><img decoding=\"async\" width=\"2048\" height=\"1365\" src=\"/images/legacy-articles/472724926_122215488980069134_9112298166317549138_n.jpg\" alt=\"\" /></figure><p >Her drive is clear: Gabriella dreams of playing rugby beyond Zimbabwe’s borders. </p><p >The thought of becoming an international player—and someday a coach—is what pushes her to train harder and grow faster. Sharing the field with seasoned senior players has been an education of its own, sharpening her skills and giving her invaluable experience. “It’s helped me develop my rugby in ways I never imagined,” she reflects.</p><p >Perhaps one of the most remarkable parts of her journey is her physical transformation. When she first picked up a rugby ball two years ago, Gabriella weighed 109 kilograms. </p><p >Today, she stands strong at 82 kg—leaner, quicker, and more powerful. The road to fitness wasn’t easy, but it was consistent. </p><p >With the unwavering support of her parents, particularly her father who woke her at 4 a.m. for gym sessions, Gabriella pushed through early mornings and tyre-pulling drills at Churchill. </p><p >“Others were sleeping,” her dad would say—words that still echo as motivation in her ears. “I’m 100% grateful to my parents. They’ve always pushed me.”</p><p >As she prepares to head to Ivory Coast, Gabriella’s expectations are crystal clear. She wants to play beyond her limits and make the most of every second on the field. “I’ve worked so hard for this opportunity,” she says. “I’m going to give it everything.”</p><p >Even with her packed rugby calendar, Gabriella finds a way to balance her passion for league rugby with another love—basketball. It’s a juggling act, but one she handles with the same discipline that has defined every chapter of her journey so far.</p><p >With her eyes set firmly on the future, Gabriella Chawatama is more than just a young talent—she’s a blueprint for what’s possible when discipline meets dreams.</p>",
     "date": "APRIL 07, 2025",
     "image": "/images/legacy-articles/472717406_122215489052069134_108344864879505022_n.jpg",
-    "category": "Sables",
+    "category": "Lady Sables",
     "url": "/media/a-leaner-grittier-and-even-more-determined-gabby",
     "source": "website",
-    "type": "news"
+    "type": "news",
+    "categories": [
+      "Lady Sables",
+      "Player Feature",
+      "Women's Rugby"
+    ]
   },
   {
     "id": "7",
@@ -98,10 +133,15 @@
     "content": "<p >Zimbabwe Rugby Union (ZRU) hosted its first-ever Women’s Rugby Breakfast Meeting on Thursday at Sabre Business World in Harare.</p><p >The event brought together players, business leaders, and sporting officials, including representatives from Zimbabwe Cricket, to highlight the national women’s team’s preparations for the upcoming Rugby Africa Women’s Division Tournament in Ivory Coast.</p><figure ><img loading=\"lazy\" decoding=\"async\" width=\"5760\" height=\"2842\" src=\"/images/legacy-articles/MS6G0725.jpg\" alt=\"\" /></figure><p >Men’s national team Sables captains Hilton Mudariki, Aiden Bennet and Kudzai Mashawi along with the Sables trust members also attended and supported the breakfast.</p><p >Chairperson of Women’s Rugby, Regina Mwanandiwa, described the meeting as part of ongoing efforts to raise awareness and build support for the women’s game.</p><p >“Our aim is not just participation in the Africa Cup but building a long-term programme that gives young women the opportunity to grow in the sport, represent their country, and develop skills on and off the pitch,” she said.</p><figure ><img loading=\"lazy\" decoding=\"async\" width=\"5184\" height=\"3456\" src=\"/images/legacy-articles/IMG_7115-1.jpg\" alt=\"\" /></figure><p >Mwanandiwa, who will represent Zimbabwe in the Women’s Rugby World Cup Impact programme later this year, said rugby could be a powerful tool for social progress. “Women still face challenges such as inequality and limited opportunities. Rugby offers a chance to change that—through leadership, economic empowerment, and visibility.”</p><p >National players Chiwoniso Mabika and Nokutenda Shoriwa shared their personal journeys in the sport.</p><p >Mabika, a former captain of both the Lady Cheetahs and Lady Sables, said rugby gave her purpose and direction.</p><p >“It all started during my high school years when I discovered rugby through a school requirement,” she said. “Since then, I’ve been fortunate to represent Zimbabwe at junior and senior levels. I’ve grown not only as a player but as a person.”</p><p >Mabika expressed gratitude for the support system behind women’s rugby, highlighting the contributions of sponsors and technical teams.</p><p >“Their backing gives us the chance to compete, to grow, and to dream. It’s not just about money—it’s about belief. We see it, we feel it, and we are driven by it.”</p><p >Shoriwa, who began playing rugby in primary school, echoed similar sentiments.</p><p >“Rugby helped me become more confident, more resilient. I was a quiet person, but being part of teams like Pitbulls Ladies, Girls High, and the national U18 and U20 squads helped me develop both on and off the field,” she said.</p><p >“Sponsorship means more than financial aid. It’s about having someone in your corner, believing you can make it.”</p><p >Lauren York, Chairperson of the Zimbabwe Women’s Rugby Trust, spoke on the need for strategic partnerships to unlock the sport’s potential.</p><p >“Women’s rugby is uncharted territory with several branding opportunities for corporations willing to go the distance with a group of people whose social capital stretches beyond the field,” she said. “We have great, ambitious plans for the women that play in Zimbabwe, but we need the resources to realise the potential that our ladies have at all levels.”</p><p >Newly appointed women’s head coach Nsikelelo Sibanda addressed the meeting, reflecting on the team’s short preparation window and the importance of the upcoming tournament.</p><p >“How we perform will determine the amount of support we get,” he said. “We’ve achieved great results even when we had almost nothing. We have the makings of a strong team. This tournament is important, and I’m confident these ladies will rise to the occasion—they just need to believe in themselves.”</p><p >ZRU President Losson Mtongwiza praised the progress of Zimbabwean women in sport and called for deeper corporate involvement.</p><figure ><img loading=\"lazy\" decoding=\"async\" width=\"3543\" height=\"2931\" src=\"/images/legacy-articles/IMG_7088.jpg\" alt=\"\" /></figure><p >“We are proud that our women will represent us in Ivory Coast. Athletes like Precious Pazani, who made history as a referee at the Six Nations, are proof that we have the talent. Now we need support,” he said. “I urge every company here to step up and help take someone to the next level.”</p><p >The event concluded with a shared understanding that developing women’s rugby requires both belief and backing.</p><p >Business Leadership Programme Developer and motivational speaker Sally Palmer inspired investors and players to have a maverick mindset as they approach the Ivory Coast tour and the rest of the planned fixtures for women’s rugby in 2025.</p><p >With continued effort and investment, the ZRU aims to build a future where young women across Zimbabwe can thrive in rugby and beyond.</p>",
     "date": "MARCH 27, 2025",
     "image": "/images/legacy-articles/IMG_7115.jpg",
-    "category": "Sables",
+    "category": "Women's Rugby",
     "url": "/media/zimbabwe-womens-rugby-hosts-first-ever-breakfast-meeting-ahead-of-africa-womens-cup",
     "source": "website",
-    "type": "news"
+    "type": "news",
+    "categories": [
+      "Women's Rugby",
+      "ZRU",
+      "Development"
+    ]
   },
   {
     "id": "8",
@@ -114,7 +154,12 @@
     "category": "Sables",
     "url": "/media/the-boy-from-prince-edward-nominated-at-2025-ansa-capping-off-a-year-of-tactical-brilliance",
     "source": "website",
-    "type": "news"
+    "type": "news",
+    "categories": [
+      "Sables",
+      "Coaching",
+      "ANSA Awards"
+    ]
   },
   {
     "id": "9",
@@ -124,10 +169,15 @@
     "content": "<p >At just 18 years old, Nokutenda Shoriwa is emerging as one of Zimbabwe’s brightest prospects in women’s rugby.</p><p >A versatile backline player, she currently plays for FS Raiders, where she continues to impress with her speed, vision, and commitment to the game.</p><p >Her rugby journey has already seen her feature for Pitbulls Ladies and she has proudly represented Zimbabwe at junior national levels.</p><figure ><img loading=\"lazy\" decoding=\"async\" width=\"2560\" height=\"1706\" src=\"/images/legacy-articles/061b0fa3-806c-46ee-b9d5-284834593d51.jpeg\" alt=\"\" /></figure><p >As she gears up for the Nedbank Challenge Cup, Shoriwa is clear about her goals. “My personal expectations are to play my heart out, help my team perform well, and continue growing as a player,” she said.</p><p >The tournament presents a key opportunity for players like her to stake their claim for future national call-ups.</p><p >Navigating the rugby scene as a young woman hasn’t been without its hurdles. “It’s not easy getting competitive game time,” she explained.</p><p >“There are fewer fixtures and limited platforms for women compared to the men’s game. You really have to fight to be seen.”</p><p >One such platform was the Harare Province Paramount Garments Under-20 competition, a tournament Shoriwa speaks of fondly. “It was a great experience. The intensity and competition were high, and it helped me develop both mentally and physically.”</p><p >Now firmly focused on the future, Shoriwa has her sights set on representing Zimbabwe at senior level. “I want it so badly. I’ve been putting in the work, and I feel ready. Wearing the green and white at senior level would be a dream come true.”</p><figure ><img loading=\"lazy\" decoding=\"async\" width=\"2560\" height=\"1796\" src=\"/images/legacy-articles/d50d552f-cffb-45ef-a9f8-caea41fe777b.jpeg\" alt=\"\" /></figure><p >The upcoming Ivory Coast tour, which forms part of the Rugby Africa Division One Cup, could be a turning point. “If I’m selected, it would mean everything,” she said. “It’s a huge opportunity to compete on a continental stage and show that I belong there. It would also give me invaluable experience going forward.”</p><p >Driven, grounded, and fiercely passionate about the game, Nokutenda Shoriwa is one of the new faces leading the charge for the future of Zimbabwean women’s rugby.</p>",
     "date": "MARCH 26, 2025",
     "image": "/images/legacy-articles/809b782e-b409-41f9-8ba4-ba3c5cc2008f.jpeg",
-    "category": "Sables",
+    "category": "Women's Rugby",
     "url": "/media/shoriwa-ready-for-sables-call-up",
     "source": "website",
-    "type": "news"
+    "type": "news",
+    "categories": [
+      "Women's Rugby",
+      "Lady Sables",
+      "Rising Stars"
+    ]
   },
   {
     "id": "10",
@@ -140,7 +190,12 @@
     "category": "Sables",
     "url": "/media/sables-shine-bright-as-zimbabwe-roars-back-onto-the-sporting-stage",
     "source": "website",
-    "type": "news"
+    "type": "news",
+    "categories": [
+      "Sables",
+      "ANSA Awards",
+      "National Pride"
+    ]
   },
   {
     "id": "11",
@@ -150,10 +205,15 @@
     "content": "<p >Harare, Zimbabwe – 25 March 2025 — Zimbabwe Rugby Union is proud to announce the return of the highly anticipated Nedbank Rugby Challenge Cup, now in its 4th edition.</p><p >The tournament kicks off on 29 March 2025 at the Machinery Exchange Harare Sports Club, with the final round and awards ceremony set for 5 April 2025 at the same venue.</p><p >This year’s event promises to be bigger, bolder, and more inclusive than ever before, with a strong focus on women’s rugby, youth development, and club excellence.</p><figure ><img loading=\"lazy\" decoding=\"async\" width=\"4454\" height=\"2927\" src=\"/images/legacy-articles/IMG_0063.jpeg\" alt=\"\" /></figure><p >In a landmark move underscoring the growth of the women’s game, both the Zimbabwe Sables Women’s and the Junior Sables U20 Women’s teams will feature prominently across both weekends.</p><p >Lady Sables will using the Nedbank Challenge Cup as the final preparatory event leading to their voyage to Ivory Coast for the Rugby Africa Division One quest in April.</p><p >Nedbank’s premier tournament opens with a historic clash between the Junior Women and the Senior Women at 10:40 AM on 29 March, showcasing the depth and talent within Zimbabwe’s female rugby ranks.</p><p >The Women’s teams will also return for the second round on 5 April, reinforcing the sport’s growing commitment to gender inclusion and visibility.</p><p >The Nedbank Challenge Cup continues to serve as a crucial platform for grooming future national talent.</p><p >Among the most anticipated fixtures is the involvement of the Nedbank Grassroots to Greatness U20 side, which faces host club Harare Sports Club in a thrilling Round one clash.</p><p >The developmental team is part of a broader initiative to nurture emerging players and offer a competitive pathway into elite rugby structures.</p><p >Through Nedbank Zimbabwe, young players such as Dion Khumalo and Takudzwa Musingwini have risen from Under-20 stardom to become African Champions as juniors and seniors.</p><p >Meanwhile, all eyes will be on two-time defending champions Harare Sports Club return with a target on their backs as they aim for a third consecutive title.</p><figure ><img loading=\"lazy\" decoding=\"async\" width=\"5616\" height=\"3744\" src=\"/images/legacy-articles/IMG_9140.jpeg\" alt=\"\" /></figure><p >Backed by home support and a reputation for clinical execution, HSC will look to extend their dominance in what has become Zimbabwe’s premier club rugby showdown.</p><p >Their first test comes against the energetic Grassroots U20 squad in the final match of the opening round.</p><p >Round one will feature five matches, including powerhouse clashes between traditional rivals and exciting regional contests such as Pitbulls vs. Manicaland and Old Hararians vs. Matabeleland.</p><p >The Nedbank Rugby Challenge Cup 2025 will once again unite fans, players, and communities under the banner of sportsmanship, development, and national pride.</p><p >With top talent on display and new stars waiting to emerge, Zimbabwe Rugby invites everyone to witness the future of the game, live and loud at Harare Sports Club.</p><p >Entry is just $2, with children in uniform entering free, reinforcing the tournament’s commitment to accessibility and family-friendly entertainment.</p><p >Tournament Schedule Highlights:<br>• Round 1 – 29 March: Quarterfinals and National Women’s showcase at Harare Sports Club.<br>• Round 2 – 5 April: Semi-finals and final placements, including the 7th/8th and 3rd/4th place playoffs.<br>• Final – 5 April: The Championship match and closing ceremony at 18:10.<br>• Awards Ceremony – 19:40, 5 April.</p><h1 >NedbankChallengeCup2025 | #RugbyForAll | #FromGrassrootsToGreatness</h1>",
     "date": "MARCH 25, 2025",
     "image": "/images/legacy-articles/IMG_0607_1.jpeg",
-    "category": "Sables",
+    "category": "Domestic",
     "url": "/media/harare-gears-up-for-the-4th-edition-of-the-nedbank-rugby-challenge-cup",
     "source": "website",
-    "type": "news"
+    "type": "news",
+    "categories": [
+      "Domestic",
+      "Club Rugby",
+      "Nedbank Cup"
+    ]
   },
   {
     "id": "12",
@@ -166,7 +226,12 @@
     "category": "Sables",
     "url": "/media/former-sables-captain-joins-technical-team-as-zimbabwe-gears-up-for-africa-cup-push",
     "source": "website",
-    "type": "news"
+    "type": "news",
+    "categories": [
+      "Sables",
+      "Technical Team",
+      "Africa Cup"
+    ]
   },
   {
     "id": "13",
@@ -176,10 +241,15 @@
     "content": "<p >As the Lady Sables prepare for the Rugby Africa Division One Tournament in Ivory Coast next month, Skumbuzo Muchenje is one player whose story shines with both determination and grace. </p><p >Popularly known as Sku, a stalwart of the game and a seasoned tight-head prop with the added option of number eight, has once again turned her focus toward the sport she holds dear. </p><figure ><img loading=\"lazy\" decoding=\"async\" width=\"720\" height=\"731\" src=\"/images/legacy-articles/WhatsApp-Image-2025-03-21-at-12.56.25-PM.jpeg\" alt=\"\" /></figure><p >Having captained False Bay in 2023, the University of Cape Town from 2018 to 2020, and the Zimburu Titans in Zimbabwe, Muchenje’s return to the national fold is a moment of both excitement and anticipation.</p><p >When asked what had inspired her to rejoin the rugby world after a brief hiatus, Muchenje was quick to clarify, “I wouldn’t say I had retired, but rather, I had taken some much-needed time off due to various personal commitments and circumstances.” </p><p >After relocating back to Zimbabwe a year ago, she found herself reflecting on her past accomplishments and her desire to return to the game. </p><p >“Once I was settled back here, it was clear to me that I had more to offer the sport,” she says. “I knew I could come back and contribute once again.”</p><figure ><img loading=\"lazy\" decoding=\"async\" width=\"2560\" height=\"1706\" src=\"/images/legacy-articles/WhatsApp-Image-2025-03-21-at-12.54.30-PM-1.jpeg\" alt=\"\" /></figure><p >Her return, though, has been marked not just by a rekindling of passion, but by a quiet resolve to improve. </p><p >“I have worked diligently to refine my overall rugby IQ, ensuring that I continue to grow both as a player and a leader,” Muchenje shares. </p><p >“Alongside that, I focused on my fitness and ball skills, eager to ensure that I remain competitive at the highest level.”</p><p > However, it wasn’t solely the physical that Muchenje sought to improve. Her time off gave her the opportunity to reflect deeply on what her place in the team might be, particularly considering the diversity of ages and experiences within the squad. </p><p >“I thought it important to understand how best I could serve the team, and how my experience could be of use in guiding the younger players. It’s about finding where you can contribute most,” she remarks thoughtfully.</p><p >Living in Zimbabwe, Muchenje has learned to balance the demands of rugby with the obligations of daily life. </p><p >“It is never easy to find perfect balance,” she admits. “But one must always strive to manage time wisely. Discipline and commitment are crucial. I ensure that I give my full attention to rugby when the time comes, whilst meeting my other obligations.”</p><p >As the Lady Sables look ahead to the upcoming tournament, Muchenje’s hard work and unwavering dedication have not gone unnoticed. </p><p >She was recently named in the extended provisional squad for the Rugby Africa Division One Tournament by head coach Nsikelelo Sibanda. </p><p >To Muchenje, this opportunity is more than a chance to play again—it is a chance to represent her country once more, an honour she holds dear. “The thought of pulling on the national jersey again fills me with pride. </p><p >To potentially return to the international stage and contribute to the Lady Sables’ success is a privilege,” she says, her voice imbued with quiet anticipation.</p><figure ><img loading=\"lazy\" decoding=\"async\" width=\"1079\" height=\"720\" src=\"/images/legacy-articles/WhatsApp-Image-2025-03-21-at-12.54.31-PM-1-1.jpeg\" alt=\"\" /></figure><p >As the tournament draws near, Skumbuzo Muchenje’s return to rugby is a testament to her passion, discipline, and resilience. Her story is one of dedication, both to the sport and to her country. </p><p >As the Lady Sables prepare to take on the challenge in Ivory Coast, there is little doubt that Muchenje’s presence will lend strength to the team, ready to face the challenges that lie ahead with unwavering determination and the hope of a triumphant return to the international rugby arena.</p>",
     "date": "MARCH 21, 2025",
     "image": "/images/legacy-articles/WhatsApp-Image-2025-03-21-at-12.54.31-PM-1.jpeg",
-    "category": "Sables",
+    "category": "Lady Sables",
     "url": "/media/skus-back-muchenje-returns-to-power-the-lady-sables",
     "source": "website",
-    "type": "news"
+    "type": "news",
+    "categories": [
+      "Lady Sables",
+      "Squad Update",
+      "Player Feature"
+    ]
   },
   {
     "id": "14",
@@ -189,10 +259,15 @@
     "content": "<p >Rugby fans are in for a thrilling weekend at <strong>Harare Sports Club</strong> on <strong>Saturday, March 22, 2025</strong>, as <strong>Zim A</strong> faces off against <strong>Manicaland</strong> Province in the headline match. The action kicks off at <strong>16:00</strong>, with tickets available for just <strong>$2</strong>.</p><figure ><img loading=\"lazy\" decoding=\"async\" width=\"1125\" height=\"1125\" src=\"/images/legacy-articles/WhatsApp-Image-2025-03-21-at-9.29.56-AM.jpeg\" alt=\"\" /></figure><p ><strong>Zimbabwe A comprises of top club players including Africa Cup winners from the Sables.</strong></p><p >Some of the names to look forward to are <strong>Jeff Makoni, Brian Makamure, and captain Hilton Mudariki along with Aiden Burnett and Kudzai Mashawi</strong> serving as vice-captains. </p><p >They’ll be looking to dominate against a tough Manicaland side eager to make their mark.</p><p >Before the main clash, three exciting matches will set the stage:</p><p >• <strong>Old Hararians vs. Pitbulls (12:15)</strong> – A fiery showdown to kick off the day.</p><p >• <strong>U20 HPC vs. Old Georgians (13:30)</strong> – Rising stars of Zimbabwean rugby take center stage.</p><p >• <strong>Junior Sables vs. HSC (14:45)</strong> – Future national team prospects battle it out.</p><p >All this action is paving the way for the annual Nedbank Challenge Cup with kicks off on the 29th of March.</p><p >The event promises more than just rugby, with <strong>post-match entertainment</strong> featuring a top DJ to keep the vibes going long after the final whistle.</p><p >Don’t miss out on a <strong>rugby-filled Saturday</strong> at Harare Sports Club—bring your energy and support your team.</p>",
     "date": "MARCH 21, 2025",
     "image": "/images/legacy-articles/WhatsApp-Image-2025-03-21-at-9.29.56-AM-1.jpeg",
-    "category": "Sables",
+    "category": "Domestic",
     "url": "/media/weekend-rugby-preview-action-packed-clash-at-harare-sports-club",
     "source": "website",
-    "type": "news"
+    "type": "news",
+    "categories": [
+      "Domestic",
+      "Zim A",
+      "Harare Sports Club"
+    ]
   },
   {
     "id": "15",
@@ -202,10 +277,15 @@
     "content": "<figure ><img loading=\"lazy\" decoding=\"async\" width=\"1410\" height=\"948\" src=\"/images/legacy-articles/Screenshot-2025-03-20-at-17.57.10.png\" alt=\"\" /></figure><p ><strong>[Harare, Zimbabwe] – [20 March, 2025]</strong> The Zimbabwe Rugby Union (ZRU) extends its heartfelt congratulations to Honourable Kirsty Coventry, Minister of Youth, Sports, Arts and Recreation, on her historic election as the 10th President of the International Olympic Committee (IOC). </p><p >This landmark achievement, announced by the IOC today, marks a significant milestone for Zimbabwe, Africa, and women in sports leadership globally.</p><p >Minister Coventry’s election, achieved through a secret ballot at the 144th IOC Session in Costa Navarino, Greece, signifies the global recognition of her exceptional leadership, dedication to sports, and unwavering commitment to the Olympic Movement. </p><p >As the first woman and the first African to hold this prestigious position, she has shattered barriers and inspired generations.</p><p >Her assumption of office on Olympic Day, June 23rd, following the handover from outgoing President Thomas Bach, will usher in a new era of leadership for the IOC. </p><p >The ZRU acknowledges Minister Coventry’s remarkable journey, from a young athlete to a global sports leader, and her commitment to upholding the values of the Olympic Movement.</p><p >“This is a truly momentous occasion for Zimbabwe and African sport,” said Losson Mtongwiza, President of the Zimbabwe Rugby Union. </p><p >“Minister Coventry’s election is a testament to her exceptional abilities and her unwavering dedication to the development of sports. Her leadership will undoubtedly inspire athletes and sports administrators across the continent and the world. From the Zimbabwe Rugby Union we wish her all the best in her new role. We are confident that she will lead the IOC with integrity, vision, and passion, and we are incredibly proud to call her one of our own,” he added.</p><p >The ZRU recognizes the significance of Minister Coventry’s leadership in overseeing the upcoming Olympic Winter Games Milano Cortina 2026, and we are confident that she will guide the IOC with distinction.</p><p >We join the nation in celebrating this extraordinary achievement and wish Minister Coventry every success in her new role.</p>",
     "date": "MARCH 20, 2025",
     "image": "/images/legacy-articles/Screenshot-2025-03-20-at-17.57.10-1.png",
-    "category": "Sables",
+    "category": "ZRU",
     "url": "/media/zimbabwe-rugby-union-congratulates-minister-kirsty-coventry-on-historic-ioc-presidency",
     "source": "website",
-    "type": "news"
+    "type": "news",
+    "categories": [
+      "ZRU",
+      "Olympic Committee",
+      "Announcement"
+    ]
   },
   {
     "id": "16",
@@ -215,10 +295,15 @@
     "content": "<p >[Source: Brandon Moyo for The Chronicle] – The Junior Sables triumphed with a 39-32 victory against the visiting Outback Barbarians of Australia at Hartsfield Rugby Stadium in Bulawayo.</p><figure ><img loading=\"lazy\" decoding=\"async\" width=\"1080\" height=\"1080\" src=\"/images/legacy-articles/484958099_1078752584296778_919427591702707443_n.jpg\" alt=\"\" /></figure><p >This match displayed a determined performance from the former African youth champions.</p><p >The crowd was left with optimism about the future of Zimbabwean rugby.</p><p >Junior Sables coach Shaun de Souza emphasized the team’s focus on the match itself.</p><p >“We went into the match with a clear target, working on our defence as part of our preparations for the 2025 Barthes Trophy,” said de Souza.</p><p >“Today’s game was about focusing on key areas, like defence and set pieces.”</p><p >“We were looking to build on last year’s loss in the Barthes Trophy.”</p><p >“It wasn’t about the scoreboard for us; it was about the small key areas we were focusing on that would lead to a good result.”</p><p >“That wasn’t the plan, but we’ll take the win and move on to the next step.”</p><p >As the first half drew to a close, Shammah Jackson’s timely intercept try narrowed the gap, leaving the score at 20-21 in favor of the Barbarians at halftime.</p><p >The second half saw the Barbarians push forward again, extending their lead to 20-28. But Zimbabwe wasn’t done yet. Ethan Chiponda and Phillip Chimhaka both crossed for tries, with Tatenda Kambvumbi adding a conversion to put the Junior Sables ahead 32-28.</p><p >Not to be outdone, the Barbarians responded with another try, but Tafara Dewa’s brilliant effort, converted by Rusike, sealed the 39-32 victory for the Junior Sables in a thrilling finish.</p><p >Junior Sables Squad: Takudzwa Matsvimbo, Louange Ujenza Mutima, Emmanuel Tawana Gabi, Nyasha Ngwarati, Tafara Dewa, Tinashe Nyanyiwa, Pharrell Mudiwa Maziwa, Rufaro Shenje, Wayne Kunaka, Tinotenda Rusike, Shammah Jackson, Tadiwanashe Unganai, Munangi Kamwendo, PK Manyakara, Tinotenda Chinyadza, and replacements.</p>",
     "date": "MARCH 20, 2025",
     "image": "https://images.unsplash.com/photo-1544698310-74ea9d1c8258?q=80&w=1200&auto=format&fit=crop",
-    "category": "Sables",
+    "category": "Junior Sables",
     "url": "/media/junior-sables-secure-thrilling-victory-over-outback-barbarians",
     "source": "website",
-    "type": "news"
+    "type": "news",
+    "categories": [
+      "Junior Sables",
+      "U20",
+      "International"
+    ]
   },
   {
     "id": "17",
@@ -228,10 +313,15 @@
     "content": "<p >Newly appointed Zimbabwe Senior Women’s Rugby Head Coach, Nsikelelo “Sykes” Sibanda, has announced an extended training squad and technical team as preparations intensify for the Rugby Africa Division One Women’s Tournament.</p><figure ><img loading=\"lazy\" decoding=\"async\" width=\"2560\" height=\"1365\" src=\"/images/legacy-articles/lady-2-1.jpeg\" alt=\"\" /></figure><p >The competition, set to take place in Ivory Coast from April 9 to 20, will see Zimbabwe competing against Uganda, Tunisia, and hosts Ivory Coast.</p><p >The tournament winner will earn a coveted spot in the Rugby Africa Cup alongside South Africa, Kenya, and <a></a>Madagascar.</p><p >With limited time and resources, Sibanda emphasized the urgency of making every training session count.</p><p >“We have very little time and resources to pull off an upset in this upcoming tournament, and the whole squad is taking every training opportunity and second on the field very seriously,” said Sibanda.</p><p >The provisional squad includes a mix of seasoned players and emerging talents, with several Under-20 players from the recent Harare Provincial Tournament earning a call-up.</p><p >“This huge provisional squad includes Under-20 players who just came from the Provincial Tournaments going on and are raising their hands to play. But we will need anything close to a miracle to reach the standard we want in such a short period,” he added.</p><p >Before heading to Ivory Coast, the Lady Sables will have their last competitive test in the highly anticipated Nedbank Challenge Cup from March 29 to April 5.</p><p >This will provide the team with valuable match time and an opportunity to finalize the squad selection.</p><p >“Thanks to Nedbank, we have a chance to get some competitive local game time and trim our final squad ready for this task. I am working on a culture of winning and a relentless desire to enjoy that feeling,</p><p >“We are going there to compete and come out with something to motivate us to grow the teams pride and brings smiles back home,” Sibanda stated.</p><figure ><img loading=\"lazy\" decoding=\"async\" width=\"1600\" height=\"2238\" src=\"/images/legacy-articles/lady-1-1.jpeg\" alt=\"\"  /></figure><p >Lady Sables Extended Training Squad</p><p >Forwards:</p><p >1. Tino Mugariri (Fs Raiders)</p><p >2. Beshious Mabute (Police)</p><p >3. Vimbai Dewa (Fs Raiders)</p><p >4. Ruvimbo Chigumbu (Old Hararians)</p><p >5. Tariro Chinyengetere (Fs Raiders U20)</p><p >6. Blessing Mvuke (Old Hararians)</p><p >7. Simpiwe Gumbo (Highlanders)</p><p >8. Thembelani Ndlela (Mat Warriors)</p><p >9. Skumbuzo Muchenje (Zimbiru Titans)</p><p >10. Mutsawashe Mwanyisa (Spartans U20)</p><p >11. Mabel Murungweni (Zimbiru Titans U20)</p><p >12. Sicelumsua Nyoni (Fs Raiders)</p><p >13. Phyllis Chivhanga (Zimbiru Titans)</p><p >14. Tendai Garapo (Old Hararians)</p><p >15. Susan Madzigwara (Police Defenders)</p><p >16. Trish Moko (Zimbiru Titans)</p><p >17. Contana Date (Zimbiru Titans)</p><p >18. Lisa Gombwe (Harare Sports Club)</p><p >19. Mercy Runesu (Police Defenders)</p><p >20. Natalia Nyabinde (Zimbiru Titans U20)</p><p >21. Gabriella Chawatama (Fs Raiders)</p><p >22. Sisasenkosi Moyo (Highlanders U20)</p><p >23. Farai Museketi (Zimbiru Titans)</p><p >24. Rutendo Morosi (Zimbiru Titans U20)</p><p >25. Ericka Mack (Border)</p><p >26. Tanaka Mutarumisa (Zimbiru Titans U20)</p><p >27. Tariro Nyamudeza (Zimbiru Titans)</p><p >28. Wadzanai Chidawa (Old Hararians)</p><p >29. Hazel Njaya</p><p >30. Tadiwa Chendambuya (Fs Raiders)</p><p >31. Caroline Malenga (Police Defenders)</p><p >32. Tanyaradzwa Shava (Blue Bulls)</p><p >33. Nyasha Gonangombe (UJ)</p><p >34. Elsie Bhasvi (Zimbiru Titans)</p><p >35. Natasha Mutumbi (Zimbiru Titans)</p><p >36. Mbalenhle Mzizi (Pumas SA)</p><p >37. Andile Moyo (SA)</p><p >Backs:</p><p >1. Trish Chiunze (Mat Warriors)</p><p >2. Ropafadzo Muzanechita (Police Defenders)</p><p >3. Kudzai Wasili (Harare Sports Club)</p><p >4. Tarren Munodaani (Fs Raiders)</p><p >5. Memory Moyo (Highlanders)</p><p >6. Ruvarashe Muzanechita (Police Defenders)</p><p >7. Pauline Sianga (Harare Sports Club)</p><p >8. Delight Mukomondo</p><p >9. Nokutenda Shoriwa (Fs Raiders U20)</p><p >10. Chiwoniso Mabika (Fs Raiders)</p><p >11. Ropafadzo Madya (Stellenbosch)</p><p >12. Bridget Magaso (Zimbiru Titans)</p><p >13. Lovelight Fusire (Mat Warriors)</p><p >14. Cleopatra Kadimu (Harare Sports Club)</p><p >15. Rufaro Tagarira (Harare Sports Club)</p><p >16. Ruvimbo Mudyanadzo (Harare Sports Club)</p><p >17. Robyn Mhembere (Mat Warriors)</p><p >18. Kuzivakwashe Gonangombe (UJ)</p><p >19. Nosta Binton (Fs Raiders)</p><p >20. Kudzanai Chirinda (Fs Raiders)</p><p >21. Natasha Landsberg (Police Defenders)</p><p >22. Tanaka Kanyepi (Lindenwood University USA)</p><p >With the final squad selection set to take place after the Nedbank Challenge Cup, all eyes will be on the Lady Sables as they prepare for this crucial tournament.</p><p >Sibanda’s squad faces a tough challenge but remains determined to make a mark on the continental stage.</p>",
     "date": "MARCH 20, 2025",
     "image": "https://images.unsplash.com/photo-1544698310-74ea9d1c8258?q=80&w=1200&auto=format&fit=crop",
-    "category": "Sables",
+    "category": "Lady Sables",
     "url": "/media/lady-sables-name-extended-training-squad-for-ivory-coast-tourney",
     "source": "website",
-    "type": "news"
+    "type": "news",
+    "categories": [
+      "Lady Sables",
+      "Squad Announcement",
+      "Africa Cup"
+    ]
   },
   {
     "id": "18",
@@ -241,10 +331,15 @@
     "content": "<figure ><img loading=\"lazy\" decoding=\"async\" width=\"1080\" height=\"810\" src=\"/images/legacy-articles/484816332_1061333382706280_3420707262745611283_n.jpg\" alt=\"\" /></figure><p >The Zimbabwe Rugby Union is thrilled to share the incredible success of a recent Tag Rugby event hosted by our affiliate, TAG Rugby Trust (TRT), in Plumtree! In celebration of Women’s Month, a vibrant group of 86 girls and 10 dedicated mentors came together for a day filled with fun, teamwork, and rugby.</p><figure ><img loading=\"lazy\" decoding=\"async\" width=\"1020\" height=\"765\" src=\"/images/legacy-articles/484556908_1061333539372931_904712974967861354_n.jpg\" alt=\"\" /></figure><p >The event was a resounding success, with the girls enthusiastically participating in Tag Rugby matches and engaging in exciting team-building activities. The energy and enthusiasm were truly inspiring!</p><p >To further support the growth of women’s rugby in the region, TRT generously awarded rugby kits to two deserving teams. Additionally, several individuals were recognized for their outstanding performances with special t-shirts.</p><p >We extend our heartfelt gratitude to TAG Rugby Trust for their unwavering commitment to developing rugby at the grassroots level and empowering young women through sport. A massive thank you also goes to National Foods and all our valued sponsors for their continued support, which makes events like these possible.</p><p >This event is a testament to the growing passion for rugby among young women in Zimbabwe. We are proud to see the impact of our development programs and look forward to continuing to support the growth of women’s rugby across the country.</p><figure ><img loading=\"lazy\" decoding=\"async\" width=\"1080\" height=\"810\" src=\"/images/legacy-articles/484816332_1061333382706280_3420707262745611283_n.jpg\" alt=\"\" /></figure><p ><strong>#ZimbabweRugby #WomensMonth #TagRugby #TRTZimbabwe #GrassrootsRugby #EmpoweringGirls #NationalFoods #RugbyDevelopment</strong></p>",
     "date": "MARCH 12, 2025",
     "image": "https://images.unsplash.com/photo-1544698310-74ea9d1c8258?q=80&w=1200&auto=format&fit=crop",
-    "category": "Sables",
+    "category": "Grassroots",
     "url": "/media/plumtree-girls-shine-in-womens-month-tag-rugby-celebration",
     "source": "website",
-    "type": "news"
+    "type": "news",
+    "categories": [
+      "Grassroots",
+      "Tag Rugby",
+      "Women's Month"
+    ]
   },
   {
     "id": "19",
@@ -257,7 +352,12 @@
     "category": "Sables",
     "url": "/media/zimbabwe-sables-soar-to-new-heights-in-world-rugby-rankings",
     "source": "website",
-    "type": "news"
+    "type": "news",
+    "categories": [
+      "Sables",
+      "World Rugby Rankings",
+      "Milestone"
+    ]
   },
   {
     "id": "20",
@@ -270,7 +370,12 @@
     "category": "Sables",
     "url": "/media/how-to-watch-stream-manchester-united-vs-sheriff",
     "source": "website",
-    "type": "news"
+    "type": "news",
+    "categories": [
+      "Sables",
+      "Africa Cup Champions",
+      "Historic Win"
+    ]
   },
   {
     "id": "21",
@@ -283,6 +388,11 @@
     "category": "Sables",
     "url": "/media/champions-league-picks-will-barca-stay-alive",
     "source": "website",
-    "type": "news"
+    "type": "news",
+    "categories": [
+      "Sables",
+      "Squad Announcement",
+      "Africa Cup"
+    ]
   }
 ]
