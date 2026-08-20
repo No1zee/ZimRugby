@@ -74,6 +74,7 @@ export default function TeamCardBento({ teams }: TeamCardBentoProps) {
             <Link
               key={team.slug}
               href={`/teams/${team.slug}`}
+              prefetch={false}
               className="group relative rounded-3xl overflow-hidden h-[400px] sm:h-[480px] flex items-end shadow-lg hover:shadow-2xl transition-shadow duration-500"
             >
               {/* Background Image */}
@@ -81,6 +82,7 @@ export default function TeamCardBento({ teams }: TeamCardBentoProps) {
                 src={team.image}
                 alt={team.name}
                 fill
+                sizes="(max-width: 768px) 100vw, 50vw"
                 className="object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out"
               />
 

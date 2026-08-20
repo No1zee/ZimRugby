@@ -27,7 +27,7 @@ interface FetchParams {
 export async function directusFetch<T>(
   collection: string,
   params: FetchParams = {},
-  revalidateSeconds: number = 60,
+  revalidateSeconds: number = 3600,
   opts?: { includeDeleted?: boolean }
 ): Promise<T[]> {
   const baseUrl = process.env.DIRECTUS_API_URL || process.env.NEXT_PUBLIC_DIRECTUS_URL;
@@ -126,7 +126,7 @@ export async function directusFetch<T>(
 export async function directusCount(
   collection: string,
   filter?: Record<string, unknown>,
-  revalidateSeconds: number = 0,
+  revalidateSeconds: number = 3600,
   opts?: { includeDeleted?: boolean }
 ): Promise<number> {
   const baseUrl = process.env.DIRECTUS_API_URL || process.env.NEXT_PUBLIC_DIRECTUS_URL;

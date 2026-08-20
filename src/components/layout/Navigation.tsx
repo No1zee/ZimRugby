@@ -18,6 +18,8 @@ import { useAuth } from "@/context/AuthContext";
 const SOLID_ROUTES = ["/admin", "/admin-login", "/login", "/verify-email", "/onboarding", "/tickets", "/video-hub", "/gallery", "/competitions"];
 const SCROLL_THRESHOLD = 20;
 
+let cachedNavData: { teams?: any[]; competitions?: any[]; events?: any[] } | null = null;
+
 export default function Navigation() {
   const pathname = usePathname();
   const { scrollY } = useScroll();
@@ -27,14 +29,40 @@ export default function Navigation() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
-  const [dynamicNavItems, setDynamicNavItems] = useState<NavItem[]>(mainNav);
+  const [dynamicNavItems, setDynamicNavItems] = useState<NavItem[]>(() => {
+    if (cachedNavData) {
+      return mainNav.map((item) => {
+        if (item.label === "NATIONAL TEAMS" && cachedNavData?.teams) {
+          return { ...item, children: cachedNavData.teams };
+        }
+        if (
+          item.label === "DOMESTIC & MATCH CENTRE" &&
+          (cachedNavData?.competitions || cachedNavData?.events)
+        ) {
+          return {
+            ...item,
+            children: [
+              ...(cachedNavData.competitions || []),
+              ...(cachedNavData.events || []),
+            ],
+          };
+        }
+        return item;
+      });
+    }
+    return mainNav;
+  });
   const [showFanMenu, setShowFanMenu] = useState(false);
 
-  /* ── Admin Auth Verification state (Secure fail-closed) ── */
+  /* ── Admin Auth Verification state (Secure fail-closed, skip on anonymous public visits) ── */
   const [isAdminUser, setIsAdminUser] = useState(false);
 
   useEffect(() => {
-    if (user?.email?.toLowerCase() === "edwardmagejo@gmail.com") {
+    if (!user) {
+      setIsAdminUser(false);
+      return;
+    }
+    if (user.email?.toLowerCase() === "edwardmagejo@gmail.com") {
       setIsAdminUser(true);
       return;
     }
@@ -116,12 +144,14 @@ export default function Navigation() {
     return () => { cancelled = true; };
   }, [isSearchOpen]);
 
-  /* ── Load dynamic nav items once on mount ── */
+  /* ── Load dynamic nav items once on mount (cached in-memory) ── */
   useEffect(() => {
+    if (cachedNavData) return;
     fetch("/api/navigation")
       .then((r) => (r.ok ? r.json() : null))
       .then((data) => {
         if (!data) return;
+        cachedNavData = data;
         setDynamicNavItems((prev) =>
           prev.map((item) => {
             if (item.label === "NATIONAL TEAMS" && data.teams) {
@@ -224,6 +254,7 @@ export default function Navigation() {
                 <Link
                   key={item.label}
                   href={item.href || "#"}
+                  prefetch={false}
                   className="flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-heading font-black uppercase tracking-wider text-white/60 hover:text-white hover:bg-white/10 transition-all"
                 >
                   <Icon className="w-3 h-3" />
@@ -232,10 +263,11 @@ export default function Navigation() {
               );
             })}
 
-            {/* Admin Portal Direct Link — Only rendered for verified logged-in Admin/Staff users */}
+            {/* Admin Portal Direct Link ── Only rendered for verified logged-in Admin/Staff users */}
             {isAdminUser && (
               <Link
                 href="/admin"
+                prefetch={false}
                 className="clip-slanted flex items-center gap-1.5 px-3.5 py-1 text-[10px] font-heading font-black uppercase tracking-wider text-emerald-300 bg-white/10 hover:bg-zru-green hover:text-white transition-all shadow-sm"
                 title="Launch Admin Portal"
               >
@@ -277,6 +309,7 @@ export default function Navigation() {
                     {(isAdminUser || user.email.toLowerCase() === "edwardmagejo@gmail.com") && (
                       <Link
                         href="/admin"
+                        prefetch={false}
                         onClick={() => setShowFanMenu(false)}
                         className="flex items-center justify-between px-3 py-2.5 bg-[#006747] hover:bg-[#005232] text-white rounded-lg text-xs font-bold uppercase tracking-wider transition-all shadow-md group border border-white/20"
                       >
@@ -290,6 +323,7 @@ export default function Navigation() {
 
                     <Link
                       href="/fan-zone"
+                      prefetch={false}
                       onClick={() => setShowFanMenu(false)}
                       className="flex items-center gap-2 px-2 py-2 hover:bg-white/10 rounded-lg text-xs font-medium text-white transition-colors"
                     >
@@ -313,6 +347,7 @@ export default function Navigation() {
             ) : (
               <Link
                 href="/login"
+                prefetch={false}
                 className="clip-slanted flex items-center gap-1.5 px-4 py-1.5 bg-[#006747] text-white text-xs font-heading font-black uppercase tracking-wider shadow-[0_2px_8px_rgba(0,0,0,0.35)] hover:bg-[#004D2C] transition-all"
               >
                 SIGN IN
@@ -333,6 +368,7 @@ export default function Navigation() {
             {isAdminUser && (
               <Link
                 href="/admin"
+                prefetch={false}
                 className="clip-slanted flex items-center gap-1 px-3 py-1 bg-[#006747] text-white text-[10px] font-heading font-black uppercase tracking-wider shadow-[0_2px_6px_rgba(0,0,0,0.3)] hover:bg-[#004D2C] transition-colors"
                 title="Admin Dashboard"
               >
@@ -344,6 +380,7 @@ export default function Navigation() {
             {user ? (
               <Link
                 href="/fan-zone"
+                prefetch={false}
                 className="clip-slanted flex items-center gap-1.5 px-3 py-1 bg-white/10 border border-white/20 text-white text-[10px] font-heading font-black uppercase tracking-wider hover:bg-white/20 transition-colors"
               >
                 <User className="w-3.5 h-3.5 text-emerald-400" />
@@ -352,6 +389,7 @@ export default function Navigation() {
             ) : (
               <Link
                 href="/login"
+                prefetch={false}
                 className="clip-slanted flex items-center gap-1 px-3 py-1 bg-[#006747] text-white text-[10px] font-heading font-black uppercase tracking-wider shadow-[0_2px_6px_rgba(0,0,0,0.3)] hover:bg-[#004D2C] transition-colors"
               >
                 SIGN IN
@@ -374,6 +412,7 @@ export default function Navigation() {
           {/* ── Logo Brand Block ── */}
           <Link
             href="/"
+            prefetch={false}
             className="flex items-center gap-2 sm:gap-2.5 md:gap-3 group z-50 transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] shrink-0"
           >
             <div
@@ -427,6 +466,7 @@ export default function Navigation() {
                 >
                   <Link
                     href={item.href}
+                    prefetch={false}
                     className={`
                       flex items-center gap-1 xl:gap-1.5 py-2 font-subheading tracking-wider text-[9px] xl:text-[10px] 2xl:text-xs uppercase font-black transition-colors relative whitespace-nowrap
                       ${isActive(item.href, item.children) ? "text-zru-green" : navTextClass}
@@ -463,6 +503,7 @@ export default function Navigation() {
                             <Link
                               key={child.label}
                               href={child.href}
+                              prefetch={false}
                               className={`
                                 block px-3.5 py-2.5 text-xs font-bold tracking-wide transition-all duration-200 rounded-xl hover:bg-zru-green/15 text-white hover:translate-x-[3px] hover:shadow-[0_2px_6px_rgba(0,0,0,0.25)]
                                 ${isActive(child.href) ? "text-white bg-white/20 font-black" : "text-white/90"}
@@ -549,6 +590,7 @@ export default function Navigation() {
                     <Link
                       key={m.id}
                       href="/match-centre"
+                      prefetch={false}
                       onClick={closeSearch}
                       className="block p-3 rounded-lg bg-white/5 hover:bg-zru-green/10 border border-white/5 hover:border-zru-green/20 transition-all group"
                     >
@@ -579,6 +621,7 @@ export default function Navigation() {
                     <Link
                       key={r.id}
                       href={`/media/${r.id}`}
+                      prefetch={false}
                       onClick={closeSearch}
                       className="block p-3 rounded-lg bg-white/5 hover:bg-zru-green/10 border border-white/5 hover:border-zru-green/20 transition-all group"
                     >
@@ -607,6 +650,7 @@ export default function Navigation() {
                       <Link
                         key={e.id}
                         href={e.href}
+                        prefetch={false}
                         onClick={closeSearch}
                         className="block p-3 rounded-lg bg-white/5 hover:bg-zru-green/10 border border-white/5 hover:border-zru-green/20 transition-all group"
                       >

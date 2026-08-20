@@ -31,7 +31,7 @@ export default function NewsCard({
 
   if (variant === "compact") {
     return (
-      <Link href={slug} className="block group">
+      <Link href={slug} prefetch={false} className="block group">
         <div className="flex items-center justify-between gap-4 py-3 border-b border-black/10 dark:border-white/10 hover:border-zru-green transition-colors">
           <div className="flex items-center gap-3 min-w-0">
             <span className="px-2 py-0.5 rounded-none text-[9px] font-black tracking-widest uppercase bg-zru-green/10 text-zru-green border border-zru-green/30 shrink-0">
@@ -51,7 +51,7 @@ export default function NewsCard({
 
   if (variant === "featured") {
     return (
-      <Link href={slug} className="block group">
+      <Link href={slug} prefetch={false} className="block group">
         <div className="flex flex-col lg:flex-row gap-6 bg-white dark:bg-rich-black p-6 sm:p-8 rounded-3xl border border-black/10 dark:border-white/10 relative overflow-hidden transition-all duration-300 hover:border-zru-green/50 shadow-md">
           {image && (
             <div className="w-full lg:w-96 h-56 sm:h-64 relative rounded-2xl overflow-hidden shrink-0 bg-black/10">
@@ -99,7 +99,7 @@ export default function NewsCard({
 
   // Default Grid Variant
   return (
-    <Link href={slug} className="block group h-full">
+    <Link href={slug} prefetch={false} className="block group h-full">
       <div className="flex flex-col h-full bg-white dark:bg-zinc-950 border border-black/10 dark:border-white/10 rounded-2xl overflow-hidden transition-all duration-300 hover:border-zru-green/50 shadow-sm hover:shadow-md">
         {image && (
           <div className="relative aspect-video w-full overflow-hidden bg-black/5 shrink-0">

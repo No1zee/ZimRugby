@@ -10,7 +10,7 @@ export const metadata: Metadata = {
   description: "Overview of all active Zimbabwe Rugby Union competitions including the Rugby Africa Cup, Victoria Cup, and more.",
 };
 
-export const revalidate = 300;
+export const revalidate = 3600;
 
 const typeIcons: Record<string, typeof Trophy> = {
   cup: Trophy,

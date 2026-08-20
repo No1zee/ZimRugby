@@ -149,10 +149,9 @@ export default function KineticNav({ isOpen, onClose, navItems, pathname }: Kine
               )}
             </div>
 
-            <div className="k-content-wrapper">
-              {/* Top bar */}
+            <div className="k-content-wrapper">              {/* Top bar */}
               <div className="k-top-bar">
-                <Link href="/" onClick={onClose} className="k-logo-link" aria-label="Zimbabwe Rugby Union Home">
+                <Link href="/" prefetch={false} onClick={onClose} className="k-logo-link" aria-label="Zimbabwe Rugby Union Home">
                   <Image src="/images/logos/zru-logo.svg" alt="ZRU" width={34} height={34} className="object-contain" />
                 </Link>
 
@@ -174,7 +173,7 @@ export default function KineticNav({ isOpen, onClose, navItems, pathname }: Kine
                 </button>
               </div>
 
-              {/* Nav links — grouped under Browse */}
+              {/* Nav links ── grouped under Browse */}
               <div className="k-links-area">
                 <div className="k-section-label" data-menu-fade>BROWSE</div>
                 <ul className="k-nav-list">
@@ -201,6 +200,7 @@ export default function KineticNav({ isOpen, onClose, navItems, pathname }: Kine
                                 <Link
                                   key={child.label}
                                   href={child.href}
+                                  prefetch={false}
                                   onClick={onClose}
                                   className={`k-sub-link ${isActive(child.href) ? "is-active" : ""}`}
                                 >
@@ -211,7 +211,7 @@ export default function KineticNav({ isOpen, onClose, navItems, pathname }: Kine
                             </div>
                           </div>
                         ) : (
-                          <Link href={item.href} onClick={onClose} className={`k-link ${active ? "is-active" : ""}`}>
+                          <Link href={item.href} prefetch={false} onClick={onClose} className={`k-link ${active ? "is-active" : ""}`}>
                             <span className="k-link-text">{item.label}</span>
                           </Link>
                         )}
@@ -224,12 +224,12 @@ export default function KineticNav({ isOpen, onClose, navItems, pathname }: Kine
                 <div className="k-section-label k-section-label--actions" data-menu-fade>ACCOUNT &amp; ACTIONS</div>
                 <ul className="k-nav-list" data-menu-fade>
                   <li className="k-menu-item">
-                    <Link href="/login" onClick={onClose} className="k-link">
+                    <Link href="/login" prefetch={false} onClick={onClose} className="k-link">
                       <span className="k-link-text">SIGN IN</span>
                     </Link>
                   </li>
                   <li className="k-menu-item">
-                    <Link href="/fan-zone" onClick={onClose} className="k-link">
+                    <Link href="/fan-zone" prefetch={false} onClick={onClose} className="k-link">
                       <span className="k-link-text">FAN ZONE</span>
                     </Link>
                   </li>

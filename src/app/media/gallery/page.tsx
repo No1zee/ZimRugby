@@ -7,7 +7,7 @@ export const metadata: Metadata = {
   description: "Photos and galleries from Zimbabwe rugby matches, events, and training sessions.",
 };
 
-export const revalidate = 300; // ISR cache revalidation every 5 minutes
+export const revalidate = 3600; // ISR cache revalidation every 1 hour (on-demand revalidated via Directus webhook)
 
 export default async function GalleryPage() {
   const photos = await getPhotos();

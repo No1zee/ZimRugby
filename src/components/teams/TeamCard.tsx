@@ -21,7 +21,7 @@ export default function TeamCard({
   href,
 }: TeamCardProps) {
   return (
-    <Link href={href} className="block h-full">
+    <Link href={href} prefetch={false} className="block h-full">
       <motion.div
         whileHover={{ y: -6, boxShadow: "0 10px 30px -10px rgba(0, 0, 0, 0.08)" }}
         transition={{ duration: 0.3 }}

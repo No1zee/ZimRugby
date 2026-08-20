@@ -30,6 +30,7 @@ function Hero() {
           fill
           priority
           quality={60}
+          sizes="100vw"
           className="object-cover object-top opacity-30"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-rich-black via-rich-black/80 to-rich-black/40" />

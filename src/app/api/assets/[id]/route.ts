@@ -38,7 +38,7 @@ export async function GET(
 
     const blob = await res.blob();
     const contentType = res.headers.get("content-type") || "image/webp";
-    const cacheControl = res.headers.get("cache-control") || "public, max-age=31536000, immutable";
+    const cacheControl = "public, max-age=31536000, s-maxage=31536000, immutable";
 
     return new NextResponse(blob, {
       status: 200,

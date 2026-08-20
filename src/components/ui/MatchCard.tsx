@@ -75,7 +75,7 @@ export default function MatchCard({
   );
 
   if (href) {
-    return <Link href={href}>{content}</Link>;
+    return <Link href={href} prefetch={false}>{content}</Link>;
   }
 
   return content;

@@ -24,7 +24,7 @@ export const metadata: Metadata = {
   description: "Official website of the Zimbabwe Rugby Union. Follow the Sables, Lady Sables, and all Zimbabwe rugby teams. Fixtures, results, news, and tickets.",
 };
 
-export const revalidate = 300;
+export const revalidate = 3600;
 
 async function HeroSection() {
   const heroSlides = await getHeroSlides();

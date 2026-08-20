@@ -2,6 +2,7 @@ import React from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
+import ZruButton from "./ZruButton";
 
 interface HeroBannerProps {
   title: string;
@@ -55,13 +56,16 @@ export default function HeroBanner({
             </p>
           )}
           {ctaLabel && ctaHref && (
-            <Link
-              href={ctaHref}
-              className="clip-slanted inline-flex items-center gap-3 bg-zru-green text-white px-8 py-4 mt-8 text-xs font-heading font-black uppercase tracking-widest hover:bg-[#004D2C] transition-all duration-200 hover:-translate-y-0.5 shadow-lg"
-            >
-              <span>{ctaLabel}</span>
-              <ArrowRight className="w-4 h-4" />
-            </Link>
+            <div className="mt-8">
+              <ZruButton
+                href={ctaHref}
+                variant="solid-green"
+                size="md"
+                showArrow
+              >
+                {ctaLabel}
+              </ZruButton>
+            </div>
           )}
         </div>
       </div>

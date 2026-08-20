@@ -16,6 +16,7 @@ export default function ClubhouseHero() {
           fill
           priority
           quality={75}
+          sizes="100vw"
           className="object-cover object-center grayscale-[0.25] opacity-20"
         />
         {/* Soft Milk-White Gradient Wash */}

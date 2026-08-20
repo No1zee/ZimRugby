@@ -79,7 +79,7 @@ export default function MatchCard({
   const awayScore = typeof awayTeam.score === "number" ? awayTeam.score : null;
 
   return (
-    <Link href={`/matches/${id}`} className="block h-full group focus:outline-none">
+    <Link href={`/matches/${id}`} prefetch={false} className="block h-full group focus:outline-none">
       <motion.div
         whileHover={{ y: -3 }}
         transition={{ duration: 0.2, ease: "easeOut" }}

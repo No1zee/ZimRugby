@@ -93,6 +93,7 @@ export default function FanZoneClient({ cmsPage }: FanZoneClientProps) {
                   src={pillar.image}
                   alt={pillar.title}
                   fill
+                  sizes="(max-width: 1024px) 100vw, 33vw"
                   className="object-cover object-center group-hover:scale-105 transition-transform duration-700 filter brightness-[0.85] contrast-[1.05]"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-rich-black/90 via-rich-black/20 to-transparent" />

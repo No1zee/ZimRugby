@@ -72,6 +72,7 @@ export default function SponsorGrid({ partners }: SponsorGridProps) {
                     src={s.logo}
                     alt={s.name}
                     fill
+                    sizes="(max-width: 640px) 130px, 180px"
                     className="object-contain"
                   />
                 </div>
@@ -91,6 +92,7 @@ export default function SponsorGrid({ partners }: SponsorGridProps) {
                     src={s.logo}
                     alt={s.name}
                     fill
+                    sizes="(max-width: 640px) 130px, 180px"
                     className="object-contain"
                   />
                 </div>
@@ -107,6 +109,7 @@ export default function SponsorGrid({ partners }: SponsorGridProps) {
                     src={s.logo}
                     alt={s.name}
                     fill
+                    sizes="(max-width: 640px) 130px, 180px"
                     className="object-contain"
                   />
                 </div>

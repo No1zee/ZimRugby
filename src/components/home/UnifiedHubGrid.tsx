@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowRight, Newspaper, Calendar, MapPin, Clock } from "lucide-react";
+import { ArrowRight, Newspaper, Calendar, MapPin, Clock, Users } from "lucide-react";
 import ShopCardShowcase from "@/components/home/ShopCardShowcase";
 import type { Report } from "@/lib/data-fetcher";
 import type { MatchCardViewModel } from "@/lib/match-centre/types";
@@ -45,7 +45,7 @@ export default function UnifiedHubGrid({ news = [], nextMatch, customTitle }: Pr
             <div className="flex flex-col items-center group/team w-[100px]">
               <div className="relative w-20 h-20 flex items-center justify-center p-2 mb-3">
                 {nextMatch?.homeTeam.logo ? (
-                  <Image src={nextMatch.homeTeam.logo} alt={nextMatch.homeTeam.name || "Home Team"} fill className="object-contain drop-shadow-md" />
+                  <Image src={nextMatch.homeTeam.logo} alt={nextMatch.homeTeam.name || "Home Team"} fill sizes="80px" className="object-contain drop-shadow-md" />
                 ) : (
                   <span className="text-xl font-heading font-black text-rich-black">
                     {nextMatch?.homeTeam.code || "ZIM"}
@@ -71,7 +71,7 @@ export default function UnifiedHubGrid({ news = [], nextMatch, customTitle }: Pr
             <div className="flex flex-col items-center group/team w-[100px]">
               <div className="relative w-20 h-20 flex items-center justify-center p-2 mb-3">
                 {nextMatch?.awayTeam.logo ? (
-                  <Image src={nextMatch.awayTeam.logo} alt={nextMatch.awayTeam.name || "Opponent"} fill className="object-contain drop-shadow-md" />
+                  <Image src={nextMatch.awayTeam.logo} alt={nextMatch.awayTeam.name || "Opponent"} fill sizes="80px" className="object-contain drop-shadow-md" />
                 ) : (
                   <span className="text-xl font-heading font-black text-rich-black">
                     {nextMatch?.awayTeam.code || "TBA"}
@@ -113,6 +113,7 @@ export default function UnifiedHubGrid({ news = [], nextMatch, customTitle }: Pr
             <span className="absolute inset-0 z-0 clip-slanted bg-black/10 translate-x-[4px] translate-y-[4px] transition-transform duration-200 group-hover/btn:translate-x-[6px] group-hover/btn:translate-y-[6px] group-active/btn:translate-x-[2px] group-active/btn:translate-y-[2px]" aria-hidden="true" />
             <Link
               href="/match-centre"
+              prefetch={false}
               className="relative z-10 w-full clip-slanted bg-rich-black hover:bg-black text-white font-black flex items-center justify-center gap-2 py-3.5 transition-all duration-200 group-hover/btn:-translate-y-px group-active/btn:translate-x-[2px] group-active/btn:translate-y-[2px] text-[11px] tracking-widest uppercase font-heading shadow-sm"
             >
               <span>MATCH CENTRE</span>
@@ -133,7 +134,7 @@ export default function UnifiedHubGrid({ news = [], nextMatch, customTitle }: Pr
           <div className="space-y-4 flex-1 min-h-0 overflow-y-auto pr-2 news-scroll overscroll-contain">
             {news.length > 0 ? (
               news.map((article: Report) => (
-                <Link key={article.id} href={article.url || "/media"} className="group/item block border-b border-black/5 pb-4 last:border-b-0">
+                <Link key={article.id} href={article.url || "/media"} prefetch={false} className="group/item block border-b border-black/5 pb-4 last:border-b-0">
                   <div className="flex gap-4 items-start">
                     <div className="relative w-20 h-20 rounded-md overflow-hidden shrink-0 border border-black/5">
                       <Image src={article.image || "/images/teams/sables.jpg"} alt={article.title} fill className="object-cover transition-transform duration-500 group-hover/item:scale-105" sizes="80px" />
@@ -152,7 +153,7 @@ export default function UnifiedHubGrid({ news = [], nextMatch, customTitle }: Pr
               ))
             ) : (
               <>
-                <Link href="/media" className="group/item block border-b border-black/5 pb-4">
+                <Link href="/media" prefetch={false} className="group/item block border-b border-black/5 pb-4">
                   <div className="flex gap-4 items-start">
                     <div className="relative w-20 h-20 rounded-md overflow-hidden shrink-0 border border-black/5">
                       <Image src="/images/teams/sables.jpg" alt="Sables" fill className="object-cover transition-transform duration-500 group-hover/item:scale-105" sizes="80px" />
@@ -164,7 +165,7 @@ export default function UnifiedHubGrid({ news = [], nextMatch, customTitle }: Pr
                     </div>
                   </div>
                 </Link>
-                <Link href="/media" className="group/item block border-b border-black/5 pb-4">
+                <Link href="/media" prefetch={false} className="group/item block border-b border-black/5 pb-4">
                   <div className="flex gap-4 items-center">
                     <div className="relative w-16 h-16 rounded-md overflow-hidden shrink-0 border border-black/5">
                       <Image src="/images/teams/junior-sables.jpg" alt="Junior Sables" fill className="object-cover transition-transform duration-500 group-hover/item:scale-105" sizes="64px" />
@@ -175,7 +176,7 @@ export default function UnifiedHubGrid({ news = [], nextMatch, customTitle }: Pr
                     </div>
                   </div>
                 </Link>
-                <Link href="/media" className="group/item block border-b border-black/5 pb-4">
+                <Link href="/media" prefetch={false} className="group/item block border-b border-black/5 pb-4">
                   <div className="flex gap-4 items-center">
                     <div className="relative w-16 h-16 rounded-md overflow-hidden shrink-0 border border-black/5">
                       <Image src="/images/teams/cheetahs.jpg" alt="Cheetahs" fill className="object-cover transition-transform duration-500 group-hover/item:scale-105" sizes="64px" />
@@ -186,7 +187,7 @@ export default function UnifiedHubGrid({ news = [], nextMatch, customTitle }: Pr
                     </div>
                   </div>
                 </Link>
-                <Link href="/media" className="group/item block">
+                <Link href="/media" prefetch={false} className="group/item block">
                   <div className="flex gap-4 items-center">
                     <div className="relative w-16 h-16 rounded-md overflow-hidden shrink-0 border border-black/5">
                       <Image src="/images/teams/lady-sables.jpg" alt="Lady Sables" fill className="object-cover transition-transform duration-500 group-hover/item:scale-105" sizes="64px" />
@@ -201,23 +202,49 @@ export default function UnifiedHubGrid({ news = [], nextMatch, customTitle }: Pr
             )}
           </div>
 
-          <span className="relative inline-flex group/btn w-full mt-4 shrink-0">
-            <span className="absolute inset-0 z-0 clip-slanted bg-black/5 translate-x-[4px] translate-y-[4px] transition-transform duration-200 group-hover/btn:translate-x-[6px] group-hover/btn:translate-y-[6px] group-active/btn:translate-x-[2px] group-active/btn:translate-y-[2px]" aria-hidden="true" />
-            <Link
-              href="/media"
-              className="relative z-10 w-full clip-slanted bg-milk-white hover:bg-white text-rich-black hover:text-zru-green font-black flex items-center justify-center gap-2 py-2.5 transition-all duration-200 group-hover/btn:-translate-y-px group-active/btn:translate-x-[2px] group-active/btn:translate-y-[2px] text-[11px] tracking-widest uppercase border border-black/5 font-heading"
-            >
-              <span>EXPLORE ALL NEWS</span>
-              <ArrowRight size={14} className="group-hover/btn:translate-x-1 transition-transform" />
-            </Link>
-          </span>
+          <div className="pt-4 mt-auto border-t border-black/5 shrink-0">
+            <span className="relative inline-flex group/btn w-full">
+              <span className="absolute inset-0 z-0 clip-slanted bg-black/10 translate-x-[4px] translate-y-[4px] transition-transform duration-200 group-hover/btn:translate-x-[6px] group-hover/btn:translate-y-[6px] group-active/btn:translate-x-[2px] group-active/btn:translate-y-[2px]" aria-hidden="true" />
+              <Link
+                href="/media"
+                prefetch={false}
+                className="relative z-10 w-full clip-slanted bg-milk-white hover:bg-white text-rich-black hover:text-zru-green font-black flex items-center justify-center gap-2 py-2.5 transition-all duration-200 group-hover/btn:-translate-y-px group-active/btn:translate-x-[2px] group-active/btn:translate-y-[2px] text-[11px] tracking-widest uppercase border border-black/5 font-heading"
+              >
+                <span>ALL NEWS</span>
+                <ArrowRight size={14} className="transition-transform duration-300 group-hover/btn:translate-x-1" />
+              </Link>
+            </span>
+          </div>
         </div>
 
-        {/* ═══════════ SHOP & TICKETS (SPAN 3) ═══════════ */}
+        {/* ═══════════ FAN ZONE & TICKETS (SPAN 3) ═══════════ */}
         <div className="lg:col-span-3 flex flex-col gap-4 md:gap-5">
-          {/* Shop Card (Top Section) */}
-          <div className="flex-[5] relative overflow-hidden rounded-lg border border-black/5 shadow-sm hover:shadow-md transition-shadow min-h-[260px]">
-            <ShopCardShowcase />
+          {/* Fan Zone Card (Top Section) */}
+          <div className="flex-[4] bg-white border border-black/5 rounded-lg p-6 shadow-sm hover:shadow-md transition-all flex flex-col justify-between relative overflow-hidden group min-h-[220px]">
+             <div className="absolute -right-6 -bottom-6 w-32 h-32 bg-zru-green/5 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-500" />
+             <div>
+              <div className="flex items-center justify-between mb-3">
+                <span className="font-heading font-black text-[11px] uppercase tracking-[0.2em] text-zru-green flex items-center gap-1.5">
+                  <Users size={14} /> FAN HUB
+                </span>
+                <span className="bg-zru-green/10 text-zru-green px-2 py-0.5 text-[9px] font-black uppercase tracking-wider rounded">Free Access</span>
+              </div>
+              <h4 className="font-heading font-black text-xl leading-tight text-rich-black uppercase mb-2">
+                JOIN THE OFFICIAL GREEN &amp; WHITE NATION
+              </h4>
+             </div>
+             <div className="pt-4 mt-2">
+              <span className="relative inline-flex group/btn w-full">
+                <span className="absolute inset-0 z-0 clip-slanted bg-black/10 translate-x-[4px] translate-y-[4px] transition-transform duration-200 group-hover/btn:translate-x-[6px] group-hover/btn:translate-y-[6px] group-active/btn:translate-x-[2px] group-active/btn:translate-y-[2px]" aria-hidden="true" />
+                <Link
+                  href="/fan-zone"
+                  prefetch={false}
+                  className="relative z-10 w-full clip-slanted bg-rich-black hover:bg-black text-white py-2.5 font-black text-[10px] uppercase tracking-widest flex justify-center items-center gap-2 transition-all duration-200 group-hover/btn:-translate-y-px group-active/btn:translate-x-[2px] group-active/btn:translate-y-[2px] shadow-sm font-heading"
+                >
+                  Join Fan Zone <ArrowRight size={14} className="group-hover/btn:translate-x-1 transition-transform" />
+                </Link>
+              </span>
+            </div>
           </div>
 
           {/* Tickets Card (Bottom Section - Accent block) */}
@@ -243,6 +270,7 @@ export default function UnifiedHubGrid({ news = [], nextMatch, customTitle }: Pr
               <span className="absolute inset-0 z-0 clip-slanted bg-black/30 translate-x-[4px] translate-y-[4px] transition-transform duration-200 group-hover/btn:translate-x-[6px] group-hover/btn:translate-y-[6px] group-active/btn:translate-x-[2px] group-active/btn:translate-y-[2px]" aria-hidden="true" />
               <Link
                 href="/tickets"
+                prefetch={false}
                 className="relative z-10 w-full clip-slanted bg-white text-zru-green hover:bg-rich-black hover:text-white py-2.5 font-black text-[10px] uppercase tracking-widest flex justify-center items-center gap-2 transition-all duration-200 group-hover/btn:-translate-y-px group-active/btn:translate-x-[2px] group-active/btn:translate-y-[2px] shadow-sm"
               >
                 Buy Tickets <ArrowRight size={14} className="group-hover/btn:translate-x-1 transition-transform" />

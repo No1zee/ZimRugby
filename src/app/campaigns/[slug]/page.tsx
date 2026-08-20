@@ -68,7 +68,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-export const revalidate = 60;
+export const revalidate = 3600;
 
 export default async function CampaignPage({ params }: Props) {
   const { slug } = await params;
@@ -140,6 +140,7 @@ export default async function CampaignPage({ params }: Props) {
               src={heroAssetUrl(campaign.hero_image) || campaign.hero_image}
               alt={campaign.name}
               fill
+              sizes="100vw"
               className="object-cover opacity-60"
               priority
             />
@@ -221,6 +222,7 @@ export default async function CampaignPage({ params }: Props) {
                         src={photoAssetUrl(entry.player.photo) || entry.player.photo}
                         alt={entry.player.name || "Player"}
                         fill
+                        sizes="(max-width: 640px) 50vw, (max-width: 1024px) 25vw, 15vw"
                         className="object-cover"
                         priority
                       />
@@ -292,7 +294,7 @@ export default async function CampaignPage({ params }: Props) {
               <div className="flex flex-col items-center justify-center py-16 border border-dashed border-black/10 rounded-xl bg-white text-center gap-3">
                 <Trophy className="w-8 h-8 text-black/20" />
                 <p className="text-sm font-heading font-bold text-black/30 uppercase tracking-wider">Fixtures to be announced</p>
-                <Link href="/match-centre" className="text-xs font-black uppercase tracking-wider text-zru-green hover:underline">View all fixtures →</Link>
+                <Link href="/match-centre" className="text-xs font-black uppercase tracking-wider text-zru-green hover:underline">View all fixtures '</Link>
               </div>
             )}
           </section>
@@ -310,7 +312,7 @@ export default async function CampaignPage({ params }: Props) {
                 {featuredMedia.length > 0 && featuredMedia.map((item) => (
                   <div key={item.id} className="relative aspect-[21/9] rounded-2xl overflow-hidden bg-zru-green/10 mb-6">
                     {item.media_asset_id && (
-                      <Image src={heroAssetUrl(item.media_asset_id) || item.media_asset_id} alt={item.label || "Campaign media"} fill className="object-cover" />
+                      <Image src={heroAssetUrl(item.media_asset_id) || item.media_asset_id} alt={item.label || "Campaign media"} fill sizes="(max-width: 1024px) 100vw, 80vw" className="object-cover" />
                     )}
                     {item.label && (
                       <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-rich-black/80 to-transparent p-6">
@@ -324,7 +326,7 @@ export default async function CampaignPage({ params }: Props) {
                     {galleryMedia.map((item) => (
                       <div key={item.id} className="relative aspect-[4/3] rounded-xl overflow-hidden bg-zru-green/10 group">
                         {item.media_asset_id && (
-                          <Image src={photoAssetUrl(item.media_asset_id) || item.media_asset_id} alt={item.label || "Gallery image"} fill className="object-cover group-hover:scale-105 transition-transform duration-500" />
+                          <Image src={photoAssetUrl(item.media_asset_id) || item.media_asset_id} alt={item.label || "Gallery image"} fill sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw" className="object-cover group-hover:scale-105 transition-transform duration-500" />
                         )}
                         {item.label && (
                           <div className="absolute inset-0 bg-rich-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-3">

@@ -8,7 +8,7 @@ export const metadata: Metadata = {
   description: "Latest news, match reports, and video highlights from Zimbabwe Rugby Union.",
 };
 
-export const revalidate = 300;
+export const revalidate = 3600;
 
 export default async function MediaPage() {
   const [cmsPage, latestNews] = await Promise.all([

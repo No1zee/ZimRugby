@@ -9,7 +9,7 @@ export const metadata: Metadata = {
   description: 'Meet the principal partners, official partners, sponsors and supporters of the Zimbabwe Rugby Union.',
 };
 
-export const revalidate = 300;
+export const revalidate = 3600;
 
 const TIER_ORDER: PartnerTierKey[] = ["title", "gold", "silver", "bronze"];
 

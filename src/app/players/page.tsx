@@ -9,7 +9,7 @@ export const metadata: Metadata = {
   description: "Meet the players of Zimbabwe Rugby – the Sables, Lady Sables, and all national teams.",
 };
 
-export const revalidate = 120;
+export const revalidate = 3600;
 
 export default async function PlayersPage() {
   const players = await getPlayers();

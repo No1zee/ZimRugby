@@ -7,7 +7,7 @@ export const metadata: Metadata = {
   description: "Find a club, join a programme, or start playing rugby in Zimbabwe.",
 };
 
-export const dynamic = "force-dynamic";
+export const revalidate = 3600;
 
 export default async function PlayRugbyPage() {
   const cmsPage = await getPageBySlug("play-rugby");

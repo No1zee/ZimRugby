@@ -8,7 +8,7 @@ export const metadata: Metadata = {
   description: "Full schedule of Zimbabwe Rugby Union matches including the Sables, Lady Sables, and all national teams.",
 };
 
-export const revalidate = 120;
+export const revalidate = 3600;
 
 export default async function MatchesPage() {
   const allMatches = await getAllMatches();

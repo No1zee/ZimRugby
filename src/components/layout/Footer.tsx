@@ -127,6 +127,7 @@ export default function Footer({ initialColumns, siteSettings }: FooterProps) {
                     <li key={link.label}>
                       <Link
                         href={link.href}
+                        prefetch={false}
                         className="text-[13px] font-bold text-white/85 hover:text-emerald-300 transition-colors inline-block"
                       >
                         {link.label}
@@ -147,13 +148,13 @@ export default function Footer({ initialColumns, siteSettings }: FooterProps) {
           </div>
 
           <nav aria-label="Legal Links" className="flex flex-wrap items-center gap-5 text-[10px] font-extrabold uppercase tracking-wider">
-            <Link href="/privacy-policy" className="hover:text-[#006747] transition-colors">
+            <Link href="/privacy-policy" prefetch={false} className="hover:text-[#006747] transition-colors">
               Privacy Policy
             </Link>
-            <Link href="/terms-of-use" className="hover:text-[#006747] transition-colors">
+            <Link href="/terms-of-use" prefetch={false} className="hover:text-[#006747] transition-colors">
               Terms of Use
             </Link>
-            <Link href="/privacy-policy" className="hover:text-[#006747] transition-colors">
+            <Link href="/privacy-policy" prefetch={false} className="hover:text-[#006747] transition-colors">
               Cookie Policy
             </Link>
             <span className="text-[#006747] font-bold flex items-center gap-1">

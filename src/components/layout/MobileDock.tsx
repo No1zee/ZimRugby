@@ -79,7 +79,7 @@ export default function MobileDock() {
           const Icon = item.icon;
 
           const LinkWrapper = item.isMenu ? motion.button : motion.create(Link);
-          const linkProps = item.isMenu ? { type: "button" } : { href: item.href };
+          const linkProps = item.isMenu ? { type: "button" } : { href: item.href, prefetch: false };
 
           return (
             <LinkWrapper
