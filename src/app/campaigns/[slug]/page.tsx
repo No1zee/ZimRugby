@@ -149,10 +149,10 @@ export default async function CampaignPage({ params }: Props) {
           <div className="absolute inset-0 bg-gradient-to-br from-zru-green/80 to-rich-black" />
         )}
 
-        <div className="relative z-10 max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24">
+        <div className="relative z-10 max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 pt-36 sm:pt-40 md:pt-48 pb-12 sm:pb-16">
           <Link
             href="/campaigns"
-            className="inline-flex items-center gap-2 text-white/60 hover:text-white text-xs font-bold uppercase tracking-wider mb-8 transition-colors"
+            className="inline-flex items-center gap-2 text-white/60 hover:text-white text-xs font-bold uppercase tracking-wider mb-6 transition-colors"
           >
             <ArrowLeft className="w-3.5 h-3.5" />
             Back to Campaigns

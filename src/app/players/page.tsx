@@ -2,10 +2,11 @@ import { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
 import { getPlayers } from "@/lib/api/players";
+import PageHero from "@/components/ui/PageHero";
 
 export const metadata: Metadata = {
   title: "Players | Zimbabwe Rugby Union",
-  description: "Meet the players of Zimbabwe Rugby — the Sables, Lady Sables, and all national teams.",
+  description: "Meet the players of Zimbabwe Rugby – the Sables, Lady Sables, and all national teams.",
 };
 
 export const revalidate = 120;
@@ -15,16 +16,12 @@ export default async function PlayersPage() {
 
   return (
     <main className="min-h-screen bg-milk-white">
-      <div className="bg-rich-black border-b border-white/10">
-        <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20">
-          <h1 className="text-4xl sm:text-6xl font-black uppercase tracking-tighter text-white leading-none not-italic">
-            Players
-          </h1>
-          <p className="text-white/50 text-lg mt-4 max-w-2xl font-normal">
-            The men and women who represent Zimbabwe Rugby on the international stage.
-          </p>
-        </div>
-      </div>
+      <PageHero
+        kicker="National Squad"
+        title="Players"
+        subtitle="The men and women who represent Zimbabwe Rugby on the international stage."
+        breadcrumb={[{ label: "Players", href: "/players" }]}
+      />
 
       <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-16">
         {players.length === 0 ? (

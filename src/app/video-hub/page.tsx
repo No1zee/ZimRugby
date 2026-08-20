@@ -39,7 +39,7 @@ export default function VideoHubPage() {
   const featuredVideo = videos[0];
 
   return (
-    <main className="bg-rich-black min-h-screen pt-10 md:pt-12 pb-10 md:pb-12 text-white">
+    <main className="bg-rich-black min-h-screen pt-28 md:pt-32 pb-10 md:pb-12 text-white">
       
       {/* 1. Widescreen Cinematic Header / Hero Video */}
       {featuredVideo && (

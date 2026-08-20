@@ -55,11 +55,13 @@ export default function Navigation() {
   const [allMatches, setAllMatches] = useState<any[]>([]);
   const [allReports, setAllReports] = useState<any[]>([]);
 
-  /* ── Derived booleans (computed once) ── */
+  /* ─── Derived booleans (computed once) ─── */
+  const isHomePage = pathname === "/";
   const isTransparentAllowed = !SOLID_ROUTES.some((route) =>
     route === "/" ? pathname === "/" : pathname.startsWith(route)
   );
   const isOnHero = isTransparentAllowed && !isScrolled;
+  const isLargeLogo = isHomePage && !isScrolled;
   const showOpaqueHeader = !isOnHero;
 
   /* ── Scroll listener (single useEffect, no framer-motion dependency for this) ── */
@@ -371,17 +373,17 @@ export default function Navigation() {
           {/* ── Logo Brand Block ── */}
           <Link
             href="/"
-            className="flex items-center gap-2 sm:gap-2.5 md:gap-4 group z-50 transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] shrink-0"
+            className="flex items-center gap-2 sm:gap-2.5 md:gap-3 group z-50 transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] shrink-0"
           >
             <div
               className={`relative transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:rotate-6 flex items-center justify-center shrink-0 ${
-                isOnHero
+                isLargeLogo
                   ? "w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 lg:w-28 lg:h-28 xl:w-32 xl:h-32 drop-shadow-[0_10px_25px_rgba(0,0,0,0.5)]"
                   : "w-8 h-8 sm:w-9 sm:h-9 md:w-10 md:h-10 lg:w-10 lg:h-10 xl:w-12 xl:h-12"
               }`}
             >
               <Image
-                src={isOnHero ? "/images/logos/zru-logo-white-text.svg" : "/zru logo main.svg"}
+                src={showOpaqueHeader ? "/zru logo main.svg" : (isLargeLogo ? "/images/logos/zru-logo-white-text.svg" : "/zru logo main.svg")}
                 alt="Zimbabwe Rugby Union Logo"
                 width={80}
                 height={80}
@@ -391,25 +393,21 @@ export default function Navigation() {
             </div>
 
             <div
-              className={`flex flex-col justify-center items-center transition-opacity duration-500 ${
-                isOnHero ? "opacity-0 pointer-events-none" : "opacity-100"
+              className={`flex flex-col justify-center items-start transition-opacity duration-500 ${
+                isLargeLogo ? "opacity-0 pointer-events-none hidden" : "opacity-100 flex"
               }`}
             >
               <span
-                className={`font-heading font-black tracking-[0.05em] leading-none transition-all duration-500 whitespace-nowrap ${
-                  isOnHero
-                    ? "text-lg sm:text-2xl md:text-3xl text-white"
-                    : `text-sm sm:text-lg md:text-xl ${showOpaqueHeader ? "text-black" : "text-white"}`
+                className={`font-heading font-black tracking-[0.05em] leading-none transition-all duration-500 whitespace-nowrap text-xs sm:text-base md:text-lg ${
+                  showOpaqueHeader ? "text-black" : "text-white"
                 }`}
               >
                 ZIMBABWE
               </span>
               <span
-                className={`font-subheading font-black leading-none mt-1 whitespace-nowrap transition-all duration-500 ${
-                  isOnHero
-                    ? "text-[0.85em] sm:text-xl md:text-2xl tracking-[-0.02em]"
-                    : `text-[0.85em] sm:text-base md:text-lg tracking-[-0.05em]`
-                } ${isOnHero ? "text-white" : "text-[#006747]"}`}
+                className={`font-subheading font-black leading-none mt-1 whitespace-nowrap transition-all duration-500 text-[10px] sm:text-xs md:text-sm tracking-[-0.02em] ${
+                  showOpaqueHeader ? "text-zru-green" : "text-emerald-400"
+                }`}
               >
                 RUGBY UNION
               </span>

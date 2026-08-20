@@ -2,6 +2,7 @@ import { Metadata } from "next";
 import MatchList from "@/components/matches/MatchList";
 import { getAllMatches } from "@/lib/api/fixtures";
 import { Calendar, Radio } from "lucide-react";
+import PageHero from "@/components/ui/PageHero";
 
 export const metadata: Metadata = {
   title: "Live Scores | Zimbabwe Rugby Union",
@@ -22,22 +23,12 @@ export default async function LiveScoresPage() {
 
   return (
     <main className="min-h-screen bg-milk-white">
-      <div className="bg-rich-black border-b border-white/10 rounded-b-[40px] overflow-hidden">
-        <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-14">
-          <div className="flex items-center gap-4 mb-3">
-            <span className="flex items-center gap-2 text-zru-green text-[10px] font-black uppercase tracking-[0.3em]">
-              <span className="w-2 h-2 rounded-full bg-zru-green animate-pulse" />
-              LIVE
-            </span>
-          </div>
-          <h1 className="text-4xl sm:text-6xl font-black uppercase tracking-tighter text-white leading-none not-italic">
-            Live Scores
-          </h1>
-          <p className="text-white/50 text-lg mt-3 max-w-2xl font-normal">
-            Real-time scores, match updates, and results from every Zimbabwe Rugby fixture.
-          </p>
-        </div>
-      </div>
+      <PageHero
+        kicker="Match Day Center"
+        title="Live Scores"
+        subtitle="Real-time scores, match updates, and results from every Zimbabwe Rugby fixture."
+        breadcrumb={[{ label: "Live Scores", href: "/live" }]}
+      />
 
       <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-14">
         {live.length > 0 && (

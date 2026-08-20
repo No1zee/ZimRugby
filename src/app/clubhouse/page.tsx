@@ -21,7 +21,7 @@ import JoinFanZoneSection from "@/components/home/JoinFanZoneSection";
 /* ------------------------------------------------------------------ */
 function Hero() {
   return (
-    <section className="relative min-h-[90dvh] w-full flex items-center overflow-hidden bg-rich-black py-16 sm:py-24">
+    <section className="relative min-h-[90dvh] w-full flex items-center overflow-hidden bg-rich-black pt-36 sm:pt-40 md:pt-48 pb-16 sm:py-24">
       {/* Background with Darkened Atmosphere */}
       <div className="absolute inset-0 z-0 pointer-events-none">
         <Image

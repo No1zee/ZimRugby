@@ -51,22 +51,22 @@ const MOCK_TEAMS: Record<string, Team> = {
       ],
       matches: [
         // 2024
-        { opponent: "Uganda", opponentLogo: "https://flagcdn.com/w160/ug.png", date: "20 July 2024", venue: "Mandela National Stadium, Kampala", score: "22 - 20", status: "completed" },
-        { opponent: "Namibia", opponentLogo: "https://flagcdn.com/w160/na.png", date: "24 July 2024", venue: "Mandela National Stadium, Kampala", score: "32 - 10", status: "completed" },
-        { opponent: "Algeria", opponentLogo: "https://flagcdn.com/w160/dz.png", date: "28 July 2024", venue: "Mandela National Stadium, Kampala", score: "29 - 3", status: "completed" },
+        { opponent: "Uganda", opponentLogo: "https://flagcdn.com/w160/ug.png", date: "20 July 2024", venue: "Mandela National Stadium, Kampala", score: "22 - 20", zimScore: 22, opponentScore: 20, isHome: false, status: "completed", statsSummary: { halfTimeScore: "12 - 10", triesZim: 3, triesOpp: 2, topScorer: "Ian Prior (12 pts)" } },
+        { opponent: "Namibia", opponentLogo: "https://flagcdn.com/w160/na.png", date: "24 July 2024", venue: "Mandela National Stadium, Kampala", score: "32 - 10", zimScore: 32, opponentScore: 10, isHome: false, status: "completed", statsSummary: { halfTimeScore: "17 - 3", triesZim: 4, triesOpp: 1, topScorer: "Edward Sigauke (10 pts)" } },
+        { opponent: "Algeria", opponentLogo: "https://flagcdn.com/w160/dz.png", date: "28 July 2024", venue: "Mandela National Stadium, Kampala", score: "29 - 3", zimScore: 29, opponentScore: 3, isHome: false, status: "completed", statsSummary: { halfTimeScore: "14 - 3", triesZim: 4, triesOpp: 0, topScorer: "Hilton Mudariki (9 pts)" } },
         
         // 2025
-        { opponent: "Morocco", opponentLogo: "https://flagcdn.com/w160/ma.png", date: "8 July 2025", venue: "Mandela National Stadium, Kampala", score: "43 - 8", status: "completed" },
-        { opponent: "Kenya", opponentLogo: "https://flagcdn.com/w160/ke.png", date: "13 July 2025", venue: "Mandela National Stadium, Kampala", score: "29 - 23", status: "completed" },
-        { opponent: "Namibia", opponentLogo: "https://flagcdn.com/w160/na.png", date: "19 July 2025", venue: "Mandela National Stadium, Kampala", score: "30 - 28", status: "completed" },
+        { opponent: "Morocco", opponentLogo: "https://flagcdn.com/w160/ma.png", date: "8 July 2025", venue: "Mandela National Stadium, Kampala", score: "43 - 8", zimScore: 43, opponentScore: 8, isHome: false, status: "completed", statsSummary: { halfTimeScore: "24 - 3", triesZim: 6, triesOpp: 1, topScorer: "Brendon Marume (15 pts)" } },
+        { opponent: "Kenya", opponentLogo: "https://flagcdn.com/w160/ke.png", date: "13 July 2025", venue: "Mandela National Stadium, Kampala", score: "29 - 23", zimScore: 29, opponentScore: 23, isHome: false, status: "completed", statsSummary: { halfTimeScore: "16 - 13", triesZim: 3, triesOpp: 2, topScorer: "Ian Prior (14 pts)" } },
+        { opponent: "Namibia", opponentLogo: "https://flagcdn.com/w160/na.png", date: "19 July 2025", venue: "Mandela National Stadium, Kampala", score: "30 - 28", zimScore: 30, opponentScore: 28, isHome: false, status: "completed", statsSummary: { halfTimeScore: "15 - 18", triesZim: 3, triesOpp: 3, topScorer: "Hilton Mudariki (10 pts)" } },
         
         // 2026
-        { opponent: "Zambia", opponentLogo: "https://flagcdn.com/w160/zm.png", date: "25 April 2026", venue: "Harare Sports Club", score: "28 - 14", status: "completed" },
-        { opponent: "Uganda", opponentLogo: "https://flagcdn.com/w160/ug.png", date: "30 May 2026", venue: "Kyadondo Stadium, Kampala", score: "25 - 19", status: "completed" },
-        { opponent: "Algeria", opponentLogo: "https://flagcdn.com/w160/dz.png", date: "20 June 2026", venue: "Harare Sports Club", score: "29 - 7", status: "completed" },
-        { opponent: "Tonga", opponentLogo: "https://flagcdn.com/w160/to.png", date: "4 July 2026", venue: "Dick’s Sporting Goods Park, Denver", score: "26 - 36", status: "completed" },
-        { opponent: "USA", opponentLogo: "https://flagcdn.com/w160/us.png", date: "11 July 2026", venue: "American Legion Memorial Stadium, Charlotte", score: "15 - 31", status: "completed" },
-        { opponent: "Canada", opponentLogo: "https://flagcdn.com/w160/ca.png", date: "19 July 2026", venue: "Princess Auto Stadium, Winnipeg", score: "19 - 23", status: "completed" },
+        { opponent: "Zambia", opponentLogo: "https://flagcdn.com/w160/zm.png", date: "25 April 2026", venue: "Harare Sports Club", score: "28 - 14", zimScore: 28, opponentScore: 14, isHome: true, status: "completed", statsSummary: { halfTimeScore: "14 - 7", triesZim: 4, triesOpp: 2, topScorer: "Edward Sigauke (10 pts)" } },
+        { opponent: "Uganda", opponentLogo: "https://flagcdn.com/w160/ug.png", date: "30 May 2026", venue: "Kyadondo Stadium, Kampala", score: "25 - 19", zimScore: 25, opponentScore: 19, isHome: false, status: "completed", statsSummary: { halfTimeScore: "10 - 12", triesZim: 3, triesOpp: 2, topScorer: "Ian Prior (10 pts)" } },
+        { opponent: "Algeria", opponentLogo: "https://flagcdn.com/w160/dz.png", date: "20 June 2026", venue: "Harare Sports Club", score: "29 - 7", zimScore: 29, opponentScore: 7, isHome: true, status: "completed", statsSummary: { halfTimeScore: "17 - 0", triesZim: 4, triesOpp: 1, topScorer: "Tinotenda Masekere (10 pts)" } },
+        { opponent: "Tonga", opponentLogo: "https://flagcdn.com/w160/to.png", date: "4 July 2026", venue: "Dick's Sporting Goods Park, Denver", score: "26 - 36", zimScore: 26, opponentScore: 36, isHome: false, status: "completed", statsSummary: { halfTimeScore: "14 - 19", triesZim: 3, triesOpp: 5, topScorer: "Ian Prior (11 pts)", yellowCardsZim: 1 } },
+        { opponent: "USA", opponentLogo: "https://flagcdn.com/w160/us.png", date: "11 July 2026", venue: "American Legion Memorial Stadium, Charlotte", score: "15 - 31", zimScore: 15, opponentScore: 31, isHome: false, status: "completed", statsSummary: { halfTimeScore: "8 - 17", triesZim: 2, triesOpp: 4, topScorer: "Kudzai Mashawi (5 pts)" } },
+        { opponent: "Canada", opponentLogo: "https://flagcdn.com/w160/ca.png", date: "19 July 2026", venue: "Princess Auto Stadium, Winnipeg", score: "19 - 23", zimScore: 19, opponentScore: 23, isHome: false, status: "completed", statsSummary: { halfTimeScore: "12 - 10", triesZim: 2, triesOpp: 3, topScorer: "Ian Prior (9 pts)" } },
         { opponent: "Namibia", opponentLogo: "https://flagcdn.com/w160/na.png", date: "16 August 2026", venue: "Harare Sports Club", status: "upcoming" },
         { opponent: "Kenya", opponentLogo: "https://flagcdn.com/w160/ke.png", date: "30 August 2026", venue: "Prince Edward Grounds", status: "upcoming" },
         { opponent: "Uganda", opponentLogo: "https://flagcdn.com/w160/ug.png", date: "12 September 2026", venue: "Harare Sports Club", status: "upcoming" }

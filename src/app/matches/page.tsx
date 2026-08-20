@@ -1,6 +1,7 @@
 import { Metadata } from "next";
 import MatchList from "@/components/matches/MatchList";
 import { getAllMatches } from "@/lib/api/fixtures";
+import PageHero from "@/components/ui/PageHero";
 
 export const metadata: Metadata = {
   title: "Fixtures & Results | Zimbabwe Rugby Union",
@@ -16,16 +17,12 @@ export default async function MatchesPage() {
 
   return (
     <main className="min-h-screen bg-milk-white">
-      <div className="bg-rich-black border-b border-white/10">
-        <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20">
-          <h1 className="text-4xl sm:text-6xl font-black uppercase tracking-tighter text-white leading-none not-italic">
-            Fixtures & Results
-          </h1>
-          <p className="text-white/50 text-lg mt-4 max-w-2xl font-normal">
-            Follow the Sables and all Zimbabwe national teams through their season — from pool stages to finals.
-          </p>
-        </div>
-      </div>
+      <PageHero
+        kicker="Schedule & Results"
+        title="Fixtures & Results"
+        subtitle="Follow the Sables and all Zimbabwe national teams through their season — from pool stages to finals."
+        breadcrumb={[{ label: "Matches", href: "/matches" }]}
+      />
 
       <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-16 space-y-20">
         {upcoming.length > 0 && (

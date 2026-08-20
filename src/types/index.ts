@@ -32,7 +32,20 @@ export interface TeamMatch {
   date: string;
   venue: string;
   score?: string;
-  status: 'upcoming' | 'completed';
+  zimScore?: number;
+  opponentScore?: number;
+  isHome?: boolean;
+  status: 'upcoming' | 'completed' | 'live';
+  statsSummary?: {
+    halfTimeScore?: string;
+    triesZim?: number;
+    triesOpp?: number;
+    conversionsZim?: number;
+    penaltiesZim?: number;
+    yellowCardsZim?: number;
+    redCardsZim?: number;
+    topScorer?: string;
+  };
 }
 
 export interface Team {

@@ -3,6 +3,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { getCompetitions } from "@/lib/api/competitions";
 import { ArrowRight, Trophy, Swords, Globe } from "lucide-react";
+import PageHero from "@/components/ui/PageHero";
 
 export const metadata: Metadata = {
   title: "Competitions | Zimbabwe Rugby Union",
@@ -28,16 +29,12 @@ export default async function CompetitionsPage() {
 
   return (
     <main className="min-h-screen bg-milk-white">
-      <div className="bg-rich-black border-b border-white/10">
-        <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20">
-          <h1 className="text-4xl sm:text-6xl font-black uppercase tracking-tighter text-white leading-none not-italic">
-            Competitions
-          </h1>
-          <p className="text-white/50 text-lg mt-4 max-w-2xl font-normal">
-            Active competitions featuring Zimbabwe national teams.
-          </p>
-        </div>
-      </div>
+      <PageHero
+        kicker="Tournaments & Leagues"
+        title="Competitions"
+        subtitle="Active competitions featuring Zimbabwe national teams and domestic rugby."
+        breadcrumb={[{ label: "Competitions", href: "/competitions" }]}
+      />
 
       <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">

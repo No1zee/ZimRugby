@@ -214,7 +214,7 @@ export default function WorldCupCampaignPage() {
   return (
     <main className="relative bg-rich-black min-h-screen selection:bg-zru-green selection:text-rich-black">
       {/* SECTION 1: HERO */}
-      <section className="relative h-screen w-full overflow-hidden flex items-center pt-20">
+      <section className="relative min-h-screen w-full overflow-hidden flex items-center pt-28 md:pt-36 pb-16">
         {/* Cinematic Backdrop */}
         <motion.div 
           style={{ y: heroY }}

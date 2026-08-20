@@ -38,6 +38,10 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "*.ytimg.com",
       },
+      {
+        protocol: "https",
+        hostname: "flagcdn.com",
+      },
     ],
   },
   async headers() {
@@ -45,7 +49,7 @@ const nextConfig: NextConfig = {
       default-src 'self';
       script-src 'self' 'unsafe-inline' 'unsafe-eval';
       style-src 'self' 'unsafe-inline';
-      img-src 'self' data: blob: https://images.unsplash.com https://zru-directus-cms-production.up.railway.app https://zru.co.zw https://www.zru.co.zw https://img.youtube.com https://*.ytimg.com;
+      img-src 'self' data: blob: https://images.unsplash.com https://zru-directus-cms-production.up.railway.app https://zru.co.zw https://www.zru.co.zw https://img.youtube.com https://*.ytimg.com https://flagcdn.com;
       media-src 'self' https://*.youtube.com https://*.youtube-nocookie.com;
       connect-src 'self' https://*.supabase.co wss://*.supabase.co https://*.upstash.io https://*.qstash.io https://zru-directus-cms-production.up.railway.app;
       frame-src 'self' https://www.youtube.com https://youtube.com https://www.youtube-nocookie.com https://youtube-nocookie.com;
