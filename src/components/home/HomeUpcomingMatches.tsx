@@ -146,7 +146,7 @@ export default function HomeUpcomingMatches({
             </p>
             <Link
               href="/match-centre"
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-zru-green text-white text-xs font-bold hover:bg-zru-green/90 transition-colors"
+              className="clip-slanted inline-flex items-center gap-2 px-6 py-2.5 bg-zru-green hover:bg-[#004D2C] text-white text-xs font-heading font-black uppercase tracking-wider transition-all duration-200 hover:-translate-y-0.5 shadow-md"
             >
               <span>Visit Match Centre</span>
               <ArrowRight className="w-3.5 h-3.5" />

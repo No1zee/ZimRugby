@@ -47,6 +47,10 @@ export function roleToName(role: UserRole): string {
       return "Content Editor";
     case "media_manager":
       return "Media Manager";
+    case "match_scorer":
+      return "Matchday Live Scorer";
+    case "squad_coordinator":
+      return "Squad & Player Coordinator";
     case "viewer":
       return "Security Compliance Officer";
     default:

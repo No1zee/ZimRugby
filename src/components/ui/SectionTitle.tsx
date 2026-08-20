@@ -76,7 +76,7 @@ export default function SectionTitle({
           ) : (
             <>
               {text}{" "}
-              {accent && <span className="text-accent-teal">{accent}</span>}
+              {accent && <span className="text-zru-green">{accent}</span>}
             </>
           )}
         </h2>

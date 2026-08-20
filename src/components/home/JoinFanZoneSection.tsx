@@ -65,9 +65,10 @@ export default function JoinFanZoneSection() {
             </p>
             <Link
               href="/fan-zone"
-              className="inline-flex items-center gap-2 mt-2 bg-zru-green hover:bg-zru-green/90 text-white font-black uppercase tracking-widest text-xs px-6 py-3 rounded-xl transition-all duration-200"
+              className="clip-slanted inline-flex items-center gap-2 mt-2 bg-zru-green hover:bg-[#004D2C] text-white font-black uppercase tracking-widest text-xs px-6 py-3 transition-all duration-200 hover:-translate-y-0.5 shadow-md"
             >
-              Visit Fan Zone <ArrowRight className="w-4 h-4" />
+              <span>Visit Fan Zone</span>
+              <ArrowRight className="w-4 h-4" />
             </Link>
           </div>
         </div>
@@ -104,9 +105,10 @@ export default function JoinFanZoneSection() {
             </div>
             <Link
               href="/fan-zone"
-              className="inline-flex items-center gap-2 bg-zru-green hover:bg-zru-green/90 text-white font-black uppercase tracking-widest text-xs px-6 py-3 rounded-xl transition-all duration-200 shadow-lg shadow-[#006B3F]/30"
+              className="clip-slanted inline-flex items-center gap-2 bg-zru-green hover:bg-[#004D2C] text-white font-black uppercase tracking-widest text-xs px-6 py-3 transition-all duration-200 hover:-translate-y-0.5 shadow-lg shadow-[#006B3F]/30"
             >
-              Fan Zone Dashboard <ArrowRight className="w-4 h-4" />
+              <span>Fan Zone Dashboard</span>
+              <ArrowRight className="w-4 h-4" />
             </Link>
           </div>
         </div>
@@ -114,61 +116,36 @@ export default function JoinFanZoneSection() {
     );
   }
 
-  /* ── Main banner (original expand mechanic) ── */
+  /* ── Default: Unauthenticated view ── */
   return (
-    <section className="w-full bg-milk-white py-10 sm:py-12 lg:py-16 relative z-20">
+    <section className="w-full bg-milk-white py-12 sm:py-16 relative z-20 overflow-hidden">
       <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
-
-        {/*
-          group/fzCard — the original CSS-only expand trick.
-          On hover/focus-within the logo zooms, the text slides away,
-          and the form panel expands to fill the space.
-        */}
         <div
-          className="group/fzCard rounded-3xl p-5 sm:p-6 flex flex-col sm:flex-row items-center justify-between gap-4 relative overflow-hidden shadow-2xl transition-shadow duration-500 ease-in-out touch-manipulation cursor-pointer border border-white/10"
           style={{
             background:
               "radial-gradient(circle at 50% 25%, #0A1C15 0%, #00331F 60%, #001A10 100%)",
           }}
+          className="group/fzCard rounded-3xl p-5 sm:p-6 flex flex-col sm:flex-row items-center justify-between gap-4 relative overflow-hidden shadow-2xl transition-shadow duration-500 ease-in-out touch-manipulation cursor-pointer border border-white/10"
         >
-          {/* Border glow on hover */}
+          {/* Subtle glow border effect on hover */}
           <div className="absolute inset-0 border border-white/10 group-hover/fzCard:border-zru-green/60 group-focus-within/fzCard:border-[#006B3F]/60 group-hover/fzCard:shadow-[inset_0_0_60px_rgba(0,107,63,0.4)] transition-shadow duration-700 pointer-events-none rounded-3xl" />
-          {/* Green gradient sweep */}
-          <div className="absolute inset-0 opacity-0 group-hover/fzCard:opacity-20 group-focus-within/fzCard:opacity-20 pointer-events-none bg-gradient-to-r from-transparent via-[#006B3F] to-transparent transition-opacity duration-700" />
 
-          {/* LEFT: Logo + collapsed text */}
-          <div className="flex items-center justify-start group-hover/fzCard:justify-center group-focus-within/fzCard:justify-center gap-4 relative z-10 sm:w-3/5 group-hover/fzCard:w-1/3 group-focus-within/fzCard:w-1/3 transition-[width,justify-content] duration-500 shrink-0">
-
-            {/* Logo — scales up on hover */}
-            <div className="relative shrink-0 flex items-center justify-center transition-transform duration-500 group-hover/fzCard:scale-150">
-              <Image
-                src="/images/logos/zru-logo-white-text.svg"
-                alt="ZRU Emblem"
-                width={56}
-                height={56}
-                className="w-12 sm:w-14 h-12 sm:h-14 object-contain filter drop-shadow-[0_4px_30px_rgba(0,107,63,0.85)] group-hover/fzCard:drop-shadow-[0_8px_35px_rgba(52,211,153,0.6)] transition-[filter] duration-500"
-              />
-            </div>
-
-            {/* Collapsed label — slides away on hover */}
-            <div className="space-y-1.5 transition-[opacity,max-width,transform] duration-500 origin-left max-w-lg opacity-100 group-hover/fzCard:opacity-0 group-hover/fzCard:max-w-0 group-hover/fzCard:scale-95 group-hover/fzCard:overflow-hidden group-focus-within/fzCard:opacity-0 group-focus-within/fzCard:max-w-0 group-focus-within/fzCard:scale-95 group-focus-within/fzCard:overflow-hidden shrink min-w-0">
-              <h2 className="text-2xl sm:text-3xl text-white font-heading font-black uppercase tracking-tight leading-tight">
-                JOIN THE FAN ZONE
-              </h2>
-              <p className="text-xs sm:text-sm text-white/80 font-normal leading-relaxed font-body line-clamp-2">
-                Priority ticket presale, 10% merch discounts, insider squad news, and VIP
-                competitions. Free to join.
-              </p>
-            </div>
+          {/* Left: Text & Pitch */}
+          <div className="flex-1 space-y-2 z-10 sm:pr-4">
+            <h3 className="text-xl sm:text-2xl lg:text-3xl font-black uppercase tracking-tight text-white font-heading">
+              JOIN THE ZRU FAN ZONE
+            </h3>
+            <p className="text-white/60 text-xs sm:text-sm leading-relaxed max-w-lg">
+              Priority ticket presale, 10% merchandise discount, exclusive team access, and member-only competitions. Free forever.
+            </p>
           </div>
 
-          {/* RIGHT: Form panel — expands on hover/focus */}
-          <div className="relative z-10 w-full sm:w-2/5 group-hover/fzCard:w-2/3 group-focus-within/fzCard:w-2/3 flex flex-col items-center group-hover/fzCard:items-end group-focus-within/fzCard:items-end transition-[width] duration-500">
+          {/* Right: Expandable Auth Area */}
+          <div className="w-full sm:w-auto z-10 shrink-0">
             <div className="w-full sm:w-auto group-hover/fzCard:w-full group-focus-within/fzCard:w-full bg-white p-3 group-hover/fzCard:p-5 sm:group-hover/fzCard:p-7 group-focus-within/fzCard:p-5 sm:group-focus-within/fzCard:p-7 rounded-2xl border border-black/5 group-hover/fzCard:border-[#006B3F]/50 group-focus-within/fzCard:border-[#006B3F]/50 transition-[width,padding,border-color] duration-500 ease-in-out shadow-lg">
-
-              {/* Header — revealed on expand */}
+              {/* Default unexpanded prompt */}
               <p className="text-zru-green/70 text-xs font-black uppercase tracking-wider font-heading transition-[opacity,max-height,margin] duration-500 opacity-0 max-h-0 overflow-hidden mb-0 group-hover/fzCard:opacity-100 group-hover/fzCard:max-h-10 group-hover/fzCard:mb-3 group-hover/fzCard:text-[#002D1A] group-focus-within/fzCard:opacity-100 group-focus-within/fzCard:max-h-10 group-focus-within/fzCard:mb-3 group-focus-within/fzCard:text-[#002D1A]">
-                Join the Fan Zone &mdash; It&apos;s Free
+                Join 10,000+ Sables supporters worldwide
               </p>
 
               {error && (
@@ -180,7 +157,7 @@ export default function JoinFanZoneSection() {
                 <button
                   type="button"
                   onClick={() => signInWithOAuth("google")}
-                  className="w-full flex items-center justify-center gap-3 bg-white border border-black/12 hover:border-[#006B3F]/60 hover:bg-zru-green/5 text-rich-black text-xs font-bold py-3 rounded-xl transition-all duration-200 shadow-sm group/gbtn"
+                  className="clip-slanted w-full flex items-center justify-center gap-3 bg-white border border-black/12 hover:border-[#006B3F]/60 hover:bg-zru-green/5 text-rich-black text-xs font-bold py-3 transition-all duration-200 shadow-sm group/gbtn cursor-pointer"
                 >
                   {/* Google "G" SVG */}
                   <svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true">
@@ -194,7 +171,7 @@ export default function JoinFanZoneSection() {
                 {/* OR divider */}
                 <div className="flex items-center gap-2 my-3">
                   <div className="flex-1 h-px bg-black/10" />
-                  <span className="text-[10px] text-black/40 font-medium uppercase tracking-wider">or join with email</span>
+                  <span className="text-[10px] text-black/40 font-medium uppercase tracking-wider">or</span>
                   <div className="flex-1 h-px bg-black/10" />
                 </div>
               </div>
@@ -228,7 +205,7 @@ export default function JoinFanZoneSection() {
                   type="submit"
                   disabled={isSubmitting || !cdpaConsent}
                   id="fan-zone-join-btn"
-                  className="group/btn bg-gradient-to-b from-zru-green to-[#005238] hover:from-[#00855B] hover:to-zru-green text-white px-8 py-3.5 rounded-xl transition-colors duration-300 flex items-center justify-center gap-2 font-black text-xs tracking-widest uppercase font-heading w-full shadow-lg shadow-zru-green/30 min-h-[46px] disabled:opacity-50 cursor-pointer"
+                  className="clip-slanted group/btn bg-gradient-to-b from-zru-green to-[#005238] hover:from-[#00855B] hover:to-zru-green text-white px-8 py-3.5 transition-all duration-200 hover:-translate-y-0.5 flex items-center justify-center gap-2 font-black text-xs tracking-widest uppercase font-heading w-full shadow-lg shadow-zru-green/30 min-h-[46px] disabled:opacity-50 cursor-pointer"
                 >
                   <span>{isSubmitting ? "Submitting..." : "JOIN THE FAN ZONE"}</span>
                   <ArrowRight className="w-4 h-4 transition-transform group-hover/btn:translate-x-1" />

@@ -189,6 +189,16 @@ export interface Matches {
   publish_at?: string;
   expire_at?: string;
   status_editorial?: string;
+  live_minute?: number;
+  broadcast_channel?: string;
+  venue_weather?: string;
+  match_events?: Array<{
+    minute: number;
+    type: "try" | "conversion" | "penalty" | "drop_goal" | "yellow_card" | "red_card" | "sub";
+    team: "home" | "away";
+    player_name?: string;
+    description?: string;
+  }>;
   date_created?: string;
   date_updated?: string;
 }
@@ -509,6 +519,12 @@ export interface Players {
   team_id?: number;
   caps?: number;
   age?: number;
+  height_cm?: number;
+  weight_kg?: number;
+  debut_year?: number;
+  tries_scored?: number;
+  points_scored?: number;
+  club_affiliation?: string;
   photo?: string;
   bio?: string;
   featured?: boolean;

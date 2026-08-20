@@ -44,6 +44,33 @@ export const LEGACY_ROLE_DEFAULTS: Record<string, RolePermissions> = {
     media_upload: false,
     fanzone_pii: true,
   },
+  match_scorer: {
+    tabs: ["overview", "fixtures"],
+    collections: {
+      matches: { create: false, read: true, update: true, delete: false },
+      matches_results: { create: false, read: true, update: true, delete: false },
+      venues: { create: false, read: true, update: false, delete: false },
+      teams: { create: false, read: true, update: false, delete: false },
+      opponents: { create: false, read: true, update: false, delete: false },
+    },
+    pages_builder: false,
+    ai_assistant: false,
+    media_upload: false,
+    fanzone_pii: false,
+  },
+  squad_coordinator: {
+    tabs: ["overview", "teams"],
+    collections: {
+      players: { create: true, read: true, update: true, delete: true },
+      teams: { create: false, read: true, update: true, delete: false },
+      opponents: { create: false, read: true, update: false, delete: false },
+      venues: { create: false, read: true, update: false, delete: false },
+    },
+    pages_builder: false,
+    ai_assistant: false,
+    media_upload: true,
+    fanzone_pii: false,
+  },
 };
 
 export function isLegacyRole(role: string): boolean {

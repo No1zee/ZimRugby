@@ -14,9 +14,16 @@ interface PageProps {
 
 export async function generateStaticParams() {
   const reports = await getLatestReports();
-  return reports.map((r) => ({
-    slug: r.id
-  }));
+  const slugs = new Set<string>();
+  reports.forEach((r) => {
+    if (r.id) slugs.add(r.id);
+    if (r.slug) slugs.add(r.slug);
+    if (r.url && r.url.startsWith("/media/")) {
+      const uSlug = r.url.replace("/media/", "");
+      if (uSlug) slugs.add(uSlug);
+    }
+  });
+  return Array.from(slugs).map((slug) => ({ slug }));
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {

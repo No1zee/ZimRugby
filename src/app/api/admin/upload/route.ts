@@ -1,10 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
 import { requireFeature } from "@/lib/admin/auth";
+import sharp from "sharp";
 
 const DIRECTUS_URL = process.env.NEXT_PUBLIC_DIRECTUS_URL!;
 const DIRECTUS_TOKEN = process.env.DIRECTUS_TOKEN!;
 
-// POST /api/admin/upload — upload image to Directus media library
+// POST /api/admin/upload — upload image to Directus media library with auto-WebP optimization
 export async function POST(req: NextRequest) {
   try {
     await requireFeature("media_upload");
@@ -16,9 +17,32 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "No file provided" }, { status: 400 });
     }
 
+    let fileToUpload: Blob | File = file;
+    let fileName = file.name;
+
+    // Transcode raster images (JPEG, PNG, WebP) to high-efficiency WebP
+    if (file.type.startsWith("image/") && !file.type.includes("svg") && !file.type.includes("gif")) {
+      try {
+        const arrayBuffer = await file.arrayBuffer();
+        const inputBuffer = Buffer.from(arrayBuffer);
+
+        const optimizedBuffer = await sharp(inputBuffer)
+          .webp({ quality: 85, effort: 4 })
+          .toBuffer();
+
+        const baseName = file.name.replace(/\.[^/.]+$/, "");
+        fileName = `${baseName}.webp`;
+
+        fileToUpload = new Blob([new Uint8Array(optimizedBuffer)], { type: "image/webp" });
+      } catch (err) {
+        console.warn("[MediaUpload] Sharp optimization failed, falling back to original file:", err);
+        fileToUpload = file;
+      }
+    }
+
     // Upload to Directus
     const uploadFormData = new FormData();
-    uploadFormData.append("file", file);
+    uploadFormData.append("file", fileToUpload, fileName);
 
     const res = await fetch(`${DIRECTUS_URL}/files`, {
       method: "POST",

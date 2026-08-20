@@ -90,6 +90,15 @@ const nextConfig: NextConfig = {
       },
     ];
   },
+  async redirects() {
+    return [
+      {
+        source: "/fan-zone",
+        destination: "/1987-club",
+        permanent: true,
+      },
+    ];
+  },
 };
 
 export default nextConfig;

@@ -1094,8 +1094,9 @@ export default function CollectionManager({
         )}
 
         {selectedIds.size > 0 && (
-          <div className="mb-3 flex flex-wrap items-center gap-2 rounded-xl bg-rich-black px-4 py-2.5">
-            <span className="text-[11px] font-black uppercase tracking-wider text-white">
+          <div className="sticky top-4 z-30 mb-3 flex flex-wrap items-center gap-2 rounded-xl bg-rich-black/95 backdrop-blur-md px-4 py-2.5 shadow-2xl border border-white/15 animate-in fade-in slide-in-from-top-2">
+            <span className="text-[11px] font-black uppercase tracking-wider text-white flex items-center gap-1.5">
+              <span className="inline-block w-2 h-2 rounded-full bg-zru-green animate-pulse" />
               {selectedIds.size} selected
             </span>
             <div className="ml-auto flex flex-wrap items-center gap-2">
@@ -1104,14 +1105,14 @@ export default function CollectionManager({
                   <button
                     onClick={() => bulkSetStatus(true)}
                     disabled={bulkBusy}
-                    className="rounded-lg bg-zru-green px-3 py-1.5 text-[10px] font-black uppercase tracking-wider text-white transition-colors hover:bg-green-700 disabled:opacity-60"
+                    className="rounded-lg bg-zru-green px-3.5 py-1.5 text-[10px] font-black uppercase tracking-wider text-white transition-colors hover:bg-green-700 disabled:opacity-60 cursor-pointer shadow-sm"
                   >
-                    {bulkBusy ? "Working…" : "Publish"}
+                    {bulkBusy ? "Working..." : "Publish"}
                   </button>
                   <button
                     onClick={() => bulkSetStatus(false)}
                     disabled={bulkBusy}
-                    className="rounded-lg bg-white/10 px-3 py-1.5 text-[10px] font-black uppercase tracking-wider text-white transition-colors hover:bg-white/20 disabled:opacity-60"
+                    className="rounded-lg bg-white/10 px-3.5 py-1.5 text-[10px] font-black uppercase tracking-wider text-white transition-colors hover:bg-white/20 disabled:opacity-60 cursor-pointer"
                   >
                     Move to draft
                   </button>
@@ -1121,14 +1122,14 @@ export default function CollectionManager({
                 <button
                   onClick={bulkDelete}
                   disabled={bulkBusy}
-                  className="flex items-center gap-1 rounded-lg bg-red-500 px-3 py-1.5 text-[10px] font-black uppercase tracking-wider text-white transition-colors hover:bg-red-600 disabled:opacity-60"
+                  className="flex items-center gap-1 rounded-lg bg-red-600 px-3.5 py-1.5 text-[10px] font-black uppercase tracking-wider text-white transition-colors hover:bg-red-700 disabled:opacity-60 cursor-pointer shadow-sm"
                 >
                   <Trash2 className="h-3 w-3" /> Delete
                 </button>
               )}
               <button
                 onClick={() => setSelected(new Set())}
-                className="rounded-lg bg-white/10 px-3 py-1.5 text-[10px] font-black uppercase tracking-wider text-white/70 transition-colors hover:bg-white/20"
+                className="rounded-lg bg-white/10 px-3 py-1.5 text-[10px] font-black uppercase tracking-wider text-white/70 transition-colors hover:bg-white/20 cursor-pointer"
               >
                 Clear
               </button>

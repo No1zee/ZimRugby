@@ -70,10 +70,14 @@ export default function Navigation() {
     setIsScrolled((prev) => (prev === next ? prev : next));
   });
 
-  /* ── Lock body scroll when mobile menu is open ── */
+  /* ── Lock body scroll and notify components when mobile menu is open ── */
   useEffect(() => {
     document.documentElement.style.overflow = isOpen ? "hidden" : "";
-    return () => { document.documentElement.style.overflow = ""; };
+    window.dispatchEvent(new CustomEvent("mobileMenuState", { detail: { isOpen } }));
+    return () => { 
+      document.documentElement.style.overflow = ""; 
+      window.dispatchEvent(new CustomEvent("mobileMenuState", { detail: { isOpen: false } }));
+    };
   }, [isOpen]);
 
   /* ── Mobile menu toggle from external trigger ── */
@@ -232,10 +236,10 @@ export default function Navigation() {
             {isAdminUser && (
               <Link
                 href="/admin"
-                className="flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-heading font-black uppercase tracking-wider text-zru-green bg-white/10 hover:bg-zru-green hover:text-white transition-all shadow-sm"
+                className="clip-slanted flex items-center gap-1.5 px-3.5 py-1 text-[10px] font-heading font-black uppercase tracking-wider text-emerald-300 bg-white/10 hover:bg-zru-green hover:text-white transition-all shadow-sm"
                 title="Launch Admin Portal"
               >
-                <ShieldCheck className="w-3.5 h-3.5" />
+                <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
                 <span>ADMIN PORTAL</span>
               </Link>
             )}
@@ -254,8 +258,7 @@ export default function Navigation() {
               <div className="relative">
                 <button
                   onClick={() => setShowFanMenu(!showFanMenu)}
-                  className="flex items-center gap-2 px-4 py-1.5 bg-[#006747] hover:bg-[#006747]/80 text-white text-xs font-heading font-black uppercase tracking-wider transition-all cursor-pointer shadow-[0_2px_8px_rgba(0,0,0,0.35)]"
-                  style={{ clipPath: "polygon(8% 0, 100% 0, 92% 100%, 0 100%)" }}
+                  className="clip-slanted flex items-center gap-2 px-4 py-1.5 bg-[#006747] hover:bg-[#004D2C] text-white text-xs font-heading font-black uppercase tracking-wider transition-all cursor-pointer shadow-[0_2px_8px_rgba(0,0,0,0.35)]"
                 >
                   <div className="w-4 h-4 rounded-full bg-white/20 text-white flex items-center justify-center font-bold text-[9px]">
                     {user.name.charAt(0).toUpperCase()}
@@ -308,14 +311,12 @@ export default function Navigation() {
                 )}
               </div>
             ) : (
-              <SlantedButton
+              <Link
                 href="/login"
-                variant="primary"
-                size="xs"
-                leftIcon={<User className="w-3.5 h-3.5" />}
+                className="clip-slanted flex items-center gap-1.5 px-4 py-1.5 bg-[#006747] text-white text-xs font-heading font-black uppercase tracking-wider shadow-[0_2px_8px_rgba(0,0,0,0.35)] hover:bg-[#004D2C] transition-all"
               >
                 SIGN IN
-              </SlantedButton>
+              </Link>
             )}
           </div>
 
@@ -332,7 +333,7 @@ export default function Navigation() {
             {isAdminUser && (
               <Link
                 href="/admin"
-                className="flex items-center gap-1 px-2.5 py-1 rounded-full bg-[#006747] text-white text-[10px] font-heading font-black uppercase tracking-wider shadow-[0_2px_6px_rgba(0,0,0,0.3)] hover:bg-[#004D2C] transition-colors"
+                className="clip-slanted flex items-center gap-1 px-3 py-1 bg-[#006747] text-white text-[10px] font-heading font-black uppercase tracking-wider shadow-[0_2px_6px_rgba(0,0,0,0.3)] hover:bg-[#004D2C] transition-colors"
                 title="Admin Dashboard"
               >
                 <ShieldCheck className="w-3.5 h-3.5 text-emerald-300" />
@@ -343,7 +344,7 @@ export default function Navigation() {
             {user ? (
               <Link
                 href="/fan-zone"
-                className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-white/10 border border-white/20 text-white text-[10px] font-heading font-black uppercase tracking-wider hover:bg-white/20 transition-colors"
+                className="clip-slanted flex items-center gap-1.5 px-3 py-1 bg-white/10 border border-white/20 text-white text-[10px] font-heading font-black uppercase tracking-wider hover:bg-white/20 transition-colors"
               >
                 <User className="w-3.5 h-3.5 text-emerald-400" />
                 <span className="truncate max-w-[80px]">{user.name.split(" ")[0]}</span>
@@ -351,7 +352,7 @@ export default function Navigation() {
             ) : (
               <Link
                 href="/login"
-                className="flex items-center gap-1 px-2.5 py-1 rounded-full bg-[#006747] text-white text-[10px] font-heading font-black uppercase tracking-wider shadow-[inset_0_1px_0_rgba(255,255,255,0.20),inset_0_-1px_0_rgba(0,0,0,0.25),0_2px_0_#003D20,0_4px_8px_rgba(0,0,0,0.35)] hover:bg-black transition-colors"
+                className="clip-slanted flex items-center gap-1 px-3 py-1 bg-[#006747] text-white text-[10px] font-heading font-black uppercase tracking-wider shadow-[0_2px_6px_rgba(0,0,0,0.3)] hover:bg-[#004D2C] transition-colors"
               >
                 SIGN IN
               </Link>

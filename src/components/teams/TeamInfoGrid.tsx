@@ -37,7 +37,7 @@ export default function TeamInfoGrid({
           <span className="text-rich-black">
             {team.shortName.split(" ").slice(0, -1).join(" ")}{" "}
           </span>
-          <span className="text-accent-teal">
+          <span className="text-zru-green">
             {team.shortName.split(" ").slice(-1)}
           </span>
         </h2>

@@ -183,7 +183,7 @@ export default function MatchCentreClient({
           <div className="flex flex-col lg:flex-row justify-between items-center gap-5 mb-8">
             {/* Tabs */}
             <div className="flex p-1 bg-black/5 rounded-xl border border-black/10 relative z-0">
-              {(["fixtures", "results", "standings"] as const).map((tab) => {
+              {(["fixtures", "results"] as const).map((tab) => {
                 const isActive = activeTab === tab;
                 return (
                   <button
@@ -222,7 +222,7 @@ export default function MatchCentreClient({
           </div>
 
           {/* Team Category Filter tabs */}
-          {settings.showTeamFilters && activeTab !== "standings" && (
+          {settings.showTeamFilters && (
             <div className="flex overflow-x-auto py-1 gap-2 no-scrollbar w-full border-b border-black/5 pb-4">
               {filterList.map((teamName) => (
                 <SlantedButton
@@ -238,7 +238,7 @@ export default function MatchCentreClient({
           )}
 
           {/* Campaign Filter chips */}
-          {campaignsWithMatches.length > 0 && activeTab !== "standings" && (
+          {campaignsWithMatches.length > 0 && (
             <div className="flex overflow-x-auto py-1 gap-2 no-scrollbar mb-8 w-full">
               <button
                 onClick={() => setSelectedCampaign("All")}
@@ -287,23 +287,6 @@ export default function MatchCentreClient({
                 transition={{ duration: 0.3 }}
               >
                 <MatchList matches={filteredResults} />
-              </motion.div>
-            )}
-
-            {activeTab === "standings" && (
-              <motion.div
-                initial={{ opacity: 0, y: 15 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -15 }}
-                transition={{ duration: 0.3 }}
-                className="max-w-4xl mx-auto"
-              >
-                <div className="mb-6 flex justify-between items-center">
-                  <h3 className="font-heading text-xl font-black text-rich-black uppercase">
-                    {activeStandingsTable?.title || "Rugby Africa Cup Standings"}
-                  </h3>
-                </div>
-                <LeagueTable data={activeStandingsTable?.rows || []} />
               </motion.div>
             )}
           </div>

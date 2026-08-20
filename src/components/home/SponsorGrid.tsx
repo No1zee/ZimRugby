@@ -49,9 +49,11 @@ export default function SponsorGrid({ partners }: SponsorGridProps) {
             transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
             className="relative z-10 max-w-3xl mx-auto px-4 text-center"
           >
-            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-heading font-black uppercase tracking-[0.06em] sm:tracking-widest text-white leading-[1.08]">
-              <span className="text-zru-green">POWERING</span> ZIMBABWEAN RUGBY
-            </h2>
+            <div className="heading-plate heading-plate-light">
+              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-heading font-black uppercase tracking-[0.06em] sm:tracking-widest text-white leading-[1.08]">
+                <span className="text-white/90">POWERING</span> <span className="text-white">ZIMBABWEAN RUGBY</span>
+              </h2>
+            </div>
           </motion.div>
         </div>
 

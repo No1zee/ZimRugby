@@ -31,14 +31,6 @@ const footerColumns = [
       { label: "Match Tickets", href: "/tickets" },
     ],
   },
-  {
-    title: "Grassroots & Support",
-    links: [
-      { label: "Get Into Rugby", href: "/play-rugby" },
-      { label: "Schools Rugby", href: "/schools" },
-      { label: "Coaching & Referees", href: "/referees" },
-    ],
-  },
 ];
 
 interface FooterProps {
@@ -52,15 +44,17 @@ export default function Footer({ initialColumns, siteSettings }: FooterProps) {
   if (pathname?.startsWith('/clubhouse') || pathname?.startsWith('/admin')) return null;
 
   const columns: { title: string; links: { label: string; href: string }[] }[] = initialColumns && initialColumns.length > 0
-    ? initialColumns.map((col: any) => ({
-        title: col.column_title || "",
-        links: (Array.isArray(col.links)
-          ? col.links
-          : JSON.parse(col.links || "[]")).map((l: any) => ({
-              label: l.label || "",
-              href: l.href || "#"
-            })),
-      }))
+    ? initialColumns
+        .filter((col: any) => col.column_title !== "Grassroots & Support")
+        .map((col: any) => ({
+          title: col.column_title || "",
+          links: (Array.isArray(col.links)
+            ? col.links
+            : JSON.parse(col.links || "[]")).map((l: any) => ({
+                label: l.label || "",
+                href: l.href || "#"
+              })),
+        }))
     : footerColumns;
 
   return (
@@ -120,9 +114,9 @@ export default function Footer({ initialColumns, siteSettings }: FooterProps) {
           </div>
         </div>
 
-        {/* 4-Column Navigation Links */}
+        {/* 3-Column Navigation Links */}
         <div className="bg-[#006747] -mx-4 sm:-mx-6 lg:-mx-8 px-4 sm:px-6 lg:px-8 py-6 rounded-lg">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 lg:gap-12">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 lg:gap-12">
             {columns.map((col) => (
               <nav key={col.title} aria-label={col.title} className="space-y-3">
                 <span className="block font-heading font-black text-xs sm:text-sm uppercase tracking-wider text-white border-b border-white/20 pb-2">
@@ -133,7 +127,7 @@ export default function Footer({ initialColumns, siteSettings }: FooterProps) {
                     <li key={link.label}>
                       <Link
                         href={link.href}
-                        className="text-[13px] font-bold text-white/85 hover:text-accent-teal transition-colors inline-block"
+                        className="text-[13px] font-bold text-white/85 hover:text-emerald-300 transition-colors inline-block"
                       >
                         {link.label}
                       </Link>

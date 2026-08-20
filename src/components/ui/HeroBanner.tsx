@@ -45,7 +45,7 @@ export default function HeroBanner({
             {accentTitle ? (
               <>
                 {title}{" "}
-                <span className="text-accent-teal">{accentTitle}</span>
+                <span className="text-zru-green">{accentTitle}</span>
               </>
             ) : title}
           </h1>
@@ -57,9 +57,10 @@ export default function HeroBanner({
           {ctaLabel && ctaHref && (
             <Link
               href={ctaHref}
-              className="inline-flex items-center gap-3 bg-zru-green text-white px-8 py-4 mt-8 text-xs font-black uppercase tracking-widest rounded-md hover:bg-zru-green/90 transition-all"
+              className="clip-slanted inline-flex items-center gap-3 bg-zru-green text-white px-8 py-4 mt-8 text-xs font-heading font-black uppercase tracking-widest hover:bg-[#004D2C] transition-all duration-200 hover:-translate-y-0.5 shadow-lg"
             >
-              {ctaLabel} <ArrowRight className="w-4 h-4" />
+              <span>{ctaLabel}</span>
+              <ArrowRight className="w-4 h-4" />
             </Link>
           )}
         </div>

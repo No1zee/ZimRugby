@@ -274,15 +274,23 @@ function AdminClientInner(props: AdminClientProps) {
     setAdminTab(activeTab);
   }, [activeTab]);
 
-  // Sync activeTab with URL hash/query parameter on load and tab change (#12)
+  // Sync activeTab with URL hash/query parameter and localStorage on load and tab change
   useEffect(() => {
     if (typeof window === "undefined") return;
+    const hash = window.location.hash.replace(/^#/, "") as TabId;
     const params = new URLSearchParams(window.location.search);
-    const tabParam = params.get("tab") as TabId | null;
+    const tabParam = (hash || params.get("tab") || localStorage.getItem("zru_admin_last_tab")) as TabId | null;
     if (tabParam && tabParam !== activeTab && canAccessPanel(permissions, tabParam)) {
       setActiveTab(tabParam);
     }
   }, []);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      localStorage.setItem("zru_admin_last_tab", activeTab);
+      window.history.replaceState(null, "", `#${activeTab}`);
+    }
+  }, [activeTab]);
 
   // Global Keyboard Navigation Shortcuts (#17)
   useEffect(() => {

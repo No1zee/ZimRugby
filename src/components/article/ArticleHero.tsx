@@ -1,6 +1,5 @@
 import Image from "next/image";
-import Link from "next/link";
-import { Calendar, Clock, ChevronRight } from "lucide-react";
+import { Calendar, Clock } from "lucide-react";
 
 interface ArticleHeroProps {
   title: string;
@@ -39,19 +38,6 @@ export default function ArticleHero({
 
       <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 w-full relative z-10">
         <div className="max-w-4xl space-y-4">
-          {/* Breadcrumb Navigation */}
-          <nav className="flex items-center gap-2 text-xs font-black uppercase tracking-widest text-white/50 mb-2">
-            <Link href="/" className="hover:text-zru-green transition-colors">
-              HOME
-            </Link>
-            <ChevronRight className="w-3.5 h-3.5 text-white/30" />
-            <Link href="/media" className="hover:text-zru-green transition-colors">
-              MEDIA
-            </Link>
-            <ChevronRight className="w-3.5 h-3.5 text-white/30" />
-            <span className="text-zru-green">{category}</span>
-          </nav>
-
           {/* Category Tag Pill */}
           <div className="inline-block bg-zru-green text-white font-black text-[10px] uppercase tracking-[0.2em] px-3.5 py-1 rounded-full shadow-md">
             {category}

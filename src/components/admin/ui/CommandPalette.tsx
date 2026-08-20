@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useRef, useMemo } from "react";
-import { Search, Trophy, Radio, BookOpen, Layers, Handshake, Users, ShieldAlert, Sparkles, FolderOpen, CalendarDays, Sprout, ArrowRight, Plus, Database } from "lucide-react";
+import { Search, Trophy, Radio, BookOpen, Layers, Handshake, Users, ShieldAlert, Sparkles, FolderOpen, CalendarDays, Sprout, ArrowRight, Plus, Database, Building2 } from "lucide-react";
 import { setAdminTab } from "@/lib/admin/tab-events";
 
 interface CommandItem {
@@ -150,6 +150,23 @@ export default function CommandPalette({ isOpen, onClose }: CommandPaletteProps)
       keywords: ["alert", "emergency", "banner", "warning", "announcements", "weather", "notice"],
     },
 
+    {
+      id: "nav-clubs",
+      title: "Clubs Directory & League Affiliates",
+      category: "Navigation",
+      icon: Building2,
+      tabTarget: "clubs",
+      keywords: ["clubs", "harare sports club", "old hararians", "matabeleland", "teams", "leagues"],
+    },
+    {
+      id: "nav-audit-logs",
+      title: "Security & Action Audit Logs",
+      category: "Navigation",
+      icon: ShieldAlert,
+      tabTarget: "audit_logs",
+      keywords: ["audit", "logs", "security", "history", "admin actions", "changes"],
+    },
+
     // Quick Action Shortcuts
     {
       id: "action-new-article",
@@ -166,6 +183,14 @@ export default function CommandPalette({ isOpen, onClose }: CommandPaletteProps)
       icon: Plus,
       tabTarget: "fixtures",
       keywords: ["schedule", "fixture", "new match", "game", "versus"],
+    },
+    {
+      id: "action-add-club",
+      title: "Add New Rugby Club to Directory",
+      category: "Quick Actions",
+      icon: Plus,
+      tabTarget: "clubs",
+      keywords: ["add club", "new club", "affiliate", "rugby club"],
     },
     {
       id: "action-add-partner",

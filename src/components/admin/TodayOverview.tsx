@@ -200,6 +200,17 @@ export default function TodayOverview({
     [initialNews]
   );
 
+  // ---- Asset Health Scanner ----
+  const missingMediaArticles = useMemo(() => {
+    return initialNews
+      .filter((n) => {
+        const isPublished = String(n.status ?? "").toLowerCase() === "published";
+        const hasImage = Boolean(n.featured_image || n.image || n.thumbnail);
+        return isPublished && !hasImage;
+      })
+      .slice(0, 4);
+  }, [initialNews]);
+
   const matchesNeedingScores = useMemo(
     () =>
       initialMatches.filter(
@@ -218,10 +229,11 @@ export default function TodayOverview({
   );
 
   const queueItems = [
-    { key: "drafts", label: "Draft articles awaiting publish", count: drafts.length, tab: "media", show: hasPanel("media") },
-    { key: "scores", label: "Completed fixtures missing scores", count: matchesNeedingScores.length, tab: "fixtures", show: hasPanel("fixtures") },
-    { key: "upcoming", label: "Upcoming fixtures scheduled", count: upcoming.length, tab: "fixtures", show: hasPanel("fixtures") },
-    { key: "onboarding", label: "New enquiries to answer", count: onboardingCount, tab: "onboarding", show: hasPanel("onboarding") },
+    { key: "scores", label: "Matches needing final scores", count: matchesNeedingScores.length, tab: "fixtures", show: hasPanel("fixtures") },
+    { key: "upcoming", label: "Matches this week", count: upcoming.length, tab: "fixtures", show: hasPanel("fixtures") },
+    { key: "drafts", label: "Draft articles to review / publish", count: drafts.length, tab: "media", show: hasPanel("media") },
+    { key: "missing_media", label: "Published articles missing hero images", count: missingMediaArticles.length, tab: "media", show: hasPanel("media") },
+    { key: "onboarding", label: "Pending onboarding submissions", count: onboardingCount, tab: "onboarding", show: hasPanel("onboarding") },
     { key: "fanzone", label: "New fan zone registrations", count: fanZoneCount, tab: "fanzone", show: hasPanel("fanzone") },
   ].filter((q) => q.show);
 

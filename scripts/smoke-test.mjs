@@ -179,14 +179,14 @@ async function main() {
         ok = bd.status === 200;
         detail = ok ? "bulk delete OK" : `bulk delete ${bd.status}`;
       }
-      if (ok) {
-        const filter = encodeURIComponent(JSON.stringify({ id: { _in: ids } }));
-        const after = await fetch(`${CMS}/items/news?filter=${filter}&fields=id`, {
-          headers: { Authorization: `Bearer ${TOKEN}` },
-        }).then((r) => r.json());
-        ok = (after?.data?.length ?? 0) === 0;
-        detail = ok ? "removed from CMS" : `leftover: ${JSON.stringify(after?.data)}`;
-      }
+        if (ok) {
+          const filter = encodeURIComponent(JSON.stringify({ id: { _in: ids }, deleted_at: { _null: true } }));
+          const after = await fetch(`${CMS}/items/news?filter=${filter}&fields=id,deleted_at`, {
+            headers: { Authorization: `Bearer ${TOKEN}` },
+          }).then((r) => r.json());
+          ok = (after?.data?.length ?? 0) === 0;
+          detail = ok ? "soft-deleted from CMS" : `leftover: ${JSON.stringify(after?.data)}`;
+        }
       record("admin bulk API round-trip", ok, detail);
       for (const id of ids) {
         await fetch(`${SITE}/api/admin/directus`, {

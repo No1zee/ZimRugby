@@ -85,12 +85,12 @@ export default function PlayRugbyDevelopment() {
                 <div className="absolute inset-0 flex flex-col justify-end p-6 sm:p-8 space-y-5">
                   <div className="space-y-2">
                     <div className="w-12 h-12 rounded-xl bg-white/10 border border-white/20 flex items-center justify-center">
-                      <program.icon className="w-6 h-6 text-accent-teal" />
+                      <program.icon className="w-6 h-6 text-emerald-400" />
                     </div>
                     <div className="text-5xl sm:text-6xl font-heading font-black text-white tracking-tighter">
                       <AnimatedCounter value={program.stat} suffix="+" />
                     </div>
-                    <span className="text-[10px] font-heading font-black tracking-widest uppercase text-accent-teal">
+                    <span className="text-[10px] font-heading font-black tracking-widest uppercase text-emerald-400">
                       {program.statLabel}
                     </span>
                   </div>
@@ -100,17 +100,6 @@ export default function PlayRugbyDevelopment() {
                   <p className="text-xs sm:text-sm text-white/70 font-normal line-clamp-3 leading-relaxed">
                     {program.description}
                   </p>
-                  <div className="pt-2">
-                    <SlantedButton
-                      href={program.ctaLink}
-                      variant="primary"
-                      size="sm"
-                      className="w-full justify-between group/btn"
-                      rightIcon={<ArrowRight className="w-4 h-4 transition-transform group-hover/btn:translate-x-1 shrink-0" />}
-                    >
-                      <span>{program.cta}</span>
-                    </SlantedButton>
-                  </div>
                 </div>
               </div>
             </motion.div>
@@ -128,7 +117,7 @@ export default function PlayRugbyDevelopment() {
           <div className="space-y-3 relative z-10 max-w-xl text-center md:text-left">
              <div className="heading-plate heading-plate-light">
                <h3 className="text-2xl md:text-4xl font-heading font-black text-white uppercase tracking-tight leading-tight">
-                 JOIN THE <span className="text-accent-teal">1985 CLUB</span>
+                 JOIN THE <span className="text-zru-green">1985 CLUB</span>
                </h3>
              </div>
              <p className="text-white/70 text-xs sm:text-sm leading-relaxed">
@@ -138,7 +127,7 @@ export default function PlayRugbyDevelopment() {
           <div className="flex relative z-10 w-full sm:w-auto justify-center">
             <Link
               href="/contact"
-              className="px-8 py-3.5 bg-accent-teal text-rich-black text-xs font-heading font-black uppercase tracking-wider rounded-xl hover:bg-white transition-all shadow-lg inline-flex items-center gap-2"
+              className="clip-slanted px-8 py-3.5 bg-white text-rich-black hover:bg-milk-white hover:text-zru-green text-xs font-heading font-black uppercase tracking-wider transition-all duration-200 hover:-translate-y-0.5 shadow-lg inline-flex items-center gap-2"
             >
               <span>Contact Us</span>
               <ArrowRight className="w-4 h-4" />

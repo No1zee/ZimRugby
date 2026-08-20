@@ -1,364 +1,133 @@
 "use client";
 
-import {
-  ShieldCheck,
-  Ticket,
-  Percent,
-  Mail,
-  Trophy,
-  Bell,
-  ArrowRight,
-  LogOut,
-  Sparkles,
-  ExternalLink,
-} from "lucide-react";
-import Link from "next/link";
+import Image from "next/image";
 import CmsHero from "@/components/cms/CmsHero";
-import PageAnnouncements from "@/components/ui/PageAnnouncements";
-import { useAuth } from "@/context/AuthContext";
+import JoinFanZoneSection from "@/components/home/JoinFanZoneSection";
 
 interface FanZoneClientProps {
   cmsPage?: any;
 }
 
-const PRIMARY_BENEFIT = {
-  icon: Ticket,
-  title: "Priority Match Tickets",
-  description:
-    "48-hour exclusive early access window for all Sables, Lady Sables, and international test matches before tickets hit general public release.",
-  badge: "48h Early Access",
-  detail: "Verified supporter access delivered straight to your member account.",
-};
-
-const SECONDARY_BENEFITS = [
+const FUTURE_PILLARS = [
   {
-    icon: Percent,
-    title: "10% Clubhouse Store Privilege",
-    description:
-      "Save 10% on official jerseys, training vests, and supporter merchandise online and on matchdays.",
-    badge: "10% Discount",
+    num: "01",
+    kicker: "MATCHDAY & TERRACE CULTURE",
+    title: "Matchday HQ & Stadium Guides",
+    desc: "From Harare Sports Club to international tour destinations. Curated matchday itineraries, stadium entry guides, chants, traditions, and local supporter meetups around the world.",
+    image: "/images/gallery/zimbabwe-sables-0350.webp",
   },
   {
-    icon: Mail,
-    title: "Direct Squad Dispatches",
-    description:
-      "Official team sheets, injury updates, and tactical briefings sent straight from the camp.",
-    badge: "First to Know",
+    num: "02",
+    kicker: "NEXT GENERATION",
+    title: "Junior Rugby & Schools Hub",
+    desc: "Connecting the historic roots of Zimbabwe schoolboy and schoolgirl rugby. Skill breakdowns from national coaches, youth tournament calendars, and printable supporter packs for young fans.",
+    image: "/images/events/schools-fest-1200w.webp",
   },
   {
-    icon: Trophy,
-    title: "VIP Matchday Draws",
-    description:
-      "Automatic entry into seasonal draws for VIP hospitality, signed test jerseys, and open training sessions.",
-    badge: "VIP Draws",
-  },
-];
-
-const WHAT_TO_EXPECT = [
-  {
-    step: "01",
-    title: "Verified Squad News",
-    description:
-      "No rumors or delays. Whenever matchday lineups, tour selections, or union updates are locked in, you receive them first right here and via direct dispatch.",
-  },
-  {
-    step: "02",
-    title: "Presale Ticket Drops",
-    description:
-      "When major fixtures and test tournaments go live, your registered supporter status unlocks priority allocations before general public windows open.",
-  },
-  {
-    step: "03",
-    title: "Growing Member Privileges",
-    description:
-      "We are rolling out regular member-only perks, merchandise drops, partner rewards, and digital match programmes all season long.",
+    num: "03",
+    kicker: "THE INNER CIRCLE",
+    title: "Direct Squad Briefings & Presales",
+    desc: "Straight from the national training camp. Verified squad sheets, injury briefings, tactical audio breakdowns, and 48-hour priority test match ticket windows before general release.",
+    image: "/images/gallery/zimbabwe-sables-0348.webp",
   },
 ];
 
 export default function FanZoneClient({ cmsPage }: FanZoneClientProps) {
-  const { user, isAuthenticated, signOut } = useAuth();
-
-  const displayName = user?.name || "Edward Magejo";
-
-  const PrimaryIcon = PRIMARY_BENEFIT.icon;
-
   return (
-    <main className="bg-milk-white min-h-screen pb-24 text-rich-black">
-      {/* Editorial Header */}
+    <main className="bg-milk-white min-h-screen text-rich-black">
+      {/* 1. Official ZRU Page Hero (Standard Design System) */}
       <CmsHero
-        kicker={cmsPage?.hero_kicker || "OFFICIAL SUPPORTERS NETWORK"}
-        title={cmsPage?.hero_title || "FAN ZONE"}
+        title={cmsPage?.hero_title || "THE GREEN & WHITE"}
+        accentTitle={cmsPage?.hero_accent_title || "NATION"}
         intro={
           cmsPage?.hero_intro ||
-          "Welcome to the official Zimbabwe Rugby Union fan hub. Your direct connection to the national teams, matchday perks, and supporter benefits."
+          "From the electric terraces of Harare Sports Club to diaspora supporters across the globe—this is the official home for the faithful who back the Sables and Lady Sables."
         }
         image={cmsPage?.hero_image || "/images/gallery/zimbabwe-sables-0350.webp"}
         breadcrumb={[{ label: "Fan Zone", href: "/fan-zone" }]}
+        pageId={cmsPage?.id}
       />
 
-      <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8 pt-8 space-y-12">
-        <PageAnnouncements scope="media" />
-
-        {/* 1. Personalized Welcome Card (Hallmark Elevation) */}
-        <div className="bg-rich-black text-white rounded-3xl p-6 sm:p-8 lg:p-10 border border-white/10 shadow-xl relative overflow-hidden">
-          <div className="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-8">
-            <div className="space-y-4 max-w-2xl">
-              <div className="flex flex-wrap items-center gap-2.5">
-                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-none bg-zru-green/20 border border-zru-green/40 text-[10px] font-mono font-bold uppercase tracking-widest text-emerald-300">
-                  <ShieldCheck className="w-3.5 h-3.5" />
-                  <span>OFFICIAL ZRU SUPPORTER</span>
-                </span>
-                <span className="text-white/40 text-[10px] font-mono tabular-nums uppercase tracking-widest">
-                  SEASON 2026
-                </span>
-              </div>
-
-              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-heading font-black uppercase tracking-tight text-white leading-tight">
-                Welcome, <span className="text-zru-green">{displayName}</span>
-              </h1>
-
-              <p className="text-white/75 text-sm sm:text-base font-body leading-relaxed max-w-xl">
-                You are connected to the official heartbeat of Zimbabwe Rugby. Your supporter status gives you direct access to test match presales, store privileges, and official union dispatches.
-              </p>
-
-              {/* Quick Action Navigation Buttons */}
-              <div className="flex flex-wrap items-center gap-3 pt-2">
-                <Link
-                  href="/tickets"
-                  className="inline-flex items-center gap-2 rounded-xl bg-zru-green hover:bg-[#004D2C] px-5 py-2.5 font-heading text-xs font-black uppercase tracking-wider text-white shadow-sm transition-colors duration-200"
-                >
-                  <Ticket className="w-3.5 h-3.5" />
-                  <span>Match Tickets</span>
-                </Link>
-                <Link
-                  href="/shop"
-                  className="inline-flex items-center gap-2 rounded-xl bg-white/10 hover:bg-white/15 px-5 py-2.5 font-heading text-xs font-black uppercase tracking-wider text-white transition-colors duration-200 border border-white/10"
-                >
-                  <Percent className="w-3.5 h-3.5" />
-                  <span>Clubhouse Store (10% Off)</span>
-                </Link>
-              </div>
-            </div>
-
-            {/* Membership Status & Account Box */}
-            <div className="shrink-0 bg-white/5 border border-white/10 rounded-2xl p-6 flex flex-col justify-between min-w-[280px] sm:min-w-[320px]">
-              <div className="space-y-3 pb-4 border-b border-white/10">
-                <div className="flex items-center justify-between">
-                  <span className="text-[10px] font-mono uppercase tracking-widest text-white/50">
-                    Membership Status
-                  </span>
-                  <span className="text-[10px] font-mono text-emerald-300 font-bold uppercase tracking-wider">
-                    {isAuthenticated ? "Verified Fan" : "Supporter Access"}
-                  </span>
-                </div>
-                <div className="bg-black/30 px-4 py-3 rounded-xl border border-white/5 space-y-1">
-                  <span className="text-[10px] font-mono uppercase tracking-wider text-white/40 block">
-                    Registered Identity
-                  </span>
-                  <span className="text-sm font-heading font-black tracking-wide text-white uppercase block truncate">
-                    {user?.email || displayName}
-                  </span>
-                </div>
-              </div>
-
-              <div className="pt-4 flex items-center justify-between">
-                {isAuthenticated ? (
-                  <button
-                    onClick={() => signOut()}
-                    className="inline-flex items-center gap-1.5 text-xs font-heading font-bold text-red-400 hover:text-red-300 uppercase tracking-wider transition-colors cursor-pointer"
-                  >
-                    <LogOut className="w-3.5 h-3.5" />
-                    Sign Out
-                  </button>
-                ) : (
-                  <Link
-                    href="/login?redirect=/fan-zone"
-                    className="inline-flex items-center gap-1.5 text-xs font-heading font-bold text-zru-green hover:underline uppercase tracking-wider"
-                  >
-                    Sign In / Register
-                  </Link>
-                )}
-                <span className="text-[10px] font-mono text-white/40 tabular-nums uppercase">EST. 1895</span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* 2. Notice: Watch Out Here for News & Benefits (Clean Focal Callout) */}
-        <div className="bg-white border-2 border-zru-green/40 rounded-3xl p-6 sm:p-8 flex flex-col md:flex-row items-start md:items-center justify-between gap-6 shadow-sm">
-          <div className="flex items-start gap-4 max-w-2xl">
-            <div className="w-12 h-12 rounded-2xl bg-zru-green/10 text-zru-green flex items-center justify-center shrink-0 mt-0.5">
-              <Bell className="w-6 h-6" />
-            </div>
-            <div className="space-y-1.5">
-              <div className="flex items-center gap-2">
-                <span className="text-[10px] font-mono font-bold uppercase tracking-widest text-zru-green bg-zru-green/10 px-2 py-0.5 rounded">
-                  WATCH THIS SPACE
-                </span>
-                <h3 className="font-heading font-black text-lg uppercase text-rich-black">
-                  Keep An Eye On This Hub
-                </h3>
-              </div>
-              <p className="text-xs sm:text-sm text-black/70 font-body leading-relaxed">
-                Watch out right here for breaking team news, priority ticket release dates, exclusive partner benefits, and new fan features throughout the 2026 season.
-              </p>
-            </div>
-          </div>
-
-          <Link
-            href="/media"
-            className="shrink-0 inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-black/5 hover:bg-black/10 text-rich-black text-xs font-heading font-black uppercase tracking-wider transition-colors duration-200 border border-black/10"
-          >
-            <span>Latest News</span>
-            <ArrowRight className="w-3.5 h-3.5 text-zru-green" />
-          </Link>
-        </div>
-
-        {/* 3. Benefits of Being a Fan (Asymmetric Bento Grid) */}
-        <section className="space-y-6">
-          <div className="flex flex-col md:flex-row md:items-end justify-between gap-3 border-b border-black/10 pb-4">
-            <div>
-              <span className="text-[10px] font-mono font-bold uppercase tracking-widest text-zru-green block mb-1">
-                MEMBERSHIP PRIVILEGES
-              </span>
-              <h2 className="text-2xl sm:text-3xl font-heading font-black text-rich-black uppercase tracking-tight">
-                Benefits of Being a Fan
+      {/* 2. The Supporter Manifesto */}
+      <section className="py-20 sm:py-28 border-b border-black/10 bg-white">
+        <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 sm:gap-14 items-baseline">
+            <div className="lg:col-span-4">
+              <h2 className="text-2xl sm:text-3xl font-heading font-black uppercase tracking-tight text-rich-black">
+                MORE THAN A GAME. <br />
+                <span className="text-zru-green">A HERITAGE.</span>
               </h2>
             </div>
-            <p className="text-xs text-black/60 font-body max-w-sm">
-              Your official supporter pass grants direct access across ticketing, merchandise, and national squad content.
-            </p>
-          </div>
 
-          {/* Asymmetric Bento Layout: 6 cols featured + 6 cols stacked 3 items */}
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-5">
-            {/* Featured Primary Perk */}
-            <div className="md:col-span-6 bg-white border border-black/10 rounded-3xl p-7 sm:p-8 flex flex-col justify-between hover:border-zru-green/50 transition-colors duration-200 shadow-sm">
-              <div className="space-y-5">
-                <div className="flex items-center justify-between">
-                  <div className="w-14 h-14 rounded-2xl bg-zru-green/10 flex items-center justify-center text-zru-green">
-                    <PrimaryIcon className="w-7 h-7" />
-                  </div>
-                  <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-zru-green bg-zru-green/10 border border-zru-green/20 px-2.5 py-1 rounded-none">
-                    {PRIMARY_BENEFIT.badge}
+            <div className="lg:col-span-8 space-y-6">
+              <p className="text-xl sm:text-2xl font-heading font-medium text-rich-black leading-snug tracking-tight">
+                We are building the definitive digital home for Zimbabwe Rugby supporters worldwide. A unified hub designed to celebrate our culture, fuel matchday pride, and connect every supporter directly with our national teams.
+              </p>
+              <p className="text-sm sm:text-base text-black/70 font-body leading-relaxed max-w-3xl">
+                Rugby in Zimbabwe is forged in raw passion, centuries of storied schoolboy rivalry, and an unwavering loyalty that spans across generations and continents. We are crafting an authentic supporter experience that honors that legacy.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 3. The 3 Editorial Pillars: What's to Come */}
+      <section className="py-20 sm:py-28 max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8 space-y-16">
+        <div className="max-w-2xl space-y-3">
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-heading font-black uppercase tracking-tight text-rich-black">
+            THE NEW FAN <span className="text-zru-green">EXPERIENCE</span>
+          </h2>
+          <p className="text-sm sm:text-base text-black/65 font-body leading-relaxed pt-1">
+            A preview of the dedicated programs, portals, and exclusive privileges currently in development for registered supporters.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 sm:gap-10">
+          {FUTURE_PILLARS.map((pillar) => (
+            <div
+              key={pillar.num}
+              className="group flex flex-col justify-between bg-white border border-black/10 rounded-2xl overflow-hidden shadow-sm hover:shadow-md hover:border-black/20 transition-all duration-300"
+            >
+              <div className="relative h-64 sm:h-72 w-full overflow-hidden bg-rich-black">
+                <Image
+                  src={pillar.image}
+                  alt={pillar.title}
+                  fill
+                  className="object-cover object-center group-hover:scale-105 transition-transform duration-700 filter brightness-[0.85] contrast-[1.05]"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-rich-black/90 via-rich-black/20 to-transparent" />
+                
+                <div className="absolute top-4 left-4 z-10">
+                  <span className="text-xs font-mono font-black tracking-widest text-white/90 bg-rich-black/80 backdrop-blur-md px-3 py-1.5 rounded-none border border-white/10">
+                    {pillar.num}
                   </span>
                 </div>
 
-                <div className="space-y-2">
-                  <h3 className="text-2xl sm:text-3xl font-heading font-black uppercase tracking-tight text-rich-black leading-tight">
-                    {PRIMARY_BENEFIT.title}
+                <div className="absolute bottom-4 left-4 right-4 z-10">
+                  <h3 className="text-xl sm:text-2xl font-heading font-black uppercase tracking-tight text-white leading-tight">
+                    {pillar.title}
                   </h3>
-                  <p className="text-xs sm:text-sm text-black/70 font-body leading-relaxed">
-                    {PRIMARY_BENEFIT.description}
-                  </p>
                 </div>
               </div>
 
-              <div className="mt-8 pt-4 border-t border-black/10 text-xs text-black/50 font-mono">
-                {PRIMARY_BENEFIT.detail}
-              </div>
-            </div>
-
-            {/* 3 Secondary Stacked Bento Cards */}
-            <div className="md:col-span-6 grid grid-cols-1 gap-4">
-              {SECONDARY_BENEFITS.map((benefit) => {
-                const Icon = benefit.icon;
-                return (
-                  <div
-                    key={benefit.title}
-                    className="bg-white border border-black/10 rounded-2xl p-5 flex items-start justify-between gap-4 hover:border-zru-green/40 transition-colors duration-200 shadow-sm"
-                  >
-                    <div className="flex items-start gap-4">
-                      <div className="w-10 h-10 rounded-xl bg-zru-green/10 flex items-center justify-center text-zru-green shrink-0 mt-0.5">
-                        <Icon className="w-5 h-5" />
-                      </div>
-                      <div className="space-y-1">
-                        <h4 className="text-base font-heading font-black uppercase tracking-tight text-rich-black">
-                          {benefit.title}
-                        </h4>
-                        <p className="text-xs text-black/65 font-body leading-relaxed">
-                          {benefit.description}
-                        </p>
-                      </div>
-                    </div>
-
-                    <span className="shrink-0 text-[9px] font-mono font-bold uppercase tracking-wider text-zru-green bg-zru-green/10 px-2.5 py-1 rounded-md">
-                      {benefit.badge}
-                    </span>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-        </section>
-
-        {/* 4. What to Expect (Numbered Step Sequence) */}
-        <section className="space-y-6">
-          <div className="flex flex-col md:flex-row md:items-end justify-between gap-3 border-b border-black/10 pb-4">
-            <div>
-              <span className="text-[10px] font-mono font-bold uppercase tracking-widest text-zru-green block mb-1">
-                SUPPORTER TIMELINE
-              </span>
-              <h2 className="text-2xl sm:text-3xl font-heading font-black text-rich-black uppercase tracking-tight">
-                What to Expect
-              </h2>
-            </div>
-            <p className="text-xs text-black/60 font-body max-w-sm">
-              How information, ticket releases, and exclusive member privileges reach you.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-            {WHAT_TO_EXPECT.map((item) => (
-              <div
-                key={item.step}
-                className="bg-white border border-black/10 rounded-2xl p-6 relative overflow-hidden shadow-sm hover:border-zru-green/40 transition-colors duration-200"
-              >
-                <span className="text-5xl font-heading font-black text-black/5 absolute top-3 right-4 select-none pointer-events-none tabular-nums">
-                  {item.step}
-                </span>
-                <span className="text-[10px] font-mono font-bold uppercase tracking-widest text-zru-green block mb-2">
-                  Step {item.step}
-                </span>
-                <h3 className="text-lg font-heading font-black uppercase tracking-tight text-rich-black mb-2">
-                  {item.title}
-                </h3>
-                <p className="text-xs sm:text-sm text-black/70 font-body leading-relaxed">
-                  {item.description}
+              <div className="p-6 sm:p-8 flex-1 flex flex-col justify-between space-y-4">
+                <p className="text-sm text-black/75 font-body leading-relaxed">
+                  {pillar.desc}
                 </p>
+                <div className="pt-4 border-t border-black/10 flex items-center justify-between">
+                  <span className="text-[11px] font-mono uppercase tracking-wider text-black/40 font-medium">
+                    STATUS: IN DEVELOPMENT
+                  </span>
+                  <span className="w-2 h-2 rounded-full bg-zru-green" />
+                </div>
               </div>
-            ))}
-          </div>
-        </section>
-
-        {/* Quick Links Exploration Footer Banner */}
-        <div className="bg-white border border-black/10 rounded-2xl p-6 flex flex-wrap items-center justify-between gap-4 shadow-sm">
-          <div className="space-y-1">
-            <h4 className="font-heading font-black text-sm uppercase text-rich-black">
-              Ready to explore?
-            </h4>
-            <p className="text-xs text-black/60 font-body">
-              Browse upcoming fixtures or visit the match centre for live tournament updates.
-            </p>
-          </div>
-
-          <div className="flex flex-wrap items-center gap-3">
-            <Link
-              href="/match-centre"
-              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-zru-green hover:bg-[#004D2C] text-white text-xs font-heading font-black uppercase tracking-wider transition-colors shadow-sm"
-            >
-              <span>Match Centre</span>
-              <ArrowRight className="w-3.5 h-3.5" />
-            </Link>
-            <Link
-              href="/tickets"
-              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-black/5 hover:bg-black/10 text-rich-black text-xs font-heading font-black uppercase tracking-wider transition-colors border border-black/10"
-            >
-              <span>View Fixtures</span>
-            </Link>
-          </div>
+            </div>
+          ))}
         </div>
-      </div>
+      </section>
+
+      {/* 4. Consolidated Official Fan Zone Join Card */}
+      <JoinFanZoneSection />
     </main>
   );
 }

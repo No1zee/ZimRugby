@@ -21,8 +21,19 @@ export default function MobileDock() {
   const pathname = usePathname();
   const { user } = useAuth();
   const [isHidden, setIsHidden] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const isFanActive = !!user;
   const lastScrollY = useRef(0);
+
+  // Hide dock when mobile menu is open
+  useEffect(() => {
+    const handleMenuState = (e: Event) => {
+      const customEvent = e as CustomEvent<{ isOpen: boolean }>;
+      setIsMenuOpen(!!customEvent.detail?.isOpen);
+    };
+    window.addEventListener("mobileMenuState", handleMenuState);
+    return () => window.removeEventListener("mobileMenuState", handleMenuState);
+  }, []);
 
   // Hide on scroll down, show on scroll up — native passive listener (no framer-motion RAF)
   useEffect(() => {
@@ -51,6 +62,8 @@ export default function MobileDock() {
       window.dispatchEvent(new CustomEvent('toggleMobileMenu'));
     }
   };
+
+  if (isMenuOpen) return null;
 
   return (
     <motion.div 

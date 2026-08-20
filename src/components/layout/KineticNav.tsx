@@ -152,9 +152,8 @@ export default function KineticNav({ isOpen, onClose, navItems, pathname }: Kine
             <div className="k-content-wrapper">
               {/* Top bar */}
               <div className="k-top-bar">
-                <Link href="/" onClick={onClose} className="k-logo-link">
+                <Link href="/" onClick={onClose} className="k-logo-link" aria-label="Zimbabwe Rugby Union Home">
                   <Image src="/images/logos/zru-logo.svg" alt="ZRU" width={34} height={34} className="object-contain" />
-                  <span className="k-logo-title">ZIMBABWE RUGBY</span>
                 </Link>
 
                 <button onClick={onClose} className="k-close-btn" aria-label="Close menu">
@@ -235,16 +234,6 @@ export default function KineticNav({ isOpen, onClose, navItems, pathname }: Kine
                     </Link>
                   </li>
                 </ul>
-              </div>
-
-              {/* Bottom CTA strip */}
-              <div className="k-bottom-strip">
-                <div className="k-bottom-inner">
-                  <div className="k-copyright">
-                    <ShieldCheck className="w-3.5 h-3.5" />
-                    <span>ZIMBABWE RUGBY UNION &copy; {new Date().getFullYear()}</span>
-                  </div>
-                </div>
               </div>
             </div>
           </nav>

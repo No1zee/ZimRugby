@@ -150,7 +150,20 @@ body::after {
   z-index: 1;
 }
 .heading-plate-light::before {
-  background: rgba(255, 255, 255, 0.18);
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.heading-plate span.text-zru-green,
+.heading-plate-light span.text-zru-green,
+span.text-zru-green {
+  color: var(--color-zru-green) !important;
+}
+
+/* On dark plates, make green pop vibrantly */
+.heading-plate-light span.text-zru-green {
+  color: #00A876 !important;
+  text-shadow: 0 0 20px rgba(0, 168, 118, 0.35);
 }
 
 /* Sponsor logo plaque — offset plate revealed on hover */
@@ -175,6 +188,10 @@ body::after {
 .sponsor-plate:hover::before {
   transform: translate(6px, 6px);
   opacity: 1;
+}
+
+@utility text-zru-green {
+  color: var(--color-zru-green);
 }
 
 @utility font-heading {
@@ -688,6 +705,7 @@ html, body {
   inset: 0;
   background: #006747;
   z-index: 1;
+  pointer-events: none;
 }
 
 .k-menu-content {
@@ -699,6 +717,7 @@ html, body {
   flex-direction: column;
   overflow: hidden;
   overscroll-behavior: contain;
+  pointer-events: auto;
 }
 
 /* ── Backdrop ── */
@@ -756,6 +775,8 @@ html, body {
   display: flex;
   flex-direction: column;
   height: 100%;
+  min-height: 0;
+  flex: 1 1 0%;
 }
 
 /* ── Top bar ── */
@@ -768,6 +789,7 @@ html, body {
   max-width: 1440px;
   width: 100%;
   margin: 0 auto;
+  flex-shrink: 0;
 }
 
 .k-logo-link {
@@ -921,11 +943,13 @@ html, body {
 
 /* ── Links area ── */
 .k-links-area {
-  flex: 1;
-  overflow-y: auto;
+  flex: 1 1 0%;
+  min-height: 0;
+  overflow-y: scroll;
   overscroll-behavior: contain;
+  touch-action: pan-y;
   -webkit-overflow-scrolling: touch;
-  padding: 1.25rem 1rem 2rem;
+  padding: 1.25rem 1rem 3rem;
   max-width: 1440px;
   width: 100%;
   margin: 0 auto;
