@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import {
   ShieldCheck,
   Ticket,
@@ -10,8 +9,6 @@ import {
   Bell,
   ArrowRight,
   LogOut,
-  Copy,
-  Check,
   Sparkles,
   ExternalLink,
 } from "lucide-react";
@@ -68,7 +65,7 @@ const WHAT_TO_EXPECT = [
     step: "02",
     title: "Presale Ticket Drops",
     description:
-      "When major fixtures and test tournaments go live, your verified supporter code unlocks priority allocations before general public windows open.",
+      "When major fixtures and test tournaments go live, your registered supporter status unlocks priority allocations before general public windows open.",
   },
   {
     step: "03",
@@ -80,20 +77,8 @@ const WHAT_TO_EXPECT = [
 
 export default function FanZoneClient({ cmsPage }: FanZoneClientProps) {
   const { user, isAuthenticated, signOut } = useAuth();
-  const [copiedCode, setCopiedCode] = useState(false);
 
   const displayName = user?.name || "Edward Magejo";
-  const memberCode = user
-    ? `ZRU-${(user.name.slice(0, 3) + (user.handle?.replace(/[^0-9]/g, "") || "2026")).toUpperCase().padEnd(8, "0")}`
-    : "ZRU-2026-FAN";
-
-  const handleCopyCode = () => {
-    if (typeof navigator !== "undefined") {
-      navigator.clipboard.writeText(memberCode);
-      setCopiedCode(true);
-      setTimeout(() => setCopiedCode(false), 2000);
-    }
-  };
 
   const PrimaryIcon = PRIMARY_BENEFIT.icon;
 
@@ -119,7 +104,7 @@ export default function FanZoneClient({ cmsPage }: FanZoneClientProps) {
           <div className="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-8">
             <div className="space-y-4 max-w-2xl">
               <div className="flex flex-wrap items-center gap-2.5">
-                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-zru-green/20 border border-zru-green/40 text-[10px] font-mono font-bold uppercase tracking-widest text-emerald-300">
+                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-none bg-zru-green/20 border border-zru-green/40 text-[10px] font-mono font-bold uppercase tracking-widest text-emerald-300">
                   <ShieldCheck className="w-3.5 h-3.5" />
                   <span>OFFICIAL ZRU SUPPORTER</span>
                 </span>
@@ -155,26 +140,24 @@ export default function FanZoneClient({ cmsPage }: FanZoneClientProps) {
               </div>
             </div>
 
-            {/* Supporter Code / Credentials Box */}
+            {/* Membership Status & Account Box */}
             <div className="shrink-0 bg-white/5 border border-white/10 rounded-2xl p-6 flex flex-col justify-between min-w-[280px] sm:min-w-[320px]">
               <div className="space-y-3 pb-4 border-b border-white/10">
                 <div className="flex items-center justify-between">
                   <span className="text-[10px] font-mono uppercase tracking-widest text-white/50">
-                    Supporter Code
+                    Membership Status
                   </span>
-                  <span className="text-[10px] font-mono text-emerald-300 font-bold uppercase">Active</span>
+                  <span className="text-[10px] font-mono text-emerald-300 font-bold uppercase tracking-wider">
+                    {isAuthenticated ? "Verified Fan" : "Supporter Access"}
+                  </span>
                 </div>
-                <div className="flex items-center justify-between bg-black/30 px-3.5 py-2.5 rounded-xl border border-white/5">
-                  <span className="text-base font-mono font-bold tracking-wider text-white tabular-nums">
-                    {memberCode}
+                <div className="bg-black/30 px-4 py-3 rounded-xl border border-white/5 space-y-1">
+                  <span className="text-[10px] font-mono uppercase tracking-wider text-white/40 block">
+                    Registered Identity
                   </span>
-                  <button
-                    onClick={handleCopyCode}
-                    className="p-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-white/80 transition-colors cursor-pointer"
-                    title="Copy code"
-                  >
-                    {copiedCode ? <Check className="w-4 h-4 text-emerald-400" /> : <Copy className="w-4 h-4" />}
-                  </button>
+                  <span className="text-sm font-heading font-black tracking-wide text-white uppercase block truncate">
+                    {user?.email || displayName}
+                  </span>
                 </div>
               </div>
 
@@ -256,7 +239,7 @@ export default function FanZoneClient({ cmsPage }: FanZoneClientProps) {
                   <div className="w-14 h-14 rounded-2xl bg-zru-green/10 flex items-center justify-center text-zru-green">
                     <PrimaryIcon className="w-7 h-7" />
                   </div>
-                  <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-zru-green bg-zru-green/10 border border-zru-green/20 px-3 py-1 rounded-full">
+                  <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-zru-green bg-zru-green/10 border border-zru-green/20 px-2.5 py-1 rounded-none">
                     {PRIMARY_BENEFIT.badge}
                   </span>
                 </div>
@@ -352,7 +335,7 @@ export default function FanZoneClient({ cmsPage }: FanZoneClientProps) {
         <div className="bg-white border border-black/10 rounded-2xl p-6 flex flex-wrap items-center justify-between gap-4 shadow-sm">
           <div className="space-y-1">
             <h4 className="font-heading font-black text-sm uppercase text-rich-black">
-              Ready to explore Zimbabwe Rugby?
+              Ready to explore?
             </h4>
             <p className="text-xs text-black/60 font-body">
               Browse upcoming fixtures or visit the match centre for live tournament updates.

@@ -1,21 +1,44 @@
 import { NextResponse } from "next/server";
-import { saveSubmission } from "@/lib/mockStorage";
+import { Receiver } from "@upstash/qstash";
 import { supabase } from "@/lib/supabase/client";
 
 /**
  * Worker endpoint triggered by QStash queue with 5x retry backoff.
- * Consumes queued payload and writes to Supabase DB & failover storage.
+ * Consumes queued payload and writes securely to Supabase DB.
  */
 export async function POST(req: Request) {
   try {
-    const payload = await req.json();
+    const bodyText = await req.text();
+    const signature = req.headers.get("upstash-signature");
+
+    // Cryptographic signature verification when QStash keys are present
+    const currentSigningKey = process.env.QSTASH_CURRENT_SIGNING_KEY;
+    const nextSigningKey = process.env.QSTASH_NEXT_SIGNING_KEY;
+
+    if (currentSigningKey && nextSigningKey) {
+      const receiver = new Receiver({
+        currentSigningKey,
+        nextSigningKey,
+      });
+
+      const isValid = await receiver.verify({
+        signature: signature || "",
+        body: bodyText,
+      }).catch(() => false);
+
+      if (!isValid) {
+        return NextResponse.json({ error: "Invalid QStash signature" }, { status: 401 });
+      }
+    }
+
+    const payload = JSON.parse(bodyText);
     const { formType, data } = payload;
 
     if (!formType || !data) {
       return NextResponse.json({ error: "Invalid queue payload format" }, { status: 400 });
     }
 
-    // 1. Process database write
+    // Process database write to appropriate table
     if (process.env.NEXT_PUBLIC_SUPABASE_URL) {
       const tableName = formType.startsWith("onboarding_") ? "onboarding_submissions" : "fan_zone_members";
       const { error: dbError } = await supabase.from(tableName).insert([data]);
@@ -24,9 +47,6 @@ export async function POST(req: Request) {
         return NextResponse.json({ error: dbError.message }, { status: 500 });
       }
     }
-
-    // 2. Secondary failover buffer write
-    await saveSubmission(formType, data);
 
     return NextResponse.json({
       success: true,

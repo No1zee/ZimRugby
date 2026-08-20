@@ -48,7 +48,13 @@ const TEAMS_DATA: TeamInfo[] = [
   },
 ];
 
-export default function TeamCardBento() {
+interface TeamCardBentoProps {
+  teams?: TeamInfo[];
+}
+
+export default function TeamCardBento({ teams }: TeamCardBentoProps) {
+  const displayTeams = teams && teams.length > 0 ? teams : TEAMS_DATA;
+
   return (
     <section className="py-20 bg-milk-white">
       <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
@@ -64,7 +70,7 @@ export default function TeamCardBento() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          {TEAMS_DATA.map((team) => (
+          {displayTeams.map((team) => (
             <Link
               key={team.slug}
               href={`/teams/${team.slug}`}

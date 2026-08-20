@@ -13,8 +13,10 @@
     "type": "news",
     "categories": [
       "Sables",
+      "Nations Cup",
+      "International",
       "Match Day",
-      "Nations Cup"
+      "Senior Men"
     ]
   },
   {
@@ -32,7 +34,9 @@
     "categories": [
       "ZRU",
       "Governance",
-      "Code of Conduct"
+      "Code of Conduct",
+      "Referees",
+      "Schools"
     ]
   },
   {
@@ -50,7 +54,9 @@
     "categories": [
       "Sables",
       "International",
-      "Zambezi Challenge"
+      "Zambezi Challenge",
+      "Match Series",
+      "Senior Men"
     ]
   },
   {
@@ -68,7 +74,9 @@
     "categories": [
       "Sables",
       "International",
-      "Double Header"
+      "Double Header",
+      "South Africa A",
+      "Senior Men"
     ]
   },
   {
@@ -86,7 +94,9 @@
     "categories": [
       "Sables",
       "Squad Update",
-      "Player Feature"
+      "Player Feature",
+      "Battle of the Zambezi",
+      "Senior Men"
     ]
   },
   {
@@ -104,7 +114,9 @@
     "categories": [
       "Lady Sables",
       "Women's Rugby",
-      "Africa Cup"
+      "Africa Cup",
+      "International",
+      "Senior Women"
     ]
   },
   {
@@ -122,7 +134,9 @@
     "categories": [
       "Lady Sables",
       "Player Feature",
-      "Women's Rugby"
+      "Women's Rugby",
+      "Grassroots",
+      "Senior Women"
     ]
   },
   {
@@ -140,7 +154,9 @@
     "categories": [
       "Women's Rugby",
       "ZRU",
-      "Development"
+      "Lady Sables",
+      "Development",
+      "Africa Cup"
     ]
   },
   {
@@ -158,7 +174,9 @@
     "categories": [
       "Sables",
       "Coaching",
-      "ANSA Awards"
+      "ANSA Awards",
+      "Pieter Benade",
+      "Senior Men"
     ]
   },
   {
@@ -176,6 +194,8 @@
     "categories": [
       "Women's Rugby",
       "Lady Sables",
+      "Grassroots",
+      "Domestic",
       "Rising Stars"
     ]
   },
@@ -194,7 +214,9 @@
     "categories": [
       "Sables",
       "ANSA Awards",
-      "National Pride"
+      "National Pride",
+      "ZRU",
+      "Senior Men"
     ]
   },
   {
@@ -212,7 +234,9 @@
     "categories": [
       "Domestic",
       "Club Rugby",
-      "Nedbank Cup"
+      "Nedbank Cup",
+      "Harare",
+      "ZRU"
     ]
   },
   {
@@ -230,7 +254,9 @@
     "categories": [
       "Sables",
       "Technical Team",
-      "Africa Cup"
+      "Africa Cup",
+      "Coaching",
+      "Senior Men"
     ]
   },
   {
@@ -248,7 +274,9 @@
     "categories": [
       "Lady Sables",
       "Squad Update",
-      "Player Feature"
+      "Player Feature",
+      "Women's Rugby",
+      "Senior Women"
     ]
   },
   {
@@ -266,7 +294,9 @@
     "categories": [
       "Domestic",
       "Zim A",
-      "Harare Sports Club"
+      "Harare Sports Club",
+      "Manicaland",
+      "Club Rugby"
     ]
   },
   {
@@ -284,7 +314,8 @@
     "categories": [
       "ZRU",
       "Olympic Committee",
-      "Announcement"
+      "Announcement",
+      "Governance"
     ]
   },
   {
@@ -302,7 +333,9 @@
     "categories": [
       "Junior Sables",
       "U20",
-      "International"
+      "International",
+      "Hartsfield",
+      "Barbarians"
     ]
   },
   {
@@ -320,7 +353,9 @@
     "categories": [
       "Lady Sables",
       "Squad Announcement",
-      "Africa Cup"
+      "Africa Cup",
+      "Women's Rugby",
+      "Senior Women"
     ]
   },
   {
@@ -338,7 +373,9 @@
     "categories": [
       "Grassroots",
       "Tag Rugby",
-      "Women's Month"
+      "Women's Rugby",
+      "Women's Month",
+      "Development"
     ]
   },
   {
@@ -356,7 +393,9 @@
     "categories": [
       "Sables",
       "World Rugby Rankings",
-      "Milestone"
+      "Milestone",
+      "International",
+      "Senior Men"
     ]
   },
   {
@@ -374,7 +413,9 @@
     "categories": [
       "Sables",
       "Africa Cup Champions",
-      "Historic Win"
+      "Historic Win",
+      "International",
+      "Senior Men"
     ]
   },
   {
@@ -392,7 +433,9 @@
     "categories": [
       "Sables",
       "Squad Announcement",
-      "Africa Cup"
+      "Africa Cup",
+      "Uganda",
+      "Senior Men"
     ]
   }
 ]

@@ -9,6 +9,10 @@ interface AdaptivePerformanceContextType {
   shouldReduceMotion: boolean;
   deviceMemory?: number;
   hardwareConcurrency?: number;
+  // Backward compatibility aliases
+  isLowEndDevice?: boolean;
+  isSlowConnection?: boolean;
+  prefersReducedMotion?: boolean;
 }
 
 const AdaptivePerformanceContext = createContext<AdaptivePerformanceContextType>({
@@ -16,6 +20,9 @@ const AdaptivePerformanceContext = createContext<AdaptivePerformanceContextType>
   isSlowNetwork: false,
   saveDataEnabled: false,
   shouldReduceMotion: false,
+  isLowEndDevice: false,
+  isSlowConnection: false,
+  prefersReducedMotion: false,
 });
 
 export function AdaptivePerformanceProvider({ children }: { children: React.ReactNode }) {
@@ -51,6 +58,9 @@ export function AdaptivePerformanceProvider({ children }: { children: React.Reac
       shouldReduceMotion: reduceMotion,
       deviceMemory: memory,
       hardwareConcurrency: cores,
+      isLowEndDevice: isLowTier,
+      isSlowConnection: isSlow,
+      prefersReducedMotion: reduceMotion,
     });
   }, []);
 

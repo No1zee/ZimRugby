@@ -242,10 +242,10 @@ export default function MatchCentreClient({
             <div className="flex overflow-x-auto py-1 gap-2 no-scrollbar mb-8 w-full">
               <button
                 onClick={() => setSelectedCampaign("All")}
-                className={`px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-wider whitespace-nowrap transition-colors border ${
+                className={`px-3 py-1.5 rounded-none text-[10px] font-black uppercase tracking-widest whitespace-nowrap transition-colors border cursor-pointer ${
                   selectedCampaign === "All"
                     ? "bg-rich-black text-white border-rich-black"
-                    : "bg-white text-black/50 border-black/15 hover:border-black/30 hover:text-black"
+                    : "bg-white text-black/60 border-black/15 hover:border-black/30 hover:text-black"
                 }`}
               >
                 All Matches
@@ -254,10 +254,10 @@ export default function MatchCentreClient({
                 <button
                   key={c.slug}
                   onClick={() => setSelectedCampaign(c.slug === selectedCampaign ? "All" : c.slug)}
-                  className={`px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-wider whitespace-nowrap transition-colors border ${
+                  className={`px-3 py-1.5 rounded-none text-[10px] font-black uppercase tracking-widest whitespace-nowrap transition-colors border cursor-pointer ${
                     selectedCampaign === c.slug
                       ? "bg-zru-green text-white border-zru-green shadow"
-                      : "bg-white text-black/50 border-black/15 hover:border-zru-green/40 hover:text-zru-green"
+                      : "bg-white text-black/60 border-black/15 hover:border-zru-green/40 hover:text-zru-green"
                   }`}
                 >
                   {c.name}

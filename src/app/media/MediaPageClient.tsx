@@ -146,7 +146,7 @@ export default function MediaPageClient({ cmsPage, initialNews = [] }: MediaPage
             </div>
           </div>
 
-          {/* Category Filter Chips Bar */}
+          {/* Category Filter Slanted Pills Bar */}
           <div className="flex items-center gap-2 overflow-x-auto pb-2 no-scrollbar">
             {CATEGORIES.map((cat) => {
               const isSelected = selectedCategory === cat;
@@ -154,10 +154,10 @@ export default function MediaPageClient({ cmsPage, initialNews = [] }: MediaPage
                 <button
                   key={cat}
                   onClick={() => handleCategoryChange(cat)}
-                  className={`px-4 py-2 rounded-full text-[11px] font-black uppercase tracking-wider transition-all whitespace-nowrap cursor-pointer ${
+                  className={`clip-slanted-sm px-5 py-2.5 text-xs font-black uppercase tracking-wider transition-all duration-200 whitespace-nowrap cursor-pointer ${
                     isSelected
-                      ? "bg-zru-green text-white shadow-sm"
-                      : "bg-white text-neutral-600 border border-neutral-200 hover:border-zru-green/40 hover:text-neutral-900"
+                      ? "bg-zru-green text-white shadow-md shadow-zru-green/20 scale-[1.02]"
+                      : "bg-white text-neutral-600 border border-neutral-200 hover:border-zru-green/50 hover:text-neutral-900 hover:bg-neutral-50"
                   }`}
                 >
                   {cat}

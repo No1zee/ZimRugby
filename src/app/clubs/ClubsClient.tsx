@@ -41,7 +41,7 @@ export default function ClubsClient({ cmsPage, clubs }: ClubsClientProps) {
                   <div className="w-12 h-12 rounded-xl bg-zru-green/5 border border-zru-green/10 flex items-center justify-center text-zru-green">
                     <Shield className="w-6 h-6" />
                   </div>
-                  <span className="px-3 py-1 rounded-full bg-black/5 border border-black/10 text-[9px] font-black uppercase tracking-wider text-rich-black/60">
+                  <span className="px-2.5 py-1 rounded-none bg-black/[0.03] border border-black/10 text-[9px] font-black uppercase tracking-widest text-rich-black/70">
                     {club.province}
                   </span>
                 </div>

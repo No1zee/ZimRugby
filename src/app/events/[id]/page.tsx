@@ -68,7 +68,7 @@ export default async function EventDetailPage({ params }: { params: Promise<{ id
       <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8 pt-10 sm:pt-12">
         {/* Metadata Strip */}
         <div className="flex flex-wrap items-center gap-3 sm:gap-4 mb-10 pb-8 border-b border-black/10">
-          <span className={`px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest ${STATUS_STYLES[statusKey]}`}>
+          <span className={`px-2.5 py-1 rounded-none border text-[10px] font-black uppercase tracking-widest ${STATUS_STYLES[statusKey]}`}>
             {statusKey}
           </span>
           <span className="flex items-center gap-1.5 text-black/60 text-xs sm:text-sm font-bold">

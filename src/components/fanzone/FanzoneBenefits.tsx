@@ -28,7 +28,7 @@ export const FAN_BENEFITS: FanBenefit[] = [
     description:
       "Automatic 10% discount on official jerseys, teamwear, and caps at the ZRU Clubhouse store and online drops.",
     badge: "10% Off Storewide",
-    perkDetail: "Applied automatically with your verified supporter code.",
+    perkDetail: "Applied automatically with your verified member account.",
   },
   {
     icon: Mail,

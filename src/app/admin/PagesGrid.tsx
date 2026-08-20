@@ -102,10 +102,10 @@ export default function PagesGrid({
                     <button
                       onClick={() => handleToggleStatus(page)}
                       disabled={isToggling}
-                      className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-[9px] font-black uppercase tracking-widest transition-all duration-200 cursor-pointer disabled:opacity-50 ${
+                      className={`inline-flex items-center gap-1.5 rounded-none border px-2.5 py-1 text-[9px] font-black uppercase tracking-widest transition-all duration-200 cursor-pointer disabled:opacity-50 ${
                         page.status === "published"
-                          ? "border-zru-green/30 bg-zru-green/15 text-zru-green hover:bg-zru-green/25"
-                          : "border-amber-500/30 bg-amber-500/15 text-amber-700 hover:bg-amber-500/25"
+                          ? "border-zru-green/40 bg-zru-green/10 text-zru-green hover:bg-zru-green/20"
+                          : "border-amber-500/40 bg-amber-500/10 text-amber-700 hover:bg-amber-500/20"
                       }`}
                       title="Click to toggle published status"
                     >
@@ -113,8 +113,8 @@ export default function PagesGrid({
                         <Loader2 className="h-3 w-3 animate-spin" />
                       ) : (
                         <span
-                          className={`h-1.5 w-1.5 rounded-full ${
-                            page.status === "published" ? "bg-zru-green animate-pulse" : "bg-amber-500"
+                          className={`h-1.5 w-1.5 ${
+                            page.status === "published" ? "bg-zru-green" : "bg-amber-500"
                           }`}
                         />
                       )}

@@ -37,7 +37,6 @@ export const mainNav: NavItem[] = [
     href: "/match-centre",
     children: [
       { label: "Fixtures & Results", href: "/match-centre" },
-      { label: "Match Tickets", href: "/tickets" },
     ],
   },
   {

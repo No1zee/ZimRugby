@@ -120,8 +120,8 @@ export default function GlobalAnnouncementBar() {
           <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-2.5 flex items-center justify-between gap-4 relative z-10">
             {/* Left Notification Icon */}
             <div className="flex items-center shrink-0">
-              <div className="w-7 h-7 rounded-full bg-red-500/20 border border-red-500/30 flex items-center justify-center">
-                <Bell className="w-3.5 h-3.5 text-red-400 animate-pulse" />
+              <div className="w-7 h-7 rounded-none bg-red-500/20 border border-red-500/30 flex items-center justify-center">
+                <Bell className="w-3.5 h-3.5 text-red-400" />
               </div>
             </div>
 

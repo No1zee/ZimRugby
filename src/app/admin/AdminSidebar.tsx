@@ -256,7 +256,7 @@ export default function AdminSidebar({ activeTab = "overview", onTabChange }: Ad
         <div className="p-4 border-t border-white/10 space-y-3 relative bg-black/20">
           <div className="flex items-center justify-between text-[10px] text-white/40 font-mono">
             <div className="flex items-center gap-1.5">
-              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+              <span className="w-1.5 h-1.5 bg-emerald-500"></span>
               <span>All systems normal</span>
             </div>
           </div>

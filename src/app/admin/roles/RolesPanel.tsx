@@ -457,11 +457,11 @@ export default function RolesPanel() {
             <KeyRound className="w-5 h-5 text-zru-green" /> Account Security
           </h2>
           {mfaStatus?.enabled ? (
-            <span className="px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-700 text-[10px] font-black uppercase tracking-wider">
+            <span className="px-2.5 py-1 rounded-none bg-emerald-50 border border-emerald-300 text-emerald-700 text-[10px] font-black uppercase tracking-widest">
               Two-Step ON
             </span>
           ) : (
-            <span className="px-2.5 py-1 rounded-full bg-black/5 text-black/40 text-[10px] font-black uppercase tracking-wider">
+            <span className="px-2.5 py-1 rounded-none bg-black/[0.03] border border-black/10 text-black/50 text-[10px] font-black uppercase tracking-widest">
               Not Enabled
             </span>
           )}

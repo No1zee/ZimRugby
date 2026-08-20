@@ -55,8 +55,37 @@ export default async function ReportPage({ params }: PageProps) {
     Math.round(rawBody.replace(/<[^>]*>/g, " ").split(/\s+/).filter(Boolean).length / 200)
   );
 
+  const schemaData = {
+    "@context": "https://schema.org",
+    "@type": "NewsArticle",
+    "headline": report.title,
+    "description": report.excerpt,
+    "image": [report.image],
+    "datePublished": report.date,
+    "dateModified": report.date,
+    "author": [{
+      "@type": "Organization",
+      "name": "Zimbabwe Rugby Union",
+      "url": "https://zimrugby.vercel.app"
+    }],
+    "publisher": {
+      "@type": "Organization",
+      "name": "Zimbabwe Rugby Union",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://zimrugby.vercel.app/images/logo/zru-logo.png"
+      }
+    }
+  };
+
   return (
     <main className="min-h-screen bg-white text-neutral-900 selection:bg-zru-green selection:text-white">
+      {/* Schema.org NewsArticle Structured Data */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(schemaData) }}
+      />
+
       {/* 1. Dark Compact Hero Header */}
       <ArticleHero
         title={report.title}

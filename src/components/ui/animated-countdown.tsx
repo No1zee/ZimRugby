@@ -53,18 +53,18 @@ const UNIT_LABELS: Record<CountdownUnitKey, string> = {
 
 const variantClasses: Record<CountdownVariant, string> = {
   modern:
-    "border-border/70 bg-background/75 shadow-2xl shadow-primary/5 backdrop-blur-xl dark:bg-white/[0.035]",
+    "border-border/70 bg-background/75 shadow-lg backdrop-blur-xl dark:bg-white/[0.035]",
   digital:
-    "border-cyan-400/20 bg-zinc-950 text-white shadow-2xl shadow-cyan-500/10",
+    "border-white/10 bg-zinc-950 text-white shadow-lg",
   minimal: "border-transparent bg-transparent shadow-none",
   classic: "border-border bg-card shadow-sm dark:bg-zinc-900/80",
 };
 
 const unitVariantClasses: Record<CountdownVariant, string> = {
   modern:
-    "border-border/70 bg-muted/45 shadow-sm transition hover:border-primary/35 hover:bg-muted/65 hover:shadow-primary/10 dark:bg-white/[0.04]",
+    "border-border/70 bg-muted/45 shadow-sm transition hover:border-primary/35 hover:bg-muted/65 dark:bg-white/[0.04]",
   digital:
-    "border-cyan-400/20 bg-cyan-400/[0.055] font-mono shadow-[0_0_28px_-18px_rgba(34,211,238,0.9)] transition hover:border-cyan-300/40 hover:bg-cyan-400/[0.09]",
+    "border-white/10 bg-white/[0.04] font-mono shadow-sm transition hover:border-white/20 hover:bg-white/[0.08]",
   minimal: "border-transparent bg-transparent transition hover:bg-muted/35",
   classic:
     "border-border bg-background shadow-sm transition hover:border-primary/30 hover:bg-muted/35 dark:bg-white/[0.035]",
@@ -212,7 +212,7 @@ function CountdownUnit({
         value={format(value)}
         className={cn(
           "font-bold leading-none tracking-tight text-foreground",
-          variant === "digital" && "font-mono text-cyan-100 drop-shadow-[0_0_18px_rgba(34,211,238,0.45)]",
+          variant === "digital" && "font-mono text-white",
           variant === "minimal" && "font-semibold",
           sizePreset.number,
           numberClassName,
@@ -221,7 +221,7 @@ function CountdownUnit({
       <span
         className={cn(
           "mt-2 font-semibold uppercase tracking-[0.18em] text-muted-foreground",
-          variant === "digital" && "text-cyan-200/55",
+          variant === "digital" && "text-white/60",
           sizePreset.label,
           labelClassName,
         )}

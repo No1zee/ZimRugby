@@ -135,18 +135,13 @@ export default function PlayRugbyDevelopment() {
                Whether as a volunteer, donor, or strategic grassroots partner, your involvement drives the next era of Zimbabwe Rugby.
              </p>
           </div>
-          <div className="flex flex-wrap gap-4 relative z-10 w-full sm:w-auto justify-center">
+          <div className="flex relative z-10 w-full sm:w-auto justify-center">
             <Link
               href="/contact"
-              className="px-8 py-3.5 bg-accent-teal text-rich-black text-xs font-heading font-black uppercase tracking-wider rounded-xl hover:bg-white transition-all shadow-lg"
+              className="px-8 py-3.5 bg-accent-teal text-rich-black text-xs font-heading font-black uppercase tracking-wider rounded-xl hover:bg-white transition-all shadow-lg inline-flex items-center gap-2"
             >
-              Partner With Us
-            </Link>
-            <Link
-              href="/play-rugby"
-              className="px-8 py-3.5 border border-white/30 text-white text-xs font-heading font-black uppercase tracking-wider rounded-xl hover:bg-white/10 transition-all"
-            >
-              Get Into Rugby
+              <span>Contact Us</span>
+              <ArrowRight className="w-4 h-4" />
             </Link>
           </div>
         </motion.div>

@@ -66,19 +66,16 @@ export async function POST(req: Request) {
       favoriteTeam: result.data.favoriteTeam,
     });
 
-    // 1. Write to Supabase (if configured)
+    // Write to Supabase table
     if (process.env.NEXT_PUBLIC_SUPABASE_URL) {
       const { error: dbError } = await supabase
         .from("fan_zone_members")
         .insert([memberData]);
       
       if (dbError) {
-        console.warn("Supabase write fallback to local buffer:", dbError.message);
+        console.warn("Supabase fan zone insert warning:", dbError.message);
       }
     }
-
-    // 2. Dual-write buffer (local failover log)
-    await saveSubmission("fan_zone_member", memberData);
 
     return NextResponse.json({
       success: true,

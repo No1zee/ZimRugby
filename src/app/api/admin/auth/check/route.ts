@@ -11,27 +11,12 @@ export async function GET() {
     data: { user },
   } = await supabase.auth.getUser();
 
-  let email = user?.email;
-  if (!email) {
-    const cookieStore = await cookies();
-    const fanCookie = cookieStore.get("zru_user_session")?.value;
-    if (fanCookie) {
-      try {
-        const parsed = JSON.parse(decodeURIComponent(fanCookie));
-        if (parsed?.email) email = parsed.email;
-      } catch {}
-    }
-  }
-
+  const email = user?.email;
   if (!email) {
     return NextResponse.json({ authenticated: false }, { status: 401 });
   }
 
-  let role = user?.app_metadata?.role as string | undefined;
-  if (!role && email.toLowerCase() === "edwardmagejo@gmail.com") {
-    role = "super_admin";
-  }
-
+  const role = user?.app_metadata?.role as string | undefined;
   if (typeof role !== "string" || !role) {
     return NextResponse.json({ authenticated: false }, { status: 401 });
   }
@@ -44,11 +29,7 @@ export async function GET() {
     }
   }
 
-  let permissions = await resolvePermissionsForRole(role);
-  if (!permissions && email.toLowerCase() === "edwardmagejo@gmail.com") {
-    permissions = { all: true };
-  }
-
+  const permissions = await resolvePermissionsForRole(role);
   if (!permissions) {
     return NextResponse.json({ authenticated: false }, { status: 401 });
   }

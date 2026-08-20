@@ -1,197 +1,230 @@
-"use client";
-
-import Image from "next/image";
+import React from "react";
 import Link from "next/link";
-import { Calendar, MapPin, Ticket, ArrowRight, Clock } from "lucide-react";
-import type { MatchCardViewModel } from "@/lib/match-centre/types";
+import { ArrowRight, CalendarDays } from "lucide-react";
+import { MatchCardViewModel } from "@/lib/match-centre/types";
+import { Match } from "@/types";
+import { HomeFixtureCard, UniversalMatch } from "./HomeFixtureCard";
 
-interface HomeUpcomingMatchesProps {
-  nextMatch: MatchCardViewModel | null;
-  upcomingMatches?: MatchCardViewModel[];
+export interface HomeUpcomingMatchesProps {
+  nextMatch?: UniversalMatch | null;
+  upcomingMatches?: UniversalMatch[];
+  matches?: UniversalMatch[];
+  completedMatches?: UniversalMatch[];
+}
+
+function getMatchKey(m: UniversalMatch): string {
+  if ("slug" in m && m.slug) return m.slug;
+  return String(m.id || "");
 }
 
 export default function HomeUpcomingMatches({
   nextMatch,
   upcomingMatches = [],
+  matches = [],
+  completedMatches = [],
 }: HomeUpcomingMatchesProps) {
-  const homeTeamName = nextMatch?.homeTeam?.name || "Zimbabwe Sables";
-  const awayTeamName = nextMatch?.awayTeam?.name || "Namibia Welwitschias";
-  const competition = nextMatch?.competition || "Rugby Africa Cup 2026";
-  const venue = nextMatch?.venue || "Harare Sports Club";
-  const matchDate = nextMatch?.dateIso
-    ? new Date(nextMatch.dateIso).toLocaleDateString("en-GB", {
-        weekday: "long",
-        day: "numeric",
-        month: "long",
-        year: "numeric",
-      })
-    : "Saturday, 22 August 2026";
-  const time = nextMatch?.time || "15:30 CAT";
+  // Aggregate all matches
+  const allInputMatches: UniversalMatch[] = [
+    ...(nextMatch ? [nextMatch] : []),
+    ...upcomingMatches,
+    ...matches,
+  ];
+
+  const now = new Date().getTime();
+
+  const isMatchUpcoming = (m: UniversalMatch): boolean => {
+    if ("status" in m && m.status) {
+      if (m.status === "upcoming" || m.status === "live") return true;
+      if (m.status === "completed") return false;
+    }
+    // Check date
+    let dateStr = "";
+    if ("dateIso" in m && (m as MatchCardViewModel).dateIso) {
+      dateStr = (m as MatchCardViewModel).dateIso;
+    } else if ("date" in m && (m as Match).date) {
+      dateStr = (m as Match).date || "";
+    }
+
+    if (!dateStr) return true;
+    const matchTime = new Date(dateStr).getTime();
+    return !isNaN(matchTime) ? matchTime >= now - 2 * 60 * 60 * 1000 : true;
+  };
+
+  const upcomingList: UniversalMatch[] = [];
+  const rawCompleted: UniversalMatch[] = [...completedMatches];
+
+  for (const m of allInputMatches) {
+    if (isMatchUpcoming(m)) {
+      upcomingList.push(m);
+    } else {
+      rawCompleted.push(m);
+    }
+  }
+
+  const getMatchTime = (m: UniversalMatch): number => {
+    if ("dateIso" in m && (m as MatchCardViewModel).dateIso) {
+      return new Date((m as MatchCardViewModel).dateIso).getTime() || 0;
+    }
+    const raw = (m as Match).date || "";
+    return raw ? new Date(raw).getTime() || 0 : 0;
+  };
+
+  // Sort upcoming chronologically ascending
+  upcomingList.sort((a, b) => getMatchTime(a) - getMatchTime(b));
+
+  // Sort completed chronologically descending
+  rawCompleted.sort((a, b) => getMatchTime(b) - getMatchTime(a));
+
+  // Deduplicate
+  const dedupe = (list: UniversalMatch[]): UniversalMatch[] => {
+    const seen = new Set<string>();
+    const result: UniversalMatch[] = [];
+    for (const m of list) {
+      const key = getMatchKey(m);
+      if (key && !seen.has(key)) {
+        seen.add(key);
+        result.push(m);
+      } else if (!key) {
+        result.push(m);
+      }
+    }
+    return result;
+  };
+
+  const dedupedUpcoming = dedupe(upcomingList);
+  const dedupedCompleted = dedupe(rawCompleted);
+
+  // Determine Primary Match and Companions
+  let primaryMatch: UniversalMatch | null = nextMatch || null;
+  let isPrimaryCompleted = false;
+  const companionSlots: { match: UniversalMatch; isCompleted: boolean }[] = [];
+
+  if (primaryMatch && isMatchUpcoming(primaryMatch)) {
+    isPrimaryCompleted = false;
+    const primaryKey = getMatchKey(primaryMatch);
+    const nextUpcoming = dedupedUpcoming.filter(
+      (m) => getMatchKey(m) !== primaryKey
+    ).slice(0, 2);
+
+    nextUpcoming.forEach((m) => companionSlots.push({ match: m, isCompleted: false }));
+
+    if (companionSlots.length < 2) {
+      const needed = 2 - companionSlots.length;
+      const backfill = dedupedCompleted.slice(0, needed);
+      backfill.forEach((m) => companionSlots.push({ match: m, isCompleted: true }));
+    }
+  } else if (dedupedUpcoming.length > 0) {
+    primaryMatch = dedupedUpcoming[0];
+    isPrimaryCompleted = false;
+    const nextUpcoming = dedupedUpcoming.slice(1, 3);
+    nextUpcoming.forEach((m) => companionSlots.push({ match: m, isCompleted: false }));
+
+    if (companionSlots.length < 2) {
+      const needed = 2 - companionSlots.length;
+      const backfill = dedupedCompleted.slice(0, needed);
+      backfill.forEach((m) => companionSlots.push({ match: m, isCompleted: true }));
+    }
+  } else if (dedupedCompleted.length > 0) {
+    primaryMatch = dedupedCompleted[0];
+    isPrimaryCompleted = true;
+    const backfill = dedupedCompleted.slice(1, 3);
+    backfill.forEach((m) => companionSlots.push({ match: m, isCompleted: true }));
+  }
+
+  // If completely empty
+  if (!primaryMatch) {
+    return (
+      <section className="py-12 bg-[#060a08] text-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="relative overflow-hidden rounded-2xl border border-white/10 bg-[#0c140f]/60 backdrop-blur-md p-8 text-center">
+            <CalendarDays className="w-10 h-10 text-zru-green mx-auto mb-3" />
+            <h3 className="text-lg font-bold text-white mb-1">
+              Season Fixtures Being Finalised
+            </h3>
+            <p className="text-xs text-white/60 max-w-md mx-auto mb-4">
+              Upcoming international and domestic fixtures are being updated. Check the Match Centre for complete schedules and archives.
+            </p>
+            <Link
+              href="/match-centre"
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-zru-green text-white text-xs font-bold hover:bg-zru-green/90 transition-colors"
+            >
+              <span>Visit Match Centre</span>
+              <ArrowRight className="w-3.5 h-3.5" />
+            </Link>
+          </div>
+        </div>
+      </section>
+    );
+  }
 
   return (
-    <section
-      aria-label="Match Centre & Upcoming Fixtures"
-      className="py-12 sm:py-16 bg-[#002D1A] relative overflow-hidden"
-    >
-      {/* Dynamic Background Accents */}
-      <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute top-0 right-1/4 w-96 h-96 bg-accent-teal/10 rounded-full blur-3xl" />
-        <div className="absolute bottom-0 left-1/4 w-96 h-96 bg-zru-green/20 rounded-full blur-3xl" />
-      </div>
+    <section className="py-16 sm:py-24 bg-[#060a08] text-white relative overflow-hidden">
+      {/* Background ambient lighting */}
+      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[700px] h-[350px] bg-zru-green/5 blur-[140px] pointer-events-none rounded-full" />
 
-      <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Section Header */}
-        <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-8 sm:mb-10 gap-4 border-b border-white/10 pb-4">
-          <div className="heading-plate heading-plate-light">
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-heading font-black uppercase text-white tracking-tight leading-[1.05]">
-              UPCOMING <span className="text-accent-teal">FIXTURES</span>
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-8 sm:mb-12 border-b border-white/10 pb-6">
+          <div>
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-none bg-zru-green/15 text-emerald-300 border border-zru-green/30 text-[10px] font-mono font-bold uppercase tracking-widest mb-3">
+              <span>NATIONAL & DOMESTIC FIXTURES</span>
+            </div>
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-heading font-black text-white uppercase tracking-tight">
+              UPCOMING <span className="text-zru-green">FIXTURES</span>
             </h2>
           </div>
 
           <Link
             href="/match-centre"
-            className="group inline-flex items-center gap-2 text-xs font-heading font-black tracking-widest uppercase text-accent-teal hover:text-white transition-colors self-start sm:self-auto py-1"
+            className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-zru-green/20 hover:bg-zru-green text-white text-xs font-heading font-black uppercase tracking-wider transition-colors border border-zru-green/30 group"
           >
-            <span>FULL MATCH SCHEDULE</span>
-            <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+            <span>View Full Match Centre</span>
+            <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
           </Link>
         </div>
 
-        {/* Feature Grid: Next Match Hero Card + Fixture List */}
+        {/* Responsive Grid: Primary Match (Left/Large) + Companion Cards (Right/Stacked) */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
-          {/* Main Next Match Card (Span 8) */}
-          <div className="lg:col-span-8 bg-[#002214]/60 backdrop-blur-xl rounded-[24px] border border-[#006747]/30 p-6 sm:p-8 flex flex-col justify-between shadow-2xl relative overflow-hidden">
-            {/* Top Match Banner */}
-            <div className="flex items-center justify-between gap-2 border-b border-white/10 pb-4 mb-6">
-              <span className="px-3.5 py-1 bg-white text-zru-green text-[10px] font-black uppercase tracking-widest rounded-md shadow">
-                {competition}
-              </span>
-              <span className="text-white/70 text-xs font-heading font-black tracking-widest uppercase">
-                NEXT OFFICIAL TEST
-              </span>
-            </div>
-
-            {/* Teams Duel Layout */}
-            <div className="grid grid-cols-7 items-center py-6 my-auto gap-2 text-center">
-              {/* Home Team */}
-              <div className="col-span-3 flex flex-col items-center gap-3">
-                <div className="relative w-20 h-20 sm:w-28 sm:h-28 rounded-2xl bg-white/10 border border-white/15 p-3 flex items-center justify-center shadow-lg">
-                  {nextMatch?.homeTeam?.logo ? (
-                    <Image
-                      src={nextMatch.homeTeam.logo}
-                      alt={homeTeamName}
-                      fill
-                      className="object-contain p-2"
-                    />
-                  ) : (
-                    <span className="font-heading font-black text-2xl text-accent-teal">
-                      {nextMatch?.homeTeam?.code || "ZIM"}
-                    </span>
-                  )}
-                </div>
-                <h3 className="font-heading font-black text-base sm:text-xl text-white uppercase tracking-tight leading-tight">
-                  {homeTeamName}
-                </h3>
-              </div>
-
-              {/* VS Separator */}
-              <div className="col-span-1 flex flex-col items-center justify-center">
-                <span className="font-heading font-black text-xl sm:text-3xl text-accent-teal tracking-widest">
-                  VS
-                </span>
-              </div>
-
-              {/* Away Team */}
-              <div className="col-span-3 flex flex-col items-center gap-3">
-                <div className="relative w-20 h-20 sm:w-28 sm:h-28 rounded-2xl bg-white/10 border border-white/15 p-3 flex items-center justify-center shadow-lg">
-                  {nextMatch?.awayTeam?.logo ? (
-                    <Image
-                      src={nextMatch.awayTeam.logo}
-                      alt={awayTeamName}
-                      fill
-                      className="object-contain p-2"
-                    />
-                  ) : (
-                    <span className="font-heading font-black text-2xl text-white/60">
-                      {nextMatch?.awayTeam?.code || "TBA"}
-                    </span>
-                  )}
-                </div>
-                <h3 className="font-heading font-black text-base sm:text-xl text-white uppercase tracking-tight leading-tight">
-                  {awayTeamName}
-                </h3>
-              </div>
-            </div>
-
-            {/* Match Meta Footer & Action CTAs */}
-            <div className="pt-6 border-t border-white/10 mt-6 flex flex-col sm:flex-row items-center justify-between gap-4">
-              <div className="flex flex-wrap items-center gap-4 text-xs text-white/80 font-bold">
-                <div className="flex items-center gap-1.5">
-                  <Calendar className="w-4 h-4 text-accent-teal" />
-                  <span>{matchDate}</span>
-                </div>
-                <div className="flex items-center gap-1.5">
-                  <Clock className="w-4 h-4 text-accent-teal" />
-                  <span>{time}</span>
-                </div>
-                <div className="flex items-center gap-1.5">
-                  <MapPin className="w-4 h-4 text-accent-teal" />
-                  <span>{venue}</span>
-                </div>
-              </div>
-
-              <div className="flex items-center gap-3 w-full sm:w-auto">
-                <Link
-                  href="/tickets"
-                  className="flex-1 sm:flex-none inline-flex items-center justify-center gap-2 px-6 py-2.5 rounded-lg bg-zru-green hover:bg-[#00875A] text-white font-heading font-black text-xs uppercase tracking-wider transition-all shadow-md"
-                >
-                  <Ticket className="w-4 h-4" />
-                  <span>Match Tickets</span>
-                </Link>
-                <Link
-                  href={nextMatch?.slug ? `/matches/${nextMatch.slug}` : "/match-centre"}
-                  className="flex-1 sm:flex-none inline-flex items-center justify-center gap-1.5 px-5 py-2.5 rounded-lg bg-white/10 hover:bg-white/20 text-white font-heading font-black text-xs uppercase tracking-wider transition-all"
-                >
-                  <span>Preview</span>
-                </Link>
-              </div>
-            </div>
+          {/* Primary Featured Card */}
+          <div className="lg:col-span-7 xl:col-span-7 flex flex-col">
+            <HomeFixtureCard
+              match={primaryMatch}
+              variant="primary"
+              isCompleted={isPrimaryCompleted}
+            />
           </div>
 
-          {/* Matchday Information Side Box (Span 4) */}
-          <div className="lg:col-span-4 bg-[#002214]/40 border border-[#006747]/20 rounded-[24px] p-6 sm:p-7 flex flex-col justify-between gap-6 shadow-xl backdrop-blur-md">
-            <div className="space-y-4">
-              <div className="flex items-center gap-2 text-xs font-black uppercase text-accent-teal tracking-widest font-heading">
-                <Ticket className="w-4 h-4" />
-                <span>MATCHDAY ADMISSION</span>
+          {/* Companion Cards Stack */}
+          <div className="lg:col-span-5 xl:col-span-5 flex flex-col justify-between gap-4 sm:gap-6">
+            {companionSlots.length > 0 ? (
+              companionSlots.map((slot, index) => (
+                <div key={getMatchKey(slot.match) || index} className="flex-1">
+                  <HomeFixtureCard
+                    match={slot.match}
+                    variant="companion"
+                    isCompleted={slot.isCompleted}
+                  />
+                </div>
+              ))
+            ) : (
+              <div className="h-full min-h-[180px] rounded-2xl border border-white/10 bg-[#0c140f]/60 backdrop-blur-md p-6 flex flex-col items-center justify-center text-center">
+                <p className="text-xs text-white/50 mb-3">
+                  More fixtures will be announced shortly.
+                </p>
+                <Link
+                  href="/match-centre"
+                  className="text-xs font-heading font-bold uppercase tracking-wider text-zru-green hover:underline inline-flex items-center gap-1"
+                >
+                  <span>Explore Match Centre</span>
+                  <ArrowRight className="w-3 h-3" />
+                </Link>
               </div>
-              <h4 className="font-heading font-black text-xl sm:text-2xl text-white uppercase leading-snug">
-                EXPERIENCE SABLES RUGBY LIVE
-              </h4>
-              <p className="text-white/70 text-xs leading-relaxed">
-                Secure your tickets in advance for national tests and domestic championships. Gates open 3 hours prior to kickoff with Fan Village access.
-              </p>
-            </div>
-
-            <div className="space-y-3 pt-4 border-t border-white/10">
-              <Link
-                href="/tickets"
-                className="w-full flex items-center justify-between p-3.5 rounded-xl bg-white/10 hover:bg-zru-green hover:text-white text-white transition-all text-xs font-heading font-black uppercase tracking-wider group"
-              >
-                <span>Buy Match Tickets</span>
-                <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
-              </Link>
-              <Link
-                href="/match-centre"
-                className="w-full flex items-center justify-between p-3.5 rounded-xl bg-black/20 hover:bg-white/10 text-white/80 transition-all text-xs font-heading font-bold uppercase tracking-wider group"
-              >
-                <span>Domestic Results & Tables</span>
-                <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
-              </Link>
-            </div>
+            )}
           </div>
         </div>
       </div>
     </section>
   );
 }
+
+export { HomeUpcomingMatches };

@@ -54,16 +54,13 @@ export async function POST(req: Request, { params }: { params: Promise<{ actor: 
       submittedAt: new Date().toISOString(),
     };
 
-    // 1. Write to Supabase table (if active)
+    // Write to Supabase table
     if (process.env.NEXT_PUBLIC_SUPABASE_URL) {
       const { error: dbError } = await supabase.from("onboarding_submissions").insert([payload]);
       if (dbError) {
         console.warn("Supabase onboarding insert warning:", dbError.message);
       }
     }
-
-    // 2. Dual-write fallback buffer
-    await saveSubmission(`onboarding_${actor}` as Parameters<typeof saveSubmission>[0], payload);
 
     return NextResponse.json({
       success: true,

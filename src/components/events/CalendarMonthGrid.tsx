@@ -141,16 +141,16 @@ export default function CalendarMonthGrid({
                   : isSelected
                   ? "bg-zru-green/10 border-2 border-zru-green shadow-inner"
                   : isToday
-                  ? "bg-zru-gold/10 hover:bg-zru-gold/20"
+                  ? "bg-zru-green/5 hover:bg-zru-green/10"
                   : "bg-white hover:bg-black/2"
               }`}
             >
               {/* Top Cell Header: Date Number + Event Count Pill */}
               <div className="flex items-center justify-between">
                 <span
-                  className={`text-xs font-mono font-bold rounded-full w-6 h-6 flex items-center justify-center ${
+                  className={`text-xs font-mono font-bold rounded-none w-6 h-6 flex items-center justify-center ${
                     isToday
-                      ? "bg-zru-gold text-rich-black font-black shadow"
+                      ? "bg-rich-black text-white font-black shadow-sm"
                       : isSelected
                       ? "bg-zru-green text-white font-black"
                       : cell.isCurrentMonth
@@ -162,7 +162,7 @@ export default function CalendarMonthGrid({
                 </span>
 
                 {dayEvents.length > 0 && (
-                  <span className="text-[9px] font-mono font-black px-1.5 py-0.5 rounded-full bg-black text-white">
+                  <span className="text-[9px] font-mono font-black px-1.5 py-0.5 rounded-none bg-black text-white">
                     {dayEvents.length} {dayEvents.length === 1 ? "evt" : "evts"}
                   </span>
                 )}

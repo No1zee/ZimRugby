@@ -1,10 +1,5 @@
-/**
- * ZRU CRM CONNECTOR (Mock Service)
- * 
- * This module handles synchronization with the ZRU central supporter database (CRM).
- * In a production environment, this would integrate with services like HubSpot, 
- * Mailchimp, or a custom sovereign data hub.
- */
+import { supabase } from "@/lib/supabase/client";
+import { publishToQueue } from "@/lib/qstash/client";
 
 export interface SupporterData {
   name: string;
@@ -13,41 +8,75 @@ export interface SupporterData {
 }
 
 /**
- * Registers interest for a specific ticketed fixture.
- * Tags the supporter with the fixture ID for targeted ticket-drop alerts.
+ * Registers interest for a specific ticketed fixture into Supabase.
  */
 export async function registerTicketingInterest(fixtureId: string, data: SupporterData) {
-  console.log(`[CRM] Registering interest for fixture: ${fixtureId}`, data);
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://zimrugby.vercel.app";
   
-  // Simulate network delay
-  await new Promise(resolve => setTimeout(resolve, 800));
+  const record = {
+    fixture_id: fixtureId,
+    name: data.name,
+    email: data.email,
+    registered_at: new Date().toISOString(),
+  };
 
-  // Actual implementation would:
-  // 1. POST to /api/crm/events
-  // 2. Add 'ticketing_interest' tag
-  // 3. Add 'fixture_<id>' tag
-  
+  if (process.env.NEXT_PUBLIC_SUPABASE_URL) {
+    try {
+      await supabase.from("ticket_interest").insert([record]);
+    } catch {}
+  }
+
+  await publishToQueue(`${baseUrl}/api/queue/worker`, {
+    formType: "ticket_interest",
+    data: record,
+  });
+
   return { success: true, message: "Interest registered successfully." };
 }
 
 /**
- * Adds a new supporter to ZRU Nation (Free Membership).
+ * Adds a new supporter to ZRU Nation (Supabase persistence).
  */
 export async function joinZRUNation(data: SupporterData) {
-  console.log(`[CRM] New ZRU Nation Member:`, data);
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://zimrugby.vercel.app";
   
-  await new Promise(resolve => setTimeout(resolve, 1000));
-  
-  return { success: true, memberId: Math.random().toString(36).substr(2, 9) };
+  const memberData = {
+    name: data.name,
+    email: data.email,
+    registered_at: new Date().toISOString(),
+    vip_code: "SABLES2027",
+  };
+
+  if (process.env.NEXT_PUBLIC_SUPABASE_URL) {
+    try {
+      await supabase.from("fan_zone_members").insert([memberData]);
+    } catch {}
+  }
+
+  await publishToQueue(`${baseUrl}/api/queue/worker`, {
+    formType: "fan_zone_member",
+    data: memberData,
+  });
+
+  return { success: true, memberId: Math.random().toString(36).substring(2, 11).toUpperCase() };
 }
 
 /**
- * Records a pledge impact for the World Cup Campaign.
+ * Records a pledge impact for the World Cup Campaign into Supabase.
  */
 export async function recordCampaignPledge(email: string, tierId: string) {
-  console.log(`[CRM] Recording campaign pledge for ${email}: ${tierId}`);
-  
-  await new Promise(resolve => setTimeout(resolve, 500));
-  
+  const pledgeData = {
+    email,
+    tier_id: tierId,
+    campaign_slug: "road-to-australia-2027",
+    created_at: new Date().toISOString(),
+  };
+
+  if (process.env.NEXT_PUBLIC_SUPABASE_URL) {
+    try {
+      await supabase.from("campaign_pledges").insert([pledgeData]);
+    } catch {}
+  }
+
   return { success: true };
 }
