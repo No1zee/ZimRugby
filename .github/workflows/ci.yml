@@ -2,9 +2,9 @@ name: CI
 
 on:
   push:
-    branches: [preview]
+    branches: [preview, main]
   pull_request:
-    branches: [preview]
+    branches: [preview, main]
 
 jobs:
   verify:
@@ -21,8 +21,14 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Environment Pre-Flight Sanitation
+        run: node scripts/sanitize-env.mjs
+
       - name: Typecheck
         run: npx tsc --noEmit
 
-      - name: Unit tests
+      - name: Unit and Security Tests
         run: npm test
+
+      - name: Production Build Verification
+        run: npm run build

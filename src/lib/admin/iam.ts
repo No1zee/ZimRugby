@@ -1,4 +1,5 @@
 export type UserRole = string;
+export type AdminRole = UserRole;
 
 export interface CollectionGrant {
   create?: boolean;
@@ -20,6 +21,7 @@ export interface RolePermissions {
   ai_assistant?: boolean;
   media_upload?: boolean;
   fanzone_pii?: boolean;
+  audit_view?: boolean;
 }
 
 export interface IAMUser {
@@ -150,10 +152,10 @@ export function canCreateCollection(perms: RolePermissions | null | undefined, c
   return canOnCollection(perms, collection, "create");
 }
 
-// Feature-flag gate for the advanced surfaces (Pages builder / AI assistant)
+// Feature-flag gate for the advanced surfaces (Pages builder / AI assistant / Audit logs)
 export function canUseFeature(
   perms: RolePermissions | null | undefined,
-  feature: "pages_builder" | "ai_assistant" | "media_upload" | "fanzone_pii"
+  feature: "pages_builder" | "ai_assistant" | "media_upload" | "fanzone_pii" | "audit_view"
 ): boolean {
   if (!perms) return false;
   if (perms.all) return true;
@@ -176,8 +178,14 @@ export type AdminTabId =
   | "teams"
   | "clubs"
   | "campaigns"
+  | "signups"
   | "fanzone"
   | "onboarding"
+  | "trash"
+  | "backups"
+  | "logs"
+  | "analytics"
+  | "users"
   | "roles"
   | "audit_logs"
   | "backups";
@@ -196,11 +204,13 @@ export function canAccessTab(
  * only rendered when BOTH the tab list and the matching feature flag allow
  * it, so a DB row that grants a tab but forgets the flag still can't see it.
  */
-const TAB_FEATURE: Partial<Record<string, "pages_builder" | "ai_assistant" | "fanzone_pii" | "media_upload">> = {
+const TAB_FEATURE: Partial<Record<string, "pages_builder" | "ai_assistant" | "fanzone_pii" | "media_upload" | "audit_view">> = {
   directus_ai: "ai_assistant",
   pages: "pages_builder",
   fanzone: "fanzone_pii",
   onboarding: "fanzone_pii",
+  logs: "audit_view",
+  audit_logs: "audit_view",
 };
 
 export function canAccessPanel(

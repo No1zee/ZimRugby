@@ -41,6 +41,11 @@ export async function updateSession(request: NextRequest) {
   const isAdminRoute = path.startsWith('/admin/') || path === '/admin'
   const isUserRoute = path.startsWith('/dashboard') || path.startsWith('/portal')
 
+  // In development, bypass admin route authentication so local testing is friction-free
+  if (process.env.NODE_ENV === 'development' && isAdminRoute) {
+    return supabaseResponse
+  }
+
   // Redirect unauthenticated visitors to the unified login
   if (!user) {
     if (isAdminRoute) {

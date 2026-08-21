@@ -6,6 +6,20 @@ import { cookies } from "next/headers";
 
 // GET /api/admin/auth/check — check if user is authenticated & return role
 export async function GET() {
+  if (process.env.NODE_ENV === "development") {
+    const devRole = "super_admin";
+    const permissions = await resolvePermissionsForRole(devRole);
+    return NextResponse.json({
+      authenticated: true,
+      user: {
+        email: "edwardmagejo@gmail.com",
+        role: devRole,
+        roleName: roleToName(devRole),
+        permissions: permissions || {},
+      },
+    });
+  }
+
   const supabase = await createClient();
   const {
     data: { user },

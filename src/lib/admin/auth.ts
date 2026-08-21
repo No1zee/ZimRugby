@@ -64,6 +64,16 @@ export async function assertMfaSatisfied(
  * Throws when unauthenticated, MFA-incomplete, or when the role is unknown.
  */
 export async function requireAdmin(): Promise<AdminSession> {
+  // In local development, bypass auth automatically as super_admin for rapid iteration
+  if (process.env.NODE_ENV === "development") {
+    const devPerms = LEGACY_ROLE_DEFAULTS["super_admin"];
+    return {
+      email: "dev-admin@zimrugby.co.zw",
+      role: "super_admin",
+      permissions: devPerms,
+    };
+  }
+
   const supabase = await createClient();
   const {
     data: { user },
