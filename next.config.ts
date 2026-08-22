@@ -69,6 +69,10 @@ const nextConfig: NextConfig = {
         value: cspHeader,
       },
       {
+        key: "Strict-Transport-Security",
+        value: "max-age=63072000; includeSubDomains; preload",
+      },
+      {
         key: "X-Frame-Options",
         value: "DENY",
       },
@@ -80,9 +84,27 @@ const nextConfig: NextConfig = {
         key: "Referrer-Policy",
         value: "strict-origin-when-cross-origin",
       },
+      {
+        key: "Permissions-Policy",
+        value: "camera=(), microphone=(), geolocation=(), payment=()",
+      },
+      {
+        key: "X-Permitted-Cross-Domain-Policies",
+        value: "none",
+      },
     ];
 
     return [
+      // Static assets — aggressive immutable edge cache (saves bandwidth and compute)
+      {
+        source: "/(images|fonts|icons)/:path*",
+        headers: [
+          {
+            key: "Cache-Control",
+            value: "public, max-age=31536000, immutable",
+          },
+        ],
+      },
       // Pages and API routes — need full security headers
       {
         source: "/((?!_next/static|_next/image|images|fonts|favicon|icons|manifest\\.json).*)",

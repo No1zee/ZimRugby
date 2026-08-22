@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { ArrowRight, Heart, Users, GraduationCap } from "lucide-react";
 import Link from "next/link";
 import { AnimatedCounter } from "../ui/animations";
+import { KineticHeading } from "@/components/ui/KineticHeading";
 import SlantedButton from "@/components/ui/SlantedButton";
 
 const programs = [
@@ -60,9 +61,13 @@ export default function PlayRugbyDevelopment() {
           className="border-b border-white/20 pb-8 max-w-3xl space-y-4"
         >
           <div className="heading-plate heading-plate-light">
-            <h2 className="text-3xl sm:text-5xl font-heading font-black uppercase tracking-tight text-white not-italic leading-[1.05]">
-              RUGBY FOR <span className="text-emerald-400">GOOD</span>
-            </h2>
+            <KineticHeading
+              text="RUGBY FOR"
+              accentText="GOOD"
+              as="h2"
+              className="text-3xl sm:text-5xl font-heading font-black uppercase tracking-tight text-white not-italic leading-[1.05]"
+              accentClassName="text-emerald-400 ml-2 sm:ml-3"
+            />
           </div>
           <p className="text-sm md:text-base text-white/80 font-normal leading-relaxed border-l-2 border-emerald-400 pl-6 max-w-2xl">
             Using rugby to transform communities, empower youth, and build an enduring sporting legacy across Zimbabwe.

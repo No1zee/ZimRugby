@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { ArrowUpRight, Edit2, FileText, Loader2, Layout, Layers, CheckCircle2, Globe2 } from "lucide-react";
+import { ArrowUpRight, Edit2, FileText, Loader2, Layout, Layers, Globe2 } from "lucide-react";
 import { useToast } from "@/components/admin/ui/ToastProvider";
 
 interface Page {
@@ -52,7 +52,7 @@ export default function PagesGrid({
   return (
     <div className="space-y-6">
       {/* Header Banner */}
-      <div className="rounded-2xl border border-black/10 bg-white p-6 shadow-sm flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+      <div className="rounded-2xl border border-black/10 bg-white p-6 shadow-xs flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <div>
           <div className="flex items-center gap-2 mb-1">
             <span className="flex h-2 w-2 rounded-full bg-zru-green" />
@@ -90,7 +90,7 @@ export default function PagesGrid({
               <div
                 key={page.id}
                 className={`group relative flex flex-col justify-between rounded-2xl border bg-white p-6 transition-all duration-200 hover:shadow-lg ${
-                  isHome ? "border-zru-green/40 shadow-sm md:col-span-2 lg:col-span-2" : "border-black/10 hover:border-black/20"
+                  isHome ? "border-zru-green/40 shadow-xs md:col-span-2 lg:col-span-2" : "border-black/10 hover:border-black/20"
                 }`}
               >
                 <div>
@@ -144,7 +144,7 @@ export default function PagesGrid({
                   <div className="grid grid-cols-2 gap-2.5">
                     <Link
                       href={`/admin/${page.slug}`}
-                      className="flex items-center justify-center gap-1.5 rounded-xl bg-zru-green py-2.5 text-center text-xs font-black uppercase tracking-wider text-white shadow-sm transition-all hover:bg-green-800"
+                      className="flex items-center justify-center gap-1.5 rounded-xl bg-zru-green py-2.5 text-center text-xs font-black uppercase tracking-wider text-white shadow-xs transition-all hover:bg-green-800"
                     >
                       <Edit2 className="h-3.5 w-3.5" /> Edit Layout
                     </Link>

@@ -19,11 +19,21 @@
   --color-neutral-mid: #4A4A4A;
   --color-neutral-light: #FDFBF0; /* Milk White */
   --color-white: #FFFFFF;
-  --color-milk-white: #FDFBF0;
+  --color-milk-white: #fcfaef;
   --color-black: #000000;
 
+  /* Stitch Material-3 Warm Surface Tokens */
+  --color-surface-bg: #fcfaef;
+  --color-surface-card: #ffffff;
+  --color-surface-border: #eae8de;
+  --color-surface-border-subtle: #f0eee3;
+  --color-surface-container: #f0eee3;
+  --color-surface-container-low: #f6f4e9;
+  --color-on-surface: #1b1c16;
+  --color-on-surface-variant: #404942;
+
   --color-zru-green: var(--color-green-primary);
-  --color-rich-black: #0E0E0E;
+  --color-rich-black: #1b1c16;
   --color-gray-900: var(--color-neutral-dark);
   --color-gray-100: var(--color-neutral-light);
   --color-blue-600: var(--color-zru-green);

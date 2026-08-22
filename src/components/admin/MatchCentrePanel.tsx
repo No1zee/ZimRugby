@@ -17,13 +17,20 @@ import {
   ChevronRight,
   RotateCcw,
   Zap,
+  FileText,
+  Image as ImageIcon,
 } from "lucide-react";
 import StatusChip, { EmptyState } from "./ui/StatusChip";
 import { Pagination } from "./ui/ListTools";
 import CollapsibleSection from "./ui/CollapsibleSection";
 import { useToast } from "./ui/ToastProvider";
 import { useConfirm } from "./ui/ConfirmProvider";
+import MatchSheetExporter from "./MatchSheetExporter";
+import MatchSocialCardModal from "./MatchSocialCardModal";
 import type { MatchCardViewModel, StandingsTableViewModel } from "@/lib/match-centre/types";
+import { generatePostMatchReport } from "@/lib/match-centre/report-generator";
+import { setAdminTab } from "@/lib/admin/tab-events";
+import { getFlagUrl } from "@/lib/flags";
 
 interface LookupOption {
   id: string | number;
@@ -67,6 +74,8 @@ export default function MatchCentrePanel({
   // Inline score editing & Live Matchday Operator
   const [savingId, setSavingId] = useState<string | null>(null);
   const [activeOperatorMatchId, setActiveOperatorMatchId] = useState<string | null>(null);
+  const [activeSheetMatch, setActiveSheetMatch] = useState<MatchCardViewModel | null>(null);
+  const [activeSocialMatch, setActiveSocialMatch] = useState<MatchCardViewModel | null>(null);
 
   const [query, setQuery] = useState("");
   const [page, setPage] = useState(1);
@@ -86,6 +95,12 @@ export default function MatchCentrePanel({
     if (!activeOperatorMatchId) return null;
     return initialMatches.find((m) => m.id === activeOperatorMatchId) || null;
   }, [activeOperatorMatchId, initialMatches]);
+
+  function handleDraftStory(match: MatchCardViewModel) {
+    const draft = generatePostMatchReport(match);
+    setAdminTab("news", undefined, draft);
+    toast("Post-match story drafted! Switching to News Studio...", "success");
+  }
 
   async function createFixture(e: React.FormEvent) {
     e.preventDefault();
@@ -389,10 +404,19 @@ export default function MatchCentrePanel({
           />
 
           <div className="relative z-10 flex flex-wrap items-start justify-between gap-4">
-            <div className="flex items-center gap-3">
-              <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-zru-green/20 border border-zru-green/40 shadow-inner">
-                <CalendarClock className="h-6 w-6 text-zru-green" />
-              </span>
+            <div className="flex items-center gap-4">
+              <div className="flex items-center -space-x-3 shrink-0">
+                <img
+                  src={getFlagUrl(nextMatch.homeTeam?.name || "Zimbabwe")}
+                  alt={nextMatch.homeTeam?.name || "Home"}
+                  className="w-12 h-12 rounded-full border-2 border-white object-cover shadow-md z-10 bg-white"
+                />
+                <img
+                  src={getFlagUrl(nextMatch.awayTeam?.name || "Opponent")}
+                  alt={nextMatch.awayTeam?.name || "Away"}
+                  className="w-12 h-12 rounded-full border-2 border-white object-cover shadow-md bg-white"
+                />
+              </div>
               <div>
                 <div className="flex items-center gap-2 mb-0.5">
                   <span className="font-heading text-[10px] font-black uppercase tracking-[0.2em] text-white/50">
@@ -554,6 +578,11 @@ export default function MatchCentrePanel({
               <span className="rounded-full bg-zru-green/20 border border-zru-green/40 px-3 py-0.5 text-[9px] font-black uppercase tracking-widest text-zru-green mb-1">
                 HOME
               </span>
+              <img
+                src={getFlagUrl(activeOperatorMatch.homeTeam?.name || "Zimbabwe")}
+                alt=""
+                className="w-14 h-14 rounded-full border-2 border-white/20 object-cover shadow-md my-1 bg-white"
+              />
               <div className="font-heading text-base font-black uppercase text-white tracking-wide text-center">
                 {activeOperatorMatch.homeTeam?.name || "Zimbabwe Sables"}
               </div>
@@ -600,6 +629,11 @@ export default function MatchCentrePanel({
               <span className="rounded-full bg-white/10 border border-white/20 px-3 py-0.5 text-[9px] font-black uppercase tracking-widest text-white/60 mb-1">
                 AWAY
               </span>
+              <img
+                src={getFlagUrl(activeOperatorMatch.awayTeam?.name || "Opponent")}
+                alt=""
+                className="w-14 h-14 rounded-full border-2 border-white/20 object-cover shadow-md my-1 bg-white"
+              />
               <div className="font-heading text-base font-black uppercase text-white tracking-wide text-center">
                 {activeOperatorMatch.awayTeam?.name || "Opponent"}
               </div>
@@ -647,7 +681,7 @@ export default function MatchCentrePanel({
               <Zap className="w-3.5 h-3.5 text-zru-green" />
               <span>Instant Edge broadcast updates fans in real-time</span>
             </div>
-            <div className="flex items-center gap-2">
+            <div className="flex flex-wrap items-center gap-2">
               <button
                 type="button"
                 onClick={() => changeStatus(activeOperatorMatch.id, "live")}
@@ -661,6 +695,15 @@ export default function MatchCentrePanel({
                 className="px-4 py-2 rounded-xl bg-amber-500/20 text-amber-300 border border-amber-500/30 hover:bg-amber-500/30 text-xs font-black uppercase tracking-wider cursor-pointer"
               >
                 Mark Full Time (Final)
+              </button>
+              <button
+                type="button"
+                onClick={() => handleDraftStory(activeOperatorMatch)}
+                className="px-4 py-2 rounded-xl bg-zru-green text-white hover:bg-green-700 text-xs font-black uppercase tracking-wider flex items-center gap-1.5 transition-all shadow-md cursor-pointer"
+                title="1-Click Draft Post-Match Story into News Studio"
+              >
+                <Newspaper className="w-3.5 h-3.5" />
+                <span>Draft Post-Match Story</span>
               </button>
             </div>
           </div>
@@ -685,7 +728,7 @@ export default function MatchCentrePanel({
             <select
               value={teamId}
               onChange={(e) => setTeamId(e.target.value)}
-              className="w-full rounded-xl border border-black/10 bg-white p-3 text-sm font-bold outline-none focus:border-zru-green"
+              className="w-full rounded-xl border border-[#eae8de] bg-white p-3 text-sm font-bold outline-none focus:border-zru-green"
             >
               <option value="">— Select Home Team —</option>
               {teams.map((t) => (
@@ -702,7 +745,7 @@ export default function MatchCentrePanel({
             <select
               value={opponentId}
               onChange={(e) => setOpponentId(e.target.value)}
-              className="w-full rounded-xl border border-black/10 bg-white p-3 text-sm font-bold outline-none focus:border-zru-green"
+              className="w-full rounded-xl border border-[#eae8de] bg-white p-3 text-sm font-bold outline-none focus:border-zru-green"
             >
               <option value="">— Select Opponent —</option>
               {opponents.map((o) => (
@@ -719,7 +762,7 @@ export default function MatchCentrePanel({
             <select
               value={competitionId}
               onChange={(e) => setCompetitionId(e.target.value)}
-              className="w-full rounded-xl border border-black/10 bg-white p-3 text-sm font-bold outline-none focus:border-zru-green"
+              className="w-full rounded-xl border border-[#eae8de] bg-white p-3 text-sm font-bold outline-none focus:border-zru-green"
             >
               <option value="">— Select Competition —</option>
               {competitions.map((c) => (
@@ -734,7 +777,7 @@ export default function MatchCentrePanel({
             <select
               value={venueId}
               onChange={(e) => setVenueId(e.target.value)}
-              className="w-full rounded-xl border border-black/10 bg-white p-3 text-sm font-bold outline-none focus:border-zru-green"
+              className="w-full rounded-xl border border-[#eae8de] bg-white p-3 text-sm font-bold outline-none focus:border-zru-green"
             >
               <option value="">— Select Stadium / Venue —</option>
               {venues.map((v) => (
@@ -752,7 +795,7 @@ export default function MatchCentrePanel({
               type="datetime-local"
               value={kickoff}
               onChange={(e) => setKickoff(e.target.value)}
-              className="w-full rounded-xl border border-black/10 bg-white p-3 text-sm font-bold outline-none focus:border-zru-green"
+              className="w-full rounded-xl border border-[#eae8de] bg-white p-3 text-sm font-bold outline-none focus:border-zru-green"
             />
           </div>
           <div>
@@ -764,7 +807,7 @@ export default function MatchCentrePanel({
               value={roundLabel}
               onChange={(e) => setRoundLabel(e.target.value)}
               placeholder="e.g. Round 1, Semi-Final, Cup Final"
-              className="w-full rounded-xl border border-black/10 bg-white p-3 text-sm outline-none focus:border-zru-green"
+              className="w-full rounded-xl border border-[#eae8de] bg-white p-3 text-sm outline-none focus:border-zru-green"
             />
           </div>
           <div className="md:col-span-2 flex justify-end pt-2">
@@ -779,7 +822,7 @@ export default function MatchCentrePanel({
       </CollapsibleSection>
 
       {/* ── FIXTURES & RESULTS LIST ─────────────────────────────────────── */}
-      <section className="rounded-2xl border border-black/10 bg-white p-6 shadow-sm">
+      <section className="rounded-2xl border border-[#eae8de] bg-white p-6 shadow-sm">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
           <div>
             <h2 className="flex items-center gap-2 font-heading text-xl font-black uppercase text-rich-black">
@@ -801,7 +844,7 @@ export default function MatchCentrePanel({
               setPage(1);
             }}
             placeholder="Search fixtures by team name, venue, competition..."
-            className="w-full rounded-xl border border-black/10 bg-black/[0.02] px-4 py-2.5 text-sm placeholder:text-black/40 focus:border-zru-green focus:bg-white focus:outline-none transition-colors"
+            className="w-full rounded-xl border border-[#eae8de] bg-black/[0.02] px-4 py-2.5 text-sm placeholder:text-black/40 focus:border-zru-green focus:bg-white focus:outline-none transition-colors"
           />
         </div>
 
@@ -824,7 +867,7 @@ export default function MatchCentrePanel({
                   className={`group flex flex-col gap-3 rounded-2xl border p-4.5 transition-all lg:flex-row lg:items-center lg:justify-between ${
                     isSelectedForOperator
                       ? "border-zru-green/50 bg-green-50/40 shadow-sm"
-                      : "border-black/10 bg-white hover:border-black/20"
+                      : "border-[#eae8de] bg-white hover:border-black/20"
                   }`}
                 >
                   <div className="min-w-0">
@@ -840,9 +883,23 @@ export default function MatchCentrePanel({
                       <StatusChip status={m.status} />
                     </div>
 
-                    <h4 className="mt-1.5 truncate font-heading text-base font-black uppercase text-rich-black">
-                      {matchLabel(m)}
-                    </h4>
+                    <div className="mt-1.5 flex items-center gap-2 min-w-0">
+                      <div className="flex items-center -space-x-1.5 shrink-0">
+                        <img
+                          src={getFlagUrl(m.homeTeam?.name || "Zimbabwe")}
+                          alt=""
+                          className="w-5 h-5 rounded-full border border-white object-cover shadow-xs bg-white"
+                        />
+                        <img
+                          src={getFlagUrl(m.awayTeam?.name || "Opponent")}
+                          alt=""
+                          className="w-5 h-5 rounded-full border border-white object-cover shadow-xs bg-white"
+                        />
+                      </div>
+                      <h4 className="truncate font-heading text-base font-black uppercase text-rich-black">
+                        {matchLabel(m)}
+                      </h4>
+                    </div>
 
                     <p className="mt-0.5 flex flex-wrap items-center gap-2 text-xs text-black/50">
                       <span className="flex items-center gap-1 font-medium">
@@ -875,7 +932,7 @@ export default function MatchCentrePanel({
                     <button
                       type="button"
                       onClick={() => openOperator(m.id)}
-                      className={`flex items-center gap-1.5 rounded-xl px-3.5 py-2 text-xs font-black uppercase tracking-wider transition-all cursor-pointer ${
+                      className={`flex items-center gap-1.5 rounded-xl px-3 py-2 text-xs font-black uppercase tracking-wider transition-all cursor-pointer ${
                         isSelectedForOperator
                           ? "bg-zru-green text-white shadow-md"
                           : "bg-black/5 text-black/75 hover:bg-zru-green hover:text-white"
@@ -885,10 +942,43 @@ export default function MatchCentrePanel({
                       <span>Live Operator</span>
                     </button>
 
+                    {/* World Rugby Match Sheet Exporter */}
+                    <button
+                      type="button"
+                      onClick={() => setActiveSheetMatch(m)}
+                      className="flex items-center gap-1.5 rounded-xl bg-black/5 px-3 py-2 text-xs font-bold uppercase tracking-wider text-black/75 hover:bg-black/10 transition-all cursor-pointer"
+                      title="Export official World Rugby Match Sheet PDF"
+                    >
+                      <FileText className="h-3.5 w-3.5 text-[#006747]" />
+                      <span className="hidden sm:inline">Sheet</span>
+                    </button>
+
+                    {/* Match Social Card Generator */}
+                    <button
+                      type="button"
+                      onClick={() => setActiveSocialMatch(m)}
+                      className="flex items-center gap-1.5 rounded-xl bg-black/5 px-3 py-2 text-xs font-bold uppercase tracking-wider text-black/75 hover:bg-black/10 transition-all cursor-pointer"
+                      title="Generate 1080x1350 Social Matchday Announcement Graphic"
+                    >
+                      <ImageIcon className="h-3.5 w-3.5 text-[#006747]" />
+                      <span className="hidden sm:inline">Social</span>
+                    </button>
+
+                    {/* 1-Click Post-Match Story Generator */}
+                    <button
+                      type="button"
+                      onClick={() => handleDraftStory(m)}
+                      className="flex items-center gap-1.5 rounded-xl bg-zru-green/10 hover:bg-zru-green text-zru-green hover:text-white px-3 py-2 text-xs font-black uppercase tracking-wider transition-all cursor-pointer shadow-xs"
+                      title="1-Click Generate Post-Match Story in News Studio"
+                    >
+                      <Newspaper className="h-3.5 w-3.5" />
+                      <span className="hidden sm:inline">Story</span>
+                    </button>
+
                     <select
                       value={m.status}
                       onChange={(e) => changeStatus(m.id, e.target.value)}
-                      className="rounded-xl border border-black/10 bg-white px-3 py-2 text-xs font-bold outline-none"
+                      className="rounded-xl border border-[#eae8de] bg-white px-3 py-2 text-xs font-bold outline-none"
                     >
                       <option value="upcoming">Upcoming</option>
                       <option value="live">Live</option>
@@ -909,13 +999,28 @@ export default function MatchCentrePanel({
           </div>
         )}
 
+        {/* Modal Portals */}
+        {activeSheetMatch && (
+          <MatchSheetExporter
+            match={activeSheetMatch}
+            onClose={() => setActiveSheetMatch(null)}
+          />
+        )}
+
+        {activeSocialMatch && (
+          <MatchSocialCardModal
+            match={activeSocialMatch}
+            onClose={() => setActiveSocialMatch(null)}
+          />
+        )}
+
         <div className="mt-6">
           <Pagination page={safePage} pageCount={pageCount} total={filtered.length} onPage={setPage} />
         </div>
       </section>
 
       {/* ── STANDINGS & LEADERBOARDS ────────────────────────────────────── */}
-      <section className="rounded-2xl border border-black/10 bg-white p-6 shadow-sm">
+      <section className="rounded-2xl border border-[#eae8de] bg-white p-6 shadow-sm">
         <h2 className="flex items-center gap-2 font-heading text-xl font-black uppercase text-rich-black">
           <Trophy className="h-5 w-5 text-zru-green" /> Official Standings & Leaderboards
         </h2>
@@ -928,7 +1033,7 @@ export default function MatchCentrePanel({
           </div>
         ) : (
           initialStandings.map((table) => (
-            <div key={table.id} className="mt-4 overflow-x-auto rounded-2xl border border-black/10">
+            <div key={table.id} className="mt-4 overflow-x-auto rounded-2xl border border-[#eae8de]">
               <div className="bg-[#0B1520] px-5 py-3 text-white flex items-center justify-between">
                 <h3 className="font-heading text-sm font-black uppercase tracking-wide">
                   {table.title} · {table.seasonYear}
@@ -939,7 +1044,7 @@ export default function MatchCentrePanel({
               </div>
               <table className="w-full text-sm">
                 <thead>
-                  <tr className="border-b border-black/10 bg-black/[0.02] text-left text-[10px] font-black uppercase tracking-wider text-black/50">
+                  <tr className="border-b border-[#eae8de] bg-black/[0.02] text-left text-[10px] font-black uppercase tracking-wider text-black/50">
                     <th className="px-4 py-3">#</th>
                     <th className="px-4 py-3">Team</th>
                     <th className="px-4 py-3 text-center">P</th>

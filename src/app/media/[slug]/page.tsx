@@ -30,14 +30,37 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const { slug } = await params;
   const report = await getReportById(slug);
   if (!report) return {};
+
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://zimrugby.vercel.app";
+  const ogUrl = new URL(`${baseUrl}/api/og`);
+  ogUrl.searchParams.set("title", report.title);
+  if (report.excerpt) ogUrl.searchParams.set("subtitle", report.excerpt);
+  if (report.category) ogUrl.searchParams.set("category", report.category);
+  if (report.image) ogUrl.searchParams.set("image", report.image);
+  if (report.date) ogUrl.searchParams.set("date", report.date);
+
   return {
     title: `${report.title} | Zimbabwe Rugby Union`,
     description: report.excerpt,
     openGraph: {
       title: report.title,
       description: report.excerpt,
-      images: [{ url: report.image }]
-    }
+      type: "article",
+      images: [
+        {
+          url: ogUrl.toString(),
+          width: 1200,
+          height: 630,
+          alt: report.title,
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: report.title,
+      description: report.excerpt,
+      images: [ogUrl.toString()],
+    },
   };
 }
 
@@ -100,6 +123,7 @@ export default async function ReportPage({ params }: PageProps) {
         category={report.category}
         date={report.date}
         readingMinutes={readingMinutes}
+        focalPoint={(report as any).focalPoint || (report as any).focal_position}
       />
 
       {/* 2. Main Article Content Container (Clean White/Off-White Editorial Space) */}

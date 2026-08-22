@@ -2,7 +2,6 @@ import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { roleToName } from "@/lib/admin/iam";
 import { assertMfaSatisfied, resolvePermissionsForRole } from "@/lib/admin/auth";
-import { cookies } from "next/headers";
 
 // GET /api/admin/auth/check — check if user is authenticated & return role
 export async function GET() {

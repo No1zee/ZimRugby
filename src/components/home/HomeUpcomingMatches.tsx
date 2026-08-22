@@ -3,6 +3,7 @@ import Link from "next/link";
 import { ArrowRight, CalendarDays } from "lucide-react";
 import { MatchCardViewModel } from "@/lib/match-centre/types";
 import { Match } from "@/types";
+import { KineticHeading } from "@/components/ui/KineticHeading";
 import { HomeFixtureCard, UniversalMatch } from "./HomeFixtureCard";
 
 export interface HomeUpcomingMatchesProps {
@@ -167,9 +168,13 @@ export default function HomeUpcomingMatches({
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-white/10 pb-4 mb-8 sm:mb-12">
           <div>
             <div className="heading-plate heading-plate-light">
-              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-heading font-black uppercase text-white tracking-tight leading-[1.05]">
-                UPCOMING <span className="text-zru-green">FIXTURES</span>
-              </h2>
+              <KineticHeading
+                text="UPCOMING"
+                accentText="FIXTURES"
+                as="h2"
+                className="text-3xl sm:text-4xl lg:text-5xl font-heading font-black uppercase text-white tracking-tight leading-[1.05]"
+                accentClassName="text-zru-green ml-2 sm:ml-3"
+              />
             </div>
           </div>
 

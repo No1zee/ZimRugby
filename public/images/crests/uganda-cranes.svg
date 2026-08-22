@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <circle cx="50" cy="50" r="48" fill="#1b1c1c" stroke="#fcdc04" stroke-width="3"/>
+  <circle cx="50" cy="50" r="38" fill="#d90000" stroke="#ffffff" stroke-width="1.5"/>
+  <circle cx="50" cy="50" r="26" fill="#ffffff"/>
+  <path d="M44 40 C46 34, 54 34, 56 40 C58 48, 52 56, 46 62 L56 62" stroke="#1b1c1c" stroke-width="3" fill="none" stroke-linecap="round"/>
+  <text x="50" y="82" font-family="Arial, sans-serif" font-size="6" font-weight="900" fill="#ffffff" text-anchor="middle" letter-spacing="1">UGANDA</text>
+</svg>

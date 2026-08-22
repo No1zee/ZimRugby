@@ -81,18 +81,17 @@ describe("canAccessPanel (tab + feature-flag gate)", () => {
   });
 
   it("denies when the feature flag is off even if the tab is listed", () => {
-    const editorWithPagesTab = { ...EDITOR, tabs: [...EDITOR.tabs, "pages", "directus_ai"] };
-    expect(canAccessPanel(editorWithPagesTab, "pages")).toBe(false);
-    expect(canAccessPanel(editorWithPagesTab, "directus_ai")).toBe(false);
+    const editorWithAiTab = { ...EDITOR, tabs: [...EDITOR.tabs, "directus_ai"] };
+    expect(canAccessPanel(editorWithAiTab, "directus_ai")).toBe(false);
   });
 
   it("allows when tab listed AND feature flag on", () => {
     const mediaPlus = {
       ...EDITOR,
-      tabs: [...EDITOR.tabs, "pages"],
-      pages_builder: true,
+      tabs: [...EDITOR.tabs, "directus_ai"],
+      ai_assistant: true,
     };
-    expect(canAccessPanel(mediaPlus, "pages")).toBe(true);
+    expect(canAccessPanel(mediaPlus, "directus_ai")).toBe(true);
   });
 
   it("fanzone/onboarding require fanzone_pii", () => {
@@ -105,7 +104,6 @@ describe("canAccessPanel (tab + feature-flag gate)", () => {
 
   it("super admin passes every panel", () => {
     expect(canAccessPanel({ all: true }, "directus_ai")).toBe(true);
-    expect(canAccessPanel({ all: true }, "pages")).toBe(true);
     expect(canAccessPanel({ all: true }, "roles")).toBe(true);
   });
 

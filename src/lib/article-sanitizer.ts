@@ -51,17 +51,23 @@ export function sanitizeArticleHtml(html: string, articleTitle: string): string 
   // 7. Remove empty paragraphs and stray whitespace paragraphs
   out = out.replace(/<p[^>]*>\s*(?:&nbsp;|\s)*<\/p>/gi, "");
 
-  // 8. Remove "Issued by..." footer lines (legacy sign-off, not editorial content)
-  out = out.replace(/<p[^>]*>\s*<strong>\s*Issued by[^<]*<\/strong>\s*<\/p>/gi, "");
-  out = out.replace(/<p[^>]*>\s*Issued by[^<]*<\/p>/gi, "");
+  // 8. Strip legacy WordPress post-meta lists, author links, and comment counts
+  out = out.replace(/<ul[^>]*class="[^"]*(?:post-meta|entry-meta|meta)[^"]*"[^>]*>[\s\S]*?<\/ul>/gi, "");
+  out = out.replace(/<ul[^>]*>(?:(?!<\/ul>)[\s\S])*?(?:Webmaster|\d+\s*Comments?|Leave a comment|#respond)[\s\S]*?<\/ul>/gi, "");
+  out = out.replace(/<ol[^>]*>(?:(?!<\/ol>)[\s\S])*?(?:Webmaster|\d+\s*Comments?|Leave a comment|#respond)[\s\S]*?<\/ol>/gi, "");
+  out = out.replace(/<li[^>]*>(?:(?!<\/li>)[\s\S])*?(?:Webmaster|\d+\s*Comments?|Leave a comment|#respond)[\s\S]*?<\/li>/gi, "");
+  out = out.replace(/<p[^>]*>(?:(?!<\/p>)[\s\S])*?(?:ZRU Webmaster|\d+\s*Comments?|Leave a comment)[\s\S]*?<\/p>/gi, "");
 
-  // 9. Remove contact info paragraphs (Marketing@zru.co.zw etc)
-  out = out.replace(/<p[^>]*>[\s\S]*?(?:Contact Information|Marketing@zru\.co\.zw)[\s\S]*?<\/p>/gi, "");
+  // 9. Remove "Issued by..." footer lines (legacy sign-off, not editorial content)
+  out = out.replace(/<p[^>]*>(?:(?!<\/p>)[\s\S])*?Issued by[\s\S]*?<\/p>/gi, "");
 
-  // 10. Normalise legacy zru.co.zw email links → plain text
+  // 10. Remove contact info paragraphs (Marketing@zru.co.zw etc) - bounded to single paragraph
+  out = out.replace(/<p[^>]*>(?:(?!<\/p>)[\s\S])*?(?:Contact Information|Marketing@zru\.co\.zw)[\s\S]*?<\/p>/gi, "");
+
+  // 11. Normalise legacy zru.co.zw email links → plain text
   out = out.replace(/<a\s+href="mailto:[^"]*"[^>]*>([\s\S]*?)<\/a>/gi, "$1");
 
-  // 11. Trim leading/trailing whitespace
+  // 12. Trim leading/trailing whitespace
   out = out.trim();
 
   return out;

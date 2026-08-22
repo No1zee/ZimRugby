@@ -13,15 +13,20 @@ export async function GET(
 ) {
   const { id } = await params;
 
-  if (!id) {
-    return new NextResponse("Missing asset ID", { status: 400 });
+  if (!id || !/^[a-zA-Z0-9_-]{1,64}$/.test(id)) {
+    return new NextResponse("Invalid or missing asset ID", { status: 400 });
   }
 
   try {
     const searchParams = request.nextUrl.searchParams;
-    const targetUrl = new URL(`${DIRECTUS_URL}/assets/${id}`);
+    const targetUrl = new URL(`${DIRECTUS_URL}/assets/${encodeURIComponent(id)}`);
+    
+    // Whitelist only safe Directus image transformation query parameters
+    const ALLOWED_PARAMS = new Set(["fit", "width", "height", "quality", "format", "transforms", "download"]);
     searchParams.forEach((value, key) => {
-      targetUrl.searchParams.set(key, value);
+      if (ALLOWED_PARAMS.has(key.toLowerCase())) {
+        targetUrl.searchParams.set(key, value);
+      }
     });
 
     const headers: HeadersInit = {};

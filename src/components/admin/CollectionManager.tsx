@@ -1,11 +1,41 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
-import { Plus, Pencil, Trash2, ChevronDown, Copy, CheckSquare, Square, Loader2, AlertCircle, Archive, RotateCcw, ShieldX } from "lucide-react";
+import { useEffect, useMemo, useRef, useState, useCallback } from "react";
+import {
+  Plus,
+  Pencil,
+  Trash2,
+  ChevronDown,
+  ChevronUp,
+  ChevronRight,
+  Copy,
+  CheckSquare,
+  Square,
+  Loader2,
+  AlertCircle,
+  Archive,
+  RotateCcw,
+  ShieldX,
+  Table,
+  LayoutGrid,
+  Layers,
+  ArrowUpDown,
+  Minimize2,
+  Maximize2,
+  Download,
+  Upload,
+  Eye,
+  X,
+  Check,
+  FileSpreadsheet,
+  Keyboard,
+  ExternalLink,
+} from "lucide-react";
 import { useRouter } from "next/navigation";
 import StatusChip from "./ui/StatusChip";
 import ImagePicker, { toAssetUrl } from "./ui/ImagePicker";
 import RichTextEditor from "./ui/RichTextEditor";
+import { getFlagUrl } from "@/lib/flags";
 import { SearchBox, Pagination } from "./ui/ListTools";
 import { useToast } from "./ui/ToastProvider";
 import { useConfirm, usePrompt } from "./ui/ConfirmProvider";
@@ -30,26 +60,18 @@ interface CollectionManagerProps {
   subtitleField?: string;
   badgeField?: string;
   statusField?: string;
-  /** Date-window fields (e.g. announcement starts_at/ends_at). Enables upcoming/active/expired chips + purge-expired. */
   scheduleField?: { starts: string; ends: string };
   searchable?: string[];
   pageSize?: number;
   singularLabel?: string;
   onDirtyChange?: (dirty: boolean) => void;
-  /** External request to open the editor for a specific item id. */
   focusId?: string | number | null;
   onFocusHandled?: () => void;
-  /** Per-action grants (role-gated UI). Absent = full access (all allowed). */
   grants?: { create?: boolean; update?: boolean; delete?: boolean };
-  /** Whether the actor may permanently purge trashed items (super admin). */
   canPurge?: boolean;
-  /** Enables the approval pipeline (Draft → In review → Approved → Live) for this collection. */
   reviewable?: boolean;
-  /** Whether the actor can approve/reject in-review items (editor, super admin). */
   canReview?: boolean;
-  /** Signed-in staff email — used to prevent reviewers approving their own work. */
   currentUserEmail?: string;
-  /** Default initial values to populate when creating a new record (e.g. preselected team). */
   initialValues?: Record<string, string>;
 }
 
@@ -70,48 +92,36 @@ function isBooleanValue(v: unknown): boolean {
   return typeof v === "boolean" || v === "true" || v === "false" || v === "1" || v === "0";
 }
 
-/** Normalised status label for filtering: boolean fields → shown/hidden, strings → lowercase value. */
+function itemSortKey(item: Record<string, unknown>): string {
+  const v = item.date_created || item.created_at || item.kickoff_at || item.date || item.id || "";
+  return String(v);
+}
+
 function statusValue(item: Record<string, unknown>, statusField?: string): string {
   if (!statusField) return "";
-  const raw = item[statusField];
-  if (isBooleanValue(raw)) return raw === true || raw === "true" || raw === "1" ? "shown" : "hidden";
-  return String(raw ?? "").toLowerCase();
+  const v = item[statusField];
+  if (typeof v === "boolean") return v ? "published" : "draft";
+  return String(v ?? "draft").toLowerCase();
 }
 
-function itemSortKey(item: Record<string, unknown>): string {
-  const d = item.created_at || item.date_created || item.date || item.updated_at;
-  if (d) return String(d);
-  return String(item.id ?? "");
-}
-
-/** Window lifecycle of a dated item: "upcoming" | "active" | "expired" | "" (no window set). */
-function scheduleValue(item: Record<string, unknown>, schedule?: { starts: string; ends: string }): string {
+function scheduleValue(item: Record<string, unknown>, schedule?: { starts: string; ends: string }): "upcoming" | "active" | "expired" | "" {
   if (!schedule) return "";
-  const now = Date.now();
   const starts = item[schedule.starts] ? new Date(String(item[schedule.starts])).getTime() : null;
   const ends = item[schedule.ends] ? new Date(String(item[schedule.ends])).getTime() : null;
-  const hasStarts = starts !== null && !isNaN(starts);
-  const hasEnds = ends !== null && !isNaN(ends);
-  if (hasStarts && now < starts) return "upcoming";
-  if (hasEnds && now > ends) return "expired";
-  if (hasStarts || hasEnds) return "active";
-  return "";
+  const now = Date.now();
+  if (starts && now < starts) return "upcoming";
+  if (ends && now > ends) return "expired";
+  return "active";
 }
 
 function formatWindowRange(item: Record<string, unknown>, schedule?: { starts: string; ends: string }): string {
   if (!schedule) return "";
-  const fmt = (v: unknown) => {
-    if (!v) return "";
-    const d = new Date(String(v));
-    return isNaN(d.getTime())
-      ? ""
-      : d.toLocaleDateString("en-GB", { day: "numeric", month: "short" }) +
-        (String(v).length > 10 ? ` ${d.toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit" })}` : "");
-  };
-  const s = fmt(item[schedule.starts]);
-  const e = fmt(item[schedule.ends]);
+  const s = item[schedule.starts] ? new Date(String(item[schedule.starts])).toLocaleDateString("en-GB") : "";
+  const e = item[schedule.ends] ? new Date(String(item[schedule.ends])).toLocaleDateString("en-GB") : "";
   if (s && e) return `${s} → ${e}`;
-  return s || e;
+  if (s) return `From ${s}`;
+  if (e) return `Until ${e}`;
+  return "";
 }
 
 export default function CollectionManager({
@@ -126,7 +136,7 @@ export default function CollectionManager({
   statusField,
   scheduleField,
   searchable,
-  pageSize = 8,
+  pageSize = 20,
   singularLabel,
   onDirtyChange,
   focusId,
@@ -141,9 +151,11 @@ export default function CollectionManager({
   const canCreate = grants?.create !== false;
   const canUpdate = grants?.update !== false;
   const canDelete = grants?.delete !== false;
+
   const [formData, setFormData] = useState<Record<string, string>>({});
   const [editingId, setEditingId] = useState<string | number | null>(null);
   const [formOpen, setFormOpen] = useState(false);
+  const [drawerOpen, setDrawerOpen] = useState(false);
   const [touched, setTouched] = useState(false);
   const [saving, setSaving] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -152,13 +164,37 @@ export default function CollectionManager({
   const [scheduleFilter, setScheduleFilter] = useState<string>("all");
   const [selected, setSelected] = useState<Set<string>>(new Set());
   const [bulkBusy, setBulkBusy] = useState(false);
-  const [sortNewest, setSortNewest] = useState(true);
+  const [density, setDensity] = useState<"compact" | "comfortable">("compact");
+  const [viewLayout, setViewLayout] = useState<"table" | "cards">("table");
+  const [sortColumn, setSortColumn] = useState<"display" | "date" | "status" | "id">("date");
+  const [sortAsc, setSortAsc] = useState(false);
+  const [groupBy, setGroupBy] = useState<"none" | "status" | "badge">("none");
   const [page, setPage] = useState(1);
   const [showTrash, setShowTrash] = useState(false);
   const [trashItems, setTrashItems] = useState<Record<string, unknown>[]>([]);
   const [trashBusy, setTrashBusy] = useState(false);
+
+  // Advanced features state
+  const [inlineEditing, setInlineEditing] = useState<{ id: string | number; field: string } | null>(null);
+  const [inlineValue, setInlineValue] = useState("");
+  const [showColumnMenu, setShowColumnMenu] = useState(false);
+  const [showImportModal, setShowImportModal] = useState(false);
+  const [importCsvText, setImportCsvText] = useState("");
+  const [importBusy, setImportBusy] = useState(false);
+  const [activeRowIndex, setActiveRowIndex] = useState<number>(-1);
+
+  // Column visibility
+  const [visibleColumns, setVisibleColumns] = useState({
+    thumbnail: true,
+    display: true,
+    badge: true,
+    status: true,
+    date: true,
+    id: true,
+    actions: true,
+  });
+
   const deletedBackup = useRef<{ id: string | number; item: Record<string, unknown> } | null>(null);
-  const publishedBackup = useRef<{ id: string | number; prev: unknown }[] | null>(null);
   const dirtyRef = useRef(false);
 
   const router = useRouter();
@@ -167,6 +203,7 @@ export default function CollectionManager({
   const prompt = usePrompt();
 
   const term = (v: unknown) => (v === null || v === undefined ? "" : String(v));
+  const label = singularLabel || title.replace(/s$/, "");
 
   useEffect(() => {
     const dirty = touched;
@@ -175,6 +212,54 @@ export default function CollectionManager({
       onDirtyChange?.(dirty);
     }
   }, [touched, onDirtyChange]);
+
+  const startEdit = useCallback(
+    (item: Record<string, unknown>, duplicate = false) => {
+      const data: Record<string, string> = {};
+      fields.forEach((f) => {
+        const val = item[f.key];
+        data[f.key] = term(val);
+      });
+      if (duplicate) {
+        if (displayField && data[displayField]) {
+          data[displayField] = `${data[displayField]} (Copy)`;
+        }
+        if (data["slug"]) data["slug"] = "";
+        if (statusField) data[statusField] = "draft";
+        setEditingId(null);
+      } else {
+        setEditingId(item.id as string | number);
+      }
+      setFormData(data);
+      setErrors({});
+      setTouched(false);
+      setFormOpen(true);
+      setDrawerOpen(true);
+    },
+    [fields, displayField, statusField]
+  );
+
+  const openNewForm = () => {
+    const data: Record<string, string> = {};
+    fields.forEach((f) => {
+      data[f.key] = initialValues?.[f.key] || "";
+    });
+    setFormData(data);
+    setEditingId(null);
+    setErrors({});
+    setTouched(false);
+    setFormOpen(true);
+    setDrawerOpen(true);
+  };
+
+  const closeForm = () => {
+    setFormOpen(false);
+    setDrawerOpen(false);
+    setEditingId(null);
+    setFormData({});
+    setTouched(false);
+    setErrors({});
+  };
 
   // Deep-link: open the editor for a requested item once it's available.
   const openedFocus = useRef<string | number | null>(null);
@@ -185,10 +270,7 @@ export default function CollectionManager({
     openedFocus.current = focusId;
     startEdit(item);
     onFocusHandled?.();
-    // startEdit is intentionally omitted: it changes every render and the
-    // openedFocus ref already guards against re-opening the same item.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [focusId, items]);
+  }, [focusId, items, onFocusHandled, startEdit]);
 
   const statusOptions = useMemo(() => {
     if (!statusField) return [] as string[];
@@ -205,12 +287,26 @@ export default function CollectionManager({
     if (q) list = list.filter((it) => keys.some((k) => term(it[k]).toLowerCase().includes(q)));
     if (statusFilter !== "all") list = list.filter((it) => statusValue(it, statusField) === statusFilter);
     if (scheduleFilter !== "all") list = list.filter((it) => scheduleValue(it, scheduleField) === scheduleFilter);
+
     list = [...list].sort((a, b) => {
-      const cmp = itemSortKey(a).localeCompare(itemSortKey(b));
-      return sortNewest ? -cmp : cmp;
+      let cmp = 0;
+      if (sortColumn === "display") {
+        const valA = term(a[displayField]).toLowerCase();
+        const valB = term(b[displayField]).toLowerCase();
+        cmp = valA.localeCompare(valB);
+      } else if (sortColumn === "status") {
+        const valA = statusValue(a, statusField);
+        const valB = statusValue(b, statusField);
+        cmp = valA.localeCompare(valB);
+      } else if (sortColumn === "id") {
+        cmp = String(a.id).localeCompare(String(b.id));
+      } else {
+        cmp = itemSortKey(a).localeCompare(itemSortKey(b));
+      }
+      return sortAsc ? cmp : -cmp;
     });
     return list;
-  }, [items, query, searchable, displayField, subtitleField, sortNewest, statusFilter, statusField, scheduleFilter, scheduleField]);
+  }, [items, query, searchable, displayField, subtitleField, sortColumn, sortAsc, statusFilter, statusField, scheduleFilter, scheduleField]);
 
   const pageCount = Math.max(1, Math.ceil(filtered.length / pageSize));
   const safePage = Math.min(page, pageCount);
@@ -224,811 +320,383 @@ export default function CollectionManager({
       if (statusFilter !== "all" && s !== statusFilter) ids.delete(String(it.id));
     });
     return ids;
-  }, [selected, filtered, statusFilter, statusField]);
+  }, [selected, filtered, statusField, statusFilter]);
 
-  function setField(key: string, value: string) {
-    setTouched(true);
-    setErrors((prev) => (prev[key] ? { ...prev, [key]: "" } : prev));
-    setFormData((prev) => ({ ...prev, [key]: value }));
-  }
-
-  function startEdit(item: Record<string, unknown>, duplicate = false) {
-    const data: Record<string, string> = {};
-    fields.forEach((f) => {
-      const raw = item[f.key];
-      if (f.type === "boolean") {
-        data[f.key] = raw === true || raw === "true" || raw === 1 ? "1" : "0";
-      } else if (isDateFieldType(f.type)) {
-        data[f.key] = f.type === "datetime" ? (raw ? String(raw).slice(0, 16) : "") : raw ? String(raw).slice(0, 10) : "";
-      } else if (duplicate && f.key === "slug") {
-        data[f.key] = "";
-      } else if (duplicate && f.key === displayField) {
-        data[f.key] = `${raw !== null && raw !== undefined ? String(raw) : ""} (copy)`;
-      } else if (f.type === "csv") {
-        data[f.key] = Array.isArray(raw) ? String(raw.join(", ")) : raw !== null && raw !== undefined ? String(raw) : "";
-      } else {
-        data[f.key] = raw !== null && raw !== undefined ? String(raw) : "";
-      }
-    });
-    if (duplicate && statusField && statusOptions.includes("draft")) data[statusField] = "draft";
-    setFormData(data);
-    setEditingId(duplicate ? null : String(item.id));
-    setFormOpen(true);
-    setErrors({});
-    setTouched(false);
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  }
-
-  function resetForm() {
-    setFormData({});
-    setEditingId(null);
-    setFormOpen(false);
-    setTouched(false);
-    setErrors({});
-  }
-
-  function openCreate() {
-    const data: Record<string, string> = {};
-    const today = new Date().toISOString().slice(0, 10);
-    fields.forEach((f) => {
-      if (initialValues && initialValues[f.key] !== undefined) {
-        data[f.key] = initialValues[f.key];
-      } else if (f.type === "boolean") {
-        data[f.key] = "0";
-      } else if (f.type === "select" && f.options?.[0]) {
-        data[f.key] = f.options[0];
-      } else if (isDateFieldType(f.type)) {
-        data[f.key] = today;
-      } else {
-        data[f.key] = "";
-      }
-    });
-    setFormData(data);
-    setEditingId(null);
-    setFormOpen(true);
-    setErrors({});
-    setTouched(false);
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  }
-
-  function validate(): boolean {
-    const next: Record<string, string> = {};
-    fields.forEach((f) => {
-      if (!f.required) return;
-      if (f.type === "boolean") return;
-      const v = formData[f.key] ?? "";
-      if (!v.trim()) next[f.key] = `${f.label} is required.`;
-    });
-    setErrors(next);
-    if (Object.keys(next).length > 0) {
-      const first = fields.find((f) => next[f.key]);
-      if (first) {
-        const el = document.getElementById(`cm-field-${collection}-${first.key}`);
-        el?.focus();
-      }
-    }
-    return Object.keys(next).length === 0;
-  }
-
-  async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault();
-    if (saving) return;
-    if (!validate()) return;
-    const payload: Record<string, unknown> = {};
-    fields.forEach((f) => {
-      let v: unknown = formData[f.key] ?? "";
-      if (f.type === "number") v = v === "" ? null : Number(v);
-      else if (f.type === "boolean") v = v === "1";
-      else if (f.type === "datetime") v = v ? new Date(String(v)).toISOString() : null;
-      else if (f.type === "csv") v = String(v).split(",").map((s) => s.trim()).filter(Boolean);
-      else if (isDateFieldType(f.type)) v = v || null;
-      else if (v === "") v = null;
-      payload[f.key] = v;
-    });
-    setSaving(true);
-    try {
-      const res = await fetch("/api/admin/directus", {
-        method: editingId !== null ? "PATCH" : "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(
-          editingId !== null
-            ? { collection, id: editingId, data: payload }
-            : { collection, data: payload }
-        ),
-      });
-      if (res.ok) {
-        toast(editingId !== null ? "Saved changes." : "Created successfully.");
-        resetForm();
-        router.refresh();
-      } else {
-        const err = await res.json().catch(() => null);
-        toast(`Failed to save: ${err?.error || res.statusText}`, "error");
-      }
-    } catch (err) {
-      toast(`Error: ${err instanceof Error ? err.message : err}`, "error");
-    } finally {
-      setSaving(false);
-    }
-  }
-
-  async function restoreDeleted() {
-    const backup = deletedBackup.current;
-    if (!backup) return;
-    deletedBackup.current = null;
-    try {
-      const res = await fetch("/api/admin/directus/trash", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ collection, action: "restore", id: backup.id }),
-      });
-      if (res.ok) {
-        toast("Item restored.");
-        setShowTrash(false);
-        setTrashItems([]);
-        router.refresh();
-      } else {
-        const err = await res.json().catch(() => null);
-        toast(`Restore failed: ${err?.error || res.statusText}`, "error");
-      }
-    } catch (err) {
-      toast(`Restore failed: ${err instanceof Error ? err.message : err}`, "error");
-    }
-  }
-
-  async function loadTrash() {
-    if (showTrash) {
-      setShowTrash(false);
-      return;
-    }
-    setShowTrash(true);
-    setTrashBusy(true);
-    try {
-      const res = await fetch(`/api/admin/directus/trash?collection=${encodeURIComponent(collection)}`);
-      const json = await res.json().catch(() => null);
-      if (res.ok) {
-        setTrashItems(json?.data || []);
-      } else {
-        toast(`Could not load trash: ${json?.error || res.statusText}`, "error");
-      }
-    } catch (err) {
-      toast(`Error: ${err instanceof Error ? err.message : err}`, "error");
-    } finally {
-      setTrashBusy(false);
-    }
-  }
-
-  async function restoreTrashRow(id: string | number) {
-    if (!canUpdate || trashBusy) return;
-    setTrashBusy(true);
-    try {
-      const res = await fetch("/api/admin/directus/trash", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ collection, action: "restore", id }),
-      });
-      if (!res.ok) throw new Error((await res.json().catch(() => null))?.error || res.statusText);
-      toast("Item restored.");
-      setTrashItems((prev) => prev.filter((it) => String(it.id) !== String(id)));
-      router.refresh();
-    } catch (err) {
-      toast(`Restore failed: ${err instanceof Error ? err.message : err}`, "error");
-    } finally {
-      setTrashBusy(false);
-    }
-  }
-
-  async function purgeTrashRow(id: string | number) {
-    if (!canPurge || trashBusy) return;
-    const ok = await confirm({
-      title: "Permanently delete this item?",
-      message: "This permanently removes the item from the CMS. It cannot be recovered.",
-      confirmLabel: "Purge",
-      danger: true,
-    });
-    if (!ok) return;
-    setTrashBusy(true);
-    try {
-      const res = await fetch("/api/admin/directus/trash", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ collection, action: "purge", id }),
-      });
-      if (!res.ok) throw new Error((await res.json().catch(() => null))?.error || res.statusText);
-      toast("Item permanently deleted.");
-      setTrashItems((prev) => prev.filter((it) => String(it.id) !== String(id)));
-      router.refresh();
-    } catch (err) {
-      toast(`Purge failed: ${err instanceof Error ? err.message : err}`, "error");
-    } finally {
-      setTrashBusy(false);
-    }
-  }
-
-  async function purgeAllTrash() {
-    if (!canPurge || trashBusy || trashItems.length === 0) return;
-    const ok = await confirm({
-      title: `Permanently delete ${trashItems.length} trashed item(s)?`,
-      message: "This permanently removes every trashed item in this collection. It cannot be recovered.",
-      confirmLabel: "Purge all",
-      danger: true,
-    });
-    if (!ok) return;
-    setTrashBusy(true);
-    try {
-      const res = await fetch("/api/admin/directus/trash", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ collection, action: "purge-all" }),
-      });
-      if (!res.ok) throw new Error((await res.json().catch(() => null))?.error || res.statusText);
-      toast(`Purged ${trashItems.length} item(s).`);
-      setTrashItems([]);
-      router.refresh();
-    } catch (err) {
-      toast(`Purge failed: ${err instanceof Error ? err.message : err}`, "error");
-    } finally {
-      setTrashBusy(false);
-    }
-  }
-
-  async function handleDelete(id: string | number) {
-    const ok = await confirm({
-      title: `Delete this ${singularLabel || "item"}?`,
-      message: "The item moves to the trash (removed from the website). You can restore it from the Trash panel.",
-      confirmLabel: "Delete",
-      danger: true,
-    });
-    if (!ok) return;
-    const backup = { id, item: items.find((it) => String(it.id) === String(id)) ?? {} };
-    try {
-      const res = await fetch("/api/admin/directus", {
-        method: "DELETE",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ collection, id }),
-      });
-      if (res.ok) {
-        deletedBackup.current = backup;
-        setSelected((prev) => {
-          const next = new Set(prev);
-          next.delete(String(id));
-          return next;
-        });
-        setEditingId((prev) => (prev === id ? null : prev));
-        toast("Item deleted. Click Undo to bring it back.", "success", {
-          label: "Undo",
-          onClick: restoreDeleted,
-        });
-        router.refresh();
-      } else {
-        const err = await res.json().catch(() => null);
-        toast(`Delete failed: ${err?.error || res.statusText}`, "error");
-      }
-    } catch (err) {
-      toast(`Error: ${err instanceof Error ? err.message : err}`, "error");
-    }
-  }
-
-  /** Audience-naming publish gate: "Post" is always a confirm that names who sees it. */
-  const publishConfirm = async (): Promise<boolean> => {
-    return confirm({
-      title: "Post to the website?",
-      message: "This will be visible to everyone on zimrugby.co.zw within about a minute. You'll get an Undo button if you change your mind.",
-      confirmLabel: "Post it",
-    });
-  };
-
-  async function toggleStatus(item: Record<string, unknown>, statusFieldName: string) {
-    const raw = item[statusFieldName];
-    try {
-      if (isBooleanValue(raw)) {
-        const next = !(raw === true || raw === "true" || raw === "1");
-        const res = await fetch("/api/admin/directus", {
-          method: "PATCH",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ collection, id: item.id, data: { [statusFieldName]: next } }),
-        });
-        if (res.ok) {
-          toast(next ? "Turned on." : "Turned off.");
-          router.refresh();
-        } else {
-          toast("Could not update.", "error");
-        }
-        return;
-      }
-      const current = term(item[statusFieldName]);
-      let next: string;
-      if (reviewable) {
-        if (current === "published" || current === "running" || current === "active" || current === "approved") next = "draft";
-        else if (current === "in_review" || current === "draft") next = current === "in_review" ? "draft" : "in_review";
-        else next = "published";
-      } else {
-        next = current === "published" || current === "active" ? "draft" : "published";
-      }
-      if (next === "published" && !(await publishConfirm())) return;
-      const res = await fetch("/api/admin/directus", {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ collection, id: item.id, data: { [statusFieldName]: next } }),
-      });
-      if (res.ok) {
-        if (next === "published") {
-          publishedBackup.current = [{ id: item.id as string | number, prev: current }];
-          toast("Posted to the website. Click Undo to take it down.", "success", {
-            label: "Undo",
-            onClick: undoPublish,
-            durationMs: 5000,
-          });
-        } else if (next === "in_review") {
-          toast("Sent for review — waiting on the editor.");
-        } else {
-          toast(next === "draft" ? "Moved back to draft." : "Marked as approved.");
-        }
-        router.refresh();
-      } else {
-        toast("Could not update status.", "error");
-      }
-    } catch (err) {
-      toast(`Error: ${err instanceof Error ? err.message : err}`, "error");
-    }
-  }
-
-  async function approveItem(item: Record<string, unknown>, statusFieldName: string) {
-    const res = await fetch("/api/admin/directus", {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ collection, id: item.id, data: { [statusFieldName]: "approved", review_note: null } }),
-    });
-    if (res.ok) {
-      toast("Approved — ready to post.");
-      router.refresh();
-    } else {
-      toast("Could not approve.", "error");
-    }
-  }
-
-  async function requestChanges(item: Record<string, unknown>, statusFieldName: string) {
-    const note = await prompt({
-      title: "Request changes",
-      message: "The author will see your note and can fix it before re-submitting.",
-      label: "What should the author change?",
-      placeholder: "e.g. Please add the team line-up and a final score.",
-      confirmLabel: "Send back",
-    });
-    if (!note) return;
-    const res = await fetch("/api/admin/directus", {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ collection, id: item.id, data: { [statusFieldName]: "draft", review_note: note } }),
-    });
-    if (res.ok) {
-      toast("Sent back to the author with your note.");
-      router.refresh();
-    } else {
-      toast("Could not send back.", "error");
-    }
-  }
-
-  function toggleSelected(id: string) {
+  const toggleSelected = (id: string) => {
     setSelected((prev) => {
       const next = new Set(prev);
       if (next.has(id)) next.delete(id);
       else next.add(id);
       return next;
     });
-  }
+  };
 
-  function toggleSelectAll() {
-    const visibleIds = visible.map((it) => String(it.id));
-    const allSelected = visibleIds.every((id) => selectedIds.has(id));
+  const toggleSelectAll = () => {
+    const allVisibleSelected = visible.every((it) => selectedIds.has(String(it.id)));
     setSelected((prev) => {
       const next = new Set(prev);
-      visibleIds.forEach((id) => {
-        if (allSelected) next.delete(id);
-        else next.add(id);
-      });
+      if (allVisibleSelected) {
+        visible.forEach((it) => next.delete(String(it.id)));
+      } else {
+        visible.forEach((it) => next.add(String(it.id)));
+      }
       return next;
     });
-  }
+  };
 
-  async function undoPublish() {
-    const backup = publishedBackup.current;
-    if (!backup || backup.length === 0) return;
-    publishedBackup.current = null;
-    const ids = backup.map((b) => b.id);
-    const prevByKey = new Map(backup.map((b) => [String(b.id), b.prev]));
+  // Keyboard navigation
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (["INPUT", "TEXTAREA", "SELECT"].includes((e.target as HTMLElement)?.tagName)) {
+        if (e.key === "Escape") {
+          setInlineEditing(null);
+        }
+        return;
+      }
+
+      if (e.key === "Escape") {
+        if (drawerOpen) closeForm();
+        if (showColumnMenu) setShowColumnMenu(false);
+        if (showImportModal) setShowImportModal(false);
+        return;
+      }
+
+      if (e.key === "ArrowDown") {
+        e.preventDefault();
+        setActiveRowIndex((prev) => Math.min(prev + 1, visible.length - 1));
+      } else if (e.key === "ArrowUp") {
+        e.preventDefault();
+        setActiveRowIndex((prev) => Math.max(prev - 1, 0));
+      } else if (e.key === "Enter" && activeRowIndex >= 0 && activeRowIndex < visible.length) {
+        e.preventDefault();
+        startEdit(visible[activeRowIndex]);
+      } else if (e.key === " " && activeRowIndex >= 0 && activeRowIndex < visible.length) {
+        e.preventDefault();
+        toggleSelected(String(visible[activeRowIndex].id));
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [visible, activeRowIndex, drawerOpen, showColumnMenu, showImportModal, startEdit]);
+
+  // Inline edit save handler
+  const handleSaveInline = async (id: string | number, field: string, value: string) => {
     try {
       const res = await fetch("/api/admin/directus", {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          collection,
-          ids,
-          data: { [statusField ?? ""]: prevByKey.get(String(ids[0])) ?? "draft" },
-        }),
+        body: JSON.stringify({ collection, id, data: { [field]: value } }),
       });
-      if (res.ok) {
-        toast(`Unpublished ${ids.length} item(s) — back to draft.`);
-        router.refresh();
-      } else {
-        const err = await res.json().catch(() => null);
-        toast(`Undo failed: ${err?.error || res.statusText}`, "error");
-      }
+      if (!res.ok) throw new Error("Failed to save inline edit");
+      toast("Saved cell change.", "success");
+      router.refresh();
     } catch (err) {
-      toast(`Undo failed: ${err instanceof Error ? err.message : err}`, "error");
+      toast(`Inline save failed: ${err instanceof Error ? err.message : err}`, "error");
+    } finally {
+      setInlineEditing(null);
     }
-  }
+  };
 
-  async function bulkSetStatus(publish: boolean) {
-    if (bulkBusy || selectedIds.size === 0) return;
-    const ok = await confirm({
-      title: publish ? `Publish ${selectedIds.size} ${label}?` : `Move ${selectedIds.size} ${label} to draft?`,
-      message: publish
-        ? `These will be visible to everyone on zimrugby.co.zw within about a minute. You'll get an Undo button if you change your mind.`
-        : "Selected items will be hidden from the website.",
-      confirmLabel: publish ? "Post it" : "Move to draft",
-    });
-    if (!ok) return;
-    setBulkBusy(true);
+  // CSV Export Handler
+  const handleExportCSV = () => {
+    if (filtered.length === 0) {
+      toast("No records to export.", "info");
+      return;
+    }
+
+    const headers = fields.map((f) => f.key);
+    const csvRows = [
+      ["id", ...headers].join(","),
+      ...filtered.map((row) => {
+        const values = ["id", ...headers].map((h) => {
+          const val = row[h] === null || row[h] === undefined ? "" : String(row[h]);
+          return `"${val.replace(/"/g, '""')}"`;
+        });
+        return values.join(",");
+      }),
+    ];
+
+    const blob = new Blob([csvRows.join("\n")], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.setAttribute("href", url);
+    link.setAttribute("download", `${collection}-export-${new Date().toISOString().substring(0, 10)}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    toast(`Exported ${filtered.length} rows to CSV.`, "success");
+  };
+
+  // CSV Import Handler
+  const handleImportCSV = async () => {
+    if (!importCsvText.trim()) return;
+    setImportBusy(true);
     try {
-      const ids = [...selectedIds];
-      if (publish && statusField) {
-        publishedBackup.current = items
-          .filter((it) => ids.includes(String(it.id)))
-          .map((it) => ({ id: it.id as string | number, prev: it[statusField] }));
+      const lines = importCsvText.trim().split("\n");
+      if (lines.length < 2) throw new Error("CSV must have a header row and at least 1 data row.");
+
+      const headers = lines[0].split(",").map((h) => h.trim().replace(/^"|"$/g, ""));
+      const itemsToCreate = [];
+
+      for (let i = 1; i < lines.length; i++) {
+        const cols = lines[i].split(",").map((c) => c.trim().replace(/^"|"$/g, ""));
+        if (cols.length === 0 || cols.every((c) => !c)) continue;
+        const rowData: Record<string, string> = {};
+        headers.forEach((h, idx) => {
+          if (h !== "id") rowData[h] = cols[idx] || "";
+        });
+        itemsToCreate.push(rowData);
       }
-      const res = await fetch("/api/admin/directus", {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ collection, ids, data: { [statusField ?? ""]: publish ? "published" : "draft" } }),
-      });
-      if (res.ok) {
-        toast(publish ? `Published ${ids.length} items.` : `Moved ${ids.length} items to draft.`, "success",
-          publish && publishedBackup.current
-            ? { label: "Undo", onClick: undoPublish, durationMs: 5000 }
-            : undefined);
-        setSelected(new Set());
-        router.refresh();
-      } else {
-        publishedBackup.current = null;
-        const err = await res.json().catch(() => null);
-        toast(`Failed: ${err?.error || res.statusText}`, "error");
+
+      for (const item of itemsToCreate) {
+        await fetch("/api/admin/directus", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ collection, data: item }),
+        });
       }
+
+      toast(`Imported ${itemsToCreate.length} items successfully.`, "success");
+      setShowImportModal(false);
+      setImportCsvText("");
+      router.refresh();
     } catch (err) {
-      publishedBackup.current = null;
+      toast(`Import failed: ${err instanceof Error ? err.message : err}`, "error");
+    } finally {
+      setImportBusy(false);
+    }
+  };
+
+  // Standard CRUD Handlers
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!canCreate && editingId === null) return;
+    if (!canUpdate && editingId !== null) return;
+
+    setSaving(true);
+    try {
+      const method = editingId !== null ? "PATCH" : "POST";
+      const payload: Record<string, unknown> = {
+        collection,
+        data: formData,
+      };
+      if (editingId !== null) {
+        payload.id = editingId;
+      }
+
+      const res = await fetch("/api/admin/directus", {
+        method,
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+
+      if (!res.ok) {
+        const json = await res.json().catch(() => null);
+        throw new Error(json?.error || "Save operation failed.");
+      }
+
+      toast(editingId !== null ? "Changes saved." : `Created ${label}.`, "success");
+      closeForm();
+      router.refresh();
+    } catch (err) {
       toast(`Error: ${err instanceof Error ? err.message : err}`, "error");
     } finally {
-      setBulkBusy(false);
+      setSaving(false);
     }
-  }
+  };
 
-  async function bulkDelete() {
-    if (bulkBusy || selectedIds.size === 0) return;
+  const handleDelete = async (id: string | number) => {
     const ok = await confirm({
-      title: `Move ${selectedIds.size} ${label} to trash?`,
-      message: "The selected items will be removed from the website and can be restored from the Trash panel.",
-      confirmLabel: "Move to trash",
+      title: `Delete this ${label}?`,
+      message: "The item will be moved to the trash and hidden from the website.",
+      confirmLabel: "Move to Trash",
       danger: true,
     });
     if (!ok) return;
-    setBulkBusy(true);
+
     try {
-      const ids = [...selectedIds];
       const res = await fetch("/api/admin/directus", {
         method: "DELETE",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ collection, ids }),
+        body: JSON.stringify({ collection, id }),
       });
-      if (res.ok) {
-        toast(`Deleted ${ids.length} items.`);
-        setSelected(new Set());
-        router.refresh();
-      } else {
-        const err = await res.json().catch(() => null);
-        toast(`Failed: ${err?.error || res.statusText}`, "error");
-      }
+      if (!res.ok) throw new Error("Delete failed");
+      toast(`Moved to trash.`, "info");
+      router.refresh();
     } catch (err) {
-      toast(`Error: ${err instanceof Error ? err.message : err}`, "error");
-    } finally {
-      setBulkBusy(false);
+      toast(`Delete failed: ${err instanceof Error ? err.message : err}`, "error");
     }
-  }
+  };
 
-  const label = singularLabel || "item";
-  const statusIsBoolean = !!statusField && (items.length === 0 || isBooleanValue(items[0][statusField]));
+  const toggleStatus = async (item: Record<string, unknown>, sField: string) => {
+    const current = statusValue(item, sField);
+    const next = current === "published" ? "draft" : "published";
+    await handleSaveInline(item.id as string | number, sField, next);
+  };
 
-  // Only reachable when super-admin (canPurge). Moves every date-window-expired
-  // row to the trash (recoverable), mirroring the phased soft-delete model.
-  async function purgeExpired() {
-    if (!canPurge || !scheduleField || bulkBusy) return;
-    const expired = items.filter((it) => scheduleValue(it, scheduleField) === "expired");
-    if (expired.length === 0) return;
-    const ok = await confirm({
-      title: `Move ${expired.length} expired to trash?`,
-      message: "Expired announcements are no longer shown on the site. They will be moved to the Trash panel where you can restore or permanently purge them.",
-      confirmLabel: "Move expired to trash",
-      danger: true,
-    });
-    if (!ok) return;
-    setBulkBusy(true);
-    try {
-      const ids = expired.map((it) => String(it.id));
-      const res = await fetch("/api/admin/directus", {
-        method: "DELETE",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ collection, ids }),
-      });
-      if (res.ok) {
-        toast(`Moved ${ids.length} expired item(s) to trash.`);
-        if (scheduleFilter === "expired") setScheduleFilter("all");
-        setSelected(new Set());
-        router.refresh();
-      } else {
-        const err = await res.json().catch(() => null);
-        toast(`Failed: ${err?.error || res.statusText}`, "error");
-      }
-    } catch (err) {
-      toast(`Error: ${err instanceof Error ? err.message : err}`, "error");
-    } finally {
-      setBulkBusy(false);
-    }
-  }
+  const setField = (key: string, val: string) => {
+    setFormData((prev) => ({ ...prev, [key]: val }));
+    setTouched(true);
+  };
 
   return (
-    <div className="rounded-2xl border border-black/10 bg-white shadow-sm">
-      {/* Header */}
-      <div className="flex flex-wrap items-center justify-between gap-3 border-b border-black/5 px-6 py-4">
+    <div className="rounded-2xl border border-[#eae8de] bg-white shadow-sm">
+      {/* Header Bar */}
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 p-6 border-b border-[#eae8de] bg-milk-white/40">
         <div>
-          <h2 className="flex items-center gap-2 font-heading text-lg font-black uppercase text-rich-black">
-            {title}
-            <span className="rounded-full bg-black/5 px-2 py-0.5 text-[10px] font-black text-black/50">{items.length}</span>
-          </h2>
-          {description && <p className="mt-0.5 text-xs text-black/50">{description}</p>}
+          <h2 className="text-xl font-heading font-black uppercase text-rich-black">{title}</h2>
+          {description && <p className="text-xs text-charcoal-gray mt-0.5">{description}</p>}
         </div>
+
         <div className="flex items-center gap-2">
+          {/* Export CSV */}
           <button
-            onClick={loadTrash}
-            title="Trashed items (soft-deleted)"
-            className={`flex items-center gap-1.5 rounded-lg px-3 py-2 text-[10px] font-black uppercase tracking-wider transition-colors ${
-              showTrash ? "bg-amber-100 text-amber-800" : "bg-black/5 text-black/60 hover:bg-black/10"
-            }`}
+            type="button"
+            onClick={handleExportCSV}
+            className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-white border border-[#eae8de] text-xs font-bold text-rich-black hover:bg-milk-white hover:border-black/20 transition-all shadow-2xs"
+            title="Export list to CSV"
           >
-            <Archive className="h-3 w-3" />
-            Trash
+            <Download className="w-3.5 h-3.5 text-zru-green" />
+            <span className="hidden sm:inline">Export</span>
           </button>
-          <label className="flex items-center gap-1.5 rounded-lg bg-black/5 px-3 py-2 text-[10px] font-black uppercase tracking-wider text-black/60">
-            <ChevronDown className="h-3 w-3" />
-            <select
-              value={sortNewest ? "newest" : "oldest"}
-              onChange={(e) => setSortNewest(e.target.value === "newest")}
-              className="cursor-pointer bg-transparent font-black uppercase tracking-wider outline-none"
-            >
-              <option value="newest">Newest first</option>
-              <option value="oldest">Oldest first</option>
-            </select>
-          </label>
-          {!formOpen && canCreate && (
+
+          {/* Import CSV */}
+          {canCreate && (
             <button
-              onClick={openCreate}
-              className="flex items-center gap-1.5 rounded-lg bg-zru-green px-4 py-2 font-heading text-xs font-black uppercase tracking-wider text-white transition-colors hover:bg-green-800"
+              type="button"
+              onClick={() => setShowImportModal(true)}
+              className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-white border border-[#eae8de] text-xs font-bold text-rich-black hover:bg-milk-white hover:border-black/20 transition-all shadow-2xs"
+              title="Import from CSV"
             >
-              <Plus className="h-3.5 w-3.5" /> Add {label}
+              <Upload className="w-3.5 h-3.5 text-zru-green" />
+              <span className="hidden sm:inline">Import</span>
+            </button>
+          )}
+
+          {/* Add New Item */}
+          {canCreate && (
+            <button
+              type="button"
+              onClick={openNewForm}
+              className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-zru-green text-white text-xs font-black uppercase tracking-wider hover:bg-forest-green transition-all shadow-xs"
+            >
+              <Plus className="w-4 h-4" />
+              Add {label}
             </button>
           )}
         </div>
       </div>
 
-      {/* Trash panel: soft-deleted rows, restored with the SAME id (links survive). */}
-      {showTrash && (
-        <div className="border-b border-black/5 bg-amber-50/50 p-6">
-          <div className="mb-3 flex items-center justify-between">
-            <h3 className="flex items-center gap-2 font-heading text-sm font-black uppercase tracking-wider text-amber-900">
-              <Archive className="h-4 w-4" /> Trash — {collection}
-              <span className="rounded-full bg-amber-200/70 px-2 py-0.5 text-[10px] text-amber-900">{trashItems.length}</span>
-            </h3>
-            {canPurge && trashItems.length > 0 && (
+      {/* Main List Area */}
+      <div className="p-6 space-y-4">
+        {/* Controls Toolbar */}
+        <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3">
+          <div className="flex-1">
+            <SearchBox
+              value={query}
+              onChange={(v) => {
+                setQuery(v);
+                setPage(1);
+              }}
+              placeholder={`Search ${title.toLowerCase()}... (Press '/' to focus)`}
+            />
+          </div>
+
+          <div className="flex flex-wrap items-center gap-2">
+            {/* Column Selector */}
+            <div className="relative">
               <button
-                onClick={purgeAllTrash}
-                disabled={trashBusy}
-                className="flex items-center gap-1.5 rounded-lg bg-red-700 px-3 py-1.5 text-[10px] font-black uppercase tracking-wider text-white transition-colors hover:bg-red-800 disabled:opacity-50"
+                type="button"
+                onClick={() => setShowColumnMenu(!showColumnMenu)}
+                className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-milk-white border border-[#eae8de] text-xs font-bold text-charcoal-gray hover:text-rich-black transition-colors"
               >
-                <ShieldX className="h-3 w-3" /> Purge all ({trashItems.length})
+                <Eye className="w-3.5 h-3.5 text-zru-green" />
+                Columns
               </button>
-            )}
-          </div>
-          {trashBusy && !trashItems.length ? (
-            <p className="flex items-center gap-2 text-xs text-amber-800"><Loader2 className="h-3.5 w-3.5 animate-spin" /> Loading trashed items…</p>
-          ) : trashItems.length === 0 ? (
-            <p className="text-xs text-amber-800/70">Trash is empty. Deleted items appear here and stay until purged.</p>
-          ) : (
-            <ul className="space-y-2">
-              {trashItems.map((it) => (
-                <li key={String(it.id)} className="flex items-center justify-between gap-3 rounded-lg border border-amber-200/70 bg-white px-3 py-2">
-                  <div className="min-w-0">
-                    <p className="truncate text-sm font-bold text-rich-black">{String(it[displayField] ?? it.id)}</p>
-                    <p className="text-[10px] text-black/40">
-                      {String(it.id)} · trashed {it.deleted_at ? new Date(String(it.deleted_at)).toLocaleString() : "?"}
-                      {it.deleted_by ? ` by ${it.deleted_by}` : ""}
-                    </p>
-                  </div>
-                  <div className="flex shrink-0 items-center gap-2">
-                    {canUpdate && (
-                      <button
-                        onClick={() => restoreTrashRow(it.id as string | number)}
-                        disabled={trashBusy}
-                        className="flex items-center gap-1 rounded-lg bg-zru-green px-2.5 py-1.5 text-[10px] font-black uppercase tracking-wider text-white transition-colors hover:bg-green-800 disabled:opacity-50"
-                      >
-                        <RotateCcw className="h-3 w-3" /> Restore
-                      </button>
-                    )}
-                    {canPurge && (
-                      <button
-                        onClick={() => purgeTrashRow(it.id as string | number)}
-                        disabled={trashBusy}
-                        className="flex items-center gap-1 rounded-lg bg-black/10 px-2.5 py-1.5 text-[10px] font-black uppercase tracking-wider text-red-700 transition-colors hover:bg-red-100 disabled:opacity-50"
-                      >
-                        <Trash2 className="h-3 w-3" /> Purge
-                      </button>
-                    )}
-                  </div>
-                </li>
-              ))}
-            </ul>
-          )}
-        </div>
-      )}
 
-      {/* Create / Edit form */}
-      {formOpen && (
-        <form onSubmit={handleSubmit} className="border-b border-black/5 bg-black/[0.02] p-6">
-          <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-            {fields.map((field) => {
-              const full = field.colSpan === "full" || field.type === "richtext" || field.type === "textarea";
-              const fieldError = errors[field.key];
-              const fieldId = `cm-field-${collection}-${field.key}`;
-              return (
-                <div key={field.key} className={full ? "md:col-span-2" : ""}>
-                  <label htmlFor={fieldId} className="mb-1 block text-[10px] font-bold uppercase tracking-wider text-black/60">
-                    {field.label}
-                    {field.required && field.type !== "boolean" && <span className="ml-1 text-red-500">*</span>}
-                  </label>
-                  {field.type === "textarea" ? (
-                    <textarea
-                      id={fieldId}
-                      rows={4}
-                      value={formData[field.key] || ""}
-                      onChange={(e) => setField(field.key, e.target.value)}
-                      placeholder={field.placeholder}
-                      disabled={saving}
-                      className={`w-full rounded-lg border bg-white p-2.5 text-sm disabled:opacity-60 ${fieldError ? "border-red-400" : "border-black/10"}`}
-                    />
-                  ) : field.type === "richtext" ? (
-                    <RichTextEditor value={formData[field.key] || ""} onChange={(html) => setField(field.key, html)} />
-                  ) : field.type === "select" ? (
-                    <select
-                      id={fieldId}
-                      value={formData[field.key] || ""}
-                      onChange={(e) => setField(field.key, e.target.value)}
-                      disabled={saving}
-                      className={`w-full rounded-lg border bg-white p-2.5 text-sm font-bold disabled:opacity-60 ${fieldError ? "border-red-400" : "border-black/10"}`}
+              {showColumnMenu && (
+                <div className="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-xl border border-[#eae8de] p-2 z-40 space-y-1">
+                  <span className="block text-[10px] font-black uppercase text-black/40 px-2 py-1">Visible Columns</span>
+                  {Object.entries(visibleColumns).map(([col, isVis]) => (
+                    <label
+                      key={col}
+                      className="flex items-center gap-2 px-2 py-1.5 text-xs font-bold text-rich-black hover:bg-milk-white rounded-lg cursor-pointer select-none"
                     >
-                      <option value="">— Select —</option>
-                      {(field.options || []).map((opt) => (
-                        <option key={opt} value={opt}>
-                          {opt}
-                        </option>
-                      ))}
-                    </select>
-                  ) : field.type === "image" ? (
-                    <ImagePicker
-                      value={formData[field.key] || ""}
-                      onChange={(id) => setField(field.key, id)}
-                      hint="Upload or reuse an image."
-                    />
-                  ) : field.type === "date" ? (
-                    <input
-                      id={fieldId}
-                      type="date"
-                      value={formData[field.key] || ""}
-                      onChange={(e) => setField(field.key, e.target.value)}
-                      disabled={saving}
-                      className={`w-full rounded-lg border bg-white p-2.5 text-sm disabled:opacity-60 ${fieldError ? "border-red-400" : "border-black/10"}`}
-                    />
-                  ) : field.type === "datetime" ? (
-                    <input
-                      id={fieldId}
-                      type="datetime-local"
-                      value={formData[field.key] || ""}
-                      onChange={(e) => setField(field.key, e.target.value)}
-                      disabled={saving}
-                      className={`w-full rounded-lg border bg-white p-2.5 text-sm disabled:opacity-60 ${fieldError ? "border-red-400" : "border-black/10"}`}
-                    />
-                  ) : field.type === "number" ? (
-                    <input
-                      id={fieldId}
-                      type="number"
-                      step="any"
-                      value={formData[field.key] || ""}
-                      onChange={(e) => setField(field.key, e.target.value)}
-                      placeholder={field.placeholder}
-                      disabled={saving}
-                      className={`w-full rounded-lg border bg-white p-2.5 text-sm disabled:opacity-60 ${fieldError ? "border-red-400" : "border-black/10"}`}
-                    />
-                  ) : field.type === "boolean" ? (
-                    <div className="flex items-center gap-3 pt-1.5">
-                      <button
-                        type="button"
-                        disabled={saving}
-                        onClick={() => setField(field.key, formData[field.key] === "1" ? "0" : "1")}
-                        className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors disabled:opacity-60 ${
-                          formData[field.key] === "1" ? "bg-zru-green" : "bg-black/20"
-                        }`}
-                      >
-                        <span
-                          className={`inline-block h-4 w-4 transform rounded-full bg-white shadow transition-transform ${
-                            formData[field.key] === "1" ? "translate-x-6" : "translate-x-1"
-                          }`}
-                        />
-                      </button>
-                      <span className="text-sm text-black/60">{formData[field.key] === "1" ? "Yes" : "No"}</span>
-                    </div>
-                  ) : (
-                    <input
-                      id={fieldId}
-                      type="text"
-                      value={formData[field.key] || ""}
-                      onChange={(e) => setField(field.key, e.target.value)}
-                      placeholder={field.placeholder}
-                      required={field.required}
-                      disabled={saving}
-                      className={`w-full rounded-lg border bg-white p-2.5 text-sm font-bold disabled:opacity-60 ${fieldError ? "border-red-400" : "border-black/10"}`}
-                    />
-                  )}
-                  {fieldError && (
-                    <p className="mt-1 flex items-center gap-1 text-[11px] font-bold text-red-600">
-                      <AlertCircle className="h-3 w-3" /> {fieldError}
-                    </p>
-                  )}
+                      <input
+                        type="checkbox"
+                        checked={isVis}
+                        onChange={() => setVisibleColumns((prev) => ({ ...prev, [col]: !isVis }))}
+                        className="rounded accent-zru-green"
+                      />
+                      <span className="capitalize">{col}</span>
+                    </label>
+                  ))}
                 </div>
-              );
-            })}
-          </div>
+              )}
+            </div>
 
-          <div className="mt-4 flex items-center gap-3">
-            <button
-              type="submit"
-              disabled={saving}
-              className="flex items-center gap-2 rounded-lg bg-zru-green px-6 py-2.5 font-heading text-xs font-black uppercase tracking-wider text-white transition-colors hover:bg-green-800 disabled:cursor-not-allowed disabled:opacity-60"
-            >
-              {saving && <Loader2 className="h-3.5 w-3.5 animate-spin" />}
-              {saving ? "Saving…" : editingId !== null ? "Save changes" : `Add ${label}`}
-            </button>
-            <button
-              type="button"
-              onClick={resetForm}
-              disabled={saving}
-              className="rounded-lg bg-black/5 px-4 py-2.5 font-heading text-xs font-black uppercase tracking-wider text-black/60 transition-colors hover:bg-black/10 disabled:opacity-60"
-            >
-              {editingId !== null ? "Cancel" : "Close"}
-            </button>
-            {editingId !== null && (
-              <span className="rounded bg-zru-green/10 px-2 py-1 text-[10px] font-black uppercase tracking-wider text-zru-green">
-                Editing {term(items.find((it) => String(it.id) === String(editingId))?.[displayField]) || `#${String(editingId)}`}
-              </span>
-            )}
-          </div>
-        </form>
-      )}
+            {/* Density Toggle */}
+            <div className="flex items-center bg-milk-white p-1 rounded-xl border border-[#eae8de] text-xs">
+              <button
+                type="button"
+                onClick={() => setDensity("compact")}
+                className={`px-2.5 py-1 rounded-lg font-bold text-[10px] uppercase tracking-wider transition-colors ${
+                  density === "compact" ? "bg-white text-zru-green shadow-xs" : "text-black/50 hover:text-black"
+                }`}
+                title="Windows Details / Apple Compact Mode"
+              >
+                <span className="flex items-center gap-1">
+                  <Minimize2 className="w-3 h-3" /> Compact
+                </span>
+              </button>
+              <button
+                type="button"
+                onClick={() => setDensity("comfortable")}
+                className={`px-2.5 py-1 rounded-lg font-bold text-[10px] uppercase tracking-wider transition-colors ${
+                  density === "comfortable" ? "bg-white text-zru-green shadow-xs" : "text-black/50 hover:text-black"
+                }`}
+              >
+                <span className="flex items-center gap-1">
+                  <Maximize2 className="w-3 h-3" /> Cozy
+                </span>
+              </button>
+            </div>
 
-      {/* List */}
-      <div className="p-6">
-        <div className="mb-3">
-          <SearchBox value={query} onChange={(v) => { setQuery(v); setPage(1); }} placeholder={`Search ${title.toLowerCase()}…`} />
+            {/* Layout Toggle */}
+            <div className="flex items-center bg-milk-white p-1 rounded-xl border border-[#eae8de]">
+              <button
+                type="button"
+                onClick={() => setViewLayout("table")}
+                className={`p-1.5 rounded-lg transition-colors ${
+                  viewLayout === "table" ? "bg-white text-zru-green shadow-xs" : "text-black/40 hover:text-black"
+                }`}
+                title="Table view"
+              >
+                <Table className="w-3.5 h-3.5" />
+              </button>
+              <button
+                type="button"
+                onClick={() => setViewLayout("cards")}
+                className={`p-1.5 rounded-lg transition-colors ${
+                  viewLayout === "cards" ? "bg-white text-zru-green shadow-xs" : "text-black/40 hover:text-black"
+                }`}
+                title="Cards view"
+              >
+                <LayoutGrid className="w-3.5 h-3.5" />
+              </button>
+            </div>
+          </div>
         </div>
 
+        {/* Status filter chips */}
         {statusOptions.length > 0 && (
-          <div className="mb-3 flex flex-wrap items-center gap-1.5">
+          <div className="flex flex-wrap items-center gap-1.5">
             <button
-              onClick={() => { setStatusFilter("all"); setPage(1); }}
+              onClick={() => {
+                setStatusFilter("all");
+                setPage(1);
+              }}
               className={`rounded-full px-3 py-1 text-[10px] font-black uppercase tracking-wider transition-colors ${
                 statusFilter === "all" ? "bg-rich-black text-white" : "bg-black/5 text-black/60 hover:bg-black/10"
               }`}
@@ -1038,7 +706,10 @@ export default function CollectionManager({
             {statusOptions.map((opt) => (
               <button
                 key={opt}
-                onClick={() => { setStatusFilter(opt); setPage(1); }}
+                onClick={() => {
+                  setStatusFilter(opt);
+                  setPage(1);
+                }}
                 className={`rounded-full px-3 py-1 text-[10px] font-black uppercase tracking-wider transition-colors ${
                   statusFilter === opt
                     ? opt === "draft" || opt === "hidden"
@@ -1053,241 +724,302 @@ export default function CollectionManager({
           </div>
         )}
 
-        {scheduleField && (
-          <div className="mb-3 flex flex-wrap items-center gap-1.5">
-            <button
-              onClick={() => { setScheduleFilter("all"); setPage(1); }}
-              className={`rounded-full px-3 py-1 text-[10px] font-black uppercase tracking-wider transition-colors ${
-                scheduleFilter === "all" ? "bg-rich-black text-white" : "bg-black/5 text-black/60 hover:bg-black/10"
-              }`}
-            >
-              All windows ({items.length})
-            </button>
-            {(["upcoming", "active", "expired"] as const).map((opt) => {
-              const count = items.filter((it) => scheduleValue(it, scheduleField) === opt).length;
-              const active = scheduleFilter === opt;
-              const tone = opt === "active" ? "bg-zru-green text-white" : opt === "upcoming" ? "bg-blue-600 text-white" : "bg-red-600 text-white";
-              return (
-                <button
-                  key={opt}
-                  onClick={() => { setScheduleFilter(active ? "all" : opt); setPage(1); }}
-                  className={`rounded-full px-3 py-1 text-[10px] font-black uppercase tracking-wider transition-colors ${
-                    active ? tone : "bg-black/5 text-black/60 hover:bg-black/10"
-                  }`}
-                >
-                  {opt} ({count})
-                </button>
-              );
-            })}
-            <span className="mx-1 h-4 w-px bg-black/10" />
-            {canPurge && (
-              <button
-                onClick={purgeExpired}
-                disabled={bulkBusy || items.filter((it) => scheduleValue(it, scheduleField) === "expired").length === 0}
-                className="flex items-center gap-1 rounded-full bg-red-600/10 px-3 py-1 text-[10px] font-black uppercase tracking-wider text-red-700 transition-colors hover:bg-red-600/20 disabled:cursor-not-allowed disabled:opacity-40"
-              >
-                <Archive className="h-3 w-3" />
-                Purge expired ({items.filter((it) => scheduleValue(it, scheduleField) === "expired").length})
-              </button>
-            )}
-          </div>
-        )}
-
-        {selectedIds.size > 0 && (
-          <div className="sticky top-4 z-30 mb-3 flex flex-wrap items-center gap-2 rounded-xl bg-rich-black/95 backdrop-blur-md px-4 py-2.5 shadow-2xl border border-white/15 animate-in fade-in slide-in-from-top-2">
-            <span className="text-[11px] font-black uppercase tracking-wider text-white flex items-center gap-1.5">
-              <span className="inline-block w-2 h-2 rounded-full bg-zru-green animate-pulse" />
-              {selectedIds.size} selected
-            </span>
-            <div className="ml-auto flex flex-wrap items-center gap-2">
-              {statusField && !statusIsBoolean && canUpdate && (
-                <>
-                  <button
-                    onClick={() => bulkSetStatus(true)}
-                    disabled={bulkBusy}
-                    className="rounded-lg bg-zru-green px-3.5 py-1.5 text-[10px] font-black uppercase tracking-wider text-white transition-colors hover:bg-green-700 disabled:opacity-60 cursor-pointer shadow-sm"
-                  >
-                    {bulkBusy ? "Working..." : "Publish"}
-                  </button>
-                  <button
-                    onClick={() => bulkSetStatus(false)}
-                    disabled={bulkBusy}
-                    className="rounded-lg bg-white/10 px-3.5 py-1.5 text-[10px] font-black uppercase tracking-wider text-white transition-colors hover:bg-white/20 disabled:opacity-60 cursor-pointer"
-                  >
-                    Move to draft
-                  </button>
-                </>
-              )}
-              {canDelete && (
-                <button
-                  onClick={bulkDelete}
-                  disabled={bulkBusy}
-                  className="flex items-center gap-1 rounded-lg bg-red-600 px-3.5 py-1.5 text-[10px] font-black uppercase tracking-wider text-white transition-colors hover:bg-red-700 disabled:opacity-60 cursor-pointer shadow-sm"
-                >
-                  <Trash2 className="h-3 w-3" /> Delete
-                </button>
-              )}
-              <button
-                onClick={() => setSelected(new Set())}
-                className="rounded-lg bg-white/10 px-3 py-1.5 text-[10px] font-black uppercase tracking-wider text-white/70 transition-colors hover:bg-white/20 cursor-pointer"
-              >
-                Clear
-              </button>
-            </div>
-          </div>
-        )}
-
+        {/* Table / Cards Render */}
         {filtered.length === 0 ? (
-          <div className="rounded-xl border border-dashed border-black/10 py-12 text-center">
-            <p className="text-xs font-bold uppercase tracking-wider text-black/40">
-              {query || statusFilter !== "all" ? "No matches found" : "Nothing here yet"}
-            </p>
-            <p className="mt-1 text-[11px] text-black/30">
-              {query || statusFilter !== "all"
-                ? "Try a different search or filter."
-                : `Click "Add ${label}" above to create the first ${label}.`}
-            </p>
+          <div className="rounded-2xl border border-dashed border-[#eae8de] py-16 text-center">
+            <FileSpreadsheet className="w-10 h-10 text-charcoal-gray/30 mx-auto mb-3" />
+            <p className="text-sm font-black uppercase tracking-wider text-rich-black">No matches found</p>
+            <p className="mt-1 text-xs text-charcoal-gray">Try adjusting your search query or status filter.</p>
           </div>
-        ) : (
-          <div className="divide-y divide-black/5 rounded-xl border border-black/5">
-            {visible.length > 1 && (
-              <button
-                type="button"
-                onClick={toggleSelectAll}
-                className="flex w-full items-center gap-2 px-4 py-2 text-left text-[10px] font-black uppercase tracking-wider text-black/40 transition-colors hover:bg-black/[0.03]"
-              >
-                {visible.every((it) => selectedIds.has(String(it.id))) ? (
-                  <CheckSquare className="h-4 w-4 text-zru-green" />
-                ) : (
-                  <Square className="h-4 w-4" />
-                )}
-                Select all {visible.length} on this page
-              </button>
-            )}
-            {visible.map((item) => {
-              const display = String(item[displayField] ?? `#${item.id}`);
-              const subtitle = subtitleField ? formatDisplay(item[subtitleField]) : "";
-              const badge = badgeField ? String(item[badgeField] ?? "") : "";
-              const status = statusField ? String(item[statusField] ?? "") : "";
-              const img = item.image ? toAssetUrl(String(item.image)) : "";
-              const itemKey = String(item.id);
-              const isSelected = selectedIds.has(itemKey);
-              return (
-                <div key={itemKey} className={`flex flex-col justify-between gap-3 px-4 py-4 transition-colors md:flex-row md:items-center ${isSelected ? "bg-zru-green/5" : "hover:bg-black/[0.02]"}`}>
-                  <div className="flex min-w-0 items-center gap-3">
+        ) : viewLayout === "table" ? (
+          /* ========================================================= */
+          /* COMPACT / SPREADSHEET TABLE (Windows Details / macOS List) */
+          /* ========================================================= */
+          <div className="overflow-x-auto rounded-xl border border-[#eae8de] bg-white shadow-2xs">
+            <table className="w-full text-left border-collapse">
+              <thead>
+                <tr className="border-b border-[#eae8de] bg-milk-white/80 text-[10px] font-black uppercase tracking-wider text-black/60 select-none">
+                  <th className="w-10 px-3 py-2 text-center">
                     <button
                       type="button"
-                      onClick={() => toggleSelected(itemKey)}
-                      aria-label={isSelected ? "Deselect" : "Select"}
-                      className={`shrink-0 rounded-md p-0.5 transition-colors ${isSelected ? "text-zru-green" : "text-black/30 hover:text-black/60"}`}
+                      onClick={toggleSelectAll}
+                      className="inline-flex items-center justify-center p-0.5 rounded text-black/40 hover:text-black"
                     >
-                      {isSelected ? <CheckSquare className="h-5 w-5" /> : <Square className="h-5 w-5" />}
-                    </button>
-                    {img ? (
-                      // eslint-disable-next-line @next/next/no-img-element
-                      <img src={img} alt="" className="h-12 w-16 shrink-0 rounded-md object-cover" />
-                    ) : null}
-                    <div className="min-w-0">
-                      <div className="flex flex-wrap items-center gap-2">
-                        {badge && (
-                          <span className="inline-block rounded bg-zru-green/10 px-2 py-0.5 text-[10px] font-black uppercase tracking-widest text-zru-green">
-                            {badge}
-                          </span>
-                        )}
-                        <h4 className="truncate font-heading text-sm font-black uppercase text-rich-black">{display}</h4>
-                        {status && statusField && <StatusChip status={status} />}
-                        {scheduleField && scheduleValue(item, scheduleField) && (
-                          <>
-                            <StatusChip status={scheduleValue(item, scheduleField)} />
-                            <span className="rounded bg-black/5 px-1.5 py-0.5 text-[10px] font-bold text-black/50">
-                              {formatWindowRange(item, scheduleField)}
-                            </span>
-                          </>
-                        )}
-                      </div>
-                      {subtitle && <p className="mt-0.5 truncate text-xs text-black/50">{subtitle}</p>}
-                      {reviewable && term(item["review_note"]) && (
-                        <p className="mt-0.5 flex items-start gap-1 text-[11px] text-amber-600">
-                          <AlertCircle className="mt-0.5 h-3 w-3 shrink-0" />
-                          <span className="line-clamp-1">Reviewer note: {term(item["review_note"])}</span>
-                        </p>
+                      {visible.every((it) => selectedIds.has(String(it.id))) ? (
+                        <CheckSquare className="h-4 w-4 text-zru-green" />
+                      ) : (
+                        <Square className="h-4 w-4" />
                       )}
-                    </div>
-                  </div>
-                  <div className="flex shrink-0 flex-wrap items-center gap-2">
-                    {statusField && canUpdate && (
-                      <button
-                        onClick={() => toggleStatus(item, statusField)}
-                        className="flex items-center gap-1 rounded-lg bg-black/5 px-3 py-1.5 text-[10px] font-black uppercase tracking-wider text-black/60 transition-colors hover:bg-black/10"
-                      >
-                        {isBooleanValue(item[statusField])
-                          ? term(item[statusField]) === "true" || term(item[statusField]) === "1"
-                            ? "Hide"
-                            : "Show"
-                          : reviewable
-                            ? term(item[statusField]) === "published" || term(item[statusField]) === "running" || term(item[statusField]) === "active" || term(item[statusField]) === "approved"
-                              ? "Unpublish"
-                              : term(item[statusField]) === "in_review"
-                                ? "Back to draft"
-                                : "Send for review"
-                            : term(item[statusField]) === "published"
-                              ? "Unpublish"
-                              : "Publish"}
-                      </button>
-                    )}
-                    {reviewable && canReview && statusField && term(item[statusField]) === "in_review" && (
-                      <>
-                        {currentUserEmail && item.created_by_email === currentUserEmail ? (
-                          <span className="rounded-lg bg-black/5 px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider text-black/40">
-                            Waiting for another reviewer
+                    </button>
+                  </th>
+                  {visibleColumns.display && (
+                    <th
+                      className="px-3 py-2 cursor-pointer hover:bg-black/5"
+                      onClick={() => {
+                        setSortColumn("display");
+                        setSortAsc(!sortAsc);
+                      }}
+                    >
+                      <div className="flex items-center gap-1">
+                        <span>{displayField.replace(/_/g, " ")}</span>
+                        {sortColumn === "display" && <ArrowUpDown className="h-3 w-3 text-zru-green" />}
+                      </div>
+                    </th>
+                  )}
+                  {visibleColumns.badge && badgeField && <th className="px-3 py-2 w-28">{badgeField.replace(/_/g, " ")}</th>}
+                  {visibleColumns.status && statusField && (
+                    <th
+                      className="px-3 py-2 w-28 cursor-pointer hover:bg-black/5"
+                      onClick={() => {
+                        setSortColumn("status");
+                        setSortAsc(!sortAsc);
+                      }}
+                    >
+                      <div className="flex items-center gap-1">
+                        <span>Status</span>
+                        {sortColumn === "status" && <ArrowUpDown className="h-3 w-3 text-zru-green" />}
+                      </div>
+                    </th>
+                  )}
+                  {visibleColumns.date && (
+                    <th
+                      className="px-3 py-2 w-32 cursor-pointer hover:bg-black/5"
+                      onClick={() => {
+                        setSortColumn("date");
+                        setSortAsc(!sortAsc);
+                      }}
+                    >
+                      <div className="flex items-center gap-1">
+                        <span>Date / Schedule</span>
+                        {sortColumn === "date" && <ArrowUpDown className="h-3 w-3 text-zru-green" />}
+                      </div>
+                    </th>
+                  )}
+                  {visibleColumns.id && (
+                    <th
+                      className="px-3 py-2 w-20 cursor-pointer hover:bg-black/5"
+                      onClick={() => {
+                        setSortColumn("id");
+                        setSortAsc(!sortAsc);
+                      }}
+                    >
+                      <div className="flex items-center gap-1">
+                        <span>ID</span>
+                        {sortColumn === "id" && <ArrowUpDown className="h-3 w-3 text-zru-green" />}
+                      </div>
+                    </th>
+                  )}
+                  {visibleColumns.actions && <th className="px-3 py-2 w-28 text-right">Actions</th>}
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-black/5 text-xs">
+                {visible.map((item, idx) => {
+                  const display = String(item[displayField] ?? `#${item.id}`);
+                  const subtitle = subtitleField ? formatDisplay(item[subtitleField]) : "";
+                  const badge = badgeField ? String(item[badgeField] ?? "") : "";
+                  const status = statusField ? String(item[statusField] ?? "") : "";
+                  const img = item.image ? toAssetUrl(String(item.image)) : "";
+                  const itemKey = String(item.id);
+                  const isSelected = selectedIds.has(itemKey);
+                  const isCompact = density === "compact";
+                  const isRowActive = activeRowIndex === idx;
+                  const isEditingDisplay = inlineEditing?.id === item.id && inlineEditing?.field === displayField;
+
+                  return (
+                    <tr
+                      key={itemKey}
+                      onClick={() => {
+                        setActiveRowIndex(idx);
+                        startEdit(item);
+                      }}
+                      className={`group cursor-pointer transition-colors ${
+                        isRowActive
+                          ? "ring-1 ring-zru-green bg-zru-green/10"
+                          : isSelected
+                          ? "bg-zru-green/10"
+                          : "hover:bg-zru-green/5 odd:bg-white even:bg-milk-white/30"
+                      }`}
+                    >
+                      {/* Checkbox */}
+                      <td className={`px-3 ${isCompact ? "py-1.5" : "py-3"} text-center`} onClick={(e) => e.stopPropagation()}>
+                        <button
+                          type="button"
+                          onClick={() => toggleSelected(itemKey)}
+                          className={`rounded p-0.5 transition-colors ${isSelected ? "text-zru-green" : "text-black/30 hover:text-black/60"}`}
+                        >
+                          {isSelected ? <CheckSquare className="h-4 w-4" /> : <Square className="h-4 w-4" />}
+                        </button>
+                      </td>
+
+                      {/* Display / Title (Inline Editable) */}
+                      {visibleColumns.display && (
+                        <td
+                          className={`px-3 ${isCompact ? "py-1.5" : "py-3"} font-medium`}
+                          onDoubleClick={(e) => {
+                            e.stopPropagation();
+                            setInlineEditing({ id: item.id as string | number, field: displayField });
+                            setInlineValue(display);
+                          }}
+                        >
+                          <div className="flex items-center gap-2.5 min-w-0">
+                            {(collection === "opponents" || collection === "teams") && (
+                              <img
+                                src={getFlagUrl(display)}
+                                alt=""
+                                className={`${isCompact ? "h-6 w-6" : "h-7 w-7"} rounded-full object-cover border border-black/10 shadow-xs shrink-0 bg-white`}
+                              />
+                            )}
+                            {visibleColumns.thumbnail && img && collection !== "opponents" && collection !== "teams" && (
+                              // eslint-disable-next-line @next/next/no-img-element
+                              <img
+                                src={img}
+                                alt=""
+                                className={`${isCompact ? "h-6 w-8" : "h-10 w-14"} shrink-0 rounded object-cover border border-[#eae8de]`}
+                              />
+                            )}
+                            <div className="min-w-0 flex-1">
+                              {isEditingDisplay ? (
+                                <input
+                                  type="text"
+                                  autoFocus
+                                  value={inlineValue}
+                                  onChange={(e) => setInlineValue(e.target.value)}
+                                  onBlur={() => handleSaveInline(item.id as string | number, displayField, inlineValue)}
+                                  onKeyDown={(e) => {
+                                    if (e.key === "Enter") handleSaveInline(item.id as string | number, displayField, inlineValue);
+                                    if (e.key === "Escape") setInlineEditing(null);
+                                  }}
+                                  onClick={(e) => e.stopPropagation()}
+                                  className="w-full bg-white border border-zru-green px-2 py-0.5 rounded text-xs font-heading font-black uppercase text-rich-black outline-none shadow-xs"
+                                />
+                              ) : (
+                                <>
+                                  <span
+                                    className="font-heading font-black uppercase text-rich-black text-xs truncate block group-hover:text-zru-green transition-colors"
+                                    title="Double-click to inline edit"
+                                  >
+                                    {display}
+                                  </span>
+                                  {subtitle && !isCompact && (
+                                    <span className="text-[11px] text-black/50 truncate block mt-0.5">{subtitle}</span>
+                                  )}
+                                </>
+                              )}
+                            </div>
+                          </div>
+                        </td>
+                      )}
+
+                      {/* Badge */}
+                      {visibleColumns.badge && badgeField && (
+                        <td className={`px-3 ${isCompact ? "py-1.5" : "py-3"}`}>
+                          {badge ? (
+                            <span className="inline-block rounded bg-zru-green/10 px-2 py-0.5 text-[9px] font-black uppercase tracking-wider text-zru-green">
+                              {badge}
+                            </span>
+                          ) : (
+                            <span className="text-black/30 text-[10px]">—</span>
+                          )}
+                        </td>
+                      )}
+
+                      {/* Status */}
+                      {visibleColumns.status && statusField && (
+                        <td className={`px-3 ${isCompact ? "py-1.5" : "py-3"}`} onClick={(e) => e.stopPropagation()}>
+                          <div className="flex items-center gap-1.5">
+                            {status && <StatusChip status={status} />}
+                            {canUpdate && (
+                              <button
+                                onClick={() => toggleStatus(item, statusField)}
+                                className="opacity-0 group-hover:opacity-100 text-[9px] font-black uppercase text-black/40 hover:text-black transition-opacity px-1 py-0.5 rounded bg-black/5"
+                                title="Toggle Status"
+                              >
+                                Toggle
+                              </button>
+                            )}
+                          </div>
+                        </td>
+                      )}
+
+                      {/* Date */}
+                      {visibleColumns.date && (
+                        <td className={`px-3 ${isCompact ? "py-1.5" : "py-3"} text-[11px] font-medium text-black/60`}>
+                          <span>
+                            {item.date_created
+                              ? new Date(String(item.date_created)).toLocaleDateString("en-GB")
+                              : item.date
+                              ? String(item.date)
+                              : "—"}
                           </span>
-                        ) : (
-                          <>
+                        </td>
+                      )}
+
+                      {/* ID */}
+                      {visibleColumns.id && (
+                        <td
+                          className={`px-3 ${isCompact ? "py-1.5" : "py-3"} font-mono text-[10px] text-black/40 truncate max-w-[80px]`}
+                          title={String(item.id)}
+                        >
+                          {String(item.id).substring(0, 8)}
+                        </td>
+                      )}
+
+                      {/* Actions */}
+                      {visibleColumns.actions && (
+                        <td className={`px-3 ${isCompact ? "py-1.5" : "py-3"} text-right`} onClick={(e) => e.stopPropagation()}>
+                          <div className="flex items-center justify-end gap-1 opacity-80 group-hover:opacity-100 transition-opacity">
                             <button
-                              onClick={() => approveItem(item, statusField!)}
-                              className="flex items-center gap-1 rounded-lg bg-zru-green/10 px-3 py-1.5 text-[10px] font-black uppercase tracking-wider text-zru-green transition-colors hover:bg-zru-green/20"
+                              onClick={() => startEdit(item)}
+                              className="p-1 rounded text-black/50 hover:text-zru-green hover:bg-black/5 transition-colors"
+                              title="Edit in inspector"
                             >
-                              Approve
+                              <Pencil className="h-3.5 w-3.5" />
                             </button>
-                            <button
-                              onClick={() => requestChanges(item, statusField!)}
-                              className="flex items-center gap-1 rounded-lg bg-amber-500/10 px-3 py-1.5 text-[10px] font-black uppercase tracking-wider text-amber-600 transition-colors hover:bg-amber-500/20"
-                            >
-                              Request changes
-                            </button>
-                          </>
-                        )}
-                      </>
-                    )}
-                    {canUpdate && (
-                      <button
-                        onClick={() => startEdit(item)}
-                        className="flex items-center gap-1 rounded-lg bg-zru-green/10 px-3 py-1.5 text-[10px] font-black uppercase tracking-wider text-zru-green transition-colors hover:bg-zru-green/20"
-                      >
-                        <Pencil className="h-3 w-3" /> Edit
-                      </button>
-                    )}
-                    {canCreate && (
-                      <button
-                        onClick={() => startEdit(item, true)}
-                        title="Duplicate this item"
-                        className="flex items-center gap-1 rounded-lg bg-black/5 px-3 py-1.5 text-[10px] font-black uppercase tracking-wider text-black/60 transition-colors hover:bg-black/10"
-                      >
-                        <Copy className="h-3 w-3" /> Duplicate
-                      </button>
-                    )}
-                    {canDelete && (
-                      <button
-                        onClick={() => handleDelete(String(item.id))}
-                        className="flex items-center gap-1 rounded-lg bg-red-500/10 px-3 py-1.5 text-[10px] font-black uppercase tracking-wider text-red-600 transition-colors hover:bg-red-500/20"
-                      >
-                        <Trash2 className="h-3 w-3" /> Delete
-                      </button>
-                    )}
-                  </div>
+                            {canCreate && (
+                              <button
+                                onClick={() => startEdit(item, true)}
+                                className="p-1 rounded text-black/50 hover:text-rich-black hover:bg-black/5 transition-colors"
+                                title="Duplicate"
+                              >
+                                <Copy className="h-3.5 w-3.5" />
+                              </button>
+                            )}
+                            {canDelete && (
+                              <button
+                                onClick={() => handleDelete(item.id as string | number)}
+                                className="p-1 rounded text-black/50 hover:text-red-600 hover:bg-red-50 transition-colors"
+                                title="Delete"
+                              >
+                                <Trash2 className="h-3.5 w-3.5" />
+                              </button>
+                            )}
+                          </div>
+                        </td>
+                      )}
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+        ) : (
+          /* Cards view */
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {visible.map((item) => (
+              <div
+                key={String(item.id)}
+                onClick={() => startEdit(item)}
+                className="p-4 rounded-xl border border-[#eae8de] bg-white hover:border-zru-green transition-all cursor-pointer space-y-2 shadow-2xs"
+              >
+                <div className="flex items-start justify-between gap-2">
+                  <h4 className="font-heading font-black uppercase text-sm text-rich-black">
+                    {String(item[displayField] ?? `#${item.id}`)}
+                  </h4>
+                  {statusField && <StatusChip status={statusValue(item, statusField)} />}
                 </div>
-              );
-            })}
+                {subtitleField && <p className="text-xs text-charcoal-gray">{formatDisplay(item[subtitleField])}</p>}
+              </div>
+            ))}
           </div>
         )}
 
@@ -1295,6 +1027,232 @@ export default function CollectionManager({
           <Pagination page={safePage} pageCount={pageCount} total={filtered.length} onPage={setPage} />
         </div>
       </div>
+
+      {/* ========================================================= */}
+      {/* SIDE-DRAWER INSPECTOR (Notion / Linear Style Slide-Over)  */}
+      {/* ========================================================= */}
+      {drawerOpen && (
+        <div className="fixed inset-0 z-50 overflow-hidden">
+          {/* Backdrop */}
+          <div className="absolute inset-0 bg-black/40 backdrop-blur-xs transition-opacity" onClick={closeForm} />
+
+          <div className="fixed inset-y-0 right-0 max-w-full flex pl-10">
+            <div className="w-screen max-w-2xl bg-white shadow-2xl border-l border-[#eae8de] flex flex-col animate-in slide-in-from-right duration-200">
+              {/* Drawer Header */}
+              <div className="flex items-center justify-between px-6 py-4 border-b border-[#eae8de] bg-milk-white/50">
+                <div className="flex items-center gap-2">
+                  <span className="text-xs font-black uppercase tracking-wider text-zru-green bg-zru-green/10 px-2.5 py-1 rounded-lg">
+                    {editingId !== null ? `Edit ${label}` : `New ${label}`}
+                  </span>
+                  {editingId !== null && (
+                    <span className="font-mono text-xs text-charcoal-gray/60">#{String(editingId).substring(0, 8)}</span>
+                  )}
+                </div>
+
+                <div className="flex items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={closeForm}
+                    className="p-1.5 rounded-lg text-charcoal-gray hover:text-rich-black hover:bg-black/5 transition-colors"
+                    title="Close (Esc)"
+                  >
+                    <X className="w-5 h-5" />
+                  </button>
+                </div>
+              </div>
+
+              {/* Drawer Body Form */}
+              <form onSubmit={handleSubmit} className="flex-1 overflow-y-auto p-6 space-y-5">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {fields.map((field) => {
+                    const full = field.colSpan === "full" || field.type === "richtext" || field.type === "textarea";
+                    const fieldError = errors[field.key];
+                    const fieldId = `cm-drawer-${collection}-${field.key}`;
+
+                    return (
+                      <div key={field.key} className={full ? "md:col-span-2" : ""}>
+                        <label htmlFor={fieldId} className="mb-1 block text-[10px] font-bold uppercase tracking-wider text-black/60">
+                          {field.label}
+                          {field.required && field.type !== "boolean" && <span className="ml-1 text-red-500">*</span>}
+                        </label>
+                        {field.type === "textarea" ? (
+                          <textarea
+                            id={fieldId}
+                            rows={4}
+                            value={formData[field.key] || ""}
+                            onChange={(e) => setField(field.key, e.target.value)}
+                            placeholder={field.placeholder}
+                            disabled={saving}
+                            className={`w-full rounded-lg border bg-white p-2.5 text-sm disabled:opacity-60 ${
+                              fieldError ? "border-red-400" : "border-[#eae8de]"
+                            }`}
+                          />
+                        ) : field.type === "richtext" ? (
+                          <RichTextEditor value={formData[field.key] || ""} onChange={(html) => setField(field.key, html)} />
+                        ) : field.type === "select" ? (
+                          <select
+                            id={fieldId}
+                            value={formData[field.key] || ""}
+                            onChange={(e) => setField(field.key, e.target.value)}
+                            disabled={saving}
+                            className={`w-full rounded-lg border bg-white p-2.5 text-sm font-bold disabled:opacity-60 ${
+                              fieldError ? "border-red-400" : "border-[#eae8de]"
+                            }`}
+                          >
+                            <option value="">— Select —</option>
+                            {(field.options || []).map((opt) => (
+                              <option key={opt} value={opt}>
+                                {opt}
+                              </option>
+                            ))}
+                          </select>
+                        ) : field.type === "image" ? (
+                          <ImagePicker
+                            value={formData[field.key] || ""}
+                            onChange={(id) => setField(field.key, id)}
+                            hint="Upload or reuse an image."
+                          />
+                        ) : field.type === "date" ? (
+                          <input
+                            id={fieldId}
+                            type="date"
+                            value={formData[field.key] || ""}
+                            onChange={(e) => setField(field.key, e.target.value)}
+                            disabled={saving}
+                            className={`w-full rounded-lg border bg-white p-2.5 text-sm disabled:opacity-60 ${
+                              fieldError ? "border-red-400" : "border-[#eae8de]"
+                            }`}
+                          />
+                        ) : field.type === "datetime" ? (
+                          <input
+                            id={fieldId}
+                            type="datetime-local"
+                            value={formData[field.key] || ""}
+                            onChange={(e) => setField(field.key, e.target.value)}
+                            disabled={saving}
+                            className={`w-full rounded-lg border bg-white p-2.5 text-sm disabled:opacity-60 ${
+                              fieldError ? "border-red-400" : "border-[#eae8de]"
+                            }`}
+                          />
+                        ) : field.type === "number" ? (
+                          <input
+                            id={fieldId}
+                            type="number"
+                            step="any"
+                            value={formData[field.key] || ""}
+                            onChange={(e) => setField(field.key, e.target.value)}
+                            placeholder={field.placeholder}
+                            disabled={saving}
+                            className={`w-full rounded-lg border bg-white p-2.5 text-sm disabled:opacity-60 ${
+                              fieldError ? "border-red-400" : "border-[#eae8de]"
+                            }`}
+                          />
+                        ) : field.type === "boolean" ? (
+                          <div className="flex items-center gap-3 pt-1.5">
+                            <button
+                              type="button"
+                              disabled={saving}
+                              onClick={() => setField(field.key, formData[field.key] === "1" ? "0" : "1")}
+                              className={`rounded-lg px-3 py-1.5 text-xs font-black uppercase transition-colors ${
+                                formData[field.key] === "1"
+                                  ? "bg-zru-green text-white"
+                                  : "bg-black/5 text-black/60 hover:bg-black/10"
+                              }`}
+                            >
+                              {formData[field.key] === "1" ? "Enabled / True" : "Disabled / False"}
+                            </button>
+                          </div>
+                        ) : (
+                          <input
+                            id={fieldId}
+                            type="text"
+                            value={formData[field.key] || ""}
+                            onChange={(e) => setField(field.key, e.target.value)}
+                            placeholder={field.placeholder}
+                            disabled={saving}
+                            className={`w-full rounded-lg border bg-white p-2.5 text-sm disabled:opacity-60 ${
+                              fieldError ? "border-red-400" : "border-[#eae8de]"
+                            }`}
+                          />
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
+
+                {/* Drawer Footer Actions */}
+                <div className="pt-6 border-t border-[#eae8de] flex items-center justify-between sticky bottom-0 bg-white py-3">
+                  <button
+                    type="button"
+                    onClick={closeForm}
+                    disabled={saving}
+                    className="px-4 py-2 rounded-xl bg-black/5 text-rich-black text-xs font-bold hover:bg-black/10 transition-colors"
+                  >
+                    Cancel
+                  </button>
+
+                  <button
+                    type="submit"
+                    disabled={saving}
+                    className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-zru-green text-white text-xs font-black uppercase tracking-wider hover:bg-forest-green transition-all shadow-xs"
+                  >
+                    {saving && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
+                    {saving ? "Saving..." : editingId !== null ? "Save Changes" : `Create ${label}`}
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ========================================================= */}
+      {/* CSV IMPORT MODAL                                          */}
+      {/* ========================================================= */}
+      {showImportModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+          <div className="absolute inset-0 bg-black/50 backdrop-blur-xs" onClick={() => setShowImportModal(false)} />
+          <div className="relative w-full max-w-lg bg-white rounded-2xl p-6 shadow-2xl space-y-4">
+            <div className="flex items-center justify-between">
+              <h3 className="text-base font-black uppercase text-rich-black">Import {title} from CSV</h3>
+              <button onClick={() => setShowImportModal(false)} className="text-charcoal-gray hover:text-rich-black">
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <p className="text-xs text-charcoal-gray">
+              Paste CSV data with column headers matching your collection fields (e.g. <code>{fields.map((f) => f.key).join(", ")}</code>).
+            </p>
+
+            <textarea
+              rows={8}
+              value={importCsvText}
+              onChange={(e) => setImportCsvText(e.target.value)}
+              placeholder={`title,status,season_year\n"Sample Title","published","2026"`}
+              className="w-full font-mono text-xs p-3 rounded-xl border border-[#eae8de] focus:border-zru-green outline-none"
+            />
+
+            <div className="flex items-center justify-end gap-2 pt-2">
+              <button
+                type="button"
+                onClick={() => setShowImportModal(false)}
+                className="px-4 py-2 rounded-xl bg-black/5 text-xs font-bold text-rich-black"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                onClick={handleImportCSV}
+                disabled={importBusy || !importCsvText.trim()}
+                className="flex items-center gap-2 px-5 py-2 rounded-xl bg-zru-green text-white text-xs font-black uppercase tracking-wider hover:bg-forest-green transition-colors disabled:opacity-50"
+              >
+                {importBusy && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
+                {importBusy ? "Importing..." : "Run Import"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

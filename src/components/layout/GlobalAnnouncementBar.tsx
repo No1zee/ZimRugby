@@ -15,6 +15,7 @@ type FeedItem = {
   body?: string;
   href?: string;
   cta?: string;
+  isCritical?: boolean;
 };
 
 export default function GlobalAnnouncementBar() {
@@ -48,11 +49,12 @@ export default function GlobalAnnouncementBar() {
           .filter((a) => !dismissed.has(`ann-${a.id}`))
           .map<FeedItem>((a) => ({
             key: `ann-${a.id}`,
-            badge: a.badge || (a.priority === "critical" ? "TICKET ALERT" : "ANNOUNCEMENT"),
+            badge: a.badge || (a.priority === "critical" ? "BREAKING NEWS" : "OFFICIAL UPDATE"),
             title: a.title,
             body: a.body,
             href: a.ctaUrl || undefined,
-            cta: a.ctaLabel || "BOOK TICKETS",
+            cta: a.ctaLabel || "READ STORY",
+            isCritical: a.priority === "critical" || a.badge?.toLowerCase().includes("breaking"),
           }));
 
         if (!alive) return;
@@ -104,65 +106,114 @@ export default function GlobalAnnouncementBar() {
   return (
     <AnimatePresence>
       {isVisible && (
-        <motion.div
+        <motion.aside
           key="global-announcement-ribbon"
-          initial={{ y: "-100%", opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          exit={{ y: "-100%", opacity: 0, transition: { duration: 0.3 } }}
-          transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+          initial={{ height: 0, opacity: 0 }}
+          animate={{ height: "auto", opacity: 1 }}
+          exit={{ height: 0, opacity: 0, transition: { duration: 0.2 } }}
+          transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
           onMouseEnter={() => setPaused(true)}
           onMouseLeave={() => setPaused(false)}
-          className="w-full text-white relative z-50 border-b border-red-500/20 bg-gradient-to-r from-[#4A0808] via-[#004D2C] to-[#4A0808] shadow-[0_4px_25px_rgba(239,68,68,0.25)] transition-all duration-500 select-none overflow-hidden"
+          className="w-full text-white relative z-50 select-none overflow-hidden block shrink-0 border-0 m-0 p-0 shadow-none"
+          aria-label="Breaking news & official announcements"
         >
-          {/* Ambient Lighting & Shimmer */}
-          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full animate-[shimmer_4s_infinite] pointer-events-none" />
+          {/* ═══ 1. BASE LAYER: Red Sides, Green Center (Default Rest State) ═══ */}
+          <div
+            className="absolute inset-0"
+            style={{
+              background:
+                "linear-gradient(90deg, #5B0B0B 0%, #8B0000 18%, #004D2C 38%, #006B3F 50%, #004D2C 62%, #8B0000 82%, #5B0B0B 100%)",
+            }}
+          />
 
-          <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-2.5 flex items-center justify-between gap-4 relative z-10">
-            {/* Left Notification Icon */}
-            <div className="flex items-center shrink-0">
-              <div className="w-7 h-7 rounded-none bg-red-500/20 border border-red-500/30 flex items-center justify-center">
-                <Bell className="w-3.5 h-3.5 text-red-400" />
-              </div>
+          {/* ═══ 2. ALTERNATING LAYER: Green Sides, Red Center (Fades in during Shimmer) ═══ */}
+          <motion.div
+            className="absolute inset-0"
+            style={{
+              background:
+                "linear-gradient(90deg, #004D2C 0%, #006B3F 18%, #8B0000 38%, #B91C1C 50%, #8B0000 62%, #006B3F 82%, #004D2C 100%)",
+            }}
+            animate={{
+              opacity: [0, 0, 0.95, 0.95, 0, 0],
+            }}
+            transition={{
+              duration: 5,
+              repeat: Infinity,
+              times: [0, 0.2, 0.45, 0.65, 0.85, 1],
+              ease: "easeInOut",
+            }}
+          />
+
+          {/* ═══ 3. SPECULAR SHIMMER LIGHT WAVE (Synchronized with Color Alternation) ═══ */}
+          <div className="absolute inset-0 overflow-hidden pointer-events-none">
+            <motion.div
+              initial={{ x: "-120%" }}
+              animate={{ x: ["-120%", "280%", "280%"] }}
+              transition={{
+                repeat: Infinity,
+                duration: 5,
+                times: [0.2, 0.7, 1],
+                ease: [0.4, 0.0, 0.2, 1],
+              }}
+              className="absolute inset-y-0 w-2/5 bg-gradient-to-r from-transparent via-white/40 to-transparent -skew-x-12"
+            />
+          </div>
+
+          {/* ═══ 4. TOP SPECULAR EDGE LINE ═══ */}
+          <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-red-500/50 via-emerald-400/80 to-red-500/50" />
+
+          {/* ═══ 5. CONTENT BAR CONTAINER ═══ */}
+          <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-2 flex items-center justify-between gap-3 relative z-10">
+            {/* Left Beacon & Live Desk Indicator */}
+            <div className="flex items-center gap-2 shrink-0">
+              <span className="flex h-2.5 w-2.5 relative">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-80" />
+                <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-red-500 shadow-sm shadow-red-900" />
+              </span>
+              <span className="hidden sm:inline-flex items-center gap-1.5 font-mono text-[10px] font-black uppercase tracking-widest text-white drop-shadow-md">
+                <Bell className="w-3.5 h-3.5 text-red-300 animate-pulse" />
+                Breaking Desk
+              </span>
             </div>
 
-            {/* Middle Notification Text & CTA */}
-            <div className="flex-1 flex items-center justify-center overflow-hidden">
+            {/* Middle Notification Content */}
+            <div className="flex-1 flex items-center justify-center overflow-hidden min-w-0">
               <AnimatePresence mode="wait">
                 <motion.div
                   key={current.key}
-                  initial={{ opacity: 0, y: -6 }}
+                  initial={{ opacity: 0, y: -3 }}
                   animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: 6 }}
-                  transition={{ duration: 0.25 }}
-                  className="flex flex-wrap items-center justify-center gap-2.5 text-center text-xs"
+                  exit={{ opacity: 0, y: 3 }}
+                  transition={{ duration: 0.18 }}
+                  className="flex flex-wrap items-center justify-center gap-2 text-center text-xs"
                 >
-                  {/* Red Ticket/Alert Pill */}
+                  {/* High-Visibility Red Badge */}
                   {current.badge && (
-                    <span className="bg-[#EF4444] text-white text-[9px] font-heading font-black uppercase tracking-wider px-2 py-0.5 rounded shadow-sm shadow-red-500/40">
+                    <span className="text-[9px] font-black uppercase tracking-widest px-2.5 py-0.5 rounded bg-red-600 text-white shadow-md shadow-red-950/70 border border-red-400/30 shrink-0">
                       {current.badge}
                     </span>
                   )}
 
-                  {/* Title */}
-                  <span className="font-heading font-black uppercase tracking-wide text-white text-xs sm:text-[13px]">
+                  {/* Headline */}
+                  <span className="font-heading font-black uppercase tracking-wide text-white text-xs sm:text-[13px] truncate max-w-[260px] sm:max-w-[500px] md:max-w-none drop-shadow-md">
                     {current.title}
                   </span>
 
-                  {/* Body Subtext */}
+                  {/* Subtext Body */}
                   {current.body && (
-                    <span className="text-white/85 font-normal text-xs hidden md:inline">
+                    <span className="text-white/90 font-normal text-xs hidden lg:inline truncate max-w-sm drop-shadow-sm">
                       — {current.body}
                     </span>
                   )}
 
-                  {/* Solid White CTA Button */}
+                  {/* Action CTA Button */}
                   {current.href && (
                     <Link
                       href={current.href}
-                      className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-md bg-white text-[#4A0808] hover:bg-accent-teal hover:text-rich-black text-[10px] font-heading font-black uppercase tracking-wider transition-all duration-200 shadow-md font-bold"
+                      className="inline-flex items-center gap-1.5 px-3 py-1 rounded bg-white text-[#5B0B0B] hover:bg-[#006B3F] hover:text-white text-[10px] font-black uppercase tracking-wider transition-all duration-200 ml-1 cursor-pointer shadow-lg font-bold shrink-0"
                     >
                       <span>{current.cta}</span>
-                      <ArrowRight className="w-3 h-3" />
+                      <ArrowRight className="w-3 h-3 transition-transform group-hover:translate-x-0.5" />
                     </Link>
                   )}
                 </motion.div>
@@ -170,22 +221,23 @@ export default function GlobalAnnouncementBar() {
             </div>
 
             {/* Right Pagination & Dismiss */}
-            <div className="flex items-center gap-3 shrink-0">
+            <div className="flex items-center gap-2.5 shrink-0">
               {items.length > 1 && (
-                <span className="text-[10px] font-mono font-bold text-white/60 tracking-wider">
+                <span className="text-[10px] font-mono font-bold text-white/70 tracking-wider">
                   {Math.min(index, items.length - 1) + 1}/{items.length}
                 </span>
               )}
               <button
                 onClick={() => handleDismiss(current.key)}
-                className="p-1 hover:bg-white/10 rounded-full transition-colors text-white/60 hover:text-white"
+                className="p-1 hover:bg-white/20 rounded-full transition-colors text-white/80 hover:text-white cursor-pointer"
                 aria-label="Dismiss Announcement"
+                title="Dismiss Announcement"
               >
                 <X className="w-3.5 h-3.5" />
               </button>
             </div>
           </div>
-        </motion.div>
+        </motion.aside>
       )}
     </AnimatePresence>
   );

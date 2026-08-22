@@ -5,6 +5,8 @@ import { motion } from "framer-motion";
 import EditableWrapper from "@/lib/edit-mode/EditableWrapper";
 import { useEditMode } from "@/lib/edit-mode/EditContext";
 
+import { KineticHeading } from "./KineticHeading";
+
 export interface BreadcrumbItem {
   label: string;
   href: string;
@@ -75,13 +77,14 @@ export default function PageHero({
       className="max-w-4xl space-y-4"
     >
 
-      {/* Main Title */}
-      <h1 className="text-3xl sm:text-5xl md:text-6xl font-heading font-black not-italic text-white tracking-tight uppercase leading-[1.08]">
-        {title}
-        {accentTitle && (
-          <span className="text-zru-green ml-2 sm:ml-3">{accentTitle}</span>
-        )}
-      </h1>
+      {/* Main Title with Kinetic Line-by-Line Reveal */}
+      <KineticHeading
+        text={title}
+        accentText={accentTitle}
+        as="h1"
+        className="text-3xl sm:text-5xl md:text-6xl font-heading font-black not-italic text-white tracking-tight uppercase leading-[1.08]"
+        accentClassName="text-zru-green ml-2 sm:ml-3"
+      />
 
       {/* Subtitle / Intro */}
       {finalSubtitle && (

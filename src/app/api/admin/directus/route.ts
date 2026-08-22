@@ -72,6 +72,156 @@ async function revalidateCollection(request: NextRequest, collection: string) {
   }
 }
 
+async function syncHeroSlideFromNews(
+  newsId: string | number,
+  newsData: Record<string, unknown>,
+  action: "upsert" | "remove"
+) {
+  try {
+    if (!DIRECTUS_URL || !DIRECTUS_TOKEN) return;
+
+    const slug = newsData.slug || `news-${newsId}`;
+    const targetHref = `/media/${slug}`;
+
+    const currentSlidesRes = await directusJson(`/items/hero_slides?sort=sort&limit=50`);
+    const existingSlides = (currentSlidesRes.body?.data || []) as Record<string, unknown>[];
+
+    const existingSlide = existingSlides.find(
+      (s) =>
+        String(s.linked_news_id || "") === String(newsId) ||
+        String(s.cta1_href || "").includes(String(slug)) ||
+        String(s.cta1_href || "").includes(`news-${newsId}`)
+    );
+
+    if (action === "remove") {
+      if (existingSlide) {
+        await directusJson(`/items/hero_slides/${existingSlide.id}`, {
+          method: "PATCH",
+          body: JSON.stringify({ is_active: false, status: "draft" }),
+        });
+      }
+      return;
+    }
+
+    const title = String(newsData.title || "Latest Rugby News");
+    const excerpt = String(newsData.excerpt || newsData.summary || "");
+    const image = String(newsData.image || "/images/gallery/zimbabwe-sables-battle-of-zambezi-gameday1-505.webp");
+    const category = String(newsData.category || "National Teams").toUpperCase();
+
+    // Shift older slides down
+    for (const slide of existingSlides) {
+      if (existingSlide && String(slide.id) === String(existingSlide.id)) continue;
+      const currentSort = Number(slide.sort) || 1;
+      await directusJson(`/items/hero_slides/${slide.id}`, {
+        method: "PATCH",
+        body: JSON.stringify({ sort: currentSort + 1 }),
+      });
+    }
+
+    const slidePayload = {
+      headline_line1: title.length > 35 ? title.slice(0, 35) : title,
+      headline_line2: title.length > 35 ? title.slice(35).trim() : "",
+      subtext: excerpt.slice(0, 200),
+      tag: category,
+      context_pill: "OFFICIAL MATCH & NEWS DESK",
+      image,
+      cta1_label: "READ FULL STORY",
+      cta1_href: targetHref,
+      sort: 1,
+      is_active: true,
+      status: "published",
+      linked_news_id: String(newsId),
+    };
+
+    if (existingSlide) {
+      await directusJson(`/items/hero_slides/${existingSlide.id}`, {
+        method: "PATCH",
+        body: JSON.stringify(slidePayload),
+      });
+    } else {
+      await directusJson(`/items/hero_slides`, {
+        method: "POST",
+        body: JSON.stringify(slidePayload),
+      });
+    }
+  } catch (err) {
+    console.warn("[syncHeroSlideFromNews] Warning during hero slide sync:", err);
+  }
+}
+
+async function syncFlashBannerFromNews(
+  newsId: string | number,
+  newsData: Record<string, unknown>,
+  action: "upsert" | "remove"
+) {
+  try {
+    if (!DIRECTUS_URL || !DIRECTUS_TOKEN) return;
+
+    const slug = newsData.slug || `news-${newsId}`;
+    const targetHref = `/media/${slug}`;
+
+    const currentAnnRes = await directusJson(`/items/announcements?limit=50`);
+    const existingAnns = (currentAnnRes.body?.data || []) as Record<string, unknown>[];
+
+    const existingAnn = existingAnns.find(
+      (a) =>
+        String(a.related_article || "") === String(newsId) ||
+        String(a.cta_url || "").includes(String(slug)) ||
+        String(a.cta_url || "").includes(`news-${newsId}`)
+    );
+
+    if (action === "remove") {
+      if (existingAnn) {
+        await directusJson(`/items/announcements/${existingAnn.id}`, {
+          method: "PATCH",
+          body: JSON.stringify({ is_enabled: false, status: "draft" }),
+        });
+      }
+      return;
+    }
+
+    const title = String(newsData.title || "Breaking Rugby Update");
+    const expiryHours = Number(newsData.breaking_expiry_hours) || 48;
+    const now = new Date();
+    const endsAt = new Date(now.getTime() + expiryHours * 3600 * 1000).toISOString();
+
+    const bannerPayload = {
+      title,
+      body: String(newsData.excerpt || "").slice(0, 140),
+      design_variant: "banner",
+      badge: "BREAKING NEWS",
+      priority: "30",
+      starts_at: now.toISOString(),
+      ends_at: endsAt,
+      segment: "general",
+      scope: ["global", "homepage", "media"],
+      cta_label: "READ STORY",
+      cta_url: targetHref,
+      is_sticky: true,
+      is_enabled: true,
+      status: "published",
+      related_article: String(newsId),
+    };
+
+    if (existingAnn) {
+      await directusJson(`/items/announcements/${existingAnn.id}`, {
+        method: "PATCH",
+        body: JSON.stringify(bannerPayload),
+      });
+    } else {
+      await directusJson(`/items/announcements`, {
+        method: "POST",
+        body: JSON.stringify({
+          id: crypto.randomUUID(),
+          ...bannerPayload,
+        }),
+      });
+    }
+  } catch (err) {
+    console.warn("[syncFlashBannerFromNews] Warning during flash banner sync:", err);
+  }
+}
+
 async function directusJson(path: string, init: RequestInit = {}): Promise<{ ok: boolean; status: number; body: any }> {
   const res = await fetch(`${DIRECTUS_URL}${path}`, {
     ...init,
@@ -202,6 +352,18 @@ export async function POST(request: NextRequest) {
   const created = result.body?.data;
   await audit(session, "CREATE", `${collection}:${created?.id ?? "?"}`, JSON.stringify(payload).slice(0, 2000), clientIp(request));
   void revalidateCollection(request, collection);
+
+  if (collection === "news" && created?.id) {
+    if (payload.is_featured_hero === true && payload.status === "published") {
+      await syncHeroSlideFromNews(created.id, { ...payload, id: created.id }, "upsert");
+      void revalidateCollection(request, "hero_slides");
+    }
+    if (payload.is_breaking_banner === true && payload.status === "published") {
+      await syncFlashBannerFromNews(created.id, { ...payload, id: created.id }, "upsert");
+      void revalidateCollection(request, "announcements");
+    }
+  }
+
   return NextResponse.json(result.body);
 }
 
@@ -280,6 +442,26 @@ export async function PATCH(request: NextRequest) {
     const diff = diffScalars(before || {}, after || {});
     await audit(session, "UPDATE", `${collection}:${id}`, JSON.stringify(diff).slice(0, 3000), clientIp(request));
     void revalidateCollection(request, collection);
+
+    if (collection === "news" && id) {
+      const merged = { ...before, ...after, ...cleanData };
+      if (cleanData.is_featured_hero === true && (merged.status === "published" || cleanData.status === "published")) {
+        await syncHeroSlideFromNews(id, merged, "upsert");
+        void revalidateCollection(request, "hero_slides");
+      } else if (cleanData.is_featured_hero === false || cleanData.status === "draft") {
+        await syncHeroSlideFromNews(id, merged, "remove");
+        void revalidateCollection(request, "hero_slides");
+      }
+
+      if (cleanData.is_breaking_banner === true && (merged.status === "published" || cleanData.status === "published")) {
+        await syncFlashBannerFromNews(id, merged, "upsert");
+        void revalidateCollection(request, "announcements");
+      } else if (cleanData.is_breaking_banner === false || cleanData.status === "draft") {
+        await syncFlashBannerFromNews(id, merged, "remove");
+        void revalidateCollection(request, "announcements");
+      }
+    }
+
     return NextResponse.json(result.body);
   } catch (error) {
     return NextResponse.json({ error: String(error) }, { status: 500 });
@@ -330,6 +512,10 @@ export async function DELETE(request: NextRequest) {
         return NextResponse.json({ error: "Directus error" }, { status: result.status });
       }
       await audit(session2, "PURGE", `${collection}:${id}`, "hard-deleted item", clientIp(request));
+      if (collection === "news" && id) {
+        await syncHeroSlideFromNews(id, {}, "remove");
+        void revalidateCollection(request, "hero_slides");
+      }
       void revalidateCollection(request, collection);
       return NextResponse.json({ success: true });
     }
@@ -366,6 +552,12 @@ export async function DELETE(request: NextRequest) {
         { error: typeof result.body === "string" ? result.body : "Directus error" },
         { status: result.status }
       );
+    }
+    if (collection === "news" && id) {
+      await syncHeroSlideFromNews(id, {}, "remove");
+      await syncFlashBannerFromNews(id, {}, "remove");
+      void revalidateCollection(request, "hero_slides");
+      void revalidateCollection(request, "announcements");
     }
     void revalidateCollection(request, collection);
     return NextResponse.json({ success: true });

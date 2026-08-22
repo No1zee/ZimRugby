@@ -89,7 +89,12 @@ export async function getNewsArticles(limit = 6, category?: string): Promise<Rep
     
     const items = await directusFetch<DirectusNewsItem>(
       "news",
-      { filter, sort: ["-date"], limit: limit * 2 },
+      {
+        fields: ["id", "title", "slug", "excerpt", "image", "category", "date", "status", "publish_at", "expire_at"],
+        filter,
+        sort: ["-date"],
+        limit: limit * 2,
+      },
       60
     );
     const reports = items.map(newsItemToReport);

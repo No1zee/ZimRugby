@@ -4,6 +4,7 @@ import React, { useState, useRef } from "react";
 import { Users, Shield, ArrowRight, ChevronDown, LayoutGrid, Flag } from "lucide-react";
 import CollectionManager from "@/components/admin/CollectionManager";
 import { VisualPitchBuilder } from "./VisualPitchBuilder";
+import { getFlagUrl } from "@/lib/flags";
 
 interface VisualTeamsManagerProps {
   teams: Record<string, unknown>[];
@@ -189,11 +190,15 @@ export default function VisualTeamsManager({
                 <div className="relative z-10 space-y-3">
                   <div className="flex items-start justify-between gap-2">
                     <div
-                      className={`w-10 h-10 rounded-xl flex items-center justify-center border ${
-                        isSelected ? "bg-white/10 border-white/20" : "bg-black/5 border-black/10"
+                      className={`w-10 h-10 rounded-xl flex items-center justify-center border overflow-hidden shadow-xs ${
+                        isSelected ? "bg-white/10 border-white/20" : "bg-white border-black/10"
                       }`}
                     >
-                      <Shield className={`w-5 h-5 ${isSelected ? "text-accent-teal" : "text-zru-green"}`} />
+                      <img
+                        src={getFlagUrl(name)}
+                        alt={name}
+                        className="w-full h-full object-cover"
+                      />
                     </div>
                     <span
                       className={`text-[9px] font-black uppercase tracking-wider px-2 py-0.5 rounded-full ${

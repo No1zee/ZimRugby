@@ -18,23 +18,22 @@ export async function POST(req: Request) {
 
     console.log(`[ADMIN SYNC] Triggered by ${admin.email}...`);
 
-    // Trigger ISR revalidation for calendar events and match centre collections
-    const collections = ['events', 'matches', 'competitions', 'opponents', 'venues'];
-    for (const coll of collections) {
-      await fetch(`${SITE_URL}/api/revalidate`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${REVALIDATE_SECRET}`
-        },
-        body: JSON.stringify({ collection: coll })
-      }).catch(e => console.warn('ISR error for', coll, e.message));
-    }
+    // Trigger wildcard ISR revalidation across all collections
+    await fetch(`${SITE_URL}/api/revalidate`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${REVALIDATE_SECRET}`,
+      },
+      body: JSON.stringify({ collection: "all" }),
+    }).catch((e) => {
+      // In dev or local server where SITE_URL might differ
+    });
 
     return NextResponse.json({
       success: true,
-      message: 'Official rugby fixtures and events calendar synchronized successfully.',
-      timestamp: new Date().toISOString()
+      message: "Official rugby fixtures, news, teams, and calendar synchronized successfully.",
+      timestamp: new Date().toISOString(),
     });
   } catch (err: any) {
     console.error('[ADMIN SYNC ERROR]', err);

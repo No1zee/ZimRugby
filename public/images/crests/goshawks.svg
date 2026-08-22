@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <circle cx="50" cy="50" r="48" fill="#1B1C1C" stroke="#006B3F" stroke-width="3"/>
+  <circle cx="50" cy="50" r="38" fill="#004526" stroke="#ffffff" stroke-width="1.5"/>
+  <path d="M30 42 C38 32, 50 28, 64 34 C72 40, 74 52, 68 62 C58 58, 50 52, 44 46 C40 52, 36 60, 32 68 C30 58, 28 50, 30 42 Z" fill="#ffffff"/>
+  <circle cx="54" cy="40" r="2.5" fill="#004526"/>
+  <text x="50" y="80" font-family="Arial, sans-serif" font-size="6" font-weight="900" fill="#ffffff" text-anchor="middle" letter-spacing="1">GOSHAWKS</text>
+</svg>

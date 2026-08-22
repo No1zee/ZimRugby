@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { BookOpen, ExternalLink, FileText, Flag, HelpCircle, LayoutDashboard, Radio, ShieldCheck, Sparkles, Sprout, Users, CalendarDays, Trophy, RefreshCw, Layers, Handshake, FolderOpen, Building2 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
+import AdminSidebar from "./AdminSidebar";
 import CollectionManager from "@/components/admin/CollectionManager";
 import ArticleComposer from "@/components/admin/ArticleComposer";
 import MatchCentrePanel from "@/components/admin/MatchCentrePanel";
@@ -15,8 +16,8 @@ import { ConfirmProvider, useConfirm } from "@/components/admin/ui/ConfirmProvid
 import { onAdminTab, setAdminTab } from "@/lib/admin/tab-events";
 import { canAccessPanel, canOnCollection, type RolePermissions } from "@/lib/admin/iam";
 import RolesPanel from "./roles/RolesPanel";
-import PagesGrid from "./PagesGrid";
 import CampaignsPanel from "./CampaignsPanel";
+import PagesGrid from "./PagesGrid";
 import AiAssistantPanel from "./AiAssistantPanel";
 import AuditLogsPanel from "@/components/admin/AuditLogsPanel";
 import HeroLayoutPanel from "@/components/admin/HeroLayoutPanel";
@@ -24,6 +25,7 @@ import SponsorsPanel from "@/components/admin/SponsorsPanel";
 import ResourcesPanel from "@/components/admin/ResourcesPanel";
 import BackupsPanel from "@/components/admin/BackupsPanel";
 import VisualTeamsManager from "@/components/admin/VisualTeamsManager";
+import NewsMasterDetailPanel from "@/components/admin/panels/NewsMasterDetailPanel";
 import AdminInactivityLock from "@/components/admin/ui/AdminInactivityLock";
 import type { MatchCardViewModel, StandingsTableViewModel } from "@/lib/match-centre/types";
 import type { Campaign } from "@/lib/api/campaigns";
@@ -66,7 +68,7 @@ interface AdminClientProps {
   initialProgrammes: Record<string, unknown>[];
   initialFaqs: Record<string, unknown>[];
   initialFooterNav: Record<string, unknown>[];
-  initialPages: Array<{
+  initialPages?: Array<{
     id: string;
     slug: string;
     title: string;
@@ -76,7 +78,7 @@ interface AdminClientProps {
     updated_at?: string;
     sort?: number;
   }>;
-  initialSectionCounts: Record<string, number>;
+  initialSectionCounts?: Record<string, number>;
   initialActivityFeed: Array<{
     id: number;
     action: "create" | "update" | "delete" | "login" | "authenticate";
@@ -99,10 +101,10 @@ interface AdminClientProps {
   initialResources: Record<string, unknown>[];
   initialClubs: Record<string, unknown>[];
   stats: {
-    pagesCount: number;
-    publishedPages: number;
-    draftPages: number;
-    totalSections: number;
+    pagesCount?: number;
+    publishedPages?: number;
+    draftPages?: number;
+    totalSections?: number;
     eventCount: number;
     teamCount: number;
     playerCount: number;
@@ -159,8 +161,8 @@ function AdminClientInner(props: AdminClientProps) {
     initialProgrammes,
     initialFaqs,
     initialFooterNav,
-    initialPages,
-    initialSectionCounts,
+    initialPages = [],
+    initialSectionCounts = {},
     initialActivityFeed,
     teams,
     opponents,
@@ -216,8 +218,7 @@ function AdminClientInner(props: AdminClientProps) {
       items: [
         { id: "hero_layout", label: "Homepage & Banners", icon: Layers, count: 0 },
         { id: "media", label: "News & Stories", icon: BookOpen, count: initialNews.length },
-        { id: "pages", label: "Website Pages", icon: FileText, count: stats.pagesCount },
-        { id: "events", label: "Events & Festivals", icon: CalendarDays, count: stats.eventCount },
+                { id: "events", label: "Events & Festivals", icon: CalendarDays, count: stats.eventCount },
         { id: "clubs", label: "Clubs", icon: Building2, count: initialClubs.length },
         { id: "resources", label: "Resources", icon: FolderOpen, count: 0 },
         { id: "sponsors", label: "Sponsors & Partners", icon: Handshake, count: 0 },
@@ -363,7 +364,7 @@ function AdminClientInner(props: AdminClientProps) {
     try {
       const res = await fetch("/api/revalidate", { method: "POST" });
       if (res.ok) {
-        toast("Live site refreshed — changes are now visible.", "success");
+        toast("Live site refreshed ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã‚Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â changes are now visible.", "success");
       } else {
         toast("Could not refresh the live site. Please try again.", "error");
       }
@@ -375,124 +376,121 @@ function AdminClientInner(props: AdminClientProps) {
   };
 
   return (
-    <main className="bg-milk-white min-h-screen pb-16 pt-8">
-      <div className="mx-auto max-w-[1400px] px-4 sm:px-6 lg:px-8">
-        {/* Header */}
-        <div className="mb-6 flex flex-col gap-4 border-b border-black/10 pb-6 md:flex-row md:items-center md:justify-between">
-          <div>
-            <div className="mb-1.5 flex items-center gap-2">
-              <span className="rounded-lg bg-zru-green px-2.5 py-1 text-[10px] font-black uppercase tracking-[0.2em] text-white shadow-xs">
-                Official ZRU Admin
-              </span>
-              <span className="text-[10px] font-bold uppercase tracking-wider text-black/40">
-                Command Workspace
+    <div className="min-h-screen flex flex-col bg-[#FDFBF0] text-[#1b1c1c] font-sans antialiased">
+      {/* ── TopNavBar (Stitch Design) ─────────────────────────────────── */}
+      <header className="bg-[#002d19] text-white flex justify-between items-center w-full px-6 h-16 border-b border-white/10 sticky top-0 z-50 shadow-sm">
+        <div className="flex items-center gap-8 h-full">
+          <div className="flex items-center gap-2.5">
+            <div className="w-8 h-8 rounded-lg bg-[#006c4a] flex items-center justify-center text-white font-heading font-black text-sm shadow-xs">
+              Z
+            </div>
+            <div>
+              <h1 className="text-base font-heading font-bold text-white tracking-tight leading-none m-0">
+                The Touchline
+              </h1>
+              <span className="text-[9px] text-[#84d7af] font-mono uppercase tracking-widest font-semibold">
+                ZRU Studio
               </span>
             </div>
-            <h1 className="font-heading text-2xl sm:text-3xl font-black uppercase tracking-tight text-rich-black">
-              {NAV_SECTIONS.flatMap((s) => s.items).find((i) => i.id === activeTab)?.label ?? "Dashboard"}
-            </h1>
           </div>
 
-          <div className="flex flex-wrap items-center gap-2.5">
-            {/* One-Click CDN Cache Purge Button */}
+          {/* Desktop Nav Links */}
+          <nav className="hidden md:flex h-full items-end gap-5">
             <button
-              onClick={handlePurgeCache}
-              disabled={isPurgingCache}
-              className="inline-flex items-center gap-2 rounded-xl bg-zru-green px-4 py-2.5 font-heading text-xs font-black uppercase tracking-wider text-white shadow-sm transition-all hover:bg-green-800 disabled:opacity-50 cursor-pointer"
+              type="button"
+              onClick={() => navigate("overview")}
+              className={`h-full flex items-center px-2 py-3.5 text-xs uppercase tracking-wider font-bold transition-all cursor-pointer ${
+                activeTab === "overview"
+                  ? "text-white border-b-2 border-[#3be0a2]"
+                  : "text-white/70 hover:text-white"
+              }`}
             >
-              <RefreshCw className={`h-3.5 w-3.5 ${isPurgingCache ? "animate-spin" : ""}`} />
-              {isPurgingCache ? "Refreshing..." : "Refresh Live Site"}
+              Dashboard
             </button>
-
-            <a
-              href={
-                (activeTab === "fixtures"
-                  ? "/matches"
-                  : activeTab === "media"
-                  ? "/media"
-                  : activeTab === "events"
-                  ? "/events"
-                  : activeTab === "teams"
-                  ? "/teams"
-                  : activeTab === "sponsors"
-                  ? "/partners"
-                  : activeTab === "resources"
-                  ? "/resources"
-                  : activeTab === "campaigns"
-                  ? "/campaigns"
-                  : activeTab === "fanzone"
-                  ? "/fan-zone"
-                  : activeTab === "onboarding"
-                  ? "/onboarding"
-                  : activeTab === "grassroots"
-                  ? "/schools"
-                  : activeTab === "faq-footer"
-                  ? "/faqs"
-                  : "/")
-              }
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 rounded-xl bg-white border border-black/10 px-4 py-2.5 font-heading text-xs font-black uppercase tracking-wider text-black/70 transition-all hover:bg-black/5 hover:text-black shadow-xs cursor-pointer"
+            <button
+              type="button"
+              onClick={() => navigate("media")}
+              className={`h-full flex items-center px-2 py-3.5 text-xs uppercase tracking-wider font-bold transition-all cursor-pointer ${
+                activeTab === "media" || activeTab === "hero_layout"
+                  ? "text-white border-b-2 border-[#3be0a2]"
+                  : "text-white/70 hover:text-white"
+              }`}
             >
-              View Live Page <ExternalLink className="h-3.5 w-3.5 text-[#006B3F]" />
-            </a>
-          </div>
+              Editorial
+            </button>
+            <button
+              type="button"
+              onClick={() => navigate("fixtures")}
+              className={`h-full flex items-center px-2 py-3.5 text-xs uppercase tracking-wider font-bold transition-all cursor-pointer ${
+                activeTab === "fixtures" || activeTab === "teams" || activeTab === "clubs"
+                  ? "text-white border-b-2 border-[#3be0a2]"
+                  : "text-white/70 hover:text-white"
+              }`}
+            >
+              Match Ops
+            </button>
+            <button
+              type="button"
+              onClick={() => navigate("onboarding")}
+              className={`h-full flex items-center px-2 py-3.5 text-xs uppercase tracking-wider font-bold transition-all cursor-pointer ${
+                activeTab === "onboarding" || activeTab === "fanzone" || activeTab === "campaigns"
+                  ? "text-white border-b-2 border-[#3be0a2]"
+                  : "text-white/70 hover:text-white"
+              }`}
+            >
+              Governance
+            </button>
+          </nav>
         </div>
 
-        {/* Section Navigation Tabs */}
-        <div className="mb-6 space-y-3">
-          {/* Top Category Tabs */}
-          <div className="flex gap-2 overflow-x-auto pb-2 -mx-4 px-4 sm:mx-0 sm:px-0 [scrollbar-width:none] [-webkit-overflow-scrolling:touch]">
-            {accessibleSections.map((section) => (
-              <button
-                key={section.id}
-                onClick={() => navigate(section.items[0].id)}
-                className={`whitespace-nowrap rounded-xl px-4 py-2 sm:px-5 sm:py-2.5 text-xs font-black uppercase tracking-wider transition-all cursor-pointer ${
-                  section.items.some((i) => i.id === activeTab)
-                    ? "bg-[#0B1520] text-white shadow-md ring-1 ring-white/10"
-                    : "bg-white border border-black/10 text-black/70 hover:bg-black/5"
-                }`}
-              >
-                {section.label}
-              </button>
-            ))}
-          </div>
+        {/* Right Nav Utilities */}
+        <div className="flex items-center gap-3">
+          <button
+            type="button"
+            onClick={handlePurgeCache}
+            disabled={isPurgingCache}
+            className="hidden sm:flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-white text-xs font-bold uppercase tracking-wider transition-all cursor-pointer disabled:opacity-50"
+          >
+            <RefreshCw className={`w-3.5 h-3.5 ${isPurgingCache ? "animate-spin" : ""}`} />
+            <span>{isPurgingCache ? "Syncing..." : "Sync Live Site"}</span>
+          </button>
 
-          {/* Sub-item Tabs */}
-          <div className="flex gap-2 overflow-x-auto pb-2 -mx-4 px-4 sm:mx-0 sm:px-0 [scrollbar-width:none] [-webkit-overflow-scrolling:touch]">
-            {accessibleSections
-              .filter((s) => s.items.some((i) => i.id === activeTab))
-              .map((section) =>
-                section.items.map((tab) => {
-                  const Icon = tab.icon;
-                  const isActive = activeTab === tab.id;
-                  return (
-                    <button
-                      key={tab.id}
-                      onClick={() => navigate(tab.id)}
-                      className={`flex items-center gap-2 whitespace-nowrap rounded-xl px-3.5 py-2 text-xs font-bold uppercase tracking-wider transition-all cursor-pointer ${
-                        isActive
-                          ? "bg-zru-green text-white shadow-sm"
-                          : "bg-black/5 text-black/70 hover:bg-black/10 hover:text-black"
-                      }`}
-                    >
-                      <Icon className="h-3.5 w-3.5" />
-                      <span>{tab.label}</span>
-                      {tab.count > 0 && (
-                        <span
-                          className={`rounded-full px-2 py-0.5 text-[10px] font-mono ${
-                            isActive ? "bg-white/20 text-white" : "bg-black/10 text-black/70"
-                          }`}
-                        >
-                          {tab.count}
-                        </span>
-                      )}
-                    </button>
-                  );
-                })
-              )}
+          <a
+            href="/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#006c4a] hover:bg-[#00875a] text-white text-xs font-bold uppercase tracking-wider transition-all shadow-xs"
+          >
+            <ExternalLink className="w-3.5 h-3.5" />
+            <span className="hidden sm:inline">View Site</span>
+          </a>
+
+          {/* User Profile Avatar */}
+          <div className="flex items-center gap-2 pl-2 border-l border-white/10">
+            <div className="w-8 h-8 rounded-full bg-[#006c4a] text-white flex items-center justify-center text-xs font-black font-heading border border-white/20 shadow-xs uppercase">
+              {email ? email.charAt(0) : "A"}
+            </div>
+            <span className="hidden md:inline text-xs font-semibold text-white/90">
+              {email ? email.split("@")[0] : "Admin"}
+            </span>
           </div>
         </div>
+      </header>
+
+      {/* ── Main Layout Container ───────────────────────────────────── */}
+      <div className="flex-1 flex w-full">
+        {/* SideNavBar (Desktop) */}
+        <AdminSidebar
+          activeTab={activeTab}
+          onNavigate={(tab) => navigate(tab as TabId)}
+          permissions={permissions}
+          userEmail={email}
+          userRole={role}
+        />
+
+        {/* Main Content Canvas */}
+        <main className="flex-1 flex flex-col lg:pl-64 w-full min-h-screen p-4 md:p-6 lg:p-8">
+          <div className="max-w-[1440px] mx-auto w-full space-y-6">
 
         {/* Panel body */}
         {activeTab === "overview" && (
@@ -514,39 +512,10 @@ function AdminClientInner(props: AdminClientProps) {
 
         {activeTab === "media" && (
           <div className="space-y-8">
-            <ArticleComposer onDirtyChange={registerDirty("composer")} />
-            <CollectionManager
-              collection="news"
-              title="News articles"
-              description="Articles here appear in the homepage Latest News panel and the media archive."
-              grants={grantsFor("news")}
-              canPurge={permissions?.all === true}
-              reviewable
-              canReview={canReview}
+            <NewsMasterDetailPanel
+              initialNews={initialNews as any[]}
+              canPublish={canReview}
               currentUserEmail={email}
-              fields={[
-                { key: "title", label: "Headline", type: "text", placeholder: "e.g. Sables squad named for Rugby Africa Cup", required: true, colSpan: "full" },
-                { key: "slug", label: "Web address (slug)", type: "text", placeholder: "auto-generated", colSpan: "full" },
-                { key: "excerpt", label: "Summary", type: "textarea", placeholder: "One or two sentences shown on cards", colSpan: "full" },
-                { key: "body", label: "Body", type: "richtext", colSpan: "full" },
-                { key: "category", label: "Category", type: "text", placeholder: "e.g. NEWS" },
-                { key: "date", label: "Publish date", type: "date" },
-                { key: "publish_at", label: "Go live at (schedule)", type: "datetime" },
-                { key: "expire_at", label: "Hide after (expire)", type: "datetime" },
-                { key: "status", label: "Status", type: "select", options: ["draft", "in_review", "approved", "published"] },
-                { key: "image", label: "Hero image", type: "image" },
-              ]}
-              items={initialNews}
-              displayField="title"
-              subtitleField="date"
-              badgeField="category"
-              statusField="status"
-              searchable={["title", "excerpt", "category"]}
-              scheduleField={{ starts: "publish_at", ends: "expire_at" }}
-              singularLabel="article"
-              onDirtyChange={registerDirty("news")}
-              focusId={activeTab === "media" ? focusItem?.id : null}
-              onFocusHandled={() => setFocusItem(null)}
             />
             <CollectionManager
               collection="announcements"
@@ -583,7 +552,7 @@ function AdminClientInner(props: AdminClientProps) {
         )}
 
         {activeTab === "pages" && (
-          <PagesGrid initialPages={initialPages} initialSectionCounts={initialSectionCounts} />
+          <PagesGrid initialPages={initialPages as any[]} initialSectionCounts={initialSectionCounts} />
         )}
 
         {activeTab === "events" && (
@@ -596,7 +565,7 @@ function AdminClientInner(props: AdminClientProps) {
                 return {
                   id: Number(m.id.replace(/\D/g, "")) || Math.floor(Math.random() * 100000),
                   title: `${home} vs ${away}`,
-                  subtitle: `${m.competition} â€¢ ${m.teamCategory}`,
+                  subtitle: `${m.competition} ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã¢â‚¬Â¦Ãƒâ€šÃ‚Â¡ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã‚Â¡ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¢ ${m.teamCategory}`,
                   date: m.dateIso ? m.dateIso.split("T")[0] : "",
                   time: m.time,
                   location: m.venue,
@@ -759,7 +728,7 @@ function AdminClientInner(props: AdminClientProps) {
               key={`competitions-${teamsRemountKey}`}
               title="Competitions"
               icon={<Trophy className="h-5 w-5" />}
-              description="Tournaments and leagues (Rugby Africa Cup, Gold CupÃ¢â‚¬Â¦)."
+              description="Tournaments and leagues (Rugby Africa Cup, Gold CupÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â‚¬Å¾Ã‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã‚Â¡ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã‚Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¦ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¡ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã‚Â¡ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã¢â‚¬Â¦Ãƒâ€šÃ‚Â¡ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã‚Â¡ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¦)."
               defaultOpen={false}
             >
               <CollectionManager
@@ -815,7 +784,7 @@ function AdminClientInner(props: AdminClientProps) {
                   { key: "country", label: "Country", type: "text", placeholder: "e.g. Zimbabwe" },
                   { key: "full_label", label: "Full label", type: "text", placeholder: "e.g. Hartsfield Grounds, Bulawayo" },
                   { key: "address", label: "Address", type: "text", placeholder: "e.g. 12 Park Road" },
-                  { key: "google_maps_url", label: "Google Maps URL", type: "text", placeholder: "https://maps.google.com/Ã¢â‚¬Â¦" },
+                  { key: "google_maps_url", label: "Google Maps URL", type: "text", placeholder: "https://maps.google.com/ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â‚¬Å¾Ã‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã‚Â¡ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã‚Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¦ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¡ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã‚Â¡ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã¢â‚¬Â¦Ãƒâ€šÃ‚Â¡ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã‚Â¡ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¦" },
                   { key: "timezone", label: "Timezone", type: "text", placeholder: "e.g. Africa/Harare" },
                   { key: "capacity", label: "Capacity", type: "number" },
                   { key: "status", label: "Status", type: "select", options: ["published", "draft"] },
@@ -889,8 +858,10 @@ function AdminClientInner(props: AdminClientProps) {
         {activeTab === "roles" && <RolesPanel />}
         {activeTab === "audit_logs" && <AuditLogsPanel />}
         {activeTab === "backups" && <BackupsPanel />}
+          </div>
+        </main>
       </div>
-    </main>
+    </div>
   );
 }
 
@@ -904,3 +875,11 @@ export default function AdminClient(props: AdminClientProps) {
     </ToastProvider>
   );
 }
+
+
+
+
+
+
+
+

@@ -7,6 +7,7 @@ interface ArticleHeroProps {
   category: string;
   date: string;
   readingMinutes: number;
+  focalPoint?: { x: number; y: number } | string;
 }
 
 export default function ArticleHero({
@@ -15,7 +16,15 @@ export default function ArticleHero({
   category,
   date,
   readingMinutes,
+  focalPoint,
 }: ArticleHeroProps) {
+  const objectPosition =
+    typeof focalPoint === "object"
+      ? `${focalPoint.x}% ${focalPoint.y}%`
+      : typeof focalPoint === "string"
+      ? focalPoint
+      : "center";
+
   return (
     <section className="relative min-h-[44vh] md:min-h-[50vh] flex items-end pt-40 md:pt-48 pb-14 bg-rich-black rounded-b-[40px] overflow-hidden">
       {/* Background Image / Ambient Gradient with Noise */}
@@ -27,6 +36,7 @@ export default function ArticleHero({
           sizes="100vw"
           priority
           className="object-cover opacity-60"
+          style={{ objectPosition }}
           unoptimized={image.startsWith("/images/legacy-articles/")}
         />
         <div className="absolute inset-0 bg-gradient-to-t from-rich-black via-rich-black/70 to-rich-black/30" />

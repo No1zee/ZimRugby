@@ -4,6 +4,7 @@ import Image from "next/image";
 import { Calendar, MapPin, ArrowRight, Trophy, Radio } from "lucide-react";
 import { MatchCardViewModel } from "@/lib/match-centre/types";
 import { Match, TeamDetails } from "@/types";
+import { getTeamCrestUrl } from "@/lib/flags";
 
 export type UniversalMatch = MatchCardViewModel | Match;
 
@@ -36,14 +37,17 @@ function extractScore(team: string | TeamDetails | { score?: number } | undefine
 
 export function HomeFixtureCard({
   match,
-  variant = "companion",
+  variant = "primary",
   isCompleted = false,
 }: HomeFixtureCardProps) {
   const homeTeamName = extractTeamName(match.homeTeam, "Zimbabwe Sables");
   const awayTeamName = extractTeamName(match.awayTeam, "Opponent");
 
-  const homeLogo = extractTeamLogo(match.homeTeam);
-  const awayLogo = extractTeamLogo(match.awayTeam);
+  const rawHomeLogo = extractTeamLogo(match.homeTeam);
+  const rawAwayLogo = extractTeamLogo(match.awayTeam);
+
+  const homeLogo = getTeamCrestUrl(homeTeamName, rawHomeLogo);
+  const awayLogo = getTeamCrestUrl(awayTeamName, rawAwayLogo);
 
   const homeScore = extractScore(match.homeTeam);
   const awayScore = extractScore(match.awayTeam);
@@ -115,13 +119,13 @@ export function HomeFixtureCard({
         <div className="relative z-10 space-y-8">
           {/* Header Strip: Competition + Status Badge */}
           <div className="flex flex-wrap items-center justify-between gap-3">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-[11px] font-heading font-black uppercase tracking-wider bg-black/5 border border-black/10 text-rich-black group-hover:border-zru-green/40 transition-colors shadow-sm">
+            <div className="clip-slanted-sm inline-flex items-center gap-2 px-4 py-1.5 text-[11px] font-heading font-black uppercase tracking-wider bg-black/5 border border-black/10 text-rich-black group-hover:border-zru-green/40 transition-colors shadow-sm">
               <Trophy className="w-3.5 h-3.5 text-zru-green" />
               <span>{competitionName}</span>
             </div>
 
             <span
-              className={`px-3 py-1 rounded-full text-[10px] font-mono font-bold uppercase tracking-widest border shadow-sm ${
+              className={`clip-slanted-sm px-4 py-1 text-[10px] font-mono font-bold uppercase tracking-widest border shadow-sm ${
                 isLive
                   ? "bg-red-500/15 text-red-700 border-red-500/30 animate-pulse inline-flex items-center gap-1.5"
                   : effectiveCompleted
@@ -180,7 +184,7 @@ export function HomeFixtureCard({
                 </div>
               ) : (
                 <div className="flex flex-col items-center gap-2">
-                  <span className="text-xs sm:text-sm font-heading font-black text-zru-green tracking-widest uppercase bg-zru-green/10 border border-zru-green/30 px-4 py-1 rounded-full shadow-sm">
+                  <span className="clip-slanted-sm text-xs sm:text-sm font-heading font-black text-zru-green tracking-widest uppercase bg-zru-green/10 border border-zru-green/30 px-4 py-1 shadow-sm">
                     VS
                   </span>
                   {formattedTime && (
@@ -258,7 +262,7 @@ export function HomeFixtureCard({
             {competitionName}
           </span>
           <span
-            className={`px-2.5 py-0.5 rounded-full text-[9px] font-mono font-bold uppercase tracking-widest border shrink-0 ${
+            className={`px-3 py-0.5 clip-slanted-sm text-[9px] font-mono font-bold uppercase tracking-widest border shrink-0 ${
               isLive
                 ? "bg-red-500/15 text-red-700 border-red-500/30"
                 : effectiveCompleted

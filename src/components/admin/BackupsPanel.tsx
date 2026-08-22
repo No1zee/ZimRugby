@@ -302,7 +302,7 @@ export default function BackupsPanel() {
   return (
     <div className="space-y-6">
       {/* 🛡️ SESSION REVERT & SAFETY SHIELD */}
-      <section className="bg-gradient-to-r from-[#0d131a] to-[#15202b] border border-white/10 rounded-2xl p-6 text-white shadow-md">
+      <section className="bg-[#00452A] border border-white/10 rounded-2xl p-6 text-white shadow-md">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-white/10 pb-5 mb-5">
           <div className="flex items-start gap-3">
             <div className="w-10 h-10 rounded-xl bg-[#006B3F] flex items-center justify-center text-white shrink-0 mt-0.5 shadow-md shadow-[#006B3F]/30">

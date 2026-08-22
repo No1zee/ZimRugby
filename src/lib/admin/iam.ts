@@ -1,4 +1,4 @@
-export type UserRole = string;
+﻿export type UserRole = string;
 export type AdminRole = UserRole;
 
 export interface CollectionGrant {
@@ -17,11 +17,11 @@ export interface RolePermissions {
   all?: boolean;
   tabs?: string[];
   collections?: Record<string, CollectionGrant>;
-  pages_builder?: boolean;
   ai_assistant?: boolean;
   media_upload?: boolean;
   fanzone_pii?: boolean;
   audit_view?: boolean;
+  pages_builder?: boolean;
 }
 
 export interface IAMUser {
@@ -77,9 +77,10 @@ const AUDIT_LOGS: AuditLogEntry[] = [
 ];
 
 export function logAuditEvent(entry: Omit<AuditLogEntry, "id" | "timestamp">): AuditLogEntry {
+  const randomSuffix = typeof crypto !== "undefined" && crypto.randomUUID ? crypto.randomUUID().substring(0, 8) : Date.now().toString(36);
   const newEntry: AuditLogEntry = {
     ...entry,
-    id: `log-${Date.now()}-${Math.random().toString(36).substring(2, 7)}`,
+    id: `log-${Date.now()}-${randomSuffix}`,
     timestamp: new Date().toISOString(),
   };
   AUDIT_LOGS.unshift(newEntry);
@@ -102,7 +103,7 @@ export function getAuditLogs(limit: number = 50): AuditLogEntry[] {
 }
 
 // Role Permission Checker (Authorization / AuthZ - NIST AC-3)
-// Operates on the resolved RolePermissions object — pure, client-safe.
+// Operates on the resolved RolePermissions object â€” pure, client-safe.
 export type AdminPermission = "EDIT" | "PUBLISH" | "DELETE" | "MEDIA" | "AUDIT";
 
 export function hasPermission(
@@ -114,11 +115,8 @@ export function hasPermission(
   switch (requiredPermission) {
     case "EDIT":
     case "PUBLISH":
-      return (
-        perms.pages_builder === true ||
-        Object.values(perms.collections || {}).some(
-          (c) => c.create === true || c.update === true
-        )
+      return Object.values(perms.collections || {}).some(
+        (c) => c.create === true || c.update === true
       );
     case "DELETE":
       return Object.values(perms.collections || {}).some((c) => c.delete === true);
@@ -152,10 +150,10 @@ export function canCreateCollection(perms: RolePermissions | null | undefined, c
   return canOnCollection(perms, collection, "create");
 }
 
-// Feature-flag gate for the advanced surfaces (Pages builder / AI assistant / Audit logs)
+// Feature-flag gate for the advanced surfaces (AI assistant / Audit logs / Pages)
 export function canUseFeature(
   perms: RolePermissions | null | undefined,
-  feature: "pages_builder" | "ai_assistant" | "media_upload" | "fanzone_pii" | "audit_view"
+  feature: "ai_assistant" | "media_upload" | "fanzone_pii" | "audit_view" | "pages_builder"
 ): boolean {
   if (!perms) return false;
   if (perms.all) return true;
@@ -167,7 +165,6 @@ export type AdminTabId =
   | "overview"
   | "directus_ai"
   | "hero_layout"
-  | "pages"
   | "events"
   | "media"
   | "resources"
@@ -204,9 +201,8 @@ export function canAccessTab(
  * only rendered when BOTH the tab list and the matching feature flag allow
  * it, so a DB row that grants a tab but forgets the flag still can't see it.
  */
-const TAB_FEATURE: Partial<Record<string, "pages_builder" | "ai_assistant" | "fanzone_pii" | "media_upload" | "audit_view">> = {
+const TAB_FEATURE: Partial<Record<string, "ai_assistant" | "fanzone_pii" | "media_upload" | "audit_view">> = {
   directus_ai: "ai_assistant",
-  pages: "pages_builder",
   fanzone: "fanzone_pii",
   onboarding: "fanzone_pii",
   logs: "audit_view",
@@ -229,3 +225,36 @@ export function canAccessPanel(
 export function isSuperAdmin(perms: RolePermissions | null | undefined): boolean {
   return perms?.all === true;
 }
+
+
+// Map known system and staff email accounts to full human names
+export const KNOWN_ADMIN_NAMES: Record<string, string> = {
+  "admin@zimrugby.co.zw": "Edward M. (Admin)",
+  "edwardmagejo@gmail.com": "Edward M.",
+  "editor@zimrugby.co.zw": "Editorial Desk",
+  "media@zimrugby.co.zw": "Media Communications",
+  "auditor@zimrugby.co.zw": "Compliance Auditor",
+  "site-reader@zimrugby.co.zw": "Automated Sync Agent",
+};
+
+export function resolveActorName(emailOrHandle?: string, fallbackRole?: string): string {
+  if (!emailOrHandle) return fallbackRole ? roleToName(fallbackRole as UserRole) : "Staff Admin";
+  const cleanEmail = emailOrHandle.trim().toLowerCase();
+  
+  if (KNOWN_ADMIN_NAMES[cleanEmail]) {
+    return KNOWN_ADMIN_NAMES[cleanEmail];
+  }
+  
+  // Format username nicely from email (e.g. edward.magejo@... -> Edward Magejo)
+  if (cleanEmail.includes("@")) {
+    const handle = cleanEmail.split("@")[0];
+    return handle
+      .split(/[._-]/)
+      .filter(Boolean)
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(" ");
+  }
+
+  return cleanEmail.charAt(0).toUpperCase() + cleanEmail.slice(1);
+}
+

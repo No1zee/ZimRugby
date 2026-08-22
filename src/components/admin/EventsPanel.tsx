@@ -21,7 +21,7 @@ export interface AdminOccurrenceRow {
 }
 
 export interface AdminEventRow {
-  id: number;
+  id: number | string;
   title?: string;
   subtitle?: string;
   date?: string;
@@ -176,7 +176,7 @@ export default function EventsPanel({ initialEvents, onDirtyChange }: EventsPane
     return new Date(now.getFullYear(), now.getMonth(), 1);
   });
   const [form, setForm] = useState<FormState | null>(null);
-  const [editingId, setEditingId] = useState<number | null>(null);
+  const [editingId, setEditingId] = useState<number | string | null>(null);
   const [saving, setSaving] = useState(false);
   const dirtyRef = useRef(false);
 
@@ -455,9 +455,9 @@ export default function EventsPanel({ initialEvents, onDirtyChange }: EventsPane
       {form && (
         <form
           onSubmit={handleSubmit}
-          className="rounded-2xl border border-black/10 bg-white p-6 shadow-sm"
+          className="rounded-2xl border border-[#eae8de] bg-white p-6 shadow-sm"
         >
-          <div className="mb-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-black/5 pb-4">
+          <div className="mb-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-[#eae8de] pb-4">
             <div>
               <h2 className="flex items-center gap-2 font-heading text-xl font-black uppercase text-rich-black">
                 <CalendarPlus className="h-5 w-5 text-zru-green" />
@@ -476,7 +476,7 @@ export default function EventsPanel({ initialEvents, onDirtyChange }: EventsPane
 
             {/* Entry Kind Switcher */}
             {editingId === null && (
-              <div className="flex p-1 bg-black/5 rounded-xl border border-black/10">
+              <div className="flex p-1 bg-black/5 rounded-xl border border-[#eae8de]">
                 <button
                   type="button"
                   onClick={() => setForm({ ...form, entry_kind: "event" })}
@@ -530,7 +530,7 @@ export default function EventsPanel({ initialEvents, onDirtyChange }: EventsPane
                     onChange={(e) => setForm({ ...form, title: e.target.value })}
                     required
                     placeholder="e.g. Sables vs Namibia"
-                    className="w-full rounded-lg border border-black/10 bg-white p-2.5 text-sm font-bold"
+                    className="w-full rounded-lg border border-[#eae8de] bg-white p-2.5 text-sm font-bold"
                   />
                 </div>
                 <div>
@@ -540,7 +540,7 @@ export default function EventsPanel({ initialEvents, onDirtyChange }: EventsPane
                     value={form.subtitle}
                     onChange={(e) => setForm({ ...form, subtitle: e.target.value })}
                     placeholder="e.g. Rugby Africa Gold Cup Round 3"
-                    className="w-full rounded-lg border border-black/10 bg-white p-2.5 text-sm"
+                    className="w-full rounded-lg border border-[#eae8de] bg-white p-2.5 text-sm"
                   />
                 </div>
                 <div>
@@ -553,7 +553,7 @@ export default function EventsPanel({ initialEvents, onDirtyChange }: EventsPane
                     value={form.category}
                     onChange={(e) => setForm({ ...form, category: e.target.value })}
                     placeholder="e.g. National Team, Schools Rugby"
-                    className="w-full rounded-lg border border-black/10 bg-white p-2.5 text-sm"
+                    className="w-full rounded-lg border border-[#eae8de] bg-white p-2.5 text-sm"
                   />
                 </div>
                 <div>
@@ -563,7 +563,7 @@ export default function EventsPanel({ initialEvents, onDirtyChange }: EventsPane
                     value={form.date}
                     onChange={(e) => setForm({ ...form, date: e.target.value })}
                     required
-                    className="w-full rounded-lg border border-black/10 bg-white p-2.5 text-sm font-bold"
+                    className="w-full rounded-lg border border-[#eae8de] bg-white p-2.5 text-sm font-bold"
                   />
                 </div>
                 <div>
@@ -572,7 +572,7 @@ export default function EventsPanel({ initialEvents, onDirtyChange }: EventsPane
                     type="time"
                     value={form.time}
                     onChange={(e) => setForm({ ...form, time: e.target.value })}
-                    className="w-full rounded-lg border border-black/10 bg-white p-2.5 text-sm font-bold"
+                    className="w-full rounded-lg border border-[#eae8de] bg-white p-2.5 text-sm font-bold"
                   />
                 </div>
                 <div>
@@ -585,7 +585,7 @@ export default function EventsPanel({ initialEvents, onDirtyChange }: EventsPane
                     value={form.location}
                     onChange={(e) => setForm({ ...form, location: e.target.value })}
                     placeholder="e.g. Harare Sports Club, Harare"
-                    className="w-full rounded-lg border border-black/10 bg-white p-2.5 text-sm"
+                    className="w-full rounded-lg border border-[#eae8de] bg-white p-2.5 text-sm"
                   />
                 </div>
                 <div>
@@ -597,7 +597,7 @@ export default function EventsPanel({ initialEvents, onDirtyChange }: EventsPane
                     value={form.score}
                     onChange={(e) => setForm({ ...form, score: e.target.value })}
                     placeholder="e.g. ZIM 32 - 10 KEN"
-                    className="w-full rounded-lg border border-black/10 bg-white p-2.5 text-sm font-bold"
+                    className="w-full rounded-lg border border-[#eae8de] bg-white p-2.5 text-sm font-bold"
                   />
                 </div>
                 <div>
@@ -605,7 +605,7 @@ export default function EventsPanel({ initialEvents, onDirtyChange }: EventsPane
                   <select
                     value={form.event_type}
                     onChange={(e) => setForm({ ...form, event_type: e.target.value })}
-                    className="w-full rounded-lg border border-black/10 bg-white p-2.5 text-sm font-bold"
+                    className="w-full rounded-lg border border-[#eae8de] bg-white p-2.5 text-sm font-bold"
                   >
                     <option value="event">Event</option>
                     <option value="match">Match / Fixture</option>
@@ -620,7 +620,7 @@ export default function EventsPanel({ initialEvents, onDirtyChange }: EventsPane
                   <select
                     value={form.visibility}
                     onChange={(e) => setForm({ ...form, visibility: e.target.value })}
-                    className="w-full rounded-lg border border-black/10 bg-white p-2.5 text-sm font-bold"
+                    className="w-full rounded-lg border border-[#eae8de] bg-white p-2.5 text-sm font-bold"
                   >
                     <option value="public">Public</option>
                     <option value="internal">Internal only</option>
@@ -639,7 +639,7 @@ export default function EventsPanel({ initialEvents, onDirtyChange }: EventsPane
                     onChange={(e) => setForm({ ...form, title: e.target.value })}
                     required
                     placeholder="e.g. Sables Squad Announced for Africa Cup Finals"
-                    className="w-full rounded-lg border border-black/10 bg-white p-2.5 text-sm font-bold"
+                    className="w-full rounded-lg border border-[#eae8de] bg-white p-2.5 text-sm font-bold"
                   />
                 </div>
                 <div>
@@ -649,7 +649,7 @@ export default function EventsPanel({ initialEvents, onDirtyChange }: EventsPane
                   <select
                     value={form.category || "NEWS"}
                     onChange={(e) => setForm({ ...form, category: e.target.value })}
-                    className="w-full rounded-lg border border-black/10 bg-white p-2.5 text-sm font-bold"
+                    className="w-full rounded-lg border border-[#eae8de] bg-white p-2.5 text-sm font-bold"
                   >
                     {["NEWS", "PRESS RELEASE", "SABLES", "LADY SABLES", "JUNIORS", "CLUB RUGBY", "ANNOUNCEMENT", "SPONSORSHIP"].map((c) => (
                       <option key={c} value={c}>{c}</option>
@@ -665,7 +665,7 @@ export default function EventsPanel({ initialEvents, onDirtyChange }: EventsPane
                     value={form.date}
                     onChange={(e) => setForm({ ...form, date: e.target.value })}
                     required
-                    className="w-full rounded-lg border border-black/10 bg-white p-2.5 text-sm font-bold"
+                    className="w-full rounded-lg border border-[#eae8de] bg-white p-2.5 text-sm font-bold"
                   />
                 </div>
               </>
@@ -676,7 +676,7 @@ export default function EventsPanel({ initialEvents, onDirtyChange }: EventsPane
               <select
                 value={form.status}
                 onChange={(e) => setForm({ ...form, status: e.target.value })}
-                className="w-full rounded-lg border border-black/10 bg-white p-2.5 text-sm font-bold"
+                className="w-full rounded-lg border border-[#eae8de] bg-white p-2.5 text-sm font-bold"
               >
                 <option value="published">Published (Visible)</option>
                 <option value="draft">Draft (Hidden)</option>
@@ -692,7 +692,7 @@ export default function EventsPanel({ initialEvents, onDirtyChange }: EventsPane
                 value={form.description}
                 onChange={(e) => setForm({ ...form, description: e.target.value })}
                 placeholder={form.entry_kind === "news" ? "One or two sentences to hook readers." : "One or two lines shown on calendar card."}
-                className="w-full rounded-lg border border-black/10 bg-white p-2.5 text-sm"
+                className="w-full rounded-lg border border-[#eae8de] bg-white p-2.5 text-sm"
               />
             </div>
             <div className="md:col-span-2">
@@ -704,7 +704,7 @@ export default function EventsPanel({ initialEvents, onDirtyChange }: EventsPane
                 value={form.content}
                 onChange={(e) => setForm({ ...form, content: e.target.value })}
                 placeholder={form.entry_kind === "news" ? "Write or paste article text here..." : "Full match / event details."}
-                className="w-full rounded-lg border border-black/10 bg-white p-2.5 text-sm"
+                className="w-full rounded-lg border border-[#eae8de] bg-white p-2.5 text-sm"
               />
             </div>
             <div>
@@ -719,7 +719,7 @@ export default function EventsPanel({ initialEvents, onDirtyChange }: EventsPane
               disabled={saving}
               className="rounded-lg bg-zru-green px-6 py-2.5 font-heading text-xs font-black uppercase tracking-wider text-white transition-colors hover:bg-green-800 disabled:opacity-50"
             >
-              {saving ? "Savingâ€¦" : editingId !== null ? "Save changes" : "Create event"}
+              {saving ? "Saving..." : editingId !== null ? "Save changes" : "Create event"}
             </button>
             <button
               type="button"
@@ -739,11 +739,11 @@ export default function EventsPanel({ initialEvents, onDirtyChange }: EventsPane
             <CalendarDays className="h-5 w-5 text-zru-green" /> Events calendar
           </h2>
           <p className="mt-1 text-xs text-black/50">
-            {initialEvents.length} event{initialEvents.length === 1 ? "" : "s"} â€” status updates automatically as dates pass.
+            {initialEvents.length} event{initialEvents.length === 1 ? "" : "s"} — status updates automatically as dates pass.
           </p>
         </div>
         <div className="flex items-center gap-2">
-          <div className="flex rounded-xl border border-black/10 bg-black/5 p-1">
+          <div className="flex rounded-xl border border-[#eae8de] bg-black/5 p-1">
             <button
               onClick={() => setViewMode("month")}
               className={`flex items-center gap-2 rounded-lg px-4 py-2 text-[11px] font-bold uppercase tracking-wider transition-colors ${viewMode === "month" ? "bg-black text-white" : "text-black/60 hover:text-black"}`}
@@ -775,13 +775,13 @@ export default function EventsPanel({ initialEvents, onDirtyChange }: EventsPane
       </div>
 
       {viewMode === "month" ? (
-        <div className="rounded-2xl border border-black/10 bg-white p-6 shadow-sm">
+        <div className="rounded-2xl border border-[#eae8de] bg-white p-6 shadow-sm">
           <div className="mb-4 flex items-center justify-between">
             <h3 className="font-heading text-lg font-black uppercase text-rich-black">{monthLabel(cursor)}</h3>
             <div className="flex items-center gap-1">
               <button
                 onClick={() => setCursor(new Date(cursor.getFullYear(), cursor.getMonth() - 1, 1))}
-                className="rounded-lg border border-black/10 bg-white p-2 text-black/70 transition-colors hover:bg-black/5"
+                className="rounded-lg border border-[#eae8de] bg-white p-2 text-black/70 transition-colors hover:bg-black/5"
                 aria-label="Previous month"
               >
                 <ChevronLeft className="h-4 w-4" />
@@ -791,13 +791,13 @@ export default function EventsPanel({ initialEvents, onDirtyChange }: EventsPane
                   const now = new Date();
                   setCursor(new Date(now.getFullYear(), now.getMonth(), 1));
                 }}
-                className="rounded-lg border border-black/10 bg-white px-3 py-2 text-[11px] font-bold uppercase tracking-wider text-black/70 transition-colors hover:bg-black/5"
+                className="rounded-lg border border-[#eae8de] bg-white px-3 py-2 text-[11px] font-bold uppercase tracking-wider text-black/70 transition-colors hover:bg-black/5"
               >
                 Today
               </button>
               <button
                 onClick={() => setCursor(new Date(cursor.getFullYear(), cursor.getMonth() + 1, 1))}
-                className="rounded-lg border border-black/10 bg-white p-2 text-black/70 transition-colors hover:bg-black/5"
+                className="rounded-lg border border-[#eae8de] bg-white p-2 text-black/70 transition-colors hover:bg-black/5"
                 aria-label="Next month"
               >
                 <ChevronRight className="h-4 w-4" />
@@ -805,7 +805,7 @@ export default function EventsPanel({ initialEvents, onDirtyChange }: EventsPane
             </div>
           </div>
 
-          <div className="grid grid-cols-7 gap-px overflow-hidden rounded-xl border border-black/10 bg-black/5">
+          <div className="grid grid-cols-7 gap-px overflow-hidden rounded-xl border border-[#eae8de] bg-black/5">
             {WEEKDAYS.map((d) => (
               <div key={d} className="bg-black/[0.03] px-2 py-2 text-center text-[10px] font-black uppercase tracking-wider text-black/50">
                 {d}
@@ -863,18 +863,18 @@ export default function EventsPanel({ initialEvents, onDirtyChange }: EventsPane
           </div>
         </div>
       ) : (
-        <div className="rounded-2xl border border-black/10 bg-white p-6 shadow-sm">
+        <div className="rounded-2xl border border-[#eae8de] bg-white p-6 shadow-sm">
           {sortedEvents.length === 0 ? (
             <EmptyState
               icon={<CalendarDays className="h-8 w-8" />}
               title="No events yet"
-              hint="Click â€œNew eventâ€ to add the first one â€” it will appear here and on the public /events page."
+              hint="Click “New event” to add the first one — it will appear here and on the public /events page."
             />
           ) : (
-            <div className="overflow-x-auto rounded-xl border border-black/5">
+            <div className="overflow-x-auto rounded-xl border border-[#eae8de]">
               <table className="w-full text-sm">
                 <thead>
-                  <tr className="border-b border-black/5 bg-black/[0.02] text-left text-[10px] font-black uppercase tracking-wider text-black/50">
+                  <tr className="border-b border-[#eae8de] bg-black/[0.02] text-left text-[10px] font-black uppercase tracking-wider text-black/50">
                     <th className="px-4 py-2.5">Date</th>
                     <th className="px-4 py-2.5">Event</th>
                     <th className="px-4 py-2.5">Type</th>
@@ -887,10 +887,10 @@ export default function EventsPanel({ initialEvents, onDirtyChange }: EventsPane
                   {sortedEvents.map((ev) => {
                     const st = derivedStatus(ev);
                     return (
-                      <tr key={ev.id} className="border-b border-black/5 last:border-0">
+                      <tr key={ev.id} className="border-b border-[#eae8de] last:border-0">
                         <td className="whitespace-nowrap px-4 py-2.5 font-bold">
-                          {ev.date ? new Date(toDateStr(ev.date) + "T00:00:00").toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" }) : "â€”"}
-                          {ev.time ? <span className="ml-1.5 text-black/40">Â· {ev.time}</span> : null}
+                          {ev.date ? new Date(toDateStr(ev.date) + "T00:00:00").toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" }) : "—"}
+                          {ev.time ? <span className="ml-1.5 text-black/40">• {ev.time}</span> : null}
                         </td>
                         <td className="px-4 py-2.5">
                           <div className="font-bold">{ev.title || "Untitled"}</div>
@@ -906,7 +906,7 @@ export default function EventsPanel({ initialEvents, onDirtyChange }: EventsPane
                             <span className="flex items-center gap-1">
                               <MapPin className="h-3.5 w-3.5 text-zru-green" /> {ev.location}
                             </span>
-                          ) : "â€”"}
+                          ) : "—"}
                         </td>
                         <td className="px-4 py-2.5">
                           <div className="flex flex-wrap items-center gap-1.5">

@@ -24,7 +24,6 @@ const TAB_OPTIONS: { id: string; label: string }[] = [
   { id: "overview", label: "Overview" },
   { id: "directus_ai", label: "Drafting Assistant" },
   { id: "hero_layout", label: "Homepage & Banners" },
-  { id: "pages", label: "Pages & Layouts" },
   { id: "media", label: "News & Media" },
   { id: "resources", label: "Resources" },
   { id: "sponsors", label: "Sponsors & Partners" },
@@ -44,12 +43,9 @@ const COLLECTIONS = [
   "announcements",
   "players",
   "grassroots_initiatives",
-  "pages",
-  "page_sections",
 ];
 
 const FEATURES: { key: keyof RolePermissions; label: string }[] = [
-  { key: "pages_builder", label: "Pages Builder" },
   { key: "ai_assistant", label: "AI Assistant" },
   { key: "media_upload", label: "Media Upload" },
   { key: "fanzone_pii", label: "View Fan Zone PII" },
@@ -94,7 +90,6 @@ const TEMPLATES: { label: string; perms: RolePermissions }[] = [
 
 const TAB_LABEL: Record<string, string> = Object.fromEntries(TAB_OPTIONS.map((t) => [t.id, t.label]));
 const FEATURE_LABEL: Partial<Record<keyof RolePermissions, string>> = {
-  pages_builder: "Build and edit website pages",
   ai_assistant: "Use the AI drafting assistant",
   media_upload: "Upload and manage photos",
   fanzone_pii: "See fans' personal data",
@@ -429,7 +424,7 @@ export default function RolesPanel() {
 
   if (loading) {
     return (
-      <div className="bg-white border border-black/10 rounded-2xl p-6 shadow-sm">
+      <div className="bg-white border border-[#eae8de] rounded-2xl p-6 shadow-sm">
         <p className="text-sm text-black/50">Loading roles & permissions…</p>
       </div>
     );
@@ -451,7 +446,7 @@ export default function RolesPanel() {
       )}
 
       {/* ── Account Security (MFA) ────────────────────────────── */}
-      <div className="bg-white border border-black/10 rounded-2xl p-6 shadow-sm">
+      <div className="bg-white border border-[#eae8de] rounded-2xl p-6 shadow-sm">
         <div className="flex items-center justify-between mb-1">
           <h2 className="font-heading text-xl font-black uppercase text-rich-black flex items-center gap-2">
             <KeyRound className="w-5 h-5 text-zru-green" /> Account Security
@@ -461,7 +456,7 @@ export default function RolesPanel() {
               Two-Step ON
             </span>
           ) : (
-            <span className="px-2.5 py-1 rounded-none bg-black/[0.03] border border-black/10 text-black/50 text-[10px] font-black uppercase tracking-widest">
+            <span className="px-2.5 py-1 rounded-none bg-black/[0.03] border border-[#eae8de] text-black/50 text-[10px] font-black uppercase tracking-widest">
               Not Enabled
             </span>
           )}
@@ -483,7 +478,7 @@ export default function RolesPanel() {
               Scan the QR code with your authenticator app, or enter the secret manually, then enter the 6-digit code to activate.
             </p>
             {mfaQr && (
-              <img src={mfaQr} alt="TOTP QR code" className="w-44 h-44 border border-black/10 rounded-xl bg-white" />
+              <img src={mfaQr} alt="TOTP QR code" className="w-44 h-44 border border-[#eae8de] rounded-xl bg-white" />
             )}
             {mfaSecret && (
               <p className="text-xs text-black/60">
@@ -500,7 +495,7 @@ export default function RolesPanel() {
                 value={mfaCode}
                 onChange={(e) => setMfaCode(e.target.value.replace(/[^0-9]/g, ""))}
                 placeholder="6-digit code"
-                className="px-3 py-2 rounded-lg border border-black/10 text-sm font-mono tracking-[0.3em] text-center w-40"
+                className="px-3 py-2 rounded-lg border border-[#eae8de] text-sm font-mono tracking-[0.3em] text-center w-40"
               />
               <button
                 onClick={activateMfa}
@@ -542,7 +537,7 @@ export default function RolesPanel() {
       </div>
 
       {/* ── Roles ─────────────────────────────────────────────── */}
-      <div className="bg-white border border-black/10 rounded-2xl p-6 shadow-sm">
+      <div className="bg-white border border-[#eae8de] rounded-2xl p-6 shadow-sm">
         <div className="flex items-center justify-between mb-4">
           <h2 className="font-heading text-xl font-black uppercase text-rich-black flex items-center gap-2">
             <Shield className="w-5 h-5 text-zru-green" /> Roles &amp; Permissions
@@ -560,7 +555,7 @@ export default function RolesPanel() {
                 value={newName}
                 onChange={(e) => setNewName(e.target.value)}
                 placeholder="e.g. match_admin"
-                className="px-3 py-2 rounded-lg border border-black/10 text-sm font-mono"
+                className="px-3 py-2 rounded-lg border border-[#eae8de] text-sm font-mono"
               />
               <button onClick={createRole} disabled={isSaving}
                 className="px-3 py-2 rounded-lg bg-zru-green text-white text-xs font-bold disabled:opacity-50">Create</button>
@@ -572,7 +567,7 @@ export default function RolesPanel() {
 
         <div className="grid md:grid-cols-2 gap-3">
           {roles.map((role) => (
-            <div key={role.id} className="border border-black/10 rounded-xl p-4 flex items-start justify-between gap-3">
+            <div key={role.id} className="border border-[#eae8de] rounded-xl p-4 flex items-start justify-between gap-3">
               <div>
                 <p className="font-bold text-rich-black font-mono text-sm">{role.name}</p>
                 <p className="text-[11px] text-black/50 mt-1">
@@ -599,7 +594,7 @@ export default function RolesPanel() {
       </div>
 
       {/* ── Users ──────────────────────────────────────────────── */}
-      <div className="bg-white border border-black/10 rounded-2xl p-6 shadow-sm">
+      <div className="bg-white border border-[#eae8de] rounded-2xl p-6 shadow-sm">
         <div className="flex items-center justify-between mb-4">
           <h2 className="font-heading text-xl font-black uppercase text-rich-black flex items-center gap-2">
             <Users className="w-5 h-5 text-zru-green" /> Admin Users
@@ -619,11 +614,11 @@ export default function RolesPanel() {
         </div>
 
         {showNewUser && (
-          <div className="mb-4 border border-black/10 rounded-xl p-4 space-y-3 bg-black/[0.02]">
+          <div className="mb-4 border border-[#eae8de] rounded-xl p-4 space-y-3 bg-black/[0.02]">
             <div className="grid sm:grid-cols-3 gap-3">
-              <input value={newUserEmail} onChange={(e) => setNewUserEmail(e.target.value)} placeholder="email@zimrugby.co.zw" className="px-3 py-2 rounded-lg border border-black/10 text-sm" />
-              <input value={newUserPassword} onChange={(e) => setNewUserPassword(e.target.value)} placeholder="Temporary password" type="password" className="px-3 py-2 rounded-lg border border-black/10 text-sm" />
-              <select value={newUserRole} onChange={(e) => setNewUserRole(e.target.value)} className="px-3 py-2 rounded-lg border border-black/10 text-sm">
+              <input value={newUserEmail} onChange={(e) => setNewUserEmail(e.target.value)} placeholder="email@zimrugby.co.zw" className="px-3 py-2 rounded-lg border border-[#eae8de] text-sm" />
+              <input value={newUserPassword} onChange={(e) => setNewUserPassword(e.target.value)} placeholder="Temporary password" type="password" className="px-3 py-2 rounded-lg border border-[#eae8de] text-sm" />
+              <select value={newUserRole} onChange={(e) => setNewUserRole(e.target.value)} className="px-3 py-2 rounded-lg border border-[#eae8de] text-sm">
                 {roles.map((r) => <option key={r.id} value={r.name}>{r.name}</option>)}
               </select>
             </div>
@@ -637,7 +632,7 @@ export default function RolesPanel() {
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse">
             <thead>
-              <tr className="border-b border-black/10 text-xs font-black uppercase text-black/50">
+              <tr className="border-b border-[#eae8de] text-xs font-black uppercase text-black/50">
                 <th className="py-2">Email</th>
                 <th className="py-2">Role</th>
                 <th className="py-2">Last Sign In</th>
@@ -651,7 +646,7 @@ export default function RolesPanel() {
                     <select
                       value={user.role || ""}
                       onChange={(e) => assignUserRole(user.id, e.target.value, user.email)}
-                      className="px-2 py-1.5 rounded-lg border border-black/10 text-xs font-mono bg-white"
+                      className="px-2 py-1.5 rounded-lg border border-[#eae8de] text-xs font-mono bg-white"
                     >
                       <option value="">— no access —</option>
                       {roles.map((r) => <option key={r.id} value={r.name}>{r.name}</option>)}
@@ -671,9 +666,9 @@ export default function RolesPanel() {
       {editingRole && (
         <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4"
           onClick={closeEditor}>
-          <div className="bg-white border border-black/10 rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto"
+          <div className="bg-white border border-[#eae8de] rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto"
             onClick={(e) => e.stopPropagation()}>
-            <div className="flex items-center justify-between border-b border-black/10 px-6 py-4 sticky top-0 bg-white z-10">
+            <div className="flex items-center justify-between border-b border-[#eae8de] px-6 py-4 sticky top-0 bg-white z-10">
               <h2 className="font-heading text-lg font-black uppercase text-rich-black flex items-center gap-2">
                 <Pencil className="w-5 h-5 text-zru-green" /> Edit Role
               </h2>
@@ -688,7 +683,7 @@ export default function RolesPanel() {
                 <input
                   value={editingName}
                   onChange={(e) => setEditingName(e.target.value)}
-                  className="w-full px-3 py-2 rounded-lg border border-black/10 text-sm font-mono"
+                  className="w-full px-3 py-2 rounded-lg border border-[#eae8de] text-sm font-mono"
                   disabled={editingRole.name === "super_admin"}
                 />
               </div>
@@ -700,7 +695,7 @@ export default function RolesPanel() {
               ) : (
                 <>
                   {/* Capability summary — plain language */}
-                  <div className="rounded-xl border border-black/10 bg-black/[0.02] p-4">
+                  <div className="rounded-xl border border-[#eae8de] bg-black/[0.02] p-4">
                     <p className="text-xs font-black uppercase tracking-wider text-black/60 mb-2">
                       This role will be able to:
                     </p>
@@ -739,7 +734,7 @@ export default function RolesPanel() {
                           key={t.label}
                           type="button"
                           onClick={() => setEditingPerms(JSON.parse(JSON.stringify(t.perms)))}
-                          className="rounded-full border border-black/10 bg-white px-3 py-1.5 text-[10px] font-black uppercase tracking-wider text-black/60 hover:border-zru-green hover:text-zru-green transition-colors cursor-pointer"
+                          className="rounded-full border border-[#eae8de] bg-white px-3 py-1.5 text-[10px] font-black uppercase tracking-wider text-black/60 hover:border-zru-green hover:text-zru-green transition-colors cursor-pointer"
                         >
                           {t.label}
                         </button>
@@ -766,7 +761,7 @@ export default function RolesPanel() {
 
                   <div>
                     <label className="block text-xs font-bold uppercase text-black/60 mb-2">Collection Access</label>
-                    <div className="overflow-x-auto border border-black/10 rounded-xl">
+                    <div className="overflow-x-auto border border-[#eae8de] rounded-xl">
                       <table className="w-full text-left border-collapse">
                         <thead>
                           <tr className="bg-black/[0.03] text-[10px] font-black uppercase text-black/50">
@@ -817,7 +812,7 @@ export default function RolesPanel() {
               )}
             </div>
 
-            <div className="flex items-center justify-end gap-2 border-t border-black/10 px-6 py-4">
+            <div className="flex items-center justify-end gap-2 border-t border-[#eae8de] px-6 py-4">
               <button onClick={closeEditor} className="px-4 py-2 rounded-lg bg-black/5 text-black/60 text-xs font-bold">
                 Cancel
               </button>

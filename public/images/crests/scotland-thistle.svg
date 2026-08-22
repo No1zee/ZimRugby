@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <circle cx="50" cy="50" r="48" fill="#002B49" stroke="#ffffff" stroke-width="3"/>
+  <circle cx="50" cy="40" r="14" fill="#6A1B9A" stroke="#ffffff" stroke-width="1.5"/>
+  <path d="M36 46 C32 58, 42 66, 50 68 C58 66, 68 58, 64 46 C58 52, 42 52, 36 46 Z" fill="#006B3F"/>
+  <path d="M50 68 L50 80" stroke="#006B3F" stroke-width="3" stroke-linecap="round"/>
+  <text x="50" y="90" font-family="Arial, sans-serif" font-size="5.5" font-weight="900" fill="#ffffff" text-anchor="middle" letter-spacing="1">SCOTLAND</text>
+</svg>

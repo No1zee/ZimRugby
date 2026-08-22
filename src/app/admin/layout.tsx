@@ -1,6 +1,5 @@
 import { redirect } from "next/navigation";
 import { requireAdmin } from "@/lib/admin/auth";
-import AdminSidebar from "./AdminSidebar";
 
 export default async function AdminLayout({
   children,
@@ -14,11 +13,8 @@ export default async function AdminLayout({
   }
 
   return (
-    <div className="min-h-screen bg-[#001A0E] flex font-body">
-      <AdminSidebar />
-      <main className="flex-1 overflow-auto pt-14 md:pt-0">
-        {children}
-      </main>
+    <div className="min-h-screen bg-milk-white text-[#1b1c16] font-body">
+      {children}
     </div>
   );
 }

@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useCallback, useRef } from "react";
-import { Lock, Unlock, Shield, KeyRound, AlertCircle, RefreshCw } from "lucide-react";
+import { Lock, Unlock, Shield, KeyRound, AlertCircle, RefreshCw, LogOut } from "lucide-react";
 import { useToast } from "./ToastProvider";
 
 interface AdminInactivityLockProps {
@@ -11,7 +11,7 @@ interface AdminInactivityLockProps {
 
 export default function AdminInactivityLock({
   userEmail = "admin@zimrugby.co.zw",
-  timeoutMinutes = 15,
+  timeoutMinutes = 30,
 }: AdminInactivityLockProps) {
   const { toast } = useToast();
   const [isLocked, setIsLocked] = useState(false);
@@ -20,6 +20,9 @@ export default function AdminInactivityLock({
   const [errorMsg, setErrorMsg] = useState("");
   const timerRef = useRef<NodeJS.Timeout | null>(null);
 
+  // In local development, avoid locking unexpectedly
+  const isDev = process.env.NODE_ENV === "development";
+
   const resetTimer = useCallback(() => {
     if (isLocked) return;
 
@@ -27,11 +30,14 @@ export default function AdminInactivityLock({
       clearTimeout(timerRef.current);
     }
 
+    // Don't auto-lock in dev mode unless manually triggered
+    if (isDev) return;
+
     timerRef.current = setTimeout(() => {
       setIsLocked(true);
-      toast("Admin Studio auto-locked due to 15 minutes of inactivity.", "info");
+      toast("Admin Studio auto-locked due to inactivity.", "info");
     }, timeoutMinutes * 60 * 1000);
-  }, [isLocked, timeoutMinutes, toast]);
+  }, [isLocked, timeoutMinutes, toast, isDev]);
 
   useEffect(() => {
     const events = ["mousedown", "mousemove", "keydown", "scroll", "touchstart"];
@@ -49,7 +55,7 @@ export default function AdminInactivityLock({
   const handleUnlock = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!password.trim()) {
-      setErrorMsg("Please enter your admin password or PIN.");
+      setErrorMsg("Please enter your admin password.");
       return;
     }
 
@@ -57,19 +63,25 @@ export default function AdminInactivityLock({
     setErrorMsg("");
 
     try {
-      // Re-authenticate session against auth check endpoint
-      const res = await fetch("/api/admin/auth/check");
+      // Re-authenticate session against auth endpoint with entered credentials
+      const res = await fetch("/api/admin/auth", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: userEmail, password }),
+      });
+
       if (res.ok) {
         setIsLocked(false);
         setPassword("");
-        toast("Session unlocked. Welcome back!");
+        setErrorMsg("");
+        toast("Session unlocked. Welcome back!", "success");
         resetTimer();
       } else {
-        // If session expired in background
-        window.location.href = "/admin-login";
+        const json = await res.json().catch(() => null);
+        setErrorMsg(json?.error || "Incorrect password. Please try again.");
       }
     } catch {
-      setErrorMsg("Failed to verify credentials. Please try again.");
+      setErrorMsg("Connection error. Please try again or log in from the login page.");
     } finally {
       setUnlocking(false);
     }
@@ -81,7 +93,7 @@ export default function AdminInactivityLock({
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-xl animate-in fade-in duration-200">
       <div className="w-full max-w-md bg-[#090d16] border border-white/15 rounded-3xl p-8 shadow-2xl text-white text-center flex flex-col items-center">
         {/* Shield & Lock Icon */}
-        <div className="w-16 h-16 rounded-2xl bg-[#006B3F] flex items-center justify-center text-white mb-5 shadow-lg shadow-[#006B3F]/30">
+        <div className="w-16 h-16 rounded-2xl bg-zru-green flex items-center justify-center text-white mb-5 shadow-lg shadow-zru-green/30">
           <Lock className="w-8 h-8" />
         </div>
 
@@ -89,48 +101,66 @@ export default function AdminInactivityLock({
           Session Locked
         </h2>
         <p className="text-xs text-white/50 mt-1 mb-6">
-          Studio auto-locked after 15 minutes of inactivity to protect matchday data (SOC 2 / ISO 27001).
+          Studio auto-locked after {timeoutMinutes} minutes of inactivity to protect matchday data.
         </p>
 
         {/* User Badge */}
         <div className="flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-white/5 border border-white/10 text-xs font-mono text-white/80 mb-6">
-          <Shield className="w-4 h-4 text-[#006B3F]" />
+          <Shield className="w-4 h-4 text-zru-green" />
           <span>{userEmail}</span>
         </div>
 
-        {/* Re-Auth Form */}
+        {/* Error Alert */}
+        {errorMsg && (
+          <div className="w-full mb-4 p-3 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 text-xs flex items-center gap-2 text-left">
+            <AlertCircle className="w-4 h-4 shrink-0" />
+            <span>{errorMsg}</span>
+          </div>
+        )}
+
+        {/* Unlock Form */}
         <form onSubmit={handleUnlock} className="w-full space-y-4">
           <div className="relative">
             <input
               type="password"
+              autoFocus
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              placeholder="Enter password or PIN to resume..."
-              autoFocus
-              className="w-full bg-white/5 border border-white/15 rounded-xl px-4 py-3 text-sm text-white placeholder:text-white/30 outline-none focus:border-[#006B3F] transition-colors font-sans"
+              placeholder="Enter password to unlock..."
+              disabled={unlocking}
+              className="w-full bg-white/10 border border-white/15 rounded-xl px-4 py-3 text-sm text-white placeholder-white/40 focus:outline-none focus:border-zru-green focus:ring-1 focus:ring-zru-green transition-all"
             />
           </div>
 
-          {errorMsg && (
-            <p className="text-xs text-red-400 font-medium flex items-center justify-center gap-1.5">
-              <AlertCircle className="w-3.5 h-3.5" />
-              <span>{errorMsg}</span>
-            </p>
-          )}
-
           <button
             type="submit"
-            disabled={unlocking}
-            className="w-full flex items-center justify-center gap-2 rounded-xl bg-[#006B3F] hover:bg-green-800 py-3 text-xs font-bold uppercase tracking-wider text-white shadow-md shadow-[#006B3F]/20 transition-all cursor-pointer disabled:opacity-50"
+            disabled={unlocking || !password.trim()}
+            className="w-full py-3 rounded-xl bg-zru-green hover:bg-forest-green text-white font-black font-heading text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-2 shadow-lg shadow-zru-green/20 disabled:opacity-50 cursor-pointer"
           >
-            {unlocking ? <RefreshCw className="w-4 h-4 animate-spin" /> : <Unlock className="w-4 h-4" />}
-            <span>{unlocking ? "Verifying..." : "Unlock Studio & Resume"}</span>
+            {unlocking ? (
+              <>
+                <RefreshCw className="w-4 h-4 animate-spin" />
+                <span>Verifying...</span>
+              </>
+            ) : (
+              <>
+                <Unlock className="w-4 h-4" />
+                <span>Unlock Session</span>
+              </>
+            )}
           </button>
         </form>
 
-        <p className="text-[10px] text-white/30 font-mono mt-6">
-          All your unsaved form drafts have been preserved in session memory.
-        </p>
+        <div className="mt-6 pt-4 border-t border-white/10 w-full flex items-center justify-between text-xs text-white/40">
+          <span>Unsaved drafts preserved</span>
+          <a
+            href="/admin-login"
+            className="flex items-center gap-1 text-white/60 hover:text-white transition-colors"
+          >
+            <LogOut className="w-3.5 h-3.5" />
+            <span>Switch account</span>
+          </a>
+        </div>
       </div>
     </div>
   );

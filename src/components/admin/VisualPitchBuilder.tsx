@@ -98,8 +98,8 @@ export function VisualPitchBuilder({
 
   // Normalized squad players
   const squadPlayers: PlayerOption[] = useMemo(() => {
-    return players.map((p) => ({
-      id: (p.id as string | number) || Math.random(),
+    return players.map((p, idx) => ({
+      id: (p.id as string | number) || `player-${idx}-${String(p.name || p.full_name || "unnamed")}`,
       name: String(p.name || p.full_name || p.title || "Player"),
       position: String(p.position || p.role || ""),
       jersey_number: typeof p.jersey_number === "number" ? p.jersey_number : undefined,

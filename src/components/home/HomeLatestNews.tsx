@@ -3,6 +3,7 @@
 import { ArrowRight, Calendar, Newspaper } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
+import { KineticHeading } from "@/components/ui/KineticHeading";
 import type { Report } from "@/lib/data-fetcher";
 
 interface HomeLatestNewsProps {
@@ -22,9 +23,13 @@ export default function HomeLatestNews({ news = [] }: HomeLatestNewsProps) {
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-black/10 pb-4">
           <div>
             <div className="heading-plate">
-              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-heading font-black uppercase text-rich-black tracking-tight leading-[1.05]">
-                LATEST <span className="text-zru-green">NEWS &amp; STORIES</span>
-              </h2>
+              <KineticHeading
+                text="LATEST"
+                accentText="NEWS & STORIES"
+                as="h2"
+                className="text-3xl sm:text-4xl lg:text-5xl font-heading font-black uppercase text-rich-black tracking-tight leading-[1.05]"
+                accentClassName="text-zru-green ml-2 sm:ml-3"
+              />
             </div>
           </div>
 

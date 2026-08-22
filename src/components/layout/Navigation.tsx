@@ -14,19 +14,19 @@ import { mainNav, utilityNav } from "@/lib/navConfig";
 import type { SearchEventResult } from "@/types";
 import { useAuth } from "@/context/AuthContext";
 
+import { useHeaderScrollPhysics } from "@/hooks/useHeaderScrollPhysics";
+
 /* ── Static config ── */
 const SOLID_ROUTES = ["/admin", "/admin-login", "/login", "/verify-email", "/onboarding", "/tickets", "/video-hub", "/gallery", "/competitions"];
-const SCROLL_THRESHOLD = 20;
 
 let cachedNavData: { teams?: any[]; competitions?: any[]; events?: any[] } | null = null;
 
 export default function Navigation() {
   const pathname = usePathname();
-  const { scrollY } = useScroll();
   const { user, signOut: authSignOut } = useAuth();
+  const { progress, compaction, isVisible, isScrolled } = useHeaderScrollPhysics(80);
 
   /* ── Core UI state ── */
-  const [isScrolled, setIsScrolled] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
   const [dynamicNavItems, setDynamicNavItems] = useState<NavItem[]>(() => {
@@ -92,11 +92,7 @@ export default function Navigation() {
   const isLargeLogo = isHomePage && !isScrolled;
   const showOpaqueHeader = !isOnHero;
 
-  /* ── Scroll listener (single useEffect, no framer-motion dependency for this) ── */
-  useMotionValueEvent(scrollY, "change", (latest) => {
-    const next = latest > SCROLL_THRESHOLD;
-    setIsScrolled((prev) => (prev === next ? prev : next));
-  });
+
 
   /* ── Lock body scroll and notify components when mobile menu is open ── */
   useEffect(() => {
@@ -234,16 +230,24 @@ export default function Navigation() {
   if (isAdminRoute) return null;
 
   return (
-    <header className="fixed top-0 left-0 w-full z-50">
+    <header
+      className="fixed top-0 left-0 w-full z-50 transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] will-change-transform"
+      style={{
+        transform: isVisible ? "translateY(0)" : "translateY(-100%)",
+      }}
+    >
       {pathname !== "/fan-zone" && <GlobalAnnouncementBar />}
 
       {/* ═══ UTILITY BAR ═══ */}
       <div
-        className={`w-full transition-all duration-500 ${
+        className={`w-full transition-all duration-300 ${
           showOpaqueHeader
             ? "bg-[#002D1A]/95 backdrop-blur-md border-b border-white/5"
             : "bg-[#002D1A]/80 backdrop-blur-sm"
         }`}
+        style={{
+          opacity: compaction > 0.6 && !isHomePage ? 0.95 : 1,
+        }}
       >
         <div className="w-full px-4 sm:px-6 lg:px-8 flex items-center justify-end gap-1 sm:gap-2 h-9">
           {/* Desktop utility items */}
@@ -401,12 +405,25 @@ export default function Navigation() {
 
       {/* ═══ MAIN NAVIGATION BAR (Fully See-Through at Rest -> Milk-White on Scroll) ═══ */}
       <nav
-        className={`w-full transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+        className={`w-full transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] relative ${
           showOpaqueHeader
-            ? "bg-milk-white/95 backdrop-blur-md py-3 shadow-md border-b border-black/5"
-            : "bg-transparent py-5 border-b border-transparent"
+            ? "bg-milk-white/95 backdrop-blur-md shadow-md border-b border-black/5"
+            : "bg-transparent border-b border-transparent"
         }`}
+        style={{
+          paddingTop: showOpaqueHeader ? `${Math.max(8, 12 - compaction * 4)}px` : "20px",
+          paddingBottom: showOpaqueHeader ? `${Math.max(8, 12 - compaction * 4)}px` : "20px",
+        }}
       >
+        {/* ── ZRU Green Reading / Scroll Momentum Gauge (1.5px hairline) ── */}
+        <div
+          className="absolute bottom-0 left-0 h-[1.5px] bg-zru-green transition-opacity duration-300 pointer-events-none z-50"
+          style={{
+            width: `${progress * 100}%`,
+            opacity: progress > 0.01 ? 1 : 0,
+          }}
+          aria-hidden="true"
+        />
         <div className="w-full px-4 sm:px-6 lg:px-8 flex items-center justify-between lg:justify-start gap-1.5 sm:gap-2 lg:gap-4">
 
           {/* ── Logo Brand Block ── */}

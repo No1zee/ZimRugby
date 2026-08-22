@@ -3,95 +3,70 @@
  * Zero-latency local asset resolver for national teams and federations.
  */
 
+import { getTeamCrestUrl } from "./flags";
+
 const TEAM_LOGOS: Record<string, string> = {
   // Zimbabwe National Teams
-  zimbabwe: "/images/logos/zru-logo.svg",
-  zim: "/images/logos/zru-logo.svg",
-  sables: "/images/logos/zru-logo.svg",
-  "zimbabwe sables": "/images/logos/zru-logo.svg",
-  "lady sables": "/images/logos/zru-logo.svg",
-  cheetahs: "/images/logos/zru-logo.svg",
-  "zimbabwe cheetahs": "/images/logos/zru-logo.svg",
-  "junior sables": "/images/logos/zru-logo.svg",
+  zimbabwe: "/images/crests/zru-sables.svg",
+  zim: "/images/crests/zru-sables.svg",
+  sables: "/images/crests/zru-sables.svg",
+  "zimbabwe sables": "/images/crests/zru-sables.svg",
+  "lady sables": "/images/crests/lady-sables.svg",
+  "zimbabwe lady sables": "/images/crests/lady-sables.svg",
+  cheetahs: "/images/crests/cheetahs-7s.svg",
+  "zimbabwe cheetahs": "/images/crests/cheetahs-7s.svg",
+  "cheetahs 7s": "/images/crests/cheetahs-7s.svg",
+  "junior sables": "/images/crests/junior-sables.svg",
+  "zimbabwe junior sables": "/images/crests/junior-sables.svg",
+  "zimbabwe u20": "/images/crests/junior-sables.svg",
+  goshawks: "/images/crests/goshawks.svg",
+  "zimbabwe goshawks": "/images/crests/goshawks.svg",
 
-  // African Opponents & Unions
-  namibia: "/images/teams/namibia.png",
-  nam: "/images/teams/namibia.png",
-  "namibia welwitschias": "/images/teams/namibia.png",
-
-  kenya: "/images/teams/kenya.png",
-  ken: "/images/teams/kenya.png",
-  "kenya simbas": "/images/teams/kenya.png",
-  "kenya u20": "/images/teams/kenya.png",
-
-  uganda: "/images/teams/uganda.png",
-  uga: "/images/teams/uganda.png",
-  "uganda cranes": "/images/teams/uganda.png",
-
-  zambia: "/images/teams/zambia.png",
-  zam: "/images/teams/zambia.png",
-
-  algeria: "/images/teams/algeria.png",
-  alg: "/images/teams/algeria.png",
-
-  tunisia: "/images/teams/tunisia.png",
-  tun: "/images/teams/tunisia.png",
-  "tunisia u20": "/images/teams/tunisia.png",
-
-  botswana: "/images/teams/botswana.jpg",
-  bot: "/images/teams/botswana.jpg",
-  "botswana u20": "/images/teams/botswana.jpg",
-
-  "ivory coast": "/images/teams/ivory-coast.png",
-  "côte d'ivoire": "/images/teams/ivory-coast.png",
-  civ: "/images/teams/ivory-coast.png",
-
-  senegal: "/images/teams/senegal.png",
-  sen: "/images/teams/senegal.png",
-
-  "south africa": "/images/teams/south-africa.png",
-  rsa: "/images/teams/south-africa.png",
-  springboks: "/images/teams/south-africa.png",
-
-  // International Tier 2 / Global Opponents
+  // International & African Unions (Official Federation Shields)
+  england: "/images/crests/england-rfu.svg",
+  "england rugby": "/images/crests/england-rfu.svg",
+  wales: "/images/crests/wales-feathers.svg",
+  "wales rugby": "/images/crests/wales-feathers.svg",
+  uganda: "/images/teams/uganda.svg",
+  "uganda lady cranes": "/images/teams/uganda.svg",
+  "uganda cranes": "/images/teams/uganda.svg",
+  "south africa": "/images/teams/south-africa.svg",
+  "south africa a": "/images/teams/south-africa.svg",
+  springboks: "/images/teams/south-africa.svg",
+  "new zealand": "/images/crests/all-blacks-fern.svg",
+  "all blacks": "/images/crests/all-blacks-fern.svg",
+  kenya: "/images/teams/kenya.svg",
+  "kenya simbas": "/images/teams/kenya.svg",
+  "kenya u20": "/images/teams/kenya.svg",
+  simbas: "/images/teams/kenya.svg",
+  namibia: "/images/teams/namibia.svg",
+  "namibia welwitschias": "/images/teams/namibia.svg",
+  welwitschias: "/images/teams/namibia.svg",
+  zambia: "/images/teams/zambia.svg",
+  algeria: "/images/teams/algeria.svg",
+  botswana: "/images/teams/botswana.svg",
+  chile: "/images/teams/chile.svg",
+  canada: "/images/teams/canada.svg",
   usa: "/images/teams/usa.svg",
   "united states": "/images/teams/usa.svg",
-  "usa eagles": "/images/teams/usa.svg",
-
-  canada: "/images/teams/canada.svg",
-  can: "/images/teams/canada.svg",
-
-  tonga: "/images/teams/tonga.png",
-  ton: "/images/teams/tonga.png",
-  "ikale tahi": "/images/teams/tonga.png",
-
-  samoa: "/images/teams/samoa.png",
-  sam: "/images/teams/samoa.png",
-  "manu samoa": "/images/teams/samoa.png",
-
-  uruguay: "/images/teams/uruguay.png",
-  uru: "/images/teams/uruguay.png",
-  "los teros": "/images/teams/uruguay.png",
-
-  chile: "/images/teams/chile.png",
-  chi: "/images/teams/chile.png",
-  "los cóndores": "/images/teams/chile.png",
-
-  // Governing Bodies
-  "world rugby": "/images/teams/world-rugby.svg",
-  "rugby africa": "/images/teams/world-rugby.svg",
+  france: "/images/crests/france-coq.svg",
+  ireland: "/images/crests/ireland-shamrock.svg",
+  scotland: "/images/crests/scotland-thistle.svg",
+  "scotland u20": "/images/crests/scotland-thistle.svg",
+  australia: "/images/crests/australia-wallaby.svg",
+  wallabies: "/images/crests/australia-wallaby.svg",
 };
 
 /**
  * Returns the standardized local logo path for a team name, country code, or Directus crest URL.
  */
 export function getTeamEmblem(teamNameOrCode?: string | null, customCrest?: string | null): string {
-  if (customCrest && (customCrest.startsWith("http") || customCrest.startsWith("/"))) {
+  if (customCrest && (customCrest.startsWith("http") || customCrest.startsWith("/")) && !customCrest.includes("flagcdn.com")) {
     return customCrest;
   }
 
   if (!teamNameOrCode) {
-    return "/images/logos/zru-logo.svg";
+    return "/images/crests/zru-sables.png";
   }
 
   const key = teamNameOrCode.toLowerCase().trim();
@@ -99,12 +74,13 @@ export function getTeamEmblem(teamNameOrCode?: string | null, customCrest?: stri
     return TEAM_LOGOS[key];
   }
 
-  // Partial match search
+  // Partial match search in TEAM_LOGOS
   for (const [name, logoPath] of Object.entries(TEAM_LOGOS)) {
     if (key.includes(name) || name.includes(key)) {
       return logoPath;
     }
   }
 
-  return "/images/logos/zru-logo.svg";
+  // Fallback to official Rugby Union Crest & ISO Flag Engine
+  return getTeamCrestUrl(teamNameOrCode);
 }

@@ -11,7 +11,7 @@ export async function POST(req: Request) {
     const bodyText = await req.text();
     const signature = req.headers.get("upstash-signature");
 
-    // Cryptographic signature verification when QStash keys are present
+    // Cryptographic signature verification
     const currentSigningKey = process.env.QSTASH_CURRENT_SIGNING_KEY;
     const nextSigningKey = process.env.QSTASH_NEXT_SIGNING_KEY;
 
@@ -29,6 +29,11 @@ export async function POST(req: Request) {
       if (!isValid) {
         return NextResponse.json({ error: "Invalid QStash signature" }, { status: 401 });
       }
+    } else if (process.env.NODE_ENV === "production") {
+      return NextResponse.json(
+        { error: "Server configuration error: QStash signing keys not configured" },
+        { status: 500 }
+      );
     }
 
     const payload = JSON.parse(bodyText);

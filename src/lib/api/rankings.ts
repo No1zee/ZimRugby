@@ -25,19 +25,19 @@ const MOCK_RANKINGS: RankingsData = {
         name: "Namibia",
         position: 22,
         points: 60.56,
-        logo: "https://flagcdn.com/w160/na.png"
+        logo: "/images/teams/namibia.svg"
       },
       {
         name: "Kenya",
         position: 34,
         points: 49.80,
-        logo: "https://flagcdn.com/w160/ke.png"
+        logo: "/images/teams/kenya.svg"
       },
       {
         name: "Uganda",
         position: 38,
         points: 47.10,
-        logo: "https://flagcdn.com/w160/ug.png"
+        logo: "/images/teams/uganda.svg"
       }
     ]
   };

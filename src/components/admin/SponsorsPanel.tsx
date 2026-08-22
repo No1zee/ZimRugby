@@ -183,8 +183,8 @@ export default function SponsorsPanel({ initialSponsors }: { initialSponsors?: a
 
   return (
     <div className="space-y-6">
-      <section className="bg-white border border-black/10 rounded-2xl p-6 shadow-sm">
-        <div className="flex items-center justify-between border-b border-black/5 pb-4 mb-6">
+      <section className="bg-white border border-[#eae8de] rounded-2xl p-6 shadow-sm">
+        <div className="flex items-center justify-between border-b border-[#eae8de] pb-4 mb-6">
           <div>
             <h2 className="text-sm font-black font-heading uppercase tracking-wider text-rich-black flex items-center gap-2">
               <Handshake className="w-4 h-4 text-[#006B3F]" />
@@ -207,16 +207,16 @@ export default function SponsorsPanel({ initialSponsors }: { initialSponsors?: a
           {TIERS.map(({ key: tierKey, label: tierLabel }) => {
             const tierSponsors = sponsors.filter((s) => s.tier === tierKey);
             return (
-              <div key={tierKey} className="bg-black/[0.01] border border-black/5 rounded-xl p-4 space-y-3">
+              <div key={tierKey} className="bg-black/[0.01] border border-[#eae8de] rounded-xl p-4 space-y-3">
                 <h3 className="text-xs font-black uppercase tracking-widest text-black/60 flex items-center justify-between">
                   <span>{tierLabel}</span>
-                  <span className="text-[10px] font-bold bg-white px-2 py-0.5 rounded border border-black/10 text-black/60 font-mono">
+                  <span className="text-[10px] font-bold bg-white px-2 py-0.5 rounded border border-[#eae8de] text-black/60 font-mono">
                     {tierSponsors.length} Active
                   </span>
                 </h3>
 
                 {tierSponsors.length === 0 ? (
-                  <div className="text-[11px] text-black/30 text-center py-6 border border-dashed border-black/5 rounded-lg">
+                  <div className="text-[11px] text-black/30 text-center py-6 border border-dashed border-[#eae8de] rounded-lg">
                     No partners in this tier yet.
                   </div>
                 ) : (
@@ -227,11 +227,11 @@ export default function SponsorsPanel({ initialSponsors }: { initialSponsors?: a
                         <div
                           key={sponsor.id}
                           className={`flex items-center justify-between p-3 rounded-xl bg-white border shadow-sm hover:border-black/15 transition-all ${
-                            sponsor.is_active ? "border-black/5" : "border-black/5 opacity-60"
+                            sponsor.is_active ? "border-[#eae8de]" : "border-[#eae8de] opacity-60"
                           }`}
                         >
                           <div className="flex items-center gap-3 min-w-0">
-                            <div className="w-12 h-12 rounded-lg border border-black/5 bg-black/[0.02] flex items-center justify-center p-1.5 overflow-hidden shrink-0">
+                            <div className="w-12 h-12 rounded-lg border border-[#eae8de] bg-black/[0.02] flex items-center justify-center p-1.5 overflow-hidden shrink-0">
                               {logoSrc ? (
                                 // eslint-disable-next-line @next/next/no-img-element
                                 <img src={logoSrc} alt={sponsor.name} className="object-contain max-w-full max-h-full" />
@@ -258,7 +258,7 @@ export default function SponsorsPanel({ initialSponsors }: { initialSponsors?: a
                           <div className="flex items-center gap-1.5 shrink-0 ml-2">
                             <button
                               onClick={() => setEditingSponsor(sponsor)}
-                              className="px-2.5 py-1 rounded-lg text-xs font-bold uppercase tracking-wider border border-black/10 hover:bg-black/5 text-rich-black cursor-pointer"
+                              className="px-2.5 py-1 rounded-lg text-xs font-bold uppercase tracking-wider border border-[#eae8de] hover:bg-black/5 text-rich-black cursor-pointer"
                             >
                               Edit
                             </button>
@@ -284,8 +284,8 @@ export default function SponsorsPanel({ initialSponsors }: { initialSponsors?: a
       {/* Editor Modal with Directus Dropzone */}
       {editingSponsor && (
         <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4" data-lenis-prevent>
-          <div className="bg-white rounded-2xl max-w-md w-full p-6 space-y-4 shadow-2xl border border-black/10" data-lenis-prevent>
-            <div className="flex items-center justify-between border-b border-black/10 pb-3">
+          <div className="bg-white rounded-2xl max-w-md w-full p-6 space-y-4 shadow-2xl border border-[#eae8de]" data-lenis-prevent>
+            <div className="flex items-center justify-between border-b border-[#eae8de] pb-3">
               <h3 className="font-heading text-base font-black uppercase text-rich-black">
                 {editingSponsor.id ? "Edit Partner Profile" : "Add Sponsor"}
               </h3>
@@ -307,7 +307,7 @@ export default function SponsorsPanel({ initialSponsors }: { initialSponsors?: a
                   value={editingSponsor.name || ""}
                   onChange={(e) => setEditingSponsor({ ...editingSponsor, name: e.target.value })}
                   placeholder="e.g. Nedbank Zimbabwe"
-                  className="w-full bg-black/5 border border-black/10 rounded-lg px-3 py-2 text-xs focus:outline-none focus:border-zru-green font-bold"
+                  className="w-full bg-black/5 border border-[#eae8de] rounded-lg px-3 py-2 text-xs focus:outline-none focus:border-zru-green font-bold"
                 />
               </div>
 
@@ -317,7 +317,7 @@ export default function SponsorsPanel({ initialSponsors }: { initialSponsors?: a
                   <select
                     value={editingSponsor.tier || "gold"}
                     onChange={(e) => setEditingSponsor({ ...editingSponsor, tier: e.target.value as Sponsor["tier"] })}
-                    className="w-full bg-black/5 border border-black/10 rounded-lg px-3 py-2 text-xs focus:outline-none focus:border-zru-green font-bold"
+                    className="w-full bg-black/5 border border-[#eae8de] rounded-lg px-3 py-2 text-xs focus:outline-none focus:border-zru-green font-bold"
                   >
                     <option value="title">Title Partner</option>
                     <option value="gold">Gold Partner</option>
@@ -333,7 +333,7 @@ export default function SponsorsPanel({ initialSponsors }: { initialSponsors?: a
                     value={editingSponsor.badge || ""}
                     onChange={(e) => setEditingSponsor({ ...editingSponsor, badge: e.target.value })}
                     placeholder="PRIMARY PARTNER"
-                    className="w-full bg-black/5 border border-black/10 rounded-lg px-3 py-2 text-xs focus:outline-none focus:border-zru-green font-mono"
+                    className="w-full bg-black/5 border border-[#eae8de] rounded-lg px-3 py-2 text-xs focus:outline-none focus:border-zru-green font-mono"
                   />
                 </div>
               </div>
@@ -344,7 +344,7 @@ export default function SponsorsPanel({ initialSponsors }: { initialSponsors?: a
                   <select
                     value={editingSponsor.is_active !== false ? "true" : "false"}
                     onChange={(e) => setEditingSponsor({ ...editingSponsor, is_active: e.target.value === "true" })}
-                    className="w-full bg-black/5 border border-black/10 rounded-lg px-3 py-2 text-xs focus:outline-none focus:border-zru-green font-bold"
+                    className="w-full bg-black/5 border border-[#eae8de] rounded-lg px-3 py-2 text-xs focus:outline-none focus:border-zru-green font-bold"
                   >
                     <option value="true">Active & Visible</option>
                     <option value="false">Hidden</option>
@@ -358,7 +358,7 @@ export default function SponsorsPanel({ initialSponsors }: { initialSponsors?: a
                     min={1}
                     value={editingSponsor.sort || 1}
                     onChange={(e) => setEditingSponsor({ ...editingSponsor, sort: Number(e.target.value) })}
-                    className="w-full bg-black/5 border border-black/10 rounded-lg px-3 py-2 text-xs focus:outline-none focus:border-zru-green font-mono"
+                    className="w-full bg-black/5 border border-[#eae8de] rounded-lg px-3 py-2 text-xs focus:outline-none focus:border-zru-green font-mono"
                   />
                 </div>
               </div>
@@ -380,7 +380,7 @@ export default function SponsorsPanel({ initialSponsors }: { initialSponsors?: a
                   onChange={(e) => setEditingSponsor({ ...editingSponsor, description: e.target.value })}
                   rows={2}
                   placeholder="Short blurb shown on the partners page"
-                  className="w-full bg-black/5 border border-black/10 rounded-lg px-3 py-2 text-xs focus:outline-none focus:border-zru-green resize-none"
+                  className="w-full bg-black/5 border border-[#eae8de] rounded-lg px-3 py-2 text-xs focus:outline-none focus:border-zru-green resize-none"
                 />
               </div>
 
@@ -391,16 +391,16 @@ export default function SponsorsPanel({ initialSponsors }: { initialSponsors?: a
                   value={editingSponsor.href || ""}
                   onChange={(e) => setEditingSponsor({ ...editingSponsor, href: e.target.value })}
                   placeholder="https://example.com"
-                  className="w-full bg-black/5 border border-black/10 rounded-lg px-3 py-2 text-xs focus:outline-none focus:border-zru-green font-mono"
+                  className="w-full bg-black/5 border border-[#eae8de] rounded-lg px-3 py-2 text-xs focus:outline-none focus:border-zru-green font-mono"
                 />
               </div>
 
-              <div className="flex justify-end gap-3 pt-4 border-t border-black/10">
+              <div className="flex justify-end gap-3 pt-4 border-t border-[#eae8de]">
                 <button
                   type="button"
                   onClick={() => setEditingSponsor(null)}
                   disabled={saving}
-                  className="px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-wider border border-black/10 hover:bg-black/5 text-rich-black cursor-pointer"
+                  className="px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-wider border border-[#eae8de] hover:bg-black/5 text-rich-black cursor-pointer"
                 >
                   Cancel
                 </button>

@@ -31,17 +31,6 @@ export const metadata: Metadata = {
 
 export const dynamic = "force-dynamic";
 
-interface Page {
-  id: string;
-  slug: string;
-  title: string;
-  status: string;
-  page_type?: string;
-  hero_title?: string;
-  updated_at?: string;
-  sort?: number;
-}
-
 interface ActivityEntry {
   id: number;
   action: "create" | "update" | "delete" | "login" | "authenticate";
@@ -58,7 +47,10 @@ async function fetchActivityFeed(): Promise<ActivityEntry[]> {
     if (!baseUrl) return [];
     const headers: Record<string, string> = { "Content-Type": "application/json" };
     if (token) headers["Authorization"] = `Bearer ${token}`;
-    const res = await fetch(`${baseUrl}/activity?limit=15&sort=-timestamp`, { headers, next: { revalidate: 60 } });
+    const res = await fetch(
+      `${baseUrl}/activity?limit=30&sort=-timestamp&fields=id,action,collection,item,timestamp,user.first_name,user.last_name,user.email&filter[collection][_nin]=directus_flows,directus_sessions,directus_presets`,
+      { headers, next: { revalidate: 30 } }
+    );
     if (!res.ok) return [];
     const json = await res.json();
     return (json.data || []) as ActivityEntry[];
@@ -119,26 +111,8 @@ async function getLookups(): Promise<{
   };
 }
 
-async function getPageSectionCounts(): Promise<Record<string, number>> {
-  try {
-    const rows = await directusFetch<{ count: Record<string, number>; page_id: string }>(
-      "page_sections",
-      { aggregate: { count: "*" }, groupBy: ["page_id"] },
-      0
-    );
-    const counts: Record<string, number> = {};
-    rows.forEach((row) => {
-      const value = row.count && typeof row.count === "object" ? Object.values(row.count)[0] : 0;
-      counts[row.page_id] = typeof value === "number" ? value : 0;
-    });
-    return counts;
-  } catch {
-    return {};
-  }
-}
-
 export default async function AdminDashboard() {
-  // Server-side authorization gate — data is never fetched/serialized for
+  // Server-side authorization gate â€” data is never fetched/serialized for
   // unauthenticated visitors. The client-side AdminAuthGate remains as a
   // defensive UX layer only.
   let session: AdminSession;
@@ -151,14 +125,13 @@ export default async function AdminDashboard() {
   const perms = session.permissions;
   const canTab = (tab: string) => canAccessTab(perms, tab);
   // Role-scoped data loading: each collection is only fetched when the actor's
-  // tab grants expose a panel that displays it (least privilege — a viewer
+  // tab grants expose a panel that displays it (least privilege â€” a viewer
   // never receives news/announcements/partners payloads in the HTML).
   const overview = canTab("overview");
   const showNews = canTab("media") || overview;
   const showEvents = canTab("events") || overview;
   const showMatches = canTab("fixtures") || overview;
   const showTeams = canTab("teams") || canTab("fixtures");
-  const showPages = canTab("pages") || overview;
   const showGrassroots = canTab("grassroots");
   const showFaqFooter = canTab("faq-footer");
   const showCampaigns = canTab("campaigns") || overview;
@@ -169,7 +142,6 @@ export default async function AdminDashboard() {
   const showClubs = canTab("clubs");
 
   const [
-    pages, sectionCounts,
     campaigns, announcements,
     news, events, eventOccurrences, grassrootsInitiatives, programmes, faqs, footerNav,
     eventsCount, teamCount, playerCount, matchCount, partnerCount, announcementCount,
@@ -177,8 +149,6 @@ export default async function AdminDashboard() {
     fanZoneMembers, onboardingSubmissions,
     activityFeed,
   ] = await Promise.all([
-    showPages ? directusFetch<Page>("pages", { sort: ["sort"] }, 0) : Promise.resolve([] as Page[]),
-    showPages ? getPageSectionCounts() : Promise.resolve({} as Record<string, number>),
     showCampaigns ? getActiveCampaigns() : Promise.resolve([] as Campaign[]),
     showAnnouncements ? getAdminAnnouncements() : Promise.resolve([] as Record<string, unknown>[]),
     showNews ? getAdminCollection<Record<string, unknown>>("news") : Promise.resolve([] as Record<string, unknown>[]),
@@ -207,10 +177,6 @@ export default async function AdminDashboard() {
   ]);
 
   const stats = {
-    pagesCount: pages.length,
-    publishedPages: pages.filter((p) => p.status === "published").length,
-    draftPages: pages.length - pages.filter((p) => p.status === "published").length,
-    totalSections: Object.values(sectionCounts).reduce((a, b) => a + b, 0),
     eventCount: eventsCount,
     teamCount,
     playerCount,
@@ -245,8 +211,6 @@ export default async function AdminDashboard() {
         initialProgrammes={programmes}
         initialFaqs={faqs}
         initialFooterNav={footerNav}
-        initialPages={pages}
-        initialSectionCounts={sectionCounts}
         initialActivityFeed={activityFeed}
         teams={lookups.teamOptions}
         opponents={lookups.opponentOptions}
@@ -266,3 +230,6 @@ export default async function AdminDashboard() {
     </AdminAuthGate>
   );
 }
+
+
+

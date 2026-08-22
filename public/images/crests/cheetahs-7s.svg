@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <circle cx="50" cy="50" r="48" fill="#002D19" stroke="#ffffff" stroke-width="3"/>
+  <circle cx="50" cy="50" r="38" fill="#004526" stroke="#006B3F" stroke-width="2"/>
+  <path d="M32 46 C36 34, 48 26, 64 28 C68 34, 64 44, 54 52 C46 58, 40 66, 36 74 C34 64, 30 54, 32 46 Z" fill="#ffffff"/>
+  <circle cx="48" cy="38" r="2" fill="#002D19"/>
+  <circle cx="56" cy="42" r="2" fill="#002D19"/>
+  <circle cx="42" cy="50" r="2" fill="#002D19"/>
+  <text x="50" y="82" font-family="Arial, sans-serif" font-size="6" font-weight="900" fill="#ffffff" text-anchor="middle" letter-spacing="1">CHEETAHS 7s</text>
+</svg>

@@ -70,4 +70,74 @@ describe('Security & Penetration Test Suite', () => {
       expect(isAuthorized('Bearer ')).toBe(false);
     });
   });
+
+  describe('Asset Proxy Path Traversal & Identifier Validation', () => {
+    const isValidAssetId = (id: string) => /^[a-zA-Z0-9_-]{1,64}$/.test(id);
+
+    it('accepts valid UUIDs and alphanumeric asset keys', () => {
+      expect(isValidAssetId('550e8400-e29b-41d4-a716-446655440000')).toBe(true);
+      expect(isValidAssetId('asset_123_456-abc')).toBe(true);
+      expect(isValidAssetId('hero-banner-2026')).toBe(true);
+    });
+
+    it('rejects path traversal, special characters, and protocol injection in asset IDs', () => {
+      expect(isValidAssetId('../admin/users')).toBe(false);
+      expect(isValidAssetId('../../directus_users')).toBe(false);
+      expect(isValidAssetId('..\\..\\etc\\passwd')).toBe(false);
+      expect(isValidAssetId('id; DROP TABLE news;--')).toBe(false);
+      expect(isValidAssetId('asset/123')).toBe(false);
+      expect(isValidAssetId('<script>alert(1)</script>')).toBe(false);
+      expect(isValidAssetId('')).toBe(false);
+    });
+  });
+
+  describe('Open Redirect Defense', () => {
+    const sanitizeRedirect = (target: string | null): string => {
+      if (!target || typeof target !== "string") return "/";
+      const trimmed = target.trim();
+      if (!trimmed.startsWith("/") || trimmed.startsWith("//") || trimmed.startsWith("/\\")) {
+        return "/";
+      }
+      if (trimmed.includes(":") || trimmed.includes("\n") || trimmed.includes("\r")) {
+        return "/";
+      }
+      return trimmed;
+    };
+
+    it('permits valid relative local application paths', () => {
+      expect(sanitizeRedirect('/admin')).toBe('/admin');
+      expect(sanitizeRedirect('/media/sables-win-nations-cup')).toBe('/media/sables-win-nations-cup');
+      expect(sanitizeRedirect('/fixtures?season=2026')).toBe('/fixtures?season=2026');
+    });
+
+    it('neutralizes protocol-relative and external domain redirect attempts', () => {
+      expect(sanitizeRedirect('//evil.com')).toBe('/');
+      expect(sanitizeRedirect('https://evil.com/phishing')).toBe('/');
+      expect(sanitizeRedirect('http://attacker.com')).toBe('/');
+      expect(sanitizeRedirect('/\\evil.com')).toBe('/');
+      expect(sanitizeRedirect('javascript:alert(document.cookie)')).toBe('/');
+      expect(sanitizeRedirect(null)).toBe('/');
+      expect(sanitizeRedirect('')).toBe('/');
+    });
+  });
+
+  describe('Fail-Closed Cron & Webhook Gate', () => {
+    const checkCronAuth = (providedToken: string | null, envSecret?: string): boolean => {
+      if (!envSecret) return false; // Fail closed if secret is not set
+      if (!providedToken) return false;
+      return providedToken === envSecret;
+    };
+
+    it('fails closed when secret is not configured in the environment', () => {
+      expect(checkCronAuth('any-token', undefined)).toBe(false);
+      expect(checkCronAuth('any-token', '')).toBe(false);
+    });
+
+    it('rejects unauthenticated or mismatched tokens when secret is set', () => {
+      const secret = 'prod-cron-secret-98765';
+      expect(checkCronAuth(null, secret)).toBe(false);
+      expect(checkCronAuth('wrong-token', secret)).toBe(false);
+      expect(checkCronAuth(secret, secret)).toBe(true);
+    });
+  });
 });

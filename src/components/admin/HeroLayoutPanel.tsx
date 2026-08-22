@@ -1,7 +1,20 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Plus, Trash, ArrowUp, ArrowDown, Eye, EyeOff, Save, LayoutGrid, Radio } from "lucide-react";
+import { 
+  Plus, 
+  Trash, 
+  ArrowUp, 
+  ArrowDown, 
+  Eye, 
+  EyeOff, 
+  Save, 
+  LayoutGrid, 
+  Radio, 
+  ExternalLink,
+  Pencil,
+  ArrowRight
+} from "lucide-react";
 import { useToast } from "./ui/ToastProvider";
 import ImagePicker, { toAssetUrl } from "./ui/ImagePicker";
 
@@ -202,18 +215,16 @@ export default function HeroLayoutPanel({ initialSlides }: { initialSlides?: any
   const handleSaveSlide = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!editingSlide) return;
-
     setSaving(true);
     try {
       const payload = {
-        headline_line1: editingSlide.headline_line1 || "NEW HEADLINE",
+        headline_line1: editingSlide.headline_line1 || "",
         headline_line2: editingSlide.headline_line2 || "",
         subtext: editingSlide.subtext || "",
-        tag: editingSlide.tag || "ZRU",
+        tag: editingSlide.tag || "",
         context_pill: editingSlide.context_pill || "",
         image: editingSlide.image || DEFAULT_IMAGE,
         image_position: editingSlide.image_position || "center",
-        alignment: "left",
         cta1_label: editingSlide.cta1_label || "EXPLORE",
         cta1_href: editingSlide.cta1_href || "/",
         cta2_label: editingSlide.cta2_label || "",
@@ -257,7 +268,7 @@ export default function HeroLayoutPanel({ initialSlides }: { initialSlides?: any
     } catch (err) {
       toast(`Failed to save slide: ${err instanceof Error ? err.message : String(err)}`, "error");
     } finally {
-      setSaving(false);
+      setSaving(false)
     }
   };
 
@@ -328,11 +339,17 @@ export default function HeroLayoutPanel({ initialSlides }: { initialSlides?: any
     );
   }
 
+  const getPositionClass = (pos?: string) => {
+    if (pos === "top") return "object-top";
+    if (pos === "bottom") return "object-bottom";
+    return "object-center";
+  };
+
   return (
     <div className="space-y-8">
-      {/* ⚡ BREAKING MATCHDAY MARQUEE TICKER MANAGER */}
-      <div className="bg-white border border-black/10 rounded-2xl p-6 shadow-sm">
-        <div className="flex items-center justify-between border-b border-black/5 pb-4 mb-4">
+      {/* ALERT BREAKING MATCHDAY MARQUEE TICKER MANAGER */}
+      <div className="bg-white border border-[#eae8de] rounded-2xl p-6 shadow-sm">
+        <div className="flex items-center justify-between border-b border-[#eae8de] pb-4 mb-4">
           <div>
             <h2 className="text-sm font-black font-heading uppercase tracking-wider text-rich-black flex items-center gap-2">
               <Radio className="w-4 h-4 text-[#006B3F] animate-pulse" />
@@ -349,12 +366,12 @@ export default function HeroLayoutPanel({ initialSlides }: { initialSlides?: any
           <select
             value={newTickerTag}
             onChange={(e) => setNewTickerTag(e.target.value as any)}
-            className="w-full sm:w-40 rounded-lg border border-black/10 bg-white p-2 text-xs font-bold font-mono"
+            className="w-full sm:w-40 rounded-lg border border-[#eae8de] bg-white p-2 text-xs font-bold font-mono"
           >
-            <option value="LIVE MATCH">🔴 LIVE MATCH</option>
-            <option value="BREAKING">⚡ BREAKING</option>
-            <option value="TICKETS">🎟️ TICKETS</option>
-            <option value="NOTICE">📢 NOTICE</option>
+            <option value="LIVE MATCH">LIVE LIVE MATCH</option>
+            <option value="BREAKING">ALERT BREAKING</option>
+            <option value="TICKETS">TICKETS TICKETS</option>
+            <option value="NOTICE">NOTICE NOTICE</option>
           </select>
           <input
             type="text"
@@ -362,7 +379,7 @@ export default function HeroLayoutPanel({ initialSlides }: { initialSlides?: any
             value={newTickerText}
             onChange={(e) => setNewTickerText(e.target.value)}
             placeholder="e.g. Sables vs Uganda kickoff delayed to 15:30 CAT due to pitch preparation..."
-            className="flex-1 w-full rounded-lg border border-black/10 bg-white px-3 py-2 text-xs focus:outline-none focus:border-zru-green"
+            className="flex-1 w-full rounded-lg border border-[#eae8de] bg-white px-3 py-2 text-xs focus:outline-none focus:border-zru-green"
           />
           <button
             type="submit"
@@ -375,11 +392,11 @@ export default function HeroLayoutPanel({ initialSlides }: { initialSlides?: any
 
         {/* Active ticker list */}
         {tickers.length === 0 ? (
-          <div className="text-[11px] text-black/30 text-center py-6 border border-dashed border-black/5 rounded-xl">
+          <div className="text-[11px] text-black/30 text-center py-6 border border-dashed border-[#eae8de] rounded-xl">
             No live ticker items. Publish matchday notices above.
           </div>
         ) : (
-          <div className="divide-y divide-black/5 border border-black/5 rounded-xl overflow-hidden">
+          <div className="divide-y divide-black/5 border border-[#eae8de] rounded-xl overflow-hidden">
             {tickers.map((t) => (
               <div key={t.id} className="flex items-center justify-between p-3 bg-black/[0.01]">
                 <div className="flex items-center gap-3 min-w-0">
@@ -393,7 +410,7 @@ export default function HeroLayoutPanel({ initialSlides }: { initialSlides?: any
                   onClick={() => handleDeleteTicker(t.id)}
                   className="text-xs text-red-500 hover:text-red-700 px-2 py-1 rounded hover:bg-red-50 font-bold ml-2 shrink-0 cursor-pointer"
                 >
-                  ✕ Remove
+                  âœ• Remove
                 </button>
               </div>
             ))}
@@ -401,207 +418,363 @@ export default function HeroLayoutPanel({ initialSlides }: { initialSlides?: any
         )}
       </div>
 
-      {/* 🖼️ HERO SLIDES CAROUSEL MANAGER */}
-      <div className="bg-white border border-black/10 rounded-2xl p-6 shadow-sm">
-        <div className="flex items-center justify-between border-b border-black/5 pb-4 mb-6">
+      {/* ðŸ–¼ï¸ HERO SLIDES CAROUSEL MANAGER */}
+      {/* 🖼️ HOMEPAGE HERO CAROUSEL MANAGER */}
+      <div className="bg-white border border-[#eae8de] rounded-2xl p-6 shadow-sm">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#eae8de] pb-4 mb-6">
           <div>
             <h2 className="text-sm font-black font-heading uppercase tracking-wider text-rich-black flex items-center gap-2">
-              <LayoutGrid className="w-4 h-4 text-[#006B3F]" />
+              <LayoutGrid className="w-4 h-4 text-zru-green" />
               <span>Homepage Hero Carousel</span>
             </h2>
             <p className="text-xs text-black/50 mt-0.5">
-              Reorder, edit, and create hero banners promoting Sables test matches and campaigns.
+              Live-preview, reorder, edit, and create full cinematic hero banners for the public homepage.
             </p>
           </div>
-          <button
-            type="button"
-            onClick={() => setEditingSlide({ image_position: "center", cta1_label: "EXPLORE", cta1_href: "/" })}
-            className="flex items-center gap-1.5 rounded-lg bg-zru-green px-3.5 py-1.5 text-xs font-bold uppercase tracking-wider text-white hover:bg-green-800 transition-colors shadow-sm cursor-pointer"
-          >
-            <Plus className="w-4 h-4" /> Add New Slide
-          </button>
+          <div className="flex items-center gap-2.5">
+            <a
+              href="/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1.5 rounded-lg border border-[#eae8de] bg-white px-3 py-1.5 text-xs font-bold uppercase tracking-wider text-rich-black hover:bg-black/5 transition-colors shadow-xs"
+            >
+              <ExternalLink className="w-3.5 h-3.5 text-black/60" />
+              <span>View Live Site</span>
+            </a>
+            <button
+              type="button"
+              onClick={() => setEditingSlide({ image_position: "center", cta1_label: "EXPLORE", cta1_href: "/", tag: "ZRU", is_active: true })}
+              className="inline-flex items-center gap-1.5 rounded-lg bg-zru-green px-3.5 py-1.5 text-xs font-bold uppercase tracking-wider text-white hover:bg-green-800 transition-colors shadow-sm cursor-pointer"
+            >
+              <Plus className="w-4 h-4" />
+              <span>Add New Slide</span>
+            </button>
+          </div>
         </div>
 
-        {/* Slide List */}
+        {/* Cinematic Slide Cards List */}
         {slides.length === 0 ? (
-          <div className="text-[11px] text-black/30 text-center py-10 border border-dashed border-black/5 rounded-xl">
-            No hero slides yet. Add your first slide above.
+          <div className="text-[11px] text-black/30 text-center py-12 border border-dashed border-[#eae8de] rounded-2xl">
+            No hero slides yet. Click &quot;Add New Slide&quot; above to create your first banner.
           </div>
         ) : (
-          <div className="space-y-4">
-            {slides.map((slide, index) => (
-              <div
-                key={slide.id}
-                className={`flex items-center justify-between p-4 rounded-xl border transition-all ${
-                  slide.is_active ? "bg-white border-black/10 shadow-sm" : "bg-black/5 border-black/5 opacity-60"
-                }`}
-              >
-                <div className="flex items-center gap-4 min-w-0">
-                  <div className="w-24 h-16 rounded-lg bg-black/10 overflow-hidden relative shrink-0 border border-black/10">
-                    {toAssetUrl(slide.image) ? (
-                      // eslint-disable-next-line @next/next/no-img-element
-                      <img src={toAssetUrl(slide.image)} alt="" className="w-full h-full object-cover" />
-                    ) : (
-                      <div className="w-full h-full flex items-center justify-center text-black/20 text-[9px] font-mono">
-                        NO IMAGE
-                      </div>
-                    )}
-                    <span className="absolute bottom-1 right-1 bg-black/70 text-white font-mono text-[9px] px-1 rounded">
-                      #{slide.sort}
-                    </span>
-                  </div>
-                  <div className="min-w-0">
-                    <div className="flex items-center gap-2">
-                      <span className="text-[10px] font-black uppercase tracking-wider text-zru-green bg-zru-green/10 px-2 py-0.5 rounded">
-                        {slide.tag}
-                      </span>
-                      <h3 className="font-heading font-black text-sm text-rich-black truncate">
-                        {slide.headline_line1} {slide.headline_line2}
-                      </h3>
-                    </div>
-                    <p className="text-xs text-black/60 truncate mt-0.5 max-w-xl">{slide.subtext}</p>
-                  </div>
-                </div>
+          <div className="space-y-6">
+            {slides.map((slide, index) => {
+              const bgUrl = toAssetUrl(slide.image) || DEFAULT_IMAGE;
+              const posClass = getPositionClass(slide.image_position);
 
-                <div className="flex items-center gap-2 shrink-0">
-                  <button
-                    type="button"
-                    onClick={() => handleMoveSlide(index, "up")}
-                    disabled={index === 0}
-                    className="p-1.5 rounded-lg border border-black/10 hover:bg-black/5 text-black/60 disabled:opacity-30 cursor-pointer"
-                    title="Move Up"
-                  >
-                    <ArrowUp className="w-3.5 h-3.5" />
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => handleMoveSlide(index, "down")}
-                    disabled={index === slides.length - 1}
-                    className="p-1.5 rounded-lg border border-black/10 hover:bg-black/5 text-black/60 disabled:opacity-30 cursor-pointer"
-                    title="Move Down"
-                  >
-                    <ArrowDown className="w-3.5 h-3.5" />
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => handleToggleSlide(slide.id)}
-                    className={`p-1.5 rounded-lg border border-black/10 hover:bg-black/5 cursor-pointer ${
-                      slide.is_active ? "text-zru-green" : "text-black/40"
-                    }`}
-                    title={slide.is_active ? "Hide Slide" : "Show Slide"}
-                  >
-                    {slide.is_active ? <Eye className="w-3.5 h-3.5" /> : <EyeOff className="w-3.5 h-3.5" />}
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setEditingSlide(slide)}
-                    className="px-3 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wider border border-black/10 hover:bg-black/5 text-rich-black cursor-pointer"
-                  >
-                    Edit
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => handleDeleteSlide(slide.id)}
-                    className="p-1.5 rounded-lg text-red-500 hover:bg-red-50 cursor-pointer"
-                    title="Delete Slide"
-                  >
-                    <Trash className="w-3.5 h-3.5" />
-                  </button>
+              return (
+                <div
+                  key={slide.id}
+                  onClick={() => setEditingSlide(slide)}
+                  className={`group relative w-full rounded-2xl overflow-hidden bg-rich-black border transition-all duration-300 min-h-[240px] sm:min-h-[280px] flex flex-col justify-between p-5 sm:p-7 select-none cursor-pointer shadow-md ${
+                    slide.is_active 
+                      ? "border-[#eae8de] hover:border-zru-green/60 hover:shadow-xl" 
+                      : "border-[#eae8de] opacity-65 grayscale-30"
+                  }`}
+                >
+                  {/* Background Image with Focal Alignment */}
+                  <div className="absolute inset-0 z-0 overflow-hidden">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={bgUrl}
+                      alt=""
+                      className={`w-full h-full object-cover ${posClass} transition-transform duration-700 ease-out group-hover:scale-105`}
+                    />
+                  </div>
+
+                  {/* Gradient Scrim & Vignette Overlays */}
+                  <div className="absolute inset-0 z-10 bg-gradient-to-r from-black/95 via-black/70 to-black/30 pointer-events-none" />
+                  <div className="absolute inset-0 z-10 bg-gradient-to-t from-black/95 via-black/40 to-transparent pointer-events-none" />
+
+                  {/* Top Bar: Status Badges & Glass Floating Toolbar */}
+                  <div className="relative z-20 flex items-start justify-between gap-3 w-full">
+                    {/* Order & Status Badges */}
+                    <div className="flex flex-wrap items-center gap-2">
+                      <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-black font-mono uppercase tracking-wider backdrop-blur-md border ${
+                        slide.is_active
+                          ? "bg-zru-green/20 border-zru-green/40 text-zru-green"
+                          : "bg-black/60 border-white/20 text-white/50"
+                      }`}>
+                        <span className={`w-1.5 h-1.5 rounded-full ${slide.is_active ? "bg-zru-green animate-pulse" : "bg-white/40"}`} />
+                        <span>#{slide.sort || index + 1} {slide.is_active ? "LIVE" : "HIDDEN"}</span>
+                      </span>
+
+                      {slide.context_pill && (
+                        <span className="hidden sm:inline-flex items-center px-2.5 py-1 rounded-full text-[9px] font-black font-mono uppercase tracking-wider bg-white/10 border border-white/15 text-white/80 backdrop-blur-md">
+                          {slide.context_pill}
+                        </span>
+                      )}
+                    </div>
+
+                    {/* Glass Floating Action Toolbar */}
+                    <div 
+                      onClick={(e) => e.stopPropagation()} 
+                      className="bg-black/75 backdrop-blur-md border border-white/15 rounded-xl p-1 flex items-center gap-1 shadow-lg"
+                    >
+                      <button
+                        type="button"
+                        onClick={() => handleMoveSlide(index, "up")}
+                        disabled={index === 0}
+                        className="p-1.5 rounded-lg text-white/70 hover:text-white hover:bg-white/15 disabled:opacity-25 transition-colors cursor-pointer"
+                        title="Move Up"
+                      >
+                        <ArrowUp className="w-3.5 h-3.5" />
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => handleMoveSlide(index, "down")}
+                        disabled={index === slides.length - 1}
+                        className="p-1.5 rounded-lg text-white/70 hover:text-white hover:bg-white/15 disabled:opacity-25 transition-colors cursor-pointer"
+                        title="Move Down"
+                      >
+                        <ArrowDown className="w-3.5 h-3.5" />
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => handleToggleSlide(slide.id)}
+                        className={`p-1.5 rounded-lg transition-colors cursor-pointer ${
+                          slide.is_active ? "text-zru-green hover:bg-zru-green/20" : "text-white/40 hover:bg-white/15"
+                        }`}
+                        title={slide.is_active ? "Hide Slide on Homepage" : "Show Slide on Homepage"}
+                      >
+                        {slide.is_active ? <Eye className="w-3.5 h-3.5" /> : <EyeOff className="w-3.5 h-3.5 text-white/40" />}
+                      </button>
+                      <div className="w-[1px] h-3.5 bg-white/15 mx-0.5" />
+                      <button
+                        type="button"
+                        onClick={() => setEditingSlide(slide)}
+                        className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-[11px] font-black uppercase tracking-wider text-white bg-white/10 hover:bg-zru-green hover:text-white transition-colors cursor-pointer"
+                        title="Edit Slide Content"
+                      >
+                        <Pencil className="w-3 h-3" />
+                        <span>Edit</span>
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => handleDeleteSlide(slide.id)}
+                        className="p-1.5 rounded-lg text-red-400 hover:text-red-300 hover:bg-red-500/20 transition-colors cursor-pointer"
+                        title="Delete Slide"
+                      >
+                        <Trash className="w-3.5 h-3.5" />
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Bottom Content: Authentic Live Hero Typography & CTA Preview */}
+                  <div className="relative z-20 space-y-2 mt-6 max-w-3xl">
+                    {/* Eyebrow Tag */}
+                    <div className="text-[10px] sm:text-xs font-black uppercase tracking-[0.25em] text-zru-green drop-shadow-md">
+                      {slide.tag || "ZRU"}
+                    </div>
+
+                    {/* Dual-Tone Headline */}
+                    <h3 className="font-heading uppercase tracking-tight leading-[0.95] drop-shadow-2xl">
+                      <span className="block text-white font-black text-xl sm:text-2xl md:text-3xl">
+                        {slide.headline_line1 || "UNTITLED SLIDE"}
+                      </span>
+                      {slide.headline_line2 && (
+                        <span className="block text-zru-green font-black text-xl sm:text-2xl md:text-3xl">
+                          {slide.headline_line2}
+                        </span>
+                      )}
+                    </h3>
+
+                    {/* Subtext */}
+                    {slide.subtext && (
+                      <p className="text-white/75 text-xs sm:text-sm font-normal max-w-xl line-clamp-2 leading-relaxed drop-shadow">
+                        {slide.subtext}
+                      </p>
+                    )}
+
+                    {/* Slanted CTA Button Preview */}
+                    <div className="flex flex-wrap items-center gap-3 pt-2">
+                      <span className="inline-flex items-center gap-2 px-5 py-2 bg-white text-rich-black font-subheading font-black text-[11px] uppercase tracking-widest clip-slanted shadow-md group-hover:bg-zru-green group-hover:text-white transition-colors">
+                        <span>{slide.cta1_label || "EXPLORE"}</span>
+                        <ArrowRight className="w-3 h-3" />
+                      </span>
+                      {slide.cta2_label && (
+                        <span className="inline-flex items-center gap-2 px-5 py-2 border-2 border-white/25 text-white font-subheading font-black text-[11px] uppercase tracking-widest clip-slanted backdrop-blur-xs">
+                          <span>{slide.cta2_label}</span>
+                        </span>
+                      )}
+                    </div>
+                  </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         )}
       </div>
 
-      {/* EDIT MODAL WITH DIRECTUS ASSET DROPZONE */}
+      {/* 🛠️ SLIDE EDIT / CREATE MODAL WITH REAL-TIME LIVE PREVIEW */}
       {editingSlide && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-150" data-lenis-prevent>
-          <div className="w-full max-w-2xl bg-white rounded-2xl border border-black/10 shadow-2xl p-6 max-h-[90vh] overflow-y-auto overscroll-contain" data-lenis-prevent>
-            <div className="flex items-center justify-between border-b border-black/10 pb-4 mb-4">
-              <h3 className="font-heading font-black text-base uppercase text-rich-black">
-                {editingSlide.id ? "Edit Hero Slide" : "Create Hero Slide"}
-              </h3>
+        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4 overflow-y-auto">
+          <div className="bg-white border border-[#eae8de] rounded-2xl w-full max-w-3xl max-h-[92vh] overflow-y-auto p-6 shadow-2xl space-y-6">
+            <div className="flex items-center justify-between border-b border-[#eae8de] pb-4">
+              <div>
+                <h3 className="font-heading font-black uppercase text-base text-rich-black">
+                  {editingSlide.id ? "Edit Homepage Hero Slide" : "Create New Hero Slide"}
+                </h3>
+                <p className="text-xs text-black/50">
+                  Preview in real time and modify banner visuals, headline typography, and action links.
+                </p>
+              </div>
               <button
                 type="button"
                 onClick={() => setEditingSlide(null)}
-                className="text-black/40 hover:text-black text-sm font-bold"
+                className="text-black/40 hover:text-rich-black p-1 text-lg font-bold cursor-pointer"
               >
                 ✕
               </button>
             </div>
 
+            {/* 🌟 REAL-TIME LIVE PREVIEW STAGE */}
+            <div className="space-y-2">
+              <div className="flex items-center justify-between">
+                <span className="text-[10px] font-black uppercase tracking-[0.2em] text-zru-green">
+                  ● Real-Time Live Preview
+                </span>
+                <span className="text-[10px] font-mono text-black/40">
+                  Exact Homepage Presentation
+                </span>
+              </div>
+              <div className="relative w-full rounded-xl overflow-hidden bg-rich-black border border-black/20 min-h-[220px] flex flex-col justify-end p-5 select-none shadow-inner">
+                {/* Background Image Preview */}
+                <div className="absolute inset-0 z-0 overflow-hidden">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={toAssetUrl(editingSlide.image) || DEFAULT_IMAGE}
+                    alt=""
+                    className={`w-full h-full object-cover ${getPositionClass(editingSlide.image_position)} transition-all duration-300`}
+                  />
+                </div>
+                {/* Scrims */}
+                <div className="absolute inset-0 z-10 bg-gradient-to-r from-black/95 via-black/70 to-black/30 pointer-events-none" />
+                <div className="absolute inset-0 z-10 bg-gradient-to-t from-black/95 via-black/40 to-transparent pointer-events-none" />
+
+                {/* Content */}
+                <div className="relative z-20 space-y-1.5 max-w-xl">
+                  <div className="text-[10px] font-black uppercase tracking-[0.25em] text-zru-green drop-shadow">
+                    {editingSlide.tag || "ZRU"}
+                  </div>
+                  <h4 className="font-heading uppercase tracking-tight leading-[0.95] drop-shadow-2xl">
+                    <span className="block text-white font-black text-lg sm:text-xl">
+                      {editingSlide.headline_line1 || "HEADLINE LINE 1"}
+                    </span>
+                    {editingSlide.headline_line2 && (
+                      <span className="block text-zru-green font-black text-lg sm:text-xl">
+                        {editingSlide.headline_line2}
+                      </span>
+                    )}
+                  </h4>
+                  {editingSlide.subtext && (
+                    <p className="text-white/75 text-xs font-normal line-clamp-2 leading-relaxed drop-shadow">
+                      {editingSlide.subtext}
+                    </p>
+                  )}
+                  <div className="flex items-center gap-2 pt-1.5">
+                    <span className="inline-flex items-center gap-1.5 px-4 py-1.5 bg-white text-rich-black font-subheading font-black text-[10px] uppercase tracking-widest clip-slanted shadow-sm">
+                      <span>{editingSlide.cta1_label || "EXPLORE"}</span>
+                      <ArrowRight className="w-2.5 h-2.5" />
+                    </span>
+                    {editingSlide.cta2_label && (
+                      <span className="inline-flex items-center gap-1.5 px-4 py-1.5 border border-white/30 text-white font-subheading font-black text-[10px] uppercase tracking-widest clip-slanted">
+                        <span>{editingSlide.cta2_label}</span>
+                      </span>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
+
             <form onSubmit={handleSaveSlide} className="space-y-4">
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-[10px] font-bold text-black/60 uppercase tracking-wider mb-1">Headline Line 1</label>
+                  <label className="block text-[10px] font-bold text-black/60 uppercase tracking-wider mb-1">
+                    Headline Line 1 (White Title)
+                  </label>
                   <input
                     type="text"
                     required
                     value={editingSlide.headline_line1 || ""}
                     onChange={(e) => setEditingSlide({ ...editingSlide, headline_line1: e.target.value })}
-                    className="w-full bg-black/5 border border-black/10 rounded-lg px-3 py-2 text-xs focus:outline-none focus:border-zru-green font-bold"
+                    placeholder="e.g. LADY SABLES"
+                    className="w-full bg-black/5 border border-[#eae8de] rounded-lg px-3 py-2 text-xs focus:outline-none focus:border-zru-green font-bold"
                   />
                 </div>
                 <div>
-                  <label className="block text-[10px] font-bold text-black/60 uppercase tracking-wider mb-1">Headline Line 2</label>
+                  <label className="block text-[10px] font-bold text-black/60 uppercase tracking-wider mb-1">
+                    Headline Line 2 (Green Highlight)
+                  </label>
                   <input
                     type="text"
                     value={editingSlide.headline_line2 || ""}
                     onChange={(e) => setEditingSlide({ ...editingSlide, headline_line2: e.target.value })}
-                    className="w-full bg-black/5 border border-black/10 rounded-lg px-3 py-2 text-xs focus:outline-none focus:border-zru-green font-bold"
+                    placeholder="e.g. READY FOR CAMEROON"
+                    className="w-full bg-black/5 border border-[#eae8de] rounded-lg px-3 py-2 text-xs focus:outline-none focus:border-zru-green font-bold"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block text-[10px] font-bold text-black/60 uppercase tracking-wider mb-1">Subtext / Summary</label>
+                <label className="block text-[10px] font-bold text-black/60 uppercase tracking-wider mb-1">
+                  Subtext / Summary Description
+                </label>
                 <textarea
                   value={editingSlide.subtext || ""}
                   onChange={(e) => setEditingSlide({ ...editingSlide, subtext: e.target.value })}
                   rows={2}
-                  className="w-full bg-black/5 border border-black/10 rounded-lg px-3 py-2 text-xs focus:outline-none focus:border-zru-green resize-none"
+                  placeholder="e.g. National women's squad kicks off Africa Cup campaign in Harare..."
+                  className="w-full bg-black/5 border border-[#eae8de] rounded-lg px-3 py-2 text-xs focus:outline-none focus:border-zru-green resize-none"
                 />
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-[10px] font-bold text-black/60 uppercase tracking-wider mb-1">Tag / Category Badge</label>
+                  <label className="block text-[10px] font-bold text-black/60 uppercase tracking-wider mb-1">
+                    Tag / Category Eyebrow
+                  </label>
                   <input
                     type="text"
                     value={editingSlide.tag || ""}
                     onChange={(e) => setEditingSlide({ ...editingSlide, tag: e.target.value })}
-                    className="w-full bg-black/5 border border-black/10 rounded-lg px-3 py-2 text-xs focus:outline-none focus:border-zru-green font-mono"
+                    placeholder="e.g. LADY SABLES, DEVELOPMENT, SABLES"
+                    className="w-full bg-black/5 border border-[#eae8de] rounded-lg px-3 py-2 text-xs focus:outline-none focus:border-zru-green font-mono uppercase"
                   />
                 </div>
                 <div>
-                  <label className="block text-[10px] font-bold text-black/60 uppercase tracking-wider mb-1">Context Pill</label>
+                  <label className="block text-[10px] font-bold text-black/60 uppercase tracking-wider mb-1">
+                    Context Pill (Optional)
+                  </label>
                   <input
                     type="text"
                     value={editingSlide.context_pill || ""}
                     onChange={(e) => setEditingSlide({ ...editingSlide, context_pill: e.target.value })}
                     placeholder="e.g. ROAD TO AUSTRALIA 2027"
-                    className="w-full bg-black/5 border border-black/10 rounded-lg px-3 py-2 text-xs focus:outline-none focus:border-zru-green font-mono"
+                    className="w-full bg-black/5 border border-[#eae8de] rounded-lg px-3 py-2 text-xs focus:outline-none focus:border-zru-green font-mono uppercase"
                   />
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-[10px] font-bold text-black/60 uppercase tracking-wider mb-1">Focal Position</label>
+                  <label className="block text-[10px] font-bold text-black/60 uppercase tracking-wider mb-1">
+                    Focal Image Alignment
+                  </label>
                   <select
                     value={editingSlide.image_position || "center"}
                     onChange={(e) => setEditingSlide({ ...editingSlide, image_position: e.target.value as "center" | "top" | "bottom" })}
-                    className="w-full bg-black/5 border border-black/10 rounded-lg px-3 py-2 text-xs focus:outline-none focus:border-zru-green font-bold"
+                    className="w-full bg-black/5 border border-[#eae8de] rounded-lg px-3 py-2 text-xs focus:outline-none focus:border-zru-green font-bold"
                   >
-                    <option value="center">Center</option>
-                    <option value="top">Top</option>
-                    <option value="bottom">Bottom</option>
+                    <option value="center">Center (Default)</option>
+                    <option value="top">Top Focus</option>
+                    <option value="bottom">Bottom Focus</option>
                   </select>
                 </div>
                 <div className="flex items-end">
                   <p className="text-[10px] text-black/40 pb-2">
-                    Slides render in `sort` order. Hidden (`is_active = false`) slides are skipped on the homepage.
+                    Slides render in numerical order. Hidden slides (`is_active = false`) are automatically bypassed on the live site.
                   </p>
                 </div>
               </div>
@@ -616,54 +789,66 @@ export default function HeroLayoutPanel({ initialSlides }: { initialSlides?: any
                 />
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-[10px] font-bold text-black/60 uppercase tracking-wider mb-1">CTA 1 Button Label</label>
+                  <label className="block text-[10px] font-bold text-black/60 uppercase tracking-wider mb-1">
+                    Primary CTA Label
+                  </label>
                   <input
                     type="text"
                     value={editingSlide.cta1_label || ""}
                     onChange={(e) => setEditingSlide({ ...editingSlide, cta1_label: e.target.value })}
-                    className="w-full bg-black/5 border border-black/10 rounded-lg px-3 py-2 text-xs focus:outline-none focus:border-zru-green font-bold"
+                    placeholder="EXPLORE"
+                    className="w-full bg-black/5 border border-[#eae8de] rounded-lg px-3 py-2 text-xs focus:outline-none focus:border-zru-green font-bold"
                   />
                 </div>
                 <div>
-                  <label className="block text-[10px] font-bold text-black/60 uppercase tracking-wider mb-1">CTA 1 Link Target</label>
+                  <label className="block text-[10px] font-bold text-black/60 uppercase tracking-wider mb-1">
+                    Primary CTA Link Target
+                  </label>
                   <input
                     type="text"
                     value={editingSlide.cta1_href || ""}
                     onChange={(e) => setEditingSlide({ ...editingSlide, cta1_href: e.target.value })}
-                    className="w-full bg-black/5 border border-black/10 rounded-lg px-3 py-2 text-xs focus:outline-none focus:border-zru-green font-mono"
+                    placeholder="/fixtures or /media"
+                    className="w-full bg-black/5 border border-[#eae8de] rounded-lg px-3 py-2 text-xs focus:outline-none focus:border-zru-green font-mono"
                   />
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-[10px] font-bold text-black/60 uppercase tracking-wider mb-1">CTA 2 Button Label</label>
+                  <label className="block text-[10px] font-bold text-black/60 uppercase tracking-wider mb-1">
+                    Secondary CTA Label (Optional)
+                  </label>
                   <input
                     type="text"
                     value={editingSlide.cta2_label || ""}
                     onChange={(e) => setEditingSlide({ ...editingSlide, cta2_label: e.target.value })}
-                    className="w-full bg-black/5 border border-black/10 rounded-lg px-3 py-2 text-xs focus:outline-none focus:border-zru-green font-bold"
+                    placeholder="e.g. MATCH HIGHLIGHTS"
+                    className="w-full bg-black/5 border border-[#eae8de] rounded-lg px-3 py-2 text-xs focus:outline-none focus:border-zru-green font-bold"
                   />
                 </div>
                 <div>
-                  <label className="block text-[10px] font-bold text-black/60 uppercase tracking-wider mb-1">CTA 2 Link Target</label>
+                  <label className="block text-[10px] font-bold text-black/60 uppercase tracking-wider mb-1">
+                    Secondary CTA Link Target
+                  </label>
                   <input
                     type="text"
                     value={editingSlide.cta2_href || ""}
                     onChange={(e) => setEditingSlide({ ...editingSlide, cta2_href: e.target.value })}
-                    className="w-full bg-black/5 border border-black/10 rounded-lg px-3 py-2 text-xs focus:outline-none focus:border-zru-green font-mono"
+                    placeholder="/tv"
+                    className="w-full bg-black/5 border border-[#eae8de] rounded-lg px-3 py-2 text-xs focus:outline-none focus:border-zru-green font-mono"
                   />
                 </div>
               </div>
 
-              <div className="flex justify-end gap-3 pt-4 border-t border-black/10">
+              <div className="flex justify-end gap-3 pt-4 border-t border-[#eae8de]">
                 <button
                   type="button"
                   onClick={() => setEditingSlide(null)}
                   disabled={saving}
-                  className="px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-wider border border-black/10 hover:bg-black/5 text-rich-black cursor-pointer"
+                  className="px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-wider border border-[#eae8de] hover:bg-black/5 text-rich-black cursor-pointer"
                 >
                   Cancel
                 </button>
@@ -672,7 +857,7 @@ export default function HeroLayoutPanel({ initialSlides }: { initialSlides?: any
                   disabled={saving}
                   className="flex items-center gap-1.5 rounded-lg bg-zru-green px-5 py-2 text-xs font-bold uppercase tracking-wider text-white hover:bg-green-800 transition-colors shadow-sm disabled:opacity-50 cursor-pointer"
                 >
-                  <Save className="w-4 h-4" /> {saving ? "Saving..." : "Save Slide"}
+                  <Save className="w-4 h-4" /> {saving ? "Saving..." : "Save Hero Slide"}
                 </button>
               </div>
             </form>

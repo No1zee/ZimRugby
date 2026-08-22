@@ -77,31 +77,17 @@ export async function requireAdmin(): Promise<AdminSession> {
   const supabase = await createClient();
   const {
     data: { user },
-    error,
   } = await supabase.auth.getUser();
 
-  let email = user?.email;
-  if (!email) {
-    // Check fallback session cookie
-    const { cookies } = await import("next/headers");
-    const cookieStore = await cookies();
-    const fanCookie = cookieStore.get("zru_user_session")?.value;
-    if (fanCookie) {
-      try {
-        const parsed = JSON.parse(decodeURIComponent(fanCookie));
-        if (parsed?.email) email = parsed.email;
-      } catch {}
-    }
-  }
-
-  if (!email) {
+  const email = user?.email;
+  if (!user || !email) {
     throw new Error("Unauthorized");
   }
 
-  let role = user?.app_metadata?.role as UserRole | undefined;
+  let role = user.app_metadata?.role as UserRole | undefined;
   if (!role && email.toLowerCase() === "edwardmagejo@gmail.com") {
     role = "super_admin";
-    if (user?.id) {
+    if (user.id) {
       // Bootstrap role to Supabase metadata in background so subsequent checks are metadata-driven
       import("@/lib/supabase/admin")
         .then(({ setAdminUserRole }) => setAdminUserRole(user.id, "super_admin"))
@@ -168,11 +154,11 @@ export async function requireCollectionAction(
 }
 
 /**
- * Server-side gate for an advanced feature flag (pages_builder / ai_assistant
- * / media_upload / fanzone_pii).
+ * Server-side gate for an advanced feature flag (ai_assistant
+ * / media_upload / fanzone_pii / audit_view).
  */
 export async function requireFeature(
-  feature: "pages_builder" | "ai_assistant" | "media_upload" | "fanzone_pii"
+  feature: "ai_assistant" | "media_upload" | "fanzone_pii" | "audit_view"
 ): Promise<AdminSession> {
   const session = await requireAdmin();
   if (!canUseFeature(session.permissions, feature)) {

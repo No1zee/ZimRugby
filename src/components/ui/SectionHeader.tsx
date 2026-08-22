@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { KineticHeading } from "./KineticHeading";
 
 interface SectionHeaderProps {
   title: string;
@@ -38,9 +39,11 @@ export default function SectionHeader({
       )}
       
       <div className="space-y-2">
-        <h2 className="text-2xl sm:text-3xl md:text-4xl font-heading font-black uppercase tracking-tight text-white leading-[1.1]">
-          {title}
-        </h2>
+        <KineticHeading
+          text={title}
+          as="h2"
+          className="text-2xl sm:text-3xl md:text-4xl font-heading font-black uppercase tracking-tight text-white leading-[1.1]"
+        />
         {description && (
           <p className="text-white/60 font-subheading font-normal text-xs sm:text-sm md:text-base max-w-3xl leading-relaxed">
             {description}

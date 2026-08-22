@@ -8,21 +8,25 @@ import PageTransitionLoader from "@/components/common/PageTransitionLoader";
 import { directusFetch } from "@/lib/directus/fetch";
 import { AdaptivePerformanceProvider } from "@/components/providers/AdaptivePerformanceProvider";
 import { DraftAdminBar } from "@/components/admin/DraftAdminBar";
+import { InSituLiveDrawer } from "@/components/admin/InSituLiveDrawer";
 import EditModeShell from "@/components/admin/EditModeShell";
 
 const montserrat = Montserrat({
   subsets: ["latin"],
+  display: "swap",
   variable: "--font-montserrat",
 });
 
 const bebasNeue = Bebas_Neue({
   weight: "400",
   subsets: ["latin"],
+  display: "swap",
   variable: "--font-bebas-neue",
 });
 
 const inter = Inter({
   subsets: ["latin"],
+  display: "swap",
   variable: "--font-inter",
 });
 
@@ -91,6 +95,7 @@ export default async function RootLayout({
       </head>
         <body className={`${montserrat.variable} ${bebasNeue.variable} ${inter.variable} antialiased min-h-dvh flex flex-col justify-between`}>
         <DraftAdminBar />
+        <InSituLiveDrawer />
         <a
           href="#main-content"
           className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-[100] focus:px-4 focus:py-2 focus:bg-zru-green focus:text-white focus:rounded-md focus:outline-none"
