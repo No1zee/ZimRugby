@@ -163,10 +163,10 @@ export function getTeamCrestUrl(teamName: string, customLogo?: string): string {
     return UNION_CRESTS_MAP[foundUnion];
   }
 
-  // 3. Fallback to ISO Country Flag
+  // 3. Fallback: World Rugby National Shield Asset
   const iso = COUNTRY_ISO_MAP[normalized];
   if (iso) {
-    return `https://flagcdn.com/w160/${iso}.png`;
+    return `/images/shields/${iso.toLowerCase()}.webp`;
   }
 
   const foundIso = Object.keys(COUNTRY_ISO_MAP).find((k) =>
